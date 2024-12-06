@@ -13,7 +13,9 @@ Ground::~Ground()
 void Ground::Initialize()
 {
 	hModel_Ground = Model::Load("ground.fbx");
+	transform_.scale_ = { 3.0,1.0,3.0 };
 	transform_.position_ = { 0,-2,0 };
+
 }
 
 void Ground::Update()

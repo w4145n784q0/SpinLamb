@@ -122,7 +122,9 @@
     <ClCompile Include="Player.cpp">
       <Filter>04Chara</Filter>
     </ClCompile>
-    <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Ground.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -213,7 +215,9 @@
     <ClInclude Include="Player.h">
       <Filter>04Chara</Filter>
     </ClInclude>
-    <ClInclude Include="Ground.h" />
+    <ClInclude Include="Ground.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

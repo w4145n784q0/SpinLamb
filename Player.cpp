@@ -5,13 +5,14 @@
 #include"Engine/SphereCollider.h"
 
 namespace {
-	const float speed = 5.0f;
+	const float speed = 9.0f;
 	const float Player_Gravity = 0.08; //0.16333f
 	const float DeltaTime = 0.016f;
 }
 
 Player::Player(GameObject* parent)
-	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),JumpSpeed_(0.0f)
+	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),JumpSpeed_(0.0f),
+	PlayerDirection({0,0,0}),Acceleration_(0.0f)
 {
 }
 
@@ -22,32 +23,66 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	hModel_Player = Model::Load("box.fbx"); transform_.position_ = { 0,0,0 };
+	hModel_Player = Model::Load("ensui.fbx"); 
+	transform_.position_ = { -20,0,-20};
+	
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0,0,0),0.1f);
 	this->AddCollider(col);
 }
 
 void Player::Update()
 {
-	if (Input::IsKey(DIK_LEFT))
-	{
-		transform_.position_.x -= 0.1;
-	}
-
-	if (Input::IsKey(DIK_RIGHT))
-	{
-		transform_.position_.x += 0.1;
-	}
-
 	if (Input::IsKey(DIK_UP))
 	{
-		transform_.position_.z += 0.1;
+		PlayerDirection.z = 1.0;
 	}
-
 	if (Input::IsKey(DIK_DOWN))
 	{
-		transform_.position_.z -= 0.1;
+		PlayerDirection.z = -1.0;
 	}
+	if (Input::IsKey(DIK_LEFT))
+	{
+		PlayerDirection.x = -1.0;
+	}
+	if (Input::IsKey(DIK_RIGHT))
+	{
+		PlayerDirection.x = 1.0;
+	}
+
+	//--------------ダッシュ関係--------------
+	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT)) 
+	{
+		IsDash_ = true;
+	}
+	else
+	{
+		IsDash_ = false;
+	}
+
+	if (IsDash_)
+	{
+		Acceleration_ += 2.0;
+		if (Acceleration_ > 50.0) {
+			Acceleration_ = 50.0;
+		}
+	}
+	else
+	{
+		Acceleration_ = 0;
+	}
+
+	XMVECTOR DirectionVec = XMVectorSet(PlayerDirection.x,PlayerDirection.y, PlayerDirection.z, 0.0f);
+	DirectionVec = XMVector3Normalize(DirectionVec);// 単位ベクトルに正規化
+	XMVECTOR MoveVector = XMVectorScale(DirectionVec,(speed + Acceleration_) * DeltaTime);
+
+	XMVECTOR PrevPos = XMVectorSet(transform_.position_.x,transform_.position_.y, transform_.position_.z, 0.0f);
+
+	XMVECTOR NewPos = PrevPos + MoveVector;
+	XMStoreFloat3(&transform_.position_, NewPos);
+
+
+
+	PlayerDirection = { 0,0,0 };
 
 	//--------------ジャンプ(挙動のみ)--------------
 	if (Input::IsKeyDown(DIK_SPACE))
@@ -60,6 +95,9 @@ void Player::Update()
 
 	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
 	transform_.position_.y += JumpSpeed_;
+	if (JumpSpeed_ < -100) {
+		JumpSpeed_ = -100;
+	}
 
 	if (transform_.position_.y <= 0.0f) {//プレイヤーめりこみ防止に一定以下のy座標で値を固定
 		transform_.position_.y = 0.0f;
