@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ClearScene.cpp" />
+    <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BillBoard.cpp" />
     <ClCompile Include="Engine\BoxCollider.cpp" />
@@ -166,6 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClearScene.h" />
+    <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BillBoard.h" />
     <ClInclude Include="Engine\BoxCollider.h" />

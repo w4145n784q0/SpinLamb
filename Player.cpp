@@ -118,6 +118,11 @@ void Player::Release()
 {
 }
 
+void Player::OnCollision(GameObject* pTarget)
+{
+
+}
+
 void Player::Dash()
 {
 	if (IsDash_)

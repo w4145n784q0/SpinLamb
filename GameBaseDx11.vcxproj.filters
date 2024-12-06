@@ -125,6 +125,9 @@
     <ClCompile Include="Ground.cpp">
       <Filter>05Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>04Chara</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -217,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="Ground.h">
       <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>04Chara</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
