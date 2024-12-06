@@ -35,20 +35,27 @@ void Player::Update()
 	if (Input::IsKey(DIK_UP))
 	{
 		PlayerDirection.z = 1.0;
+		moveDir = Front;
 	}
 	if (Input::IsKey(DIK_DOWN))
 	{
 		PlayerDirection.z = -1.0;
+		moveDir = Back;
 	}
 	if (Input::IsKey(DIK_LEFT))
 	{
 		PlayerDirection.x = -1.0;
+		moveDir = Left;
+		
 	}
 	if (Input::IsKey(DIK_RIGHT))
 	{
 		PlayerDirection.x = 1.0;
+		moveDir = Right;
 	}
+	transform_.rotate_.y = MoveDirArray[moveDir];//キャラの回転　４方向のみ
 
+	
 	//--------------ダッシュ関係--------------
 	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT)) 
 	{
@@ -58,18 +65,8 @@ void Player::Update()
 	{
 		IsDash_ = false;
 	}
-
-	if (IsDash_)
-	{
-		Acceleration_ += 2.0;
-		if (Acceleration_ > 50.0) {
-			Acceleration_ = 50.0;
-		}
-	}
-	else
-	{
-		Acceleration_ = 0;
-	}
+	Dash();
+	
 
 	XMVECTOR DirectionVec = XMVectorSet(PlayerDirection.x,PlayerDirection.y, PlayerDirection.z, 0.0f);
 	DirectionVec = XMVector3Normalize(DirectionVec);// 単位ベクトルに正規化
@@ -79,8 +76,6 @@ void Player::Update()
 
 	XMVECTOR NewPos = PrevPos + MoveVector;
 	XMStoreFloat3(&transform_.position_, NewPos);
-
-
 
 	PlayerDirection = { 0,0,0 };
 
@@ -121,4 +116,19 @@ void Player::Draw()
 
 void Player::Release()
 {
+}
+
+void Player::Dash()
+{
+	if (IsDash_)
+	{
+		Acceleration_ += 2.0;
+		if (Acceleration_ > 50.0) {
+			Acceleration_ = 50.0;
+		}
+	}
+	else
+	{
+		Acceleration_ = 0;
+	}
 }
