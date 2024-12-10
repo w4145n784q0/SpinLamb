@@ -17,7 +17,13 @@ private:
 	};
 	EnemyState enemy_state;
 
-	XMVECTOR EnemyPosition;
+	XMVECTOR BasicVector;//敵の基本ベクトル
+	XMVECTOR EnemyDirection;//敵の方向ベクトル
+	XMVECTOR EnemyPosition;//敵の位置ベクトル
+	float RotateY;//回転角度（基本Ｙ軸のみ）
+	bool IsTargetted;//敵の視界に入ったか
+
+	XMVECTOR sightLength;//敵の視界（扇型の視界）の長さ
 
 public:
 	Enemy(GameObject* parent);
@@ -35,6 +41,7 @@ public:
 	void UpdateWince();
 
 	void OnCollision(GameObject* pTarget) override;
+	int GetModelHandle() { return hModel_Enemy; }
 	bool ComparePosition(XMFLOAT3 pos);
 };
 

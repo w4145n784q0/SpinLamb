@@ -4,6 +4,8 @@
 #include"Engine/Camera.h"
 #include"Engine/SphereCollider.h"
 
+#include"Enemy.h"
+
 namespace {
 	const float speed = 9.0f;
 	const float Player_Gravity = 0.08; //0.16333f
@@ -32,25 +34,27 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	PlayerPosition = XMLoadFloat3(&this->transform_.position_);
+
 	if (Input::IsKey(DIK_UP))
 	{
-		PlayerDirection.z = 1.0;
+		Direction.z = 1.0;
 		moveDir = Front;
 	}
 	if (Input::IsKey(DIK_DOWN))
 	{
-		PlayerDirection.z = -1.0;
+		Direction.z = -1.0;
 		moveDir = Back;
 	}
 	if (Input::IsKey(DIK_LEFT))
 	{
-		PlayerDirection.x = -1.0;
+		Direction.x = -1.0;
 		moveDir = Left;
 		
 	}
 	if (Input::IsKey(DIK_RIGHT))
 	{
-		PlayerDirection.x = 1.0;
+		Direction.x = 1.0;
 		moveDir = Right;
 	}
 	transform_.rotate_.y = MoveDirArray[moveDir];//キャラの回転　４方向のみ
@@ -68,16 +72,16 @@ void Player::Update()
 	Dash();
 	
 
-	XMVECTOR DirectionVec = XMVectorSet(PlayerDirection.x,PlayerDirection.y, PlayerDirection.z, 0.0f);
-	DirectionVec = XMVector3Normalize(DirectionVec);// 単位ベクトルに正規化
-	XMVECTOR MoveVector = XMVectorScale(DirectionVec,(speed + Acceleration_) * DeltaTime);
+	XMVECTOR PrevDir = XMVectorSet(Direction.x,Direction.y, Direction.z, 0.0f);
+	PlayerDirection = XMVector3Normalize(PrevDir);// 単位ベクトルに正規化
+	XMVECTOR MoveVector = XMVectorScale(PlayerDirection,(speed + Acceleration_) * DeltaTime);//移動ベクトル化する
 
-	XMVECTOR PrevPos = XMVectorSet(transform_.position_.x,transform_.position_.y, transform_.position_.z, 0.0f);
+	XMVECTOR PrevPos = PlayerPosition;
 
 	XMVECTOR NewPos = PrevPos + MoveVector;
 	XMStoreFloat3(&transform_.position_, NewPos);
 
-	PlayerDirection = { 0,0,0 };
+	Direction = { 0,0,0 };
 
 	//--------------ジャンプ(挙動のみ)--------------
 	if (Input::IsKeyDown(DIK_SPACE))
@@ -105,6 +109,22 @@ void Player::Update()
 
 	Camera::SetPosition(CameraPositionVec);//カメラの位置をセット（今は追従するだけ） 
 	Camera::SetTarget(CameraTargetVec);//カメラの焦点をセット（今は追従するだけ）
+
+
+	/*
+	Enemy* pEnemy = (Enemy*)FindObject("Enemy");    //ステージオブジェクトを探す
+	int hEnemyModel = pEnemy->GetModelHandle();    //モデル番号を取得
+
+	RayCastData data;
+	data.start = transform_.position_;   //レイの発射位置
+	data.dir = XMFLOAT3(0, 0, 1);       //レイの方向
+	
+	Model::RayCast(hEnemyModel, &data); //レイを発射
+
+	if (data.hit) {
+		transform_.position_.y = 3;
+	}*/
+
 
 }
 

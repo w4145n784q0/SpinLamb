@@ -19,8 +19,18 @@ private:
 	int MoveDirArray[5] = { 0,270,180,90,0 };
 	
 
-	XMFLOAT3 PlayerDirection;
+	XMFLOAT3 Direction;//プレイヤーの方向
+
+	XMVECTOR BasicVector;//基本ベクトル
+	XMVECTOR PlayerDirection;//方向ベクトル
+	XMVECTOR PlayerPosition;//位置ベクトル
+	float RotateY;//回転角度（基本Ｙ軸のみ）
+
 public:
+
+	XMVECTOR GetPlayerDirection() { return PlayerDirection; }//方向ベクトル取得
+	XMVECTOR GetPlayerPosition() { return PlayerPosition; }//位置ベクトル取得
+
 	Player(GameObject* parent);
 	~Player();
 
