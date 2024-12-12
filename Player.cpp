@@ -34,7 +34,9 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	PlayerPosition = XMLoadFloat3(&this->transform_.position_);
+	PlayerPosition = XMLoadFloat3(&this->transform_.position_); 
+	XMFLOAT3 x;
+	XMStoreFloat3(&x, PlayerPosition);
 
 	if (Input::IsKey(DIK_UP))
 	{

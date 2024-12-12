@@ -17,11 +17,13 @@ private:
 	};
 	EnemyState enemy_state;
 
-	XMVECTOR BasicVector;//敵の基本ベクトル
+	XMVECTOR FrontVector = {0,0,1};//敵の基本ベクトル
 	XMVECTOR EnemyDirection;//敵の方向ベクトル
 	XMVECTOR EnemyPosition;//敵の位置ベクトル
 	float RotateY;//回転角度（基本Ｙ軸のみ）
 	bool IsTargetted;//敵の視界に入ったか
+	float FrontLength = 5.0f;//敵の視界の長さ
+
 
 	XMVECTOR sightLength;//敵の視界（扇型の視界）の長さ
 

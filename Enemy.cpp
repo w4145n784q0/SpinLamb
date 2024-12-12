@@ -74,18 +74,31 @@ void Enemy::UpdateIdle()
 	XMFLOAT3 a;
 	Player pPlayer = (Player*)FindObject("Player");
 	XMFLOAT3 pPosition = pPlayer.GetPosition();
+	XMVECTOR pPositionVec = pPlayer.GetPlayerPosition();
+	XMFLOAT3 x;
+	XMStoreFloat3(&x, pPositionVec);
 
+	//自分(enmey)と相手(player)の座標上の距離をはかる
 	a.x = this->transform_.position_.x - pPosition.x;
 	a.y = this->transform_.position_.y - pPosition.y;
 	a.z = this->transform_.position_.z - pPosition.z;
 
-	XMVECTOR v = XMLoadFloat3(&a);
-	v = XMVector3Normalize(v);
+	float Pointdist = sqrt(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2));
+
+	//XMVECTOR v = XMLoadFloat3(&a);
+	//v = XMVector3Normalize(v);//距離をはかったらvector化
 
 
+	XMVECTOR forward = FrontVec(this->transform_.rotate_.y);//自分の前方ベクトル
+	XMVECTOR dot = XMVector3Dot(pPositionVec, forward);//相手へのベクトルと自分の前方ベクトルの内積をとる
+	float cosine = XMVectorGetX(dot);
+	float sin = XMVectorGetY(dot);
 
-	int i = 0;
-	i++;
+	if (cosine > cosf(XMConvertToRadians(60)) && Pointdist < FrontLength) //距離は60度以内かand相手との距離がFrontLengthより小さい
+	{
+		int i = 0;
+	}
+	
 }
 
 void Enemy::UpdateChase()

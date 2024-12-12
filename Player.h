@@ -21,8 +21,8 @@ private:
 
 	XMFLOAT3 Direction;//プレイヤーの方向
 
-	XMVECTOR BasicVector;//基本ベクトル
-	XMVECTOR PlayerDirection;//方向ベクトル
+	XMVECTOR FrontVector;//前向きベクトル（そのキャラクタにとっての前）
+	XMVECTOR PlayerDirection;//方向ベクトル(実際に向いている方向)
 	XMVECTOR PlayerPosition;//位置ベクトル
 	float RotateY;//回転角度（基本Ｙ軸のみ）
 
