@@ -14,8 +14,9 @@ namespace {
 
 Player::Player(GameObject* parent)
 	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),JumpSpeed_(0.0f),
-	PlayerDirection({0,0,0}),Acceleration_(0.0f)
+	 FrontVector{(0,0,1)},PlayerDirection({ 0,0,0 }),PlayerPosition({0,0,0}), Acceleration_(0.0f)
 {
+	cameraTransform = transform_;
 }
 
 Player::~Player()
@@ -34,6 +35,9 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	cameraTransform.position_ = transform_.position_;
+	
+
 	PlayerPosition = XMLoadFloat3(&this->transform_.position_); 
 	XMFLOAT3 x;
 	XMStoreFloat3(&x, PlayerPosition);
@@ -106,11 +110,38 @@ void Player::Update()
 	}
 
 	//--------------カメラ追従--------------
-	XMFLOAT3 CameraPositionVec = { transform_.position_.x ,transform_.position_.y + 1, transform_.position_.z - 8 };
-	XMFLOAT3 CameraTargetVec = { transform_.position_.x,transform_.position_.y, transform_.position_.z };
+	XMFLOAT3 CameraPosition = { transform_.position_.x ,transform_.position_.y + 1, transform_.position_.z - 8 };
+	XMFLOAT3 CameraTarget = { transform_.position_.x,transform_.position_.y, transform_.position_.z };
 
-	Camera::SetPosition(CameraPositionVec);//カメラの位置をセット（今は追従するだけ） 
-	Camera::SetTarget(CameraTargetVec);//カメラの焦点をセット（今は追従するだけ）
+	if (Input::IsKey(DIK_A))
+	{
+		cameraTransform.rotate_.y -= 10;
+	}
+	if (Input::IsKey(DIK_D))
+	{
+		cameraTransform.rotate_.y += 10;
+	}
+
+	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform.rotate_.y));//y軸の回転行列
+	XMVECTOR rotVec = XMVector3TransformCoord(FrontVector, rotY);//回転行列をかける
+	XMVECTOR inv = XMVectorNegate(rotVec);//逆ベクトルにする
+
+	XMFLOAT3 temp;
+	XMStoreFloat3(&temp, inv);
+	CameraPosition = temp;
+	
+
+
+	//XMVECTOR v = XMLoadFloat3(&CameraPosition);
+	//XMVECTOR rotvec = XMVector3TransformCoord(v, roty);
+	//XMVECTOR rotvec = XMVector3TransformCoord(XMVectorSet(0, 0, 1, 0), roty);
+	//v += rotvec;
+	//XMStoreFloat3(&CameraPosition, v);
+	//CameraPosition = {CameraPosition.x + temp.x, CameraPosition.y + temp.y, CameraPosition.z + temp.z};
+	//XMStoreFloat3(&CameraPosition,rotvec);
+	
+	Camera::SetPosition(CameraPosition);//カメラの位置をセット（今は追従するだけ） 
+	Camera::SetTarget(CameraTarget);//カメラの焦点をセット（今は追従するだけ）
 
 
 	/*

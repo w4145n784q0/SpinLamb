@@ -25,6 +25,8 @@ private:
 	XMVECTOR PlayerDirection;//方向ベクトル(実際に向いている方向)
 	XMVECTOR PlayerPosition;//位置ベクトル
 	float RotateY;//回転角度（基本Ｙ軸のみ）
+	Transform cameraTransform;//カメラの回転
+	
 
 public:
 
