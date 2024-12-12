@@ -1,11 +1,13 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"Player.h"
+
 class Enemy :
     public GameObject
 {
 private:
     int hModel_Enemy;
-
+	Player pPlayer;
 	enum EnemyState {
 		S_IDLE = 0,//‘Ò‹@
 		S_SUSPICIOUS,//‰ö‚µ‚Þ

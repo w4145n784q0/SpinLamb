@@ -5,15 +5,13 @@
 #include"Engine/Camera.h"
 #include"Engine/SphereCollider.h"
 
-#include"Player.h"
-
 namespace
 {
 	float speed_ = 3.0f;
 }
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent,"Enemy"),hModel_Enemy(-1)
+	:GameObject(parent,"Enemy"),hModel_Enemy(-1),pPlayer(nullptr)
 {
 }
 
@@ -25,7 +23,7 @@ void Enemy::Initialize()
 {
 	hModel_Enemy = Model::Load("enemy.fbx");
 	transform_.position_ = { 0,0,7 };
-
+	pPlayer = (Player*)FindObject("Player");
 	
 
 	//SphereCollider* col_eye = new SphereCollider(XMFLOAT3(0, 0, 0), 5.0f);
@@ -72,7 +70,7 @@ void Enemy::Release()
 void Enemy::UpdateIdle()
 {
 	XMFLOAT3 a;
-	Player pPlayer = (Player*)FindObject("Player");
+	
 	XMFLOAT3 pPosition = pPlayer.GetPosition();
 	XMVECTOR pPositionVec = pPlayer.GetPlayerPosition();
 	XMFLOAT3 x;
