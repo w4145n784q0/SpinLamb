@@ -17,6 +17,10 @@ Player::Player(GameObject* parent)
 	 FrontVector{(0,0,1)},PlayerDirection({ 0,0,0 }),PlayerPosition({0,0,0}), Acceleration_(0.0f)
 {
 	cameraTransform = transform_;
+	CameraPosition = { transform_.position_.x ,transform_.position_.y + 1, transform_.position_.z - 8 };
+	CameraTarget = { transform_.position_.x,transform_.position_.y, transform_.position_.z };
+
+
 }
 
 Player::~Player()
@@ -110,27 +114,33 @@ void Player::Update()
 	}
 
 	//--------------カメラ追従--------------
-	XMFLOAT3 CameraPosition = { transform_.position_.x ,transform_.position_.y + 1, transform_.position_.z - 8 };
-	XMFLOAT3 CameraTarget = { transform_.position_.x,transform_.position_.y, transform_.position_.z };
-
-	if (Input::IsKey(DIK_A))
+	
+	if (Input::IsKey(DIK_J))
 	{
 		cameraTransform.rotate_.y -= 10;
 	}
-	if (Input::IsKey(DIK_D))
+	if (Input::IsKey(DIK_K))
 	{
 		cameraTransform.rotate_.y += 10;
 	}
 
-	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform.rotate_.y));//y軸の回転行列
-	XMVECTOR rotVec = XMVector3TransformCoord(FrontVector, rotY);//回転行列をかける
-	XMVECTOR inv = XMVectorNegate(rotVec);//逆ベクトルにする
+	//XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform.rotate_.y));//y軸の回転行列
+	//XMVECTOR rotVec = XMVector3TransformCoord(FrontVector, rotY);//回転行列をかける
+	//XMVECTOR inv = XMVectorNegate(rotVec);//逆ベクトルにする
+
+	//XMFLOAT3 temp;
+	//XMStoreFloat3(&temp, inv);
+	//CameraPosition = temp;
+
+
+	XMVECTOR a = PlayerPosition + FrontVector;
+	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform.rotate_.y));
+	XMVECTOR rotVec = XMVector3TransformCoord(a, rotY);
+	XMVECTOR inv = XMVectorNegate(rotVec);
 
 	XMFLOAT3 temp;
-	XMStoreFloat3(&temp, inv);
+	XMStoreFloat3(&temp, rotVec);
 	CameraPosition = temp;
-	
-
 
 	//XMVECTOR v = XMLoadFloat3(&CameraPosition);
 	//XMVECTOR rotvec = XMVector3TransformCoord(v, roty);

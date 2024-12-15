@@ -27,6 +27,9 @@ private:
 	float RotateY;//‰ñ“]Šp“xiŠî–{‚x²‚Ì‚İj
 	Transform cameraTransform;//ƒJƒƒ‰‚Ì‰ñ“]
 	
+	XMFLOAT3 CameraPosition;
+	XMFLOAT3 CameraTarget;
+
 
 public:
 
