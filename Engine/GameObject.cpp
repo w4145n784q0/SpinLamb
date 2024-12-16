@@ -192,7 +192,7 @@ void GameObject::KillAllChildren(void)
 	childList_.clear();
 }
 
-XMVECTOR GameObject::FrontVec(float rotY)
+XMVECTOR GameObject::RotateVecFront(float rotY)
 {
 	XMVECTOR v = XMVectorSet(0, 0, 1, 0);
 	XMMATRIX m = XMMatrixRotationY(XMConvertToRadians(rotY));

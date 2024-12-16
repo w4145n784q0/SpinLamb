@@ -11,7 +11,7 @@ namespace
 }
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent,"Enemy"),hModel_Enemy(-1),pPlayer(nullptr)
+	:GameObject(parent,"Enemy"),hModel_Enemy(-1),pPlayer_(nullptr)
 {
 }
 
@@ -23,7 +23,7 @@ void Enemy::Initialize()
 {
 	hModel_Enemy = Model::Load("enemy.fbx");
 	transform_.position_ = { 0,0,7 };
-	pPlayer = (Player*)FindObject("Player");
+	pPlayer_ = (Player*)FindObject("Player");
 	
 
 	//SphereCollider* col_eye = new SphereCollider(XMFLOAT3(0, 0, 0), 5.0f);
@@ -71,8 +71,8 @@ void Enemy::UpdateIdle()
 {
 	XMFLOAT3 a;
 	
-	XMFLOAT3 pPosition = pPlayer.GetPosition();
-	XMVECTOR pPositionVec = pPlayer.GetPlayerPosition();
+	XMFLOAT3 pPosition = pPlayer_->GetPosition();
+	XMVECTOR pPositionVec = pPlayer_->GetPlayerPosition();
 	XMFLOAT3 x;
 	XMStoreFloat3(&x, pPositionVec);
 
@@ -87,7 +87,7 @@ void Enemy::UpdateIdle()
 	//v = XMVector3Normalize(v);//距離をはかったらvector化
 
 
-	XMVECTOR forward = FrontVec(this->transform_.rotate_.y);//自分の前方ベクトル
+	XMVECTOR forward = RotateVecFront(this->transform_.rotate_.y);//自分の前方ベクトル
 	XMVECTOR dot = XMVector3Dot(pPositionVec, forward);//相手へのベクトルと自分の前方ベクトルの内積をとる
 	float cosine = XMVectorGetX(dot);
 	float sin = XMVectorGetY(dot);

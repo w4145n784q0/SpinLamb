@@ -2,12 +2,14 @@
 #include "Engine/GameObject.h"
 #include"Player.h"
 
+class Player;
+
 class Enemy :
     public GameObject
 {
 private:
     int hModel_Enemy;
-	Player pPlayer;
+	Player* pPlayer_;
 	enum EnemyState {
 		S_IDLE = 0,//待機
 		S_SUSPICIOUS,//怪しむ
@@ -19,7 +21,6 @@ private:
 	};
 	EnemyState enemy_state;
 
-	XMVECTOR FrontVector = {0,0,1};//敵の基本ベクトル
 	XMVECTOR EnemyDirection;//敵の方向ベクトル
 	XMVECTOR EnemyPosition;//敵の位置ベクトル
 	float RotateY;//回転角度（基本Ｙ軸のみ）
