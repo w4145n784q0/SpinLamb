@@ -53,26 +53,21 @@ void Player::Update()
 	if (Input::IsKey(DIK_UP))
 	{
 		Direction.z = 1.0;
-		moveDir = Front;
 	}
 	if (Input::IsKey(DIK_DOWN))
 	{
 		Direction.z = -1.0;
-		moveDir = Back;
 	}
 	if (Input::IsKey(DIK_LEFT))
 	{
-		Direction.x = -1.0;
-		moveDir = Left;
-		
+		transform_.rotate_.y -= 1;
+		cameraTransform.rotate_.y -= 1;
 	}
 	if (Input::IsKey(DIK_RIGHT))
 	{
-		Direction.x = 1.0;
-		moveDir = Right;
+		transform_.rotate_.y += 1;
+		cameraTransform.rotate_.y += 1;
 	}
-	transform_.rotate_.y = MoveDirArray[moveDir];//キャラの回転　４方向のみ
-
 	
 	//--------------ダッシュ関係--------------
 	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT)) 
@@ -85,8 +80,9 @@ void Player::Update()
 	}
 	Dash();
 	
-
+	XMMATRIX playerRot = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
 	XMVECTOR PrevDir = XMVectorSet(Direction.x,Direction.y, Direction.z, 0.0f);
+	PrevDir = XMVector3TransformCoord(PrevDir, playerRot);
 	XMVECTOR norm = XMVector3Normalize(PrevDir);// 単位ベクトルに正規化
 	XMVECTOR MoveVector = XMVectorScale(norm,(speed + Acceleration_) * DeltaTime);//移動ベクトル化する
 
@@ -149,8 +145,10 @@ void Player::Draw()
 	Model::SetTransform(hModel_Player, transform_);
 	Model::Draw(hModel_Player);
 
-	/*Model::SetTransform(hcamera, cameraTransform);
-	Model::Draw(hcamera);*/
+	Transform t;
+	t.position_ = { 0,0,0 };
+	Model::SetTransform(hcamera, t);
+	Model::Draw(hcamera);
 }
 
 void Player::Release()
