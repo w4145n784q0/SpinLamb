@@ -10,17 +10,19 @@ namespace {
 	const float speed = 9.0f;
 	const float Player_Gravity = 0.08; //0.16333f
 	const float DeltaTime = 0.016f;
+	const XMVECTOR front = { 0,0,1 };
+	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎回この値にする（値が変わり続けるのを防ぐ）
 }
 
 Player::Player(GameObject* parent)
 	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),JumpSpeed_(0.0f),
-	 FrontVector{(0,0,1)},PlayerDirection({ 0,0,0 }),PlayerPosition({0,0,0}), Acceleration_(0.0f)
+	 PlayerDirection({ 0,0,0 }),PlayerPosition({0,0,0}), Acceleration_(0.0f),BackCamera(BackCameraPos)
 {
 	cameraTransform = transform_;
 	CameraPosition = { transform_.position_.x ,transform_.position_.y + 1, transform_.position_.z - 8 };
 	CameraTarget = { transform_.position_.x,transform_.position_.y, transform_.position_.z };
 
-
+	hcamera = - 1;
 }
 
 Player::~Player()
@@ -31,7 +33,9 @@ Player::~Player()
 void Player::Initialize()
 {
 	hModel_Player = Model::Load("ensui.fbx"); 
-	transform_.position_ = { -20,0,-20};
+	hcamera = Model::Load("box.fbx");
+	this->transform_.position_ = { -20,0,-20};
+
 	
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0,0,0),0.1f);
 	this->AddCollider(col);
@@ -83,8 +87,8 @@ void Player::Update()
 	
 
 	XMVECTOR PrevDir = XMVectorSet(Direction.x,Direction.y, Direction.z, 0.0f);
-	PlayerDirection = XMVector3Normalize(PrevDir);// 単位ベクトルに正規化
-	XMVECTOR MoveVector = XMVectorScale(PlayerDirection,(speed + Acceleration_) * DeltaTime);//移動ベクトル化する
+	XMVECTOR norm = XMVector3Normalize(PrevDir);// 単位ベクトルに正規化
+	XMVECTOR MoveVector = XMVectorScale(norm,(speed + Acceleration_) * DeltaTime);//移動ベクトル化する
 
 	XMVECTOR PrevPos = PlayerPosition;
 
@@ -115,58 +119,27 @@ void Player::Update()
 
 	//--------------カメラ追従--------------
 	
-	if (Input::IsKey(DIK_J))
+	if (Input::IsKey(DIK_A))
 	{
-		cameraTransform.rotate_.y -= 10;
+		cameraTransform.rotate_.y -= 5;
 	}
-	if (Input::IsKey(DIK_K))
+	if (Input::IsKey(DIK_D))
 	{
-		cameraTransform.rotate_.y += 10;
+		cameraTransform.rotate_.y += 5;
+	}
+	if (Input::IsKey(DIK_Z))//カメラを正面に戻す（方向に変化なし）
+	{
+		cameraTransform.rotate_.y = 0;
 	}
 
-	//XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform.rotate_.y));//y軸の回転行列
-	//XMVECTOR rotVec = XMVector3TransformCoord(FrontVector, rotY);//回転行列をかける
-	//XMVECTOR inv = XMVectorNegate(rotVec);//逆ベクトルにする
+	CameraTarget = { transform_.position_ };//カメラの位置は自機の位置に固定
+	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform.rotate_.y));//カメラの回転行列をつくり
+	BackCamera = XMVector3TransformCoord(BackCamera, rotY);//バックカメラのベクトルにかける
+	XMStoreFloat3(&CameraPosition, NewPos + BackCamera);//移動ベクトルと加算
 
-	//XMFLOAT3 temp;
-	//XMStoreFloat3(&temp, inv);
-	//CameraPosition = temp;
-
-
-	XMVECTOR a = PlayerPosition + FrontVector;
-	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform.rotate_.y));
-	XMVECTOR rotVec = XMVector3TransformCoord(a, rotY);
-	XMVECTOR inv = XMVectorNegate(rotVec);
-
-	XMFLOAT3 temp;
-	XMStoreFloat3(&temp, rotVec);
-	CameraPosition = temp;
-
-	//XMVECTOR v = XMLoadFloat3(&CameraPosition);
-	//XMVECTOR rotvec = XMVector3TransformCoord(v, roty);
-	//XMVECTOR rotvec = XMVector3TransformCoord(XMVectorSet(0, 0, 1, 0), roty);
-	//v += rotvec;
-	//XMStoreFloat3(&CameraPosition, v);
-	//CameraPosition = {CameraPosition.x + temp.x, CameraPosition.y + temp.y, CameraPosition.z + temp.z};
-	//XMStoreFloat3(&CameraPosition,rotvec);
-	
-	Camera::SetPosition(CameraPosition);//カメラの位置をセット（今は追従するだけ） 
-	Camera::SetTarget(CameraTarget);//カメラの焦点をセット（今は追従するだけ）
-
-
-	/*
-	Enemy* pEnemy = (Enemy*)FindObject("Enemy");    //ステージオブジェクトを探す
-	int hEnemyModel = pEnemy->GetModelHandle();    //モデル番号を取得
-
-	RayCastData data;
-	data.start = transform_.position_;   //レイの発射位置
-	data.dir = XMFLOAT3(0, 0, 1);       //レイの方向
-	
-	Model::RayCast(hEnemyModel, &data); //レイを発射
-
-	if (data.hit) {
-		transform_.position_.y = 3;
-	}*/
+	Camera::SetPosition(CameraPosition);//カメラの位置をセット 
+	Camera::SetTarget(CameraTarget);//カメラの焦点をセット
+	BackCamera = { BackCameraPos };//バックカメラベクトルをリセット
 
 
 }
@@ -175,6 +148,9 @@ void Player::Draw()
 {
 	Model::SetTransform(hModel_Player, transform_);
 	Model::Draw(hModel_Player);
+
+	/*Model::SetTransform(hcamera, cameraTransform);
+	Model::Draw(hcamera);*/
 }
 
 void Player::Release()

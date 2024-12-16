@@ -5,6 +5,7 @@ class Player :
 {
 private:
 	int hModel_Player;
+	int hcamera;
 	bool IsOnGround_;
 	float JumpSpeed_;//+ならジャンプしている状態 -なら下降～地面にいる状態
 
@@ -19,13 +20,13 @@ private:
 	int MoveDirArray[5] = { 0,270,180,90,0 };
 	
 
-	XMFLOAT3 Direction;//プレイヤーの方向
-
-	XMVECTOR FrontVector;//前向きベクトル（そのキャラクタにとっての前）
+	XMFLOAT3 Direction;//プレイヤーの方向(xzどこに進むか)
 	XMVECTOR PlayerDirection;//方向ベクトル(実際に向いている方向)
 	XMVECTOR PlayerPosition;//位置ベクトル
-	float RotateY;//回転角度（基本Ｙ軸のみ）
-	Transform cameraTransform;//カメラの回転
+	//float RotateY;//回転角度（基本Ｙ軸のみ）
+
+	Transform cameraTransform;//カメラのTransform 回転だけ使う
+	XMVECTOR BackCamera;//プレイヤーの後ろに置くカメラの位置
 	
 	XMFLOAT3 CameraPosition;
 	XMFLOAT3 CameraTarget;
