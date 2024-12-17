@@ -18,11 +18,11 @@ Player::Player(GameObject* parent)
 	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),JumpSpeed_(0.0f),
 	 PlayerDirection({ 0,0,0 }),PlayerPosition({0,0,0}), Acceleration_(0.0f),BackCamera(BackCameraPos)
 {
-	cameraTransform = transform_;
-	CameraPosition = { transform_.position_.x ,transform_.position_.y + 1, transform_.position_.z - 8 };
-	CameraTarget = { transform_.position_.x,transform_.position_.y, transform_.position_.z };
+	cameraTransform = this->transform_;
+	CameraPosition = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
+	CameraTarget = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 
-	hcamera = - 1;
+	//hcamera = - 1;
 }
 
 Player::~Player()
@@ -33,8 +33,8 @@ Player::~Player()
 void Player::Initialize()
 {
 	hModel_Player = Model::Load("ensui.fbx"); 
-	hcamera = Model::Load("box.fbx");
-	this->transform_.position_ = { -20,0,-20};
+	//hcamera = Model::Load("box.fbx");
+	this->transform_.position_ = { 0,1,0};
 
 	
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0,0,0),0.1f);
@@ -43,7 +43,7 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	cameraTransform.position_ = transform_.position_;
+	cameraTransform.position_ = this->transform_.position_;
 	
 
 	PlayerPosition = XMLoadFloat3(&this->transform_.position_); 
@@ -60,12 +60,12 @@ void Player::Update()
 	}
 	if (Input::IsKey(DIK_LEFT))
 	{
-		transform_.rotate_.y -= 1;
+		this->transform_.rotate_.y -= 1;
 		cameraTransform.rotate_.y -= 1;
 	}
 	if (Input::IsKey(DIK_RIGHT))
 	{
-		transform_.rotate_.y += 1;
+		this->transform_.rotate_.y += 1;
 		cameraTransform.rotate_.y += 1;
 	}
 	
@@ -80,7 +80,7 @@ void Player::Update()
 	}
 	Dash();
 	
-	XMMATRIX playerRot = XMMatrixRotationY(XMConvertToRadians(transform_.rotate_.y));
+	XMMATRIX playerRot = XMMatrixRotationY(XMConvertToRadians(this->transform_.rotate_.y));
 	XMVECTOR PrevDir = XMVectorSet(Direction.x,Direction.y, Direction.z, 0.0f);
 	PrevDir = XMVector3TransformCoord(PrevDir, playerRot);
 	XMVECTOR norm = XMVector3Normalize(PrevDir);// 単位ベクトルに正規化
@@ -89,7 +89,7 @@ void Player::Update()
 	XMVECTOR PrevPos = PlayerPosition;
 
 	XMVECTOR NewPos = PrevPos + MoveVector;
-	XMStoreFloat3(&transform_.position_, NewPos);
+	XMStoreFloat3(&this->transform_.position_, NewPos);
 
 	Direction = { 0,0,0 };
 
@@ -103,13 +103,13 @@ void Player::Update()
 	}
 
 	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
-	transform_.position_.y += JumpSpeed_;
+	this->transform_.position_.y += JumpSpeed_;
 	if (JumpSpeed_ < -100) {
 		JumpSpeed_ = -100;
 	}
 
-	if (transform_.position_.y <= 0.0f) {//プレイヤーめりこみ防止に一定以下のy座標で値を固定
-		transform_.position_.y = 0.0f;
+	if (this->transform_.position_.y <= 1.0f) {//プレイヤーめりこみ防止に一定以下のy座標で値を固定
+		this->transform_.position_.y = 1.0f;
 		IsOnGround_ = true;
 	}
 
@@ -126,9 +126,10 @@ void Player::Update()
 	if (Input::IsKey(DIK_Z))//カメラを正面に戻す（方向に変化なし）
 	{
 		cameraTransform.rotate_.y = 0;
+		this->transform_.rotate_.y = 0;
 	}
 
-	CameraTarget = { transform_.position_ };//カメラの位置は自機の位置に固定
+	CameraTarget = { this->transform_.position_ };//カメラの位置は自機の位置に固定
 	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform.rotate_.y));//カメラの回転行列をつくり
 	BackCamera = XMVector3TransformCoord(BackCamera, rotY);//バックカメラのベクトルにかける
 	XMStoreFloat3(&CameraPosition, NewPos + BackCamera);//移動ベクトルと加算
@@ -145,10 +146,10 @@ void Player::Draw()
 	Model::SetTransform(hModel_Player, transform_);
 	Model::Draw(hModel_Player);
 
-	Transform t;
+	/*Transform t;
 	t.position_ = { 0,0,0 };
 	Model::SetTransform(hcamera, t);
-	Model::Draw(hcamera);
+	Model::Draw(hcamera);*/
 }
 
 void Player::Release()

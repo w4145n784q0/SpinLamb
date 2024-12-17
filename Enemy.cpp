@@ -22,7 +22,7 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 	hModel_Enemy = Model::Load("enemy.fbx");
-	transform_.position_ = { 0,0,7 };
+	transform_.position_ = { 0,1,7 };
 	pPlayer_ = (Player*)FindObject("Player");
 	
 
