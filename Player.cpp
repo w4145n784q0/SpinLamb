@@ -89,11 +89,14 @@ void Player::Update()
 
 	int nextX, nextZ;
 	nextX = (int)XMVectorGetX(NewPos);
-	nextZ = (int)XMVectorGetZ(NewPos) + 1.5f;
+	nextZ = (int)XMVectorGetZ(NewPos) + 1.0f;
 
 	if (pGround->IsMoveFront(nextX, nextZ)) 
 	{
 		XMStoreFloat3(&this->transform_.position_, NewPos);
+	}
+	else {
+		transform_.position_.y = 3.0f;
 	}
 
 

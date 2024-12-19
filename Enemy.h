@@ -25,7 +25,7 @@ private:
 	XMVECTOR EnemyPosition;//“G‚ÌˆÊ’uƒxƒNƒgƒ‹
 	float RotateY;//‰ñ“]Šp“xiŠî–{‚x²‚Ì‚İj
 	bool IsTargetted;//“G‚Ì‹ŠE‚É“ü‚Á‚½‚©
-	float FrontLength = 5.0f;//“G‚Ì‹ŠE‚Ì’·‚³
+	float FrontLength = 10.0f;//“G‚Ì‹ŠE‚Ì’·‚³
 
 	bool IsHit_;
 

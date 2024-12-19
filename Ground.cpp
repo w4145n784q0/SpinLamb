@@ -1,21 +1,25 @@
 #include "Ground.h"
 #include"Engine/Model.h"
 
+namespace {
+	int blocknum = 20;
+}
+
 Ground::Ground(GameObject* parent)
 	:GameObject(parent,"Ground"),hModel_Ground(-1),hModel_grass(-1),hModel_hole(-1)
 {
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < blocknum; i++)
 	{
-		for (int j = 0; j < 20; j++)
+		for (int j = 0; j < blocknum; j++)
 		{
 			stageTable[i][j].height = 1;
 			stageTable[i][j].type = 0;
 		}
 	}
 
-	for (int i = 0; i < 20; i++) {
-		stageTable[i][19].height = 4;
-		stageTable[i][19].type = 1;
+	for (int i = 0; i < blocknum; i++) {
+		stageTable[i][blocknum - 1].height = 4;
+		stageTable[i][blocknum - 1].type = 1;
 	}
 }
 
@@ -43,9 +47,9 @@ void Ground::Update()
 
 void Ground::Draw()
 {
-	for (int x = 0; x < 20; x++)
+	for (int x = 0; x < blocknum; x++)
 	{
-		for (int z = 0; z < 20; z++)
+		for (int z = 0; z < blocknum; z++)
 		{
 			for (int y = 0; y < stageTable[x][z].height; y++)
 			{
