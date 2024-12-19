@@ -1,6 +1,10 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include<array>
+#include<vector>
+
+using std::vector;
+
 class Ground :
     public GameObject
 {

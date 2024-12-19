@@ -103,12 +103,15 @@ void Player::Update()
 
 	Direction = { 0,0,0 };
 
-	//--------------ジャンプ(挙動のみ)--------------
+	//--------------ジャンプ--------------
+	//ボタンを押すとジャンプの着地先を表示(未完成)
+	//WASDで着地場所を細かく設定(未完成)
 	if (Input::IsKeyDown(DIK_SPACE))
 	{
 		if (IsOnGround_) {
 			IsOnGround_ = false;
 			JumpSpeed_ = 1.5;//一時的にy方向にマイナスされている値を大きくする
+
 		}
 	}
 
@@ -125,11 +128,11 @@ void Player::Update()
 
 	//--------------カメラ追従--------------
 	
-	if (Input::IsKey(DIK_A))
+	if (Input::IsKey(DIK_X))
 	{
 		cameraTransform.rotate_.y -= 5;
 	}
-	if (Input::IsKey(DIK_D))
+	if (Input::IsKey(DIK_C))
 	{
 		cameraTransform.rotate_.y += 5;
 	}

@@ -1,5 +1,6 @@
 #include "Ground.h"
 #include"Engine/Model.h"
+#include"Engine/CsvReader.h"
 
 namespace {
 	int blocknum = 20;
@@ -8,6 +9,9 @@ namespace {
 Ground::Ground(GameObject* parent)
 	:GameObject(parent,"Ground"),hModel_Ground(-1),hModel_grass(-1),hModel_hole(-1)
 {
+	//CsvReader csv;
+	//csv.Load("MapTest.csv");
+
 	for (int i = 0; i < blocknum; i++)
 	{
 		for (int j = 0; j < blocknum; j++)
