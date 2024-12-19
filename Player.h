@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"Ground.h"
 class Player :
     public GameObject
 {
@@ -31,6 +32,7 @@ private:
 	XMFLOAT3 CameraPosition;
 	XMFLOAT3 CameraTarget;
 
+	Ground* pGround;
 
 public:
 

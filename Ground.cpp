@@ -12,6 +12,11 @@ Ground::Ground(GameObject* parent)
 			stageTable[i][j].type = 0;
 		}
 	}
+
+	for (int i = 0; i < 20; i++) {
+		stageTable[i][19].height = 4;
+		stageTable[i][19].type = 1;
+	}
 }
 
 Ground::~Ground()
@@ -64,4 +69,14 @@ void Ground::Draw()
 
 void Ground::Release()
 {
+}
+
+bool Ground::IsMoveFront(int x, int y)
+{
+	if (stageTable[x][y].type == 1) {
+		return false;
+	}
+	else {
+		return true;
+	}
 }

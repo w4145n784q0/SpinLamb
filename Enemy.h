@@ -27,6 +27,7 @@ private:
 	bool IsTargetted;//“G‚Ì‹ŠE‚É“ü‚Á‚½‚©
 	float FrontLength = 5.0f;//“G‚Ì‹ŠE‚Ì’·‚³
 
+	bool IsHit_;
 
 	XMVECTOR sightLength;//“G‚Ì‹ŠEiîŒ^‚Ì‹ŠEj‚Ì’·‚³
 

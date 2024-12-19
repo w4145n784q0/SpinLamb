@@ -22,5 +22,7 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
+
+	bool IsMoveFront(int x, int y);
 };
 

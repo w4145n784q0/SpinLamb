@@ -16,7 +16,7 @@ namespace {
 
 Player::Player(GameObject* parent)
 	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),JumpSpeed_(0.0f),
-	 PlayerDirection({ 0,0,0 }),PlayerPosition({0,0,0}), Acceleration_(0.0f),BackCamera(BackCameraPos)
+	 PlayerDirection({ 0,0,0 }),PlayerPosition({0,0,0}), Acceleration_(0.0f),BackCamera(BackCameraPos),pGround(nullptr)
 {
 	cameraTransform = this->transform_;
 	CameraPosition = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -36,6 +36,8 @@ void Player::Initialize()
 	//hcamera = Model::Load("box.fbx");
 	this->transform_.position_ = { 0,1,0};
 
+	pGround = (Ground*)FindObject("Ground");
+
 	
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0,0,0),0.1f);
 	this->AddCollider(col);
@@ -44,11 +46,7 @@ void Player::Initialize()
 void Player::Update()
 {
 	cameraTransform.position_ = this->transform_.position_;
-	
-
 	PlayerPosition = XMLoadFloat3(&this->transform_.position_); 
-	XMFLOAT3 x;
-	XMStoreFloat3(&x, PlayerPosition);
 
 	if (Input::IsKey(DIK_UP))
 	{
@@ -80,16 +78,25 @@ void Player::Update()
 	}
 	Dash();
 	
-	XMMATRIX playerRot = XMMatrixRotationY(XMConvertToRadians(this->transform_.rotate_.y));
-	XMVECTOR PrevDir = XMVectorSet(Direction.x,Direction.y, Direction.z, 0.0f);
-	PrevDir = XMVector3TransformCoord(PrevDir, playerRot);
+	XMMATRIX playerRot = XMMatrixRotationY(XMConvertToRadians(this->transform_.rotate_.y));//プレイヤーのy回転をラジアン化して行列に
+	XMVECTOR PrevDir = XMVectorSet(Direction.x,Direction.y, Direction.z, 0.0f);//プレイヤーの進行方向をベクトル化
+	PrevDir = XMVector3TransformCoord(PrevDir, playerRot);//方向ベクトルを回転行列で変換
 	XMVECTOR norm = XMVector3Normalize(PrevDir);// 単位ベクトルに正規化
 	XMVECTOR MoveVector = XMVectorScale(norm,(speed + Acceleration_) * DeltaTime);//移動ベクトル化する
 
 	XMVECTOR PrevPos = PlayerPosition;
-
 	XMVECTOR NewPos = PrevPos + MoveVector;
-	XMStoreFloat3(&this->transform_.position_, NewPos);
+
+	int nextX, nextZ;
+	nextX = (int)XMVectorGetX(NewPos);
+	nextZ = (int)XMVectorGetZ(NewPos) + 1.5f;
+
+	if (pGround->IsMoveFront(nextX, nextZ)) 
+	{
+		XMStoreFloat3(&this->transform_.position_, NewPos);
+	}
+
+
 
 	Direction = { 0,0,0 };
 

@@ -11,7 +11,7 @@ namespace
 }
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent,"Enemy"),hModel_Enemy(-1),pPlayer_(nullptr)
+	:GameObject(parent,"Enemy"),hModel_Enemy(-1),pPlayer_(nullptr),IsHit_(false)
 {
 }
 
@@ -94,9 +94,19 @@ void Enemy::UpdateIdle()
 
 	if (cosine > cosf(XMConvertToRadians(60)) && Pointdist < FrontLength) //‹——£‚Í60“xˆÈ“à‚©and‘ŠŽè‚Æ‚Ì‹——£‚ªFrontLength‚æ‚è¬‚³‚¢
 	{
-		int i = 0;
+		IsHit_ = true;
+	}
+	else {
+		IsHit_ = false;
 	}
 	
+	if (IsHit_) {
+		transform_.position_.y = 3.0f;
+	}
+	else {
+		transform_.position_.y = 1.0f;
+	}
+
 }
 
 void Enemy::UpdateChase()
