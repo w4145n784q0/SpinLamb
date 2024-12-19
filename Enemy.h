@@ -24,9 +24,8 @@ private:
 	XMVECTOR EnemyDirection;//敵の方向ベクトル
 	XMVECTOR EnemyPosition;//敵の位置ベクトル
 	float RotateY;//回転角度（基本Ｙ軸のみ）
-	bool IsTargetted;//敵の視界に入ったか
 	float FrontLength = 10.0f;//敵の視界の長さ
-
+	float Fov;
 	bool IsHit_;
 
 	XMVECTOR sightLength;//敵の視界（扇型の視界）の長さ

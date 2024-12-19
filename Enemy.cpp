@@ -8,10 +8,12 @@
 namespace
 {
 	float speed_ = 3.0f;
+	const int EyeAngle = 60;
 }
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent,"Enemy"),hModel_Enemy(-1),pPlayer_(nullptr),IsHit_(false)
+	:GameObject(parent,"Enemy"),hModel_Enemy(-1),pPlayer_(nullptr),IsHit_(false),
+	Fov(XMConvertToRadians(EyeAngle))
 {
 }
 
@@ -76,23 +78,22 @@ void Enemy::UpdateIdle()
 	XMFLOAT3 x;
 	XMStoreFloat3(&x, pPositionVec);
 
-	//自分(enmey)と相手(player)の座標上の距離をはかる
-	a.x = this->transform_.position_.x - pPosition.x;
-	a.y = this->transform_.position_.y - pPosition.y;
-	a.z = this->transform_.position_.z - pPosition.z;
+	//自分(enmey)と相手(player)の座標上の距離をはかる(二点間の距離)
+	//a.x = this->transform_.position_.x - pPosition.x;
+	//a.y = this->transform_.position_.y - pPosition.y;
+	//a.z = this->transform_.position_.z - pPosition.z;
+	//float Pointdist = sqrt(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2));
 
-	float Pointdist = sqrt(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2));
+	//自分(enmey)と相手(player)の距離をはかる(ベクトル)
+	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition, pPositionVec);
+	float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
 
-	//XMVECTOR v = XMLoadFloat3(&a);
-	//v = XMVector3Normalize(v);//距離をはかったらvector化
-
-
-	XMVECTOR forward = RotateVecFront(this->transform_.rotate_.y);//自分の前方ベクトル
-	XMVECTOR dot = XMVector3Dot(pPositionVec, forward);//相手へのベクトルと自分の前方ベクトルの内積をとる
+	XMVECTOR forward = RotateVecFront(this->transform_.rotate_.y);//自分の前方ベクトル(回転した分も含む)
+	DistVec = XMVector3Normalize(DistVec);//自分と相手の距離ベクトル 内積の計算用
+	XMVECTOR dot = XMVector3Dot(DistVec, forward);//相手とのベクトルと自分の前方ベクトルの内積をとる
 	float cosine = XMVectorGetX(dot);
-	float sin = XMVectorGetY(dot);
 
-	if (cosine > cosf(XMConvertToRadians(60)) && Pointdist < FrontLength) //距離は60度以内かand相手との距離がFrontLengthより小さい
+	if (cosine > cosf(Fov) && Pointdist < FrontLength) //距離は60度以内かand相手との距離がFrontLengthより小さい
 	{
 		IsHit_ = true;
 	}
