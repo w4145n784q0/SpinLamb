@@ -10,19 +10,23 @@ namespace {
 	const float speed = 9.0f;
 	const float Player_Gravity = 0.08; //0.16333f
 	const float DeltaTime = 0.016f;
+	const float FullAccelerate = 50.0f;
 	const XMVECTOR front = { 0,0,1 };
 	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎回この値にする（値が変わり続けるのを防ぐ）
 }
 
 Player::Player(GameObject* parent)
-	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),JumpSpeed_(0.0f),
-	 PlayerDirection({ 0,0,0 }),PlayerPosition({0,0,0}), Acceleration_(0.0f),BackCamera(BackCameraPos),pGround(nullptr)
+	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),IsDash_(false), 
+	JumpDirection({0,0,0}), JumpSpeed_(0.0f), MovePoint({0,0,0}), LandingPoint({0,0,0}),
+	Direction({0,0,0}),PlayerDirection({0,0,0}), PlayerPosition({0,0,0}), Acceleration_(0.0f),
+	BackCamera(BackCameraPos), pGround(nullptr)
 {
 	cameraTransform = this->transform_;
 	CameraPosition = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
 	CameraTarget = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 
-	//hcamera = - 1;
+	StartPosition.position_ = { 0,1,0 };
+
 }
 
 Player::~Player()
@@ -34,7 +38,7 @@ void Player::Initialize()
 {
 	hModel_Player = Model::Load("ensui.fbx"); 
 	//hcamera = Model::Load("box.fbx");
-	this->transform_.position_ = { 0,1,0};
+	this->transform_.position_ = StartPosition.position_;
 
 	pGround = (Ground*)FindObject("Ground");
 
@@ -95,23 +99,57 @@ void Player::Update()
 	{
 		XMStoreFloat3(&this->transform_.position_, NewPos);
 	}
-	else {
-		transform_.position_.y = 3.0f;
+	else 
+	{
+		
 	}
-
-
-
-	Direction = { 0,0,0 };
+	Direction = { 0,0,0 };//進行方向のリセット毎フレーム行う
 
 	//--------------ジャンプ--------------
 	//ボタンを押すとジャンプの着地先を表示(未完成)
 	//WASDで着地場所を細かく設定(未完成)
+
+	if (Input::IsKeyDown(DIK_W))
+	{
+		JumpDirection.z = 1.0f;
+	}
+	if (Input::IsKeyDown(DIK_S))
+	{
+		JumpDirection.z = -1.0f;//後方ジャンプは実装未定
+	}
+	if (Input::IsKeyDown(DIK_A))
+	{
+		JumpTrans.rotate_.y -= 1.0f;
+		if (JumpTrans.rotate_.y <= -60.0f) {
+			JumpTrans.rotate_.y = -60.0f;
+		}
+	}
+	if (Input::IsKeyDown(DIK_D))
+	{
+		JumpTrans.rotate_.y += 1.0f;
+		if (JumpTrans.rotate_.y >= 60.0f) {
+			JumpTrans.rotate_.y = 60.0f;
+		}
+	}
+
+	XMMATRIX JumpRot = XMMatrixRotationY(XMConvertToRadians(JumpTrans.rotate_.y));
+	XMVECTOR jumpMove = XMVectorSet(JumpDirection.x, JumpDirection.y, JumpDirection.z, 0.0f);
+	jumpMove = XMVector3TransformCoord(jumpMove, JumpRot);
+	XMVECTOR normal = XMVector3Normalize(jumpMove);
+	XMVECTOR JumpVector = XMVectorScale(normal,speed);
+
+	LandingPoint = PlayerPosition + JumpVector;
+
 	if (Input::IsKeyDown(DIK_SPACE))
 	{
 		if (IsOnGround_) {
 			IsOnGround_ = false;
-			JumpSpeed_ = 1.5;//一時的にy方向にマイナスされている値を大きくする
-
+			XMStoreFloat3(&this->transform_.position_, LandingPoint);
+			
+			JumpSpeed_ = 0.8;//一時的にy方向にマイナスされている値を大きくする
+			MovePoint = XMVectorZero();
+			LandingPoint = XMVectorZero(); 
+			JumpDirection = { 0,0,0 };//進行方向のリセット毎フレーム行う
 		}
 	}
 
@@ -179,8 +217,8 @@ void Player::Dash()
 	if (IsDash_)
 	{
 		Acceleration_ += 2.0;
-		if (Acceleration_ > 50.0) {
-			Acceleration_ = 50.0;
+		if (Acceleration_ > FullAccelerate) {
+			Acceleration_ = FullAccelerate;
 		}
 	}
 	else
