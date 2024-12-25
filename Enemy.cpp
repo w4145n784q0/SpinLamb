@@ -7,14 +7,20 @@
 
 namespace
 {
-	float speed_ = 3.0f;
+	float speed_ = 6.0f;
 	const int EyeAngle = 60;
+	const float DeltaTime = 0.016f;
 }
 
 Enemy::Enemy(GameObject* parent)
 	:GameObject(parent,"Enemy"),hModel_Enemy(-1),pPlayer_(nullptr),IsHit_(false),
-	Fov(XMConvertToRadians(EyeAngle))
+	Fov(XMConvertToRadians(EyeAngle)),EnemyDirection({0,0,1})
 {
+	//基準ベクトルをつくる　0,0,1
+	EnemyDirection = XMVector3TransformCoord(EnemyDirection,GetWorldMatrix());  //getworldmatrixで変換
+	//EPの確度を計算　XMVector3AngleBetweenVectors
+	//正規化して
+	//その分回す
 }
 
 Enemy::~Enemy()
@@ -25,19 +31,22 @@ void Enemy::Initialize()
 {
 	hModel_Enemy = Model::Load("enemy.fbx");
 	transform_.position_ = { 10,1,10 };
+	transform_.rotate_.y = 180;
 	pPlayer_ = (Player*)FindObject("Player");
 	
 
-	//SphereCollider* col_eye = new SphereCollider(XMFLOAT3(0, 0, 0), 5.0f);
-	//this->AddCollider(col_eye);
+	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 0.1f);
+	this->AddCollider(col);
 
 }
 
 void Enemy::Update()
 {
+	pPosition = pPlayer_->GetPosition();
+	pPositionVec = pPlayer_->GetPlayerPosition();
 	EnemyPosition = XMLoadFloat3(&this->transform_.position_);
 
-	switch (enemy_state)
+	switch (EnemyState)
 	{
 	case Enemy::S_IDLE:
 		UpdateIdle();
@@ -45,6 +54,7 @@ void Enemy::Update()
 	case Enemy::S_SUSPICIOUS:
 		break;
 	case Enemy::S_CHASE:
+		UpdateChase();
 		break;
 	case Enemy::S_ATTACK:
 		break;
@@ -70,11 +80,8 @@ void Enemy::Release()
 }
 
 void Enemy::UpdateIdle()
-{
-	XMFLOAT3 a;
-	
-	XMFLOAT3 pPosition = pPlayer_->GetPosition();
-	XMVECTOR pPositionVec = pPlayer_->GetPlayerPosition();
+{	
+
 	XMFLOAT3 x;
 	XMStoreFloat3(&x, pPositionVec);
 
@@ -84,11 +91,11 @@ void Enemy::UpdateIdle()
 	//a.z = this->transform_.position_.z - pPosition.z;
 	//float Pointdist = sqrt(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2));
 
-	//自分(enmey)と相手(player)の距離をはかる(ベクトル)
+	//自分(enemy)と相手(player)の距離をはかる(ベクトル)
 	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition, pPositionVec);
 	float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
 
-	XMVECTOR forward = RotateVecFront(this->transform_.rotate_.y);//自分の前方ベクトル(回転した分も含む)
+	XMVECTOR forward = RotateVecFront(this->transform_.rotate_.y,EnemyDirection);//自分の前方ベクトル(回転した分も含む)
 	DistVec = XMVector3Normalize(DistVec);//自分と相手の距離ベクトル 内積の計算用
 	XMVECTOR dot = XMVector3Dot(DistVec, forward);//相手とのベクトルと自分の前方ベクトルの内積をとる
 	float cosine = XMVectorGetX(dot);
@@ -101,26 +108,44 @@ void Enemy::UpdateIdle()
 		IsHit_ = false;
 	}
 	
-	if (IsHit_) {
-		transform_.position_.y = 3.0f;
+	if (IsHit_)
+	{
+		EnemyState = S_CHASE;
 	}
-	else {
-		transform_.position_.y = 1.0f;
-	}
-
 }
 
 void Enemy::UpdateChase()
 {
+	//変更
+	XMVECTOR PlayerDistAngle = XMVectorSubtract(EnemyPosition, pPositionVec);//プレイヤーとの距離
+	PlayerDistAngle = XMVector3AngleBetweenVectors(PlayerDistAngle, EnemyDirection);//敵の位置と自分の正面の角度
+	float angle = XMVectorGetX(PlayerDistAngle);
 
+
+	//変更
+
+	XMMATRIX EnemyRot = XMMatrixRotationY(XMConvertToRadians(this->transform_.rotate_.y));//敵の回転行列
+
+	XMFLOAT3 pPos = pPlayer_->GetPosition();//プレイヤーの位置
+	ChasePoint = pPos - this->transform_.position_;//自分（enemy）とプレイヤーの位置を引き
+	XMVECTOR ChaseVec = XMLoadFloat3(&ChasePoint);//それをベクトル化
+
+	//ChaseVec = XMVector3TransformCoord(ChaseVec, EnemyRot);//回転行列をかけて
+	XMVECTOR norm = XMVector3Normalize(ChaseVec);//正規化
+
+	XMVECTOR MoveVector = XMVectorScale(norm, speed_  * DeltaTime);//移動ベクトル化する
+	XMVECTOR PrevPos = EnemyPosition;
+	XMVECTOR NewPos = PrevPos + MoveVector;
+	XMStoreFloat3(&this->transform_.position_, NewPos);
 }
 
 void Enemy::OnCollision(GameObject* pTarget)
 {
-	/*if (pTarget->GetObjectName() == "Player")
+	if (pTarget->GetObjectName() == "Player")
 	{
-		transform_.position_.y = 2.0f;
-	}*/
+		pPlayer_->SetPosition({ 0,0,0 });
+		EnemyState = S_IDLE;
+	}
 }
 
 //bool Enemy::ComparePosition(XMFLOAT3 pos)

@@ -95,7 +95,10 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
 {
-
+	/*if (pTarget->GetObjectName() == "Enemy")
+	{
+		transform_.position_ = { 0,0,0 };
+	}*/
 }
 
 void Player::Dash()
@@ -153,12 +156,12 @@ void Player::UpdateNormal()
 
 	XMVECTOR PrevPos = PlayerPosition;
 	NewPos = PrevPos + MoveVector;
-
+	
 	int nextX, nextZ;
 	nextX = (int)XMVectorGetX(NewPos);
 	nextZ = (int)XMVectorGetZ(NewPos) + 1.0f;
 
-	//if (pGround->IsMoveFront(nextX, nextZ))
+	//if (pGround->IsMoveFront(nextX, nextZ)){}
 	
 		XMStoreFloat3(&this->transform_.position_, NewPos);
 	

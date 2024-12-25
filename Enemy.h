@@ -10,7 +10,7 @@ class Enemy :
 private:
     int hModel_Enemy;
 	Player* pPlayer_;
-	enum EnemyState {
+	enum State {
 		S_IDLE = 0,//待機
 		S_SUSPICIOUS,//怪しむ
 		S_CHASE,//追いかける
@@ -19,7 +19,7 @@ private:
 		S_WINCE,//ひるむ
 		S_MAX
 	};
-	EnemyState enemy_state;
+	State EnemyState;
 
 	XMVECTOR EnemyDirection;//敵の方向ベクトル
 	XMVECTOR EnemyPosition;//敵の位置ベクトル
@@ -27,6 +27,11 @@ private:
 	float FrontLength = 10.0f;//敵の視界の長さ
 	float Fov;
 	bool IsHit_;
+
+	XMFLOAT3 pPosition;
+	XMVECTOR pPositionVec;
+
+	XMFLOAT3 ChasePoint;
 
 	XMVECTOR sightLength;//敵の視界（扇型の視界）の長さ
 
