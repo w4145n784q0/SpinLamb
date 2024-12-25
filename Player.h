@@ -8,7 +8,8 @@ private:
 	//モデルハンドル
 	int hModel_Player;
 	int hModel_LandingPoint;
-	int hModel_GetGrass;
+	int hGetGrass;
+	int hGetWall;
 
 	//ステート
 	enum State
@@ -71,7 +72,8 @@ public:
 	void UpdateJump();
 	void UpdateHit();
 
-	void Move();
+	void PlayerRayCast(int handle);
+
 	void Dash();
 };
 

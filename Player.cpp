@@ -158,27 +158,18 @@ void Player::UpdateNormal()
 	nextX = (int)XMVectorGetX(NewPos);
 	nextZ = (int)XMVectorGetZ(NewPos) + 1.0f;
 
-	if (pGround->IsMoveFront(nextX, nextZ))
-	{
+	//if (pGround->IsMoveFront(nextX, nextZ))
+	
 		XMStoreFloat3(&this->transform_.position_, NewPos);
-	}
-	else
-	{
-		int i = 0;
-	}
+	
+	
 	Direction = { 0,0,0 };//進行方向のリセット毎フレーム行う
 
-	hModel_GetGrass = pGround->GetGrassHandle();
-	RayCastData data;
-	data.start = transform_.position_;
-	data.start.y = 2;
-	data.dir = XMFLOAT3({ 0,-1,0 });
-	Model::RayCast(hModel_GetGrass, &data);
-	if (data.hit == true)
-	{
-		transform_.position_.y = data.dist;
-		PrevHeight = data.dist;
-	}
+	hGetGrass = pGround->GetGrassHandle();
+	hGetWall = pGround->GetWallHandle();
+
+	PlayerRayCast(hGetGrass);
+	PlayerRayCast(hGetWall);
 
 	//--------------ジャンプ--------------
 	//ボタンを押すとジャンプの着地先を表示(未完成)
@@ -267,8 +258,9 @@ void Player::UpdateHide()
 
 void Player::UpdateJump()
 {
-	if (this->transform_.position_.y < PrevHeight) {//プレイヤーめりこみ防止に一定以下のy座標で値を固定
-		this->transform_.position_.y = PrevHeight;
+	if (this->transform_.position_.y < PrevHeight)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	{
+		//this->transform_.position_.y = PrevHeight;
 		PlayerState = S_Normal;
 	}
 
@@ -278,5 +270,19 @@ void Player::UpdateJump()
 
 void Player::UpdateHit()
 {
+}
+
+void Player::PlayerRayCast(int handle)
+{
+	RayCastData data;
+	data.start = transform_.position_;
+	data.start.y =  2;
+	data.dir = XMFLOAT3({ 0,-1,0 });
+	Model::RayCast(handle, &data);
+	if (data.hit == true)
+	{
+		transform_.position_.y = data.dist;
+		PrevHeight = data.dist;
+	}
 }
 

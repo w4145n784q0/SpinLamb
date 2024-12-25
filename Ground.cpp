@@ -7,11 +7,13 @@ namespace {
 }
 
 Ground::Ground(GameObject* parent)
-	:GameObject(parent,"Ground"),hModel_Ground(-1),hModel_grass(-1),hModel_hole(-1)
+	:GameObject(parent,"Ground"),hModel_Ground(-1),hModel_Wall(-1)
 {
-	//CsvReader csv;
-	//csv.Load("MapTest.csv");
+	CsvReader csv;
+	csv.Load("MapTest.csv");
 
+	stageWidth_ = csv.GetWidth();    //１行に何個データがあるか
+	stageHeight_ = csv.GetHeight();   //データが何行あるか
 	/*for (int i = 0; i < blocknum; i++)
 	{
 		for (int j = 0; j < blocknum; j++)
@@ -33,11 +35,9 @@ Ground::~Ground()
 
 void Ground::Initialize()
 {
-	hModel_Ground = Model::Load("BaseField_2.fbx");
-	hModel_grass = Model::Load("GrassBox.fbx");
-	hModel_hole = Model::Load("box.fbx");
+	hModel_Ground = Model::Load("BaseField.fbx");
+	hModel_Wall = Model::Load("wall.fbx");
 
-	blockArray = { hModel_grass,hModel_hole };
 	/*transform_.scale_ = { 3.0,1.0,3.0 };*/
 	transform_.position_ = { 0,0,0 };
 
@@ -73,6 +73,11 @@ void Ground::Draw()
 
 	Model::SetTransform(hModel_Ground, transform_);
 	Model::Draw(hModel_Ground);
+
+	Transform t;
+	t.position_ = { 3,3,3 };
+	Model::SetTransform(hModel_Wall, t);
+	Model::Draw(hModel_Wall);
 }
 
 void Ground::Release()
@@ -87,4 +92,9 @@ bool Ground::IsMoveFront(int x, int y)
 	else {
 		return true;
 	}
+}
+
+bool Ground::CanMoveFront(int x, int z)
+{
+	return false;
 }
