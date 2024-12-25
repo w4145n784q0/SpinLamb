@@ -7,6 +7,18 @@ class Player :
 private:
 	//モデルハンドル
 	int hModel_Player;
+	int hModel_LandingPoint;
+	int hModel_GetGrass;
+
+	//ステート
+	enum State
+	{
+		S_Normal,
+		S_Hide,
+		S_Jump,
+		S_Hit,
+	};
+	State PlayerState;
 
 	//ジャンプ関係
 	bool IsOnGround_;
@@ -19,14 +31,8 @@ private:
 	//ダッシュ関係
 	bool IsDash_; //ダッシュ中か
 	float Acceleration_;//加速度
-
-	//移動関係
-	/*enum MoveDirection
-	{
-		Front = 0, Left,  Back, Right, None,
-	};
-	MoveDirection moveDir;*/
 	
+	//移動関係
 	XMFLOAT3 Direction;//プレイヤーの方向(xzどこに進むか)
 	XMVECTOR PlayerDirection;//方向ベクトル(実際に向いている方向)
 	XMVECTOR PlayerPosition;//位置ベクトル
@@ -35,7 +41,9 @@ private:
 	XMVECTOR BackCamera;//プレイヤーの後ろに置くカメラの位置
 	
 	Transform StartPosition;//開始位置
+	XMVECTOR NewPos;//プレイヤーの移動先
 
+	//カメラ関係
 	XMFLOAT3 CameraPosition;
 	XMFLOAT3 CameraTarget;
 
@@ -58,11 +66,12 @@ public:
 	void Release() override;
 	void OnCollision(GameObject* pTarget) override;
 
-	void UpdateIdle();
+	void UpdateNormal();
 	void UpdateHide();
-	void UpdateDamage();
+	void UpdateJump();
+	void UpdateHit();
 
-
+	void Move();
 	void Dash();
 };
 

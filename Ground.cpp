@@ -38,8 +38,8 @@ void Ground::Initialize()
 	hModel_hole = Model::Load("box.fbx");
 
 	blockArray = { hModel_grass,hModel_hole };
-	/*transform_.scale_ = { 3.0,1.0,3.0 };
-	transform_.position_ = { 0,-2,0 };*/
+	/*transform_.scale_ = { 3.0,1.0,3.0 };*/
+	transform_.position_ = { 0,-2,0 };
 
 
 
