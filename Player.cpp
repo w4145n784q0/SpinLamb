@@ -13,6 +13,8 @@ namespace {
 	const float FullAccelerate = 50.0f;
 	const XMVECTOR front = { 0,0,1 };
 	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎回この値にする（値が変わり続けるのを防ぐ）
+
+	float PrevHeight = 0.0f;
 }
 
 Player::Player(GameObject* parent)
@@ -25,7 +27,7 @@ Player::Player(GameObject* parent)
 	CameraPosition = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
 	CameraTarget = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 
-	StartPosition.position_ = { 0,1,0 };
+	StartPosition.position_ = { 0,0,0 };
 
 }
 
@@ -41,7 +43,7 @@ void Player::Initialize()
 	this->transform_.position_ = StartPosition.position_;
 
 	pGround = (Ground*)FindObject("Ground");
-	hModel_GetGrass = pGround->GetGrassHandle();
+	
 	
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0,0,0),0.1f);
 	this->AddCollider(col);
@@ -166,14 +168,16 @@ void Player::UpdateNormal()
 	}
 	Direction = { 0,0,0 };//進行方向のリセット毎フレーム行う
 
+	hModel_GetGrass = pGround->GetGrassHandle();
 	RayCastData data;
 	data.start = transform_.position_;
-	data.start.y = 0;
+	data.start.y = 2;
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(hModel_GetGrass, &data);
 	if (data.hit == true)
 	{
-		transform_.position_.y = -data.dist;
+		transform_.position_.y = data.dist;
+		PrevHeight = data.dist;
 	}
 
 	//--------------ジャンプ--------------
@@ -263,8 +267,8 @@ void Player::UpdateHide()
 
 void Player::UpdateJump()
 {
-	if (this->transform_.position_.y <= 0.0f) {//プレイヤーめりこみ防止に一定以下のy座標で値を固定
-		this->transform_.position_.y = 0.0f;
+	if (this->transform_.position_.y < PrevHeight) {//プレイヤーめりこみ防止に一定以下のy座標で値を固定
+		this->transform_.position_.y = PrevHeight;
 		PlayerState = S_Normal;
 	}
 

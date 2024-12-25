@@ -28,7 +28,7 @@ public:
 	void Release() override;
 
 	bool IsMoveFront(int x, int y);
-	int GetGrassHandle() { return hModel_grass; }
+	int GetGrassHandle() { return hModel_Ground; }
 	
 };
 

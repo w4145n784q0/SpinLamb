@@ -12,7 +12,7 @@ Ground::Ground(GameObject* parent)
 	//CsvReader csv;
 	//csv.Load("MapTest.csv");
 
-	for (int i = 0; i < blocknum; i++)
+	/*for (int i = 0; i < blocknum; i++)
 	{
 		for (int j = 0; j < blocknum; j++)
 		{
@@ -24,7 +24,7 @@ Ground::Ground(GameObject* parent)
 	for (int i = 0; i < blocknum; i++) {
 		stageTable[i][blocknum - 1].height = 4;
 		stageTable[i][blocknum - 1].type = 1;
-	}
+	}*/
 }
 
 Ground::~Ground()
@@ -33,13 +33,13 @@ Ground::~Ground()
 
 void Ground::Initialize()
 {
-	hModel_Ground = Model::Load("ground.fbx");
+	hModel_Ground = Model::Load("BaseField_2.fbx");
 	hModel_grass = Model::Load("GrassBox.fbx");
 	hModel_hole = Model::Load("box.fbx");
 
 	blockArray = { hModel_grass,hModel_hole };
 	/*transform_.scale_ = { 3.0,1.0,3.0 };*/
-	transform_.position_ = { 0,-2,0 };
+	transform_.position_ = { 0,0,0 };
 
 
 
@@ -51,11 +51,11 @@ void Ground::Update()
 
 void Ground::Draw()
 {
-	for (int x = 0; x < blocknum; x++)
+	/*for (int x = 0; x < blocknum; x++)
 	{
 		for (int z = 0; z < blocknum; z++)
 		{
-			for (int y = 0; y < stageTable[x][z].height; y++)
+ 			for (int y = 0; y < stageTable[x][z].height; y++)
 			{
 				int type = stageTable[x][z].type;
 
@@ -68,11 +68,11 @@ void Ground::Draw()
 				Model::Draw(blockArray[type]);
 			}
 		}
-	}
+	}*/
 
 
-	/*Model::SetTransform(hModel_Ground, transform_);
-	Model::Draw(hModel_Ground);*/
+	Model::SetTransform(hModel_Ground, transform_);
+	Model::Draw(hModel_Ground);
 }
 
 void Ground::Release()
