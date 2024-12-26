@@ -31,7 +31,7 @@ void Enemy::Initialize()
 {
 	hModel_Enemy = Model::Load("enemy.fbx");
 	transform_.position_ = { 10,1,10 };
-	transform_.rotate_.y = 180;
+	//transform_.rotate_.y = 180;
 	pPlayer_ = (Player*)FindObject("Player");
 	
 
@@ -117,14 +117,29 @@ void Enemy::UpdateIdle()
 void Enemy::UpdateChase()
 {
 	//変更
-	XMVECTOR PlayerDistAngle = XMVectorSubtract(EnemyPosition, pPositionVec);//プレイヤーとの距離
-	PlayerDistAngle = XMVector3AngleBetweenVectors(PlayerDistAngle, EnemyDirection);//敵の位置と自分の正面の角度
-	float angle = XMVectorGetX(PlayerDistAngle);
+	XMVECTOR PlayerDist = XMVectorSubtract(pPositionVec,EnemyPosition);
+	PlayerDist = XMVector3Normalize(PlayerDist);//プレイヤーとの距離を正規化
+	XMVECTOR normFront = XMVector3Normalize(EnemyDirection);//正面ベクトルを正規化
+	XMVECTOR cross = XMVector3Cross(normFront,PlayerDist) ;//上記2つの外積を出す
+	float crossY= XMVectorGetY(cross);
 
+	
+	
+	if (crossY > 0)
+	{
+		transform_.rotate_.y += 1.0f;
+	}
+	else if (crossY < 0)
+	{
+		transform_.rotate_.y -= 1.0f;
+	}
+	else if(fabs(crossY < 1e-6))
+	{
+
+	}
+	
 
 	//変更
-
-	XMMATRIX EnemyRot = XMMatrixRotationY(XMConvertToRadians(this->transform_.rotate_.y));//敵の回転行列
 
 	XMFLOAT3 pPos = pPlayer_->GetPosition();//プレイヤーの位置
 	ChasePoint = pPos - this->transform_.position_;//自分（enemy）とプレイヤーの位置を引き
