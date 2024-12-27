@@ -52,6 +52,5 @@ public:
 
 	void OnCollision(GameObject* pTarget) override;
 	int GetModelHandle() { return hModel_Enemy; }
-	bool ComparePosition(XMFLOAT3 pos);
 };
 

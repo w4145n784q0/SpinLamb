@@ -113,20 +113,19 @@ void Enemy::UpdateIdle()
 
 void Enemy::UpdateChase()
 {
-	//変更
+
+
 	XMVECTOR front = EnemyFrontDirection;//計算用の前向きベクトル（初期値が入る）
 	XMMATRIX mvec = transform_.matRotate_;//現在の回転している方向（自分の回転行列）
 	front = XMVector3Transform(front, mvec);
 
 	XMFLOAT3 playerPos = pPlayer_->GetWorldPosition();//プレイヤーの位置（ワールド座標）
-	XMVECTOR playerVec = XMLoadFloat3(&playerPos);
-
-
-	//XMVECTOR PlayerDist = XMVectorSubtract(playerVec,);
-	XMVECTOR PlayerDist = { playerPos.x - transform_.position_.x, playerPos.y - transform_.position_.y,
-		playerPos.z - transform_.position_.z };
-	PlayerDist = XMVector3Normalize(PlayerDist);//プレイヤーとの距離を正規化
-	XMVECTOR angle = XMVector3AngleBetweenVectors(PlayerDist, front);//二つのベクトル間のラジアン角を求める
+	ChasePoint = playerPos - this->transform_.position_;//プレイヤーの位置-敵の位置で距離をとる
+	XMVECTOR PlayerDist = XMLoadFloat3(&ChasePoint);//ベクトルにする
+	/*XMVECTOR PlayerDist = { playerPos.x - transform_.position_.x, playerPos.y - transform_.position_.y,
+		playerPos.z - transform_.position_.z };*/
+	XMVECTOR normDist = XMVector3Normalize(PlayerDist);//プレイヤーとの距離を正規化
+	XMVECTOR angle = XMVector3AngleBetweenVectors(normDist, front);//二つのベクトル間のラジアン角を求める
 	XMVECTOR cross = XMVector3Cross(front, PlayerDist);
 
 	//XMVECTOR normFront = XMVector3Normalize(front);//正面ベクトルを正規化
@@ -134,53 +133,33 @@ void Enemy::UpdateChase()
 	//cross = XMVector3Normalize(cross);//正規化
 
 	float crossY= XMVectorGetY(cross);//外積のY軸（+か-で左右どちらにいるか判断）
-
 	
-	float angleX = XMVectorGetX(angle);
+	//float angleX = XMVectorGetX(angle);
+	//float dig = XMConvertToDegrees(angleX);
 
-	float dig = XMConvertToDegrees(angleX);
-	
-	/*XMMATRIX mat = XMMatrixRotationAxis(cross, XMConvertToRadians(1));
-
-	front = XMVector3TransformCoord(front,mat);
-	
-	XMVECTOR angle = XMVector3AngleBetweenVectors(front, PlayerDist);
-
-	transform_.matRotate_ = mat;*/
-
-	if (dig > 3)
+	float Dig = XMConvertToDegrees(XMVectorGetX(angle));
+	if (Dig > 3)
 	{
 		if (crossY > 0.0)
 		{
-			transform_.rotate_.y -= 0.5f;
+			transform_.rotate_.y -= 1.5f;
 		}
 		else if (crossY < 0.0)
 		{
-			transform_.rotate_.y += 0.5f;
+			transform_.rotate_.y += 1.5f;
 		}
 	}
 
 	transform_.Calclation();
-	//mvec = transform_.matRotate_;
-	//front = EnemyFrontDirection;
 
-
-
-
-
-	//変更
-
-	//XMFLOAT3 pPos = pPlayer_->GetPosition();//プレイヤーの位置
-	//ChasePoint = pPos - this->transform_.position_;//自分（enemy）とプレイヤーの位置を引き
+	//ChasePoint = playerPos - this->transform_.position_;//自分（enemy）とプレイヤーの位置を引き
 	//XMVECTOR ChaseVec = XMLoadFloat3(&ChasePoint);//それをベクトル化
-
-	////ChaseVec = XMVector3TransformCoord(ChaseVec, EnemyRot);//回転行列をかけて
 	//XMVECTOR norm = XMVector3Normalize(ChaseVec);//正規化
 
-	//XMVECTOR MoveVector = XMVectorScale(norm, speed_  * DeltaTime);//移動ベクトル化する
-	//XMVECTOR PrevPos = EnemyPosition;
-	//XMVECTOR NewPos = PrevPos + MoveVector;
-	//XMStoreFloat3(&this->transform_.position_, NewPos);
+	XMVECTOR MoveVector = XMVectorScale(normDist, speed_  * DeltaTime);//移動ベクトル化する
+	XMVECTOR PrevPos = EnemyPosition;
+	XMVECTOR NewPos = PrevPos + MoveVector;
+	XMStoreFloat3(&this->transform_.position_, NewPos);
 }
 
 void Enemy::OnCollision(GameObject* pTarget)
@@ -191,8 +170,3 @@ void Enemy::OnCollision(GameObject* pTarget)
 		EnemyState = S_IDLE;
 	}
 }
-
-//bool Enemy::ComparePosition(XMFLOAT3 pos)
-//{
-//	//if(transform_.position_.x){}
-//}
