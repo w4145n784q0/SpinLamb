@@ -98,10 +98,10 @@ void Player::Release()
 }
 
 void Player::OnCollision(GameObject* pTarget)
-{
-	if (pTarget->GetObjectName() == "Ground")
-	{
-		
+ {
+	if (pTarget->GetObjectName() == "StageObject")
+	 {
+		transform_.position_ = { 0,0,0 };
 	}
 }
 

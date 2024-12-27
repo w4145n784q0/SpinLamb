@@ -126,7 +126,7 @@ void Enemy::UpdateChase()
 		playerPos.z - transform_.position_.z };*/
 	XMVECTOR normDist = XMVector3Normalize(PlayerDist);//プレイヤーとの距離を正規化
 	XMVECTOR angle = XMVector3AngleBetweenVectors(normDist, front);//二つのベクトル間のラジアン角を求める
-	XMVECTOR cross = XMVector3Cross(front, PlayerDist);
+	XMVECTOR cross = XMVector3Cross(front, normDist);
 
 	//XMVECTOR normFront = XMVector3Normalize(front);//正面ベクトルを正規化
 	//XMVECTOR cross = XMVector3Cross(normFront,PlayerDist) ;//上記2つの外積を出す
