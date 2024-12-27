@@ -21,7 +21,7 @@ private:
 	};
 	State EnemyState;
 
-	XMVECTOR EnemyDirection;//敵の方向ベクトル
+	XMVECTOR EnemyFrontDirection;//敵の正面ベクトル
 	XMVECTOR EnemyPosition;//敵の位置ベクトル
 	float RotateY;//回転角度（基本Ｙ軸のみ）
 	float FrontLength = 10.0f;//敵の視界の長さ

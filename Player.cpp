@@ -21,7 +21,7 @@ Player::Player(GameObject* parent)
 	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),IsDash_(false), 
 	JumpDirection({0,0,0}), JumpSpeed_(0.0f), MovePoint({0,0,0}), LandingPoint({0,0,0}),
 	Direction({0,0,0}),PlayerDirection({0,0,0}), PlayerPosition({0,0,0}), Acceleration_(0.0f),
-	BackCamera(BackCameraPos), pGround(nullptr),PlayerState(S_Normal)
+	BackCamera(BackCameraPos), pGround(nullptr),PlayerState(S_IDLE)
 {
 	cameraTransform = this->transform_;
 	CameraPosition = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -56,16 +56,19 @@ void Player::Update()
 
 	switch (PlayerState)
 	{
-	case Player::S_Normal:
-		UpdateNormal();
+	case Player::S_IDLE:
+		UpdateIdle();
 		break;
-	case Player::S_Hide:
+	case Player::S_HIDE:
 		UpdateHide();
 		break;
-	case Player::S_Jump:
+	case Player::S_JUMPBEFORE:
+		UpdateJumpBefore();
+		break;
+	case Player::S_JUMP:
 		UpdateJump();
 		break;
-	case Player::S_Hit:
+	case Player::S_HIT:
 		UpdateHit();
 		break;
 	default:
@@ -116,7 +119,7 @@ void Player::Dash()
 	}
 }
 
-void Player::UpdateNormal()
+void Player::UpdateIdle()
 {
 	if (Input::IsKey(DIK_UP))
 	{
@@ -212,7 +215,7 @@ void Player::UpdateNormal()
 	if (Input::IsKeyDown(DIK_SPACE))
 	{
 		JumpSpeed_ = 1.2;//一時的にy方向にマイナスされている値を大きくする
-		PlayerState = S_Jump;
+		PlayerState = S_JUMP;
 
 		//if (IsOnGround_) {
 		//	IsOnGround_ = false;
@@ -236,6 +239,12 @@ void Player::UpdateNormal()
 	}
 
 */
+
+	if (Input::IsKeyDown(DIK_Q))
+	{
+		PlayerState = S_JUMPBEFORE;
+	}
+
 	//--------------カメラ追従--------------
 
 	if (Input::IsKey(DIK_X))
@@ -251,12 +260,18 @@ void Player::UpdateNormal()
 		cameraTransform.rotate_.y = 0;
 		this->transform_.rotate_.y = 0;
 	}
-
-	
 }
 
 void Player::UpdateHide()
 {
+}
+
+void Player::UpdateJumpBefore()
+{
+	if (Input::IsKeyDown(DIK_Q))
+	{
+		PlayerState = S_IDLE;
+	}
 }
 
 void Player::UpdateJump()
@@ -264,7 +279,7 @@ void Player::UpdateJump()
 	if (this->transform_.position_.y < PrevHeight)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
 	{
 		//this->transform_.position_.y = PrevHeight;
-		PlayerState = S_Normal;
+		PlayerState = S_IDLE;
 	}
 
 	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、

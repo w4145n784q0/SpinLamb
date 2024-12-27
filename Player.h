@@ -14,10 +14,11 @@ private:
 	//ステート
 	enum State
 	{
-		S_Normal,
-		S_Hide,
-		S_Jump,
-		S_Hit,
+		S_IDLE,
+		S_HIDE,
+		S_JUMPBEFORE,
+		S_JUMP,
+		S_HIT,
 	};
 	State PlayerState;
 
@@ -67,11 +68,16 @@ public:
 	void Release() override;
 	void OnCollision(GameObject* pTarget) override;
 
-	void UpdateNormal();
+	void UpdateIdle();
 	void UpdateHide();
+	void UpdateJumpBefore();
 	void UpdateJump();
 	void UpdateHit();
 
+	/// <summary>
+	/// 地面に向かってレイを飛ばす（必要なときだけ）
+	/// </summary>
+	/// <param name="handle">モデルハンドル</param>
 	void PlayerRayCast(int handle);
 
 	void Dash();
