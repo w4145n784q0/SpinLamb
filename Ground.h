@@ -9,7 +9,9 @@ class Ground :
     public GameObject
 {
 	int hModel_Ground;
+	int hModel_Grass;
 	int hModel_Wall;
+	int hModel_Hole;
 
 	struct StageData {
 		int height;
@@ -18,8 +20,11 @@ class Ground :
 	StageData stageTable[20][20];
 	std::array<int, 2> blockArray;
 
+	vector<vector<int>> MapData;
 	int stageWidth_;
 	int stageHeight_;
+	Transform mapTrans;
+
 public:
 	Ground(GameObject* parent);
 	~Ground();

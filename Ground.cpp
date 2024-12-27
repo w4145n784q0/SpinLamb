@@ -15,6 +15,22 @@ Ground::Ground(GameObject* parent)
 
 	stageWidth_ = csv.GetWidth();    //１行に何個データがあるか
 	stageHeight_ = csv.GetHeight();   //データが何行あるか
+
+	for (int i = 0; i < stageHeight_; i++)
+	{
+		vector<int> data(stageWidth_, 0);
+		MapData.push_back(data);
+	}
+
+
+	for (int j = 0; j < stageHeight_; j++)
+	{
+		for (int i = 0; i < stageWidth_; i++)
+		{
+			MapData[j][i] = csv.GetValue(i, j);
+		}
+	}
+
 	/*for (int i = 0; i < blocknum; i++)
 	{
 		for (int j = 0; j < blocknum; j++)
@@ -37,10 +53,12 @@ Ground::~Ground()
 void Ground::Initialize()
 {
 	hModel_Ground = Model::Load("BaseField.fbx");
+	hModel_Grass = Model::Load("GrassBox.fbx");
+	hModel_Hole = Model::Load("box.fbx");
 	hModel_Wall = Model::Load("wall.fbx");
 
 	/*transform_.scale_ = { 3.0,1.0,3.0 };*/
-	transform_.position_ = { 0,0,0 };
+	mapTrans.position_ = { 0,0,0 };
 
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 0.1f);
 	this->AddCollider(col);
@@ -52,6 +70,22 @@ void Ground::Update()
 
 void Ground::Draw()
 {
+	for (int z = 0; z < stageHeight_; z++) {
+		for (int x = 0; x < stageWidth_; x++) {
+			mapTrans.position_ = { (float)x, 0 ,(float)(14 - z) };
+
+			if (MapData[z][x] == 1) {
+				Model::SetTransform(hModel_Hole, mapTrans);
+				Model::Draw(hModel_Hole);
+			}
+			else {
+				Model::SetTransform(hModel_Grass, mapTrans);
+				Model::Draw(hModel_Grass);
+			}
+		}
+
+	}
+
 	/*for (int x = 0; x < blocknum; x++)
 	{
 		for (int z = 0; z < blocknum; z++)
@@ -72,13 +106,10 @@ void Ground::Draw()
 	}*/
 
 
-	Model::SetTransform(hModel_Ground, transform_);
-	Model::Draw(hModel_Ground);
+	//Model::SetTransform(hModel_Ground, transform_);
+	//Model::Draw(hModel_Ground);
 
-	/*Transform t;
-	t.position_ = { 10,3,3 };
-	Model::SetTransform(hModel_Wall, t);
-	Model::Draw(hModel_Wall);*/
+
 }
 
 void Ground::Release()
