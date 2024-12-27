@@ -72,7 +72,7 @@ void Ground::Draw()
 {
 	for (int z = 0; z < stageHeight_; z++) {
 		for (int x = 0; x < stageWidth_; x++) {
-			mapTrans.position_ = { (float)x, 0 ,(float)(14 - z) };
+			mapTrans.position_ = { (float)x, 0 ,(float) z };
 
 			if (MapData[z][x] == 1) {
 				Model::SetTransform(hModel_Hole, mapTrans);

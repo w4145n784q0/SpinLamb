@@ -28,7 +28,7 @@ Player::Player(GameObject* parent)
 	CameraPosition = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
 	CameraTarget = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 
-	StartPosition.position_ = { 0,0,0 };
+	StartPosition.position_ = { 0,1.5,0 };
 
 }
 
@@ -99,10 +99,10 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
  {
-	if (pTarget->GetObjectName() == "StageObject")
-	 {
-		transform_.position_ = { 0,0,0 };
-	}
+	//if (pTarget->GetObjectName() == "StageObject")
+	// {
+	//	//transform_.position_ = { 0,0,0 };
+	//}
 }
 
 void Player::Dash()
@@ -172,11 +172,11 @@ void Player::UpdateIdle()
 	
 	Direction = { 0,0,0 };//進行方向のリセット毎フレーム行う
 
-	hGetGrass = pGround->GetGrassHandle();
+	/*hGetGrass = pGround->GetGrassHandle();
 	hGetWall = pStageObject->GetWallHandle();
 
 	PlayerRayCast(hGetGrass);
-	PlayerRayCast(hGetWall);
+	PlayerRayCast(hGetWall);*/
 
 	//--------------ジャンプ--------------
 	//ボタンを押すとジャンプの着地先を表示(未完成)
@@ -227,19 +227,24 @@ void Player::UpdateIdle()
 		//	JumpDirection = { 0,0,0 };//進行方向のリセット毎フレーム行う
 		//}
 	}
-	/*
+	
 	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
 	this->transform_.position_.y += JumpSpeed_;
+
+	if (this->transform_.position_.y <= 1.0f) //プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	{
+		this->transform_.position_.y = 1.0f;
+	}
+
 	if (JumpSpeed_ < -100) {
 		JumpSpeed_ = -100;
 	}
 
-	if (this->transform_.position_.y <= 1.0f) {//プレイヤーめりこみ防止に一定以下のy座標で値を固定
-		this->transform_.position_.y = 1.0f;
-		IsOnGround_ = true;
-	}
+	
 
-*/
+
+
+	
 
 	if (Input::IsKeyDown(DIK_Q))
 	{
@@ -277,9 +282,9 @@ void Player::UpdateJumpBefore()
 
 void Player::UpdateJump()
 {
-	if (this->transform_.position_.y < PrevHeight)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	if (this->transform_.position_.y < 1.5)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
 	{
-		//this->transform_.position_.y = PrevHeight;
+		transform_.position_.y = 1.0f;
 		PlayerState = S_IDLE;
 	}
 

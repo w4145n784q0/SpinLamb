@@ -15,7 +15,7 @@ StageObject::~StageObject()
 void StageObject::Initialize()
 {
 	hModel_Wall_ = Model::Load("wall.fbx");
-	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 1.0f);
+	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 0.5f);
 	this->AddCollider(col);
 
 	trans_wall.position_ = { 0,3,10 };
