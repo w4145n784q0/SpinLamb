@@ -1,6 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"Ground.h"
+#include"StageObject.h"
+
 class Player :
     public GameObject
 {
@@ -53,6 +55,7 @@ private:
 
 	//インスタンス関係
 	Ground* pGround;
+	StageObject* pStageObject;
 
 public:
 

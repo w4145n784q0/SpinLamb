@@ -1,6 +1,7 @@
 #include "Ground.h"
 #include"Engine/Model.h"
 #include"Engine/CsvReader.h"
+#include"Engine/SphereCollider.h"
 
 namespace {
 	int blocknum = 20;
@@ -41,8 +42,8 @@ void Ground::Initialize()
 	/*transform_.scale_ = { 3.0,1.0,3.0 };*/
 	transform_.position_ = { 0,0,0 };
 
-
-
+	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 0.1f);
+	this->AddCollider(col);
 }
 
 void Ground::Update()
@@ -74,13 +75,17 @@ void Ground::Draw()
 	Model::SetTransform(hModel_Ground, transform_);
 	Model::Draw(hModel_Ground);
 
-	Transform t;
-	t.position_ = { 3,3,3 };
+	/*Transform t;
+	t.position_ = { 10,3,3 };
 	Model::SetTransform(hModel_Wall, t);
-	Model::Draw(hModel_Wall);
+	Model::Draw(hModel_Wall);*/
 }
 
 void Ground::Release()
+{
+}
+
+void Ground::OnCollision(GameObject* pTarget)
 {
 }
 
@@ -92,9 +97,4 @@ bool Ground::IsMoveFront(int x, int y)
 	else {
 		return true;
 	}
-}
-
-bool Ground::CanMoveFront(int x, int z)
-{
-	return false;
 }

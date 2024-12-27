@@ -28,9 +28,9 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
+	void OnCollision(GameObject* pTarget) override;
 
 	bool IsMoveFront(int x, int y);
-	bool CanMoveFront(int x, int z);
 	int GetGrassHandle() { return hModel_Ground; }
 	int GetWallHandle() { return hModel_Wall; }
 };

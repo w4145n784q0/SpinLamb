@@ -5,6 +5,7 @@
 #include"Engine/SphereCollider.h"
 
 #include"Enemy.h"
+#include"StageObject.h"
 
 namespace {
 	const float speed = 9.0f;
@@ -21,7 +22,7 @@ Player::Player(GameObject* parent)
 	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),IsDash_(false), 
 	JumpDirection({0,0,0}), JumpSpeed_(0.0f), MovePoint({0,0,0}), LandingPoint({0,0,0}),
 	Direction({0,0,0}),PlayerDirection({0,0,0}), PlayerPosition({0,0,0}), Acceleration_(0.0f),
-	BackCamera(BackCameraPos), pGround(nullptr),PlayerState(S_IDLE)
+	BackCamera(BackCameraPos), pGround(nullptr), pStageObject(nullptr), PlayerState(S_IDLE)
 {
 	cameraTransform = this->transform_;
 	CameraPosition = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -43,7 +44,7 @@ void Player::Initialize()
 	this->transform_.position_ = StartPosition.position_;
 
 	pGround = (Ground*)FindObject("Ground");
-	
+	pStageObject = (StageObject*)FindObject("StageObject");
 	
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0,0,0),0.1f);
 	this->AddCollider(col);
@@ -98,10 +99,10 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
 {
-	/*if (pTarget->GetObjectName() == "Enemy")
+	if (pTarget->GetObjectName() == "Ground")
 	{
-		transform_.position_ = { 0,0,0 };
-	}*/
+		
+	}
 }
 
 void Player::Dash()
@@ -172,7 +173,7 @@ void Player::UpdateIdle()
 	Direction = { 0,0,0 };//進行方向のリセット毎フレーム行う
 
 	hGetGrass = pGround->GetGrassHandle();
-	hGetWall = pGround->GetWallHandle();
+	hGetWall = pStageObject->GetWallHandle();
 
 	PlayerRayCast(hGetGrass);
 	PlayerRayCast(hGetWall);

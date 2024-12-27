@@ -162,6 +162,7 @@
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="StageObject.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
@@ -196,6 +197,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="StageObject.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="TitleScene.h" />
   </ItemGroup>

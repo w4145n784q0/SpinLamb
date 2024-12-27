@@ -6,6 +6,7 @@
 #include"Player.h"
 #include"Ground.h"
 #include"Enemy.h"
+#include"StageObject.h"
 
 PlayScene::PlayScene(GameObject* parent)
 	:GameObject(parent,"PlayScene"), hImage_(-1)
@@ -15,6 +16,7 @@ PlayScene::PlayScene(GameObject* parent)
 void PlayScene::Initialize()
 {
 	Instantiate<Ground>(this);
+	Instantiate<StageObject>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
 
