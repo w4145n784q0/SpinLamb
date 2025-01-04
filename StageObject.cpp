@@ -7,7 +7,6 @@
 StageObject::StageObject(GameObject* parent)
 	:GameObject(parent,"StageObject"), hModel_Wall_(-1)
 {
-	transform_.position_ = { 0,0,0 };
 }
 
 StageObject::~StageObject()
@@ -16,12 +15,14 @@ StageObject::~StageObject()
 
 void StageObject::Initialize()
 {
-	hModel_Wall_ = Model::Load("wall.fbx");
+	hModel_Wall_ = Model::Load("box.fbx");
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 0.5f);
 	this->AddCollider(col);
 
 	Ground* pGround = (Ground*)FindObject("Ground");
 	transform_.position_ = pGround->GetObjectTrans().position_;
+
+	transform_.position_.y = 1;
 
 }
 

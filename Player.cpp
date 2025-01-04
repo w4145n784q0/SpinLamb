@@ -46,7 +46,7 @@ void Player::Initialize()
 	pGround = (Ground*)FindObject("Ground");
 	pStageObject = (StageObject*)FindObject("StageObject");
 	
-	SphereCollider* col = new SphereCollider(XMFLOAT3(0,0,0),0.1f);
+	SphereCollider* col = new SphereCollider(XMFLOAT3(0,0,0),0.3f);
 	this->AddCollider(col);
 }
 
@@ -99,10 +99,10 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
  {
-	//if (pTarget->GetObjectName() == "StageObject")
-	// {
-	//	//transform_.position_ = { 0,0,0 };
-	//}
+	if (pTarget->GetObjectName() == "StageObject")
+	{
+		IsHitWall = true;
+	}
 }
 
 void Player::Dash()
@@ -166,8 +166,11 @@ void Player::UpdateIdle()
 	nextZ = (int)XMVectorGetZ(NewPos) + 1.0f;
 
 	//if (pGround->IsMoveFront(nextX, nextZ)){}
-	
+	if (pGround->CanMoveFront(nextX, nextZ))
+	{
 		XMStoreFloat3(&this->transform_.position_, NewPos);
+	}
+
 	
 	
 	Direction = { 0,0,0 };//進行方向のリセット毎フレーム行う
@@ -215,7 +218,7 @@ void Player::UpdateIdle()
 
 	if (Input::IsKeyDown(DIK_SPACE))
 	{
-		JumpSpeed_ = 1.2;//一時的にy方向にマイナスされている値を大きくする
+		JumpSpeed_ = 0.5;//一時的にy方向にマイナスされている値を大きくする
 		PlayerState = S_JUMP;
 
 		//if (IsOnGround_) {

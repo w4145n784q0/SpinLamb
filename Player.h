@@ -52,10 +52,12 @@ private:
 	XMFLOAT3 CameraTarget;
 
 
-
 	//インスタンス関係
 	Ground* pGround;
 	StageObject* pStageObject;
+
+	//他オブジェクト関係
+	bool IsHitWall;
 
 public:
 

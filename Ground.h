@@ -39,7 +39,7 @@ public:
 	void OnCollision(GameObject* pTarget) override;
 
 	void ObjectSet();
-	//bool IsMoveFront(int x, int y);
+	bool CanMoveFront(int x, int z);
 
 	int GetGrassHandle() { return hModel_Ground; }
 	int GetWallHandle() { return hModel_Wall; }

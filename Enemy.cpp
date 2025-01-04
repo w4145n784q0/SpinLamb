@@ -9,11 +9,12 @@ namespace
 {
 	float speed_ = 6.0f;
 	const int EyeAngle = 60;
+	const float EyeLength = 10.0f;
 	const float DeltaTime = 0.016f;
 }
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent,"Enemy"),hModel_Enemy(-1),pPlayer_(nullptr),IsHit_(false),
+	:GameObject(parent,"Enemy"),hModel_Enemy(-1),pPlayer_(nullptr),IsHit_(false), FrontLength(EyeLength),
 	Fov(XMConvertToRadians(EyeAngle)),EnemyFrontDirection({0,0,1})
 {
 }
@@ -90,7 +91,7 @@ void Enemy::UpdateIdle()
 	XMVECTOR dot = XMVector3Dot(DistVec, forward);//相手とのベクトルと自分の前方ベクトルの内積をとる
 	float cosine = XMVectorGetX(dot);
 
-	if (cosine > cosf(Fov) && Pointdist < FrontLength) //距離は60度以内かand相手との距離がFrontLengthより小さい
+	if (cosine > cosf(Fov) && Pointdist < FrontLength) //距離は60度以内か相手との距離がFrontLengthより小さい
 	{
 		IsHit_ = true;
 	}
@@ -106,14 +107,22 @@ void Enemy::UpdateIdle()
 
 void Enemy::UpdateChase()
 {
+	//自分(enemy)と相手(player)の距離をはかる(ベクトル)
+	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition, pPositionVec);
+	float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
+	if (Pointdist > FrontLength + 10)
+	{
+		EnemyState = S_IDLE;
+	}
 
+	//敵と自機の距離
+	XMFLOAT3 playerPos = pPlayer_->GetWorldPosition();//プレイヤーの位置（ワールド座標）
+	ChasePoint = playerPos - this->transform_.position_;//プレイヤーの位置-敵の位置で距離をとる
 
+	//敵と自機の回転処理
 	XMVECTOR front = EnemyFrontDirection;//計算用の前向きベクトル（初期値が入る）
 	XMMATRIX mvec = transform_.matRotate_;//現在の回転している方向（自分の回転行列）
 	front = XMVector3Transform(front, mvec);
-
-	XMFLOAT3 playerPos = pPlayer_->GetWorldPosition();//プレイヤーの位置（ワールド座標）
-	ChasePoint = playerPos - this->transform_.position_;//プレイヤーの位置-敵の位置で距離をとる
 	XMVECTOR PlayerDist = XMLoadFloat3(&ChasePoint);//ベクトルにする
 	XMVECTOR normDist = XMVector3Normalize(PlayerDist);//プレイヤーとの距離を正規化
 	XMVECTOR angle = XMVector3AngleBetweenVectors(normDist, front);//二つのベクトル間のラジアン角を求める
@@ -142,6 +151,9 @@ void Enemy::UpdateChase()
 	XMVECTOR PrevPos = EnemyPosition;
 	XMVECTOR NewPos = PrevPos + MoveVector;
 	XMStoreFloat3(&this->transform_.position_, NewPos);
+
+	
+
 }
 
 void Enemy::OnCollision(GameObject* pTarget)

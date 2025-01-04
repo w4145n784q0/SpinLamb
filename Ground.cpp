@@ -124,6 +124,25 @@ void Ground::ObjectSet()
 	}
 }
 
+bool Ground::CanMoveFront(int x, int z)
+{
+	if (x < 0 || z < 0 || x >= stageWidth_ || z >= stageHeight_) 
+	{
+		return false;
+	}
+
+	int data = MapData[z][x];
+	switch (data)
+	{
+	case 1:
+		return false;
+		break;
+	default:
+		return true;
+		break;
+	}
+}
+
 /*bool Ground::IsMoveFront(int x, int y)
 {
 	if (stageTable[x][y].type == 1) {
