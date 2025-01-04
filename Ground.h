@@ -3,6 +3,8 @@
 #include<array>
 #include<vector>
 
+#include"Ground.h"
+
 using std::vector;
 
 class Ground :
@@ -13,17 +15,18 @@ class Ground :
 	int hModel_Wall;
 	int hModel_Hole;
 
-	struct StageData {
+	/*struct StageData {
 		int height;
 		int type;
 	};
 	StageData stageTable[20][20];
-	std::array<int, 2> blockArray;
+	std::array<int, 2> blockArray;*/
 
 	vector<vector<int>> MapData;
 	int stageWidth_;
 	int stageHeight_;
 	Transform mapTrans;
+	Transform ObjectTrans;
 
 public:
 	Ground(GameObject* parent);
@@ -35,8 +38,12 @@ public:
 	void Release() override;
 	void OnCollision(GameObject* pTarget) override;
 
-	bool IsMoveFront(int x, int y);
+	void ObjectSet();
+	//bool IsMoveFront(int x, int y);
+
 	int GetGrassHandle() { return hModel_Ground; }
 	int GetWallHandle() { return hModel_Wall; }
+
+	Transform GetObjectTrans() { return ObjectTrans; }
 };
 

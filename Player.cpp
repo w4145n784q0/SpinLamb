@@ -28,7 +28,7 @@ Player::Player(GameObject* parent)
 	CameraPosition = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
 	CameraTarget = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 
-	StartPosition.position_ = { 0,1.5,0 };
+	StartPosition.position_ = { 0,1.0f,0 };
 
 }
 
@@ -282,7 +282,7 @@ void Player::UpdateJumpBefore()
 
 void Player::UpdateJump()
 {
-	if (this->transform_.position_.y < 1.5)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	if (this->transform_.position_.y < 1.0)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
 	{
 		transform_.position_.y = 1.0f;
 		PlayerState = S_IDLE;

@@ -2,10 +2,12 @@
 #include"Engine/Model.h"
 //#include"Engine/CsvReader.h"
 #include"Engine/SphereCollider.h"
+#include"Ground.h"
 
 StageObject::StageObject(GameObject* parent)
 	:GameObject(parent,"StageObject"), hModel_Wall_(-1)
 {
+	transform_.position_ = { 0,0,0 };
 }
 
 StageObject::~StageObject()
@@ -18,7 +20,9 @@ void StageObject::Initialize()
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 0.5f);
 	this->AddCollider(col);
 
-	trans_wall.position_ = { 0,3,10 };
+	Ground* pGround = (Ground*)FindObject("Ground");
+	transform_.position_ = pGround->GetObjectTrans().position_;
+
 }
 
 void StageObject::Update()
@@ -27,7 +31,7 @@ void StageObject::Update()
 
 void StageObject::Draw()
 {
-	Model::SetTransform(hModel_Wall_, trans_wall);
+	Model::SetTransform(hModel_Wall_, transform_);
 	Model::Draw(hModel_Wall_);
 }
 

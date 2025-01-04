@@ -81,13 +81,6 @@ void Enemy::Release()
 
 void Enemy::UpdateIdle()
 {	
-
-	//自分(enmey)と相手(player)の座標上の距離をはかる(二点間の距離)
-	//a.x = this->transform_.position_.x - pPosition.x;
-	//a.y = this->transform_.position_.y - pPosition.y;
-	//a.z = this->transform_.position_.z - pPosition.z;
-	//float Pointdist = sqrt(pow(a.x, 2) + pow(a.y, 2) + pow(a.z, 2));
-
 	//自分(enemy)と相手(player)の距離をはかる(ベクトル)
 	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition, pPositionVec);
 	float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
@@ -122,15 +115,9 @@ void Enemy::UpdateChase()
 	XMFLOAT3 playerPos = pPlayer_->GetWorldPosition();//プレイヤーの位置（ワールド座標）
 	ChasePoint = playerPos - this->transform_.position_;//プレイヤーの位置-敵の位置で距離をとる
 	XMVECTOR PlayerDist = XMLoadFloat3(&ChasePoint);//ベクトルにする
-	/*XMVECTOR PlayerDist = { playerPos.x - transform_.position_.x, playerPos.y - transform_.position_.y,
-		playerPos.z - transform_.position_.z };*/
 	XMVECTOR normDist = XMVector3Normalize(PlayerDist);//プレイヤーとの距離を正規化
 	XMVECTOR angle = XMVector3AngleBetweenVectors(normDist, front);//二つのベクトル間のラジアン角を求める
 	XMVECTOR cross = XMVector3Cross(front, normDist);
-
-	//XMVECTOR normFront = XMVector3Normalize(front);//正面ベクトルを正規化
-	//XMVECTOR cross = XMVector3Cross(normFront,PlayerDist) ;//上記2つの外積を出す
-	//cross = XMVector3Normalize(cross);//正規化
 
 	float crossY= XMVectorGetY(cross);//外積のY軸（+か-で左右どちらにいるか判断）
 	
@@ -151,11 +138,6 @@ void Enemy::UpdateChase()
 	}
 
 	transform_.Calclation();
-
-	//ChasePoint = playerPos - this->transform_.position_;//自分（enemy）とプレイヤーの位置を引き
-	//XMVECTOR ChaseVec = XMLoadFloat3(&ChasePoint);//それをベクトル化
-	//XMVECTOR norm = XMVector3Normalize(ChaseVec);//正規化
-
 	XMVECTOR MoveVector = XMVectorScale(normDist, speed_  * DeltaTime);//移動ベクトル化する
 	XMVECTOR PrevPos = EnemyPosition;
 	XMVECTOR NewPos = PrevPos + MoveVector;
