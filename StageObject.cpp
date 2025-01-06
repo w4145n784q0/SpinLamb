@@ -5,7 +5,7 @@
 #include"Ground.h"
 
 StageObject::StageObject(GameObject* parent)
-	:GameObject(parent,"StageObject"), hModel_Wall_(-1)
+	:GameObject(parent,"StageObject"), hModel_Wall_(-1),UpVec({0,1,0})
 {
 }
 
@@ -27,7 +27,7 @@ void StageObject::Initialize()
 }
 
 void StageObject::Update()
-{
+{	
 }
 
 void StageObject::Draw()

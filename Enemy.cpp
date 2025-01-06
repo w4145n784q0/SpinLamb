@@ -150,7 +150,9 @@ void Enemy::UpdateChase()
 	XMVECTOR MoveVector = XMVectorScale(normDist, speed_  * DeltaTime);//ˆÚ“®ƒxƒNƒgƒ‹‰»‚·‚é
 	XMVECTOR PrevPos = EnemyPosition;
 	XMVECTOR NewPos = PrevPos + MoveVector;
+	
 	XMStoreFloat3(&this->transform_.position_, NewPos);
+	this->transform_.position_.y = 1.0f;
 
 	
 

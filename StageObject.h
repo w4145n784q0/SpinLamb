@@ -6,7 +6,9 @@ class StageObject :
 private:
 	int hModel_Wall_;
 
-	Transform trans_wall;
+	XMVECTOR UpVec;
+
+	//Player* pPlayer_;
 
 public:
 	StageObject(GameObject* parent);
@@ -19,5 +21,6 @@ public:
 	void OnCollision(GameObject* pTarget) override;
 
 	int GetWallHandle() { return hModel_Wall_; }
+	XMVECTOR GetUpVector() { return UpVec; }
 };
 

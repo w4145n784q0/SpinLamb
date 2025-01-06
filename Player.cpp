@@ -22,7 +22,7 @@ namespace {
 
 Player::Player(GameObject* parent)
 	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),IsDash_(false), 
-	JumpDirection({0,0,0}), JumpSpeed_(0.0f), MovePoint({0,0,0}), LandingPoint({0,0,0}),
+	JumpSpeed_(0.0f), LandingPoint({0,0,0}),
 	Direction({0,0,0}),PlayerFrontDirection({0,0,1}), PlayerPosition({0,0,0}), Acceleration_(0.0f),
 	BackCamera(BackCameraPos), pGround(nullptr), pStageObject(nullptr), PlayerState(S_IDLE)
 {
@@ -51,6 +51,8 @@ void Player::Initialize()
 	
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0,0,0),0.3f);
 	this->AddCollider(col);
+
+	hGetWall = pStageObject->GetWallHandle();
 }
 
 void Player::Update()
@@ -79,6 +81,7 @@ void Player::Update()
 		break;
 	}
 
+	//--------------カメラ追従--------------
 	CameraTarget = { this->transform_.position_ };//カメラの位置は自機の位置に固定
 	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform.rotate_.y));//カメラの回転行列をつくり
 	BackCamera = XMVector3TransformCoord(BackCamera, rotY);//バックカメラのベクトルにかける
@@ -192,6 +195,11 @@ void Player::UpdateIdle()
 	//ボタンを押すとジャンプの着地先を表示
 	//WASDで着地場所を細かく設定
 
+	if (!IsOnGround_) 
+	{
+		PlayerRayCast(hGetWall);
+	}
+
 	//通常ジャンプ
 	if (Input::IsKeyDown(DIK_SPACE))
 	{
@@ -225,7 +233,6 @@ void Player::UpdateIdle()
 		PlayerState = S_JUMPBEFORE;
 	}
 
-	//--------------カメラ追従--------------
 	CameraControl();
 
 	Direction = { 0,0,0 };//最後に進行方向のリセット毎フレーム行う
@@ -291,13 +298,12 @@ void Player::PlayerRayCast(int handle)
 {
 	RayCastData data;
 	data.start = transform_.position_;
-	data.start.y =  2;
+	data.start.y =  transform_.position_.y + 1;
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(handle, &data);
 	if (data.hit == true)
 	{
-		transform_.position_.y = data.dist;
-		PrevHeight = data.dist;
+ 		transform_.position_.y = -data.dist;
 	}
 }
 
@@ -316,4 +322,8 @@ void Player::CameraControl()
 		cameraTransform.rotate_.y = 0;
 		this->transform_.rotate_.y = 0;
 	}
+}
+
+void Player::RideObject()
+{
 }

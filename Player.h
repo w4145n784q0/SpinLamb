@@ -27,12 +27,10 @@ private:
 	//ジャンプ関係
 	bool IsOnGround_;
 	float JumpSpeed_;//+ならジャンプしている状態 -なら下降～地面にいる状態
-	XMFLOAT3 JumpDirection;//移動方向（ベクトル計算用）
-	XMVECTOR MovePoint;
-	//XMVECTOR LandingPoint; //着地点
+	//XMFLOAT3 JumpDirection;//移動方向（ベクトル計算用）
 
-	Transform JumpTransform_;//
-	XMFLOAT3 LandingPoint;
+	Transform JumpTransform_;//着地位置（Transform）
+	XMFLOAT3 LandingPoint;//着地位置（XMFLOAT3）
 
 	//ダッシュ関係
 	bool IsDash_; //ダッシュ中か
@@ -43,16 +41,14 @@ private:
 	XMVECTOR PlayerFrontDirection;//正面ベクトル
 	XMVECTOR PlayerPosition;//位置ベクトル
 
-	Transform cameraTransform;//カメラのTransform 回転だけ使う
-	XMVECTOR BackCamera;//プレイヤーの後ろに置くカメラの位置
-	
 	Transform StartPosition;//開始位置
 	XMVECTOR NewPos;//プレイヤーの移動先
 
 	//カメラ関係
 	XMFLOAT3 CameraPosition;
 	XMFLOAT3 CameraTarget;
-
+	Transform cameraTransform;//カメラのTransform 回転だけ使う
+	XMVECTOR BackCamera;//プレイヤーの後ろに置くカメラの位置
 
 	//インスタンス関係
 	Ground* pGround;
@@ -93,5 +89,7 @@ public:
 	/// カメラの操作（一部のステートのみ）
 	/// </summary>
 	void CameraControl();
+
+	void RideObject();
 };
 
