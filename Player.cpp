@@ -271,23 +271,37 @@ void Player::UpdateJumpBefore()
 
 	if (Input::IsKeyDown(DIK_SPACE))
 	{
-		XMVECTOR v;
-		v = XMLoadFloat3(&JumpTransform_.position_);
-		XMStoreFloat3(&this->transform_.position_, v);//一時的な移動処理
+		//JumpSpeed_ = 1.2;
+		JumpTarget = XMLoadFloat3(&JumpTransform_.position_);
+		JumpLength = JumpTarget - PlayerPosition;
+		JumpLength = XMVector3Normalize(JumpLength);
+
+		//XMStoreFloat3(&this->transform_.position_, v);//一時的な移動処理
 		PlayerState = S_JUMP;
 	}
 }
 
 void Player::UpdateJump()
 {
-	if (this->transform_.position_.y < 1.0)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	//if (this->transform_.position_.y < 1.0)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	//{
+	//	transform_.position_.y = 1.0f;
+	//	PlayerState = S_IDLE;
+	//}
+
+	//JumpSpeed_ -= Player_Gravity;//重力分の値を引き、
+	//this->transform_.position_.y += JumpSpeed_;//プレイヤーは常に下方向に力がかかっている
+
+	//少しずつ移動(ジャンプ未実装)
+	if (XMVector3NearEqual(PlayerPosition, JumpTarget,XMVectorSet(0.1,0.1,0.1,1.0)))
 	{
-		transform_.position_.y = 1.0f;
 		PlayerState = S_IDLE;
 	}
 
-	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、
-	this->transform_.position_.y += JumpSpeed_;//プレイヤーは常に下方向に力がかかっている
+	XMVECTOR PrevPos = PlayerPosition;
+	NewPos = PlayerPosition + JumpLength * 0.3;
+	XMStoreFloat3(&this->transform_.position_, NewPos);
+
 }
 
 void Player::UpdateHit()

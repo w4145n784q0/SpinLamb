@@ -28,6 +28,8 @@ private:
 	bool IsOnGround_;
 	float JumpSpeed_;//+ならジャンプしている状態 -なら下降～地面にいる状態
 	//XMFLOAT3 JumpDirection;//移動方向（ベクトル計算用）
+	XMVECTOR JumpTarget;
+	XMVECTOR JumpLength;
 
 	Transform JumpTransform_;//着地位置（Transform）
 	XMFLOAT3 LandingPoint;//着地位置（XMFLOAT3）
