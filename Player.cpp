@@ -9,7 +9,7 @@
 
 namespace {
 	const float speed = 9.0f;
-	const float Player_Gravity = 0.08; //0.16333f
+	const float Player_Gravity = 0.04; //0.16333f
 	const float DeltaTime = 0.016f;
 	const float FullAccelerate = 50.0f;
 	const XMVECTOR front = { 0,0,1 };
@@ -21,7 +21,7 @@ namespace {
 Player::Player(GameObject* parent)
 	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),IsDash_(false), 
 	JumpDirection({0,0,0}), JumpSpeed_(0.0f), MovePoint({0,0,0}), LandingPoint({0,0,0}),
-	Direction({0,0,0}),PlayerDirection({0,0,0}), PlayerPosition({0,0,0}), Acceleration_(0.0f),
+	Direction({0,0,0}),PlayerFrontDirection({0,0,1}), PlayerPosition({0,0,0}), Acceleration_(0.0f),
 	BackCamera(BackCameraPos), pGround(nullptr), pStageObject(nullptr), PlayerState(S_IDLE)
 {
 	cameraTransform = this->transform_;
@@ -99,10 +99,6 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
  {
-	if (pTarget->GetObjectName() == "StageObject")
-	{
-		IsHitWall = true;
-	}
 }
 
 void Player::Dash()
@@ -150,37 +146,39 @@ void Player::UpdateIdle()
 	{
 		IsDash_ = false;
 	}
+
 	Dash();
 
-	XMMATRIX playerRot = XMMatrixRotationY(XMConvertToRadians(this->transform_.rotate_.y));//プレイヤーのy回転をラジアン化して行列に
-	XMVECTOR PrevDir = XMVectorSet(Direction.x, Direction.y, Direction.z, 0.0f);//プレイヤーの進行方向をベクトル化
-	PrevDir = XMVector3TransformCoord(PrevDir, playerRot);//方向ベクトルを回転行列で変換
-	XMVECTOR norm = XMVector3Normalize(PrevDir);// 単位ベクトルに正規化
-	XMVECTOR MoveVector = XMVectorScale(norm, (speed + Acceleration_) * DeltaTime);//移動ベクトル化する
+	//プレイヤーのy回転をラジアン化して行列に
+	XMMATRIX playerRot = XMMatrixRotationY(XMConvertToRadians(this->transform_.rotate_.y));
 
+	//プレイヤーの進行方向をベクトル化
+	XMVECTOR PrevDir = XMVectorSet(Direction.x, Direction.y, Direction.z, 0.0f);
+
+	//方向ベクトルを回転行列で変換
+	PrevDir = XMVector3TransformCoord(PrevDir, playerRot);
+
+	//単位ベクトル化する
+	XMVECTOR norm = XMVector3Normalize(PrevDir);
+
+	//移動ベクトル化する
+	XMVECTOR MoveVector = XMVectorScale(norm, (speed + Acceleration_) * DeltaTime);
+
+	//現在位置と移動ベクトルを加算
 	XMVECTOR PrevPos = PlayerPosition;
 	NewPos = PrevPos + MoveVector;
 	
 	int nextX, nextZ;
-	nextX = (int)XMVectorGetX(NewPos);
+	nextX = (int)XMVectorGetX(NewPos) + 1.0f;
 	nextZ = (int)XMVectorGetZ(NewPos) + 1.0f;
 
-	//if (pGround->IsMoveFront(nextX, nextZ)){}
-	if (pGround->CanMoveFront(nextX, nextZ))
+	//地上で正面からオブジェクトにぶつかった時はすり抜けないようにする
+	//空中なら飛び越えられる
+	if (pGround->CanMoveFront(nextX, nextZ) || !IsOnGround_)
 	{
 		XMStoreFloat3(&this->transform_.position_, NewPos);
 	}
-
 	
-	
-	Direction = { 0,0,0 };//進行方向のリセット毎フレーム行う
-
-	/*hGetGrass = pGround->GetGrassHandle();
-	hGetWall = pStageObject->GetWallHandle();
-
-	PlayerRayCast(hGetGrass);
-	PlayerRayCast(hGetWall);*/
-
 	//--------------ジャンプ--------------
 	//ボタンを押すとジャンプの着地先を表示(未完成)
 	//WASDで着地場所を細かく設定(未完成)
@@ -218,17 +216,13 @@ void Player::UpdateIdle()
 
 	if (Input::IsKeyDown(DIK_SPACE))
 	{
-		JumpSpeed_ = 0.5;//一時的にy方向にマイナスされている値を大きくする
-		PlayerState = S_JUMP;
+		//PlayerState = S_JUMP;
 
-		//if (IsOnGround_) {
-		//	IsOnGround_ = false;
-		//	XMStoreFloat3(&this->transform_.position_, LandingPoint);
-		//	JumpSpeed_ = 0.8;//一時的にy方向にマイナスされている値を大きくする
-		//	MovePoint = XMVectorZero();
-		//	LandingPoint = XMVectorZero();
-		//	JumpDirection = { 0,0,0 };//進行方向のリセット毎フレーム行う
-		//}
+		if (IsOnGround_)
+		{
+			IsOnGround_ = false;
+			JumpSpeed_ = 1.2;//一時的にy方向にマイナスされている値を大きくする
+		}
 	}
 	
 	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
@@ -237,6 +231,7 @@ void Player::UpdateIdle()
 	if (this->transform_.position_.y <= 1.0f) //プレイヤーめりこみ防止に一定以下のy座標で値を固定
 	{
 		this->transform_.position_.y = 1.0f;
+		IsOnGround_ = true;
 	}
 
 	if (JumpSpeed_ < -100) {
@@ -269,6 +264,8 @@ void Player::UpdateIdle()
 		cameraTransform.rotate_.y = 0;
 		this->transform_.rotate_.y = 0;
 	}
+
+	Direction = { 0,0,0 };//最後に進行方向のリセット毎フレーム行う
 }
 
 void Player::UpdateHide()

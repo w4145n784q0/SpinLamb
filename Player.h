@@ -38,7 +38,7 @@ private:
 	
 	//移動関係
 	XMFLOAT3 Direction;//プレイヤーの方向(xzどこに進むか)
-	XMVECTOR PlayerDirection;//方向ベクトル(実際に向いている方向)
+	XMVECTOR PlayerFrontDirection;//正面ベクトル
 	XMVECTOR PlayerPosition;//位置ベクトル
 
 	Transform cameraTransform;//カメラのTransform 回転だけ使う
@@ -61,7 +61,7 @@ private:
 
 public:
 
-	XMVECTOR GetPlayerDirection() { return PlayerDirection; }//方向ベクトル取得
+	XMVECTOR GetPlayerDirection() { return PlayerFrontDirection; }//方向ベクトル取得
 	XMVECTOR GetPlayerPosition() { return PlayerPosition; }//位置ベクトル取得
 
 	Player(GameObject* parent);

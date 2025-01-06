@@ -39,6 +39,12 @@ public:
 	void OnCollision(GameObject* pTarget) override;
 
 	void ObjectSet();
+	/// <summary>
+	/// プレイヤーが先に行けるか返す
+	/// </summary>
+	/// <param name="x"></param>
+	/// <param name="z"></param>
+	/// <returns></returns>
 	bool CanMoveFront(int x, int z);
 
 	int GetGrassHandle() { return hModel_Ground; }
