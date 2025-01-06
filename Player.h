@@ -29,8 +29,10 @@ private:
 	float JumpSpeed_;//+ならジャンプしている状態 -なら下降～地面にいる状態
 	XMFLOAT3 JumpDirection;//移動方向（ベクトル計算用）
 	XMVECTOR MovePoint;
-	XMVECTOR LandingPoint; //着地点
-	Transform JumpTrans;//
+	//XMVECTOR LandingPoint; //着地点
+
+	Transform JumpTransform_;//
+	XMFLOAT3 LandingPoint;
 
 	//ダッシュ関係
 	bool IsDash_; //ダッシュ中か
@@ -86,5 +88,10 @@ public:
 	void PlayerRayCast(int handle);
 
 	void Dash();
+
+	/// <summary>
+	/// カメラの操作（一部のステートのみ）
+	/// </summary>
+	void CameraControl();
 };
 

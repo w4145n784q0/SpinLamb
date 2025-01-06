@@ -7,6 +7,8 @@
 #include"Enemy.h"
 #include"StageObject.h"
 
+#include <algorithm>
+
 namespace {
 	const float speed = 9.0f;
 	const float Player_Gravity = 0.04; //0.16333f
@@ -28,7 +30,8 @@ Player::Player(GameObject* parent)
 	CameraPosition = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
 	CameraTarget = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 
-	StartPosition.position_ = { 0,1.0f,0 };
+	StartPosition.position_ = { 0.0f,1.0f,0.0f };
+	JumpTransform_.position_ = { 0.0f,1.0f,0.0f };
 
 }
 
@@ -91,6 +94,12 @@ void Player::Draw()
 {
 	Model::SetTransform(hModel_Player, transform_);
 	Model::Draw(hModel_Player);
+
+	if (PlayerState == S_JUMPBEFORE)
+	{
+		Model::SetTransform(hModel_LandingPoint, JumpTransform_);
+		Model::Draw(hModel_LandingPoint);
+	}
 }
 
 void Player::Release()
@@ -180,40 +189,10 @@ void Player::UpdateIdle()
 	}
 	
 	//--------------ジャンプ--------------
-	//ボタンを押すとジャンプの着地先を表示(未完成)
-	//WASDで着地場所を細かく設定(未完成)
+	//ボタンを押すとジャンプの着地先を表示
+	//WASDで着地場所を細かく設定
 
-	/*if (Input::IsKeyDown(DIK_W))
-	{
-		JumpDirection.z = 1.0f;
-	}
-	if (Input::IsKeyDown(DIK_S))
-	{
-		JumpDirection.z = -1.0f;
-	}
-	if (Input::IsKeyDown(DIK_A))
-	{
-		JumpTrans.rotate_.y -= 1.0f;
-		if (JumpTrans.rotate_.y <= -60.0f) {
-			JumpTrans.rotate_.y = -60.0f;
-		}
-	}
-	if (Input::IsKeyDown(DIK_D))
-	{
-		JumpTrans.rotate_.y += 1.0f;
-		if (JumpTrans.rotate_.y >= 60.0f) {
-			JumpTrans.rotate_.y = 60.0f;
-		}
-	}
-
-	XMMATRIX JumpRot = XMMatrixRotationY(XMConvertToRadians(JumpTrans.rotate_.y));
-	XMVECTOR jumpMove = XMVectorSet(JumpDirection.x, JumpDirection.y, JumpDirection.z, 0.0f);
-	jumpMove = XMVector3TransformCoord(jumpMove, JumpRot);
-	XMVECTOR normal = XMVector3Normalize(jumpMove);
-	XMVECTOR JumpVector = XMVectorScale(normal, speed);
-
-	LandingPoint = PlayerPosition + JumpVector;*/
-
+	//通常ジャンプ
 	if (Input::IsKeyDown(DIK_SPACE))
 	{
 		//PlayerState = S_JUMP;
@@ -237,33 +216,17 @@ void Player::UpdateIdle()
 	if (JumpSpeed_ < -100) {
 		JumpSpeed_ = -100;
 	}
-
 	
-
-
-
-	
-
+	//狙ったところにジャンプ
 	if (Input::IsKeyDown(DIK_Q))
 	{
+		JumpTransform_ = this->transform_;
+		LandingPoint = this->transform_.position_;
 		PlayerState = S_JUMPBEFORE;
 	}
 
 	//--------------カメラ追従--------------
-
-	if (Input::IsKey(DIK_X))
-	{
-		cameraTransform.rotate_.y -= 5;
-	}
-	if (Input::IsKey(DIK_C))
-	{
-		cameraTransform.rotate_.y += 5;
-	}
-	if (Input::IsKey(DIK_Z))//カメラを正面に戻す（方向に変化なし）
-	{
-		cameraTransform.rotate_.y = 0;
-		this->transform_.rotate_.y = 0;
-	}
+	CameraControl();
 
 	Direction = { 0,0,0 };//最後に進行方向のリセット毎フレーム行う
 }
@@ -274,9 +237,37 @@ void Player::UpdateHide()
 
 void Player::UpdateJumpBefore()
 {
+	CameraControl();
 	if (Input::IsKeyDown(DIK_Q))
 	{
 		PlayerState = S_IDLE;
+	}
+
+	if (Input::IsKey(DIK_W))
+	{
+		LandingPoint.z += 0.3f;
+	}
+	if (Input::IsKey(DIK_S))
+	{
+		LandingPoint.z -= 0.3f;
+	}
+	if (Input::IsKey(DIK_A))
+	{
+		LandingPoint.x -= 0.3f;
+	}
+	if (Input::IsKey(DIK_D))
+	{
+		LandingPoint.x += 0.3f;
+	}
+
+	JumpTransform_.position_ = LandingPoint;
+
+	if (Input::IsKeyDown(DIK_SPACE))
+	{
+		XMVECTOR v;
+		v = XMLoadFloat3(&JumpTransform_.position_);
+		XMStoreFloat3(&this->transform_.position_, v);//一時的な移動処理
+		PlayerState = S_JUMP;
 	}
 }
 
@@ -310,3 +301,19 @@ void Player::PlayerRayCast(int handle)
 	}
 }
 
+void Player::CameraControl()
+{
+	if (Input::IsKey(DIK_X))
+	{
+		cameraTransform.rotate_.y -= 5;
+	}
+	if (Input::IsKey(DIK_C))
+	{
+		cameraTransform.rotate_.y += 5;
+	}
+	if (Input::IsKey(DIK_Z))//カメラを正面に戻す（方向に変化なし）
+	{
+		cameraTransform.rotate_.y = 0;
+		this->transform_.rotate_.y = 0;
+	}
+}
