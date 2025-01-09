@@ -275,6 +275,10 @@ void Player::UpdateJumpBefore()
 		PlayerStart = PlayerPosition;
 		JumpTarget = XMLoadFloat3(&JumpTransform_.position_);//ジャンプの着地点
 		JumpLength = JumpTarget - PlayerPosition;//ジャンプする距離
+		XMStoreFloat3(&JumpValue, JumpLength);
+
+		jumpX = JumpValue.x / 100;
+		jumpZ = JumpValue.z / 100;
 		//JumpLength = XMVector3Normalize(JumpLength);
 
 		//XMStoreFloat3(&this->transform_.position_, v);//一時的な移動処理
@@ -284,31 +288,10 @@ void Player::UpdateJumpBefore()
 
 void Player::UpdateJump()
 {
-	//if (this->transform_.position_.y < 1.0)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
-	//{
-	//	transform_.position_.y = 1.0f;
-	//	PlayerState = S_IDLE;
-	//}
-
-	//JumpSpeed_ -= Player_Gravity;//重力分の値を引き、
-	//this->transform_.position_.y += JumpSpeed_;//プレイヤーは常に下方向に力がかかっている
-
-	//少しずつ移動(ジャンプ未実装)
-	if (XMVector3NearEqual(PlayerPosition, JumpTarget,XMVectorSet(0.1,0.1,0.1,1.0)))
-	{
-		PlayerState = S_IDLE;
-	}
-
-
-
-
-	//XMVECTOR result = XMQuaternionSlerp(PlayerStart,JumpTarget,1.0f);
-
-	/*XMVECTOR PrevPos = PlayerPosition;
-	NewPos = PlayerPosition + JumpLength * 0.2;
-	XMStoreFloat3(&this->transform_.position_, NewPos);*/
-
-
+	jumpX = JumpValue.x / 100;
+	transform_.position_.x += 0.3;//等速運動
+	transform_.position_.z += 0.3;//等速運動
+	
 
 }
 

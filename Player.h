@@ -31,6 +31,9 @@ private:
 	XMVECTOR JumpTarget;
 	XMVECTOR JumpLength;
 
+	XMFLOAT3 JumpValue;
+	float jumpX, jumpY, jumpZ;
+
 	Transform JumpTransform_;//着地位置（Transform）
 	XMFLOAT3 LandingPoint;//着地位置（XMFLOAT3）
 
