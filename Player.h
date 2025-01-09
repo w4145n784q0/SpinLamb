@@ -42,6 +42,7 @@ private:
 	XMFLOAT3 Direction;//プレイヤーの方向(xzどこに進むか)
 	XMVECTOR PlayerFrontDirection;//正面ベクトル
 	XMVECTOR PlayerPosition;//位置ベクトル
+	XMVECTOR PlayerStart;//計算用　プレイヤーの始点
 
 	Transform StartPosition;//開始位置
 	XMVECTOR NewPos;//プレイヤーの移動先

@@ -272,9 +272,10 @@ void Player::UpdateJumpBefore()
 	if (Input::IsKeyDown(DIK_SPACE))
 	{
 		//JumpSpeed_ = 1.2;
-		JumpTarget = XMLoadFloat3(&JumpTransform_.position_);
-		JumpLength = JumpTarget - PlayerPosition;
-		JumpLength = XMVector3Normalize(JumpLength);
+		PlayerStart = PlayerPosition;
+		JumpTarget = XMLoadFloat3(&JumpTransform_.position_);//ジャンプの着地点
+		JumpLength = JumpTarget - PlayerPosition;//ジャンプする距離
+		//JumpLength = XMVector3Normalize(JumpLength);
 
 		//XMStoreFloat3(&this->transform_.position_, v);//一時的な移動処理
 		PlayerState = S_JUMP;
@@ -298,9 +299,16 @@ void Player::UpdateJump()
 		PlayerState = S_IDLE;
 	}
 
-	XMVECTOR PrevPos = PlayerPosition;
-	NewPos = PlayerPosition + JumpLength * 0.3;
-	XMStoreFloat3(&this->transform_.position_, NewPos);
+
+
+
+	//XMVECTOR result = XMQuaternionSlerp(PlayerStart,JumpTarget,1.0f);
+
+	/*XMVECTOR PrevPos = PlayerPosition;
+	NewPos = PlayerPosition + JumpLength * 0.2;
+	XMStoreFloat3(&this->transform_.position_, NewPos);*/
+
+
 
 }
 
