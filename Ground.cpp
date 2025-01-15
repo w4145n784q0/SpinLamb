@@ -17,6 +17,7 @@ Ground::Ground(GameObject* parent)
 	stageWidth_ = csv.GetWidth();    //１行に何個データがあるか
 	stageHeight_ = csv.GetHeight();   //データが何行あるか
 
+	//
 	for (int i = 0; i < stageHeight_; i++)
 	{
 		vector<int> data(stageWidth_, 0);
@@ -60,13 +61,28 @@ void Ground::Update()
 
 void Ground::Draw()
 {
-	for (int z = 0; z < stageHeight_; z++) {
-		for (int x = 0; x < stageWidth_; x++) {
-			mapTrans.position_ = { (float)x, 0 ,(float) z };
-			Model::SetTransform(hModel_Grass, mapTrans);
-			Model::Draw(hModel_Grass);
+	for (int z = 0; z < stageHeight_; z++)
+	{
+		for (int x = 0; x < stageWidth_; x++)
+		{
+			int height = MapData[z][x];
+			
+			if (height == 0)
+			{
+				mapTrans.position_ = { (float)x, 0 ,(float)z };
+				Model::SetTransform(hModel_Grass, mapTrans);
+				Model::Draw(hModel_Grass);
+			}
+			else
+			{
+				for (int y = 0; y < height; y++)
+				{
+					mapTrans.position_ = { (float)x, height ,(float)z };
+					Model::SetTransform(hModel_Grass, mapTrans);
+					Model::Draw(hModel_Grass);
+				}
+			}
 		}
-
 	}
 
 	/*for (int x = 0; x < blocknum; x++)
@@ -112,12 +128,26 @@ void Ground::ObjectSet()
 		for (int x = 0; x < stageWidth_; x++) {
 			
 			ObjectPos.position_ = { (float)x, 0 ,(float)z };
+			int pos = MapData[z][x];
 
-			if (MapData[z][x] == 1) 
+			switch (pos)
 			{
-				ObjectTrans.position_ = ObjectPos.position_;
+			case 1:
+			{
+				ObjectTrans.position_.x = ObjectPos.position_.x;
+				ObjectTrans.position_.y = (float)pos;
+				ObjectTrans.position_.z = ObjectPos.position_.z;
 				Instantiate<StageObject>(this);
 			}
+			default:
+				break;
+			}
+
+			/*if (MapData[z][x] == 1) 
+			{
+				
+				
+			}*/
 			
 		}
 

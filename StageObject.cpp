@@ -22,7 +22,7 @@ void StageObject::Initialize()
 	Ground* pGround = (Ground*)FindObject("Ground");
 	transform_.position_ = pGround->GetObjectTrans().position_;
 
-	transform_.position_.y = 1;
+	//transform_.position_.y = 1;
 
 }
 
