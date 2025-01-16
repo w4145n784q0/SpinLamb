@@ -1,17 +1,17 @@
 #include "Ground.h"
 #include"Engine/Model.h"
-#include"Engine/CsvReader.h"
 #include"Engine/SphereCollider.h"
 #include"StageObject.h"
 
 namespace {
 	int blocknum = 20;
+	XMFLOAT3 GoalItemPos = {40,1,40};
 }
 
 Ground::Ground(GameObject* parent)
 	:GameObject(parent,"Ground"),hModel_Ground(-1),hModel_Wall(-1)
 {
-	CsvReader csv;
+	//csvの値は各ブロックの高さを保管
 	csv.Load("MapTest.csv");
 
 	stageWidth_ = csv.GetWidth();    //１行に何個データがあるか
@@ -33,6 +33,8 @@ Ground::Ground(GameObject* parent)
 		}
 	}
 
+	//Instantiate<GoalItem>(this);
+	//transform_.position =  pGround->SetPosition()
 }
 
 Ground::~Ground()
@@ -141,8 +143,8 @@ void Ground::ObjectSet()
 				ObjectTrans.position_.z = ObjectPos.position_.z;
 				//Instantiate<StageObject>(this);
 			}
-			case 101:
-				//Instantiate<GoalItem>(this);
+			
+
 			default:
 				break;
 			}
@@ -158,34 +160,34 @@ void Ground::ObjectSet()
 	}
 }
 
-bool Ground::CanMoveFront(int x, int z)
+bool Ground::CanMoveFront(int x, int z, int height)
 {
+	//csvの値を超えるか下回るならfalseを返す
 	if (x < 0 || z < 0 || x >= stageWidth_ || z >= stageHeight_) 
 	{
 		return false;
 	}
 
-	int data = MapData[z][x];
-	switch (data)
+	int data = csv.GetValue(x, z);
+
+	//今の自分以上の高さならfalseを返す
+	if (height < data) 
 	{
-	case 1:
-	case 2:
 		return false;
-		break;
-	default:
-		return true;
-		break;
 	}
+
+	return true;
 }
 
-int Ground::GetMapData(int x, int z)
+int Ground::GetPositionData(int x, int z)
 {
+	//csvの値を超えるか下回るなら0を返す
 	if (x < 0 || z < 0 || x >= stageWidth_ || z >= stageHeight_)
 	{
-		return 1;
+		return 0;
 	}
-	int data = MapData[z][x];
 
+	int data = MapData[z][x];
 	return MapData[z][x];
 }
 

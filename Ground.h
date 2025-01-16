@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"Engine/CsvReader.h"
 #include<array>
 #include<vector>
 
@@ -28,6 +29,8 @@ class Ground :
 	Transform mapTrans;
 	Transform ObjectTrans;
 
+	CsvReader csv;
+
 public:
 	Ground(GameObject* parent);
 	~Ground();
@@ -44,13 +47,21 @@ public:
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="z"></param>
+	/// <param name="height"></param>
 	/// <returns></returns>
-	bool CanMoveFront(int x, int z);
+	bool CanMoveFront(int x, int z,int height);
 
 	int GetGrassHandle() { return hModel_Ground; }
 	int GetWallHandle() { return hModel_Wall; }
 
-	int GetMapData(int x, int z);
+	/// <summary>
+	/// ƒQ[ƒ€ã‚ÌyÀ•W‚ğ‚Æ‚é
+	/// </summary>
+	/// <param name="x">“n‚³‚ê‚½xÀ•W</param>
+	/// <param name="z">“n‚³‚ê‚½zÀ•W</param>
+	/// <returns>csv‚Ì’l‚ğ‚Æ‚é</returns>
+	int GetPositionData(int x, int z);
+
 	int GetStageWidth() { return stageWidth_; }
 	int GetStageHeight() { return stageHeight_; }
 

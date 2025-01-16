@@ -190,9 +190,11 @@ void Player::UpdateIdle()
 
 	//地上で正面からオブジェクトにぶつかった時はすり抜けないようにする
 	//空中なら飛び越えられる
-	//if (pGround->CanMoveFront(nextX, nextZ) || !IsOnGround_ )
-	
-	XMStoreFloat3(&this->transform_.position_, NewPos);
+	if (pGround->CanMoveFront(nextX, nextZ, (int)transform_.position_.y) || !IsOnGround_ )
+	{
+		XMStoreFloat3(&this->transform_.position_, NewPos);
+	}
+
 	
 	
 	//--------------ジャンプ--------------
@@ -342,7 +344,7 @@ void Player::LandGround()
 {
 	int x = (int)transform_.position_.x;
 	int z = (int)transform_.position_.z;
-	int MapPosY = pGround->GetMapData(x, z) + 1;
+	int MapPosY = pGround->GetPositionData(x, z) + 1;
 
 	if (transform_.position_.y <= MapPosY)
 	{
