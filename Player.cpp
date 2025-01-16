@@ -15,13 +15,13 @@ namespace {
 	const float DeltaTime = 0.016f;
 	const float FullAccelerate = 50.0f;
 	const XMVECTOR front = { 0,0,1 };
-	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎回この値にする（値が変わり続けるのを防ぐ）
+	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 
 	float PrevHeight = 0.0f;
 }
 
 Player::Player(GameObject* parent)
-	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),IsDash_(false), 
+	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),IsDash_(false), CanMove(true),
 	JumpSpeed_(0.0f), LandingPoint({0,0,0}),
 	Direction({0,0,0}),PlayerFrontDirection({0,0,1}), PlayerPosition({0,0,0}), Acceleration_(0.0f),
 	BackCamera(BackCameraPos), pGround(nullptr), pStageObject(nullptr), PlayerState(S_IDLE)
@@ -52,7 +52,7 @@ void Player::Initialize()
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0,0,0),0.3f);
 	this->AddCollider(col);
 
-	hGetWall = pStageObject->GetWallHandle();
+	//hGetWall = pStageObject->GetWallHandle();
 }
 
 void Player::Update()
@@ -110,7 +110,17 @@ void Player::Release()
 }
 
 void Player::OnCollision(GameObject* pTarget)
- {
+{
+	if (pTarget->GetObjectName() == "Ground")
+	{
+		int x = transform_.position_.x;
+		int y = transform_.position_.y;
+		int z = transform_.position_.z;
+
+		int MapPos = pGround->GetMapData(x, z);
+
+		transform_.position_.y = MapPos ;
+	}
 }
 
 void Player::Dash()
@@ -181,12 +191,12 @@ void Player::UpdateIdle()
 	NewPos = PrevPos + MoveVector;
 	
 	int nextX, nextZ;
-	nextX = (int)XMVectorGetX(NewPos) + 1.0f;
-	nextZ = (int)XMVectorGetZ(NewPos) + 1.0f;
+	nextX = (int)XMVectorGetX(NewPos);
+	nextZ = (int)XMVectorGetZ(NewPos);
 
 	//地上で正面からオブジェクトにぶつかった時はすり抜けないようにする
 	//空中なら飛び越えられる
-	if (pGround->CanMoveFront(nextX, nextZ) || !IsOnGround_)
+	if (pGround->CanMoveFront(nextX, nextZ) || !IsOnGround_ || CanMove)
 	{
 		XMStoreFloat3(&this->transform_.position_, NewPos);
 	}
@@ -288,11 +298,13 @@ void Player::UpdateJumpBefore()
 
 void Player::UpdateJump()
 {
-	jumpX = JumpValue.x / 100;
-	transform_.position_.x += 0.3;//等速運動
-	transform_.position_.z += 0.3;//等速運動
-	
+	//jumpX = JumpValue.x / 100;
+	//transform_.position_.x += 0.3;//等速運動
+	//transform_.position_.z += 0.3;//等速運動
+	//
 
+	XMStoreFloat3(&this->transform_.position_, JumpTarget);
+	PlayerState = S_IDLE;
 }
 
 void Player::UpdateHit()

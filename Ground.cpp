@@ -49,7 +49,7 @@ void Ground::Initialize()
 
 	mapTrans.position_ = { 0,0,0 };
 
-	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 0.1f);
+	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 3.0f);
 	this->AddCollider(col);
 
 	ObjectSet();
@@ -67,17 +67,15 @@ void Ground::Draw()
 		{
 			int height = MapData[z][x];
 			
-			if (height == 0)
-			{
-				mapTrans.position_ = { (float)x, 0 ,(float)z };
-				Model::SetTransform(hModel_Grass, mapTrans);
-				Model::Draw(hModel_Grass);
-			}
-			else
+			mapTrans.position_ = { (float)x, 0 ,(float)z };
+			Model::SetTransform(hModel_Grass, mapTrans);
+			Model::Draw(hModel_Grass);
+
+			if(height >= 1 && height <= 100)
 			{
 				for (int y = 0; y < height; y++)
 				{
-					mapTrans.position_ = { (float)x, height ,(float)z };
+					mapTrans.position_ = { (float)x, (float)y + 1 ,(float)z };
 					Model::SetTransform(hModel_Grass, mapTrans);
 					Model::Draw(hModel_Grass);
 				}
@@ -117,6 +115,10 @@ void Ground::Release()
 
 void Ground::OnCollision(GameObject* pTarget)
 {
+	if (pTarget->GetObjectName() == "Player")
+	{
+		
+	}
 }
 
 void Ground::ObjectSet()
@@ -137,8 +139,10 @@ void Ground::ObjectSet()
 				ObjectTrans.position_.x = ObjectPos.position_.x;
 				ObjectTrans.position_.y = (float)pos;
 				ObjectTrans.position_.z = ObjectPos.position_.z;
-				Instantiate<StageObject>(this);
+				//Instantiate<StageObject>(this);
 			}
+			case 101:
+				//Instantiate<GoalItem>(this);
 			default:
 				break;
 			}
@@ -165,12 +169,25 @@ bool Ground::CanMoveFront(int x, int z)
 	switch (data)
 	{
 	case 1:
+	case 2:
 		return false;
 		break;
 	default:
 		return true;
 		break;
 	}
+}
+
+int Ground::GetMapData(int x, int z)
+{
+	int data  = MapData[z][x];
+	if (x <= 0 || z <= 0 || x >= stageWidth_ || z >= stageHeight_)
+	{
+		return 1;
+	}
+	
+
+	return MapData[z][x];
 }
 
 /*bool Ground::IsMoveFront(int x, int y)

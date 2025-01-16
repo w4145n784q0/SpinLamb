@@ -50,6 +50,10 @@ public:
 	int GetGrassHandle() { return hModel_Ground; }
 	int GetWallHandle() { return hModel_Wall; }
 
+	int GetMapData(int x, int z);
+	int GetStageWidth() { return stageWidth_; }
+	int GetStageHeight() { return stageHeight_; }
+
 	Transform GetObjectTrans() { return ObjectTrans; }
 };
 

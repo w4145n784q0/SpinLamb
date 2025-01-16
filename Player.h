@@ -42,6 +42,7 @@ private:
 	float Acceleration_;//加速度
 	
 	//移動関係
+	bool CanMove;
 	XMFLOAT3 Direction;//プレイヤーの方向(xzどこに進むか)
 	XMVECTOR PlayerFrontDirection;//正面ベクトル
 	XMVECTOR PlayerPosition;//位置ベクトル
