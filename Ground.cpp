@@ -180,12 +180,11 @@ bool Ground::CanMoveFront(int x, int z)
 
 int Ground::GetMapData(int x, int z)
 {
-	int data  = MapData[z][x];
-	if (x <= 0 || z <= 0 || x >= stageWidth_ || z >= stageHeight_)
+	if (x < 0 || z < 0 || x >= stageWidth_ || z >= stageHeight_)
 	{
 		return 1;
 	}
-	
+	int data = MapData[z][x];
 
 	return MapData[z][x];
 }

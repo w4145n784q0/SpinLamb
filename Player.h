@@ -27,6 +27,7 @@ private:
 	//ジャンプ関係
 	bool IsOnGround_;
 	float JumpSpeed_;//+ならジャンプしている状態 -なら下降～地面にいる状態
+	float PrevHeight;//元の高さを保管する
 	//XMFLOAT3 JumpDirection;//移動方向（ベクトル計算用）
 	XMVECTOR JumpTarget;
 	XMVECTOR JumpLength;
@@ -42,7 +43,6 @@ private:
 	float Acceleration_;//加速度
 	
 	//移動関係
-	bool CanMove;
 	XMFLOAT3 Direction;//プレイヤーの方向(xzどこに進むか)
 	XMVECTOR PlayerFrontDirection;//正面ベクトル
 	XMVECTOR PlayerPosition;//位置ベクトル
@@ -97,6 +97,6 @@ public:
 	/// </summary>
 	void CameraControl();
 
-	void RideObject();
+	void LandGround();
 };
 

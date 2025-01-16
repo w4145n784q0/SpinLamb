@@ -21,7 +21,7 @@ namespace {
 }
 
 Player::Player(GameObject* parent)
-	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),IsDash_(false), CanMove(true),
+	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),IsDash_(false),
 	JumpSpeed_(0.0f), LandingPoint({0,0,0}),
 	Direction({0,0,0}),PlayerFrontDirection({0,0,1}), PlayerPosition({0,0,0}), Acceleration_(0.0f),
 	BackCamera(BackCameraPos), pGround(nullptr), pStageObject(nullptr), PlayerState(S_IDLE)
@@ -113,13 +113,7 @@ void Player::OnCollision(GameObject* pTarget)
 {
 	if (pTarget->GetObjectName() == "Ground")
 	{
-		int x = transform_.position_.x;
-		int y = transform_.position_.y;
-		int z = transform_.position_.z;
 
-		int MapPos = pGround->GetMapData(x, z);
-
-		transform_.position_.y = MapPos ;
 	}
 }
 
@@ -191,24 +185,22 @@ void Player::UpdateIdle()
 	NewPos = PrevPos + MoveVector;
 	
 	int nextX, nextZ;
-	nextX = (int)XMVectorGetX(NewPos);
-	nextZ = (int)XMVectorGetZ(NewPos);
+	nextX = (int)XMVectorGetX(NewPos) + 1.0;
+	nextZ = (int)XMVectorGetZ(NewPos) + 1.0;
 
 	//地上で正面からオブジェクトにぶつかった時はすり抜けないようにする
 	//空中なら飛び越えられる
-	if (pGround->CanMoveFront(nextX, nextZ) || !IsOnGround_ || CanMove)
-	{
-		XMStoreFloat3(&this->transform_.position_, NewPos);
-	}
+	//if (pGround->CanMoveFront(nextX, nextZ) || !IsOnGround_ )
+	
+	XMStoreFloat3(&this->transform_.position_, NewPos);
+	
 	
 	//--------------ジャンプ--------------
 	//ボタンを押すとジャンプの着地先を表示
 	//WASDで着地場所を細かく設定
 
-	if (!IsOnGround_) 
-	{
-		PlayerRayCast(hGetWall);
-	}
+	//地面にいるときは座標固定
+	LandGround();
 
 	//通常ジャンプ
 	if (Input::IsKeyDown(DIK_SPACE))
@@ -218,12 +210,17 @@ void Player::UpdateIdle()
 		if (IsOnGround_)
 		{
 			IsOnGround_ = false;
+			PrevHeight = transform_.position_.y;
 			JumpSpeed_ = 1.2;//一時的にy方向にマイナスされている値を大きくする
 		}
 	}
 	
-	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
-	this->transform_.position_.y += JumpSpeed_;
+	if (!IsOnGround_)
+	{
+		JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
+		this->transform_.position_.y += JumpSpeed_;
+	}
+
 
 	if (this->transform_.position_.y <= 1.0f) //プレイヤーめりこみ防止に一定以下のy座標で値を固定
 	{
@@ -341,6 +338,19 @@ void Player::CameraControl()
 	}
 }
 
-void Player::RideObject()
+void Player::LandGround()
 {
+	int x = (int)transform_.position_.x;
+	int z = (int)transform_.position_.z;
+	int MapPosY = pGround->GetMapData(x, z) + 1;
+
+	if (transform_.position_.y <= MapPosY)
+	{
+		IsOnGround_ = true;
+	}
+
+	if (IsOnGround_)
+	{
+		transform_.position_.y = MapPosY;
+	}
 }
