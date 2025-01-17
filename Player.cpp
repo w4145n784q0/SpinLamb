@@ -42,7 +42,7 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	hModel_Player = Model::Load("ensui.fbx"); 
+	hModel_Player = Model::Load("Player.fbx"); 
 	hModel_LandingPoint = Model::Load("LandingPoint.fbx");
 	this->transform_.position_ = StartPosition.position_;
 
