@@ -3,7 +3,7 @@
 #include"Engine/Model.h"
 
 Terrain::Terrain(GameObject* parent)
-	:GameObject(parent, "StageObject"),hTerrain_(-1)
+	:GameObject(parent, "Terrain"),hTerrain_(-1)
 {
 }
 

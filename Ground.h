@@ -23,7 +23,15 @@ class Ground :
 	StageData stageTable[20][20];
 	std::array<int, 2> blockArray;*/
 
+	/// <summary>
+	/// csv‚Ìƒf[ƒ^‚ğ•ÛŠÇ
+	/// </summary>
 	vector<vector<int>> MapData;
+
+	/// <summary>
+	/// MapData‚Ì‚‚³î•ñ‚ğ•ÛŠÇ
+	/// </summary>
+	vector<vector<int>> MapHeight;
 	int stageWidth_;
 	int stageHeight_;
 	Transform mapTrans;

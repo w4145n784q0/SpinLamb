@@ -33,6 +33,16 @@ Ground::Ground(GameObject* parent)
 		}
 	}
 
+	for (int j = 0; j < stageHeight_; j++)
+	{
+		for (int i = 0; i < stageWidth_; i++)
+		{
+			int data = MapData[j][i];
+			data = data % 10;
+			
+			MapHeight[j][i] = data;
+		}
+	}
 
 	//Instantiate<GoalItem>(this);
 	//transform_.position =  pGround->SetPosition()
@@ -68,7 +78,7 @@ void Ground::Draw()
 	{
 		for (int x = 0; x < stageWidth_; x++)
 		{
-			int height = MapData[z][x];
+			int height = MapHeight[z][x];
 			
 			mapTrans.position_ = { (float)x, 0 ,(float)z };
 			Model::SetTransform(hModel_Grass, mapTrans);
@@ -128,10 +138,11 @@ void Ground::ObjectSet()
 		for (int x = 0; x < stageWidth_; x++) {
 			
 			ObjectPos.position_ = { (float)x, 0 ,(float)z };
-			int posY = MapData[z][x];
+			int posY = MapHeight[z][x];
 
 			switch (posY)
 			{
+			//’Êí‚Ì’nŒ`
 			case 1:
 			case 2:
 			case 3:
@@ -145,9 +156,21 @@ void Ground::ObjectSet()
 					ObjectTrans.position_.z = ObjectPos.position_.z;
 					Instantiate<Terrain>(this);
 				}
+				
 			}
-			
+			break;
 
+			//–Ø‚ğ’u‚­êŠ
+			case 100:
+			case 101:
+			case 102:
+			case 103:
+			case 104:
+			case 105:
+			{
+
+			}
+			break;
 			default:
 				break;
 			}
@@ -184,6 +207,11 @@ int Ground::GetPositionData(int x, int z)
 	}
 
 	int data = MapData[z][x];
+	if (data < 100) 
+	{
+		return 0;
+	}
+
 	return data;
 }
 
