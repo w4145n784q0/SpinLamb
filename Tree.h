@@ -1,9 +1,12 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"Ground.h"
+
 class Tree :
     public GameObject
 {
 	int hTree_;
+	Ground* pGround_;
 public:
 	Tree(GameObject* parent);
 	~Tree();

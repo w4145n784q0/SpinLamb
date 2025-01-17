@@ -15,6 +15,9 @@ void Tree::Initialize()
 	hTree_ = Model::Load("Tree.fbx");
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 1.0f);
 	this->AddCollider(col);
+
+	Ground* pGround_ = (Ground*)FindObject("Ground");
+	transform_.position_ = pGround_->GetTreeTrans().position_;
 }
 
 void Tree::Update()

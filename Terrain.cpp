@@ -18,7 +18,7 @@ void Terrain::Initialize()
 	this->AddCollider(col);
 
 	Ground* pGround = (Ground*)FindObject("Ground");
-	transform_.position_ = pGround->GetObjectTrans().position_;
+	transform_.position_ = pGround->GetTerrainTrans().position_;
 
 }
 

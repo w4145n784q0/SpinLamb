@@ -2,6 +2,7 @@
 #include"Engine/Model.h"
 #include"Engine/SphereCollider.h"
 #include"Terrain.h"
+#include"Tree.h"
 
 namespace {
 	int blocknum = 20;
@@ -22,6 +23,7 @@ Ground::Ground(GameObject* parent)
 	{
 		vector<int> data(stageWidth_, 0);
 		MapData.push_back(data);
+		MapHeight.push_back(data);
 	}
 
 
@@ -54,10 +56,7 @@ Ground::~Ground()
 
 void Ground::Initialize()
 {
-	//hModel_Ground = Model::Load("BaseField.fbx");
 	hModel_Grass = Model::Load("GrassBox.fbx");
-	//hModel_Hole = Model::Load("box.fbx");
-	//hModel_Wall = Model::Load("wall.fbx");
 	assert(hModel_Grass >= 0);
 
 	mapTrans.position_ = { 0,0,0 };
@@ -65,6 +64,7 @@ void Ground::Initialize()
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 3.0f);
 	this->AddCollider(col);
 
+	TerrainSet();
 	ObjectSet();
 }
 
@@ -78,7 +78,7 @@ void Ground::Draw()
 	{
 		for (int x = 0; x < stageWidth_; x++)
 		{
-			int height = MapHeight[z][x];
+			//int height = MapHeight[z][x];
 			
 			mapTrans.position_ = { (float)x, 0 ,(float)z };
 			Model::SetTransform(hModel_Grass, mapTrans);
@@ -130,15 +130,15 @@ void Ground::OnCollision(GameObject* pTarget)
 	}
 }
 
-void Ground::ObjectSet()
+void Ground::TerrainSet()
 {
-	Transform ObjectPos;
+	Transform trans_terrain;
 
 	for (int z = 0; z < stageHeight_; z++) {
 		for (int x = 0; x < stageWidth_; x++) {
 			
-			ObjectPos.position_ = { (float)x, 0 ,(float)z };
-			int posY = MapHeight[z][x];
+			trans_terrain.position_ = { (float)x, 0 ,(float)z };
+			int posY = MapData[z][x];
 
 			switch (posY)
 			{
@@ -148,27 +148,18 @@ void Ground::ObjectSet()
 			case 3:
 			case 4:
 			case 5:
+			case 6:
+			case 7:
+			case 8:
+			case 9:
 			{
 				for (int y = 0; y < posY; y++)
 				{
-					ObjectTrans.position_.x = ObjectPos.position_.x;
-					ObjectTrans.position_.y = (float)y + 1.0;
-					ObjectTrans.position_.z = ObjectPos.position_.z;
+					TerrainTrans.position_.x = trans_terrain.position_.x;
+					TerrainTrans.position_.y = (float)y + 1.0;
+					TerrainTrans.position_.z = trans_terrain.position_.z;
 					Instantiate<Terrain>(this);
 				}
-				
-			}
-			break;
-
-			//木を置く場所
-			case 100:
-			case 101:
-			case 102:
-			case 103:
-			case 104:
-			case 105:
-			{
-
 			}
 			break;
 			default:
@@ -177,6 +168,35 @@ void Ground::ObjectSet()
 		}
 
 	}
+}
+void Ground::ObjectSet()
+{
+	for (int z = 0; z < stageHeight_; z++) {
+		for (int x = 0; x < stageWidth_; x++) {
+			int height = MapHeight[z][x] + 1;
+			int data = MapData[z][x];
+
+			switch (data)
+			{
+			case 101:
+			case 102:
+			case 103:
+			case 104:
+			case 105:
+			case 106:
+			case 107:
+			case 108:
+			case 109:
+			{
+				TreeTrans.position_ = { (float)x, (float)height,(float)z };
+				Instantiate<Tree>(this);
+			}
+			default:
+				break;
+			}
+		}
+	}
+
 }
 //地形クラスで代用
 bool Ground::CanMoveFront(int x, int z, int height)

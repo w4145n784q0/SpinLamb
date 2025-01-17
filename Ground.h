@@ -37,7 +37,8 @@ class Ground :
 	Transform mapTrans;
 
 	//地形の位置を保管する変数
-	Transform ObjectTrans;
+	Transform TerrainTrans;
+	Transform TreeTrans;
 
 	CsvReader csv;
 
@@ -51,7 +52,9 @@ public:
 	void Release() override;
 	void OnCollision(GameObject* pTarget) override;
 
+	void TerrainSet();
 	void ObjectSet();
+
 	/// <summary>
 	/// プレイヤーが先に行けるか返す
 	/// </summary>
@@ -75,6 +78,7 @@ public:
 	int GetStageWidth() { return stageWidth_; }
 	int GetStageHeight() { return stageHeight_; }
 
-	Transform GetObjectTrans() { return ObjectTrans; }
+	Transform GetTerrainTrans() { return TerrainTrans; }
+	Transform GetTreeTrans() { return TreeTrans; }
 };
 
