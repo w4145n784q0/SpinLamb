@@ -1,7 +1,7 @@
 #include "Ground.h"
 #include"Engine/Model.h"
 #include"Engine/SphereCollider.h"
-#include"StageObject.h"
+#include"Terrain.h"
 
 namespace {
 	int blocknum = 20;
@@ -33,6 +33,7 @@ Ground::Ground(GameObject* parent)
 		}
 	}
 
+
 	//Instantiate<GoalItem>(this);
 	//transform_.position =  pGround->SetPosition()
 }
@@ -43,11 +44,11 @@ Ground::~Ground()
 
 void Ground::Initialize()
 {
-	hModel_Ground = Model::Load("BaseField.fbx");
+	//hModel_Ground = Model::Load("BaseField.fbx");
 	hModel_Grass = Model::Load("GrassBox.fbx");
-	hModel_Hole = Model::Load("box.fbx");
-	hModel_Wall = Model::Load("wall.fbx");
-	assert(hModel_Wall > 0);
+	//hModel_Hole = Model::Load("box.fbx");
+	//hModel_Wall = Model::Load("wall.fbx");
+	assert(hModel_Grass >= 0);
 
 	mapTrans.position_ = { 0,0,0 };
 
@@ -73,7 +74,7 @@ void Ground::Draw()
 			Model::SetTransform(hModel_Grass, mapTrans);
 			Model::Draw(hModel_Grass);
 
-			if(height >= 1 && height <= 100)
+			/*if(height >= 1 && height <= 100)
 			{
 				for (int y = 0; y < height; y++)
 				{
@@ -81,7 +82,7 @@ void Ground::Draw()
 					Model::SetTransform(hModel_Grass, mapTrans);
 					Model::Draw(hModel_Grass);
 				}
-			}
+			}*/
 		}
 	}
 
@@ -105,10 +106,6 @@ void Ground::Draw()
 	}*/
 
 
-	//Model::SetTransform(hModel_Ground, transform_);
-	//Model::Draw(hModel_Ground);
-
-
 }
 
 void Ground::Release()
@@ -125,41 +122,40 @@ void Ground::OnCollision(GameObject* pTarget)
 
 void Ground::ObjectSet()
 {
-	//StageObject* pStageObject = (StageObject*)FindObject("StageObject");
 	Transform ObjectPos;
 
 	for (int z = 0; z < stageHeight_; z++) {
 		for (int x = 0; x < stageWidth_; x++) {
 			
 			ObjectPos.position_ = { (float)x, 0 ,(float)z };
-			int pos = MapData[z][x];
+			int posY = MapData[z][x];
 
-			switch (pos)
+			switch (posY)
 			{
 			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5:
 			{
-				ObjectTrans.position_.x = ObjectPos.position_.x;
-				ObjectTrans.position_.y = (float)pos;
-				ObjectTrans.position_.z = ObjectPos.position_.z;
-				//Instantiate<StageObject>(this);
+				for (int y = 0; y < posY; y++)
+				{
+					ObjectTrans.position_.x = ObjectPos.position_.x;
+					ObjectTrans.position_.y = (float)y + 1.0;
+					ObjectTrans.position_.z = ObjectPos.position_.z;
+					Instantiate<Terrain>(this);
+				}
 			}
 			
 
 			default:
 				break;
 			}
-
-			/*if (MapData[z][x] == 1) 
-			{
-				
-				
-			}*/
-			
 		}
 
 	}
 }
-
+//地形クラスで代用
 bool Ground::CanMoveFront(int x, int z, int height)
 {
 	//csvの値を超えるか下回るならfalseを返す
@@ -188,7 +184,7 @@ int Ground::GetPositionData(int x, int z)
 	}
 
 	int data = MapData[z][x];
-	return MapData[z][x];
+	return data;
 }
 
 /*bool Ground::IsMoveFront(int x, int y)

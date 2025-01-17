@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"Ground.h"
-#include"StageObject.h"
+#include"Terrain.h"
 
 class Player :
     public GameObject
@@ -43,6 +43,7 @@ private:
 	float Acceleration_;//加速度
 	
 	//移動関係
+	bool CanMove_;
 	XMFLOAT3 Direction;//プレイヤーの方向(xzどこに進むか)
 	XMVECTOR PlayerFrontDirection;//正面ベクトル
 	XMVECTOR PlayerPosition;//位置ベクトル
@@ -58,8 +59,8 @@ private:
 	XMVECTOR BackCamera;//プレイヤーの後ろに置くカメラの位置
 
 	//インスタンス関係
-	Ground* pGround;
-	StageObject* pStageObject;
+	Ground* pGround_;
+	Terrain* pTerrain_;
 
 	//他オブジェクト関係
 	bool IsHitWall;

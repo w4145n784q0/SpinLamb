@@ -27,6 +27,8 @@ class Ground :
 	int stageWidth_;
 	int stageHeight_;
 	Transform mapTrans;
+
+	//’nŒ`‚ÌˆÊ’u‚ğ•ÛŠÇ‚·‚é•Ï”
 	Transform ObjectTrans;
 
 	CsvReader csv;

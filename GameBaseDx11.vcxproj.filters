@@ -129,6 +129,7 @@
       <Filter>04Chara</Filter>
     </ClCompile>
     <ClCompile Include="StageObject.cpp" />
+    <ClCompile Include="Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -226,6 +227,7 @@
       <Filter>04Chara</Filter>
     </ClInclude>
     <ClInclude Include="StageObject.h" />
+    <ClInclude Include="Terrain.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
