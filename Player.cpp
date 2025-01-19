@@ -47,7 +47,10 @@ Player::~Player()
 void Player::Initialize()
 {
 	hPlayer_ = Model::Load("Player.fbx"); 
+	assert(hPlayer_ >= 0);
 	hLandingPoint_ = Model::Load("LandingPoint.fbx");
+	assert(hLandingPoint_ >= 0);
+
 	this->transform_.position_ = StartPosition;
 
 	pGround_ = (Ground*)FindObject("Ground");

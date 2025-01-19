@@ -14,6 +14,8 @@ GoalItem::~GoalItem()
 void GoalItem::Initialize()
 {
 	hCarrot_ = Model::Load("GoldCarrot.fbx");
+	assert(hCarrot_ >= 0);
+
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 1.0f);
 	this->AddCollider(col);
 

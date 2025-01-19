@@ -22,7 +22,7 @@ private:
 		S_JUMP,
 		S_HIT,
 	};
-	State PlayerState;
+	State PlayerState_;
 
 	//ƒWƒƒƒ“ƒvŠÖŒW
 	bool IsOnGround_;

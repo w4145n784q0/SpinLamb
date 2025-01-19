@@ -27,6 +27,7 @@ void Enemy::Initialize()
 {
 
 	hEnemy_ = Model::Load("enemy.fbx");
+	assert(hEnemy_ >= 0);
 	transform_.position_ = { 10,1,10 };
 	//transform_.rotate_.y = 180;
 

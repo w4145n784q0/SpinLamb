@@ -14,6 +14,8 @@ Terrain::~Terrain()
 void Terrain::Initialize()
 {
 	hTerrain_ = Model::Load("SandGrassBox.fbx");
+	assert(hTerrain_ >= 0);
+
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 1.0f);
 	this->AddCollider(col);
 
