@@ -11,36 +11,24 @@ using std::vector;
 class Ground :
     public GameObject
 {
-	int hModel_Ground;
-	int hModel_Grass;
-	int hModel_Wall;
-	int hModel_Hole;
+	int hGrass_;
 
-	/*struct StageData {
-		int height;
-		int type;
-	};
-	StageData stageTable[20][20];
-	std::array<int, 2> blockArray;*/
 
 	/// <summary>
 	/// csvのデータを保管
 	/// </summary>
-	vector<vector<int>> MapData;
+	vector<vector<int>> MapData_;
 
 	/// <summary>
 	/// MapDataの高さ情報を保管
 	/// </summary>
-	vector<vector<int>> MapHeight;
+	vector<vector<int>> MapHeight_;
 	int stageWidth_;
 	int stageHeight_;
-	Transform mapTrans;
+	Transform mapTrans_;
 
-	//地形の位置を保管する変数
-	Transform TerrainTrans;
-	Transform TreeTrans;
 
-	CsvReader csv;
+	CsvReader csv_;
 
 public:
 	Ground(GameObject* parent);
@@ -64,9 +52,6 @@ public:
 	/// <returns></returns>
 	bool CanMoveFront(int x, int z,int height);
 
-	int GetGrassHandle() { return hModel_Ground; }
-	int GetWallHandle() { return hModel_Wall; }
-
 	/// <summary>
 	/// ゲーム上のy座標をとる
 	/// </summary>
@@ -77,8 +62,5 @@ public:
 
 	int GetStageWidth() { return stageWidth_; }
 	int GetStageHeight() { return stageHeight_; }
-
-	Transform GetTerrainTrans() { return TerrainTrans; }
-	Transform GetTreeTrans() { return TreeTrans; }
 };
 

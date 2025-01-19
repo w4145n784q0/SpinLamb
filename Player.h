@@ -10,10 +10,8 @@ class Player :
 {
 private:
 	//モデルハンドル
-	int hModel_Player;
-	int hModel_LandingPoint;
-	int hGetGrass;
-	int hGetWall;
+	int hPlayer_;
+	int hLandingPoint_;
 
 	//ステート
 	enum State
@@ -29,13 +27,12 @@ private:
 	//ジャンプ関係
 	bool IsOnGround_;
 	float JumpSpeed_;//+ならジャンプしている状態 -なら下降～地面にいる状態
-	float PrevHeight;//元の高さを保管する
+	float PrevHeight_;//元の高さを保管する
 	//XMFLOAT3 JumpDirection;//移動方向（ベクトル計算用）
-	XMVECTOR JumpTarget;
-	XMVECTOR JumpLength;
+	XMVECTOR JumpTarget_;
+	XMVECTOR JumpLength_;
 
 	XMFLOAT3 JumpValue;
-	float jumpX, jumpY, jumpZ;
 
 	Transform JumpTransform_;//着地位置（Transform）
 	XMFLOAT3 LandingPoint;//着地位置（XMFLOAT3）
@@ -46,36 +43,36 @@ private:
 	
 	//移動関係
 	bool CanMove_;
-	XMFLOAT3 Direction;//プレイヤーの方向(xzどこに進むか)
-	XMVECTOR PlayerFrontDirection;//正面ベクトル
-	XMVECTOR PlayerPosition;//位置ベクトル
-	XMVECTOR PlayerStart;//計算用　プレイヤーの始点
+	XMFLOAT3 Direction_;//プレイヤーの方向(xzどこに進むか)
+	XMVECTOR PlayerFrontDirection_;//正面ベクトル
+	XMVECTOR PlayerPosition_;//位置ベクトル
+	XMVECTOR PlayerStart_;//計算用　プレイヤーの始点
 
-	XMVECTOR NewPos;//プレイヤーの移動先
+	XMVECTOR NewPos_;//プレイヤーの移動先
 
 	//隠れる関係
-	bool CanHide;
+	bool CanHide_;
 
 	//カメラ関係
-	XMFLOAT3 CameraPosition;
-	XMFLOAT3 CameraTarget;
-	Transform cameraTransform;//カメラのTransform 回転だけ使う
-	XMVECTOR BackCamera;//プレイヤーの後ろに置くカメラの位置
+	XMFLOAT3 CameraPosition_;
+	XMFLOAT3 CameraTarget_;
+	Transform cameraTransform_;//カメラのTransform 回転だけ使う
+	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
 
 	//インスタンス関係
 	Ground* pGround_;
 	Terrain* pTerrain_;
 	Tree* pTree_;
 	TreeManager* pTreeManager_;
-	const vector<Tree>* TreesVector;
+	const vector<Tree>* TreesVector_;
 
 	//他オブジェクト関係
 	bool IsHitWall;
 
 public:
 
-	XMVECTOR GetPlayerDirection() { return PlayerFrontDirection; }//方向ベクトル取得
-	XMVECTOR GetPlayerPosition() { return PlayerPosition; }//位置ベクトル取得
+	XMVECTOR GetPlayerDirection() { return PlayerFrontDirection_; }//方向ベクトル取得
+	XMVECTOR GetPlayerPosition() { return PlayerPosition_; }//位置ベクトル取得
 
 	Player(GameObject* parent);
 	~Player();

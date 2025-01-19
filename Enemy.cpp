@@ -14,8 +14,8 @@ namespace
 }
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent,"Enemy"),hModel_Enemy(-1),pPlayer_(nullptr),IsHit_(false), FrontLength(EyeLength),
-	Fov(XMConvertToRadians(EyeAngle)),EnemyFrontDirection({0,0,1})
+	:GameObject(parent,"Enemy"),hEnemy_(-1),pPlayer_(nullptr),IsHit_(false), FrontLength_(EyeLength),
+	Eye_(XMConvertToRadians(EyeAngle)),EnemyFrontDirection_({0,0,1})
 {
 }
 
@@ -26,7 +26,7 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 
-	hModel_Enemy = Model::Load("enemy.fbx");
+	hEnemy_ = Model::Load("enemy.fbx");
 	transform_.position_ = { 10,1,10 };
 	//transform_.rotate_.y = 180;
 
@@ -42,12 +42,12 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	pPosition = pPlayer_->GetPosition();
+	pPosition_ = pPlayer_->GetPosition();
 	XMFLOAT3 tmp = pPlayer_->GetWorldPosition();
-	pPositionVec = XMLoadFloat3(&tmp);
-	EnemyPosition = XMLoadFloat3(&this->transform_.position_);
+	pPositionVec_ = XMLoadFloat3(&tmp);
+	EnemyPosition_ = XMLoadFloat3(&this->transform_.position_);
 
-	switch (EnemyState)
+	switch (EnemyState_)
 	{
 	case Enemy::S_IDLE:
 		UpdateIdle();
@@ -72,8 +72,8 @@ void Enemy::Update()
 
 void Enemy::Draw()
 {
-	Model::SetTransform(hModel_Enemy, transform_);
-	Model::Draw(hModel_Enemy);
+	Model::SetTransform(hEnemy_, transform_);
+	Model::Draw(hEnemy_);
 }
 
 void Enemy::Release()
@@ -83,15 +83,15 @@ void Enemy::Release()
 void Enemy::UpdateIdle()
 {	
 	//自分(enemy)と相手(player)の距離をはかる(ベクトル)
-	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition, pPositionVec);
+	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition_, pPositionVec_);
 	float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
 
-	XMVECTOR forward = RotateVecFront(this->transform_.rotate_.y,EnemyFrontDirection);//自分の前方ベクトル(回転した分も含む)
+	XMVECTOR forward = RotateVecFront(this->transform_.rotate_.y,EnemyFrontDirection_);//自分の前方ベクトル(回転した分も含む)
 	DistVec = XMVector3Normalize(DistVec);//自分と相手の距離ベクトル 内積の計算用
 	XMVECTOR dot = XMVector3Dot(DistVec, forward);//相手とのベクトルと自分の前方ベクトルの内積をとる
 	float cosine = XMVectorGetX(dot);
 
-	if (cosine > cosf(Fov) && Pointdist < FrontLength) //距離は60度以内か相手との距離がFrontLengthより小さい
+	if (cosine > cosf(Eye_) && Pointdist < FrontLength_) //距離は60度以内か相手との距離がFrontLengthより小さい
 	{
 		IsHit_ = true;
 	}
@@ -101,29 +101,29 @@ void Enemy::UpdateIdle()
 	
 	if (IsHit_)
 	{
-		EnemyState = S_CHASE;
+		EnemyState_ = S_CHASE;
 	}
 }
 
 void Enemy::UpdateChase()
 {
 	//自分(enemy)と相手(player)の距離をはかる(ベクトル)
-	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition, pPositionVec);
+	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition_, pPositionVec_);
 	float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
-	if (Pointdist > FrontLength + 10)
+	if (Pointdist > FrontLength_ + 10)
 	{
-		EnemyState = S_IDLE;
+		EnemyState_ = S_IDLE;
 	}
 
 	//敵と自機の距離
 	XMFLOAT3 playerPos = pPlayer_->GetWorldPosition();//プレイヤーの位置（ワールド座標）
-	ChasePoint = playerPos - this->transform_.position_;//プレイヤーの位置-敵の位置で距離をとる
+	ChasePoint_ = playerPos - this->transform_.position_;//プレイヤーの位置-敵の位置で距離をとる
 
 	//敵と自機の回転処理
-	XMVECTOR front = EnemyFrontDirection;//計算用の前向きベクトル（初期値が入る）
+	XMVECTOR front = EnemyFrontDirection_;//計算用の前向きベクトル（初期値が入る）
 	XMMATRIX mvec = transform_.matRotate_;//現在の回転している方向（自分の回転行列）
 	front = XMVector3Transform(front, mvec);
-	XMVECTOR PlayerDist = XMLoadFloat3(&ChasePoint);//ベクトルにする
+	XMVECTOR PlayerDist = XMLoadFloat3(&ChasePoint_);//ベクトルにする
 	XMVECTOR normDist = XMVector3Normalize(PlayerDist);//プレイヤーとの距離を正規化
 	XMVECTOR angle = XMVector3AngleBetweenVectors(normDist, front);//二つのベクトル間のラジアン角を求める
 	XMVECTOR cross = XMVector3Cross(front, normDist);
@@ -148,7 +148,7 @@ void Enemy::UpdateChase()
 
 	transform_.Calclation();
 	XMVECTOR MoveVector = XMVectorScale(normDist, speed_  * DeltaTime);//移動ベクトル化する
-	XMVECTOR PrevPos = EnemyPosition;
+	XMVECTOR PrevPos = EnemyPosition_;
 	XMVECTOR NewPos = PrevPos + MoveVector;
 	
 	XMStoreFloat3(&this->transform_.position_, NewPos);
@@ -163,6 +163,6 @@ void Enemy::OnCollision(GameObject* pTarget)
 	if (pTarget->GetObjectName() == "Player")
 	{
 		pPlayer_->SetPosition({ 0,0,0 });
-		EnemyState = S_IDLE;
+		EnemyState_ = S_IDLE;
 	}
 }

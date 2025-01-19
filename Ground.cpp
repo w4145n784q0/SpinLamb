@@ -12,20 +12,20 @@ namespace {
 }
 
 Ground::Ground(GameObject* parent)
-	:GameObject(parent,"Ground"),hModel_Ground(-1),hModel_Wall(-1)
+	:GameObject(parent,"Ground"),hGrass_(-1)
 {
 	//csvの値は各ブロックの高さを保管
-	csv.Load("MapTest.csv");
+	csv_.Load("MapTest.csv");
 
-	stageWidth_ = csv.GetWidth();    //１行に何個データがあるか
-	stageHeight_ = csv.GetHeight();   //データが何行あるか
+	stageWidth_ = csv_.GetWidth();    //１行に何個データがあるか
+	stageHeight_ = csv_.GetHeight();   //データが何行あるか
 
 	//
 	for (int i = 0; i < stageHeight_; i++)
 	{
 		vector<int> data(stageWidth_, 0);
-		MapData.push_back(data);
-		MapHeight.push_back(data);
+		MapData_.push_back(data);
+		MapHeight_.push_back(data);
 	}
 
 
@@ -33,7 +33,7 @@ Ground::Ground(GameObject* parent)
 	{
 		for (int i = 0; i < stageWidth_; i++)
 		{
-			MapData[j][i] = csv.GetValue(i, j);
+			MapData_[j][i] = csv_.GetValue(i, j);
 		}
 	}
 
@@ -41,10 +41,10 @@ Ground::Ground(GameObject* parent)
 	{
 		for (int i = 0; i < stageWidth_; i++)
 		{
-			int data = MapData[j][i];
+			int data = MapData_[j][i];
 			data = data % 10;
 			
-			MapHeight[j][i] = data;
+			MapHeight_[j][i] = data;
 		}
 	}
 
@@ -62,10 +62,10 @@ Ground::~Ground()
 
 void Ground::Initialize()
 {
-	hModel_Grass = Model::Load("GrassBox.fbx");
-	assert(hModel_Grass >= 0);
+	hGrass_ = Model::Load("GrassBox.fbx");
+	assert(hGrass_ >= 0);
 
-	mapTrans.position_ = { 0,0,0 };
+	mapTrans_.position_ = { 0,0,0 };
 
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 3.0f);
 	this->AddCollider(col);
@@ -86,9 +86,9 @@ void Ground::Draw()
 		{
 			//int height = MapHeight[z][x];
 			
-			mapTrans.position_ = { (float)x, 0 ,(float)z };
-			Model::SetTransform(hModel_Grass, mapTrans);
-			Model::Draw(hModel_Grass);
+			mapTrans_.position_ = { (float)x, 0 ,(float)z };
+			Model::SetTransform(hGrass_, mapTrans_);
+			Model::Draw(hGrass_);
 
 			/*if(height >= 1 && height <= 100)
 			{
@@ -140,7 +140,7 @@ void Ground::TerrainSet()
 		for (int x = 0; x < stageWidth_; x++) {
 			
 			trans_terrain.position_ = { (float)x, 0 ,(float)z };
-			int posY = MapData[z][x];
+			int posY = MapData_[z][x];
 
 			switch (posY)
 			{
@@ -179,8 +179,8 @@ void Ground::ObjectSet()
 
 	for (int z = 0; z < stageHeight_; z++) {
 		for (int x = 0; x < stageWidth_; x++) {
-			int height = MapHeight[z][x] + 1;
-			int data = MapData[z][x];
+			int height = MapHeight_[z][x] + 1;
+			int data = MapData_[z][x];
 
 			switch (data)
 			{
@@ -231,7 +231,7 @@ bool Ground::CanMoveFront(int x, int z, int height)
 		return false;
 	}
 
-	int data = csv.GetValue(x, z);
+	int data = csv_.GetValue(x, z);
 
 	//今の自分以上の高さならfalseを返す
 	if (height < data) 
@@ -250,7 +250,7 @@ int Ground::GetPositionData(int x, int z)
 		return 0;
 	}
 
-	int data = MapData[z][x];
+	int data = MapData_[z][x];
 	if (data < 100) 
 	{
 		return 0;

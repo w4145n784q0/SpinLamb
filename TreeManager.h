@@ -9,7 +9,6 @@ class TreeManager :
 {
 private:
 	vector<Tree> Trees_;
-	vector<XMFLOAT3> TreePos_;
 public:
 	TreeManager(GameObject* parent);
 	~TreeManager();
@@ -20,11 +19,9 @@ public:
 	void Release() override;
 
 	void InitializeTree(XMFLOAT3 pos);
-	void InitializeTreePos(XMFLOAT3 pos);
 
 	void AddTree(const Tree& tree);
 
 	const vector<Tree>& GetTrees() const { return Trees_; }
-	const vector<XMFLOAT3>& GetTreePos() const { return TreePos_; }
 };
 

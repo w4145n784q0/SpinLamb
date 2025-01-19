@@ -8,7 +8,7 @@ class Enemy :
     public GameObject
 {
 private:
-    int hModel_Enemy;
+    int hEnemy_;
 	Player* pPlayer_;
 	enum State {
 		S_IDLE = 0,//待機
@@ -19,21 +19,19 @@ private:
 		S_WINCE,//ひるむ
 		S_MAX
 	};
-	State EnemyState;
+	State EnemyState_;
 
-	XMVECTOR EnemyFrontDirection;//敵の正面ベクトル
-	XMVECTOR EnemyPosition;//敵の位置ベクトル
-	float RotateY;//回転角度（基本Ｙ軸のみ）
-	float FrontLength;//敵の視界の長さ
-	float Fov;
+	XMVECTOR EnemyFrontDirection_;//敵の正面ベクトル
+	XMVECTOR EnemyPosition_;//敵の位置ベクトル
+	float RotateY_;//回転角度（基本Ｙ軸のみ）
+	float FrontLength_;//敵の視界の長さ
+	float Eye_;
 	bool IsHit_;
 
-	XMFLOAT3 pPosition;
-	XMVECTOR pPositionVec;
+	XMFLOAT3 pPosition_;
+	XMVECTOR pPositionVec_;
 
-	XMFLOAT3 ChasePoint;
-
-	XMVECTOR sightLength;//敵の視界（扇型の視界）の長さ
+	XMFLOAT3 ChasePoint_;
 
 public:
 	Enemy(GameObject* parent);
@@ -51,6 +49,5 @@ public:
 	void UpdateWince();
 
 	void OnCollision(GameObject* pTarget) override;
-	int GetModelHandle() { return hModel_Enemy; }
 };
 
