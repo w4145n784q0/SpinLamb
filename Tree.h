@@ -6,6 +6,7 @@ class Tree :
     public GameObject
 {
 	int hTree_;
+
 	//Ground* pGround_;
 public:
 	Tree(GameObject* parent);
@@ -16,5 +17,7 @@ public:
 	void Draw() override;
 	void Release() override;
 	void OnCollision(GameObject* pTarget) override;
+
+	XMFLOAT3 GetPosition() { return transform_.position_; }
 };
 

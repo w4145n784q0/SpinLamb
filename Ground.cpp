@@ -196,7 +196,9 @@ void Ground::ObjectSet()
 				//TreeTrans.position_ = { (float)x, (float)height,(float)z };
 				//ローカルでインスタンス生成,位置のセット
 
-				pTreeManager->InitializeTree({ (float)x, (float)height,(float)z });
+				Tree* pTree_ = Instantiate<Tree>(this);
+				pTreeManager->AddTree(pTree_);
+				//pTreeManager->InitializeTree({ (float)x, (float)height,(float)z });
 
 				/*Tree* pTree_ = Instantiate<Tree>(this);
 				pTree_->SetPosition({ (float)x, (float)height,(float)z });*/

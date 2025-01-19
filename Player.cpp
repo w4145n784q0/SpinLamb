@@ -9,6 +9,7 @@
 #include"Tree.h"
 
 #include <algorithm>
+#include<list>
 
 namespace {
 	const float speed = 9.0f;
@@ -36,6 +37,8 @@ Player::Player(GameObject* parent)
 	StartPosition.position_ = { 0.0f,1.0f,0.0f };
 	JumpTransform_.position_ = { 0.0f,1.0f,0.0f };
 
+	
+
 }
 
 Player::~Player()
@@ -57,7 +60,7 @@ void Player::Initialize()
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0,0,0),0.3f);
 	this->AddCollider(col);
 
-	//hGetWall = pStageObject->GetWallHandle();
+	
 }
 
 void Player::Update()
@@ -251,14 +254,21 @@ void Player::UpdateIdle()
 		PlayerState = S_JUMPBEFORE;
 	}
 
-	//--------------隠れる--------------
+	//--------------隠れる-------------
 
-	  // 衝突判定を行う
-	pTreeManager_
-	for (auto& tree : ) {
-		if (locker.checkCollision(position)) {
-			currentLocker = &locker; // 衝突しているロッカーを記録
-			break; // 最初に見つかったロッカーに入る
+
+
+	vector<Tree> trees = pTreeManager_->GetTrees();
+	for (auto& tree : trees)
+	{
+		XMFLOAT3 treepos = tree.GetPosition();
+		
+		if (IsNearTree(treepos))
+		{
+			treepos.y += 2.0f;
+			NewPos = XMLoadFloat3(&treepos);
+			XMStoreFloat3(&this->transform_.position_, NewPos);
+			
 		}
 	}
 
@@ -404,4 +414,22 @@ void Player::LandGround()
 	{
 		transform_.position_.y = MapPosY;
 	}
+}
+
+bool Player::IsNearTree(XMFLOAT3 pos)
+{
+
+	/*XMFLOAT3 TreePos = pTree_->GetPosition();
+	XMVECTOR TreeVec = XMLoadFloat3(&TreePos);
+	XMVECTOR d = XMVectorSubtract(PlayerPosition, TreeVec);
+	float distance = XMVectorGetX(XMVector3Length(d));*/
+
+	XMVECTOR TreeVec = XMLoadFloat3(&pos);
+	XMVECTOR dist = XMVectorSubtract(PlayerPosition, TreeVec);
+	float distance = XMVectorGetX(XMVector3Length(dist));
+
+	if (distance <= 4.0f)
+		return true;
+	else
+		return false;
 }

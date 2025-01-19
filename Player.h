@@ -107,5 +107,8 @@ public:
 	void CameraControl();
 
 	void LandGround();
+
+	bool IsNearTree(XMFLOAT3 pos);
+
 };
 
