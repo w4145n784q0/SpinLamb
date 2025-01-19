@@ -2,7 +2,7 @@
 #include"Engine/Model.h"
 
 Tree::Tree(GameObject* parent)
-	:GameObject(parent, "StageObject"),hTree_(-1)
+	:GameObject(parent, "Tree"),hTree_(-1)
 {
 }
 
@@ -17,7 +17,7 @@ void Tree::Initialize()
 	this->AddCollider(col);
 
 	Ground* pGround_ = (Ground*)FindObject("Ground");
-	transform_.position_ = pGround_->GetTreeTrans().position_;
+//	transform_.position_ = pGround_->GetTreeTrans().position_;
 }
 
 void Tree::Update()

@@ -3,6 +3,7 @@
 #include"Engine/SphereCollider.h"
 #include"Terrain.h"
 #include"Tree.h"
+#include"TreeManager.h"
 
 namespace {
 	int blocknum = 20;
@@ -45,6 +46,10 @@ Ground::Ground(GameObject* parent)
 			MapHeight[j][i] = data;
 		}
 	}
+
+	
+
+	Instantiate<TreeManager>(this);
 
 	//Instantiate<GoalItem>(this);
 	//transform_.position =  pGround->SetPosition()
@@ -124,10 +129,6 @@ void Ground::Release()
 
 void Ground::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetObjectName() == "Player")
-	{
-		
-	}
 }
 
 void Ground::TerrainSet()
@@ -155,10 +156,12 @@ void Ground::TerrainSet()
 			{
 				for (int y = 0; y < posY; y++)
 				{
-					TerrainTrans.position_.x = trans_terrain.position_.x;
-					TerrainTrans.position_.y = (float)y + 1.0;
-					TerrainTrans.position_.z = trans_terrain.position_.z;
-					Instantiate<Terrain>(this);
+					XMFLOAT3 pos = { (float)x ,(float)y + (float)1.0 ,(float)z };
+					//TerrainTrans.position_.x = trans_terrain.position_.x;
+					//TerrainTrans.position_.y = (float)y + 1.0;
+					//TerrainTrans.position_.z = trans_terrain.position_.z;
+					Terrain* pTerrain =  Instantiate<Terrain>(this);
+					pTerrain->SetPosition(pos);
 				}
 			}
 			break;
@@ -171,6 +174,8 @@ void Ground::TerrainSet()
 }
 void Ground::ObjectSet()
 {
+	TreeManager* pTreeManager = (TreeManager*)FindObject("TreeManager");
+
 	for (int z = 0; z < stageHeight_; z++) {
 		for (int x = 0; x < stageWidth_; x++) {
 			int height = MapHeight[z][x] + 1;
@@ -188,9 +193,16 @@ void Ground::ObjectSet()
 			case 108:
 			case 109:
 			{
-				TreeTrans.position_ = { (float)x, (float)height,(float)z };
-				Instantiate<Tree>(this);
+				//TreeTrans.position_ = { (float)x, (float)height,(float)z };
+				//ローカルでインスタンス生成,位置のセット
+
+				pTreeManager->InitializeTree({ (float)x, (float)height,(float)z });
+
+				/*Tree* pTree_ = Instantiate<Tree>(this);
+				pTree_->SetPosition({ (float)x, (float)height,(float)z });*/
+
 			}
+			break;
 			default:
 				break;
 			}

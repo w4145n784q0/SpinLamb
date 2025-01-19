@@ -132,7 +132,10 @@
     <ClCompile Include="Terrain.cpp">
       <Filter>05Stage</Filter>
     </ClCompile>
-    <ClCompile Include="Tree.cpp" />
+    <ClCompile Include="Tree.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="TreeManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -233,7 +236,10 @@
     <ClInclude Include="Terrain.h">
       <Filter>05Stage</Filter>
     </ClInclude>
-    <ClInclude Include="Tree.h" />
+    <ClInclude Include="Tree.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="TreeManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

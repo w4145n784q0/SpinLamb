@@ -6,6 +6,7 @@
 
 #include"Enemy.h"
 #include"Terrain.h"
+#include"Tree.h"
 
 #include <algorithm>
 
@@ -17,6 +18,7 @@ namespace {
 	const XMVECTOR front = { 0,0,1 };
 	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 
+	const float TreeCollision = 4.0f;
 	float PrevHeight = 0.0f;
 }
 
@@ -24,7 +26,8 @@ Player::Player(GameObject* parent)
 	:GameObject(parent,"Player"),hModel_Player(-1),IsOnGround_(true),IsDash_(false),
 	JumpSpeed_(0.0f), LandingPoint({0,0,0}),
 	Direction({0,0,0}),PlayerFrontDirection({0,0,1}), PlayerPosition({0,0,0}), Acceleration_(0.0f),
-	BackCamera(BackCameraPos), pGround_(nullptr), pTerrain_(nullptr), PlayerState(S_IDLE)
+	BackCamera(BackCameraPos), pGround_(nullptr), pTerrain_(nullptr),pTree_(nullptr),pTreeManager_(nullptr)
+	, PlayerState(S_IDLE)
 {
 	cameraTransform = this->transform_;
 	CameraPosition = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -48,6 +51,8 @@ void Player::Initialize()
 
 	pGround_ = (Ground*)FindObject("Ground");
 	pTerrain_ = (Terrain*)FindObject("Terrain");
+	pTree_ = (Tree*)FindObject("Tree");
+	pTreeManager_ = (TreeManager*)FindObject("TreeManager");
 	
 	SphereCollider* col = new SphereCollider(XMFLOAT3(0,0,0),0.3f);
 	this->AddCollider(col);
@@ -209,7 +214,7 @@ void Player::UpdateIdle()
 	LandGround();
 
 	//通常ジャンプ
-	if (Input::IsKeyDown(DIK_SPACE))
+	if (!CanHide && Input::IsKeyDown(DIK_SPACE))
 	{
 		//PlayerState = S_JUMP;
 
@@ -246,6 +251,39 @@ void Player::UpdateIdle()
 		PlayerState = S_JUMPBEFORE;
 	}
 
+	//--------------隠れる--------------
+
+	  // 衝突判定を行う
+	pTreeManager_
+	for (auto& tree : ) {
+		if (locker.checkCollision(position)) {
+			currentLocker = &locker; // 衝突しているロッカーを記録
+			break; // 最初に見つかったロッカーに入る
+		}
+	}
+
+	/*XMFLOAT3 TreePos = pTree_->GetPosition();
+	XMVECTOR TreeVec = XMLoadFloat3(&TreePos);
+	XMVECTOR d = XMVectorSubtract(PlayerPosition, TreeVec);
+	float distance = XMVectorGetX(XMVector3Length(d));*/
+
+	//if (distance <= TreeCollision)
+	//{
+	//	CanHide = true;
+	//}
+	//else
+	//{
+	//	CanHide = false;
+	//}
+
+	//if (CanHide && Input::IsKeyDown(DIK_SPACE))
+	//{
+	//	XMFLOAT3 a = pTree_->GetWorldPosition();
+	//	XMVECTOR v = XMLoadFloat3(&a);
+	//	XMStoreFloat3(&this->transform_.position_, v);
+	//	PlayerState = S_HIDE;
+	//}
+
 	CameraControl();
 
 	Direction = { 0,0,0 };//最後に進行方向のリセット毎フレーム行う
@@ -253,6 +291,13 @@ void Player::UpdateIdle()
 
 void Player::UpdateHide()
 {
+	if (Input::IsKeyDown(DIK_SPACE))
+	{
+		PlayerState = S_HIDE;
+		CanHide = false;
+	}
+
+	CameraControl();
 }
 
 void Player::UpdateJumpBefore()

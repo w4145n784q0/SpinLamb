@@ -2,6 +2,8 @@
 #include "Engine/GameObject.h"
 #include"Ground.h"
 #include"Terrain.h"
+#include"Tree.h"
+#include"TreeManager.h"
 
 class Player :
     public GameObject
@@ -52,6 +54,9 @@ private:
 	Transform StartPosition;//開始位置
 	XMVECTOR NewPos;//プレイヤーの移動先
 
+	//隠れる関係
+	bool CanHide;
+
 	//カメラ関係
 	XMFLOAT3 CameraPosition;
 	XMFLOAT3 CameraTarget;
@@ -61,6 +66,9 @@ private:
 	//インスタンス関係
 	Ground* pGround_;
 	Terrain* pTerrain_;
+	Tree* pTree_;
+	TreeManager* pTreeManager_;
+	const vector<Tree>* TreesVector;
 
 	//他オブジェクト関係
 	bool IsHitWall;
