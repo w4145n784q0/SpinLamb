@@ -4,6 +4,7 @@
 #include"Terrain.h"
 #include"Tree.h"
 #include"TreeManager.h"
+#include"GoalItem.h"
 
 namespace {
 	int blocknum = 20;
@@ -183,6 +184,13 @@ void Ground::ObjectSet()
 
 			switch (data)
 			{
+			case 10:
+			{
+				GoalItem* pGoalItem = Instantiate<GoalItem>(this);
+				pGoalItem->SetPosition({ (float)x, (float)height,(float)z });
+			}
+			break;
+
 			case 101:
 			case 102:
 			case 103:
@@ -197,7 +205,9 @@ void Ground::ObjectSet()
 				//ローカルでインスタンス生成,位置のセット
 
 				Tree* pTree_ = Instantiate<Tree>(this);
+				pTree_->SetPosition({ (float)x, (float)height,(float)z });
 				pTreeManager->AddTree(pTree_);
+
 				//pTreeManager->InitializeTree({ (float)x, (float)height,(float)z });
 
 				/*Tree* pTree_ = Instantiate<Tree>(this);

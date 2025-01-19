@@ -51,7 +51,6 @@ private:
 	XMVECTOR PlayerPosition;//位置ベクトル
 	XMVECTOR PlayerStart;//計算用　プレイヤーの始点
 
-	Transform StartPosition;//開始位置
 	XMVECTOR NewPos;//プレイヤーの移動先
 
 	//隠れる関係
@@ -108,7 +107,7 @@ public:
 
 	void LandGround();
 
-	bool IsNearTree(XMFLOAT3 pos);
+	bool IsNearTree(const XMFLOAT3& pos);
 
 };
 

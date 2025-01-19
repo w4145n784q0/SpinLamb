@@ -21,6 +21,7 @@ namespace {
 
 	const float TreeCollision = 4.0f;
 	float PrevHeight = 0.0f;
+	const XMFLOAT3 StartPosition = { 0.0f,1.0f,0.0f };
 }
 
 Player::Player(GameObject* parent)
@@ -34,10 +35,7 @@ Player::Player(GameObject* parent)
 	CameraPosition = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
 	CameraTarget = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 
-	StartPosition.position_ = { 0.0f,1.0f,0.0f };
 	JumpTransform_.position_ = { 0.0f,1.0f,0.0f };
-
-	
 
 }
 
@@ -50,7 +48,7 @@ void Player::Initialize()
 {
 	hModel_Player = Model::Load("Player.fbx"); 
 	hModel_LandingPoint = Model::Load("LandingPoint.fbx");
-	this->transform_.position_ = StartPosition.position_;
+	this->transform_.position_ = StartPosition;
 
 	pGround_ = (Ground*)FindObject("Ground");
 	pTerrain_ = (Terrain*)FindObject("Terrain");
@@ -258,34 +256,12 @@ void Player::UpdateIdle()
 
 
 
-	vector<Tree> trees = pTreeManager_->GetTrees();
-	for (auto& tree : trees)
-	{
-		XMFLOAT3 treepos = tree.GetPosition();
-		
-		if (IsNearTree(treepos))
-		{
-			treepos.y += 2.0f;
-			NewPos = XMLoadFloat3(&treepos);
-			XMStoreFloat3(&this->transform_.position_, NewPos);
-			
-		}
-	}
-
 	/*XMFLOAT3 TreePos = pTree_->GetPosition();
 	XMVECTOR TreeVec = XMLoadFloat3(&TreePos);
 	XMVECTOR d = XMVectorSubtract(PlayerPosition, TreeVec);
 	float distance = XMVectorGetX(XMVector3Length(d));*/
 
-	//if (distance <= TreeCollision)
-	//{
-	//	CanHide = true;
-	//}
-	//else
-	//{
-	//	CanHide = false;
-	//}
-
+	
 	//if (CanHide && Input::IsKeyDown(DIK_SPACE))
 	//{
 	//	XMFLOAT3 a = pTree_->GetWorldPosition();
@@ -313,24 +289,24 @@ void Player::UpdateHide()
 void Player::UpdateJumpBefore()
 {
 	CameraControl();
-	if (Input::IsKeyDown(DIK_Q))
+	if (Input::IsKeyDown(DIK_Z))
 	{
 		PlayerState = S_IDLE;
 	}
 
-	if (Input::IsKey(DIK_W))
+	if (Input::IsKey(DIK_UP))
 	{
 		LandingPoint.z += 0.3f;
 	}
-	if (Input::IsKey(DIK_S))
+	if (Input::IsKey(DIK_DOWN))
 	{
 		LandingPoint.z -= 0.3f;
 	}
-	if (Input::IsKey(DIK_A))
+	if (Input::IsKey(DIK_LEFT))
 	{
 		LandingPoint.x -= 0.3f;
 	}
-	if (Input::IsKey(DIK_D))
+	if (Input::IsKey(DIK_RIGHT))
 	{
 		LandingPoint.x += 0.3f;
 	}
@@ -356,11 +332,6 @@ void Player::UpdateJumpBefore()
 
 void Player::UpdateJump()
 {
-	//jumpX = JumpValue.x / 100;
-	//transform_.position_.x += 0.3;//“™‘¬‰^“®
-	//transform_.position_.z += 0.3;//“™‘¬‰^“®
-	//
-
 	XMStoreFloat3(&this->transform_.position_, JumpTarget);
 	PlayerState = S_IDLE;
 }
@@ -416,7 +387,7 @@ void Player::LandGround()
 	}
 }
 
-bool Player::IsNearTree(XMFLOAT3 pos)
+bool Player::IsNearTree(const XMFLOAT3& pos)
 {
 
 	/*XMFLOAT3 TreePos = pTree_->GetPosition();

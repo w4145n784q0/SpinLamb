@@ -138,6 +138,9 @@
     <ClCompile Include="TreeManager.cpp">
       <Filter>05Stage</Filter>
     </ClCompile>
+    <ClCompile Include="GoalItem.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -242,6 +245,9 @@
       <Filter>05Stage</Filter>
     </ClInclude>
     <ClInclude Include="TreeManager.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="GoalItem.h">
       <Filter>05Stage</Filter>
     </ClInclude>
   </ItemGroup>

@@ -1,21 +1,18 @@
 #pragma once
 #include "Engine/GameObject.h"
-#include"Ground.h"
-
-class Tree :
+class GoalItem :
     public GameObject
 {
-	int hTree_;
+private:
+	int hCarrot_;
 public:
-	Tree(GameObject* parent);
-	~Tree();
-	
+	GoalItem(GameObject* parent);
+	~GoalItem();
+
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
 	void Release() override;
 	void OnCollision(GameObject* pTarget) override;
-
-	XMFLOAT3 GetPosition() { return transform_.position_; }
 };
 

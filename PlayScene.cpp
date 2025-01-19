@@ -22,17 +22,15 @@ void PlayScene::Initialize()
 
 void PlayScene::Update()
 {
-	if (Input::IsKeyDown(DIK_P))
+	/*if (Input::IsKeyDown(DIK_P))
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_CLEAR);
-	}
+	}*/
 }
 
 void PlayScene::Draw()
 {
-	//Image::SetTransform(hImage_, transform_);
-	//Image::Draw(hImage_);
 }
 
 void PlayScene::Release()
