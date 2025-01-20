@@ -382,6 +382,10 @@ void Player::LandGround()
 	{
 		IsOnGround_ = true;
 	}
+	else
+	{
+ 		IsOnGround_ = false;
+	}
 
 	if (IsOnGround_)
 	{

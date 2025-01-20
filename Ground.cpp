@@ -51,9 +51,6 @@ Ground::Ground(GameObject* parent)
 	
 
 	Instantiate<TreeManager>(this);
-
-	//Instantiate<GoalItem>(this);
-	//transform_.position =  pGround->SetPosition()
 }
 
 Ground::~Ground()
@@ -140,11 +137,10 @@ void Ground::TerrainSet()
 		for (int x = 0; x < stageWidth_; x++) {
 			
 			trans_terrain.position_ = { (float)x, 0 ,(float)z };
-			int posY = MapData_[z][x];
-
+			//int posY = MapData_[z][x];
+			int posY = MapHeight_[z][x];
 			switch (posY)
 			{
-			//通常の地形
 			case 1:
 			case 2:
 			case 3:
@@ -190,7 +186,7 @@ void Ground::ObjectSet()
 				pGoalItem->SetPosition({ (float)x, (float)height,(float)z });
 			}
 			break;
-
+			case 100:
 			case 101:
 			case 102:
 			case 103:
@@ -205,7 +201,7 @@ void Ground::ObjectSet()
 				//ローカルでインスタンス生成,位置のセット
 
 				Tree* pTree_ = Instantiate<Tree>(this);
-				pTree_->SetPosition({ (float)x, (float)height,(float)z });
+				pTree_->SetPosition({ (float)x, (float)height + 1,(float)z });
 				pTreeManager->AddTree(pTree_);
 
 				//pTreeManager->InitializeTree({ (float)x, (float)height,(float)z });
@@ -231,14 +227,13 @@ bool Ground::CanMoveFront(int x, int z, int height)
 		return false;
 	}
 
-	int data = csv_.GetValue(x, z);
+	int data = MapHeight_[z][x];
 
 	//今の自分以上の高さならfalseを返す
 	if (height < data) 
 	{
 		return false;
 	}
-
 	return true;
 }
 
@@ -250,11 +245,7 @@ int Ground::GetPositionData(int x, int z)
 		return 0;
 	}
 
-	int data = MapData_[z][x];
-	if (data < 100) 
-	{
-		return 0;
-	}
+	int data = MapHeight_[z][x];
 
 	return data;
 }

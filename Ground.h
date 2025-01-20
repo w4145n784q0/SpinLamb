@@ -63,4 +63,3 @@ public:
 	int GetStageWidth() { return stageWidth_; }
 	int GetStageHeight() { return stageHeight_; }
 };
-
