@@ -181,6 +181,10 @@ void Ground::ObjectSet()
 			switch (data)
 			{
 			case 10:
+			case 11:
+			case 12:
+			case 13:
+			case 14:
 			{
 				GoalItem* pGoalItem = Instantiate<GoalItem>(this);
 				pGoalItem->SetPosition({ (float)x, (float)height,(float)z });
@@ -219,18 +223,10 @@ void Ground::ObjectSet()
 
 }
 //地形クラスで代用
-bool Ground::CanMoveFront(int x, int z, int height)
+bool Ground::CanMoveFront(int x, int z)
 {
-	//csvの値を超えるか下回るならfalseを返す
+	//csvの値を超えるか下回るなら falseを返す
 	if (x < 0 || z < 0 || x >= stageWidth_ || z >= stageHeight_) 
-	{
-		return false;
-	}
-
-	int data = MapHeight_[z][x];
-
-	//今の自分以上の高さならfalseを返す
-	if (height < data) 
 	{
 		return false;
 	}
@@ -249,13 +245,3 @@ int Ground::GetPositionData(int x, int z)
 
 	return data;
 }
-
-/*bool Ground::IsMoveFront(int x, int y)
-{
-	if (stageTable[x][y].type == 1) {
-		return false;
-	}
-	else {
-		return true;
-	}
-}*/

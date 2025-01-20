@@ -44,13 +44,13 @@ public:
 	void ObjectSet();
 
 	/// <summary>
-	/// プレイヤーが先に行けるか返す
+	/// プレイヤーが先に行けるか返す(csvオーバーを防ぐだけ)
 	/// </summary>
 	/// <param name="x"></param>
 	/// <param name="z"></param>
 	/// <param name="height"></param>
 	/// <returns></returns>
-	bool CanMoveFront(int x, int z,int height);
+	bool CanMoveFront(int x, int z);
 
 	/// <summary>
 	/// ゲーム上のy座標をとる
