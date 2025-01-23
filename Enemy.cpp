@@ -28,7 +28,7 @@ void Enemy::Initialize()
 
 	hEnemy_ = Model::Load("enemy.fbx");
 	assert(hEnemy_ >= 0);
-	transform_.position_ = { 10,1,10 };
+	transform_.position_ = { 10,0,10 };
 	//transform_.rotate_.y = 180;
 
 	//基準ベクトルをつくる　0,0,1
@@ -163,7 +163,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 {
 	if (pTarget->GetObjectName() == "Player")
 	{
-		pPlayer_->SetPosition({ 0,0,0 });
+	//	pPlayer_->SetPosition({ 0,0,0 });
 		EnemyState_ = S_IDLE;
 	}
 }

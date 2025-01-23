@@ -42,13 +42,16 @@ private:
 	float Acceleration_;//加速度
 	
 	//移動関係
-	bool CanMove_;
+	bool CanMove_;//移動できるか
+	int PlayerHeight_;//プレイヤーの高さ
 	XMFLOAT3 Direction_;//プレイヤーの方向(xzどこに進むか)
 	XMVECTOR PlayerFrontDirection_;//正面ベクトル
 	XMVECTOR PlayerPosition_;//位置ベクトル
+	XMVECTOR NewPos_;//プレイヤーの移動先
+
+
 	XMVECTOR PlayerStart_;//計算用　プレイヤーの始点
 
-	XMVECTOR NewPos_;//プレイヤーの移動先
 
 	//隠れる関係
 	bool CanHide_;

@@ -15,7 +15,7 @@ Ground::Ground(GameObject* parent)
 	:GameObject(parent,"Ground"),hGrass_(-1)
 {
 	//csvの値は各ブロックの高さを保管
-	csv_.Load("MapTest.csv");
+	csv_.Load("Stage1.csv");
 
 	stageWidth_ = csv_.GetWidth();    //１行に何個データがあるか
 	stageHeight_ = csv_.GetHeight();   //データが何行あるか
@@ -83,7 +83,7 @@ void Ground::Draw()
 		{
 			//int height = MapHeight[z][x];
 			
-			mapTrans_.position_ = { (float)x, 0 ,(float)z };
+			mapTrans_.position_ = { (float)x, -1 ,(float)z };
 			Model::SetTransform(hGrass_, mapTrans_);
 			Model::Draw(hGrass_);
 
@@ -153,7 +153,7 @@ void Ground::TerrainSet()
 			{
 				for (int y = 0; y < posY; y++)
 				{
-					XMFLOAT3 pos = { (float)x ,(float)y + (float)1.0 ,(float)z };
+					XMFLOAT3 pos = { (float)x ,(float)y ,(float)z };
 					//TerrainTrans.position_.x = trans_terrain.position_.x;
 					//TerrainTrans.position_.y = (float)y + 1.0;
 					//TerrainTrans.position_.z = trans_terrain.position_.z;
@@ -175,7 +175,7 @@ void Ground::ObjectSet()
 
 	for (int z = 0; z < stageHeight_; z++) {
 		for (int x = 0; x < stageWidth_; x++) {
-			int height = MapHeight_[z][x] + 1;
+			int height = MapHeight_[z][x];
 			int data = MapData_[z][x];
 
 			switch (data)

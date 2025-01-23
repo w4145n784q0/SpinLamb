@@ -21,15 +21,15 @@ namespace {
 
 	const float TreeCollision = 4.0f;
 	float PrevHeight = 0.0f;
-	const XMFLOAT3 StartPosition = { 0.0f,1.0f,0.0f };
+	const XMFLOAT3 StartPosition = { 5.0f,3.0f,15.0f };
 }
 
 Player::Player(GameObject* parent)
-	:GameObject(parent,"Player"),hPlayer_(-1),hLandingPoint_(-1), IsOnGround_(true), IsDash_(false),
-	JumpSpeed_(0.0f), LandingPoint({0,0,0}),
-	Direction_({0,0,0}),PlayerFrontDirection_({0,0,1}), PlayerPosition_({0,0,0}), Acceleration_(0.0f),
-	BackCamera_(BackCameraPos), pGround_(nullptr), pTerrain_(nullptr),pTree_(nullptr),pTreeManager_(nullptr)
-	, PlayerState_(S_IDLE)
+	:GameObject(parent, "Player"), hPlayer_(-1), hLandingPoint_(-1), IsOnGround_(true), IsDash_(false),
+	JumpSpeed_(0.0f), LandingPoint({ 0,0,0 }),
+	Direction_({ 0,0,0 }), PlayerFrontDirection_({ 0,0,1 }), PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),
+	BackCamera_(BackCameraPos), pGround_(nullptr), pTerrain_(nullptr), pTree_(nullptr), pTreeManager_(nullptr)
+	, PlayerState_(S_IDLE), CanMove_(true),PlayerHeight_(0)
 {
 	cameraTransform_ = this->transform_;
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -120,9 +120,9 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetObjectName() == "Terrain")
+	if (pTarget->GetObjectName() == "Enemy")
 	{
-		
+		transform_.position_ = StartPosition;
 	}
 }
 
@@ -199,7 +199,7 @@ void Player::UpdateIdle()
 
 	//地上で正面からオブジェクトにぶつかった時はすり抜けないようにする
 	//空中なら飛び越えられる
-	if (pGround_->CanMoveFront(nextX, nextZ))
+	if (pGround_->CanMoveFront(nextX, nextZ) && CanMove_)
 	{
 		XMStoreFloat3(&this->transform_.position_, NewPos_);
 	}
@@ -239,9 +239,9 @@ void Player::UpdateIdle()
 	}
 
 
-	if (this->transform_.position_.y <= 1.0f) //プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	if (this->transform_.position_.y <= 0.0f) //プレイヤーめりこみ防止に一定以下のy座標で値を固定
 	{
-		this->transform_.position_.y = 1.0f;
+		this->transform_.position_.y = 0.0f;
 		IsOnGround_ = true;
 	}
 
@@ -378,7 +378,7 @@ void Player::LandGround()
 {
 	int x = (int)transform_.position_.x;
 	int z = (int)transform_.position_.z;
-	int MapPosY = pGround_->GetPositionData(x, z) + 1;
+	int MapPosY = pGround_->GetPositionData(x, z);
 
 	if (transform_.position_.y <= MapPosY)
 	{

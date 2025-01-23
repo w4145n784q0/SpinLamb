@@ -173,6 +173,7 @@
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="Tree.cpp" />
     <ClCompile Include="TreeManager.cpp" />
+    <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClearScene.h" />
@@ -212,6 +213,7 @@
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="Tree.h" />
     <ClInclude Include="TreeManager.h" />
+    <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">
