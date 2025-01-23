@@ -32,7 +32,4 @@ void StageObject::Release()
 {
 }
 
-void StageObject::OnCollision(GameObject* pTarget)
-{
 
-}

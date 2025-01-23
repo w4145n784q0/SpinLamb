@@ -64,9 +64,6 @@ void Ground::Initialize()
 
 	mapTrans_.position_ = { 0,0,0 };
 
-	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 3.0f);
-	this->AddCollider(col);
-
 	TerrainSet();
 	ObjectSet();
 }
@@ -122,10 +119,6 @@ void Ground::Draw()
 }
 
 void Ground::Release()
-{
-}
-
-void Ground::OnCollision(GameObject* pTarget)
 {
 }
 

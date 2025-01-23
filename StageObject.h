@@ -18,7 +18,6 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
-	void OnCollision(GameObject* pTarget) override;
 
 	int GetWallHandle() { return hModel_Wall_; }
 	XMVECTOR GetUpVector() { return UpVec; }

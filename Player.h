@@ -5,6 +5,10 @@
 #include"Tree.h"
 #include"TreeManager.h"
 
+namespace {
+	const XMFLOAT3 StartPosition = { 5.0f,3.0f,15.0f };
+}
+
 class Player :
     public GameObject
 {
@@ -106,6 +110,8 @@ public:
 	void CameraControl();
 
 	void LandGround();
+
+	void SetStartPosition() { this->transform_.position_ = StartPosition; }
 
 	bool IsNearTree(const XMFLOAT3& pos);
 

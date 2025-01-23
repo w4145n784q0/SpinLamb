@@ -11,8 +11,8 @@ Wall::~Wall()
 
 void Wall::Initialize()
 {
-	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 1.0f);
-	this->AddCollider(col);
+	//SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 1.0f);
+	//this->AddCollider(col);
 }
 
 void Wall::Update()

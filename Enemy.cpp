@@ -153,7 +153,7 @@ void Enemy::UpdateChase()
 	XMVECTOR NewPos = PrevPos + MoveVector;
 	
 	XMStoreFloat3(&this->transform_.position_, NewPos);
-	this->transform_.position_.y = 1.0f;
+	this->transform_.position_.y = 0.0f;
 
 	
 
@@ -161,9 +161,6 @@ void Enemy::UpdateChase()
 
 void Enemy::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetObjectName() == "Player")
-	{
-	//	pPlayer_->SetPosition({ 0,0,0 });
-		EnemyState_ = S_IDLE;
-	}
+	EnemyState_ = S_IDLE;
+	pPlayer_->SetStartPosition();
 }

@@ -49,5 +49,8 @@ public:
 	void UpdateWince();
 
 	void OnCollision(GameObject* pTarget) override;
+
+	void SetState(State s) { EnemyState_ = s; }
+	State GetState() { return EnemyState_; }
 };
 

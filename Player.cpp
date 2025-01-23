@@ -21,7 +21,7 @@ namespace {
 
 	const float TreeCollision = 4.0f;
 	float PrevHeight = 0.0f;
-	const XMFLOAT3 StartPosition = { 5.0f,3.0f,15.0f };
+	
 }
 
 Player::Player(GameObject* parent)
@@ -51,7 +51,7 @@ void Player::Initialize()
 	hLandingPoint_ = Model::Load("LandingPoint.fbx");
 	assert(hLandingPoint_ >= 0);
 
-	this->transform_.position_ = StartPosition;
+	SetStartPosition();
 
 	pGround_ = (Ground*)FindObject("Ground");
 	pTerrain_ = (Terrain*)FindObject("Terrain");
@@ -120,10 +120,10 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetObjectName() == "Enemy")
+	/*if (pTarget->GetObjectName() == "Enemy")
 	{
 		transform_.position_ = StartPosition;
-	}
+	}*/
 }
 
 void Player::Dash()
