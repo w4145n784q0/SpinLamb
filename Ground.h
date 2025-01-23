@@ -53,6 +53,25 @@ public:
 	bool CanMoveFront(int x, int z);
 
 	/// <summary>
+	///  移動元と移動先を比較しプレイヤーが先に行けるか返す
+	/// </summary>
+	/// <param name="prevX">移動元のx座標</param>
+	/// <param name="prevZ">移動元のz座標</param>
+	/// <param name="nextX">移動先のx座標</param>
+	/// <param name="nextZ">移動先のz座標</param>
+	/// <returns></returns>
+	bool CompareHeight(int prevX, int prevZ, int nextX, int nextZ);
+
+	/// <summary>
+	/// 移動元と移動先を比較しプレイヤーが先に行けるか返す
+	/// </summary>
+	/// <param name="prev">移動元の高さ</param>
+	/// <param name="nextX">移動先のx座標</param>
+	/// <param name="nextZ">移動先のz座標</param>
+	/// <returns></returns>
+	bool CompareHeight(int prev, int nextX, int nextZ);
+
+	/// <summary>
 	/// ゲーム上のy座標をとる
 	/// </summary>
 	/// <param name="x">渡されたx座標</param>

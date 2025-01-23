@@ -143,6 +143,9 @@ void Player::Dash()
 
 void Player::UpdateIdle()
 {
+	//高さの値を記録
+	PlayerHeight_ = pGround_->GetPositionData(transform_.position_.x, transform_.position_.z);
+
 	if (Input::IsKey(DIK_UP))
 	{
 		Direction_.z = 1.0;
@@ -199,9 +202,12 @@ void Player::UpdateIdle()
 
 	//地上で正面からオブジェクトにぶつかった時はすり抜けないようにする
 	//空中なら飛び越えられる
-	if (pGround_->CanMoveFront(nextX, nextZ) && CanMove_)
+	if (IsOnGround_)
 	{
-		XMStoreFloat3(&this->transform_.position_, NewPos_);
+		if (pGround_->CanMoveFront(nextX, nextZ) && pGround_->CompareHeight(PlayerHeight_, nextX, nextZ))
+		{
+			XMStoreFloat3(&this->transform_.position_, NewPos_);
+		}
 	}
 	
 	

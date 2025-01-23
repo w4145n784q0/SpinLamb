@@ -233,6 +233,29 @@ bool Ground::CanMoveFront(int x, int z)
 	return true;
 }
 
+bool Ground::CompareHeight(int prevX, int prevZ, int nextX, int nextZ)
+{
+	int Player = MapHeight_[prevZ][prevX];
+	int Next = MapHeight_[nextZ][nextX];
+
+	if (Player >= Next)
+		return true;
+	else
+		return false;
+}
+
+bool Ground::CompareHeight(int prev, int nextX, int nextZ)
+{
+	int Player = prev;
+	int Next = MapHeight_[nextZ][nextX];
+
+	if (Player >= Next)
+		return true;
+	else
+		return false;
+}
+
+
 int Ground::GetPositionData(int x, int z)
 {
 	//csv‚Ì’l‚ð’´‚¦‚é‚©‰º‰ñ‚é‚È‚ç0‚ð•Ô‚·
