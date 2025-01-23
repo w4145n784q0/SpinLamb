@@ -202,13 +202,12 @@ void Player::UpdateIdle()
 
 	//地上で正面からオブジェクトにぶつかった時はすり抜けないようにする
 	//空中なら飛び越えられる
-	if (IsOnGround_)
+
+	if (pGround_->CanMoveFront(nextX, nextZ) && pGround_->CompareHeight(PlayerHeight_, nextX, nextZ) || !IsOnGround_)
 	{
-		if (pGround_->CanMoveFront(nextX, nextZ) && pGround_->CompareHeight(PlayerHeight_, nextX, nextZ))
-		{
-			XMStoreFloat3(&this->transform_.position_, NewPos_);
-		}
+		XMStoreFloat3(&this->transform_.position_, NewPos_);
 	}
+	
 	
 	
 
