@@ -165,6 +165,7 @@
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="GoalItem.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="NoEntrySpace.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="StageObject.cpp" />
@@ -204,6 +205,7 @@
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="GoalItem.h" />
     <ClInclude Include="Ground.h" />
+    <ClInclude Include="NoEntrySpace.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="resource.h" />

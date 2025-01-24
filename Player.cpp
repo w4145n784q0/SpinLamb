@@ -195,7 +195,7 @@ void Player::UpdateIdle()
 	//現在位置と移動ベクトルを加算
 	XMVECTOR PrevPos = PlayerPosition_;
 	NewPos_ = PrevPos + MoveVector;
-	
+
 	int nextX, nextZ;
 	nextX = (int)XMVectorGetX(NewPos_) + 1.0;
 	nextZ = (int)XMVectorGetZ(NewPos_) + 1.0;
@@ -203,11 +203,13 @@ void Player::UpdateIdle()
 	//地上で正面からオブジェクトにぶつかった時はすり抜けないようにする
 	//空中なら飛び越えられる
 
-	if (pGround_->CanMoveFront(nextX, nextZ) && pGround_->CompareHeight(PlayerHeight_, nextX, nextZ) || !IsOnGround_)
+	if (pGround_->CanNoEntrySpace(nextX, nextZ))
 	{
-		XMStoreFloat3(&this->transform_.position_, NewPos_);
+		if (pGround_->CanMoveFront(nextX, nextZ) && pGround_->CompareHeight(PlayerHeight_, nextX, nextZ) || !IsOnGround_)
+		{
+			XMStoreFloat3(&this->transform_.position_, NewPos_);
+		}
 	}
-	
 	
 	
 
@@ -347,19 +349,6 @@ void Player::UpdateJump()
 
 void Player::UpdateHit()
 {
-}
-
-void Player::PlayerRayCast(int handle)
-{
-	RayCastData data;
-	data.start = transform_.position_;
-	data.start.y =  transform_.position_.y + 1;
-	data.dir = XMFLOAT3({ 0,-1,0 });
-	Model::RayCast(handle, &data);
-	if (data.hit == true)
-	{
- 		transform_.position_.y = -data.dist;
-	}
 }
 
 void Player::CameraControl()

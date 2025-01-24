@@ -5,6 +5,7 @@
 #include"Tree.h"
 #include"TreeManager.h"
 #include"GoalItem.h"
+#include"NoEntrySpace.h"
 
 namespace {
 	int blocknum = 20;
@@ -130,7 +131,6 @@ void Ground::TerrainSet()
 		for (int x = 0; x < stageWidth_; x++) {
 			
 			trans_terrain.position_ = { (float)x, 0 ,(float)z };
-			//int posY = MapData_[z][x];
 			int posY = MapHeight_[z][x];
 			switch (posY)
 			{
@@ -173,6 +173,13 @@ void Ground::ObjectSet()
 
 			switch (data)
 			{
+			/*case 999:
+			{
+				NoEntrySpace * pNoEntrySpace = Instantiate<NoEntrySpace>(this);
+				pNoEntrySpace->SetPosition({ (float)x, (float)0.0f,(float)z });
+			}*/
+			break;
+
 			case 10:
 			case 11:
 			case 12:
@@ -215,11 +222,23 @@ void Ground::ObjectSet()
 	}
 
 }
-//地形クラスで代用
+
 bool Ground::CanMoveFront(int x, int z)
 {
 	//csvの値を超えるか下回るなら falseを返す
 	if (x < 0 || z < 0 || x >= stageWidth_ || z >= stageHeight_) 
+	{
+		return false;
+	}
+	return true;
+}
+
+bool Ground::CanNoEntrySpace(int x, int z)
+{
+	int data = MapData_[z][x];
+
+	//進行不可エリアならfalseを返す
+	if (data == -1)
 	{
 		return false;
 	}
@@ -243,6 +262,8 @@ bool Ground::CompareHeight(int prev, int nextX, int nextZ)
 	int Next = MapHeight_[nextZ][nextX];
 
 	if (Player >= Next)
+		return true;
+	else if (Player == -1)
 		return true;
 	else
 		return false;

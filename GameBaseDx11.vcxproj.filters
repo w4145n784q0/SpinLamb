@@ -141,6 +141,8 @@
     <ClCompile Include="GoalItem.cpp">
       <Filter>05Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="NoEntrySpace.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -250,6 +252,8 @@
     <ClInclude Include="GoalItem.h">
       <Filter>05Stage</Filter>
     </ClInclude>
+    <ClInclude Include="Wall.h" />
+    <ClInclude Include="NoEntrySpace.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

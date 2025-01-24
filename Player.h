@@ -96,12 +96,6 @@ public:
 	void UpdateJump();
 	void UpdateHit();
 
-	/// <summary>
-	/// 地面に向かってレイを飛ばす（必要なときだけ）
-	/// </summary>
-	/// <param name="handle">モデルハンドル</param>
-	void PlayerRayCast(int handle);
-
 	void Dash();
 
 	/// <summary>

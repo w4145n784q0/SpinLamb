@@ -13,6 +13,12 @@ class Ground :
 {
 	int hGrass_;
 
+	enum Type {
+		GRASS = 0,//通常　移動できる
+		NOENTRY, //入れない
+	};
+	Type Type_;
+
 
 	/// <summary>
 	/// csvのデータを保管
@@ -23,12 +29,19 @@ class Ground :
 	/// MapDataの高さ情報を保管
 	/// </summary>
 	vector<vector<int>> MapHeight_;
+
+	/// <summary>
+	/// MapDataの地面の種類を保管
+	/// </summary>
+	vector<vector<Type>> MapType_;
+
 	int stageWidth_;
 	int stageHeight_;
 	Transform mapTrans_;
 
-
 	CsvReader csv_;
+
+
 
 public:
 	Ground(GameObject* parent);
@@ -50,6 +63,8 @@ public:
 	/// <param name="height"></param>
 	/// <returns></returns>
 	bool CanMoveFront(int x, int z);
+
+	bool CanNoEntrySpace(int x, int z);
 
 	/// <summary>
 	///  移動元と移動先を比較しプレイヤーが先に行けるか返す
@@ -77,6 +92,8 @@ public:
 	/// <param name="z">渡されたz座標</param>
 	/// <returns>csvの値をとる</returns>
 	int GetPositionData(int x, int z);
+
+
 
 	int GetStageWidth() { return stageWidth_; }
 	int GetStageHeight() { return stageHeight_; }
