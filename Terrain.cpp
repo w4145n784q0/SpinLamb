@@ -16,9 +16,6 @@ void Terrain::Initialize()
 	hTerrain_ = Model::Load("SandGrassBox.fbx");
 	assert(hTerrain_ >= 0);
 
-	Ground* pGround = (Ground*)FindObject("Ground");
-	//transform_.position_ = pGround->GetTerrainTrans().position_;
-
 }
 
 void Terrain::Update()

@@ -64,17 +64,13 @@ public:
 	/// <returns></returns>
 	bool CanMoveFront(int x, int z);
 
-	bool CanNoEntrySpace(int x, int z);
-
 	/// <summary>
-	///  移動元と移動先を比較しプレイヤーが先に行けるか返す
+	/// 進行不可エリアかどうか判断しプレイヤーが先に行けるか返す
 	/// </summary>
-	/// <param name="prevX">移動元のx座標</param>
-	/// <param name="prevZ">移動元のz座標</param>
-	/// <param name="nextX">移動先のx座標</param>
-	/// <param name="nextZ">移動先のz座標</param>
+	/// <param name="x"></param>
+	/// <param name="z"></param>
 	/// <returns></returns>
-	bool CompareHeight(int prevX, int prevZ, int nextX, int nextZ);
+	bool CanNoEntrySpace(int x, int z);
 
 	/// <summary>
 	/// 移動元と移動先を比較しプレイヤーが先に行けるか返す

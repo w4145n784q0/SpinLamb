@@ -173,12 +173,12 @@ void Ground::ObjectSet()
 
 			switch (data)
 			{
-			/*case 999:
+			/*case -1:
 			{
 				NoEntrySpace * pNoEntrySpace = Instantiate<NoEntrySpace>(this);
 				pNoEntrySpace->SetPosition({ (float)x, (float)0.0f,(float)z });
-			}*/
-			break;
+			}
+			break;*/
 
 			case 10:
 			case 11:
@@ -243,17 +243,6 @@ bool Ground::CanNoEntrySpace(int x, int z)
 		return false;
 	}
 	return true;
-}
-
-bool Ground::CompareHeight(int prevX, int prevZ, int nextX, int nextZ)
-{
-	int Player = MapHeight_[prevZ][prevX];
-	int Next = MapHeight_[nextZ][nextX];
-
-	if (Player >= Next)
-		return true;
-	else
-		return false;
 }
 
 bool Ground::CompareHeight(int prev, int nextX, int nextZ)

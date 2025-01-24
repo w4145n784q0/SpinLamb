@@ -4,7 +4,7 @@ class NoEntrySpace :
     public GameObject
 {
 private:
-	//int hmodel;
+	int hWall_;
 public:
 	NoEntrySpace(GameObject* parent);
 	~NoEntrySpace();
