@@ -84,16 +84,6 @@ void Ground::Draw()
 			mapTrans_.position_ = { (float)x, -1 ,(float)z };
 			Model::SetTransform(hGrass_, mapTrans_);
 			Model::Draw(hGrass_);
-
-			/*if(height >= 1 && height <= 100)
-			{
-				for (int y = 0; y < height; y++)
-				{
-					mapTrans.position_ = { (float)x, (float)y + 1 ,(float)z };
-					Model::SetTransform(hModel_Grass, mapTrans);
-					Model::Draw(hModel_Grass);
-				}
-			}*/
 		}
 	}
 
@@ -147,9 +137,7 @@ void Ground::TerrainSet()
 				for (int y = 0; y < posY; y++)
 				{
 					XMFLOAT3 pos = { (float)x ,(float)y ,(float)z };
-					//TerrainTrans.position_.x = trans_terrain.position_.x;
-					//TerrainTrans.position_.y = (float)y + 1.0;
-					//TerrainTrans.position_.z = trans_terrain.position_.z;
+
 					Terrain* pTerrain =  Instantiate<Terrain>(this);
 					pTerrain->SetPosition(pos);
 				}
