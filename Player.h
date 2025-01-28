@@ -16,6 +16,7 @@ private:
 	//モデルハンドル
 	int hPlayer_;
 	int hLandingPoint_;
+	int hNextPoint_;
 
 	//ステート
 	enum State
@@ -56,6 +57,11 @@ private:
 
 	XMVECTOR PlayerStart_;//計算用　プレイヤーの始点
 
+	int nextX, nextY ,nextZ;
+
+	XMFLOAT3 PlayerFront;//プレイヤーの正面位置
+
+	XMVECTOR front;
 
 	//隠れる関係
 	bool CanHide_;

@@ -53,6 +53,10 @@ public:
 	void Release() override;
 
 	void TerrainSet();
+
+	/// <summary>
+	/// アイテムやギミックを設置(地形をセットした後KO)
+	/// </summary>
 	void ObjectSet();
 
 	/// <summary>

@@ -8,7 +8,6 @@
 #include"NoEntrySpace.h"
 
 namespace {
-	int blocknum = 20;
 	XMFLOAT3 GoalItemPos = {40,1,40};
 }
 
@@ -51,7 +50,7 @@ Ground::Ground(GameObject* parent)
 
 	
 
-	Instantiate<TreeManager>(this);
+	//Instantiate<TreeManager>(this);
 }
 
 Ground::~Ground()
@@ -78,35 +77,12 @@ void Ground::Draw()
 	for (int z = 0; z < stageHeight_; z++)
 	{
 		for (int x = 0; x < stageWidth_; x++)
-		{
-			//int height = MapHeight[z][x];
-			
+		{	
 			mapTrans_.position_ = { (float)x, -1 ,(float)z };
 			Model::SetTransform(hGrass_, mapTrans_);
 			Model::Draw(hGrass_);
 		}
 	}
-
-	/*for (int x = 0; x < blocknum; x++)
-	{
-		for (int z = 0; z < blocknum; z++)
-		{
- 			for (int y = 0; y < stageTable[x][z].height; y++)
-			{
-				int type = stageTable[x][z].type;
-
-				Transform blocktrans;
-				blocktrans.position_.x = x;
-				blocktrans.position_.y = y; 
-				blocktrans.position_.z = z;
-
-				Model::SetTransform(blockArray[type], blocktrans);
-				Model::Draw(blockArray[type]);
-			}
-		}
-	}*/
-
-
 }
 
 void Ground::Release()
@@ -121,10 +97,16 @@ void Ground::TerrainSet()
 		for (int x = 0; x < stageWidth_; x++) {
 			
 			trans_terrain.position_ = { (float)x, 0 ,(float)z };
-			int posY = MapHeight_[z][x];
+			int posY = MapData_[z][x];
 			switch (posY)
 			{
 			case 1:
+			{
+				XMFLOAT3 pos = { (float)x ,(float)posY ,(float)z };
+				Terrain* pTerrain =  Instantiate<Terrain>(this);
+				pTerrain->SetPosition(pos);
+			}
+			break;
 			case 2:
 			case 3:
 			case 4:
@@ -138,8 +120,8 @@ void Ground::TerrainSet()
 				{
 					XMFLOAT3 pos = { (float)x ,(float)y ,(float)z };
 
-					Terrain* pTerrain =  Instantiate<Terrain>(this);
-					pTerrain->SetPosition(pos);
+				//	Terrain* pTerrain =  Instantiate<Terrain>(this);
+				//	pTerrain->SetPosition(pos);
 				}
 			}
 			break;
@@ -192,9 +174,9 @@ void Ground::ObjectSet()
 				//TreeTrans.position_ = { (float)x, (float)height,(float)z };
 				//ローカルでインスタンス生成,位置のセット
 
-				Tree* pTree_ = Instantiate<Tree>(this);
-				pTree_->SetPosition({ (float)x, (float)height + 1,(float)z });
-				pTreeManager->AddTree(pTree_);
+				//Tree* pTree_ = Instantiate<Tree>(this);
+				//pTree_->SetPosition({ (float)x, (float)height + 1,(float)z });
+				//pTreeManager->AddTree(pTree_);
 
 				//pTreeManager->InitializeTree({ (float)x, (float)height,(float)z });
 

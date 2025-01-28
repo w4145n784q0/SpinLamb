@@ -16,9 +16,9 @@ namespace {
 	const float Player_Gravity = 0.08; //0.16333f
 	const float DeltaTime = 0.016f;
 	const float FullAccelerate = 50.0f;
-	const XMVECTOR front = { 0,0,1 };
+	const XMVECTOR f = { 0,0,1 };
 	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
-
+	
 	const float TreeCollision = 4.0f;
 	float PrevHeight = 0.0f;
 	
@@ -26,7 +26,7 @@ namespace {
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hPlayer_(-1), hLandingPoint_(-1), IsOnGround_(true), IsDash_(false),
-	JumpSpeed_(0.0f), LandingPoint({ 0,0,0 }),
+	JumpSpeed_(0.0f), LandingPoint({ 0,0,0 }),front(f),
 	Direction_({ 0,0,0 }), PlayerFrontDirection_({ 0,0,1 }), PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),
 	BackCamera_(BackCameraPos), pGround_(nullptr), pTerrain_(nullptr), pTree_(nullptr), pTreeManager_(nullptr)
 	, PlayerState_(S_IDLE), CanMove_(true),PlayerHeight_(0)
@@ -50,6 +50,8 @@ void Player::Initialize()
 	assert(hPlayer_ >= 0);
 	hLandingPoint_ = Model::Load("LandingPoint.fbx");
 	assert(hLandingPoint_ >= 0);
+	hNextPoint_ = Model::Load("GreenBox.fbx");
+	assert(hNextPoint_ >= 0);
 
 	SetStartPosition();
 
@@ -106,6 +108,12 @@ void Player::Draw()
 {
 	Model::SetTransform(hPlayer_, transform_);
 	Model::Draw(hPlayer_);
+
+	Transform t;
+	t.position_ = PlayerFront;
+
+	Model::SetTransform(hLandingPoint_, t);
+	Model::Draw(hLandingPoint_);
 
 	if (PlayerState_ == S_JUMPBEFORE)
 	{
@@ -165,6 +173,13 @@ void Player::UpdateIdle()
 		cameraTransform_.rotate_.y += 1;
 	}
 
+	//プレイヤーの正面ベクトルを更新
+	XMVECTOR forward = RotateVecFront(this->transform_.rotate_.y, PlayerFrontDirection_);//自分の前方ベクトル(回転した分も含む)
+
+	XMFLOAT3 rot = {0,0,0};
+	XMStoreFloat3(&rot, forward);
+	PlayerFront = { transform_.position_ + rot };
+
 	//--------------ダッシュ関係--------------
 	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT))
 	{
@@ -196,9 +211,12 @@ void Player::UpdateIdle()
 	XMVECTOR PrevPos = PlayerPosition_;
 	NewPos_ = PrevPos + MoveVector;
 
-	int nextX, nextZ;
+	//int nextX, nextZ;
 	nextX = (int)XMVectorGetX(NewPos_) + 1.0;
-	nextZ = (int)XMVectorGetZ(NewPos_) + 1.0;
+	nextY = (int)XMVectorGetY(NewPos_);
+	nextZ = (int)XMVectorGetZ(NewPos_) + 1.0; 
+
+
 
 	//地上で正面からオブジェクトにぶつかった時はすり抜けないようにする
 	//空中なら飛び越えられる
