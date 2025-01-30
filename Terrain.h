@@ -7,6 +7,7 @@ private:
 	int hTerrain_;
 public:
 	Terrain(GameObject* parent);
+	Terrain(GameObject* parent, int TerrainType);
 	~Terrain();
 
 	void Initialize() override;

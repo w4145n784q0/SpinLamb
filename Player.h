@@ -6,7 +6,7 @@
 #include"TreeManager.h"
 
 namespace {
-	const XMFLOAT3 StartPosition = { 5.0f,3.0f,15.0f };
+	const XMFLOAT3 StartPosition = { 5.0f,0.0f,15.0f };
 }
 
 class Player :
@@ -17,6 +17,13 @@ private:
 	int hPlayer_;
 	int hLandingPoint_;
 	int hNextPoint_;
+
+	//インスタンス関係
+	Ground* pGround_;
+	Terrain* pTerrain_;
+	Tree* pTree_;
+	TreeManager* pTreeManager_;
+	const vector<Tree>* TreesVector_;
 
 	//ステート
 	enum State
@@ -39,6 +46,7 @@ private:
 
 	XMFLOAT3 JumpValue;
 
+	XMVECTOR PlayerStart_;//計算用　プレイヤーの始点
 	Transform JumpTransform_;//着地位置（Transform）
 	XMFLOAT3 LandingPoint;//着地位置（XMFLOAT3）
 
@@ -53,15 +61,9 @@ private:
 	XMVECTOR PlayerFrontDirection_;//正面ベクトル
 	XMVECTOR PlayerPosition_;//位置ベクトル
 	XMVECTOR NewPos_;//プレイヤーの移動先
-
-
-	XMVECTOR PlayerStart_;//計算用　プレイヤーの始点
+	XMFLOAT3 PlayerFront;//プレイヤーの正面位置 当たり判定用
 
 	int nextX, nextY ,nextZ;
-
-	XMFLOAT3 PlayerFront;//プレイヤーの正面位置
-
-	XMVECTOR front;
 
 	//隠れる関係
 	bool CanHide_;
@@ -72,12 +74,6 @@ private:
 	Transform cameraTransform_;//カメラのTransform 回転だけ使う
 	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
 
-	//インスタンス関係
-	Ground* pGround_;
-	Terrain* pTerrain_;
-	Tree* pTree_;
-	TreeManager* pTreeManager_;
-	const vector<Tree>* TreesVector_;
 
 	//他オブジェクト関係
 	bool IsHitWall;

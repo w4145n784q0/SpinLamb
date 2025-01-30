@@ -91,45 +91,18 @@ void Ground::Release()
 
 void Ground::TerrainSet()
 {
-	Transform trans_terrain;
-
 	for (int z = 0; z < stageHeight_; z++) {
 		for (int x = 0; x < stageWidth_; x++) {
-			
-			trans_terrain.position_ = { (float)x, 0 ,(float)z };
-			int posY = MapData_[z][x];
-			switch (posY)
+
+			int data = MapData_[z][x];
+			if (data == 1)
 			{
-			case 1:
-			{
-				XMFLOAT3 pos = { (float)x ,(float)posY ,(float)z };
+				XMFLOAT3 pos = { (float)x ,(float)0 ,(float)z };
 				Terrain* pTerrain =  Instantiate<Terrain>(this);
 				pTerrain->SetPosition(pos);
 			}
-			break;
-			case 2:
-			case 3:
-			case 4:
-			case 5:
-			case 6:
-			case 7:
-			case 8:
-			case 9:
-			{
-				for (int y = 0; y < posY; y++)
-				{
-					XMFLOAT3 pos = { (float)x ,(float)y ,(float)z };
 
-				//	Terrain* pTerrain =  Instantiate<Terrain>(this);
-				//	pTerrain->SetPosition(pos);
-				}
-			}
-			break;
-			default:
-				break;
-			}
 		}
-
 	}
 }
 void Ground::ObjectSet()

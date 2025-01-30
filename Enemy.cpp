@@ -43,7 +43,6 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	pPosition_ = pPlayer_->GetPosition();
 	XMFLOAT3 tmp = pPlayer_->GetWorldPosition();
 	pPositionVec_ = XMLoadFloat3(&tmp);
 	EnemyPosition_ = XMLoadFloat3(&this->transform_.position_);

@@ -16,7 +16,6 @@ namespace {
 	const float Player_Gravity = 0.08; //0.16333f
 	const float DeltaTime = 0.016f;
 	const float FullAccelerate = 50.0f;
-	const XMVECTOR f = { 0,0,1 };
 	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 	
 	const float TreeCollision = 4.0f;
@@ -26,7 +25,7 @@ namespace {
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hPlayer_(-1), hLandingPoint_(-1), IsOnGround_(true), IsDash_(false),
-	JumpSpeed_(0.0f), LandingPoint({ 0,0,0 }),front(f),
+	JumpSpeed_(0.0f), LandingPoint({ 0,0,0 }),
 	Direction_({ 0,0,0 }), PlayerFrontDirection_({ 0,0,1 }), PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),
 	BackCamera_(BackCameraPos), pGround_(nullptr), pTerrain_(nullptr), pTree_(nullptr), pTreeManager_(nullptr)
 	, PlayerState_(S_IDLE), CanMove_(true),PlayerHeight_(0)
@@ -60,8 +59,8 @@ void Player::Initialize()
 	pTree_ = (Tree*)FindObject("Tree");
 	pTreeManager_ = (TreeManager*)FindObject("TreeManager");
 	
-	SphereCollider* col = new SphereCollider(XMFLOAT3(0,0,0),0.3f);
-	this->AddCollider(col);
+	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),0.3f);
+	this->AddCollider(collider);
 
 	
 }
@@ -112,6 +111,7 @@ void Player::Draw()
 	Transform t;
 	t.position_ = PlayerFront;
 
+	//デバッグ用 正面に円の描画
 	Model::SetTransform(hLandingPoint_, t);
 	Model::Draw(hLandingPoint_);
 
@@ -174,9 +174,10 @@ void Player::UpdateIdle()
 	}
 
 	//プレイヤーの正面ベクトルを更新
-	XMVECTOR forward = RotateVecFront(this->transform_.rotate_.y, PlayerFrontDirection_);//自分の前方ベクトル(回転した分も含む)
+	// //自分の前方ベクトル(回転した分も含む)
+	XMVECTOR forward = RotateVecFront(this->transform_.rotate_.y, PlayerFrontDirection_);
 
-	XMFLOAT3 rot = {0,0,0};
+	XMFLOAT3 rot = { 0,0,0 };
 	XMStoreFloat3(&rot, forward);
 	PlayerFront = { transform_.position_ + rot };
 
@@ -214,23 +215,27 @@ void Player::UpdateIdle()
 	//int nextX, nextZ;
 	nextX = (int)XMVectorGetX(NewPos_) + 1.0;
 	nextY = (int)XMVectorGetY(NewPos_);
-	nextZ = (int)XMVectorGetZ(NewPos_) + 1.0; 
+	nextZ = (int)XMVectorGetZ(NewPos_) + 1.0;
 
 
 
 	//地上で正面からオブジェクトにぶつかった時はすり抜けないようにする
 	//空中なら飛び越えられる
 
-	if (pGround_->CanNoEntrySpace(nextX, nextZ))
-	{
-		if (pGround_->CanMoveFront(nextX, nextZ) && pGround_->CompareHeight(PlayerHeight_, nextX, nextZ) || !IsOnGround_)
-		{
-			XMStoreFloat3(&this->transform_.position_, NewPos_);
-		}
-	}
-	
+	//if (pGround_->CanNoEntrySpace(nextX, nextZ))
+	//{
+	//	if (pGround_->CanMoveFront(nextX, nextZ) && pGround_->CompareHeight(PlayerHeight_, nextX, nextZ) || !IsOnGround_)
+	//	{
+	//		XMStoreFloat3(&this->transform_.position_, NewPos_);
+	//	}
+	//}
 	
 
+	if (pGround_->CanMoveFront(PlayerFront.x, PlayerFront.z))
+	{
+		XMStoreFloat3(&this->transform_.position_, NewPos_);
+	}
+	//if( pground_->
 	
 
 	
@@ -242,7 +247,7 @@ void Player::UpdateIdle()
 	//WASDで着地場所を細かく設定
 
 	//地面にいるときは座標固定
-	LandGround();
+	//LandGround();
 
 	//通常ジャンプ
 	if (!CanHide_ && Input::IsKeyDown(DIK_SPACE))

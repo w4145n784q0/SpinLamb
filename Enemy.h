@@ -8,8 +8,13 @@ class Enemy :
     public GameObject
 {
 private:
+	//モデルハンドル
     int hEnemy_;
+
+	//インスタンス関係
 	Player* pPlayer_;
+
+	//ステート
 	enum State {
 		S_IDLE = 0,//待機
 		S_SUSPICIOUS,//怪しむ
@@ -21,6 +26,7 @@ private:
 	};
 	State EnemyState_;
 
+	//追跡関係
 	XMVECTOR EnemyFrontDirection_;//敵の正面ベクトル
 	XMVECTOR EnemyPosition_;//敵の位置ベクトル
 	float RotateY_;//回転角度（基本Ｙ軸のみ）
@@ -28,7 +34,6 @@ private:
 	float Eye_;
 	bool IsHit_;
 
-	XMFLOAT3 pPosition_;
 	XMVECTOR pPositionVec_;
 
 	XMFLOAT3 ChasePoint_;
