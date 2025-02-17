@@ -13,11 +13,11 @@ class Ground :
 {
 	int hGrass_;
 
-	enum Type {
-		GRASS = 0,//’Êí@ˆÚ“®‚Å‚«‚é
-		NOENTRY, //“ü‚ê‚È‚¢
-	};
-	Type Type_;
+	//enum Type {
+	//	GRASS = 0,//’Êí@ˆÚ“®‚Å‚«‚é
+	//	NOENTRY, //“ü‚ê‚È‚¢
+	//};
+	//Type Type_;
 
 
 	/// <summary>
@@ -30,10 +30,6 @@ class Ground :
 	/// </summary>
 	vector<vector<int>> MapHeight_;
 
-	/// <summary>
-	/// MapData‚Ì’n–Ê‚Ìí—Ş‚ğ•ÛŠÇ
-	/// </summary>
-	vector<vector<Type>> MapType_;
 
 	int stageWidth_;
 	int stageHeight_;

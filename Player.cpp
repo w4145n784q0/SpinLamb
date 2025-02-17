@@ -4,9 +4,11 @@
 #include"Engine/Camera.h"
 #include"Engine/SphereCollider.h"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_win32.h"
+
 #include"Enemy.h"
-#include"Terrain.h"
-#include"Tree.h"
 
 #include <algorithm>
 #include<list>
@@ -114,6 +116,8 @@ void Player::Draw()
 	//デバッグ用 正面に円の描画
 	Model::SetTransform(hLandingPoint_, t);
 	Model::Draw(hLandingPoint_);
+
+	ImGui::Text("Rotate:%.3f",this->transform_.rotate_.y);
 
 	if (PlayerState_ == S_JUMPBEFORE)
 	{
@@ -230,13 +234,8 @@ void Player::UpdateIdle()
 	//	}
 	//}
 	
+	XMStoreFloat3(&this->transform_.position_, NewPos_);
 
-	if (pGround_->CanMoveFront(PlayerFront.x, PlayerFront.z))
-	{
-		XMStoreFloat3(&this->transform_.position_, NewPos_);
-	}
-	//if( pground_->
-	
 
 	
 

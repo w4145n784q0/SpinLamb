@@ -59,13 +59,13 @@ Ground::~Ground()
 
 void Ground::Initialize()
 {
-	hGrass_ = Model::Load("GrassBox.fbx");
+	hGrass_ = Model::Load("GrassField_x30.fbx");
 	assert(hGrass_ >= 0);
 
-	mapTrans_.position_ = { 0,0,0 };
+	mapTrans_.position_ = { 0,-1,0 };
 
-	TerrainSet();
-	ObjectSet();
+//	TerrainSet();
+//	ObjectSet();
 }
 
 void Ground::Update()
@@ -74,15 +74,17 @@ void Ground::Update()
 
 void Ground::Draw()
 {
-	for (int z = 0; z < stageHeight_; z++)
-	{
-		for (int x = 0; x < stageWidth_; x++)
-		{	
-			mapTrans_.position_ = { (float)x, -1 ,(float)z };
-			Model::SetTransform(hGrass_, mapTrans_);
-			Model::Draw(hGrass_);
-		}
-	}
+	Model::SetTransform(hGrass_, mapTrans_);
+	Model::Draw(hGrass_);
+	//for (int z = 0; z < stageHeight_; z++)
+	//{
+	//	for (int x = 0; x < stageWidth_; x++)
+	//	{	
+	//		mapTrans_.position_ = { (float)x, -1 ,(float)z };
+	//		Model::SetTransform(hGrass_, mapTrans_);
+	//		Model::Draw(hGrass_);
+	//	}
+	//}
 }
 
 void Ground::Release()
