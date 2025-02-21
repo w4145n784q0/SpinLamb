@@ -47,10 +47,6 @@ Ground::Ground(GameObject* parent)
 			MapHeight_[j][i] = data;
 		}
 	}
-
-	
-
-	//Instantiate<TreeManager>(this);
 }
 
 Ground::~Ground()
@@ -62,7 +58,7 @@ void Ground::Initialize()
 	hGrass_ = Model::Load("GrassField_x30.fbx");
 	assert(hGrass_ >= 0);
 
-	mapTrans_.position_ = { 0,-1,0 };
+	mapTrans_.position_ = { 0,0.0,0 };
 
 //	TerrainSet();
 //	ObjectSet();

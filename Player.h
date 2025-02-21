@@ -6,7 +6,7 @@
 #include"TreeManager.h"
 
 namespace {
-	const XMFLOAT3 StartPosition = { 5.0f,0.0f,15.0f };
+	const XMFLOAT3 StartPosition = { 0.0f,3.0f,0.0f };
 }
 
 class Player :

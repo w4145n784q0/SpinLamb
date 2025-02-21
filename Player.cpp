@@ -117,7 +117,11 @@ void Player::Draw()
 	Model::SetTransform(hLandingPoint_, t);
 	Model::Draw(hLandingPoint_);
 
-	ImGui::Text("Rotate:%.3f",this->transform_.rotate_.y);
+	ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
+	ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
+	ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
+
+	ImGui::Text("IsOnGround:%.1f", IsOnGround_);
 
 	if (PlayerState_ == S_JUMPBEFORE)
 	{
@@ -253,30 +257,57 @@ void Player::UpdateIdle()
 	{
 		//PlayerState = S_JUMP;
 
-		if (IsOnGround_)
-		{
-			IsOnGround_ = false;
-			PrevHeight = transform_.position_.y;
-			JumpSpeed_ = 1.2;//一時的にy方向にマイナスされている値を大きくする
-		}
+		//if (IsOnGround_)
+		//{
+		//	IsOnGround_ = false;
+		//	PrevHeight = transform_.position_.y;
+		//	JumpSpeed_ = 1.2;//一時的にy方向にマイナスされている値を大きくする
+		//}
+
+
 	}
 	
+	
+
+ 	int hGroundModel = pGround_->GetModelHandle();    //モデル番号を取得
+	RayCastData data;
+	data.start = transform_.position_;
+	data.start.y = transform_.position_.y;
+	data.dir = XMFLOAT3({ 0,-1,0 });
+	Model::RayCast(hGroundModel, &data);
+	if (data.hit == true)
+	{
+		transform_.position_.y -= data.dist;
+		IsOnGround_ = true;
+	}
+	else
+	{
+		IsOnGround_ = false;
+	}
+
 	if (!IsOnGround_)
 	{
 		JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
 		this->transform_.position_.y += JumpSpeed_;
 	}
 
+	if (this->transform_.position_.y < -80) {
+		this->transform_.position_.y = -80;
+	}
 
-	if (this->transform_.position_.y <= 0.0f) //プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	if (Input::IsKeyDown(DIK_ESCAPE))
 	{
-		this->transform_.position_.y = 0.0f;
-		IsOnGround_ = true;
+		SetStartPosition();
 	}
 
-	if (JumpSpeed_ < -100) {
-		JumpSpeed_ = -100;
-	}
+
+	//if (this->transform_.position_.y <= 0.0f) //プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	//{
+	//	this->transform_.position_.y = 0.0f;
+	//	IsOnGround_ = true;
+	//}
+
+	
 	
 	//狙ったところにジャンプ
 	if (Input::IsKeyDown(DIK_Q))
