@@ -21,9 +21,6 @@ private:
 	//インスタンス関係
 	Ground* pGround_;
 	Terrain* pTerrain_;
-	Tree* pTree_;
-	TreeManager* pTreeManager_;
-	const vector<Tree>* TreesVector_;
 
 	//ステート
 	enum State
@@ -65,9 +62,6 @@ private:
 
 	int nextX, nextY ,nextZ;
 
-	//隠れる関係
-	bool CanHide_;
-
 	//カメラ関係
 	XMFLOAT3 CameraPosition_;
 	XMFLOAT3 CameraTarget_;
@@ -93,7 +87,6 @@ public:
 	void OnCollision(GameObject* pTarget) override;
 
 	void UpdateIdle();
-	void UpdateHide();
 	void UpdateJumpBefore();
 	void UpdateJump();
 	void UpdateHit();
@@ -105,11 +98,6 @@ public:
 	/// </summary>
 	void CameraControl();
 
-	void LandGround();
-
 	void SetStartPosition() { this->transform_.position_ = StartPosition; }
-
-	bool IsNearTree(const XMFLOAT3& pos);
-
 };
 

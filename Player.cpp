@@ -26,11 +26,11 @@ namespace {
 }
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hPlayer_(-1), hLandingPoint_(-1), IsOnGround_(true), IsDash_(false),
+	:GameObject(parent, "Player"), hPlayer_(-1), hLandingPoint_(-1), IsOnGround_(false), IsDash_(false),
 	JumpSpeed_(0.0f), LandingPoint({ 0,0,0 }),
 	Direction_({ 0,0,0 }), PlayerFrontDirection_({ 0,0,1 }), PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),
-	BackCamera_(BackCameraPos), pGround_(nullptr), pTerrain_(nullptr), pTree_(nullptr), pTreeManager_(nullptr)
-	, PlayerState_(S_IDLE), CanMove_(true),PlayerHeight_(0)
+	BackCamera_(BackCameraPos), pGround_(nullptr), pTerrain_(nullptr),
+	PlayerState_(S_IDLE), CanMove_(true),PlayerHeight_(0)
 {
 	cameraTransform_ = this->transform_;
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -51,15 +51,11 @@ void Player::Initialize()
 	assert(hPlayer_ >= 0);
 	hLandingPoint_ = Model::Load("LandingPoint.fbx");
 	assert(hLandingPoint_ >= 0);
-	hNextPoint_ = Model::Load("GreenBox.fbx");
-	assert(hNextPoint_ >= 0);
 
 	SetStartPosition();
 
 	pGround_ = (Ground*)FindObject("Ground");
 	pTerrain_ = (Terrain*)FindObject("Terrain");
-	pTree_ = (Tree*)FindObject("Tree");
-	pTreeManager_ = (TreeManager*)FindObject("TreeManager");
 	
 	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),0.3f);
 	this->AddCollider(collider);
@@ -76,9 +72,6 @@ void Player::Update()
 	{
 	case Player::S_IDLE:
 		UpdateIdle();
-		break;
-	case Player::S_HIDE:
-		UpdateHide();
 		break;
 	case Player::S_JUMPBEFORE:
 		UpdateJumpBefore();
@@ -221,22 +214,9 @@ void Player::UpdateIdle()
 	NewPos_ = PrevPos + MoveVector;
 
 	//int nextX, nextZ;
-	nextX = (int)XMVectorGetX(NewPos_) + 1.0;
-	nextY = (int)XMVectorGetY(NewPos_);
-	nextZ = (int)XMVectorGetZ(NewPos_) + 1.0;
-
-
-
-	//地上で正面からオブジェクトにぶつかった時はすり抜けないようにする
-	//空中なら飛び越えられる
-
-	//if (pGround_->CanNoEntrySpace(nextX, nextZ))
-	//{
-	//	if (pGround_->CanMoveFront(nextX, nextZ) && pGround_->CompareHeight(PlayerHeight_, nextX, nextZ) || !IsOnGround_)
-	//	{
-	//		XMStoreFloat3(&this->transform_.position_, NewPos_);
-	//	}
-	//}
+	//nextX = (int)XMVectorGetX(NewPos_) + 1.0;
+	//nextY = (int)XMVectorGetY(NewPos_);
+	//nextZ = (int)XMVectorGetZ(NewPos_) + 1.0;
 	
 	XMStoreFloat3(&this->transform_.position_, NewPos_);
 
@@ -253,7 +233,7 @@ void Player::UpdateIdle()
 	//LandGround();
 
 	//通常ジャンプ
-	if (!CanHide_ && Input::IsKeyDown(DIK_SPACE))
+	if (Input::IsKeyDown(DIK_SPACE))
 	{
 		//PlayerState = S_JUMP;
 
@@ -285,14 +265,16 @@ void Player::UpdateIdle()
 		IsOnGround_ = false;
 	}
 
-	if (!IsOnGround_)
-	{
-		JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
-		this->transform_.position_.y += JumpSpeed_;
+	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
+	this->transform_.position_.y += JumpSpeed_;
+
+	if (this->transform_.position_.y <= 0.0f) {
+		this->transform_.position_.y = 0.0f;
+		IsOnGround_ = false;
 	}
 
-	if (this->transform_.position_.y < -80) {
-		this->transform_.position_.y = -80;
+	if (this->transform_.position_.y < -100) {
+		this->transform_.position_.y = -100;
 	}
 
 	if (Input::IsKeyDown(DIK_ESCAPE))
@@ -317,38 +299,9 @@ void Player::UpdateIdle()
 		PlayerState_ = S_JUMPBEFORE;
 	}
 
-	//--------------隠れる-------------
-
-
-
-	/*XMFLOAT3 TreePos = pTree_->GetPosition();
-	XMVECTOR TreeVec = XMLoadFloat3(&TreePos);
-	XMVECTOR d = XMVectorSubtract(PlayerPosition, TreeVec);
-	float distance = XMVectorGetX(XMVector3Length(d));*/
-
-	
-	//if (CanHide && Input::IsKeyDown(DIK_SPACE))
-	//{
-	//	XMFLOAT3 a = pTree_->GetWorldPosition();
-	//	XMVECTOR v = XMLoadFloat3(&a);
-	//	XMStoreFloat3(&this->transform_.position_, v);
-	//	PlayerState = S_HIDE;
-	//}
-
 	CameraControl();
 
 	Direction_ = { 0,0,0 };//最後に進行方向のリセット毎フレーム行う
-}
-
-void Player::UpdateHide()
-{
-	if (Input::IsKeyDown(DIK_SPACE))
-	{
-		PlayerState_ = S_HIDE;
-		CanHide_ = false;
-	}
-
-	CameraControl();
 }
 
 void Player::UpdateJumpBefore()
@@ -419,43 +372,4 @@ void Player::CameraControl()
 		cameraTransform_.rotate_.y = 0;
 		this->transform_.rotate_.y = 0;
 	}
-}
-
-void Player::LandGround()
-{
-	int x = (int)transform_.position_.x;
-	int z = (int)transform_.position_.z;
-	int MapPosY = pGround_->GetPositionData(x, z);
-
-	if (transform_.position_.y <= MapPosY)
-	{
-		IsOnGround_ = true;
-	}
-	else
-	{
- 		IsOnGround_ = false;
-	}
-
-	if (IsOnGround_)
-	{
-		transform_.position_.y = MapPosY;
-	}
-}
-
-bool Player::IsNearTree(const XMFLOAT3& pos)
-{
-
-	/*XMFLOAT3 TreePos = pTree_->GetPosition();
-	XMVECTOR TreeVec = XMLoadFloat3(&TreePos);
-	XMVECTOR d = XMVectorSubtract(PlayerPosition, TreeVec);
-	float distance = XMVectorGetX(XMVector3Length(d));*/
-
-	XMVECTOR TreeVec = XMLoadFloat3(&pos);
-	XMVECTOR dist = XMVectorSubtract(PlayerPosition_, TreeVec);
-	float distance = XMVectorGetX(XMVector3Length(dist));
-
-	if (distance <= 4.0f)
-		return true;
-	else
-		return false;
 }

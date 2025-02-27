@@ -28,7 +28,7 @@ void Enemy::Initialize()
 
 	hEnemy_ = Model::Load("enemy.fbx");
 	assert(hEnemy_ >= 0);
-	transform_.position_ = { 10,0,10 };
+	transform_.position_ = { 10,0.5,10 };
 	//transform_.rotate_.y = 180;
 
 	//基準ベクトルをつくる　0,0,1
@@ -152,7 +152,7 @@ void Enemy::UpdateChase()
 	XMVECTOR NewPos = PrevPos + MoveVector;
 	
 	XMStoreFloat3(&this->transform_.position_, NewPos);
-	this->transform_.position_.y = 0.0f;
+	this->transform_.position_.y = 0.5f;
 
 	
 

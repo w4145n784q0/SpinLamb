@@ -59,9 +59,6 @@ void Ground::Initialize()
 	assert(hGrass_ >= 0);
 
 	mapTrans_.position_ = { 0,0.0,0 };
-
-//	TerrainSet();
-//	ObjectSet();
 }
 
 void Ground::Update()
