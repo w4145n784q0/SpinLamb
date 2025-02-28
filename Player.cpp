@@ -152,9 +152,6 @@ void Player::Dash()
 
 void Player::UpdateIdle()
 {
-	//高さの値を記録
-	PlayerHeight_ = pGround_->GetPositionData(transform_.position_.x, transform_.position_.z);
-
 	if (Input::IsKey(DIK_UP))
 	{
 		Direction_.z = 1.0;
@@ -217,14 +214,14 @@ void Player::UpdateIdle()
 	//nextX = (int)XMVectorGetX(NewPos_) + 1.0;
 	//nextY = (int)XMVectorGetY(NewPos_);
 	//nextZ = (int)XMVectorGetZ(NewPos_) + 1.0;
-	
+
 	XMStoreFloat3(&this->transform_.position_, NewPos_);
 
 
-	
 
-	
-	
+
+
+
 	//--------------ジャンプ--------------
 	//ボタンを押すとジャンプの着地先を表示
 	//WASDで着地場所を細かく設定
@@ -237,22 +234,22 @@ void Player::UpdateIdle()
 	{
 		//PlayerState = S_JUMP;
 
-		//if (IsOnGround_)
-		//{
-		//	IsOnGround_ = false;
-		//	PrevHeight = transform_.position_.y;
-		//	JumpSpeed_ = 1.2;//一時的にy方向にマイナスされている値を大きくする
-		//}
+		if (IsOnGround_)
+		{
+			IsOnGround_ = false;
+			PrevHeight = transform_.position_.y;
+			JumpSpeed_ = 1.2;//一時的にy方向にマイナスされている値を大きくする
+		}
 
 
 	}
-	
-	
 
- 	int hGroundModel = pGround_->GetModelHandle();    //モデル番号を取得
+
+
+	int hGroundModel = pGround_->GetModelHandle();    //モデル番号を取得
 	RayCastData data;
 	data.start = transform_.position_;
-	data.start.y = transform_.position_.y;
+	//data.start.y = 0;
 	data.dir = XMFLOAT3({ 0,-1,0 });
 	Model::RayCast(hGroundModel, &data);
 	if (data.hit == true)
@@ -265,16 +262,18 @@ void Player::UpdateIdle()
 		IsOnGround_ = false;
 	}
 
-	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
-	this->transform_.position_.y += JumpSpeed_;
-
-	if (this->transform_.position_.y <= 0.0f) {
-		this->transform_.position_.y = 0.0f;
-		IsOnGround_ = false;
+	if (!IsOnGround_){
+		JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
+		this->transform_.position_.y += JumpSpeed_;
 	}
 
-	if (this->transform_.position_.y < -100) {
-		this->transform_.position_.y = -100;
+	/*if (this->transform_.position_.y <= 0.0f) {
+		this->transform_.position_.y = 0.0f;
+		IsOnGround_ = false;
+	}*/
+
+	if (this->transform_.position_.y < -200) {
+		this->transform_.position_.y = -200;
 	}
 
 	if (Input::IsKeyDown(DIK_ESCAPE))
