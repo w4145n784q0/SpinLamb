@@ -26,7 +26,7 @@ namespace {
 }
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hPlayer_(-1), hLandingPoint_(-1), IsOnGround_(false), IsDash_(false),
+	:GameObject(parent, "Player"), hPlayer_(-1), hLandingPoint_(-1), IsOnGround_(true), IsDash_(false),
 	JumpSpeed_(0.0f), LandingPoint({ 0,0,0 }),
 	Direction_({ 0,0,0 }), PlayerFrontDirection_({ 0,0,1 }), PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),
 	BackCamera_(BackCameraPos), pGround_(nullptr), pTerrain_(nullptr),
@@ -217,63 +217,38 @@ void Player::UpdateIdle()
 
 	XMStoreFloat3(&this->transform_.position_, NewPos_);
 
-
-
-
-
-
-	//--------------ジャンプ--------------
-	//ボタンを押すとジャンプの着地先を表示
-	//WASDで着地場所を細かく設定
-
-	//地面にいるときは座標固定
-	//LandGround();
-
-	//通常ジャンプ
+	//ジャンプ
 	if (Input::IsKeyDown(DIK_SPACE))
 	{
-		//PlayerState = S_JUMP;
-
 		if (IsOnGround_)
 		{
 			IsOnGround_ = false;
 			PrevHeight = transform_.position_.y;
 			JumpSpeed_ = 1.2;//一時的にy方向にマイナスされている値を大きくする
 		}
-
-
 	}
 
-
-
-	int hGroundModel = pGround_->GetModelHandle();    //モデル番号を取得
-	RayCastData data;
-	data.start = transform_.position_;
-	//data.start.y = 0;
-	data.dir = XMFLOAT3({ 0,-1,0 });
-	Model::RayCast(hGroundModel, &data);
-	if (data.hit == true)
+	if (transform_.position_.x > 15.0f || transform_.position_.x < -15.0f ||
+		transform_.position_.z > 15.0f || transform_.position_.z < -15.0f)
 	{
-		transform_.position_.y -= data.dist;
-		IsOnGround_ = true;
+		IsOnGround_ = false;
 	}
 	else
 	{
-		IsOnGround_ = false;
+		IsOnGround_ = true;
 	}
+	
 
-	if (!IsOnGround_){
-		JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
-		this->transform_.position_.y += JumpSpeed_;
+	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
+	this->transform_.position_.y += JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
+
+	if (this->transform_.position_.y <= 0.5f && IsOnGround_)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	{
+		this->transform_.position_.y = 0.5f;
 	}
-
-	/*if (this->transform_.position_.y <= 0.0f) {
-		this->transform_.position_.y = 0.0f;
-		IsOnGround_ = false;
-	}*/
-
-	if (this->transform_.position_.y < -200) {
-		this->transform_.position_.y = -200;
+	if (this->transform_.position_.y < -200) 
+	{
+		this->transform_.position_.y = -200;//高さの最低値
 	}
 
 	if (Input::IsKeyDown(DIK_ESCAPE))
@@ -281,22 +256,6 @@ void Player::UpdateIdle()
 		SetStartPosition();
 	}
 
-
-	//if (this->transform_.position_.y <= 0.0f) //プレイヤーめりこみ防止に一定以下のy座標で値を固定
-	//{
-	//	this->transform_.position_.y = 0.0f;
-	//	IsOnGround_ = true;
-	//}
-
-	
-	
-	//狙ったところにジャンプ
-	if (Input::IsKeyDown(DIK_Q))
-	{
-		JumpTransform_ = this->transform_;
-		LandingPoint = this->transform_.position_;
-		PlayerState_ = S_JUMPBEFORE;
-	}
 
 	CameraControl();
 

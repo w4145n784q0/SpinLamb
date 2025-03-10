@@ -26,7 +26,7 @@ void Ground::Initialize()
 	hGrass_ = Model::Load("GrassField_x30.fbx");
 	assert(hGrass_ >= 0);
 
-	mapTrans_.position_ = { 0,0.0,0 };
+	mapTrans_.position_ = { 0,-0.5,0 };
 }
 
 void Ground::Update()
