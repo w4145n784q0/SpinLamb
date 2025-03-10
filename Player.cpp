@@ -286,3 +286,13 @@ void Player::CameraControl()
 		this->transform_.rotate_.y = 0;
 	}
 }
+
+void Player::EnemyReflect(XMVECTOR _vector)
+{
+	XMFLOAT3 f;
+	XMStoreFloat3(&f, _vector);
+	f.x *= 10.0;
+	f.y *= 10.0;
+	f.z *= 10.0;
+	this->transform_.position_ = this->transform_.position_ + f;
+}

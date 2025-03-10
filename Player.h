@@ -85,6 +85,8 @@ public:
 	/// </summary>
 	void CameraControl();
 
+	void EnemyReflect(XMVECTOR _vector);
+
 	void SetStartPosition() { this->transform_.position_ = StartPosition; }
 };
 
