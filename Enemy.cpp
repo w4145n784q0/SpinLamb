@@ -11,6 +11,7 @@ namespace
 	const int EyeAngle = 60;
 	const float EyeLength = 10.0f;
 	const float DeltaTime = 0.016f;
+	const float Enemy_Gravity = 0.08; //0.16333f
 }
 
 Enemy::Enemy(GameObject* parent)
@@ -67,6 +68,28 @@ void Enemy::Update()
 		break;
 	default:
 		break;
+	}
+
+	if (transform_.position_.x > 15.0f || transform_.position_.x < -15.0f ||
+		transform_.position_.z > 15.0f || transform_.position_.z < -15.0f)
+	{
+		IsOnGround_ = false;
+	}
+	else
+	{
+		IsOnGround_ = true;
+	}
+	JumpSpeed_ -= Enemy_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
+	this->transform_.position_.y += JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
+
+	if (this->transform_.position_.y <= 0.5f && IsOnGround_)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	{
+		this->transform_.position_.y = 0.5f;
+	}
+	if (this->transform_.position_.y < -400)
+	{
+		//this->transform_.position_.y = -200;//高さの最低値
+		KillMe();
 	}
 }
 
@@ -161,5 +184,14 @@ void Enemy::UpdateChase()
 void Enemy::OnCollision(GameObject* pTarget)
 {
 	EnemyState_ = S_IDLE;
-	pPlayer_->SetStartPosition();
+}
+
+void Enemy::PlayerReflect(XMVECTOR _vector)
+{
+	XMFLOAT3 f;
+	XMStoreFloat3(&f, _vector);
+	f.x *= 10.0;
+	f.y *= 10.0;
+	f.z *= 10.0;
+	this->transform_.position_ =  this->transform_.position_ + f;
 }

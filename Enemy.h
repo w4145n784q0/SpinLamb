@@ -33,11 +33,12 @@ private:
 	float FrontLength_;//敵の視界の長さ
 	float Eye_;
 	bool IsHit_;
-
-	XMVECTOR pPositionVec_;
-
+	bool IsOnGround_;//地面にいるか
+	float JumpSpeed_;//+ならジャンプしている状態 -なら下降～地面にいる状態
+	XMVECTOR pPositionVec_;//プレイヤーの位置を保管
 	XMFLOAT3 ChasePoint_;
 
+	//
 public:
 	Enemy(GameObject* parent);
 	~Enemy();
@@ -54,6 +55,7 @@ public:
 	void UpdateWince();
 
 	void OnCollision(GameObject* pTarget) override;
+	void PlayerReflect(XMVECTOR _vector);
 
 	void SetState(State s) { EnemyState_ = s; }
 	State GetState() { return EnemyState_; }

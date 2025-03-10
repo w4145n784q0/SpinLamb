@@ -22,21 +22,20 @@ namespace {
 	
 	const float TreeCollision = 4.0f;
 	float PrevHeight = 0.0f;
+
+	XMVECTOR PlayerFrontDirection = { 0,0,1 };//正面ベクトル ここからどれだけ回転したか
 	
 }
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hPlayer_(-1), hLandingPoint_(-1), IsOnGround_(true), IsDash_(false),
-	JumpSpeed_(0.0f), LandingPoint({ 0,0,0 }),
-	Direction_({ 0,0,0 }), PlayerFrontDirection_({ 0,0,1 }), PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),
-	BackCamera_(BackCameraPos), pGround_(nullptr), pTerrain_(nullptr),
+	JumpSpeed_(0.0f),
+	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),BackCamera_(BackCameraPos),
 	PlayerState_(S_IDLE), CanMove_(true),PlayerHeight_(0)
 {
 	cameraTransform_ = this->transform_;
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
 	CameraTarget_ = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
-
-	JumpTransform_.position_ = { 0.0f,1.0f,0.0f };
 
 }
 
@@ -72,9 +71,6 @@ void Player::Update()
 	{
 	case Player::S_IDLE:
 		UpdateIdle();
-		break;
-	case Player::S_JUMPBEFORE:
-		UpdateJumpBefore();
 		break;
 	case Player::S_JUMP:
 		UpdateJump();
@@ -116,11 +112,6 @@ void Player::Draw()
 
 	ImGui::Text("IsOnGround:%.1f", IsOnGround_);
 
-	if (PlayerState_ == S_JUMPBEFORE)
-	{
-		Model::SetTransform(hLandingPoint_, JumpTransform_);
-		Model::Draw(hLandingPoint_);
-	}
 }
 
 void Player::Release()
@@ -129,10 +120,13 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
 {
-	/*if (pTarget->GetObjectName() == "Enemy")
+	if (pTarget->GetObjectName() == "Enemy")
 	{
-		transform_.position_ = StartPosition;
-	}*/
+		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
+		XMFLOAT3 normal = pEnemy->GetPosition() - this->transform_.position_;
+		XMVECTOR normalVec = XMVector3Normalize(XMLoadFloat3(&normal));
+		pEnemy->PlayerReflect(normalVec);
+	}
 }
 
 void Player::Dash()
@@ -172,11 +166,11 @@ void Player::UpdateIdle()
 	}
 
 	//プレイヤーの正面ベクトルを更新
-	// //自分の前方ベクトル(回転した分も含む)
-	XMVECTOR forward = RotateVecFront(this->transform_.rotate_.y, PlayerFrontDirection_);
+	//自分の前方ベクトル(回転した分も含む)
+	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, PlayerFrontDirection);
 
 	XMFLOAT3 rot = { 0,0,0 };
-	XMStoreFloat3(&rot, forward);
+	XMStoreFloat3(&rot, ForwardVector_);
 	PlayerFront = { transform_.position_ + rot };
 
 	//--------------ダッシュ関係--------------
@@ -264,51 +258,12 @@ void Player::UpdateIdle()
 
 void Player::UpdateJumpBefore()
 {
-	CameraControl();
-	if (Input::IsKeyDown(DIK_Z))
-	{
-		PlayerState_ = S_IDLE;
-	}
 
-	if (Input::IsKey(DIK_UP))
-	{
-		LandingPoint.z += 0.3f;
-	}
-	if (Input::IsKey(DIK_DOWN))
-	{
-		LandingPoint.z -= 0.3f;
-	}
-	if (Input::IsKey(DIK_LEFT))
-	{
-		LandingPoint.x -= 0.3f;
-	}
-	if (Input::IsKey(DIK_RIGHT))
-	{
-		LandingPoint.x += 0.3f;
-	}
-
-	JumpTransform_.position_ = LandingPoint;
-
-	if (Input::IsKeyDown(DIK_SPACE))
-	{
-		//JumpSpeed_ = 1.2;
-		PlayerStart_ = PlayerPosition_;
-		JumpTarget_ = XMLoadFloat3(&JumpTransform_.position_);//ジャンプの着地点
-		JumpLength_ = JumpTarget_ - PlayerPosition_;//ジャンプする距離
-		XMStoreFloat3(&JumpValue, JumpLength_);
-
-
-		//JumpLength_ = XMVector3Normalize(JumpLength_);
-
-		//XMStoreFloat3(&this->transform_.position_, v);//一時的な移動処理
-		PlayerState_ = S_JUMP;
-	}
 }
 
 void Player::UpdateJump()
 {
-	XMStoreFloat3(&this->transform_.position_, JumpTarget_);
-	PlayerState_ = S_IDLE;
+
 }
 
 void Player::UpdateHit()
