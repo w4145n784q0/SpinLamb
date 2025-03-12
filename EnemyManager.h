@@ -1,18 +1,15 @@
 #pragma once
 #include "Engine/GameObject.h"
-class Wall :
+class EnemyManager :
     public GameObject
 {
-private:
-	
 public:
-	Wall(GameObject* parent);
-	~Wall();
+	EnemyManager(GameObject* parent);
+	~EnemyManager();
 
 	void Initialize() override;
 	void Update() override;
 	void Draw() override;
 	void Release() override;
-	void OnCollision(GameObject* pTarget) override;
 };
 

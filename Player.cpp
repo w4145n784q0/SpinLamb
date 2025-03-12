@@ -24,6 +24,7 @@ namespace {
 	float PrevHeight = 0.0f;
 
 	XMVECTOR PlayerFrontDirection = { 0,0,1 };//正面ベクトル ここからどれだけ回転したか
+	int deadTimerValue = 60;//復活時間
 	
 }
 
@@ -31,7 +32,8 @@ Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hPlayer_(-1), hLandingPoint_(-1), IsOnGround_(true), IsDash_(false),
 	JumpSpeed_(0.0f),
 	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),BackCamera_(BackCameraPos),
-	PlayerState_(S_IDLE), CanMove_(true),PlayerHeight_(0)
+	PlayerState_(S_IDLE), CanMove_(true),PlayerHeight_(0),
+	deadTimer_(deadTimerValue)
 {
 	cameraTransform_ = this->transform_;
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -54,7 +56,6 @@ void Player::Initialize()
 	SetStartPosition();
 
 	pGround_ = (Ground*)FindObject("Ground");
-	pTerrain_ = (Terrain*)FindObject("Terrain");
 	
 	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),0.3f);
 	this->AddCollider(collider);
@@ -83,7 +84,9 @@ void Player::Update()
 	case Player::S_ATTACK:
 		UpdateAttack();
 		break;
-		
+	case Player::S_OUT:
+		UpdateOut();
+		break;
 	default:
 		break;
 	}
@@ -132,6 +135,11 @@ void Player::OnCollision(GameObject* pTarget)
 		XMFLOAT3 normal = pEnemy->GetPosition() - this->transform_.position_;
 		XMVECTOR normalVec = XMVector3Normalize(XMLoadFloat3(&normal));
 		pEnemy->PlayerReflect(normalVec);
+		XMFLOAT3 f;
+		XMStoreFloat3(&f, normalVec);
+		f.x *= -2.0;
+		f.z *= -2.0;
+		this->transform_.position_ = this->transform_.position_ + f;
 	}
 }
 
@@ -255,15 +263,10 @@ void Player::UpdateIdle()
 	XMVECTOR PrevPos = PlayerPosition_;
 	NewPos_ = PrevPos + MoveVector;
 
-	//int nextX, nextZ;
-	//nextX = (int)XMVectorGetX(NewPos_) + 1.0;
-	//nextY = (int)XMVectorGetY(NewPos_);
-	//nextZ = (int)XMVectorGetZ(NewPos_) + 1.0;
-
 	XMStoreFloat3(&this->transform_.position_, NewPos_);
 
 	//ジャンプ
-	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButton(XINPUT_GAMEPAD_A))
+	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
 	{
 		if (IsOnGround_)
 		{
@@ -291,9 +294,10 @@ void Player::UpdateIdle()
 	{
 		this->transform_.position_.y = 0.5f;
 	}
-	if (this->transform_.position_.y < -200) 
+	if (this->transform_.position_.y < -500) 
 	{
-		this->transform_.position_.y = -200;//高さの最低値
+		this->transform_.position_.y = -500;//高さの最低値
+		PlayerState_ = S_OUT;
 	}
 
 	if (Input::IsKeyDown(DIK_ESCAPE))
@@ -319,6 +323,16 @@ void Player::UpdateCharge()
 
 void Player::UpdateAttack()
 {
+}
+
+void Player::UpdateOut()
+{
+	if (--deadTimer_ < 0)
+	{
+		deadTimer_ = deadTimerValue;
+		PlayerState_ = S_IDLE;
+		SetStartPosition();
+	}
 }
 
 void Player::CameraControl()

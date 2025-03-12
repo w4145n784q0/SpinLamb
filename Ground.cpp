@@ -5,7 +5,6 @@
 #include"Tree.h"
 #include"TreeManager.h"
 #include"GoalItem.h"
-#include"NoEntrySpace.h"
 
 namespace {
 	XMFLOAT3 GoalItemPos = {40,1,40};

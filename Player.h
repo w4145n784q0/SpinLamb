@@ -20,7 +20,6 @@ private:
 
 	//インスタンス関係
 	Ground* pGround_;
-	Terrain* pTerrain_;
 
 	//ステート
 	enum State
@@ -30,6 +29,7 @@ private:
 		S_HIT,
 		S_CHARGE,
 		S_ATTACK,
+		S_OUT,
 	};
 	State PlayerState_;
 
@@ -57,8 +57,8 @@ private:
 	Transform cameraTransform_;//カメラのTransform 回転だけ使う
 	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
 
-	//他オブジェクト関係
-	bool IsHitWall;
+	//タイマー
+	float deadTimer_;//復活までの時間
 
 public:
 
@@ -79,7 +79,7 @@ public:
 	void UpdateHit();
 	void UpdateCharge();
 	void UpdateAttack();
-
+	void UpdateOut();
 	void Dash();
 
 	/// <summary>
