@@ -15,7 +15,7 @@ void ClearScene::Initialize()
 
 void ClearScene::Update()
 {
-	if (Input::IsKeyDown(DIK_P))//スペースキーを押したらゲームスタート
+	if (Input::IsKeyDown(DIK_P) || Input::IsPadButton(XINPUT_GAMEPAD_B) || Input::IsPadButton(XINPUT_GAMEPAD_START))//スペースキーを押したらゲームスタート
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_TITLE);

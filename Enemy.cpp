@@ -183,13 +183,14 @@ void Enemy::UpdateChase()
 
 void Enemy::OnCollision(GameObject* pTarget)
 {
+	EnemyState_ = S_IDLE;
 	if (pTarget->GetObjectName() == "Player")
 	{
 		Player* pPlayer = (Player*)FindObject("Player");
 		XMFLOAT3 normal = pPlayer->GetPosition() - this->transform_.position_;
 		XMVECTOR normalVec = XMVector3Normalize(XMLoadFloat3(&normal));
 		pPlayer->EnemyReflect(normalVec);
-		EnemyState_ = S_IDLE;
+
 	}
 }
 
@@ -198,7 +199,6 @@ void Enemy::PlayerReflect(XMVECTOR _vector)
 	XMFLOAT3 f;
 	XMStoreFloat3(&f, _vector);
 	f.x *= 10.0;
-	f.y *= 10.0;
 	f.z *= 10.0;
 	this->transform_.position_ =  this->transform_.position_ + f;
 }

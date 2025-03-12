@@ -26,9 +26,10 @@ private:
 	enum State
 	{
 		S_IDLE,
-		S_HIDE,
 		S_JUMP,
 		S_HIT,
+		S_CHARGE,
+		S_ATTACK,
 	};
 	State PlayerState_;
 
@@ -74,9 +75,10 @@ public:
 	void OnCollision(GameObject* pTarget) override;
 
 	void UpdateIdle();
-	void UpdateJumpBefore();
-	void UpdateJump();
+	//void UpdateJump();
 	void UpdateHit();
+	void UpdateCharge();
+	void UpdateAttack();
 
 	void Dash();
 

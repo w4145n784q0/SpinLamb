@@ -72,12 +72,18 @@ void Player::Update()
 	case Player::S_IDLE:
 		UpdateIdle();
 		break;
-	case Player::S_JUMP:
-		UpdateJump();
-		break;
+	//case Player::S_JUMP:
+	//	break;
 	case Player::S_HIT:
 		UpdateHit();
 		break;
+	case Player::S_CHARGE:
+		UpdateCharge();
+		break;
+	case Player::S_ATTACK:
+		UpdateAttack();
+		break;
+		
 	default:
 		break;
 	}
@@ -146,6 +152,7 @@ void Player::Dash()
 
 void Player::UpdateIdle()
 {
+	//------------------キーボード入力の移動------------------//
 	if (Input::IsKey(DIK_UP))
 	{
 		Direction_.z = 1.0;
@@ -165,6 +172,49 @@ void Player::UpdateIdle()
 		cameraTransform_.rotate_.y += 1;
 	}
 
+	//------------------ゲームパッドスティックの移動------------------//
+
+	//前方だけに移動
+	if (Input::GetPadStickL().y >= 0.5 /*&& Input::GetPadStickL().x <= 0.5 && Input::GetPadStickL().x >= -0.5*/)
+	{
+		Direction_.z = 1.0;
+	}
+
+	//後方だけに移動
+	if (Input::GetPadStickL().y <= -0.5 /*&& Input::GetPadStickL().x >= 0.5 && Input::GetPadStickL().x <= -0.5*/)
+	{
+		Direction_.z = -1.0;
+	}
+
+	//前進&左回転
+	if (Input::GetPadStickL().y >= 0.5 && Input::GetPadStickL().x <= -0.25)
+	{
+		Direction_.z = 1.0;
+		this->transform_.rotate_.y -= 1;
+		cameraTransform_.rotate_.y -= 1;
+	}
+
+	//前進&右回転
+	if (Input::GetPadStickL().y >= 0.5 && Input::GetPadStickL().x >= 0.25)
+	{
+		Direction_.z = 1.0;
+		this->transform_.rotate_.y += 1;
+		cameraTransform_.rotate_.y += 1;
+	}
+
+	//左回転だけ
+	if (Input::GetPadStickL().x <= -0.8 && Input::GetPadStickL().y <= 0.8)
+	{
+		this->transform_.rotate_.y -= 1;
+		cameraTransform_.rotate_.y -= 1;
+	}
+	//右回転だけ
+	if (Input::GetPadStickL().x >= 0.8 && Input::GetPadStickL().y <= 0.8)
+	{
+		this->transform_.rotate_.y += 1;
+		cameraTransform_.rotate_.y += 1;
+	}
+
 	//プレイヤーの正面ベクトルを更新
 	//自分の前方ベクトル(回転した分も含む)
 	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, PlayerFrontDirection);
@@ -174,7 +224,8 @@ void Player::UpdateIdle()
 	PlayerFront = { transform_.position_ + rot };
 
 	//--------------ダッシュ関係--------------
-	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT))
+	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) 
+		|| Input::IsPadButton(XINPUT_GAMEPAD_LEFT_SHOULDER) || Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
 		IsDash_ = true;
 	}
@@ -212,7 +263,7 @@ void Player::UpdateIdle()
 	XMStoreFloat3(&this->transform_.position_, NewPos_);
 
 	//ジャンプ
-	if (Input::IsKeyDown(DIK_SPACE))
+	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButton(XINPUT_GAMEPAD_A))
 	{
 		if (IsOnGround_)
 		{
@@ -256,31 +307,31 @@ void Player::UpdateIdle()
 	Direction_ = { 0,0,0 };//最後に進行方向のリセット毎フレーム行う
 }
 
-void Player::UpdateJumpBefore()
-{
-
-}
-
-void Player::UpdateJump()
-{
-
-}
-
 void Player::UpdateHit()
+{
+
+}
+
+void Player::UpdateCharge()
+{
+
+}
+
+void Player::UpdateAttack()
 {
 }
 
 void Player::CameraControl()
 {
-	if (Input::IsKey(DIK_X))
+	if (Input::IsKey(DIK_X) || Input::GetPadStickR().x <= -0.7)
 	{
-		cameraTransform_.rotate_.y -= 5;
+		cameraTransform_.rotate_.y -= 2.5;
 	}
-	if (Input::IsKey(DIK_C))
+	if (Input::IsKey(DIK_C) || Input::GetPadStickR().x >= 0.7)
 	{
-		cameraTransform_.rotate_.y += 5;
+		cameraTransform_.rotate_.y += 2.5;
 	}
-	if (Input::IsKey(DIK_Z))//カメラを正面に戻す（方向に変化なし）
+	if (Input::IsKey(DIK_Z) || Input::IsPadButton(XINPUT_GAMEPAD_Y))//カメラを正面に戻す（方向に変化なし）
 	{
 		cameraTransform_.rotate_.y = 0;
 		this->transform_.rotate_.y = 0;
