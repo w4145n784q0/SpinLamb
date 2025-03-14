@@ -3,6 +3,8 @@
 class EnemyManager :
     public GameObject
 {
+private:
+	int EnemyNum_;
 public:
 	EnemyManager(GameObject* parent);
 	~EnemyManager();

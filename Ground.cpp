@@ -1,10 +1,6 @@
 #include "Ground.h"
 #include"Engine/Model.h"
 #include"Engine/SphereCollider.h"
-#include"Terrain.h"
-#include"Tree.h"
-#include"TreeManager.h"
-#include"GoalItem.h"
 
 namespace {
 	XMFLOAT3 GoalItemPos = {40,1,40};

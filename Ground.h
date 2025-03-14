@@ -4,21 +4,12 @@
 #include<array>
 #include<vector>
 
-#include"Tree.h"
-
 using std::vector;
 
 class Ground :
     public GameObject
 {
 	int hGrass_;
-
-	//enum Type {
-	//	GRASS = 0,//通常　移動できる
-	//	NOENTRY, //入れない
-	//};
-	//Type Type_;
-
 
 	/// <summary>
 	/// csvのデータを保管

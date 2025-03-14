@@ -15,7 +15,7 @@
 
 namespace {
 	const float speed = 9.0f;
-	const float Player_Gravity = 0.08; //0.16333f
+	const float Player_Gravity = 0.08f; //0.16333f
 	const float DeltaTime = 0.016f;
 	const float FullAccelerate = 50.0f;
 	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
@@ -272,7 +272,7 @@ void Player::UpdateIdle()
 		{
 			IsOnGround_ = false;
 			PrevHeight = transform_.position_.y;
-			JumpSpeed_ = 1.2;//一時的にy方向にマイナスされている値を大きくする
+			JumpSpeed_ = 1.2f;//一時的にy方向にマイナスされている値を大きくする
 		}
 	}
 

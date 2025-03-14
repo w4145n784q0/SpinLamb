@@ -1,9 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"Ground.h"
-#include"Terrain.h"
-#include"Tree.h"
-#include"TreeManager.h"
 
 namespace {
 	const XMFLOAT3 StartPosition = { 0.0f,0.5f,0.0f };
@@ -58,7 +55,7 @@ private:
 	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
 
 	//タイマー
-	float deadTimer_;//復活までの時間
+	int deadTimer_;//復活までの時間
 
 public:
 

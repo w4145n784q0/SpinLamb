@@ -164,7 +164,6 @@
     <ClCompile Include="Engine\Texture.cpp" />
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="GameOverScene.cpp" />
-    <ClCompile Include="GoalItem.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
@@ -175,12 +174,8 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
-    <ClCompile Include="StageObject.cpp" />
-    <ClCompile Include="Terrain.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="TitleScene.cpp" />
-    <ClCompile Include="Tree.cpp" />
-    <ClCompile Include="TreeManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ClearScene.h" />
@@ -210,7 +205,6 @@
     <ClInclude Include="Engine\Texture.h" />
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="GameOverScene.h" />
-    <ClInclude Include="GoalItem.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
@@ -223,12 +217,8 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="StageObject.h" />
-    <ClInclude Include="Terrain.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="TitleScene.h" />
-    <ClInclude Include="Tree.h" />
-    <ClInclude Include="TreeManager.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">

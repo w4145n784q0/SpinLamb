@@ -12,12 +12,15 @@ namespace
 	const float EyeLength = 10.0f;
 	const float DeltaTime = 0.016f;
 	const float Enemy_Gravity = 0.08; //0.16333f
+
+	int range1[] = { -14, -13, -12, -11, -10, -9, -8, 8, 9, 10, 11, 12, 13, 14 };
 }
 
 Enemy::Enemy(GameObject* parent)
 	:GameObject(parent,"Enemy"),hEnemy_(-1),pPlayer_(nullptr),IsHit_(false), FrontLength_(EyeLength),
 	Eye_(XMConvertToRadians(EyeAngle)),EnemyFrontDirection_({0,0,1})
 {
+	transform_.position_ = { 0,0,0 };
 }
 
 Enemy::~Enemy()
@@ -29,8 +32,11 @@ void Enemy::Initialize()
 
 	hEnemy_ = Model::Load("enemy.fbx");
 	assert(hEnemy_ >= 0);
-	transform_.position_ = { 10,0.5,10 };
-	//transform_.rotate_.y = 180;
+
+	float initX = range1[rand() % 14];
+	float initZ = range1[rand() % 14];
+
+	transform_.position_ = { initX,0.5 , initZ };
 
 	//基準ベクトルをつくる　0,0,1
 	//EnemyFrontDirection = XMVector3TransformCoord(EnemyFrontDirection, GetWorldMatrix());  //getworldmatrixで変換
