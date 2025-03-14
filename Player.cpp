@@ -17,7 +17,7 @@ namespace {
 	const float speed = 9.0f;
 	const float Player_Gravity = 0.08f; //0.16333f
 	const float DeltaTime = 0.016f;
-	const float FullAccelerate = 50.0f;
+	const float FullAccelerate = 30.0f;
 	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 	
 	const float TreeCollision = 4.0f;
@@ -145,7 +145,7 @@ void Player::OnCollision(GameObject* pTarget)
 
 void Player::Dash()
 {
-	if (IsDash_)
+	/*if (IsDash_)
 	{
 		Acceleration_ += 2.0;
 		if (Acceleration_ > FullAccelerate) {
@@ -155,6 +155,24 @@ void Player::Dash()
 	else
 	{
 		Acceleration_ = 0;
+	}*/
+	if(IsDash_)
+	{
+		if (!IsDashStart_)
+		{
+			Acceleration_ += FullAccelerate;
+			IsDashStart_ = true;
+		}
+		else
+		{
+			Acceleration_--;
+			Direction_.z = 1.0;
+			if (Acceleration_ == 0)
+			{
+				IsDash_ = false;
+				IsDashStart_ = false;
+			}
+		}
 	}
 }
 
@@ -232,7 +250,7 @@ void Player::UpdateIdle()
 	PlayerFront = { transform_.position_ + rot };
 
 	//--------------ダッシュ関係--------------
-	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) 
+	/*if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) 
 		|| Input::IsPadButton(XINPUT_GAMEPAD_LEFT_SHOULDER) || Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
 	{
 		IsDash_ = true;
@@ -240,6 +258,13 @@ void Player::UpdateIdle()
 	else
 	{
 		IsDash_ = false;
+	}*/
+	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
+	{
+		if(IsOnGround_)
+		{
+			IsDash_ = true;
+		}
 	}
 
 	Dash();
@@ -318,11 +343,12 @@ void Player::UpdateHit()
 
 void Player::UpdateCharge()
 {
-
+	
 }
 
 void Player::UpdateAttack()
 {
+
 }
 
 void Player::UpdateOut()

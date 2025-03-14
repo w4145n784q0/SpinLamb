@@ -37,6 +37,7 @@ private:
 
 	//ダッシュ関係
 	bool IsDash_; //ダッシュ中か
+	bool IsDashStart_ = false;//ダッシュ開始したか
 	float Acceleration_;//加速度
 	
 	//移動関係
