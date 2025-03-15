@@ -3,7 +3,7 @@
 #include"Engine/SphereCollider.h"
 
 namespace {
-	XMFLOAT3 GoalItemPos = {40,1,40};
+	
 }
 
 Ground::Ground(GameObject* parent)

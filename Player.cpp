@@ -17,7 +17,7 @@ namespace {
 	const float speed = 9.0f;
 	const float Player_Gravity = 0.08f; //0.16333f
 	const float DeltaTime = 0.016f;
-	const float FullAccelerate = 30.0f;
+	const float FullAccelerate = 60.0f;
 	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 	
 	const float TreeCollision = 4.0f;
@@ -132,11 +132,12 @@ void Player::OnCollision(GameObject* pTarget)
 	if (pTarget->GetObjectName() == "Enemy")
 	{
 		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
-		XMFLOAT3 normal = pEnemy->GetPosition() - this->transform_.position_;
-		XMVECTOR normalVec = XMVector3Normalize(XMLoadFloat3(&normal));
-		pEnemy->PlayerReflect(normalVec);
+		XMFLOAT3 direction = pEnemy->GetPosition() - this->transform_.position_;
+		XMVECTOR v =  XMLoadFloat3(&direction);
+		XMVECTOR normalDirection = XMVector3Normalize(v);
+		pEnemy->PlayerReflect(normalDirection);
 		XMFLOAT3 f;
-		XMStoreFloat3(&f, normalVec);
+		XMStoreFloat3(&f, normalDirection);
 		f.x *= -2.0;
 		f.z *= -2.0;
 		this->transform_.position_ = this->transform_.position_ + f;
@@ -376,14 +377,4 @@ void Player::CameraControl()
 		cameraTransform_.rotate_.y = 0;
 		this->transform_.rotate_.y = 0;
 	}
-}
-
-void Player::EnemyReflect(XMVECTOR _vector)
-{
-	XMFLOAT3 f;
-	XMStoreFloat3(&f, _vector);
-	f.x *= 10.0;
-	f.y *= 10.0;
-	f.z *= 10.0;
-	this->transform_.position_ = this->transform_.position_ + f;
 }

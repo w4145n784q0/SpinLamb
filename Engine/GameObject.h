@@ -24,6 +24,23 @@ inline XMFLOAT3 operator - (const XMFLOAT3& a, const XMFLOAT3& b) {
 	return tmp;
 }
 
+inline XMFLOAT3 operator * (const XMFLOAT3& a, const XMFLOAT3& b) {
+	XMFLOAT3 tmp = { 0,0,0 };
+	tmp.x = a.x * b.x;
+	tmp.y = a.y * b.y;
+	tmp.z = a.z * b.z;
+	return tmp;
+}
+
+inline XMFLOAT3 operator / (const XMFLOAT3& a, const XMFLOAT3& b) {
+	XMFLOAT3 tmp = { 0,0,0 };
+	tmp.x = a.x / b.x;
+	tmp.y = a.y / b.y;
+	tmp.z = a.z / b.z;
+	return tmp;
+}
+
+
 using namespace DirectX;
 
 

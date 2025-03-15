@@ -1,10 +1,14 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"Engine/Text.h"
+
 class PlayScene :
     public GameObject
 {
 private:
 	int hImage_;
+	int Phase_;
+	Text* pText_;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

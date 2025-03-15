@@ -17,11 +17,12 @@ private:
 	//ステート
 	enum State {
 		S_IDLE = 0,//待機
-		S_SUSPICIOUS,//怪しむ
+		//S_SUSPICIOUS,//怪しむ
 		S_CHASE,//追いかける
 		S_ATTACK,//攻撃
 		S_MOVE,//移動
 		S_WINCE,//ひるむ
+		S_HIT,
 		S_MAX
 	};
 	State EnemyState_;
@@ -38,7 +39,8 @@ private:
 	XMVECTOR pPositionVec_;//プレイヤーの位置を保管
 	XMFLOAT3 ChasePoint_;
 
-	//
+	//ヒット関係
+	XMFLOAT3 ReflectMove;
 public:
 	Enemy(GameObject* parent);
 	~Enemy();
@@ -53,8 +55,14 @@ public:
 	void UpdateAttack();
 	void UpdateMove();
 	void UpdateWince();
+	void UpdateHit();
 
 	void OnCollision(GameObject* pTarget) override;
+
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <param name="_vector">プレイヤーから渡されたノックバックする方向(正規化済)</param>
 	void PlayerReflect(XMVECTOR _vector);
 
 	void SetState(State s) { EnemyState_ = s; }

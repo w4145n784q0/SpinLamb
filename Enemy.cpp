@@ -12,6 +12,7 @@ namespace
 	const float EyeLength = 10.0f;
 	const float DeltaTime = 0.016f;
 	const float Enemy_Gravity = 0.08; //0.16333f
+	const float KnockBackPower = 8.0f;
 
 	int range1[] = { -14, -13, -12, -11, -10, -9, -8, 8, 9, 10, 11, 12, 13, 14 };
 }
@@ -30,7 +31,7 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 
-	hEnemy_ = Model::Load("enemy.fbx");
+	hEnemy_ = Model::Load("Enemy.fbx");
 	assert(hEnemy_ >= 0);
 
 	float initX = range1[rand() % 14];
@@ -59,8 +60,6 @@ void Enemy::Update()
 	case Enemy::S_IDLE:
 		UpdateIdle();
 		break;
-	case Enemy::S_SUSPICIOUS:
-		break;
 	case Enemy::S_CHASE:
 		UpdateChase();
 		break;
@@ -71,6 +70,9 @@ void Enemy::Update()
 	case Enemy::S_WINCE:
 		break;
 	case Enemy::S_MAX:
+		break;
+	case Enemy::S_HIT:
+		UpdateHit();
 		break;
 	default:
 		break;
@@ -139,7 +141,7 @@ void Enemy::UpdateChase()
 	//Ž©•ª(enemy)‚Æ‘ŠŽè(player)‚Ì‹——£‚ð‚Í‚©‚é(ƒxƒNƒgƒ‹)
 	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition_, pPositionVec_);
 	float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
-	if (Pointdist > FrontLength_ + 10)
+	if (Pointdist > FrontLength_ + 5)
 	{
 		EnemyState_ = S_IDLE;
 	}
@@ -183,8 +185,20 @@ void Enemy::UpdateChase()
 	XMStoreFloat3(&this->transform_.position_, NewPos);
 	this->transform_.position_.y = 0.5f;
 
-	
+}
 
+void Enemy::UpdateHit()
+{
+	this->transform_.position_.x += ReflectMove.x;
+	this->transform_.position_.z += ReflectMove.z;
+
+	ReflectMove.x *= 0.998;
+	ReflectMove.z *= 0.998;
+
+	if (ReflectMove.x <= 0.0f || ReflectMove.z <= 0.0f)
+	{
+		EnemyState_ = S_IDLE;
+	}
 }
 
 void Enemy::OnCollision(GameObject* pTarget)
@@ -196,7 +210,9 @@ void Enemy::PlayerReflect(XMVECTOR _vector)
 {
 	XMFLOAT3 f;
 	XMStoreFloat3(&f, _vector);
-	f.x *= 10.0;
-	f.z *= 10.0;
-	this->transform_.position_ =  this->transform_.position_ + f;
+	f.x *= KnockBackPower;
+	f.z *= KnockBackPower;
+	ReflectMove = f;
+	//this->transform_.position_ =  this->transform_.position_ + f;
+	EnemyState_ = S_HIT;
 }
