@@ -21,7 +21,9 @@ void Ground::Initialize()
 	hGrass_ = Model::Load("GrassField_x30.fbx");
 	assert(hGrass_ >= 0);
 
-	mapTrans_.position_ = { 0,-0.5,0 };
+	transform_.position_ = { 0,-0.5,0 };
+	transform_.scale_.x = 2.0f;
+	transform_.scale_.z = 2.0f;
 }
 
 void Ground::Update()
@@ -30,7 +32,7 @@ void Ground::Update()
 
 void Ground::Draw()
 {
-	Model::SetTransform(hGrass_, mapTrans_);
+	Model::SetTransform(hGrass_,transform_);
 	Model::Draw(hGrass_);
 }
 

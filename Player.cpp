@@ -302,8 +302,8 @@ void Player::UpdateIdle()
 		}
 	}
 
-	if (transform_.position_.x > 15.0f || transform_.position_.x < -15.0f ||
-		transform_.position_.z > 15.0f || transform_.position_.z < -15.0f)
+	if (transform_.position_.x > 30.0f || transform_.position_.x < -30.0f ||
+		transform_.position_.z > 30.0f || transform_.position_.z < -30.0f)
 	{
 		IsOnGround_ = false;
 	}

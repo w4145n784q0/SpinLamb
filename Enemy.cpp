@@ -67,8 +67,6 @@ void Enemy::Update()
 		break;
 	case Enemy::S_MOVE:
 		break;
-	case Enemy::S_WINCE:
-		break;
 	case Enemy::S_MAX:
 		break;
 	case Enemy::S_HIT:
@@ -78,8 +76,8 @@ void Enemy::Update()
 		break;
 	}
 
-	if (transform_.position_.x > 15.0f || transform_.position_.x < -15.0f ||
-		transform_.position_.z > 15.0f || transform_.position_.z < -15.0f)
+	if (transform_.position_.x > 30.0f || transform_.position_.x < -30.0f ||
+		transform_.position_.z > 30.0f || transform_.position_.z < -30.0f)
 	{
 		IsOnGround_ = false;
 	}

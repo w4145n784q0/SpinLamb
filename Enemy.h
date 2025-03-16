@@ -17,12 +17,10 @@ private:
 	//ステート
 	enum State {
 		S_IDLE = 0,//待機
-		//S_SUSPICIOUS,//怪しむ
 		S_CHASE,//追いかける
 		S_ATTACK,//攻撃
 		S_MOVE,//移動
-		S_WINCE,//ひるむ
-		S_HIT,
+		S_HIT,//攻撃を食らった
 		S_MAX
 	};
 	State EnemyState_;
@@ -50,11 +48,7 @@ public:
 	void Draw() override;
 	void Release() override;
 	void UpdateIdle();
-	void UpdateSuspicious();
 	void UpdateChase();
-	void UpdateAttack();
-	void UpdateMove();
-	void UpdateWince();
 	void UpdateHit();
 
 	void OnCollision(GameObject* pTarget) override;
