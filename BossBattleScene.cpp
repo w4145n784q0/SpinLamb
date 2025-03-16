@@ -9,7 +9,8 @@
 #include"EnemyManager.h"
 
 BossBattleScene::BossBattleScene(GameObject* parent)
-	:GameObject(parent,"BossBattleScene") ,pText_(nullptr),pText2_(nullptr), Phase_(-1),deadCount_(3)
+	:GameObject(parent,"BossBattleScene") ,pText_(nullptr),pText2_(nullptr), Phase_(0),deadCount_(3),
+	hWin_(-1),hLose_(-1)
 {
 }
 
@@ -23,23 +24,30 @@ void BossBattleScene::Initialize()
 	pText_->Initialize();
 	pText2_ = new Text;
 	pText2_->Initialize();
+
+	hWin_ = Image::Load("YouWin.png");
+	hLose_ = Image::Load("YouLose.png");
 }
 
 void BossBattleScene::Update()
 {
-	if (FindObject("Enemy") == nullptr)
+	if (FindObject("Enemy") == nullptr && Phase_ < 3)
 	{
-		Phase_++;
+		//Phase_++;
 		EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
 		pEnemyManager->EnemyInitialize();
 	}
 	if (Phase_ == 3)
 	{
+		/*Player* pPlayer = (Player*)FindObject("Player");
+		pPlayer->PlayerStop();*/
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_CLEAR);
 	}
 	if (deadCount_ == 0)
 	{
+		/*Enemy* pEnemy = (Enemy*)FindObject("Enemy");
+		pEnemy->SetStateStop();*/
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_TITLE);
 	}
@@ -51,7 +59,7 @@ void BossBattleScene::Draw()
 	pText_->Draw(30, 30, "PHASE:");
 
 	pText2_->Draw(140, 60, deadCount_);
-	pText2_->Draw(30, 60, "LIFE:");
+	pText2_->Draw(30, 60, "LIFE :");
 }
 
 void BossBattleScene::Release()

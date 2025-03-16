@@ -4,6 +4,7 @@
 #include"Engine/Input.h"
 #include"Engine/Camera.h"
 #include"Engine/SphereCollider.h"
+#include"BossBattleScene.h"
 
 namespace
 {
@@ -14,7 +15,6 @@ namespace
 	const float Enemy_Gravity = 0.08; //0.16333f
 	const float KnockBackPower = 8.0f;
 
-	int range1[] = { -14, -13, -12, -11, -10, -9, -8, 8, 9, 10, 11, 12, 13, 14 };
 }
 
 Enemy::Enemy(GameObject* parent)
@@ -33,9 +33,6 @@ void Enemy::Initialize()
 
 	hEnemy_ = Model::Load("Enemy.fbx");
 	assert(hEnemy_ >= 0);
-
-	float initX = range1[rand() % 14];
-	float initZ = range1[rand() % 14];
 
 	transform_.position_ = { 0.0,0.5 ,5.0 };
 
@@ -69,9 +66,6 @@ void Enemy::Update()
 	case Enemy::S_ATTACK:
 		UpdateAttack();
 		break;
-	case Enemy::S_MOVE:
-		UpdateMove();
-		break;
 	case Enemy::S_HIT:
 		UpdateHit();
 		break;
@@ -103,6 +97,8 @@ void Enemy::Update()
 	if (this->transform_.position_.y < -400)
 	{
 		//this->transform_.position_.y = -200;//‚‚³‚ÌÅ’á’l
+		BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
+		pBossBattleScene->PhasePlus();
 		KillMe();
 	}
 }
@@ -205,31 +201,6 @@ void Enemy::UpdateHit()
 	{
 		EnemyState_ = S_AIM;
 	}
-}
-
-void Enemy::UpdateMove()
-{
-	/*if (isStop_)
-	{
-		isStop_ = false;
-		EnemyMovePoint_ = pGround_->GetRandomMovePoint();
-		moveLengthX_ = EnemyMovePoint_.x - this->transform_.position_.x;
-		moveLengthZ_ = EnemyMovePoint_.z - this->transform_.position_.z;
-		distance = sqrt(moveLengthX_ * moveLengthX_ + moveLengthZ_ * moveLengthZ_);
-	}
-	else
-	{
-		transform_.position_.x = (moveLengthX_ / distance) * 0.5;
-		transform_.position_.z = (moveLengthZ_ / distance) * 0.5;
-		if ((int)transform_.position_.x == EnemyMovePoint_.x ||
-			(int)transform_.position_.z == EnemyMovePoint_.z)
-		{
-			isStop_ = true;
-		}
-	}*/
-
-	
-
 }
 
 void Enemy::UpdateAim()

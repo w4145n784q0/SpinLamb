@@ -411,7 +411,7 @@ namespace Direct3D
 	//•`‰æI—¹
 	void EndDraw()
 	{
-		ImGui::Button("Button");
+		//ImGui::Button("Button");
 		//ImGui::End();
 		//ImGui::EndFrame();
 		ImGui::Render();

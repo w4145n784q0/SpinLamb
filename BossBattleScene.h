@@ -5,10 +5,16 @@ class BossBattleScene :
     public GameObject
 {
 private:
+	//画像ハンドル
+	int hWin_;
+	int hLose_;
+
 	int Phase_;
 	int deadCount_;
 	Text* pText_;
 	Text* pText2_;
+
+	bool IsWin_;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
@@ -27,5 +33,6 @@ public:
 	void Release() override;
 
 	void DeadCountPlus() { deadCount_--; }
+	void PhasePlus() { Phase_++; }
 };
 

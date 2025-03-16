@@ -116,11 +116,11 @@ void Player::Draw()
 	/*Model::SetTransform(hLandingPoint_, t);
 	Model::Draw(hLandingPoint_);*/
 
-	ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
+	/*ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
 	ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
 	ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
 
-	ImGui::Text("IsOnGround:%.1f", IsOnGround_);
+	ImGui::Text("IsOnGround:%.1f", IsOnGround_);*/
 
 }
 
@@ -378,6 +378,11 @@ void Player::UpdateOut()
 		PlayerState_ = S_IDLE;
 		SetStartPosition();
 	}
+}
+
+void Player::UpdateDead()
+{
+
 }
 
 void Player::CameraControl()

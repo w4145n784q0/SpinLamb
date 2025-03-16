@@ -27,6 +27,8 @@ private:
 		S_CHARGE,
 		S_ATTACK,
 		S_OUT,
+		S_DEAD,
+		S_MAX
 	};
 	State PlayerState_;
 
@@ -80,8 +82,10 @@ public:
 	void UpdateCharge();
 	void UpdateAttack();
 	void UpdateOut();
+	void UpdateDead();
 	void Dash();
-
+	void PlayerStop() { PlayerState_ = S_MAX; }
+	
 	/// <summary>
 	/// カメラの操作（一部のステートのみ）
 	/// </summary>

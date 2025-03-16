@@ -20,7 +20,6 @@ private:
 		S_IDLE = 0,//待機
 		S_CHASE,//追いかける
 		S_ATTACK,//攻撃
-		S_MOVE,//移動
 		S_HIT,//攻撃を食らった
 		S_AIM,//プレイヤーを狙う
 		S_MAX
@@ -68,7 +67,6 @@ public:
 	void UpdateIdle();
 	void UpdateChase();
 	void UpdateHit();
-	void UpdateMove();
 	void UpdateAim();
 	void UpdateAttack();
 
@@ -83,5 +81,7 @@ public:
 	
 	void SetState(State s) { EnemyState_ = s; }
 	State GetState() { return EnemyState_; }
+
+	void SetStateStop() { EnemyState_ = S_MAX; }
 };
 
