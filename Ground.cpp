@@ -43,7 +43,7 @@ void Ground::Release()
 
 Point Ground::GetRandomMovePoint()
 {
-	int index =  sizeof(MovePoint);
+	int index = 5;
 	int random = rand() % index;
 	return MovePoint[random];
 }

@@ -19,7 +19,7 @@ namespace
 
 Enemy::Enemy(GameObject* parent)
 	:GameObject(parent,"Enemy"),hEnemy_(-1),pPlayer_(nullptr),IsHit_(false), FrontLength_(EyeLength),
-	Eye_(XMConvertToRadians(EyeAngle)),EnemyFrontDirection_({0,0,1}),isStop_(true)
+	Eye_(XMConvertToRadians(EyeAngle)),EnemyFrontDirection_({0,0,1}),isStop_(true),MoveTimer_(0)
 {
 	transform_.position_ = { 0,0,0 };
 }
@@ -37,7 +37,7 @@ void Enemy::Initialize()
 	float initX = range1[rand() % 14];
 	float initZ = range1[rand() % 14];
 
-	transform_.position_ = { initX,0.5 , initZ };
+	transform_.position_ = { 0.0,0.5 ,5.0 };
 
 	//基準ベクトルをつくる　0,0,1
 	//EnemyFrontDirection = XMVector3TransformCoord(EnemyFrontDirection, GetWorldMatrix());  //getworldmatrixで変換
@@ -45,10 +45,10 @@ void Enemy::Initialize()
 
 	pPlayer_ = (Player*)FindObject("Player");
 	pGround_ = (Ground*)FindObject("Ground");
-	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 0.1f);
+	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
 	this->AddCollider(collision);
 
-	EnemyState_ = S_IDLE;
+	EnemyState_ = S_AIM;
 
 }
 
@@ -67,14 +67,18 @@ void Enemy::Update()
 		UpdateChase();
 		break;
 	case Enemy::S_ATTACK:
+		UpdateAttack();
 		break;
 	case Enemy::S_MOVE:
 		UpdateMove();
 		break;
-	case Enemy::S_MAX:
-		break;
 	case Enemy::S_HIT:
 		UpdateHit();
+		break;
+	case Enemy::S_AIM:
+		UpdateAim();
+		break;
+	case Enemy::S_MAX:
 		break;
 	default:
 		break;
@@ -194,18 +198,18 @@ void Enemy::UpdateHit()
 	this->transform_.position_.x += ReflectMove.x;
 	this->transform_.position_.z += ReflectMove.z;
 
-	ReflectMove.x *= 0.998;
-	ReflectMove.z *= 0.998;
+	ReflectMove.x *= 0.98;
+	ReflectMove.z *= 0.98;
 
 	if (ReflectMove.x <= 0.0f || ReflectMove.z <= 0.0f)
 	{
-		EnemyState_ = S_IDLE;
+		EnemyState_ = S_AIM;
 	}
 }
 
 void Enemy::UpdateMove()
 {
-	if (isStop_)
+	/*if (isStop_)
 	{
 		isStop_ = false;
 		EnemyMovePoint_ = pGround_->GetRandomMovePoint();
@@ -222,20 +226,97 @@ void Enemy::UpdateMove()
 		{
 			isStop_ = true;
 		}
+	}*/
+
+	
+
+}
+
+void Enemy::UpdateAim()
+{
+	//自分(enemy)と相手(player)の距離をはかる(ベクトル)
+	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition_, pPositionVec_);
+	float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
+
+	//敵と自機の距離
+	XMFLOAT3 playerPos = pPlayer_->GetWorldPosition();//プレイヤーの位置（ワールド座標）
+	ChasePoint_ = playerPos - this->transform_.position_;//プレイヤーの位置-敵の位置で距離をとる
+
+	//敵と自機の回転処理
+	XMVECTOR front = EnemyFrontDirection_;//計算用の前向きベクトル（初期値が入る）
+	XMMATRIX mvec = transform_.matRotate_;//現在の回転している方向（自分の回転行列）
+	front = XMVector3Transform(front, mvec);
+	XMVECTOR PlayerDist = XMLoadFloat3(&ChasePoint_);//ベクトルにする
+	XMVECTOR normDist = XMVector3Normalize(PlayerDist);//プレイヤーとの距離を正規化
+	XMVECTOR angle = XMVector3AngleBetweenVectors(normDist, front);//二つのベクトル間のラジアン角を求める
+	XMVECTOR cross = XMVector3Cross(front, normDist);
+
+	AttackVector_ = normDist;//攻撃方向を保存
+
+	float crossY = XMVectorGetY(cross);//外積のY軸（+か-で左右どちらにいるか判断）
+
+	//float angleX = XMVectorGetX(angle);
+	//float dig = XMConvertToDegrees(angleX);
+
+	float Dig = XMConvertToDegrees(XMVectorGetX(angle));
+	if (Dig > 3)
+	{
+		if (crossY > 0.0)
+		{
+			transform_.rotate_.y -= 1.5f;
+		}
+		else if (crossY < 0.0)
+		{
+			transform_.rotate_.y += 1.5f;
+		}
+	}
+
+	transform_.Calclation();
+
+	if (++AimTimer_ > 180)
+	{
+		AimTimer_ = 0;
+		Acceleration_ = 40;
+		EnemyState_ = S_ATTACK;
+	}
+
+}
+
+void Enemy::UpdateAttack()
+{
+	XMVECTOR MoveVector = XMVectorScale(AttackVector_,(speed_ + Acceleration_) * DeltaTime);//移動ベクトル化する
+	XMVECTOR PrevPos = EnemyPosition_;
+	XMVECTOR NewPos = PrevPos + MoveVector;
+
+	XMStoreFloat3(&this->transform_.position_, NewPos);
+	Acceleration_--;
+
+	if (Acceleration_ <= 0.0f)
+	{
+		EnemyState_ = S_AIM;
 	}
 }
 
 void Enemy::OnCollision(GameObject* pTarget)
 {
-	EnemyState_ = S_IDLE;
+	
 }
 
-void Enemy::PlayerReflect(XMVECTOR _vector)
+void Enemy::PlayerReflect(XMVECTOR _vector,bool _isDush)
 {
 	XMFLOAT3 f;
 	XMStoreFloat3(&f, _vector);
-	f.x *= KnockBackPower;
-	f.z *= KnockBackPower;
+	if (_isDush)
+	{
+		f.x *= KnockBackPower * 1.5;
+		f.z *= KnockBackPower * 1.5;
+	}
+	else
+	{
+		f.x *= KnockBackPower;
+		f.z *= KnockBackPower;
+	}
+
 	ReflectMove = f;
 	//this->transform_.position_ =  this->transform_.position_ + f;
 	EnemyState_ = S_HIT;

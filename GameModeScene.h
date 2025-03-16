@@ -5,10 +5,10 @@ class GameModeScene :
 {
 private:
 	int hBack_;//背景
-	int hBossMode_;
-	int hRushMode_;
-	int hBackTitle_;
-	int hArrow_;
+	int hBossMode_;//ボスモードのボタン
+	int hRushMode_;//ラッシュモードのボタン
+	int hBackTitle_;//タイトルのボタン
+	int hArrow_;//選択の矢印
 
 	enum Mode
 	{

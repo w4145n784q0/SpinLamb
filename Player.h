@@ -58,6 +58,8 @@ private:
 	//タイマー
 	int deadTimer_;//復活までの時間
 
+	//落下関係
+
 public:
 
 	XMVECTOR GetPlayerDirection() { return ForwardVector_; }//方向ベクトル取得

@@ -9,6 +9,7 @@
 #include "imgui/imgui_impl_win32.h"
 
 #include"Enemy.h"
+#include"BossBattleScene.h"
 
 #include <algorithm>
 #include<list>
@@ -112,8 +113,8 @@ void Player::Draw()
 	t.position_ = PlayerFront;
 
 	//デバッグ用 正面に円の描画
-	Model::SetTransform(hLandingPoint_, t);
-	Model::Draw(hLandingPoint_);
+	/*Model::SetTransform(hLandingPoint_, t);
+	Model::Draw(hLandingPoint_);*/
 
 	ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
 	ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
@@ -131,15 +132,20 @@ void Player::OnCollision(GameObject* pTarget)
 {
 	if (pTarget->GetObjectName() == "Enemy")
 	{
+		//敵のノックバック
 		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
 		XMFLOAT3 direction = pEnemy->GetPosition() - this->transform_.position_;
 		XMVECTOR v =  XMLoadFloat3(&direction);
 		XMVECTOR normalDirection = XMVector3Normalize(v);
-		pEnemy->PlayerReflect(normalDirection);
+		pEnemy->PlayerReflect(normalDirection,IsDash_);
+
+		//プレイヤーのノックバック
 		XMFLOAT3 f;
 		XMStoreFloat3(&f, normalDirection);
+		
 		f.x *= -2.0;
 		f.z *= -2.0;
+		Acceleration_ = 0;
 		this->transform_.position_ = this->transform_.position_ + f;
 	}
 }
@@ -166,9 +172,9 @@ void Player::Dash()
 		}
 		else
 		{
-			Acceleration_--;
+			Acceleration_ -= 2;
 			Direction_.z = 1.0;
-			if (Acceleration_ == 0)
+			if (Acceleration_ <= 0)
 			{
 				IsDash_ = false;
 				IsDashStart_ = false;
@@ -298,7 +304,7 @@ void Player::UpdateIdle()
 		{
 			IsOnGround_ = false;
 			PrevHeight = transform_.position_.y;
-			JumpSpeed_ = 1.2f;//一時的にy方向にマイナスされている値を大きくする
+			JumpSpeed_ = 2.2f;//一時的にy方向にマイナスされている値を大きくする
 		}
 	}
 
@@ -365,6 +371,9 @@ void Player::UpdateOut()
 {
 	if (--deadTimer_ < 0)
 	{
+		BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
+		pBossBattleScene->DeadCountPlus();
+
 		deadTimer_ = deadTimerValue;
 		PlayerState_ = S_IDLE;
 		SetStartPosition();

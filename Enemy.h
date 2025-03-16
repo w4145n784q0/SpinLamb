@@ -22,6 +22,7 @@ private:
 		S_ATTACK,//攻撃
 		S_MOVE,//移動
 		S_HIT,//攻撃を食らった
+		S_AIM,//プレイヤーを狙う
 		S_MAX
 	};
 	State EnemyState_;
@@ -48,8 +49,13 @@ private:
 	float moveLengthZ_;//移動距離
 	float distance;
 
+	//攻撃関係
+	XMVECTOR AttackVector_;//攻撃方向
+	float Acceleration_;//加速度
+
 	//タイマー
 	int MoveTimer_;
+	int AimTimer_;
 
 public:
 	Enemy(GameObject* parent);
@@ -63,6 +69,8 @@ public:
 	void UpdateChase();
 	void UpdateHit();
 	void UpdateMove();
+	void UpdateAim();
+	void UpdateAttack();
 
 	void OnCollision(GameObject* pTarget) override;
 
@@ -70,8 +78,9 @@ public:
 	/// 
 	/// </summary>
 	/// <param name="_vector">プレイヤーから渡されたノックバックする方向(正規化済)</param>
-	void PlayerReflect(XMVECTOR _vector);
-
+	/// <param name="_isDush">プレイヤーがダッシュ中か</param>
+	void PlayerReflect(XMVECTOR _vector, bool _isDush);
+	
 	void SetState(State s) { EnemyState_ = s; }
 	State GetState() { return EnemyState_; }
 };

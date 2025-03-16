@@ -4,7 +4,7 @@
 #include"Engine/SceneManager.h"
 
 GameModeScene::GameModeScene(GameObject* parent)
-	:GameObject(parent,"GameModeScene")
+	:GameObject(parent,"GameModeScene"),SelectMode_(Max)
 {
 }
 
@@ -47,11 +47,36 @@ void GameModeScene::Update()
 		}
 	}
 	
+	if (Trans_Arrow_.position_.y == 0.5)
+	{
+		SelectMode_ = Boss;
+	}
+	else if (Trans_Arrow_.position_.y == 0.0)
+	{
+		SelectMode_ = Rush;
+	}
+	else if (Trans_Arrow_.position_.y == -0.5)
+	{
+		SelectMode_ = Title;
+	}
 
-	if (Input::IsKeyDown(DIK_P) || Input::IsPadButton(XINPUT_GAMEPAD_B) || Input::IsPadButton(XINPUT_GAMEPAD_START))
+	if (Input::IsKeyDown(DIK_P) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B) || Input::IsPadButtonDown(XINPUT_GAMEPAD_START))
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_PLAY);
+		switch (SelectMode_)
+		{
+		case GameModeScene::Boss:
+			pSceneManager->ChangeScene(SCENE_ID_BOSSBATTLE);
+			break;
+		case GameModeScene::Rush:
+			break;
+		case GameModeScene::Title:
+			pSceneManager->ChangeScene(SCENE_ID_TITLE);
+			break;
+		default:
+			break;
+		}
+		
 	}
 }
 
