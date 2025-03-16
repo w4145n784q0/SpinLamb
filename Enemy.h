@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"Player.h"
-
+#include"Ground.h"
 class Player;
 
 class Enemy :
@@ -13,6 +13,7 @@ private:
 
 	//インスタンス関係
 	Player* pPlayer_;
+	Ground* pGround_;
 
 	//ステート
 	enum State {
@@ -39,6 +40,17 @@ private:
 
 	//ヒット関係
 	XMFLOAT3 ReflectMove;
+
+	//移動関係
+	bool isStop_;
+	Point EnemyMovePoint_;//敵の移動先
+	float moveLengthX_;//移動距離
+	float moveLengthZ_;//移動距離
+	float distance;
+
+	//タイマー
+	int MoveTimer_;
+
 public:
 	Enemy(GameObject* parent);
 	~Enemy();
@@ -50,6 +62,7 @@ public:
 	void UpdateIdle();
 	void UpdateChase();
 	void UpdateHit();
+	void UpdateMove();
 
 	void OnCollision(GameObject* pTarget) override;
 

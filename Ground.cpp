@@ -1,9 +1,10 @@
 #include "Ground.h"
 #include"Engine/Model.h"
 #include"Engine/SphereCollider.h"
+#include"Engine/GameObject.h"
 
 namespace {
-	
+	Point MovePoint[] = { {0,0},{15,15},{-15,15},{15,-15},{-15,-15} };
 }
 
 Ground::Ground(GameObject* parent)
@@ -40,12 +41,9 @@ void Ground::Release()
 {
 }
 
-bool Ground::CanMoveFront(int x, int z)
+Point Ground::GetRandomMovePoint()
 {
-	//csv‚Ì’l‚ð’´‚¦‚é‚©‰º‰ñ‚é‚È‚ç false‚ð•Ô‚·
-	if (x < 0 || z < 0 || x >= stageWidth_ || z >= stageHeight_) 
-	{
-		return false;
-	}
-	return true;
+	int index =  sizeof(MovePoint);
+	int random = rand() % index;
+	return MovePoint[random];
 }

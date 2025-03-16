@@ -344,7 +344,16 @@ void Player::UpdateHit()
 
 void Player::UpdateCharge()
 {
-	
+	if (Input::IsKey(DIK_LEFT))
+	{
+		this->transform_.rotate_.y -= 1;
+		cameraTransform_.rotate_.y -= 1;
+	}
+	if (Input::IsKey(DIK_RIGHT))
+	{
+		this->transform_.rotate_.y += 1;
+		cameraTransform_.rotate_.y += 1;
+	}
 }
 
 void Player::UpdateAttack()

@@ -9,6 +9,7 @@
 #include"../PlayScene.h"
 #include"../ClearScene.h"
 #include"../GameOverScene.h"
+#include"../GameModeScene.h"
 
 
 //コンストラクタ
@@ -44,6 +45,7 @@ void SceneManager::Update()
 		switch (nextSceneID_)
 		{
 		case SCENE_ID_TITLE: Instantiate<TitleScene>(this); break;
+		case SCENE_ID_GAMEMODE: Instantiate<GameModeScene>(this); break;
 		case SCENE_ID_PLAY: Instantiate<PlayScene>(this); break;
 		case SCENE_ID_CLEAR: Instantiate<ClearScene>(this); break;
 		case SCENE_ID_GAMEOVER: Instantiate<GameOverScene>(this); break;

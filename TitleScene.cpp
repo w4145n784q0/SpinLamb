@@ -18,7 +18,7 @@ void TitleScene::Update()
 	if (Input::IsKeyDown(DIK_P) || Input::IsPadButton(XINPUT_GAMEPAD_B) || Input::IsPadButton(XINPUT_GAMEPAD_START))
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_PLAY);
+		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
 	}
 }
 

@@ -7,6 +7,11 @@
 #include "BoxCollider.h"
 #include "Transform.h"
 
+struct Point
+{
+	float x;
+	float z;
+};
 
 inline XMFLOAT3 operator + (const XMFLOAT3& a, const XMFLOAT3& b) {
 	XMFLOAT3 tmp = {0,0,0};

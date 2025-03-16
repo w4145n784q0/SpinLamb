@@ -19,7 +19,7 @@ namespace
 
 Enemy::Enemy(GameObject* parent)
 	:GameObject(parent,"Enemy"),hEnemy_(-1),pPlayer_(nullptr),IsHit_(false), FrontLength_(EyeLength),
-	Eye_(XMConvertToRadians(EyeAngle)),EnemyFrontDirection_({0,0,1})
+	Eye_(XMConvertToRadians(EyeAngle)),EnemyFrontDirection_({0,0,1}),isStop_(true)
 {
 	transform_.position_ = { 0,0,0 };
 }
@@ -44,8 +44,11 @@ void Enemy::Initialize()
 
 
 	pPlayer_ = (Player*)FindObject("Player");
-	SphereCollider* col = new SphereCollider(XMFLOAT3(0, 0, 0), 0.1f);
-	this->AddCollider(col);
+	pGround_ = (Ground*)FindObject("Ground");
+	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 0.1f);
+	this->AddCollider(collision);
+
+	EnemyState_ = S_IDLE;
 
 }
 
@@ -66,6 +69,7 @@ void Enemy::Update()
 	case Enemy::S_ATTACK:
 		break;
 	case Enemy::S_MOVE:
+		UpdateMove();
 		break;
 	case Enemy::S_MAX:
 		break;
@@ -196,6 +200,28 @@ void Enemy::UpdateHit()
 	if (ReflectMove.x <= 0.0f || ReflectMove.z <= 0.0f)
 	{
 		EnemyState_ = S_IDLE;
+	}
+}
+
+void Enemy::UpdateMove()
+{
+	if (isStop_)
+	{
+		isStop_ = false;
+		EnemyMovePoint_ = pGround_->GetRandomMovePoint();
+		moveLengthX_ = EnemyMovePoint_.x - this->transform_.position_.x;
+		moveLengthZ_ = EnemyMovePoint_.z - this->transform_.position_.z;
+		distance = sqrt(moveLengthX_ * moveLengthX_ + moveLengthZ_ * moveLengthZ_);
+	}
+	else
+	{
+		transform_.position_.x = (moveLengthX_ / distance) * 0.5;
+		transform_.position_.z = (moveLengthZ_ / distance) * 0.5;
+		if ((int)transform_.position_.x == EnemyMovePoint_.x ||
+			(int)transform_.position_.z == EnemyMovePoint_.z)
+		{
+			isStop_ = true;
+		}
 	}
 }
 
