@@ -5,9 +5,23 @@ class BossBattleScene :
     public GameObject
 {
 private:
+
+	enum Battle
+	{
+		BEFORE,
+		NOW,
+		AFTER,
+		MAX
+	};
+	Battle BattleState;
+
 	//‰æ‘œƒnƒ“ƒhƒ‹
 	int hWin_;
 	int hLose_;
+	int hFinish_;
+
+	//
+	int hBattleSound_;
 
 	int Phase_;
 	int deadCount_;
@@ -31,6 +45,10 @@ public:
 
 	//ŠJ•ú
 	void Release() override;
+
+	void UpdateBattleBefore();
+	void UpdateBattle();
+	void UpdateBattleAfter();
 
 	void DeadCountPlus() { deadCount_--; }
 	void PhasePlus() { Phase_++; }

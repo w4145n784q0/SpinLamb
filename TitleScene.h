@@ -5,6 +5,7 @@ class TitleScene :
 {
 private:
 	int hImage_;
+	int hTitleSound_;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

@@ -9,6 +9,9 @@ private:
 	int hRushMode_;//ラッシュモードのボタン
 	int hBackTitle_;//タイトルのボタン
 	int hArrow_;//選択の矢印
+	int hModeSelect_;//モードセレクト
+
+	int hModeSound_;
 
 	enum Mode
 	{
@@ -23,6 +26,7 @@ private:
 	Transform Trans_RushMode_;
 	Transform Trans_Title_;
 	Transform Trans_Arrow_;
+	Transform Trans_Mode_;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

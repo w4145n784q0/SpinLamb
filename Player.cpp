@@ -137,15 +137,30 @@ void Player::OnCollision(GameObject* pTarget)
 		XMFLOAT3 direction = pEnemy->GetPosition() - this->transform_.position_;
 		XMVECTOR v =  XMLoadFloat3(&direction);
 		XMVECTOR normalDirection = XMVector3Normalize(v);
-		pEnemy->PlayerReflect(normalDirection,IsDash_);
 
 		//プレイヤーのノックバック
 		XMFLOAT3 f;
 		XMStoreFloat3(&f, normalDirection);
+
+		if (pEnemy->GetStateAttack())
+		{
+			f.x *= -4.0;
+			f.z *= -4.0;
+		}
+		else
+		{
+			f.x *= -1.5;
+			f.z *= -1.5;
+		}
+
+		//ここでノックバック処理
+		pEnemy->PlayerReflect(normalDirection,IsDash_);
+
 		
-		f.x *= -2.0;
-		f.z *= -2.0;
+
 		Acceleration_ = 0;
+		IsDash_ = false;
+		IsDashStart_ = false;
 		this->transform_.position_ = this->transform_.position_ + f;
 	}
 }

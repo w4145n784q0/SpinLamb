@@ -81,6 +81,7 @@ public:
 	
 	void SetState(State s) { EnemyState_ = s; }
 	State GetState() { return EnemyState_; }
+	bool GetStateAttack() { if (EnemyState_ == S_ATTACK) return true; else return false; }
 
 	void SetStateStop() { EnemyState_ = S_MAX; }
 };

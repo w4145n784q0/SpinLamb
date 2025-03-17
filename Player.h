@@ -15,6 +15,9 @@ private:
 	int hLandingPoint_;
 	int hNextPoint_;
 
+	//音ハンドル
+	int hCollisionSound_;
+
 	//インスタンス関係
 	Ground* pGround_;
 
