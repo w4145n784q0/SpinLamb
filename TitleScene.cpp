@@ -11,7 +11,7 @@ TitleScene::TitleScene(GameObject* parent)
 
 void TitleScene::Initialize()
 {
-	hImage_ = Image::Load("title.png");
+	hImage_ = Image::Load("TitleScreen.png");
 	hTitleSound_ = Audio::Load("maou_game_rock45.wav"); 
 	assert(hTitleSound_ >= 0);
 }

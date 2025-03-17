@@ -5,6 +5,7 @@ class ClearScene :
 {
 private:
 	int hImage_;
+	int hClearSound_;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

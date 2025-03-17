@@ -1,20 +1,23 @@
 #include "ClearScene.h"
 #include"Engine/Image.h"
 #include"Engine/Input.h"
+#include"Engine/Audio.h"
 #include"Engine/SceneManager.h"
 
 ClearScene::ClearScene(GameObject* parent)
-	:GameObject(parent,"ClearScene"), hImage_(-1)
+	:GameObject(parent,"ClearScene"), hImage_(-1),hClearSound_(-1)
 {
 }
 
 void ClearScene::Initialize()
 {
-	hImage_ = Image::Load("gameclear.png");
+	hImage_ = Image::Load("ClearScreen.png");
+	hClearSound_ = Audio::Load("maou_game_jingle05.wav");
 }
 
 void ClearScene::Update()
 {
+	Audio::Play(hClearSound_);
 	if (Input::IsKeyDown(DIK_P) || Input::IsPadButton(XINPUT_GAMEPAD_B) || Input::IsPadButton(XINPUT_GAMEPAD_START))//スペースキーを押したらゲームスタート
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");

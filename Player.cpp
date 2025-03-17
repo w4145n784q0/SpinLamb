@@ -1,6 +1,7 @@
 #include "Player.h"
 #include"Engine/Model.h"
 #include"Engine/Input.h"
+#include"Engine/Audio.h"
 #include"Engine/Camera.h"
 #include"Engine/SphereCollider.h"
 
@@ -53,6 +54,8 @@ void Player::Initialize()
 	assert(hPlayer_ >= 0);
 	hLandingPoint_ = Model::Load("LandingPoint.fbx");
 	assert(hLandingPoint_ >= 0);
+	hCollisionSound_ = Audio::Load("maou_se_battle15.wav");
+	assert(hCollisionSound_ >= 0);
 
 	SetStartPosition();
 
@@ -153,14 +156,15 @@ void Player::OnCollision(GameObject* pTarget)
 			f.z *= -1.5;
 		}
 
-		//ここでノックバック処理
+		//ここで敵のノックバック処理
 		pEnemy->PlayerReflect(normalDirection,IsDash_);
 
-		
+		Audio::Play(hCollisionSound_);
 
 		Acceleration_ = 0;
 		IsDash_ = false;
 		IsDashStart_ = false;
+		//PlayerState_ = S_HIT;
 		this->transform_.position_ = this->transform_.position_ + f;
 	}
 }

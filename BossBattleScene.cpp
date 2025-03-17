@@ -12,7 +12,7 @@
 
 BossBattleScene::BossBattleScene(GameObject* parent)
 	:GameObject(parent,"BossBattleScene") ,pText_(nullptr),pText2_(nullptr), Phase_(0),deadCount_(3),
-	hWin_(-1),hLose_(-1),hBattleSound_(-1)
+	hWin_(-1),hLose_(-1),hBattleSound_(-1),hWhistle_(-1)
 {
 }
 
@@ -32,6 +32,7 @@ void BossBattleScene::Initialize()
 	hFinish_ = Image::Load("finish.png");
 
 	hBattleSound_ = Audio::Load("maou_game_rock51.wav");
+	hWhistle_ = Audio::Load("maou_se_sound_whistle01.wav");
 
 	BattleState = NOW;
 }
@@ -125,11 +126,20 @@ void BossBattleScene::UpdateBattle()
 
 void BossBattleScene::UpdateBattleAfter()
 {
+	static bool Issound = true;
+	if (Issound)
+	{
+		Audio::Play(hWhistle_);
+		Issound = false;
+	}
+
+
 	static int time = 120;
 	if (--time < 0)
 	{
 		Logo* pLogo = (Logo*)FindObject("Logo");
 		pLogo->SetMax();
+		
 		if (IsWin_)
 		{
 			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");

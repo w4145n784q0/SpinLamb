@@ -5,6 +5,7 @@ class GameOverScene :
 {
 private:
 	int hImage_;
+	int hGameOverSound_;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

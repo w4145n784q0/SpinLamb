@@ -20,8 +20,9 @@ private:
 	int hLose_;
 	int hFinish_;
 
-	//
+	//‰¹ƒnƒ“ƒhƒ‹
 	int hBattleSound_;
+	int hWhistle_;
 
 	int Phase_;
 	int deadCount_;
