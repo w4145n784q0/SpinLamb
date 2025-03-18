@@ -144,12 +144,14 @@ void BossBattleScene::UpdateBattleAfter()
 		{
 			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 			pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+			time = 120;
 			
 		}
 		else
 		{
 			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 			pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
+			time = 120;
 		}
 		
 	}

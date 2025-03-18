@@ -65,7 +65,7 @@ void GameModeScene::Update()
 		SelectMode_ = Title;
 	}
 
-	if (Input::IsKeyDown(DIK_P) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B) || Input::IsPadButtonDown(XINPUT_GAMEPAD_START))
+	if (Input::IsKeyDown(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		switch (SelectMode_)

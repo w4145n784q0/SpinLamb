@@ -195,8 +195,8 @@ void Enemy::UpdateHit()
 	this->transform_.position_.x += ReflectMove.x;
 	this->transform_.position_.z += ReflectMove.z;
 
-	ReflectMove.x *= 0.98;
-	ReflectMove.z *= 0.98;
+	ReflectMove.x--;
+	ReflectMove.z--;
 
 	if (ReflectMove.x <= 0.0f || ReflectMove.z <= 0.0f)
 	{

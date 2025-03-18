@@ -18,7 +18,7 @@ void ClearScene::Initialize()
 void ClearScene::Update()
 {
 	Audio::Play(hClearSound_);
-	if (Input::IsKeyDown(DIK_P) || Input::IsPadButton(XINPUT_GAMEPAD_B) || Input::IsPadButton(XINPUT_GAMEPAD_START))//スペースキーを押したらゲームスタート
+	if (Input::IsKeyDown(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))//スペースキーを押したらゲームスタート
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_TITLE);
