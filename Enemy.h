@@ -39,8 +39,11 @@ private:
 	XMFLOAT3 ChasePoint_;
 
 	//ヒット関係
-	XMFLOAT3 ReflectMove;
 
+	XMFLOAT3 KnockBack_Direction_;//ノックバックする方向
+	XMFLOAT3 KnockBack_Velocity_;//ノックバックする速度
+	//ノックバックする速度= ノックバックする強さ(定数) * ノックバックする方向
+ 
 	//移動関係
 	bool isStop_;
 	Point EnemyMovePoint_;//敵の移動先

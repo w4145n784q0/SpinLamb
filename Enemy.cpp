@@ -13,7 +13,8 @@ namespace
 	const float EyeLength = 10.0f;
 	const float DeltaTime = 0.016f;
 	const float Enemy_Gravity = 0.08; //0.16333f
-	const float KnockBackPower = 8.0f;
+	const float KnockBackPower = 8.0f; //ƒmƒbƒNƒoƒbƒN‚·‚é‹­‚³
+	const float mu = 0.8; //–€ŽCŒW”
 
 }
 
@@ -192,16 +193,28 @@ void Enemy::UpdateChase()
 
 void Enemy::UpdateHit()
 {
-	this->transform_.position_.x += ReflectMove.x;
+	/*this->transform_.position_.x += ReflectMove.x;
 	this->transform_.position_.z += ReflectMove.z;
 
-	ReflectMove.x--;
-	ReflectMove.z--;
+	ReflectMove.x * 0.6;
+	ReflectMove.z * 0.6;
 
 	if (ReflectMove.x <= 0.0f || ReflectMove.z <= 0.0f)
 	{
 		EnemyState_ = S_AIM;
+	}*/
+
+	KnockBack_Velocity_.x *= 0.5;
+	KnockBack_Velocity_.x *= 0.5;
+
+	transform_.position_.x += KnockBack_Velocity_.x;
+	transform_.position_.z += KnockBack_Velocity_.z;
+
+	if (KnockBack_Velocity_.x <= 0.5f || KnockBack_Velocity_.z <= 0.5f)
+	{
+		EnemyState_ = S_AIM;
 	}
+
 }
 
 void Enemy::UpdateAim()
@@ -278,7 +291,9 @@ void Enemy::PlayerReflect(XMVECTOR _vector,bool _isDush)
 {
 	XMFLOAT3 f;
 	XMStoreFloat3(&f, _vector);
-	if (_isDush)
+	KnockBack_Direction_ = f;
+
+	/*if (_isDush)
 	{
 		f.x *= KnockBackPower * 1.5;
 		f.z *= KnockBackPower * 1.5;
@@ -287,9 +302,19 @@ void Enemy::PlayerReflect(XMVECTOR _vector,bool _isDush)
 	{
 		f.x *= KnockBackPower;
 		f.z *= KnockBackPower;
+	}*/
+	if (_isDush)
+	{
+		KnockBack_Velocity_.x = KnockBackPower * 1.5;
+		KnockBack_Velocity_.z = KnockBackPower * 1.5;
+	}
+	else
+	{
+		KnockBack_Velocity_.x = KnockBackPower;
+		KnockBack_Velocity_.z = KnockBackPower;
 	}
 
-	ReflectMove = f;
-	//this->transform_.position_ =  this->transform_.position_ + f;
 	EnemyState_ = S_HIT;
+
+
 }
