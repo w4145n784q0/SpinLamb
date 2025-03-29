@@ -96,9 +96,11 @@ void Player::Update()
 	}
 
 	//--------------カメラ追従--------------
-	CameraTarget_ = { this->transform_.position_ };//カメラの位置は自機の位置に固定
-	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform_.rotate_.y));//カメラの回転行列をつくり
-	BackCamera_ = XMVector3TransformCoord(BackCamera_, rotY);//バックカメラのベクトルにかける
+	CameraTarget_ = { this->transform_.position_ };//カメラの焦点は自機の位置に固定
+	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform_.rotate_.y));//カメラの回転行列作成(Y軸)
+	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(cameraTransform_.rotate_.x));//カメラの回転行列作成(X軸)
+	XMMATRIX rotCamera = XMMatrixMultiply(rotX, rotY);
+	BackCamera_ = XMVector3TransformCoord(BackCamera_, rotCamera);//バックカメラのベクトルにかける
 	XMStoreFloat3(&CameraPosition_, NewPos_ + BackCamera_);//移動ベクトルと加算
 
 	Camera::SetPosition(CameraPosition_);//カメラの位置をセット 
@@ -406,17 +408,42 @@ void Player::UpdateDead()
 
 void Player::CameraControl()
 {
-	if (Input::IsKey(DIK_X) || Input::GetPadStickR().x <= -0.7)
+	if (Input::IsKey(DIK_A) || Input::GetPadStickR().x <= -0.7)
 	{
 		cameraTransform_.rotate_.y -= 2.5;
 	}
-	if (Input::IsKey(DIK_C) || Input::GetPadStickR().x >= 0.7)
+	if (Input::IsKey(DIK_D) || Input::GetPadStickR().x >= 0.7)
 	{
 		cameraTransform_.rotate_.y += 2.5;
 	}
+
+	if (Input::IsKey(DIK_W) || Input::GetPadStickR().y <= -0.7)
+	{
+		if(cameraTransform_.rotate_.x >= 60.0f)
+		{
+			cameraTransform_.rotate_.x = 60.0f;
+		}
+		else
+		{
+			cameraTransform_.rotate_.x += 2.5;
+		}
+	}
+	if (Input::IsKey(DIK_S) || Input::GetPadStickR().y >= 0.7)
+	{
+		if (cameraTransform_.rotate_.x <= -10.0f)
+		{
+			cameraTransform_.rotate_.x = -10.0f;
+		}
+		else
+		{
+			cameraTransform_.rotate_.x -= 2.5;
+		}
+	}
+
 	if (Input::IsKey(DIK_Z) || Input::IsPadButton(XINPUT_GAMEPAD_Y))//カメラを正面に戻す（方向に変化なし）
 	{
 		cameraTransform_.rotate_.y = 0;
+		cameraTransform_.rotate_.x = 0;
 		this->transform_.rotate_.y = 0;
 	}
 }
