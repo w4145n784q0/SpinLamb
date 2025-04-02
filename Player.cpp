@@ -139,7 +139,11 @@ void Player::OnCollision(GameObject* pTarget)
 	{
 		//敵のノックバック
 		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
+
+		//敵の位置-自機の位置を計算
 		XMFLOAT3 direction = pEnemy->GetPosition() - this->transform_.position_;
+
+		//単位ベクトルにする
 		XMVECTOR v =  XMLoadFloat3(&direction);
 		XMVECTOR normalDirection = XMVector3Normalize(v);
 
@@ -158,7 +162,7 @@ void Player::OnCollision(GameObject* pTarget)
 			f.z *= -1.5;
 		}
 
-		//ここで敵のノックバック処理
+		//敵のノックバック処理
 		pEnemy->PlayerReflect(normalDirection,IsDash_);
 
 		Audio::Play(hCollisionSound_);

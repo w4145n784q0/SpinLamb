@@ -204,9 +204,11 @@ void Enemy::UpdateHit()
 		EnemyState_ = S_AIM;
 	}*/
 
+	//速度を下げていく
 	KnockBack_Velocity_.x *= 0.5;
-	KnockBack_Velocity_.x *= 0.5;
+	KnockBack_Velocity_.z *= 0.5;
 
+	//毎フレームpositionに速度を加算
 	transform_.position_.x += KnockBack_Velocity_.x;
 	transform_.position_.z += KnockBack_Velocity_.z;
 
@@ -269,11 +271,16 @@ void Enemy::UpdateAim()
 
 void Enemy::UpdateAttack()
 {
-	XMVECTOR MoveVector = XMVectorScale(AttackVector_,(speed_ + Acceleration_) * DeltaTime);//移動ベクトル化する
+	//移動ベクトルを計算(方向 * 速度(初速 + 加速))
+	XMVECTOR MoveVector = XMVectorScale(AttackVector_,(speed_ + Acceleration_) * DeltaTime);
+
+	//敵の位置に移動ベクトルを加算
 	XMVECTOR PrevPos = EnemyPosition_;
 	XMVECTOR NewPos = PrevPos + MoveVector;
 
 	XMStoreFloat3(&this->transform_.position_, NewPos);
+
+	//速度を毎フレーム減少
 	Acceleration_--;
 
 	if (Acceleration_ <= 0.0f)
