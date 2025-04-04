@@ -8,12 +8,12 @@
 
 namespace
 {
-	float speed_ = 6.0f;
+	float speed = 6.0f;
 	const int EyeAngle = 60;
 	const float EyeLength = 10.0f;
 	const float DeltaTime = 0.016f;
 	const float Enemy_Gravity = 0.08; //0.16333f
-	const float KnockBackPower = 8.0f; //ノックバックする強さ
+	const float KnockBackPower = 2.0f; //ノックバックする強さ
 	const float mu = 0.8; //摩擦係数
 
 }
@@ -182,7 +182,7 @@ void Enemy::UpdateChase()
 	}
 
 	transform_.Calclation();
-	XMVECTOR MoveVector = XMVectorScale(normDist, speed_  * DeltaTime);//移動ベクトル化する
+	XMVECTOR MoveVector = XMVectorScale(normDist, speed  * DeltaTime);//移動ベクトル化する
 	XMVECTOR PrevPos = EnemyPosition_;
 	XMVECTOR NewPos = PrevPos + MoveVector;
 	
@@ -205,8 +205,8 @@ void Enemy::UpdateHit()
 	}*/
 
 	//速度を下げていく
-	KnockBack_Velocity_.x *= 0.5;
-	KnockBack_Velocity_.z *= 0.5;
+	KnockBack_Velocity_.x *= 0.9;
+	KnockBack_Velocity_.z *= 0.9;
 
 	//毎フレームpositionに速度を加算
 	transform_.position_.x += KnockBack_Velocity_.x;
@@ -272,7 +272,7 @@ void Enemy::UpdateAim()
 void Enemy::UpdateAttack()
 {
 	//移動ベクトルを計算(方向 * 速度(初速 + 加速))
-	XMVECTOR MoveVector = XMVectorScale(AttackVector_,(speed_ + Acceleration_) * DeltaTime);
+	XMVECTOR MoveVector = XMVectorScale(AttackVector_,(speed + Acceleration_) * DeltaTime);
 
 	//敵の位置に移動ベクトルを加算
 	XMVECTOR PrevPos = EnemyPosition_;
@@ -281,7 +281,7 @@ void Enemy::UpdateAttack()
 	XMStoreFloat3(&this->transform_.position_, NewPos);
 
 	//速度を毎フレーム減少
-	Acceleration_--;
+	Acceleration_ -= 1.0f;
 
 	if (Acceleration_ <= 0.0f)
 	{

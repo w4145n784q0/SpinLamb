@@ -171,7 +171,7 @@ void Player::OnCollision(GameObject* pTarget)
 		IsDash_ = false;
 		IsDashStart_ = false;
 		//PlayerState_ = S_HIT;
-		this->transform_.position_ = this->transform_.position_ + f;
+		//this->transform_.position_ = this->transform_.position_ + f;
 	}
 }
 
