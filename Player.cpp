@@ -147,30 +147,29 @@ void Player::OnCollision(GameObject* pTarget)
 		XMVECTOR v =  XMLoadFloat3(&direction);
 		XMVECTOR normalDirection = XMVector3Normalize(v);
 
-		//プレイヤーのノックバック
+		//敵のノックバック処理
+		pEnemy->PlayerReflect(normalDirection, IsDash_);
+
+		Audio::Play(hCollisionSound_);
+
+
+		//プレイヤーの衝突時処理
 		XMFLOAT3 f;
 		XMStoreFloat3(&f, normalDirection);
-
 		if (pEnemy->GetStateAttack())
 		{
 			f.x *= -4.0;
 			f.z *= -4.0;
+			//PlayerState_ = S_HIT;
 		}
-		else
-		{
-			f.x *= -1.5;
-			f.z *= -1.5;
-		}
+		
 
-		//敵のノックバック処理
-		pEnemy->PlayerReflect(normalDirection,IsDash_);
 
-		Audio::Play(hCollisionSound_);
 
 		Acceleration_ = 0;
 		IsDash_ = false;
 		IsDashStart_ = false;
-		//PlayerState_ = S_HIT;
+		
 		//this->transform_.position_ = this->transform_.position_ + f;
 	}
 }
@@ -370,7 +369,7 @@ void Player::UpdateIdle()
 
 void Player::UpdateHit()
 {
-
+	//
 }
 
 void Player::UpdateCharge()

@@ -99,8 +99,8 @@ void Enemy::Update()
 	if (this->transform_.position_.y < -400)
 	{
 		//this->transform_.position_.y = -200;//高さの最低値
-		BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
-		pBossBattleScene->PhasePlus();
+		//BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
+		//pBossBattleScene->PhasePlus();
 		KillMe();
 	}
 }
@@ -182,7 +182,7 @@ void Enemy::UpdateChase()
 	}
 
 	transform_.Calclation();
-	XMVECTOR MoveVector = XMVectorScale(normDist, speed  * DeltaTime);//移動ベクトル化する
+	XMVECTOR MoveVector = XMVectorScale(normDist, speed * DeltaTime);//移動ベクトル化する
 	XMVECTOR PrevPos = EnemyPosition_;
 	XMVECTOR NewPos = PrevPos + MoveVector;
 	
@@ -204,13 +204,15 @@ void Enemy::UpdateHit()
 		EnemyState_ = S_AIM;
 	}*/
 
+	//KnockBack_Direction_
+	
 	//速度を下げていく
 	KnockBack_Velocity_.x *= 0.9;
 	KnockBack_Velocity_.z *= 0.9;
 
 	//毎フレームpositionに速度を加算
-	transform_.position_.x += KnockBack_Velocity_.x;
-	transform_.position_.z += KnockBack_Velocity_.z;
+	transform_.position_.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
+	transform_.position_.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
 
 	if (KnockBack_Velocity_.x <= 0.5f || KnockBack_Velocity_.z <= 0.5f)
 	{
@@ -300,16 +302,6 @@ void Enemy::PlayerReflect(XMVECTOR _vector,bool _isDush)
 	XMStoreFloat3(&f, _vector);
 	KnockBack_Direction_ = f;
 
-	/*if (_isDush)
-	{
-		f.x *= KnockBackPower * 1.5;
-		f.z *= KnockBackPower * 1.5;
-	}
-	else
-	{
-		f.x *= KnockBackPower;
-		f.z *= KnockBackPower;
-	}*/
 	if (_isDush)
 	{
 		KnockBack_Velocity_.x = KnockBackPower * 1.5;
@@ -322,6 +314,4 @@ void Enemy::PlayerReflect(XMVECTOR _vector,bool _isDush)
 	}
 
 	EnemyState_ = S_HIT;
-
-
 }
