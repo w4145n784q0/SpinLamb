@@ -25,7 +25,6 @@ private:
 	enum State
 	{
 		S_IDLE,
-		S_JUMP,
 		S_HIT,
 		S_CHARGE,
 		S_ATTACK,
@@ -96,7 +95,7 @@ public:
 	/// </summary>
 	void CameraControl();
 
-	void EnemyReflect(XMVECTOR _vector);
+	void CameraShake();
 
 	void SetStartPosition() { this->transform_.position_ = StartPosition; }
 };

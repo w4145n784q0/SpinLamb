@@ -77,8 +77,6 @@ void Player::Update()
 	case Player::S_IDLE:
 		UpdateIdle();
 		break;
-	//case Player::S_JUMP:
-	//	break;
 	case Player::S_HIT:
 		UpdateHit();
 		break;
@@ -106,6 +104,11 @@ void Player::Update()
 	BackCamera_ = XMVector3TransformCoord(BackCamera_, rotCamera);//バックカメラのベクトルにかける
 	XMStoreFloat3(&CameraPosition_, NewPos_ + BackCamera_);//移動ベクトルと加算
 
+	//CameraPosition_.y += Camera::CameraShake();
+	CameraPosition_.x += Camera::CameraShakeFloat3().x;
+	CameraPosition_.y += Camera::CameraShakeFloat3().y;
+	CameraPosition_.z += Camera::CameraShakeFloat3().z;
+
 	Camera::SetPosition(CameraPosition_);//カメラの位置をセット 
 	Camera::SetTarget(CameraTarget_);//カメラの焦点をセット
 	BackCamera_ = { BackCameraPos };//バックカメラベクトルをリセット
@@ -120,13 +123,12 @@ void Player::Draw()
 	Transform t;
 	t.position_ = PlayerFront;
 
-	//デバッグ用 正面に円の描画
-	/*Model::SetTransform(hLandingPoint_, t);
-	Model::Draw(hLandingPoint_);*/
-
 	ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
 	ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
 	ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
+
+	//ImGui::Text("camera y :%.3f", CameraPosition_.y);
+	//ImGui::Text("camera x :%.3f", CameraPosition_.x);
 
 	/*ImGui::Text("IsOnGround:%.1f", IsOnGround_);*/
 
@@ -165,9 +167,9 @@ void Player::OnCollision(GameObject* pTarget)
 			f.z *= -4.0;
 			//PlayerState_ = S_HIT;
 		}
-		
 
-
+		//カメラ振動
+		Camera::CameraShakeStart(0.15f);
 
 		Acceleration_ = 0;
 		IsDash_ = false;
@@ -361,6 +363,7 @@ void Player::UpdateIdle()
 
 	CameraControl();
 
+
 	Direction_ = { 0,0,0 };//最後に進行方向のリセット毎フレーム行う
 }
 
@@ -459,4 +462,9 @@ void Player::CameraControl()
 		cameraTransform_.rotate_.x = 0;
 		this->transform_.rotate_.y = 0;
 	}
+}
+
+void Player::CameraShake()
+{
+
 }

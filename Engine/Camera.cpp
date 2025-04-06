@@ -7,6 +7,9 @@ XMMATRIX _view;
 XMMATRIX _proj;
 XMMATRIX _billBoard;
 
+bool IsCameraShake;//カメラが振動してるか
+float ShakeTimer;//カメラの振動カウント
+
 //初期化（プロジェクション行列作成）
 void Camera::Initialize()
 {
@@ -52,3 +55,51 @@ XMMATRIX Camera::GetProjectionMatrix() { return _proj; }
 
 //ビルボード用回転行列を取得
 XMMATRIX Camera::GetBillboardMatrix(){	return _billBoard; }
+
+//カメラ振動
+float Camera::CameraShake()
+{
+	float cameraY = 0.0f;
+	if (IsCameraShake)
+	{
+		ShakeTimer -= 0.016f;
+		if (ShakeTimer <= 0.0f)
+		{
+			IsCameraShake = false;
+			ShakeTimer = 0.0f;
+		}
+		else
+		{
+			cameraY = sinf(ShakeTimer * 300.0)* ShakeTimer * 0.5f;
+		}
+	}
+	return cameraY;
+}
+
+XMFLOAT3 Camera::CameraShakeFloat3()
+{
+	XMFLOAT3 camera = {0,0,0};
+	if (IsCameraShake)
+	{
+		ShakeTimer -= 0.016f;
+		if (ShakeTimer <= 0.0f)
+		{
+			IsCameraShake = false;
+			ShakeTimer = 0.0f;
+		}
+		else
+		{
+			camera.x = sinf(ShakeTimer * 300.0) * ShakeTimer * 0.5f;
+			camera.y = sinf(ShakeTimer * 300.0) * ShakeTimer * 0.5f;
+		}
+	}
+	return camera;
+}
+
+//振動開始
+void Camera::CameraShakeStart(float _shaketime)
+{
+	IsCameraShake = true;
+	ShakeTimer = _shaketime;
+
+}
