@@ -91,6 +91,9 @@ void Player::Update()
 	case Player::S_OUT:
 		UpdateOut();
 		break;
+	case Player::S_WALLHIT:
+		UpdateWallHit();
+		break;
 	default:
 		break;
 	}
@@ -169,8 +172,6 @@ void Player::OnCollision(GameObject* pTarget)
 		Acceleration_ = 0;
 		IsDash_ = false;
 		IsDashStart_ = false;
-		
-		//this->transform_.position_ = this->transform_.position_ + f;
 	}
 }
 
@@ -335,11 +336,7 @@ void Player::UpdateIdle()
 	if (transform_.position_.x > 60.0f || transform_.position_.x < -60.0f ||
 		transform_.position_.z > 60.0f || transform_.position_.z < -60.0f)
 	{
-		IsOnGround_ = false;
-	}
-	else
-	{
-		IsOnGround_ = true;
+		PlayerState_ = S_WALLHIT;
 	}
 	
 
@@ -392,6 +389,19 @@ void Player::UpdateAttack()
 }
 
 void Player::UpdateOut()
+{
+	if (--deadTimer_ < 0)
+	{
+		//BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
+		//pBossBattleScene->DeadCountPlus();
+
+		deadTimer_ = deadTimerValue;
+		PlayerState_ = S_IDLE;
+		SetStartPosition();
+	}
+}
+
+void Player::UpdateWallHit()
 {
 	if (--deadTimer_ < 0)
 	{

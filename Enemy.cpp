@@ -19,8 +19,8 @@ namespace
 }
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent,"Enemy"),hEnemy_(-1),pPlayer_(nullptr),IsHit_(false), FrontLength_(EyeLength),
-	Eye_(XMConvertToRadians(EyeAngle)),EnemyFrontDirection_({0,0,1}),isStop_(true),MoveTimer_(0)
+	:GameObject(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr), IsHit_(false), FrontLength_(EyeLength),
+	Eye_(XMConvertToRadians(EyeAngle)), EnemyFrontDirection_({ 0,0,1 }), isStop_(true), MoveTimer_(0), IsOnGround_(true)
 {
 	transform_.position_ = { 0,0,0 };
 }
@@ -80,7 +80,7 @@ void Enemy::Update()
 		break;
 	}
 
-	if (transform_.position_.x > 30.0f || transform_.position_.x < -30.0f ||
+	/*if (transform_.position_.x > 30.0f || transform_.position_.x < -30.0f ||
 		transform_.position_.z > 30.0f || transform_.position_.z < -30.0f)
 	{
 		IsOnGround_ = false;
@@ -88,7 +88,8 @@ void Enemy::Update()
 	else
 	{
 		IsOnGround_ = true;
-	}
+	}*/
+
 	JumpSpeed_ -= Enemy_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
 	this->transform_.position_.y += JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
 
@@ -193,17 +194,6 @@ void Enemy::UpdateChase()
 
 void Enemy::UpdateHit()
 {
-	/*this->transform_.position_.x += ReflectMove.x;
-	this->transform_.position_.z += ReflectMove.z;
-
-	ReflectMove.x * 0.6;
-	ReflectMove.z * 0.6;
-
-	if (ReflectMove.x <= 0.0f || ReflectMove.z <= 0.0f)
-	{
-		EnemyState_ = S_AIM;
-	}*/
-
 	//速度を下げていく
 	KnockBack_Velocity_.x *= 0.9;
 	KnockBack_Velocity_.z *= 0.9;

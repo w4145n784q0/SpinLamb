@@ -30,6 +30,7 @@ private:
 		S_CHARGE,
 		S_ATTACK,
 		S_OUT,
+		S_WALLHIT,
 		S_DEAD,
 		S_MAX
 	};
@@ -60,10 +61,10 @@ private:
 	Transform cameraTransform_;//カメラのTransform 回転だけ使う
 	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
 
-	//タイマー
+	//ダメージ関係
 	int deadTimer_;//復活までの時間
-
-	//落下関係
+	int InvincibilityTime_;//ダメージ後の無敵時間
+	bool IsInvincibility_;//無敵時間か
 
 public:
 
@@ -85,6 +86,7 @@ public:
 	void UpdateCharge();
 	void UpdateAttack();
 	void UpdateOut();
+	void UpdateWallHit();
 	void UpdateDead();
 	void Dash();
 	void PlayerStop() { PlayerState_ = S_MAX; }

@@ -158,6 +158,7 @@
     <ClCompile Include="EnemyManager.cpp">
       <Filter>04Chara</Filter>
     </ClCompile>
+    <ClCompile Include="PracticeScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -284,6 +285,7 @@
     <ClInclude Include="EnemyManager.h">
       <Filter>04Chara</Filter>
     </ClInclude>
+    <ClInclude Include="PracticeScene.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

@@ -177,6 +177,7 @@
     <ClCompile Include="Logo.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
+    <ClCompile Include="PracticeScene.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
@@ -222,6 +223,7 @@
     <ClInclude Include="Logo.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayScene.h" />
+    <ClInclude Include="PracticeScene.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="TitleScene.h" />
