@@ -11,6 +11,7 @@
 #include"../GameOverScene.h"
 #include"../GameModeScene.h"
 #include"../BossBattleScene.h"
+#include"../PracticeScene.h"
 
 
 //コンストラクタ
@@ -52,6 +53,7 @@ void SceneManager::Update()
 		case SCENE_ID_PLAY: Instantiate<PlayScene>(this); break;
 		case SCENE_ID_CLEAR: Instantiate<ClearScene>(this); break;
 		case SCENE_ID_GAMEOVER: Instantiate<GameOverScene>(this); break;
+		case SCENE_ID_PRACTICE: Instantiate<PracticeScene>(this); break;
 		}
 		Audio::Initialize();
 		currentSceneID_ = nextSceneID_;

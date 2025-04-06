@@ -22,6 +22,9 @@ void PracticeScene::Initialize()
 	Instantiate<Ground>(this);
 	Instantiate<Player>(this);
 	Instantiate<EnemyManager>(this);
+
+	EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
+	pEnemyManager->EnemyInitialize();
 }
 
 void PracticeScene::Update()

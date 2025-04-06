@@ -60,6 +60,10 @@ private:
 	Transform cameraTransform_;//カメラのTransform 回転だけ使う
 	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
 
+	//被弾(HIT)関係
+	XMFLOAT3 KnockBack_Direction_;//ノックバックする方向
+	XMFLOAT3 KnockBack_Velocity_;//ノックバックする速度
+
 	//ダメージ関係
 	int deadTimer_;//復活までの時間
 	int InvincibilityTime_;//ダメージ後の無敵時間
@@ -95,7 +99,13 @@ public:
 	/// </summary>
 	void CameraControl();
 
-	void CameraShake();
+	/// <summary>
+	/// 敵からはじかれる処理
+	/// </summary>
+	/// <param name="_vector">敵からノックバックする方向(正規化済)</param>
+	/// <param name="_IsAttack">敵が攻撃中か</param>
+
+	void EnemyReflect(XMVECTOR _vector, bool _IsAttack);
 
 	void SetStartPosition() { this->transform_.position_ = StartPosition; }
 };

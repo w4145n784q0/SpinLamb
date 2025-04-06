@@ -6,6 +6,10 @@
 #include"Engine/SphereCollider.h"
 #include"BossBattleScene.h"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_win32.h"
+
 namespace
 {
 	float speed = 6.0f;
@@ -110,6 +114,15 @@ void Enemy::Draw()
 {
 	Model::SetTransform(hEnemy_, transform_);
 	Model::Draw(hEnemy_);
+
+	if (ImGui::Button("EnemystateChange"))
+	{
+		if (EnemyState_ == S_AIM)
+			EnemyState_ = S_IDLE;
+		else if (EnemyState_ == S_IDLE)
+			EnemyState_ = S_AIM;
+
+	}
 }
 
 void Enemy::Release()
@@ -118,27 +131,27 @@ void Enemy::Release()
 
 void Enemy::UpdateIdle()
 {	
-	//自分(enemy)と相手(player)の距離をはかる(ベクトル)
-	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition_, pPositionVec_);
-	float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
+	////自分(enemy)と相手(player)の距離をはかる(ベクトル)
+	//XMVECTOR DistVec = XMVectorSubtract(EnemyPosition_, pPositionVec_);
+	//float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
 
-	XMVECTOR forward = RotateVecFront(this->transform_.rotate_.y,EnemyFrontDirection_);//自分の前方ベクトル(回転した分も含む)
-	DistVec = XMVector3Normalize(DistVec);//自分と相手の距離ベクトル 内積の計算用
-	XMVECTOR dot = XMVector3Dot(DistVec, forward);//相手とのベクトルと自分の前方ベクトルの内積をとる
-	float cosine = XMVectorGetX(dot);
+	//XMVECTOR forward = RotateVecFront(this->transform_.rotate_.y,EnemyFrontDirection_);//自分の前方ベクトル(回転した分も含む)
+	//DistVec = XMVector3Normalize(DistVec);//自分と相手の距離ベクトル 内積の計算用
+	//XMVECTOR dot = XMVector3Dot(DistVec, forward);//相手とのベクトルと自分の前方ベクトルの内積をとる
+	//float cosine = XMVectorGetX(dot);
 
-	if (cosine > cosf(Eye_) && Pointdist < FrontLength_) //距離は60度以内か相手との距離がFrontLengthより小さい
-	{
-		IsHit_ = true;
-	}
-	else {
-		IsHit_ = false;
-	}
-	
-	if (IsHit_)
-	{
-		EnemyState_ = S_CHASE;
-	}
+	//if (cosine > cosf(Eye_) && Pointdist < FrontLength_) //距離は60度以内か相手との距離がFrontLengthより小さい
+	//{
+	//	IsHit_ = true;
+	//}
+	//else {
+	//	IsHit_ = false;
+	//}
+	//
+	//if (IsHit_)
+	//{
+	//	EnemyState_ = S_CHASE;
+	//}
 }
 
 void Enemy::UpdateChase()

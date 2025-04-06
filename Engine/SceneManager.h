@@ -11,6 +11,7 @@ enum SCENE_ID
 	SCENE_ID_CLEAR,
 	SCENE_ID_GAMEOVER,
 	SCENE_ID_BOSSBATTLE,
+	SCENE_ID_PRACTICE
 };
 
 //-----------------------------------------------------------

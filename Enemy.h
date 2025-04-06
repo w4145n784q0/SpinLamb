@@ -39,7 +39,6 @@ private:
 	XMFLOAT3 ChasePoint_;
 
 	//ヒット関係
-
 	XMFLOAT3 KnockBack_Direction_;//ノックバックする方向
 	XMFLOAT3 KnockBack_Velocity_;//ノックバックする速度
 	//ノックバックする速度= ノックバックする強さ(定数) * ノックバックする方向
@@ -76,7 +75,7 @@ public:
 	void OnCollision(GameObject* pTarget) override;
 
 	/// <summary>
-	/// 
+	/// プレイヤーからはじかれる処理
 	/// </summary>
 	/// <param name="_vector">プレイヤーから渡されたノックバックする方向(正規化済)</param>
 	/// <param name="_isDush">プレイヤーがダッシュ中か</param>

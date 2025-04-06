@@ -25,6 +25,8 @@ namespace {
 	const float TreeCollision = 4.0f;
 	float PrevHeight = 0.0f;
 
+	const float KnockBackPower = 2.5f; //ノックバックする強さ
+
 	XMVECTOR PlayerFrontDirection = { 0,0,1 };//正面ベクトル ここからどれだけ回転したか
 	int deadTimerValue = 60;//復活時間
 	
@@ -120,9 +122,6 @@ void Player::Draw()
 	Model::SetTransform(hPlayer_, transform_);
 	Model::Draw(hPlayer_);
 
-	Transform t;
-	t.position_ = PlayerFront;
-
 	ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
 	ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
 	ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
@@ -145,31 +144,64 @@ void Player::OnCollision(GameObject* pTarget)
 		//敵のノックバック
 		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
 
-		//敵の位置-自機の位置を計算
-		XMFLOAT3 direction = pEnemy->GetPosition() - this->transform_.position_;
-
+		//敵の位置-自機の位置を計算（敵の反射）
 		//単位ベクトルにする
-		XMVECTOR v =  XMLoadFloat3(&direction);
-		XMVECTOR normalDirection = XMVector3Normalize(v);
+		XMFLOAT3 Enemydirection = pEnemy->GetPosition() - this->transform_.position_;
+		XMVECTOR EnemynormalDirection = XMVector3Normalize(XMLoadFloat3(&Enemydirection));
 
-		//敵のノックバック処理
-		pEnemy->PlayerReflect(normalDirection, IsDash_);
+		//自機の位置-敵の位置を計算（自機の反射）
+		//単位ベクトルにする
+		XMFLOAT3 Playerdirection = this->transform_.position_ - pEnemy->GetPosition();
+		XMVECTOR PlayernormalDirection = XMVector3Normalize(XMLoadFloat3(&Playerdirection));
 
-		Audio::Play(hCollisionSound_);
-
+		////敵のノックバック処理
+		//pEnemy->PlayerReflect(normalDirection, IsDash_);
 
 		//プレイヤーの衝突時処理
-		XMFLOAT3 f;
-		XMStoreFloat3(&f, normalDirection);
-		if (pEnemy->GetStateAttack())
+		//プレイヤー:通常 敵:通常 変化なし
+		//プレイヤー:通常 敵:攻撃 プレイヤーをはじく
+		//プレイヤー:ダッシュ 敵:攻撃 敵をはじく プレイヤーは方向ベクトル(敵の位置-自機の位置)に対し垂直方向に移動（正面からぶつかったらプレイヤーは停止
+		//プレイヤー:ダッシュ 敵:通常 敵を大きくはじく
+		//プレイヤーは方向ベクトル(敵の位置-自機の位置)に対し垂直方向に移動（正面からぶつかったらプレイヤーは停止
+
+		//XMFLOAT3 normal;
+		//XMStoreFloat3(&normal, normalDirection);
+
+		bool IsEnemyAttack = pEnemy->GetStateAttack();
+
+		if (IsEnemyAttack)//敵:攻撃
 		{
-			f.x *= -4.0;
-			f.z *= -4.0;
-			//PlayerState_ = S_HIT;
+			if (IsDash_)//プレイヤー:攻撃
+			{
+				//敵のノックバック処理
+				pEnemy->PlayerReflect(EnemynormalDirection, IsDash_);
+				EnemyReflect(PlayernormalDirection, IsEnemyAttack);
+				//PlayerState_ = S_HIT;
+			}
+			else//プレイヤー:通常
+			{
+				//PlayerState_ = S_HIT;
+				EnemyReflect(PlayernormalDirection, IsEnemyAttack);
+			}
+		}
+		else//敵:通常
+		{
+			if (IsDash_)//プレイヤー:攻撃
+			{
+				//敵のノックバック処理
+				pEnemy->PlayerReflect(EnemynormalDirection, IsDash_);
+			}
+			else//プレイヤー:通常
+			{
+				//変化なし
+			}
 		}
 
 		//カメラ振動
 		Camera::CameraShakeStart(0.15f);
+
+		//衝撃音
+		Audio::Play(hCollisionSound_);
 
 		Acceleration_ = 0;
 		IsDash_ = false;
@@ -279,9 +311,9 @@ void Player::UpdateIdle()
 	//自分の前方ベクトル(回転した分も含む)
 	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, PlayerFrontDirection);
 
-	XMFLOAT3 rot = { 0,0,0 };
-	XMStoreFloat3(&rot, ForwardVector_);
-	PlayerFront = { transform_.position_ + rot };
+	//XMFLOAT3 rot = { 0,0,0 };
+	//XMStoreFloat3(&rot, ForwardVector_);
+	//PlayerFront = { transform_.position_ + rot };
 
 	//--------------ダッシュ関係--------------
 	/*if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) 
@@ -369,21 +401,24 @@ void Player::UpdateIdle()
 
 void Player::UpdateHit()
 {
-	//
+	//速度を下げていく
+	KnockBack_Velocity_.x *= 0.9;
+	KnockBack_Velocity_.z *= 0.9;
+
+	//毎フレームpositionに方向を加算
+	//位置 = 位置 + 方向 * 速度
+	transform_.position_.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
+	transform_.position_.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
+
+	if (KnockBack_Velocity_.x <= 0.5f || KnockBack_Velocity_.z <= 0.5f)
+	{
+		PlayerState_ = S_IDLE;
+	}
 }
 
 void Player::UpdateCharge()
 {
-	if (Input::IsKey(DIK_LEFT))
-	{
-		this->transform_.rotate_.y -= 1;
-		cameraTransform_.rotate_.y -= 1;
-	}
-	if (Input::IsKey(DIK_RIGHT))
-	{
-		this->transform_.rotate_.y += 1;
-		cameraTransform_.rotate_.y += 1;
-	}
+
 }
 
 void Player::UpdateAttack()
@@ -464,7 +499,23 @@ void Player::CameraControl()
 	}
 }
 
-void Player::CameraShake()
+void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
 {
+	XMFLOAT3 f;
+	XMStoreFloat3(&f, _vector);
+	KnockBack_Direction_ = f;
 
+	if (_IsAttack)
+	{
+		KnockBack_Velocity_.x = KnockBackPower * 1.5;
+		KnockBack_Velocity_.z = KnockBackPower * 1.5;
+	}
+	else
+	{
+		KnockBack_Velocity_.x = KnockBackPower;
+		KnockBack_Velocity_.z = KnockBackPower;
+	}
+
+	PlayerState_ = S_HIT;
 }
+
