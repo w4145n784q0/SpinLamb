@@ -204,13 +204,12 @@ void Enemy::UpdateHit()
 		EnemyState_ = S_AIM;
 	}*/
 
-	//KnockBack_Direction_
-	
 	//速度を下げていく
 	KnockBack_Velocity_.x *= 0.9;
 	KnockBack_Velocity_.z *= 0.9;
 
-	//毎フレームpositionに速度を加算
+	//毎フレームpositionに方向を加算
+	//位置 = 位置 + 方向 * 速度
 	transform_.position_.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
 	transform_.position_.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
 

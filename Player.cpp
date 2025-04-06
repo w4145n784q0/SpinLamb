@@ -121,11 +121,11 @@ void Player::Draw()
 	/*Model::SetTransform(hLandingPoint_, t);
 	Model::Draw(hLandingPoint_);*/
 
-	/*ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
+	ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
 	ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
 	ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
 
-	ImGui::Text("IsOnGround:%.1f", IsOnGround_);*/
+	/*ImGui::Text("IsOnGround:%.1f", IsOnGround_);*/
 
 }
 
@@ -332,8 +332,8 @@ void Player::UpdateIdle()
 		}
 	}
 
-	if (transform_.position_.x > 30.0f || transform_.position_.x < -30.0f ||
-		transform_.position_.z > 30.0f || transform_.position_.z < -30.0f)
+	if (transform_.position_.x > 60.0f || transform_.position_.x < -60.0f ||
+		transform_.position_.z > 60.0f || transform_.position_.z < -60.0f)
 	{
 		IsOnGround_ = false;
 	}
@@ -395,8 +395,8 @@ void Player::UpdateOut()
 {
 	if (--deadTimer_ < 0)
 	{
-		BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
-		pBossBattleScene->DeadCountPlus();
+		//BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
+		//pBossBattleScene->DeadCountPlus();
 
 		deadTimer_ = deadTimerValue;
 		PlayerState_ = S_IDLE;
