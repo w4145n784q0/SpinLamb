@@ -64,6 +64,7 @@ void Player::Initialize()
 	assert(hCollisionSound_ >= 0);
 
 	SetStartPosition();
+	transform_.rotate_.y = 180.0f;
 
 	pGround_ = (Ground*)FindObject("Ground");
 	

@@ -41,6 +41,7 @@ void Enemy::Initialize()
 
 	transform_.position_ = { 0.0,0.5 ,5.0 };
 	transform_.scale_ = { 1.5,1.5,1.5 };
+	transform_.rotate_.y = 180.0;
 
 	//基準ベクトルをつくる　0,0,1
 	//EnemyFrontDirection = XMVector3TransformCoord(EnemyFrontDirection, GetWorldMatrix());  //getworldmatrixで変換
