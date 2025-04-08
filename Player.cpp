@@ -52,8 +52,12 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	hPlayer_ = Model::Load("Player.fbx"); 
+	//hPlayer_ = Model::Load("Player.fbx"); 
+	hPlayer_ = Model::Load("Head Hit (1).fbx");
 	assert(hPlayer_ >= 0);
+
+	//Model::SetAnimFrame(hPlayer_, 0, 60, 1.0f);
+
 	hLandingPoint_ = Model::Load("LandingPoint.fbx");
 	assert(hLandingPoint_ >= 0);
 	hCollisionSound_ = Audio::Load("maou_se_battle15.wav");
@@ -516,6 +520,7 @@ void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
 		KnockBack_Velocity_.z = KnockBackPower;
 	}
 
+	Model::SetAnimFrame(hPlayer_, 0, 60, 1.0f);
 	PlayerState_ = S_HIT;
 }
 

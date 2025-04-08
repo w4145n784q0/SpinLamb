@@ -90,15 +90,36 @@ void FbxParts::InitVertex(fbxsdk::FbxMesh * mesh)
 			pVertexData_[index].normal = XMFLOAT3((float)Normal[0], (float)Normal[1], (float)Normal[2]);
 
 			///////////////////////////頂点のＵＶ/////////////////////////////////////
+			/*
 			FbxLayerElementUV * pUV = mesh->GetLayer(0)->GetUVs();
 			int uvIndex = mesh->GetTextureUVIndex(poly, vertex, FbxLayerElement::eTextureDiffuse);
 			FbxVector2  uv = pUV->GetDirectArray().GetAt(uvIndex);
 			pVertexData_[index].uv = XMFLOAT3((float)uv.mData[0], (float)(1.0f - uv.mData[1]), 0.0f);
+			*/
+		
+			FbxLayerElementUV* pUV = mesh->GetLayer(0)->GetUVs();
+
+			if (pUV->GetReferenceMode() == FbxLayerElement::eIndexToDirect) {
+				int uvIndex = mesh->GetTextureUVIndex(poly, vertex, FbxLayerElement::eTextureDiffuse);
+				FbxVector2  uv = pUV->GetDirectArray().GetAt(uvIndex);
+				pVertexData_[index].uv = { (float)uv.mData[0], (float)(1.0 - uv.mData[1]), 0.0f };
+			}
+			else if (pUV->GetReferenceMode() == FbxLayerElement::eDirect) {
+				FbxVector2 vUV;
+				bool res = true;
+				FbxStringList sUVSetNames;
+				mesh->GetUVSetNames(sUVSetNames);
+				FbxString sUVSetName = sUVSetNames.GetStringAt(0);
+				mesh->GetPolygonVertexUV(poly, vertex, sUVSetName, vUV, res);
+				int uvIndex = mesh->GetTextureUVIndex(poly, vertex, FbxLayerElement::eTextureDiffuse);
+				pVertexData_[index].uv = { (float)vUV[0], (float)(1.0 - vUV[1]), 0.0f };
+			}
 		}
 	}
 
 
 	///////////////////////////頂点のＵＶ/////////////////////////////////////
+	/*
 	int m_dwNumUV = mesh->GetTextureUVCount();
 	FbxLayerElementUV * pUV = mesh->GetLayer(0)->GetUVs();
 	if (m_dwNumUV > 0 && pUV->GetMappingMode() == FbxLayerElement::eByControlPoint)
@@ -109,6 +130,7 @@ void FbxParts::InitVertex(fbxsdk::FbxMesh * mesh)
 			pVertexData_[k].uv = XMFLOAT3((float)uv.mData[0], (float)(1.0f - uv.mData[1]), 0.0f);
 		}
 	}
+	*/
 
 
 	// 頂点データ用バッファの設定
