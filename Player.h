@@ -12,8 +12,13 @@ class Player :
 private:
 	//モデルハンドル
 	int hPlayer_;
-	int hLandingPoint_;
-	int hNextPoint_;
+
+	int hPlayerIdle_;//待機モーション
+	int hPlayerMove_;//移動
+	int hPlayerDash_;//ダッシュ
+	int hPlayerHit_;//攻撃を食らった
+	int hPlayerDead_;//倒れる
+
 
 	//音ハンドル
 	int hCollisionSound_;

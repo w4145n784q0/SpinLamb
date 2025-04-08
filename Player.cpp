@@ -33,7 +33,7 @@ namespace {
 }
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hPlayer_(-1), hLandingPoint_(-1), IsOnGround_(true), IsDash_(false),
+	:GameObject(parent, "Player"), hPlayer_(-1), IsOnGround_(true), IsDash_(false),
 	JumpSpeed_(0.0f),
 	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),BackCamera_(BackCameraPos),
 	PlayerState_(S_IDLE), CanMove_(true),PlayerHeight_(0),
@@ -58,8 +58,6 @@ void Player::Initialize()
 
 	//Model::SetAnimFrame(hPlayer_, 0, 60, 1.0f);
 
-	hLandingPoint_ = Model::Load("LandingPoint.fbx");
-	assert(hLandingPoint_ >= 0);
 	hCollisionSound_ = Audio::Load("maou_se_battle15.wav");
 	assert(hCollisionSound_ >= 0);
 
@@ -252,11 +250,11 @@ void Player::UpdateIdle()
 	//------------------キーボード入力の移動------------------//
 	if (Input::IsKey(DIK_UP))
 	{
-		Direction_.z = 1.0;
+		Direction_.z = -1.0;
 	}
 	if (Input::IsKey(DIK_DOWN))
 	{
-		Direction_.z = -1.0;
+		Direction_.z = 1.0;
 	}
 	if (Input::IsKey(DIK_LEFT))
 	{
@@ -274,19 +272,19 @@ void Player::UpdateIdle()
 	//前方だけに移動
 	if (Input::GetPadStickL().y >= 0.5 /*&& Input::GetPadStickL().x <= 0.5 && Input::GetPadStickL().x >= -0.5*/)
 	{
-		Direction_.z = 1.0;
+		Direction_.z = -1.0;
 	}
 
 	//後方だけに移動
 	if (Input::GetPadStickL().y <= -0.5 /*&& Input::GetPadStickL().x >= 0.5 && Input::GetPadStickL().x <= -0.5*/)
 	{
-		Direction_.z = -1.0;
+		Direction_.z = 1.0;
 	}
 
 	//前進&左回転
 	if (Input::GetPadStickL().y >= 0.5 && Input::GetPadStickL().x <= -0.25)
 	{
-		Direction_.z = 1.0;
+		Direction_.z = -1.0;
 		this->transform_.rotate_.y -= 1;
 		cameraTransform_.rotate_.y -= 1;
 	}
@@ -294,7 +292,7 @@ void Player::UpdateIdle()
 	//前進&右回転
 	if (Input::GetPadStickL().y >= 0.5 && Input::GetPadStickL().x >= 0.25)
 	{
-		Direction_.z = 1.0;
+		Direction_.z = -1.0;
 		this->transform_.rotate_.y += 1;
 		cameraTransform_.rotate_.y += 1;
 	}

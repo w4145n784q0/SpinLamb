@@ -3,6 +3,8 @@
 #include"Engine/SphereCollider.h"
 #include"Engine/GameObject.h"
 
+#include"Engine/VFX.h"
+
 namespace {
 	Point MovePoint[] = { {0,0},{15,15},{-15,15},{15,-15},{-15,-15} };
 }
@@ -19,16 +21,19 @@ Ground::~Ground()
 
 void Ground::Initialize()
 {
-	hGrass_ = Model::Load("GrassField_x60.fbx");
+	hGrass_ = Model::Load("GrassField.fbx");
 	assert(hGrass_ >= 0);
 
 	transform_.position_ = { 0,-0.5,0 };
-	transform_.scale_.x = 2.0f;
-	transform_.scale_.z = 2.0f;
+	//transform_.scale_.x = 2.0f;
+	//transform_.scale_.z = 2.0f;
 }
 
 void Ground::Update()
 {
+	//EmitterData  data;
+
+	//VFX::Start(data);
 }
 
 void Ground::Draw()
