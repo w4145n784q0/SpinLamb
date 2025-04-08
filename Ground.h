@@ -10,6 +10,7 @@ class Ground :
     public GameObject
 {
 	int hGrass_;
+	int hWall_;
 
 	///// <summary>
 	///// csv‚Ìƒf[ƒ^‚ğ•ÛŠÇ

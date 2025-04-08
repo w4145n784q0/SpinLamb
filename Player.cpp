@@ -380,7 +380,7 @@ void Player::UpdateIdle()
 	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
 	this->transform_.position_.y += JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
 
-	if (this->transform_.position_.y <= 0.5f && IsOnGround_)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	if (this->transform_.position_.y <= 0.5f)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
 	{
 		this->transform_.position_.y = 0.5f;
 	}
