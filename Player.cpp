@@ -53,7 +53,7 @@ Player::~Player()
 void Player::Initialize()
 {
 	//hPlayer_ = Model::Load("Player.fbx"); 
-	hPlayer_ = Model::Load("Head Hit (1).fbx");
+	hPlayer_ = Model::Load("Hit Reaction.fbx");
 	assert(hPlayer_ >= 0);
 
 	//Model::SetAnimFrame(hPlayer_, 0, 60, 1.0f);
@@ -235,7 +235,7 @@ void Player::Dash()
 		else
 		{
 			Acceleration_ -= 2;
-			Direction_.z = 1.0;
+			Direction_.z = -1.0;
 			if (Acceleration_ <= 0)
 			{
 				IsDash_ = false;
@@ -373,6 +373,7 @@ void Player::UpdateIdle()
 	if (transform_.position_.x > 60.0f || transform_.position_.x < -60.0f ||
 		transform_.position_.z > 60.0f || transform_.position_.z < -60.0f)
 	{
+		Model::SetAnimFrame(hPlayer_, 0, 600, 1.0);
 		PlayerState_ = S_WALLHIT;
 	}
 	
@@ -498,7 +499,7 @@ void Player::CameraControl()
 	{
 		cameraTransform_.rotate_.y = 0;
 		cameraTransform_.rotate_.x = 0;
-		this->transform_.rotate_.y = 0;
+		this->transform_.rotate_.y = 180;
 	}
 }
 
@@ -519,7 +520,7 @@ void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
 		KnockBack_Velocity_.z = KnockBackPower;
 	}
 
-	Model::SetAnimFrame(hPlayer_, 0, 60, 1.0f);
+	//Model::SetAnimFrame(hPlayer_, 0, 60, 1.0f);
 	PlayerState_ = S_HIT;
 }
 

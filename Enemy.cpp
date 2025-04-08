@@ -36,12 +36,12 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 
-	hEnemy_ = Model::Load("Enemy.fbx");
+	hEnemy_ = Model::Load("Head Hit (1).fbx");
 	assert(hEnemy_ >= 0);
 
 	transform_.position_ = { 0.0,0.5 ,5.0 };
 	transform_.scale_ = { 1.5,1.5,1.5 };
-	transform_.rotate_.y = 180.0;
+	//transform_.rotate_.y = 180.0;
 
 	//基準ベクトルをつくる　0,0,1
 	//EnemyFrontDirection = XMVector3TransformCoord(EnemyFrontDirection, GetWorldMatrix());  //getworldmatrixで変換
