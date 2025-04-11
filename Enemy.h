@@ -21,7 +21,9 @@ private:
 		S_CHASE,//追いかける
 		S_ATTACK,//攻撃
 		S_HIT,//攻撃を食らった
+		S_WALLHIT,//壁に当たりダメージ
 		S_AIM,//プレイヤーを狙う
+
 		S_MAX
 	};
 	State EnemyState_;
@@ -54,6 +56,11 @@ private:
 	XMVECTOR AttackVector_;//攻撃方向
 	float Acceleration_;//加速度
 
+	//ダメージ関係
+	int deadTimer_;//復活までの時間
+	int InvincibilityTime_;//ダメージ後の無敵時間
+	bool IsInvincibility_;//無敵時間か
+
 	//タイマー
 	int MoveTimer_;
 	int AimTimer_;
@@ -66,11 +73,13 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
-	void UpdateIdle();
+	void UpdateIdle();//待機(デバッグ用)
 	void UpdateChase();
-	void UpdateHit();
-	void UpdateAim();
-	void UpdateAttack();
+	void UpdateHit();//攻撃を喰らった
+	void UpdateWallHit();//壁に接触
+	void UpdateAim();//プレイヤーを狙っている
+	//void UpdateRandomAim();
+	void UpdateAttack();//攻撃
 
 	void OnCollision(GameObject* pTarget) override;
 

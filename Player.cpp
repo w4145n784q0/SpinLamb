@@ -28,8 +28,8 @@ namespace {
 	const float KnockBackPower = 2.5f; //ノックバックする強さ
 
 	XMVECTOR PlayerFrontDirection = { 0,0,1 };//正面ベクトル ここからどれだけ回転したか
-	int deadTimerValue = 60;//復活時間
-	
+	const int deadTimerValue = 60;//復活までの時間
+	const int Invincibility = 120;//無敵時間の定数
 }
 
 Player::Player(GameObject* parent)
@@ -37,7 +37,7 @@ Player::Player(GameObject* parent)
 	JumpSpeed_(0.0f),
 	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),BackCamera_(BackCameraPos),
 	PlayerState_(S_IDLE), CanMove_(true),PlayerHeight_(0),
-	deadTimer_(deadTimerValue)
+	deadTimer_(deadTimerValue),InvincibilityTime_(Invincibility),IsInvincibility_(false)
 {
 	cameraTransform_ = this->transform_;
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -91,9 +91,9 @@ void Player::Update()
 	case Player::S_ATTACK:
 		UpdateAttack();
 		break;
-	case Player::S_OUT:
+	/*case Player::S_OUT:
 		UpdateOut();
-		break;
+		break;*/
 	case Player::S_WALLHIT:
 		UpdateWallHit();
 		break;
@@ -132,7 +132,7 @@ void Player::Draw()
 	//ImGui::Text("camera y :%.3f", CameraPosition_.y);
 	//ImGui::Text("camera x :%.3f", CameraPosition_.x);
 
-	/*ImGui::Text("IsOnGround:%.1f", IsOnGround_);*/
+	//ImGui::Text("mutekijkan:%.3f", (float)InvincibilityTime_);
 
 }
 
@@ -247,6 +247,16 @@ void Player::Dash()
 
 void Player::UpdateIdle()
 {
+	//無敵時間の計算
+	if (IsInvincibility_)
+	{
+		if (--InvincibilityTime_ < 0)
+		{
+			InvincibilityTime_ = Invincibility;
+			IsInvincibility_ = false;
+		}
+	}
+
 	//------------------キーボード入力の移動------------------//
 	if (Input::IsKey(DIK_UP))
 	{
@@ -370,11 +380,14 @@ void Player::UpdateIdle()
 		}
 	}
 
-	if (transform_.position_.x > 60.0f || transform_.position_.x < -60.0f ||
-		transform_.position_.z > 60.0f || transform_.position_.z < -60.0f)
+	if(!IsInvincibility_)
 	{
-		Model::SetAnimFrame(hPlayer_, 0, 600, 1.0);
-		PlayerState_ = S_WALLHIT;
+		if (transform_.position_.x > 60.0f || transform_.position_.x < -60.0f ||
+			transform_.position_.z > 60.0f || transform_.position_.z < -60.0f)
+		{
+			Model::SetAnimFrame(hPlayer_, 0, 600, 1.0);
+			PlayerState_ = S_WALLHIT;
+		}
 	}
 	
 
@@ -384,6 +397,7 @@ void Player::UpdateIdle()
 	if (this->transform_.position_.y <= 0.5f)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
 	{
 		this->transform_.position_.y = 0.5f;
+		IsOnGround_ = true;
 	}
 	if (this->transform_.position_.y < -500) 
 	{
@@ -452,7 +466,8 @@ void Player::UpdateWallHit()
 
 		deadTimer_ = deadTimerValue;
 		PlayerState_ = S_IDLE;
-		SetStartPosition();
+		IsInvincibility_ = true;
+		//SetStartPosition();
 	}
 }
 

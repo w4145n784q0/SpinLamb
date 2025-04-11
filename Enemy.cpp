@@ -20,11 +20,15 @@ namespace
 	const float KnockBackPower = 2.0f; //ノックバックする強さ
 	const float mu = 0.8; //摩擦係数
 
+	const int deadTimerValue = 60;//復活までの時間
+	const int Invincibility = 120;//無敵時間の定数
+
 }
 
 Enemy::Enemy(GameObject* parent)
 	:GameObject(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr), IsHit_(false), FrontLength_(EyeLength),
-	Eye_(XMConvertToRadians(EyeAngle)), EnemyFrontDirection_({ 0,0,1 }), isStop_(true), MoveTimer_(0), IsOnGround_(true)
+	Eye_(XMConvertToRadians(EyeAngle)), EnemyFrontDirection_({ 0,0,1 }), isStop_(true), MoveTimer_(0), IsOnGround_(true),
+	deadTimer_(deadTimerValue),IsInvincibility_(false),InvincibilityTime_(Invincibility)
 {
 	transform_.position_ = { 0,0,0 };
 }
@@ -36,7 +40,7 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 
-	hEnemy_ = Model::Load("Head Hit (1).fbx");
+	hEnemy_ = Model::Load("Hit Reaction.fbx");
 	assert(hEnemy_ >= 0);
 
 	transform_.position_ = { 0.0,0.5 ,5.0 };
@@ -76,6 +80,9 @@ void Enemy::Update()
 	case Enemy::S_HIT:
 		UpdateHit();
 		break;
+	case Enemy::S_WALLHIT:
+		UpdateWallHit();
+		break;
 	case Enemy::S_AIM:
 		UpdateAim();
 		break;
@@ -85,15 +92,25 @@ void Enemy::Update()
 		break;
 	}
 
-	/*if (transform_.position_.x > 30.0f || transform_.position_.x < -30.0f ||
-		transform_.position_.z > 30.0f || transform_.position_.z < -30.0f)
+	if (!IsInvincibility_ && !(EnemyState_ == S_WALLHIT))//壁ダメージ判定
 	{
-		IsOnGround_ = false;
+		if (transform_.position_.x > 60.0f || transform_.position_.x < -60.0f ||
+			transform_.position_.z > 60.0f || transform_.position_.z < -60.0f)
+		{
+			Model::SetAnimFrame(hEnemy_, 0, 600, 1.0);
+			EnemyState_ = S_WALLHIT;
+		}
 	}
-	else
+
+	//無敵時間の計算
+	if (IsInvincibility_)
 	{
-		IsOnGround_ = true;
-	}*/
+		if (--InvincibilityTime_ < 0)
+		{
+			InvincibilityTime_ = Invincibility;
+			IsInvincibility_ = false;
+		}
+	}
 
 	JumpSpeed_ -= Enemy_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
 	this->transform_.position_.y += JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
@@ -124,6 +141,8 @@ void Enemy::Draw()
 			EnemyState_ = S_AIM;
 
 	}
+
+	ImGui::Text("E:mutekijkan:%.3f", (float)InvincibilityTime_);
 }
 
 void Enemy::Release()
@@ -222,6 +241,17 @@ void Enemy::UpdateHit()
 		EnemyState_ = S_AIM;
 	}
 
+}
+
+void Enemy::UpdateWallHit()
+{
+	if (--deadTimer_ < 0)
+	{
+		deadTimer_ = deadTimerValue;
+		EnemyState_ = S_AIM;
+		IsInvincibility_ = true;
+		this->transform_.position_ = { 0,0,0 };
+	}
 }
 
 void Enemy::UpdateAim()
