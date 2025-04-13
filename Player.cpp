@@ -19,7 +19,7 @@ namespace {
 	const float speed = 9.0f;
 	const float Player_Gravity = 0.08f; //0.16333f
 	const float DeltaTime = 0.016f;
-	const float FullAccelerate = 60.0f;
+	const float FullAccelerate = 120.0f;//
 	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 	
 	const float TreeCollision = 4.0f;
@@ -132,7 +132,7 @@ void Player::Draw()
 	//ImGui::Text("camera y :%.3f", CameraPosition_.y);
 	//ImGui::Text("camera x :%.3f", CameraPosition_.x);
 
-	//ImGui::Text("mutekijkan:%.3f", (float)InvincibilityTime_);
+	ImGui::Text("dash:%.3f", Acceleration_);
 
 }
 
@@ -174,10 +174,10 @@ void Player::OnCollision(GameObject* pTarget)
 
 		if (IsEnemyAttack)//敵:攻撃
 		{
-			if (IsDash_)//プレイヤー:攻撃
+			if (IsAttackState())//プレイヤー:攻撃
 			{
 				//敵のノックバック処理
-				pEnemy->PlayerReflect(EnemynormalDirection, IsDash_);
+				pEnemy->PlayerReflect(EnemynormalDirection, true);
 				EnemyReflect(PlayernormalDirection, IsEnemyAttack);
 				//PlayerState_ = S_HIT;
 			}
@@ -189,10 +189,10 @@ void Player::OnCollision(GameObject* pTarget)
 		}
 		else//敵:通常
 		{
-			if (IsDash_)//プレイヤー:攻撃
+			if (IsAttackState())//プレイヤー:攻撃
 			{
 				//敵のノックバック処理
-				pEnemy->PlayerReflect(EnemynormalDirection, IsDash_);
+				pEnemy->PlayerReflect(EnemynormalDirection,true);
 			}
 			else//プレイヤー:通常
 			{
@@ -201,7 +201,7 @@ void Player::OnCollision(GameObject* pTarget)
 		}
 
 		//カメラ振動
-		Camera::CameraShakeStart(0.15f);
+		Camera::CameraShakeStart(0.3f);
 
 		//衝撃音
 		Audio::Play(hCollisionSound_);
@@ -338,15 +338,24 @@ void Player::UpdateIdle()
 	{
 		IsDash_ = false;
 	}*/
-	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
+	/*if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
 	{
 		if(IsOnGround_)
 		{
 			IsDash_ = true;
 		}
+	}*/
+
+	//Dash();
+
+	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) || Input::IsPadButton(XINPUT_GAMEPAD_B))
+	{
+		if (IsOnGround_)
+		{
+			PlayerState_ = S_CHARGE;
+		}
 	}
 
-	Dash();
 
 	//プレイヤーのy回転をラジアン化して行列に
 	XMMATRIX playerRot = XMMatrixRotationY(XMConvertToRadians(this->transform_.rotate_.y));
@@ -436,12 +445,79 @@ void Player::UpdateHit()
 
 void Player::UpdateCharge()
 {
+	if (Input::IsKey(DIK_LEFT))
+	{
+		this->transform_.rotate_.y -= 1;
+		cameraTransform_.rotate_.y -= 1;
+	}
+	if (Input::IsKey(DIK_RIGHT))
+	{
+		this->transform_.rotate_.y += 1;
+		cameraTransform_.rotate_.y += 1;
+	}
+
+	//左回転だけ
+	if (Input::GetPadStickL().x <= -0.8 && Input::GetPadStickL().y <= 0.8)
+	{
+		this->transform_.rotate_.y -= 1;
+		cameraTransform_.rotate_.y -= 1;
+	}
+	//右回転だけ
+	if (Input::GetPadStickL().x >= 0.8 && Input::GetPadStickL().y <= 0.8)
+	{
+		this->transform_.rotate_.y += 1;
+		cameraTransform_.rotate_.y += 1;
+	}
+
+	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) || Input::IsPadButton(XINPUT_GAMEPAD_B))
+	{
+		IsCharging_ = true;
+		if (Acceleration_ < FullAccelerate)
+		{
+			Acceleration_ += 2.0f;
+		}
+
+	}
+	else
+	{
+		if (IsCharging_)//チャージ解除
+		{
+			PlayerState_ = S_ATTACK;
+		}
+	}
 
 }
 
 void Player::UpdateAttack()
 {
+	Acceleration_ -= 2.0f;
+	Direction_.z = -1.0;
+	if (Acceleration_ <= 0)
+	{
+		Acceleration_ = 0.0f;
+		PlayerState_ = S_IDLE;
+	}
 
+	//プレイヤーのy回転をラジアン化して行列に
+	XMMATRIX playerRot = XMMatrixRotationY(XMConvertToRadians(this->transform_.rotate_.y));
+
+	//プレイヤーの進行方向をベクトル化
+	XMVECTOR PrevDir = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
+
+	//方向ベクトルを回転行列で変換
+	PrevDir = XMVector3TransformCoord(PrevDir, playerRot);
+
+	//単位ベクトル化する
+	XMVECTOR norm = XMVector3Normalize(PrevDir);
+
+	//移動ベクトル化する
+	XMVECTOR MoveVector = XMVectorScale(norm, (speed + Acceleration_) * DeltaTime);
+
+	//現在位置と移動ベクトルを加算
+	XMVECTOR PrevPos = PlayerPosition_;
+	NewPos_ = PrevPos + MoveVector;
+
+	XMStoreFloat3(&this->transform_.position_, NewPos_);
 }
 
 void Player::UpdateOut()

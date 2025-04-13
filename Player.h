@@ -49,6 +49,8 @@ private:
 	bool IsDash_; //ダッシュ中か
 	bool IsDashStart_ = false;//ダッシュ開始したか
 	float Acceleration_;//加速度
+
+	bool IsCharging_;
 	
 	//移動関係
 	bool CanMove_;//移動できるか
@@ -113,5 +115,7 @@ public:
 	void EnemyReflect(XMVECTOR _vector, bool _IsAttack);
 
 	void SetStartPosition() { this->transform_.position_ = StartPosition; }
+
+	bool IsAttackState() { if (PlayerState_ == S_ATTACK) return true; else return false; }
 };
 
