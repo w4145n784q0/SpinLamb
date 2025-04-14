@@ -33,7 +33,7 @@ struct EmitterData
 	//èâä˙âª
 	EmitterData()
 	{
-		textureFileName = "PaticleAssets\\vortex.png";
+		textureFileName = "PaticleAssets\\circle_R.png";
 		position = positionRnd = directionRnd = rotate = rotateRnd = spin = XMFLOAT3(0, 0, 0);
 		direction = XMFLOAT3(0, 1, 0);
 		speed = 0.1f;

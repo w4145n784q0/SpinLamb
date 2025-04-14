@@ -23,6 +23,9 @@ private:
 	//音ハンドル
 	int hCollisionSound_;
 
+	//VFXハンドル
+	int hPlayerEmit_;
+
 	//インスタンス関係
 	Ground* pGround_;
 

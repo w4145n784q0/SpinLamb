@@ -33,10 +33,13 @@ namespace Camera
 	//ビルボード用回転行列を取得
 	XMMATRIX GetBillboardMatrix();
 
-	//カメラ振動
+	//カメラ振動(Y座標のみ)
 	float CameraShake();
+
+	//カメラ振動(XY座標)
 	XMFLOAT3 CameraShakeFloat3();
 
 	//振動開始
+	//_shaketime 振動させる時間
 	void CameraShakeStart(float _shaketime);
 };

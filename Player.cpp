@@ -4,6 +4,7 @@
 #include"Engine/Audio.h"
 #include"Engine/Camera.h"
 #include"Engine/SphereCollider.h"
+#include"Engine/VFX.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
@@ -125,6 +126,7 @@ void Player::Draw()
 	Model::SetTransform(hPlayer_, transform_);
 	Model::Draw(hPlayer_);
 
+#ifdef _DEBUG
 	ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
 	ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
 	ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
@@ -133,6 +135,7 @@ void Player::Draw()
 	//ImGui::Text("camera x :%.3f", CameraPosition_.x);
 
 	ImGui::Text("dash:%.3f", Acceleration_);
+#endif
 
 }
 
@@ -352,6 +355,12 @@ void Player::UpdateIdle()
 	{
 		if (IsOnGround_)
 		{
+			EmitterData  data;
+			data.position = transform_.position_;
+			data.positionRnd = { 1,1,1 };
+			data.number = (DWORD)3;
+			data.direction = { 0,1,0 };
+			hPlayerEmit_ = VFX::Start(data);
 			PlayerState_ = S_CHARGE;
 		}
 	}
@@ -476,7 +485,6 @@ void Player::UpdateCharge()
 		{
 			Acceleration_ += 2.0f;
 		}
-
 	}
 	else
 	{
@@ -486,6 +494,7 @@ void Player::UpdateCharge()
 		}
 	}
 
+	CameraControl();
 }
 
 void Player::UpdateAttack()
@@ -495,6 +504,7 @@ void Player::UpdateAttack()
 	if (Acceleration_ <= 0)
 	{
 		Acceleration_ = 0.0f;
+		VFX::End(hPlayerEmit_);
 		PlayerState_ = S_IDLE;
 	}
 
