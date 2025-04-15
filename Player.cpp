@@ -37,10 +37,10 @@ namespace {
 }
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hPlayer_(-1), IsOnGround_(true), IsDash_(false),
+	:GameObject(parent, "Player"), hPlayer_(-1), IsOnGround_(true),
 	JumpSpeed_(0.0f),
 	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),BackCamera_(BackCameraPos),
-	PlayerState_(S_IDLE), CanMove_(true),PlayerHeight_(0),
+	PlayerState_(S_IDLE),CameraState_(S_NORMALCAMERA), PlayerHeight_(0),IsCharging_(false),
 	deadTimer_(deadTimerValue),InvincibilityTime_(Invincibility),IsInvincibility_(false)
 {
 	cameraTransform_ = this->transform_;
@@ -192,6 +192,8 @@ void Player::OnCollision(GameObject* pTarget)
 				//PlayerState_ = S_HIT;
 				EnemyReflect(PlayernormalDirection, IsEnemyAttack);
 			}
+			//ヒットエフェクト
+			SetHitEffect();
 		}
 		else//敵:通常
 		{
@@ -199,6 +201,8 @@ void Player::OnCollision(GameObject* pTarget)
 			{
 				//敵のノックバック処理
 				pEnemy->PlayerReflect(EnemynormalDirection,true);
+				//ヒットエフェクト
+				SetHitEffect();
 			}
 			else//プレイヤー:通常
 			{
@@ -211,22 +215,6 @@ void Player::OnCollision(GameObject* pTarget)
 
 		//衝撃音
 		Audio::Play(hCollisionSound_);
-
-		//ヒットエフェクト
-		EmitterData  data;
-		data.textureFileName = "PaticleAssets\\flashB_W.png";
-		data.position = this->transform_.position_;
-		data.position.y = this->transform_.position_.y + 1.0f;
-		data.direction = { 1,1,0 };
-		data.directionRnd = { 360,360,0 };
-		data.number = (DWORD)10;
-		data.delay = 5;
-		data.lifeTime = 10;
-
-
-		hHitEmit_ = VFX::Start(data);
-		HitEffectCount = 5;
-		IsHitEffect = true;
 
 		Acceleration_ = 0;
 	}
@@ -344,40 +332,13 @@ void Player::UpdateIdle()
 	//自分の前方ベクトル(回転した分も含む)
 	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, PlayerFrontDirection);
 
-	//XMFLOAT3 rot = { 0,0,0 };
-	//XMStoreFloat3(&rot, ForwardVector_);
-	//PlayerFront = { transform_.position_ + rot };
-
 	//--------------ダッシュ関係--------------
-	/*if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) 
-		|| Input::IsPadButton(XINPUT_GAMEPAD_LEFT_SHOULDER) || Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER))
-	{
-		IsDash_ = true;
-	}
-	else
-	{
-		IsDash_ = false;
-	}*/
-	/*if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
-	{
-		if(IsOnGround_)
-		{
-			IsDash_ = true;
-		}
-	}*/
-
-	//Dash();
 
 	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) || Input::IsPadButton(XINPUT_GAMEPAD_B))
 	{
 		if (IsOnGround_)
 		{
-			EmitterData  data;
-			data.position = transform_.position_;
-			data.positionRnd = { 1,1,1 };
-			data.number = (DWORD)3;
-			data.direction = { 0,1,0 };
-			hChargeEmit_ = VFX::Start(data);
+			SetChargeEffect();
 			PlayerState_ = S_CHARGE;
 		}
 	}
@@ -462,6 +423,7 @@ void Player::UpdateHit()
 	//位置 = 位置 + 方向 * 速度
 	transform_.position_.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
 	transform_.position_.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
+	cameraTransform_.position_ = transform_.position_;
 
 	if (KnockBack_Velocity_.x <= 0.5f || KnockBack_Velocity_.z <= 0.5f)
 	{
@@ -508,6 +470,7 @@ void Player::UpdateCharge()
 		if (IsCharging_)//チャージ解除
 		{
 			VFX::End(hChargeEmit_);
+			IsCharging_ = false;
 			PlayerState_ = S_ATTACK;
 		}
 	}
@@ -581,44 +544,66 @@ void Player::UpdateDead()
 
 void Player::CameraControl()
 {
-	if (Input::IsKey(DIK_A) || Input::GetPadStickR().x <= -0.7)
+	if (Input::IsKeyDown(DIK_Q))
 	{
-		cameraTransform_.rotate_.y -= 2.5;
-	}
-	if (Input::IsKey(DIK_D) || Input::GetPadStickR().x >= 0.7)
-	{
-		cameraTransform_.rotate_.y += 2.5;
-	}
-
-	if (Input::IsKey(DIK_W) || Input::GetPadStickR().y <= -0.7)
-	{
-		if(cameraTransform_.rotate_.x >= 60.0f)
+		if (CameraState_ == S_NORMALCAMERA)
 		{
-			cameraTransform_.rotate_.x = 60.0f;
+			CameraState_ = S_DEBUGCAMERA;
 		}
-		else
+		else if (CameraState_ == S_DEBUGCAMERA)
 		{
-			cameraTransform_.rotate_.x += 2.5;
-		}
-	}
-	if (Input::IsKey(DIK_S) || Input::GetPadStickR().y >= 0.7)
-	{
-		if (cameraTransform_.rotate_.x <= -10.0f)
-		{
-			cameraTransform_.rotate_.x = -10.0f;
-		}
-		else
-		{
-			cameraTransform_.rotate_.x -= 2.5;
+			CameraState_ = S_NORMALCAMERA;
+			cameraTransform_.rotate_.x = 0.0f;
 		}
 	}
 
-	if (Input::IsKey(DIK_Z) || Input::IsPadButton(XINPUT_GAMEPAD_Y))//カメラを正面に戻す（方向に変化なし）
+	if(CameraState_ == S_NORMALCAMERA)
 	{
-		cameraTransform_.rotate_.y = 0;
-		cameraTransform_.rotate_.x = 0;
-		this->transform_.rotate_.y = 180;
+
+		if (Input::IsKey(DIK_A) || Input::GetPadStickR().x <= -0.7)	//カメラ左右移動
+		{
+			cameraTransform_.rotate_.y -= 2.5;
+		}
+		if (Input::IsKey(DIK_D) || Input::GetPadStickR().x >= 0.7)
+		{
+			cameraTransform_.rotate_.y += 2.5;
+		}
+
+		if (Input::IsKey(DIK_W) || Input::GetPadStickR().y <= -0.7)	//カメラ上下移動
+		{
+			if (cameraTransform_.rotate_.x >= 60.0f)
+			{
+				cameraTransform_.rotate_.x = 60.0f;
+			}
+			else
+			{
+				cameraTransform_.rotate_.x += 2.5;
+			}
+		}
+		if (Input::IsKey(DIK_S) || Input::GetPadStickR().y >= 0.7)
+		{
+			if (cameraTransform_.rotate_.x <= -10.0f)
+			{
+				cameraTransform_.rotate_.x = -10.0f;
+			}
+			else
+			{
+				cameraTransform_.rotate_.x -= 2.5;
+			}
+		}
+
+		if (Input::IsKey(DIK_Z) || Input::IsPadButton(XINPUT_GAMEPAD_Y))//カメラを正面に戻す（方向に変化なし）
+		{
+			cameraTransform_.rotate_.y = 0;
+			cameraTransform_.rotate_.x = 0;
+			this->transform_.rotate_.y = 180;
+		}
 	}
+	else if (CameraState_ == S_DEBUGCAMERA)
+	{
+		cameraTransform_.rotate_.x = 90.0f;
+	}
+	
 }
 
 void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
@@ -641,10 +626,39 @@ void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
 	//Model::SetAnimFrame(hPlayer_, 0, 60, 1.0f);
 	if (PlayerState_ == S_CHARGE)
 	{
+		IsCharging_ = false;
 		VFX::End(hChargeEmit_);
 	}
 
+	IsCharging_ = false;
+	VFX::End(hChargeEmit_);
 	PlayerState_ = S_HIT;
+}
+
+void Player::SetChargeEffect()
+{
+	EmitterData  data;
+	data.position = this->transform_.position_;
+	data.positionRnd = { 1,1,1 };
+	data.number = (DWORD)3;
+	data.direction = { 0,1,0 };
+	hChargeEmit_ = VFX::Start(data);
+}
+
+void Player::SetHitEffect()
+{
+	EmitterData  data;
+	data.textureFileName = "PaticleAssets\\flashB_W.png";
+	data.position = this->transform_.position_;
+	data.position.y = this->transform_.position_.y + 1.0f;
+	data.direction = { 1,1,0 };
+	data.directionRnd = { 360,360,0 };
+	data.number = (DWORD)10;
+	data.delay = 5;
+	data.lifeTime = 10;
+	hHitEmit_ = VFX::Start(data);
+	HitEffectCount = 5;
+	IsHitEffect = true;
 }
 
 void Player::HitEffectStop()
@@ -653,6 +667,7 @@ void Player::HitEffectStop()
 	{
 		if (--HitEffectCount < 0)
 		{
+			HitEffectCount = 0;
 			VFX::End(hHitEmit_);
 		}
 	}

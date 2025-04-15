@@ -29,7 +29,7 @@ private:
 	//インスタンス関係
 	Ground* pGround_;
 
-	//ステート
+	//プレイヤーステート
 	enum State
 	{
 		S_IDLE,//通常
@@ -42,19 +42,24 @@ private:
 	};
 	State PlayerState_;
 
+	enum CameraState
+	{
+		S_NORMALCAMERA,//通常カメラ
+		S_DEBUGCAMERA,//デバッグ用カメラ
+		S_MAXCAMERA,
+	};
+	CameraState CameraState_;
+
 	//ジャンプ関係
 	bool IsOnGround_;
 	float JumpSpeed_;//+ならジャンプしている状態 -なら下降～地面にいる状態
 
 
 	//ダッシュ関係
-	bool IsDash_; //ダッシュ中か
 	float Acceleration_;//加速度
-
-	bool IsCharging_;
+	bool IsCharging_;//チャージ中か
 	
 	//移動関係
-	bool CanMove_;//移動できるか
 	int PlayerHeight_;//プレイヤーの高さ
 	XMFLOAT3 Direction_;//プレイヤーの方向(xzどこに進むか)
 	XMVECTOR PlayerPosition_;//位置ベクトル
@@ -92,7 +97,6 @@ public:
 	void OnCollision(GameObject* pTarget) override;
 
 	void UpdateIdle();
-	//void UpdateJump();
 	void UpdateHit();
 	void UpdateCharge();
 	void UpdateAttack();
@@ -118,6 +122,9 @@ public:
 	void SetStartPosition() { this->transform_.position_ = StartPosition; }
 
 	bool IsAttackState() { if (PlayerState_ == S_ATTACK) return true; else return false; }
+
+	void SetChargeEffect();
+	void SetHitEffect();
 
 	void HitEffectStop();
 };
