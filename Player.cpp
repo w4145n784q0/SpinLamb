@@ -20,10 +20,9 @@ namespace {
 	const float speed = 9.0f;
 	const float Player_Gravity = 0.08f; //0.16333f
 	const float DeltaTime = 0.016f;
-	const float FullAccelerate = 120.0f;//
+	const float FullAccelerate = 120.0f;//チャージ最大値
 	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 	
-	const float TreeCollision = 4.0f;
 	float PrevHeight = 0.0f;
 
 	const float KnockBackPower = 2.5f; //ノックバックする強さ
@@ -31,6 +30,10 @@ namespace {
 	XMVECTOR PlayerFrontDirection = { 0,0,1 };//正面ベクトル ここからどれだけ回転したか
 	const int deadTimerValue = 60;//復活までの時間
 	const int Invincibility = 120;//無敵時間の定数
+
+	int HitEffectCount = 0;
+	bool IsHitEffect = false;
+
 }
 
 Player::Player(GameObject* parent)
@@ -92,15 +95,14 @@ void Player::Update()
 	case Player::S_ATTACK:
 		UpdateAttack();
 		break;
-	/*case Player::S_OUT:
-		UpdateOut();
-		break;*/
 	case Player::S_WALLHIT:
 		UpdateWallHit();
 		break;
 	default:
 		break;
 	}
+
+	HitEffectStop();
 
 	//--------------カメラ追従--------------
 	CameraTarget_ = { this->transform_.position_ };//カメラの焦点は自機の位置に固定
@@ -110,6 +112,7 @@ void Player::Update()
 	BackCamera_ = XMVector3TransformCoord(BackCamera_, rotCamera);//バックカメラのベクトルにかける
 	XMStoreFloat3(&CameraPosition_, NewPos_ + BackCamera_);//移動ベクトルと加算
 
+	//--------------カメラ振動--------------
 	//CameraPosition_.y += Camera::CameraShake();
 	CameraPosition_.x += Camera::CameraShakeFloat3().x;
 	CameraPosition_.y += Camera::CameraShakeFloat3().y;
@@ -209,9 +212,23 @@ void Player::OnCollision(GameObject* pTarget)
 		//衝撃音
 		Audio::Play(hCollisionSound_);
 
+		//ヒットエフェクト
+		EmitterData  data;
+		data.textureFileName = "PaticleAssets\\flashB_W.png";
+		data.position = this->transform_.position_;
+		data.position.y = this->transform_.position_.y + 1.0f;
+		data.direction = { 1,1,0 };
+		data.directionRnd = { 360,360,0 };
+		data.number = (DWORD)10;
+		data.delay = 5;
+		data.lifeTime = 10;
+
+
+		hHitEmit_ = VFX::Start(data);
+		HitEffectCount = 5;
+		IsHitEffect = true;
+
 		Acceleration_ = 0;
-		IsDash_ = false;
-		IsDashStart_ = false;
 	}
 }
 
@@ -228,7 +245,7 @@ void Player::Dash()
 	{
 		Acceleration_ = 0;
 	}*/
-	if(IsDash_)
+	/*if(IsDash_)
 	{
 		if (!IsDashStart_)
 		{
@@ -245,7 +262,7 @@ void Player::Dash()
 				IsDashStart_ = false;
 			}
 		}
-	}
+	}*/
 }
 
 void Player::UpdateIdle()
@@ -360,7 +377,7 @@ void Player::UpdateIdle()
 			data.positionRnd = { 1,1,1 };
 			data.number = (DWORD)3;
 			data.direction = { 0,1,0 };
-			hPlayerEmit_ = VFX::Start(data);
+			hChargeEmit_ = VFX::Start(data);
 			PlayerState_ = S_CHARGE;
 		}
 	}
@@ -420,7 +437,7 @@ void Player::UpdateIdle()
 	if (this->transform_.position_.y < -500) 
 	{
 		this->transform_.position_.y = -500;//高さの最低値
-		PlayerState_ = S_OUT;
+		SetStartPosition();
 	}
 
 	if (Input::IsKeyDown(DIK_ESCAPE))
@@ -490,6 +507,7 @@ void Player::UpdateCharge()
 	{
 		if (IsCharging_)//チャージ解除
 		{
+			VFX::End(hChargeEmit_);
 			PlayerState_ = S_ATTACK;
 		}
 	}
@@ -504,7 +522,6 @@ void Player::UpdateAttack()
 	if (Acceleration_ <= 0)
 	{
 		Acceleration_ = 0.0f;
-		VFX::End(hPlayerEmit_);
 		PlayerState_ = S_IDLE;
 	}
 
@@ -622,6 +639,21 @@ void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
 	}
 
 	//Model::SetAnimFrame(hPlayer_, 0, 60, 1.0f);
+	if (PlayerState_ == S_CHARGE)
+	{
+		VFX::End(hChargeEmit_);
+	}
+
 	PlayerState_ = S_HIT;
 }
 
+void Player::HitEffectStop()
+{
+	if(IsHitEffect)
+	{
+		if (--HitEffectCount < 0)
+		{
+			VFX::End(hHitEmit_);
+		}
+	}
+}

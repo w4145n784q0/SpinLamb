@@ -28,7 +28,7 @@ namespace
 Enemy::Enemy(GameObject* parent)
 	:GameObject(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr), IsHit_(false), FrontLength_(EyeLength),
 	Eye_(XMConvertToRadians(EyeAngle)), EnemyFrontDirection_({ 0,0,1 }), isStop_(true), MoveTimer_(0), IsOnGround_(true),
-	deadTimer_(deadTimerValue),IsInvincibility_(false),InvincibilityTime_(Invincibility)
+	HitStopTimer_(0), deadTimer_(deadTimerValue),IsInvincibility_(false),InvincibilityTime_(Invincibility)
 {
 	transform_.position_ = { 0,0,0 };
 }
@@ -76,6 +76,9 @@ void Enemy::Update()
 		break;
 	case Enemy::S_ATTACK:
 		UpdateAttack();
+		break;
+	case Enemy::S_HITSTOP:
+		UpdateHitStop();
 		break;
 	case Enemy::S_HIT:
 		UpdateHit();
@@ -223,6 +226,15 @@ void Enemy::UpdateChase()
 	XMStoreFloat3(&this->transform_.position_, NewPos);
 	this->transform_.position_.y = 0.5f;
 
+}
+
+void Enemy::UpdateHitStop()
+{
+	if (++HitStopTimer_ > 2)
+	{
+		HitStopTimer_ = 0;
+		EnemyState_ = S_HIT;
+	}
 }
 
 void Enemy::UpdateHit()

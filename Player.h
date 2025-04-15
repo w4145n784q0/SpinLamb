@@ -19,12 +19,12 @@ private:
 	int hPlayerHit_;//攻撃を食らった
 	int hPlayerDead_;//倒れる
 
-
-	//音ハンドル
+	//サウンド関係
 	int hCollisionSound_;
 
-	//VFXハンドル
-	int hPlayerEmit_;
+	//VFX関係
+	int hChargeEmit_;//チャージエフェクト
+	int hHitEmit_;//敵とのヒットエフェクト
 
 	//インスタンス関係
 	Ground* pGround_;
@@ -32,13 +32,12 @@ private:
 	//ステート
 	enum State
 	{
-		S_IDLE,
-		S_HIT,
-		S_CHARGE,
-		S_ATTACK,
-		S_OUT,
-		S_WALLHIT,
-		S_DEAD,
+		S_IDLE,//通常
+		S_HIT,//弾かれる
+		S_CHARGE,//チャージ中
+		S_ATTACK,//攻撃
+		S_WALLHIT,//壁にヒット
+		S_DEAD,//倒れる
 		S_MAX
 	};
 	State PlayerState_;
@@ -50,7 +49,6 @@ private:
 
 	//ダッシュ関係
 	bool IsDash_; //ダッシュ中か
-	bool IsDashStart_ = false;//ダッシュ開始したか
 	float Acceleration_;//加速度
 
 	bool IsCharging_;
@@ -114,11 +112,13 @@ public:
 	/// </summary>
 	/// <param name="_vector">敵からノックバックする方向(正規化済)</param>
 	/// <param name="_IsAttack">敵が攻撃中か</param>
-
 	void EnemyReflect(XMVECTOR _vector, bool _IsAttack);
 
+	//初期位置に戻す
 	void SetStartPosition() { this->transform_.position_ = StartPosition; }
 
 	bool IsAttackState() { if (PlayerState_ == S_ATTACK) return true; else return false; }
+
+	void HitEffectStop();
 };
 

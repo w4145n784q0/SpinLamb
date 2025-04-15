@@ -20,6 +20,7 @@ private:
 		S_IDLE = 0,//待機
 		S_CHASE,//追いかける
 		S_ATTACK,//攻撃
+		S_HITSTOP,//ヒットストップ
 		S_HIT,//攻撃を食らった
 		S_WALLHIT,//壁に当たりダメージ
 		S_AIM,//プレイヤーを狙う
@@ -57,6 +58,7 @@ private:
 	float Acceleration_;//加速度
 
 	//ダメージ関係
+	int HitStopTimer_;//ヒットストップ時間
 	int deadTimer_;//復活までの時間
 	int InvincibilityTime_;//ダメージ後の無敵時間
 	bool IsInvincibility_;//無敵時間か
@@ -74,7 +76,8 @@ public:
 	void Draw() override;
 	void Release() override;
 	void UpdateIdle();//待機(デバッグ用)
-	void UpdateChase();
+	void UpdateChase();//追跡
+	void UpdateHitStop();//ヒットストップ
 	void UpdateHit();//攻撃を喰らった
 	void UpdateWallHit();//壁に接触
 	void UpdateAim();//プレイヤーを狙っている
