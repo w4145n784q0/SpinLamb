@@ -21,7 +21,7 @@ Ground::~Ground()
 
 void Ground::Initialize()
 {
-	hGrass_ = Model::Load("GrassField.fbx");
+	hGrass_ = Model::Load("ironField.fbx");
 	assert(hGrass_ >= 0);
 	transform_.position_ = { 0,-0.5,0 };
 }
