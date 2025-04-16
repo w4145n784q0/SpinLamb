@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"Ground.h"
+#include"Engine/VFX.h"
 
 namespace {
 	const XMFLOAT3 StartPosition = { 0.0f,0.5f,0.0f };

@@ -31,6 +31,9 @@ namespace {
 	const int deadTimerValue = 60;//復活までの時間
 	const int Invincibility = 120;//無敵時間の定数
 
+	EmitterData Chargedata;
+	EmitterData Hitdata;
+
 	int HitEffectCount = 0;
 	bool IsHitEffect = false;
 
@@ -175,7 +178,7 @@ void Player::OnCollision(GameObject* pTarget)
 		//pEnemy->PlayerReflect(normalDirection, IsDash_);
 
 		//プレイヤーの衝突時処理
-		//プレイヤー:通常 敵:通常 変化なし
+		//プレイヤー:通常 敵:通常 接触するだけ(プレイヤーは先に進めない)
 		//プレイヤー:通常 敵:攻撃 プレイヤーをはじく
 		//プレイヤー:ダッシュ 敵:攻撃 敵をはじく プレイヤーは方向ベクトル(敵の位置-自機の位置)に対し垂直方向に移動（正面からぶつかったらプレイヤーは停止
 		//プレイヤー:ダッシュ 敵:通常 敵を大きくはじく
@@ -214,7 +217,8 @@ void Player::OnCollision(GameObject* pTarget)
 			}
 			else//プレイヤー:通常
 			{
-				//変化なし
+				//接触するだけ(プレイヤーは先に進めない)
+
 			}
 		}
 
@@ -348,7 +352,7 @@ void Player::UpdateIdle()
 
 	//--------------ダッシュ関係--------------
 
-	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) || Input::IsPadButton(XINPUT_GAMEPAD_B))
+	if (Input::IsKeyDown(DIK_LSHIFT) || Input::IsKeyDown(DIK_RSHIFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
 	{
 		if (IsOnGround_)
 		{
@@ -484,24 +488,20 @@ void Player::UpdateCharge()
 		//ArrowTransform_.rotate_.y += 1;
 	}
 
-	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) || Input::IsPadButton(XINPUT_GAMEPAD_B))
+	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
 	{
-		IsCharging_ = true;
-		if (Acceleration_ < FullAccelerate)
-		{
-			Acceleration_ += 2.0f;
-		}
+		VFX::End(hChargeEmit_);
+		PlayerState_ = S_ATTACK;
+	}
+
+	if (Acceleration_ < FullAccelerate)
+	{
+		Acceleration_ += 2.0f;
 	}
 	else
 	{
-		if (IsCharging_)//チャージ解除
-		{
-			VFX::End(hChargeEmit_);
-			IsCharging_ = false;
-			PlayerState_ = S_ATTACK;
-		}
+		Acceleration_ = FullAccelerate;
 	}
-
 	CameraControl();
 }
 
@@ -653,37 +653,34 @@ void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
 	//Model::SetAnimFrame(hPlayer_, 0, 60, 1.0f);
 	if (PlayerState_ == S_CHARGE)
 	{
-		IsCharging_ = false;
 		VFX::End(hChargeEmit_);
 	}
 
-	IsCharging_ = false;
-	VFX::End(hChargeEmit_);
 	PlayerState_ = S_HIT;
 }
 
 void Player::SetChargeEffect()
 {
-	EmitterData  data;
-	data.position = this->transform_.position_;
-	data.positionRnd = { 1,1,1 };
-	data.number = (DWORD)3;
-	data.direction = { 0,1,0 };
-	hChargeEmit_ = VFX::Start(data);
+	Chargedata.textureFileName = "PaticleAssets\\circle_R.png";
+	Chargedata.position = this->transform_.position_;
+	Chargedata.positionRnd = { 1,1,1 };
+	Chargedata.number = (DWORD)3;
+	Chargedata.direction = { 0,1,0 };
+	hChargeEmit_ = VFX::Start(Chargedata);
 }
 
 void Player::SetHitEffect()
 {
-	EmitterData  data;
-	data.textureFileName = "PaticleAssets\\flashB_W.png";
-	data.position = this->transform_.position_;
-	data.position.y = this->transform_.position_.y + 1.0f;
-	data.direction = { 1,1,0 };
-	data.directionRnd = { 360,360,0 };
-	data.number = (DWORD)10;
-	data.delay = 5;
-	data.lifeTime = 10;
-	hHitEmit_ = VFX::Start(data);
+	
+	Hitdata.textureFileName = "PaticleAssets\\flashB_W.png";
+	Hitdata.position = this->transform_.position_;
+	Hitdata.position.y = this->transform_.position_.y + 1.0f;
+	Hitdata.direction = { 1,1,0 };
+	Hitdata.directionRnd = { 360,360,0 };
+	Hitdata.number = (DWORD)10;
+	Hitdata.delay = 5;
+	Hitdata.lifeTime = 10;
+	hHitEmit_ = VFX::Start(Hitdata);
 	HitEffectCount = 5;
 	IsHitEffect = true;
 }
@@ -695,6 +692,7 @@ void Player::HitEffectStop()
 		if (--HitEffectCount < 0)
 		{
 			HitEffectCount = 0;
+			IsHitEffect = false;
 			VFX::End(hHitEmit_);
 		}
 	}
