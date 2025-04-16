@@ -23,7 +23,8 @@ private:
 		S_HITSTOP,//ヒットストップ
 		S_HIT,//攻撃を食らった
 		S_WALLHIT,//壁に当たりダメージ
-		S_AIM,//プレイヤーを狙う
+		S_AIM,//プレイヤーを狙う(攻撃準備)
+		S_ONALEAT,//様子見
 
 		S_MAX
 	};
@@ -47,13 +48,12 @@ private:
 	//ノックバックする速度= ノックバックする強さ(定数) * ノックバックする方向
  
 	//移動関係
-	bool isStop_;
 	Point EnemyMovePoint_;//敵の移動先
 	float moveLengthX_;//移動距離
 	float moveLengthZ_;//移動距離
-	float distance;
 
 	//攻撃関係
+	int AimTimer_;//狙ってから攻撃までのタイマー
 	XMVECTOR AttackVector_;//攻撃方向
 	float Acceleration_;//加速度
 
@@ -62,10 +62,6 @@ private:
 	int deadTimer_;//復活までの時間
 	int InvincibilityTime_;//ダメージ後の無敵時間
 	bool IsInvincibility_;//無敵時間か
-
-	//タイマー
-	int MoveTimer_;
-	int AimTimer_;
 
 public:
 	Enemy(GameObject* parent);
@@ -77,12 +73,14 @@ public:
 	void Release() override;
 	void UpdateIdle();//待機(デバッグ用)
 	void UpdateChase();//追跡
+	void UpdateAttack();//攻撃
 	void UpdateHitStop();//ヒットストップ
 	void UpdateHit();//攻撃を喰らった
 	void UpdateWallHit();//壁に接触
 	void UpdateAim();//プレイヤーを狙っている
+	void UpdateOnAlert();//様子見
 	//void UpdateRandomAim();
-	void UpdateAttack();//攻撃
+
 
 	void OnCollision(GameObject* pTarget) override;
 
@@ -98,5 +96,7 @@ public:
 	bool GetStateAttack() { if (EnemyState_ == S_ATTACK) return true; else return false; }
 
 	void SetStateStop() { EnemyState_ = S_MAX; }
+
+	void LookPlayer();
 };
 

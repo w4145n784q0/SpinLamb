@@ -158,8 +158,12 @@
     <ClCompile Include="EnemyManager.cpp">
       <Filter>04Chara</Filter>
     </ClCompile>
-    <ClCompile Include="PracticeScene.cpp" />
-    <ClCompile Include="Fence.cpp" />
+    <ClCompile Include="Fence.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="PracticeScene.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -286,8 +290,12 @@
     <ClInclude Include="EnemyManager.h">
       <Filter>04Chara</Filter>
     </ClInclude>
-    <ClInclude Include="PracticeScene.h" />
-    <ClInclude Include="Fence.h" />
+    <ClInclude Include="Fence.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="PracticeScene.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
