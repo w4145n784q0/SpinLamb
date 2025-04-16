@@ -19,6 +19,8 @@ private:
 	int hPlayerHit_;//攻撃を食らった
 	int hPlayerDead_;//倒れる
 
+	int hAttackArrow_;//チャージ中の矢印
+
 	//サウンド関係
 	int hCollisionSound_;
 
@@ -60,12 +62,14 @@ private:
 	bool IsCharging_;//チャージ中か
 	
 	//移動関係
+	bool CanMove_;
 	int PlayerHeight_;//プレイヤーの高さ
 	XMFLOAT3 Direction_;//プレイヤーの方向(xzどこに進むか)
 	XMVECTOR PlayerPosition_;//位置ベクトル
 	XMVECTOR NewPos_;//プレイヤーの移動先
-	XMFLOAT3 PlayerFront;//プレイヤーの正面位置 当たり判定用
+	XMFLOAT3 PlayerFront;//プレイヤーの正面位置 
 	XMVECTOR ForwardVector_;//プレイヤーの正面ベクトル
+	Transform ArrowTransform_;//矢印モデルの位置情報
 
 	//カメラ関係
 	XMFLOAT3 CameraPosition_;

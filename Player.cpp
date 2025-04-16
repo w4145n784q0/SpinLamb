@@ -37,7 +37,8 @@ namespace {
 }
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hPlayer_(-1), IsOnGround_(true),
+	:GameObject(parent, "Player"), hPlayer_(-1), hAttackArrow_(-1),
+	IsOnGround_(true),
 	JumpSpeed_(0.0f),
 	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),BackCamera_(BackCameraPos),
 	PlayerState_(S_IDLE),CameraState_(S_NORMALCAMERA), PlayerHeight_(0),IsCharging_(false),
@@ -59,14 +60,15 @@ void Player::Initialize()
 	//hPlayer_ = Model::Load("Player.fbx"); 
 	hPlayer_ = Model::Load("Hit Reaction.fbx");
 	assert(hPlayer_ >= 0);
-
-	//Model::SetAnimFrame(hPlayer_, 0, 60, 1.0f);
+	hAttackArrow_ = Model::Load("AttackArrow.fbx");
+	assert(hAttackArrow_ >= 0);
 
 	hCollisionSound_ = Audio::Load("maou_se_battle15.wav");
 	assert(hCollisionSound_ >= 0);
 
 	SetStartPosition();
 	transform_.rotate_.y = 180.0f;
+	//ArrowTransform_.rotate_.y = 180.0f;
 
 	pGround_ = (Ground*)FindObject("Ground");
 	
@@ -128,6 +130,12 @@ void Player::Draw()
 {
 	Model::SetTransform(hPlayer_, transform_);
 	Model::Draw(hPlayer_);
+
+	/*if (PlayerState_ == S_CHARGE)
+	{
+		Model::SetTransform(hAttackArrow_, ArrowTransform_);
+		Model::Draw(hAttackArrow_);
+	}*/
 
 #ifdef _DEBUG
 	ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
@@ -217,6 +225,16 @@ void Player::OnCollision(GameObject* pTarget)
 		Audio::Play(hCollisionSound_);
 
 		Acceleration_ = 0;
+	}
+
+	if (pTarget->GetObjectName() == "Fence")
+	{
+		if(!IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
+		{
+			Model::SetAnimFrame(hPlayer_, 0, 600, 1.0);
+			Acceleration_ = 0.0f;
+			PlayerState_ = S_WALLHIT;
+		}
 	}
 }
 
@@ -328,10 +346,6 @@ void Player::UpdateIdle()
 		cameraTransform_.rotate_.y += 1;
 	}
 
-	//プレイヤーの正面ベクトルを更新
-	//自分の前方ベクトル(回転した分も含む)
-	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, PlayerFrontDirection);
-
 	//--------------ダッシュ関係--------------
 
 	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) || Input::IsPadButton(XINPUT_GAMEPAD_B))
@@ -363,7 +377,25 @@ void Player::UpdateIdle()
 	XMVECTOR PrevPos = PlayerPosition_;
 	NewPos_ = PrevPos + MoveVector;
 
-	XMStoreFloat3(&this->transform_.position_, NewPos_);
+	//位置更新
+	XMFLOAT3 f;
+	XMStoreFloat3(&f, NewPos_);
+
+	if(!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
+	{
+		XMStoreFloat3(&this->transform_.position_, NewPos_);
+	}
+
+
+	//プレイヤーの正面ベクトルを更新
+	//自分の前方ベクトル(回転した分も含む)
+	/*ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, PlayerFrontDirection);
+	XMFLOAT3 rot = { 0,0,0 };
+	XMStoreFloat3(&rot, ForwardVector_);
+	PlayerFront = { transform_.position_ + rot };
+	PlayerFront.z += 1.0;
+	ArrowTransform_.position_ = PlayerFront;*/
+
 
 	//ジャンプ
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
@@ -376,15 +408,6 @@ void Player::UpdateIdle()
 		}
 	}
 
-	if(!IsInvincibility_)
-	{
-		if (transform_.position_.x > 60.0f || transform_.position_.x < -60.0f ||
-			transform_.position_.z > 60.0f || transform_.position_.z < -60.0f)
-		{
-			Model::SetAnimFrame(hPlayer_, 0, 600, 1.0);
-			PlayerState_ = S_WALLHIT;
-		}
-	}
 	
 
 	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
@@ -437,11 +460,13 @@ void Player::UpdateCharge()
 	{
 		this->transform_.rotate_.y -= 1;
 		cameraTransform_.rotate_.y -= 1;
+		//ArrowTransform_.rotate_.y -= 1;
 	}
 	if (Input::IsKey(DIK_RIGHT))
 	{
 		this->transform_.rotate_.y += 1;
 		cameraTransform_.rotate_.y += 1;
+		//ArrowTransform_.rotate_.y += 1;
 	}
 
 	//左回転だけ
@@ -449,12 +474,14 @@ void Player::UpdateCharge()
 	{
 		this->transform_.rotate_.y -= 1;
 		cameraTransform_.rotate_.y -= 1;
+		//ArrowTransform_.rotate_.y -= 1;
 	}
 	//右回転だけ
 	if (Input::GetPadStickL().x >= 0.8 && Input::GetPadStickL().y <= 0.8)
 	{
 		this->transform_.rotate_.y += 1;
 		cameraTransform_.rotate_.y += 1;
+		//ArrowTransform_.rotate_.y += 1;
 	}
 
 	if (Input::IsKey(DIK_LSHIFT) || Input::IsKey(DIK_RSHIFT) || Input::IsPadButton(XINPUT_GAMEPAD_B))

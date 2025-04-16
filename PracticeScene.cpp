@@ -7,6 +7,7 @@
 #include"Ground.h"
 #include"Enemy.h"
 #include"EnemyManager.h"
+#include"Fence.h"
 
 PracticeScene::PracticeScene(GameObject* parent)
 	:GameObject(parent,"PracticeScene"),Press_(0)
@@ -20,6 +21,7 @@ PracticeScene::~PracticeScene()
 void PracticeScene::Initialize()
 {
 	Instantiate<Ground>(this);
+	Instantiate<Fence>(this);
 	Instantiate<Player>(this);
 	Instantiate<EnemyManager>(this);
 
