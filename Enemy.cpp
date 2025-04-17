@@ -56,7 +56,7 @@ void Enemy::Initialize()
 	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
 	this->AddCollider(collision);
 
-	EnemyState_ = S_ONALEAT;
+	EnemyState_ = S_AIM;
 
 }
 
@@ -142,9 +142,9 @@ void Enemy::Draw()
 #ifdef _DEBUG
 	if (ImGui::Button("EnemystateChange"))
 	{
-		if (EnemyState_ == S_AIM)
+		if (!EnemyState_ == S_IDLE)
 			EnemyState_ = S_IDLE;
-		else if (EnemyState_ == S_IDLE)
+		else
 			EnemyState_ = S_AIM;
 
 	}

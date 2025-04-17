@@ -31,12 +31,19 @@ namespace {
 	const int deadTimerValue = 60;//復活までの時間
 	const int Invincibility = 120;//無敵時間の定数
 
-	EmitterData Chargedata;
-	EmitterData Hitdata;
+	EmitterData Chargedata;//チャージ状態のエミッター
+	EmitterData Hitdata;//衝撃のエミッター
+	EmitterData Attackdata_locus;//攻撃時のエミッター(軌跡)
+	EmitterData Attackdata_aura;//攻撃時のエミッター(オーラ)
 
-	int HitEffectCount = 0;
-	bool IsHitEffect = false;
+	int HitEffectCount = 0;//衝撃エフェクトを出す時間
+	bool IsHitEffect = false;//衝撃エフェクトを出しているか
 
+	int LocusEffectCount = 0;//軌跡エフェクトを出す時間
+	bool IsLocusEffect = false;//軌跡エフェクトを出しているか
+
+	int AuraEffectCount = 0;//オーラエフェクトを出す時間
+	bool IsAuraEffect = false;//オーラエフェクトを出しているか
 }
 
 Player::Player(GameObject* parent)
@@ -108,6 +115,11 @@ void Player::Update()
 	}
 
 	HitEffectStop();
+	LocusEffectStop();
+	//void AuraEffectStop();
+
+	//AttackEffectStop(LocusEffectCount, IsLocusEffect, hAttackEmitLocus_);
+	//AttackEffectStop(AuraEffectCount, IsAuraEffect, hAttackEmitAura_);
 
 	//--------------カメラ追従--------------
 	CameraTarget_ = { this->transform_.position_ };//カメラの焦点は自機の位置に固定
@@ -491,6 +503,8 @@ void Player::UpdateCharge()
 	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
 	{
 		VFX::End(hChargeEmit_);
+		SetAttackLocusEffect();
+		//SetAttackAuraEffect();
 		PlayerState_ = S_ATTACK;
 	}
 
@@ -669,9 +683,36 @@ void Player::SetChargeEffect()
 	hChargeEmit_ = VFX::Start(Chargedata);
 }
 
+void Player::SetAttackAuraEffect()
+{
+	//プレイヤーの周りにオーラ
+	Attackdata_locus.textureFileName = "PaticleAssets\\rlingB_Y.png";
+	Attackdata_locus.number = (DWORD)1;
+	Attackdata_locus.position = this->transform_.position_;
+	Attackdata_locus.direction = { 0,0,1 };
+	hAttackEmitAura_ = VFX::Start(Attackdata_locus);
+	AuraEffectCount = 5;
+	IsAuraEffect = true;
+}
+
+void Player::SetAttackLocusEffect()
+{
+	//プレイヤーの背後に光の粒子
+	Attackdata_locus.textureFileName = "PaticleAssets\\flashB_Y.png";
+	Attackdata_locus.number = (DWORD)3;
+	Attackdata_locus.position = this->transform_.position_;
+	Attackdata_locus.position.z = this->transform_.position_.z - 0.5f;
+	Attackdata_locus.positionRnd = { 1,1,1 };
+	Attackdata_locus.direction = { 0,0,1 };
+	Attackdata_locus.sizeRnd = { 0.5,0.5 };
+	Attackdata_locus.lifeTime = (DWORD)10;
+	hAttackEmitLocus_ = VFX::Start(Attackdata_locus);
+	LocusEffectCount = 5;
+	IsLocusEffect = true;
+}
+
 void Player::SetHitEffect()
 {
-	
 	Hitdata.textureFileName = "PaticleAssets\\flashB_W.png";
 	Hitdata.position = this->transform_.position_;
 	Hitdata.position.y = this->transform_.position_.y + 1.0f;
@@ -697,3 +738,55 @@ void Player::HitEffectStop()
 		}
 	}
 }
+
+void Player::LocusEffectStop()
+{
+	if (IsLocusEffect)
+	{
+		if (--LocusEffectCount < 0)
+		{
+			LocusEffectCount = 0;
+			IsLocusEffect = false;
+			VFX::End(hAttackEmitLocus_);
+			if(PlayerState_ == S_ATTACK)
+			{
+				SetAttackLocusEffect();
+			}
+		}
+	}
+}
+
+void Player::AuraEffectStop()
+{
+	if (IsAuraEffect)
+	{
+		if (--AuraEffectCount < 0)
+		{
+			AuraEffectCount = 0;
+			IsAuraEffect = false;
+			VFX::End(hAttackEmitAura_);
+			if (PlayerState_ == S_ATTACK)
+			{
+				SetAttackAuraEffect();
+			}
+		}
+	}
+}
+
+//void Player::AttackEffectStop(int& EffectEndCount, bool& _IsEffect,  int& VFXhandle)
+//{
+//	if (_IsEffect)
+//	{
+//		if (--EffectEndCount < 0)
+//		{
+//			EffectEndCount = 0;
+//			_IsEffect = false;
+//			VFX::End(VFXhandle);
+//			if (PlayerState_ == S_ATTACK)
+//			{
+//				SetAttackLocusEffect();
+//				SetAttackAuraEffect();
+//			}
+//		}
+//	}
+//}

@@ -28,6 +28,8 @@ private:
 	//VFX関係
 	int hChargeEmit_;//チャージエフェクト
 	int hHitEmit_;//敵とのヒットエフェクト
+	int hAttackEmitLocus_;//攻撃エフェクト(軌跡)
+	int hAttackEmitAura_;//攻撃エフェクト(オーラ)
 
 	//インスタンス関係
 	Ground* pGround_;
@@ -128,9 +130,24 @@ public:
 
 	bool IsAttackState() { if (PlayerState_ == S_ATTACK) return true; else return false; }
 
+	//チャージ状態エフェクトをつける
 	void SetChargeEffect();
+
+	//突撃エフェクトつける
+	void SetAttackAuraEffect();
+	void SetAttackLocusEffect();
+
+	//衝撃エフェクトつける
 	void SetHitEffect();
 
+	//ヒットエフェクトを数フレームだけパーティクル表示
 	void HitEffectStop();
+	
+	//軌跡エフェクトを数フレームだけパーティクル表示
+	void LocusEffectStop();
+
+	void AuraEffectStop();
+
+	//void AttackEffectStop(int& EffectEndCount, bool& _IsEffect, int& VFXhandle);
 };
 
