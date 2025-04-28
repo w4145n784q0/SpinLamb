@@ -56,6 +56,7 @@ private:
 	int AimTimer_;//狙ってから攻撃までのタイマー
 	XMVECTOR AttackVector_;//攻撃方向
 	float Acceleration_;//加速度
+	float AcceleValue_;//1fで加速度に加算する量
 
 	//ダメージ関係
 	int HitStopTimer_;//ヒットストップ時間

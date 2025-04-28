@@ -20,6 +20,9 @@ namespace {
 	const float speed = 9.0f;
 	const float Player_Gravity = 0.08f; //0.16333f
 	const float DeltaTime = 0.016f;
+
+	const float MoveRotateX = 10.0f;//移動時の1fの回転量
+	const float FastRotateX = 30.0f;////(チャージ中など)高速回転中の1fの回転量
 	const float FullAccelerate = 120.0f;//チャージ最大値
 	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 	
@@ -51,7 +54,7 @@ Player::Player(GameObject* parent)
 	IsOnGround_(true),
 	JumpSpeed_(0.0f),
 	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),BackCamera_(BackCameraPos),
-	PlayerState_(S_IDLE),CameraState_(S_NORMALCAMERA), PlayerHeight_(0),IsCharging_(false),
+	PlayerState_(S_IDLE),CameraState_(S_NORMALCAMERA), PlayerHeight_(0),AcceleValue_(2.0f),
 	deadTimer_(deadTimerValue),InvincibilityTime_(Invincibility),IsInvincibility_(false)
 {
 	cameraTransform_ = this->transform_;
@@ -190,8 +193,8 @@ void Player::OnCollision(GameObject* pTarget)
 		//pEnemy->PlayerReflect(normalDirection, IsDash_);
 
 		//プレイヤーの衝突時処理
-		//プレイヤー:通常 敵:通常 接触するだけ(プレイヤーは先に進めない)
-		//プレイヤー:通常 敵:攻撃 プレイヤーをはじく
+		//プレイヤー:通常 敵:通常 双方がはじかれる(軽度)
+		//プレイヤー:通常 敵:攻撃 プレイヤーを大きくはじく
 		//プレイヤー:ダッシュ 敵:攻撃 敵をはじく プレイヤーは方向ベクトル(敵の位置-自機の位置)に対し垂直方向に移動（正面からぶつかったらプレイヤーは停止
 		//プレイヤー:ダッシュ 敵:通常 敵を大きくはじく
 		//プレイヤーは方向ベクトル(敵の位置-自機の位置)に対し垂直方向に移動（正面からぶつかったらプレイヤーは停止
@@ -229,8 +232,7 @@ void Player::OnCollision(GameObject* pTarget)
 			}
 			else//プレイヤー:通常
 			{
-				//接触するだけ(プレイヤーは先に進めない)
-
+				
 			}
 		}
 
@@ -254,39 +256,6 @@ void Player::OnCollision(GameObject* pTarget)
 	}
 }
 
-void Player::Dash()
-{
-	/*if (IsDash_)
-	{
-		Acceleration_ += 2.0;
-		if (Acceleration_ > FullAccelerate) {
-			Acceleration_ = FullAccelerate;
-		}
-	}
-	else
-	{
-		Acceleration_ = 0;
-	}*/
-	/*if(IsDash_)
-	{
-		if (!IsDashStart_)
-		{
-			Acceleration_ += FullAccelerate;
-			IsDashStart_ = true;
-		}
-		else
-		{
-			Acceleration_ -= 2;
-			Direction_.z = -1.0;
-			if (Acceleration_ <= 0)
-			{
-				IsDash_ = false;
-				IsDashStart_ = false;
-			}
-		}
-	}*/
-}
-
 void Player::UpdateIdle()
 {
 	//無敵時間の計算
@@ -303,10 +272,12 @@ void Player::UpdateIdle()
 	if (Input::IsKey(DIK_UP))
 	{
 		Direction_.z = -1.0;
+		this->transform_.rotate_.x -= MoveRotateX;
 	}
 	if (Input::IsKey(DIK_DOWN))
 	{
 		Direction_.z = 1.0;
+		this->transform_.rotate_.x += MoveRotateX;
 	}
 	if (Input::IsKey(DIK_LEFT))
 	{
@@ -325,14 +296,14 @@ void Player::UpdateIdle()
 	if (Input::GetPadStickL().y >= 0.5 /*&& Input::GetPadStickL().x <= 0.5 && Input::GetPadStickL().x >= -0.5*/)
 	{
 		Direction_.z = -1.0;
-		this->transform_.rotate_.x -= 1;
+		this->transform_.rotate_.x -= MoveRotateX;
 	}
 
 	//後方だけに移動
 	if (Input::GetPadStickL().y <= -0.5 /*&& Input::GetPadStickL().x >= 0.5 && Input::GetPadStickL().x <= -0.5*/)
 	{
 		Direction_.z = 1.0;
-		this->transform_.rotate_.x += 1;
+		this->transform_.rotate_.x += MoveRotateX;
 	}
 
 	//前進&左回転
@@ -340,6 +311,7 @@ void Player::UpdateIdle()
 	{
 		Direction_.z = -1.0;
 		this->transform_.rotate_.y -= 1;
+		this->transform_.rotate_.x -= MoveRotateX;
 		cameraTransform_.rotate_.y -= 1;
 	}
 
@@ -348,6 +320,7 @@ void Player::UpdateIdle()
 	{
 		Direction_.z = -1.0;
 		this->transform_.rotate_.y += 1;
+		this->transform_.rotate_.x += MoveRotateX;
 		cameraTransform_.rotate_.y += 1;
 	}
 
@@ -512,19 +485,22 @@ void Player::UpdateCharge()
 
 	if (Acceleration_ < FullAccelerate)
 	{
-		Acceleration_ += 2.0f;
+		Acceleration_ += AcceleValue_;
 	}
 	else
 	{
 		Acceleration_ = FullAccelerate;
 	}
+
+	this->transform_.rotate_.x -= FastRotateX;
 	CameraControl();
 }
 
 void Player::UpdateAttack()
 {
-	Acceleration_ -= 2.0f;
+	Acceleration_ -= AcceleValue_;
 	Direction_.z = -1.0;
+	this->transform_.rotate_.x -= FastRotateX;
 	if (Acceleration_ <= 0)
 	{
 		Acceleration_ = 0.0f;

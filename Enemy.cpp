@@ -16,6 +16,11 @@ namespace
 	const int EyeAngle = 60;
 	const float EyeLength = 10.0f;
 	const float DeltaTime = 0.016f;
+
+	const float FullAccelerate = 40.0f;
+	const float MoveRotateX = 10.0f;//移動時の1fの回転量
+	const float FastRotateX = 30.0f;//(チャージ中など)高速回転中の1fの回転量
+
 	const float Enemy_Gravity = 0.08; //0.16333f
 	const float KnockBackPower = 2.0f; //ノックバックする強さ
 	const float mu = 0.8; //摩擦係数
@@ -27,7 +32,7 @@ namespace
 
 Enemy::Enemy(GameObject* parent)
 	:GameObject(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr), IsHit_(false), FrontLength_(EyeLength),
-	Eye_(XMConvertToRadians(EyeAngle)), EnemyFrontDirection_({ 0,0,1 }), IsOnGround_(true),
+	Eye_(XMConvertToRadians(EyeAngle)), EnemyFrontDirection_({ 0,0,1 }), IsOnGround_(true),Acceleration_(0.0f), AcceleValue_(1.0f),
 	HitStopTimer_(0), deadTimer_(deadTimerValue),IsInvincibility_(false),InvincibilityTime_(Invincibility)
 {
 	transform_.position_ = { 0,0,0 };
@@ -40,11 +45,11 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 
-	hEnemy_ = Model::Load("Hit Reaction.fbx");
+	hEnemy_ = Model::Load("chara.fbx");
 	assert(hEnemy_ >= 0);
 
 	transform_.position_ = { 0.0,0.5 ,5.0 };
-	transform_.scale_ = { 1.5,1.5,1.5 };
+	//transform_.scale_ = { 1.5,1.5,1.5 };
 	//transform_.rotate_.y = 180.0;
 
 	//基準ベクトルをつくる　0,0,1
@@ -205,6 +210,9 @@ void Enemy::UpdateHitStop()
 
 void Enemy::UpdateHit()
 {
+
+	this->transform_.rotate_.x -= FastRotateX;
+
 	//速度を下げていく
 	KnockBack_Velocity_.x *= 0.9;
 	KnockBack_Velocity_.z *= 0.9;
@@ -216,6 +224,7 @@ void Enemy::UpdateHit()
 
 	if (KnockBack_Velocity_.x <= 0.5f || KnockBack_Velocity_.z <= 0.5f)
 	{
+		transform_.rotate_.x = 0.0f;
 		EnemyState_ = S_AIM;
 	}
 
@@ -235,11 +244,12 @@ void Enemy::UpdateWallHit()
 void Enemy::UpdateAim()
 {
 	LookPlayer();
+	//this->transform_.rotate_.x -= ChargeRotateX;
 
 	if (++AimTimer_ > 180)
 	{
 		AimTimer_ = 0;
-		Acceleration_ = 40;
+		Acceleration_ = FullAccelerate;
 		EnemyState_ = S_ATTACK;
 	}
 
@@ -262,10 +272,14 @@ void Enemy::UpdateAttack()
 	XMStoreFloat3(&this->transform_.position_, NewPos);
 
 	//速度を毎フレーム減少
-	Acceleration_ -= 1.0f;
+	Acceleration_ -= AcceleValue_;
+
+	//ノックバック時回転
+	this->transform_.rotate_.x -= FastRotateX;
 
 	if (Acceleration_ <= 0.0f)
 	{
+		transform_.rotate_.x = 0.0f;
 		EnemyState_ = S_AIM;
 	}
 }

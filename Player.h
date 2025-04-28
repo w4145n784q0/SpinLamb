@@ -62,7 +62,7 @@ private:
 
 	//ダッシュ関係
 	float Acceleration_;//加速度
-	bool IsCharging_;//チャージ中か
+	float AcceleValue_;//1fで加速度に加算する量
 	
 	//移動関係
 	bool CanMove_;
