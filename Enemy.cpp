@@ -17,13 +17,13 @@ namespace
 	const float EyeLength = 10.0f;
 	const float DeltaTime = 0.016f;
 
-	const float FullAccelerate = 40.0f;
+	const float FullAccelerate = 40.0f;//Å‘å‰Á‘¬“x
 	const float MoveRotateX = 10.0f;//ˆÚ“®Žž‚Ì1f‚Ì‰ñ“]—Ê
 	const float FastRotateX = 30.0f;//(ƒ`ƒƒ[ƒW’†‚È‚Ç)‚‘¬‰ñ“]’†‚Ì1f‚Ì‰ñ“]—Ê
 
 	const float Enemy_Gravity = 0.08; //0.16333f
 	const float KnockBackPower = 2.0f; //ƒmƒbƒNƒoƒbƒN‚·‚é‹­‚³
-	const float mu = 0.8; //–€ŽCŒW”
+	const int EnemyAttackTime = 180;//“G‚ªUŒ‚‚·‚é‚Ü‚Å‚ÌŽžŠÔ
 
 	const int deadTimerValue = 60;//•œŠˆ‚Ü‚Å‚ÌŽžŠÔ
 	const int Invincibility = 120;//–³“GŽžŠÔ‚Ì’è”
@@ -108,7 +108,6 @@ void Enemy::Update()
 		if (transform_.position_.x > 60.0f || transform_.position_.x < -60.0f ||
 			transform_.position_.z > 60.0f || transform_.position_.z < -60.0f)
 		{
-			Model::SetAnimFrame(hEnemy_, 0, 600, 1.0);
 			EnemyState_ = S_WALLHIT;
 		}
 	}
@@ -126,7 +125,7 @@ void Enemy::Update()
 	JumpSpeed_ -= Enemy_Gravity;//d—Í•ª‚Ì’l‚ðˆø‚«AƒvƒŒƒCƒ„[‚Íí‚É‰º•ûŒü‚É—Í‚ª‚©‚©‚Á‚Ä‚¢‚é
 	this->transform_.position_.y += JumpSpeed_;//ƒtƒB[ƒ‹ƒh‚Éæ‚Á‚Ä‚¢‚é‚©‚ÍŠÖŒW‚È‚­d—Í‚Í‚©‚©‚è‘±‚¯‚é
 
-	if (this->transform_.position_.y <= 0.5f && IsOnGround_)//ƒvƒŒƒCƒ„[‚ß‚è‚±‚Ý–hŽ~‚Éˆê’èˆÈ‰º‚ÌyÀ•W‚Å’l‚ðŒÅ’è
+	if (this->transform_.position_.y <= 0.5f && IsOnGround_)//‚ß‚è‚±‚Ý–hŽ~‚Éˆê’èˆÈ‰º‚ÌyÀ•W‚Å’l‚ðŒÅ’è
 	{
 		this->transform_.position_.y = 0.5f;
 	}
@@ -246,7 +245,7 @@ void Enemy::UpdateAim()
 	LookPlayer();
 	//this->transform_.rotate_.x -= ChargeRotateX;
 
-	if (++AimTimer_ > 180)
+	if (++AimTimer_ > EnemyAttackTime)
 	{
 		AimTimer_ = 0;
 		Acceleration_ = FullAccelerate;

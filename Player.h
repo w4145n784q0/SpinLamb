@@ -110,7 +110,6 @@ public:
 	void UpdateOut();
 	void UpdateWallHit();
 	void UpdateDead();
-	void Dash();
 	void PlayerStop() { PlayerState_ = S_MAX; }
 	
 	/// <summary>
