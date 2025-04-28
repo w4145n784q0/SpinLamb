@@ -68,7 +68,7 @@ Player::~Player()
 void Player::Initialize()
 {
 	//hPlayer_ = Model::Load("Player.fbx"); 
-	hPlayer_ = Model::Load("Hit Reaction.fbx");
+	hPlayer_ = Model::Load("chara.fbx");
 	assert(hPlayer_ >= 0);
 	hAttackArrow_ = Model::Load("AttackArrow.fbx");
 	assert(hAttackArrow_ >= 0);
@@ -325,12 +325,14 @@ void Player::UpdateIdle()
 	if (Input::GetPadStickL().y >= 0.5 /*&& Input::GetPadStickL().x <= 0.5 && Input::GetPadStickL().x >= -0.5*/)
 	{
 		Direction_.z = -1.0;
+		this->transform_.rotate_.x -= 1;
 	}
 
 	//Œã•û‚¾‚¯‚ÉˆÚ“®
 	if (Input::GetPadStickL().y <= -0.5 /*&& Input::GetPadStickL().x >= 0.5 && Input::GetPadStickL().x <= -0.5*/)
 	{
 		Direction_.z = 1.0;
+		this->transform_.rotate_.x += 1;
 	}
 
 	//‘Oi&¶‰ñ“]
