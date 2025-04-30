@@ -41,7 +41,7 @@ void GameModeScene::Update()
 	{
 		if (itr == ModeList_.begin())
 		{
-			itr = ModeList_.end();
+			itr = --ModeList_.end();
 		}
 		else
 		{
@@ -51,7 +51,7 @@ void GameModeScene::Update()
 	}
 	if (Input::IsKeyDown(DIK_DOWN) || Input::GetPadStickL().y <= -0.5)
 	{
-		if (itr == ModeList_.end())
+		if (itr == --ModeList_.end())
 		{
 			itr = ModeList_.begin();
 		}
