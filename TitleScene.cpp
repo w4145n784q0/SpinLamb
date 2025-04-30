@@ -21,7 +21,8 @@ void TitleScene::Update()
 	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_PRACTICE);//デバッグ用
+		//pSceneManager->ChangeScene(SCENE_ID_PRACTICE);//デバッグ用
+		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
 		Audio::Stop(hTitleSound_);
 	}
 

@@ -4,77 +4,92 @@
 #include"Engine/SceneManager.h"
 #include"Engine/Audio.h"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_win32.h"
+
 GameModeScene::GameModeScene(GameObject* parent)
-	:GameObject(parent,"GameModeScene"),SelectMode_(Max)
+	:GameObject(parent,"GameModeScene"),SelectMode_(Battle)
 {
 }
 
 void GameModeScene::Initialize()
 {
-	hBack_ = Image::Load("Black.png");
-	hBossMode_ = Image::Load("BossMode.png");
-	hRushMode_ = Image::Load("RushMode.png");
-	hBackTitle_ = Image::Load("backtitle.png");
+	//hBack_ = Image::Load("Black.png");
+	hBattle_ = Image::Load("play.png");
+	hPractice_ = Image::Load("practice.png");
+	hBackTitle_ = Image::Load("title.png");
 	hArrow_ = Image::Load("arrow.png");
 	hModeSelect_ = Image::Load("ModeSelect.png");
 
 	hModeSound_ = Audio::Load("maou_game_rock54.wav");
 
-	Trans_BossMode_.position_ = { 0.5,0.5,0 };
-	Trans_RushMode_.position_ = { 0.5,0.0,0 };
-	Trans_Title_.position_ = {0.5, -0.5, 0 };
+	ModeSetTrans[0].position_ = { -0.5,0.5,0 };//モードセレクトの位置
+	ModeSetTrans[1].position_ = { 0.5,0.5,0 };//プレイの位置
+	ModeSetTrans[2].position_ = { 0.5,0.0,0 };//練習の位置
+	ModeSetTrans[3].position_ = { 0.5,-0.5,0 };//タイトルの位置
+	
 	Trans_Arrow_.position_ = { 0.0,0.5,0 };
-	Trans_Mode_.position_ = { -0.5,0.5,0 };
+
+	ModeList_ = { Battle,Practice,Title };
+	itr = ModeList_.begin();
 }
 
 void GameModeScene::Update()
 {
 	if (Input::IsKeyDown(DIK_UP) || Input::GetPadStickL().y >= 0.5)
 	{
-		if (Trans_Arrow_.position_.y == 0.5)
+		if (itr == ModeList_.begin())
 		{
-			Trans_Arrow_.position_.y = 0.5;
+			itr = ModeList_.end();
 		}
 		else
 		{
-			Trans_Arrow_.position_.y += 0.5;
+			--itr;
 		}
+		SelectMode_ = *itr;
 	}
 	if (Input::IsKeyDown(DIK_DOWN) || Input::GetPadStickL().y <= -0.5)
 	{
-		if (Trans_Arrow_.position_.y == -0.5)
+		if (itr == ModeList_.end())
 		{
-			Trans_Arrow_.position_.y = -0.5;
+			itr = ModeList_.begin();
 		}
 		else
 		{
-			Trans_Arrow_.position_.y -= 0.5;
+			++itr;
 		}
+		SelectMode_ = *itr;
 	}
-	
-	if (Trans_Arrow_.position_.y == 0.5)
+
+	switch (SelectMode_)
 	{
-		SelectMode_ = Boss;
+	case GameModeScene::Battle:
+		Trans_Arrow_.position_.y = 0.5f;
+		break;
+	case GameModeScene::Practice:
+		Trans_Arrow_.position_.y = 0.0f;
+		break;
+	case GameModeScene::Title:
+		Trans_Arrow_.position_.y = -0.5f;
+		break;
+	default:
+		break;
 	}
-	else if (Trans_Arrow_.position_.y == 0.0)
-	{
-		SelectMode_ = Rush;
-	}
-	else if (Trans_Arrow_.position_.y == -0.5)
-	{
-		SelectMode_ = Title;
-	}
+
 
 	if (Input::IsKeyDown(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		switch (SelectMode_)
 		{
-		case GameModeScene::Boss:
-			pSceneManager->ChangeScene(SCENE_ID_BOSSBATTLE);
+		case GameModeScene::Battle:
+			pSceneManager->ChangeScene(SCENE_ID_BATTLE);
 			Audio::Stop(hModeSound_);
 			break;
-		case GameModeScene::Rush:
+		case GameModeScene::Practice:
+			pSceneManager->ChangeScene(SCENE_ID_PRACTICE);
+			Audio::Stop(hModeSound_);
 			break;
 		case GameModeScene::Title:
 			pSceneManager->ChangeScene(SCENE_ID_TITLE);
@@ -91,20 +106,25 @@ void GameModeScene::Update()
 
 void GameModeScene::Draw()
 {
-	Image::SetTransform(hBossMode_, Trans_BossMode_);
-	Image::Draw(hBossMode_);
+	Image::SetTransform(hModeSelect_, ModeSetTrans[0]);
+	Image::Draw(hModeSelect_);
 
-	/*Image::SetTransform(hRushMode_, Trans_RushMode_);
-	Image::Draw(hRushMode_);*/
+	Image::SetTransform(hBattle_, ModeSetTrans[1]);
+	Image::Draw(hBattle_);
 
-	Image::SetTransform(hBackTitle_, Trans_Title_);
+	Image::SetTransform(hPractice_, ModeSetTrans[2]);
+	Image::Draw(hPractice_);
+
+	Image::SetTransform(hBackTitle_, ModeSetTrans[3]);
 	Image::Draw(hBackTitle_);
 
 	Image::SetTransform(hArrow_, Trans_Arrow_);
 	Image::Draw(hArrow_);
 
-	Image::SetTransform(hModeSelect_, Trans_Mode_);
-	Image::Draw(hModeSelect_);
+#ifdef _DEBUG
+	ImGui::Text("mode :%.1f", itr);
+#endif
+
 
 }
 

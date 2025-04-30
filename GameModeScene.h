@@ -1,12 +1,13 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include<array>
 class GameModeScene :
     public GameObject
 {
 private:
 	int hBack_;//背景
-	int hBossMode_;//ボスモードのボタン
-	int hRushMode_;//ラッシュモードのボタン
+	int hBattle_;//バトルスタートボタン
+	int hPractice_;//練習モードボタン
 	int hBackTitle_;//タイトルのボタン
 	int hArrow_;//選択の矢印
 	int hModeSelect_;//モードセレクト
@@ -15,18 +16,18 @@ private:
 
 	enum Mode
 	{
-		Boss,
-		Rush,
+		Battle,
+		Practice,
 		Title,
 		Max
 	};
 	Mode SelectMode_;
+	std::list<Mode> ModeList_;//各モードのリスト
+	std::list<Mode>::iterator itr;//ModeList_のインデックスを指す値
+	
 
-	Transform Trans_BossMode_;
-	Transform Trans_RushMode_;
-	Transform Trans_Title_;
 	Transform Trans_Arrow_;
-	Transform Trans_Mode_;
+	std::array<Transform, 4> ModeSetTrans;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
