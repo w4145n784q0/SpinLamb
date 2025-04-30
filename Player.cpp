@@ -55,7 +55,7 @@ Player::Player(GameObject* parent)
 	JumpSpeed_(0.0f),
 	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),BackCamera_(BackCameraPos),
 	PlayerState_(S_IDLE),CameraState_(S_NORMALCAMERA), PlayerHeight_(0),AcceleValue_(2.0f),
-	deadTimer_(deadTimerValue),InvincibilityTime_(Invincibility),IsInvincibility_(false)
+	deadTimer_(deadTimerValue),InvincibilityTime_(Invincibility),IsInvincibility_(false),ColliderSize_(0.3f)
 {
 	cameraTransform_ = this->transform_;
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -85,7 +85,7 @@ void Player::Initialize()
 
 	pGround_ = (Ground*)FindObject("Ground");
 	
-	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),0.3f);
+	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),ColliderSize_);
 	this->AddCollider(collider);
 
 	

@@ -153,7 +153,6 @@
       <Filter>00imgui</Filter>
     </ClCompile>
     <ClCompile Include="BossBattleScene.cpp" />
-    <ClCompile Include="GameModeScene.cpp" />
     <ClCompile Include="Logo.cpp" />
     <ClCompile Include="EnemyManager.cpp">
       <Filter>04Chara</Filter>
@@ -162,6 +161,9 @@
       <Filter>05Stage</Filter>
     </ClCompile>
     <ClCompile Include="PracticeScene.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameModeScene.cpp">
       <Filter>03Scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -285,7 +287,6 @@
       <Filter>00imgui</Filter>
     </ClInclude>
     <ClInclude Include="BossBattleScene.h" />
-    <ClInclude Include="GameModeScene.h" />
     <ClInclude Include="Logo.h" />
     <ClInclude Include="EnemyManager.h">
       <Filter>04Chara</Filter>
@@ -294,6 +295,9 @@
       <Filter>05Stage</Filter>
     </ClInclude>
     <ClInclude Include="PracticeScene.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameModeScene.h">
       <Filter>03Scene</Filter>
     </ClInclude>
   </ItemGroup>

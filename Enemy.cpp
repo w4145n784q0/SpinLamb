@@ -33,7 +33,7 @@ namespace
 Enemy::Enemy(GameObject* parent)
 	:GameObject(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr), IsHit_(false), FrontLength_(EyeLength),
 	Eye_(XMConvertToRadians(EyeAngle)), EnemyFrontDirection_({ 0,0,1 }), IsOnGround_(true),Acceleration_(0.0f), AcceleValue_(1.0f),
-	HitStopTimer_(0), deadTimer_(deadTimerValue),IsInvincibility_(false),InvincibilityTime_(Invincibility)
+	HitStopTimer_(0), deadTimer_(deadTimerValue),IsInvincibility_(false),InvincibilityTime_(Invincibility),ColliderSize_(1.5f)
 {
 	transform_.position_ = { 0,0,0 };
 }
@@ -58,7 +58,7 @@ void Enemy::Initialize()
 
 	pPlayer_ = (Player*)FindObject("Player");
 	pGround_ = (Ground*)FindObject("Ground");
-	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), 1.5f);
+	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), ColliderSize_);
 	this->AddCollider(collision);
 
 	EnemyState_ = S_AIM;

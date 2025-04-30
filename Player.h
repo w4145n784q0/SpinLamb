@@ -81,6 +81,7 @@ private:
 	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
 
 	//被弾(HIT)関係
+	float ColliderSize_;//スフィアコライダーのサイズ
 	XMFLOAT3 KnockBack_Direction_;//ノックバックする方向
 	XMFLOAT3 KnockBack_Velocity_;//ノックバックする速度
 
