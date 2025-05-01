@@ -13,7 +13,6 @@
 #include "imgui/imgui_impl_win32.h"
 
 #include"Enemy.h"
-#include"BattleScene.h"
 
 #include <algorithm>
 #include<list>
@@ -26,7 +25,7 @@ namespace {
 	const float MoveRotateX = 10.0f;//移動時の1fの回転量
 	const float FastRotateX = 30.0f;////(チャージ中など)高速回転中の1fの回転量
 	const float FullAccelerate = 120.0f;//チャージ最大値
-	XMVECTOR BackCameraPos = { 0,2,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
+	XMVECTOR BackCameraPos = { 0,3,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 	
 	float PrevHeight = 0.0f;
 
@@ -37,7 +36,7 @@ namespace {
 	const int Invincibility = 120;//無敵時間の定数
 
 	EmitterData Chargedata;//チャージ状態のエミッター
-	EmitterData Hitdata;//衝撃のエミッター
+
 	EmitterData Attackdata_locus;//攻撃時のエミッター(軌跡)
 	EmitterData Attackdata_aura;//攻撃時のエミッター(オーラ)
 
@@ -73,7 +72,7 @@ Player::~Player()
 void Player::Initialize()
 {
 	//hPlayer_ = Model::Load("Player.fbx"); 
-	hPlayer_ = Model::Load("chara.fbx");
+	hPlayer_ = Model::Load("chara2.fbx");
 	assert(hPlayer_ >= 0);
 	hAttackArrow_ = Model::Load("AttackArrow.fbx");
 	assert(hAttackArrow_ >= 0);
@@ -119,7 +118,6 @@ void Player::Update()
 		break;
 	}
 
-	HitEffectStop();
 	LocusEffectStop();
 	//void AuraEffectStop();
 
@@ -345,7 +343,7 @@ void Player::UpdateIdle()
 	{
 		if (IsOnGround_)
 		{
-			SetChargeEffect();
+			//SetChargeEffect();
 			PlayerState_ = S_CHARGE;
 		}
 	}
@@ -449,6 +447,8 @@ void Player::UpdateHit()
 
 void Player::UpdateCharge()
 {
+	SetChargingEffect();
+
 	if (Input::IsKey(DIK_LEFT))
 	{
 		this->transform_.rotate_.y -= 1;
@@ -479,12 +479,13 @@ void Player::UpdateCharge()
 
 	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
 	{
-		VFX::End(hChargeEmit_);
+		//VFX::End(hChargeEmit_);
 		SetAttackLocusEffect();
 		//SetAttackAuraEffect();
 		PlayerState_ = S_ATTACK;
 	}
 
+	//チャージ中一定の加速量を加算し続ける
 	if (Acceleration_ < FullAccelerate)
 	{
 		Acceleration_ += AcceleValue_;
@@ -675,6 +676,22 @@ void Player::SetChargeEffect()
 	hChargeEmit_ = VFX::Start(Chargedata);
 }
 
+void Player::SetChargingEffect()
+{
+	EmitterData charge;
+	charge.textureFileName = "PaticleAssets\\circle_R.png";
+	charge.delay = 0;
+	charge.lifeTime = 20;
+	charge.position = this->transform_.position_;
+	charge.positionRnd = XMFLOAT3(3, 3, 3);
+	charge.direction = { -1,-1,0 };
+	charge.directionRnd = XMFLOAT3(90, 90, 90);
+	charge.speed = 0.15;
+	charge.number = (DWORD)1;
+	VFX::Start(charge);
+
+}
+
 void Player::SetAttackAuraEffect()
 {
 	//プレイヤーの周りにオーラ
@@ -705,7 +722,28 @@ void Player::SetAttackLocusEffect()
 
 void Player::SetHitEffect()
 {
-	Hitdata.textureFileName = "PaticleAssets\\flashB_W.png";
+	EmitterData hit;
+	hit.textureFileName = "PaticleAssets\\flashB_W.png";
+	hit.position = this->transform_.position_;
+	hit.position.y = this->transform_.position_.y + 1.0f;
+	hit.delay = 0;
+	hit.direction = { 1,1,0 };
+	hit.directionRnd = XMFLOAT3(90, 90, 90);
+	hit.speed = 0.5;
+	hit.speedRnd = 1.0;
+	hit.accel = 1.0;
+	hit.lifeTime = 10.0;
+	hit.number = (DWORD)10;
+	//hit.size = XMFLOAT2(0.1, 0.1);
+	hit.sizeRnd = XMFLOAT2(0.4, 0.4);
+	//hit.scale = XMFLOAT2(0.99, 0.99);
+	//hit.color = XMFLOAT4(1, 1, 0.1, 1);
+	//hit.deltaColor = XMFLOAT4(0, 0, 0, 0);
+	//hit.gravity = 0.0f;
+	VFX::Start(hit);
+
+
+	/*Hitdata.textureFileName = "PaticleAssets\\flashB_W.png";
 	Hitdata.position = this->transform_.position_;
 	Hitdata.position.y = this->transform_.position_.y + 1.0f;
 	Hitdata.direction = { 1,1,0 };
@@ -715,21 +753,21 @@ void Player::SetHitEffect()
 	Hitdata.lifeTime = 10;
 	hHitEmit_ = VFX::Start(Hitdata);
 	HitEffectCount = 5;
-	IsHitEffect = true;
+	IsHitEffect = true;*/
 }
 
-void Player::HitEffectStop()
-{
-	if(IsHitEffect)
-	{
-		if (--HitEffectCount < 0)
-		{
-			HitEffectCount = 0;
-			IsHitEffect = false;
-			VFX::End(hHitEmit_);
-		}
-	}
-}
+//void Player::HitEffectStop()
+//{
+//	if(IsHitEffect)
+//	{
+//		if (--HitEffectCount < 0)
+//		{
+//			HitEffectCount = 0;
+//			IsHitEffect = false;
+//			VFX::End(hHitEmit_);
+//		}
+//	}
+//}
 
 void Player::LocusEffectStop()
 {

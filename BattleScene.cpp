@@ -19,8 +19,8 @@ namespace
 
 BattleScene::BattleScene(GameObject* parent)
 	:GameObject(parent,"BattleScene") ,BattleState(NOW),
-	hWin_(-1),hLose_(-1),hBattleSound_(-1),hWhistle_(-1),
-	PlayerLife_(0),EnemyLife_(0)
+	hWin_(-1),hLose_(-1),hFinish_(-1),hLife_(-1), hBattleSound_(-1),hWhistle_(-1),
+	PlayerLife_(0),EnemyLife_(0),pPlayer_(nullptr)
 {
 	HUD_Trans_[0].position_ = { -0.7,0.8,0 };
 	HUD_Trans_[1].position_ = { 0.7,0.8,0 };

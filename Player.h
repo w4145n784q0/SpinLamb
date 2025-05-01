@@ -133,6 +133,7 @@ public:
 
 	//チャージ状態エフェクトをつける
 	void SetChargeEffect();
+	void SetChargingEffect();
 
 	//突撃エフェクトつける
 	void SetAttackAuraEffect();
@@ -140,9 +141,6 @@ public:
 
 	//衝撃エフェクトつける
 	void SetHitEffect();
-
-	//ヒットエフェクトを数フレームだけパーティクル表示
-	void HitEffectStop();
 	
 	//軌跡エフェクトを数フレームだけパーティクル表示
 	void LocusEffectStop();
