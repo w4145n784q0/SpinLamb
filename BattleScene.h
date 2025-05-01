@@ -1,10 +1,15 @@
 #pragma once
 #include"Engine/Text.h"
 #include "Engine/GameObject.h"
-class BossBattleScene :
+#include"Player.h"
+
+class BattleScene :
     public GameObject
 {
 private:
+
+	//インスタンス
+	Player* pPlayer_;
 
 	enum Battle
 	{
@@ -16,24 +21,25 @@ private:
 	Battle BattleState;
 
 	//画像ハンドル
+
 	int hWin_;
 	int hLose_;
 	int hFinish_;
+	int hLife_;
 
 	//音ハンドル
 	int hBattleSound_;
 	int hWhistle_;
 
-	int Phase_;
-	int deadCount_;
-	Text* pText_;
-	Text* pText2_;
-
 	bool IsWin_;
+
+	std::array<Transform, 2> HUD_Trans_;
+	int PlayerLife_;
+	int EnemyLife_;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
-	BossBattleScene(GameObject* parent);
+	BattleScene(GameObject* parent);
 
 	//初期化
 	void Initialize() override;
@@ -51,7 +57,11 @@ public:
 	void UpdateBattle();
 	void UpdateBattleAfter();
 
-	void DeadCountPlus() { deadCount_--; }
-	void PhasePlus() { Phase_++; }
+	void DrawBattleBefore();
+	void DrawBattle();
+	void DrawBattleAfter();
+
+	void SetPlayerHp(int _hp) { PlayerLife_ = _hp; }
+
 };
 

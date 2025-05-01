@@ -34,6 +34,9 @@ public:
 	//引数：next	次のシーンのID
 	void ChangeScene(SCENE_ID next);
 
+	bool IsBattleScene() { if (currentSceneID_ == SCENE_ID_BATTLE) return true; else return false; }
+	bool IsPracticeScene() { if (currentSceneID_ == SCENE_ID_PRACTICE) return true; else return false; }
+
 private:
 	SCENE_ID currentSceneID_;	//現在のシーン
 	SCENE_ID nextSceneID_;		//次のシーン

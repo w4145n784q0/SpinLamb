@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include<array>
+#include<list>
 class GameModeScene :
     public GameObject
 {

@@ -5,13 +5,15 @@
 #include"Engine/Camera.h"
 #include"Engine/SphereCollider.h"
 #include"Engine/VFX.h"
+#include"Engine/SceneManager.h"
+#include"BattleScene.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
 
 #include"Enemy.h"
-#include"BossBattleScene.h"
+#include"BattleScene.h"
 
 #include <algorithm>
 #include<list>
@@ -55,7 +57,7 @@ Player::Player(GameObject* parent)
 	JumpSpeed_(0.0f),
 	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),BackCamera_(BackCameraPos),
 	PlayerState_(S_IDLE),CameraState_(S_NORMALCAMERA), PlayerHeight_(0),AcceleValue_(2.0f),
-	deadTimer_(deadTimerValue),InvincibilityTime_(Invincibility),IsInvincibility_(false),ColliderSize_(0.3f)
+	deadTimer_(deadTimerValue),InvincibilityTime_(Invincibility),IsInvincibility_(false),ColliderSize_(0.3f),CharacterLife_(3)
 {
 	cameraTransform_ = this->transform_;
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -163,7 +165,8 @@ void Player::Draw()
 	//ImGui::Text("camera y :%.3f", CameraPosition_.y);
 	//ImGui::Text("camera x :%.3f", CameraPosition_.x);
 
-	ImGui::Text("dash:%.3f", Acceleration_);
+	//ImGui::Text("dash:%.3f", Acceleration_);
+	ImGui::Text("PlayerLife:%.3f", (float)CharacterLife_);
 #endif
 
 }
@@ -249,7 +252,6 @@ void Player::OnCollision(GameObject* pTarget)
 	{
 		if(!IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
 		{
-			Model::SetAnimFrame(hPlayer_, 0, 600, 1.0);
 			Acceleration_ = 0.0f;
 			PlayerState_ = S_WALLHIT;
 		}
@@ -549,9 +551,22 @@ void Player::UpdateWallHit()
 		//BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
 		//pBossBattleScene->DeadCountPlus();
 
+		CharacterLife_--;
 		deadTimer_ = deadTimerValue;
 		PlayerState_ = S_IDLE;
 		IsInvincibility_ = true;
+
+		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
+		if (pSM->IsBattleScene())
+		{
+			BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
+			pBattleScene->SetPlayerHp(CharacterLife_);
+		}
+		else
+		{
+
+		}
+
 		//SetStartPosition();
 	}
 }
@@ -642,7 +657,6 @@ void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
 		KnockBack_Velocity_.z = KnockBackPower;
 	}
 
-	//Model::SetAnimFrame(hPlayer_, 0, 60, 1.0f);
 	if (PlayerState_ == S_CHARGE)
 	{
 		VFX::End(hChargeEmit_);

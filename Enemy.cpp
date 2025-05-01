@@ -4,7 +4,7 @@
 #include"Engine/Input.h"
 #include"Engine/Camera.h"
 #include"Engine/SphereCollider.h"
-#include"BossBattleScene.h"
+#include"BattleScene.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
@@ -33,7 +33,7 @@ namespace
 Enemy::Enemy(GameObject* parent)
 	:GameObject(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr), IsHit_(false), FrontLength_(EyeLength),
 	Eye_(XMConvertToRadians(EyeAngle)), EnemyFrontDirection_({ 0,0,1 }), IsOnGround_(true),Acceleration_(0.0f), AcceleValue_(1.0f),
-	HitStopTimer_(0), deadTimer_(deadTimerValue),IsInvincibility_(false),InvincibilityTime_(Invincibility),ColliderSize_(1.5f)
+	HitStopTimer_(0), deadTimer_(deadTimerValue),IsInvincibility_(false),InvincibilityTime_(Invincibility),ColliderSize_(1.5f), CharacterLife_(3)
 {
 	transform_.position_ = { 0,0,0 };
 }
@@ -153,7 +153,8 @@ void Enemy::Draw()
 
 	}
 
-	ImGui::Text("E:mutekijkan:%.3f", (float)InvincibilityTime_);
+	//ImGui::Text("E:mutekijkan:%.3f", (float)InvincibilityTime_);
+	ImGui::Text("EnemyLife:%.3f", (float)CharacterLife_);
 #endif
 }
 
@@ -233,6 +234,7 @@ void Enemy::UpdateWallHit()
 {
 	if (--deadTimer_ < 0)
 	{
+		CharacterLife_--;
 		deadTimer_ = deadTimerValue;
 		EnemyState_ = S_AIM;
 		IsInvincibility_ = true;

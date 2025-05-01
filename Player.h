@@ -86,6 +86,7 @@ private:
 	XMFLOAT3 KnockBack_Velocity_;//ノックバックする速度
 
 	//ダメージ関係
+	int CharacterLife_;//キャラクターのHP
 	int deadTimer_;//復活までの時間
 	int InvincibilityTime_;//ダメージ後の無敵時間
 	bool IsInvincibility_;//無敵時間か
@@ -147,6 +148,9 @@ public:
 	void LocusEffectStop();
 
 	void AuraEffectStop();
+
+	void SetCharacterLife(int _hp) { CharacterLife_ = _hp; }
+	int GetCharacterLife() { return CharacterLife_; }
 
 	//void AttackEffectStop(int& EffectEndCount, bool& _IsEffect, int& VFXhandle);
 };

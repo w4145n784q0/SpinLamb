@@ -31,7 +31,9 @@ void PracticeScene::Initialize()
 
 void PracticeScene::Update()
 {
-	if (Input::IsKey(DIK_P))
+	
+
+	if (Input::IsKey(DIK_P))//ボタン長押しでタイトルに戻る
 	{
 		Press_++;
 	}
@@ -43,7 +45,7 @@ void PracticeScene::Update()
 	if (Press_ >= 120)
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_CLEAR);
+		pSceneManager->ChangeScene(SCENE_ID_TITLE);
 	}
 }
 
