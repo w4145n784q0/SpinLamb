@@ -142,14 +142,8 @@ public:
 	//衝撃エフェクトつける
 	void SetHitEffect();
 	
-	//軌跡エフェクトを数フレームだけパーティクル表示
-	void LocusEffectStop();
-
-	void AuraEffectStop();
-
 	void SetCharacterLife(int _hp) { CharacterLife_ = _hp; }
 	int GetCharacterLife() { return CharacterLife_; }
 
-	//void AttackEffectStop(int& EffectEndCount, bool& _IsEffect, int& VFXhandle);
 };
 

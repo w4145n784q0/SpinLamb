@@ -36,18 +36,6 @@ namespace {
 	const int Invincibility = 120;//無敵時間の定数
 
 	EmitterData Chargedata;//チャージ状態のエミッター
-
-	EmitterData Attackdata_locus;//攻撃時のエミッター(軌跡)
-	EmitterData Attackdata_aura;//攻撃時のエミッター(オーラ)
-
-	int HitEffectCount = 0;//衝撃エフェクトを出す時間
-	bool IsHitEffect = false;//衝撃エフェクトを出しているか
-
-	int LocusEffectCount = 0;//軌跡エフェクトを出す時間
-	bool IsLocusEffect = false;//軌跡エフェクトを出しているか
-
-	int AuraEffectCount = 0;//オーラエフェクトを出す時間
-	bool IsAuraEffect = false;//オーラエフェクトを出しているか
 }
 
 Player::Player(GameObject* parent)
@@ -118,8 +106,6 @@ void Player::Update()
 		break;
 	}
 
-	LocusEffectStop();
-	//void AuraEffectStop();
 
 	//AttackEffectStop(LocusEffectCount, IsLocusEffect, hAttackEmitLocus_);
 	//AttackEffectStop(AuraEffectCount, IsAuraEffect, hAttackEmitAura_);
@@ -480,7 +466,7 @@ void Player::UpdateCharge()
 	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
 	{
 		//VFX::End(hChargeEmit_);
-		SetAttackLocusEffect();
+		//SetAttackLocusEffect();
 		//SetAttackAuraEffect();
 		PlayerState_ = S_ATTACK;
 	}
@@ -501,6 +487,8 @@ void Player::UpdateCharge()
 
 void Player::UpdateAttack()
 {
+	SetAttackLocusEffect();
+
 	Acceleration_ -= AcceleValue_;
 	Direction_.z = -1.0;
 	this->transform_.rotate_.x -= FastRotateX;
@@ -707,7 +695,19 @@ void Player::SetAttackAuraEffect()
 void Player::SetAttackLocusEffect()
 {
 	//プレイヤーの背後に光の粒子
-	Attackdata_locus.textureFileName = "PaticleAssets\\flashB_Y.png";
+	EmitterData locus;
+	locus.textureFileName = "PaticleAssets\\flashB_Y.png";
+	locus.delay = 0;
+	locus.number = (DWORD)3;
+	locus.position = this->transform_.position_;
+	locus.position.z = this->transform_.position_.z - 0.5f;
+	locus.positionRnd = { 1,1,1 };
+	locus.direction = { 0,0,1 };
+	locus.sizeRnd = { 0.5,0.5 };
+	locus.lifeTime = (DWORD)10;
+	VFX::Start(locus);
+
+	/*Attackdata_locus.textureFileName = "PaticleAssets\\flashB_Y.png";
 	Attackdata_locus.number = (DWORD)3;
 	Attackdata_locus.position = this->transform_.position_;
 	Attackdata_locus.position.z = this->transform_.position_.z - 0.5f;
@@ -717,7 +717,7 @@ void Player::SetAttackLocusEffect()
 	Attackdata_locus.lifeTime = (DWORD)10;
 	hAttackEmitLocus_ = VFX::Start(Attackdata_locus);
 	LocusEffectCount = 5;
-	IsLocusEffect = true;
+	IsLocusEffect = true;*/
 }
 
 void Player::SetHitEffect()
