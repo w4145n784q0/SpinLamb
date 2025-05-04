@@ -168,6 +168,9 @@
     <ClCompile Include="BattleScene.cpp">
       <Filter>03Scene</Filter>
     </ClCompile>
+    <ClCompile Include="MiniMap.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -303,6 +306,9 @@
     </ClInclude>
     <ClInclude Include="BattleScene.h">
       <Filter>03Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="MiniMap.h">
+      <Filter>05Stage</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

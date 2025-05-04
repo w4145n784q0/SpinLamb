@@ -35,7 +35,6 @@ namespace {
 	const int deadTimerValue = 60;//復活までの時間
 	const int Invincibility = 120;//無敵時間の定数
 
-	EmitterData Chargedata;//チャージ状態のエミッター
 }
 
 Player::Player(GameObject* parent)
@@ -50,6 +49,7 @@ Player::Player(GameObject* parent)
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
 	CameraTarget_ = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 
+	srand((unsigned)time(NULL));
 }
 
 Player::~Player()
@@ -59,7 +59,6 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	//hPlayer_ = Model::Load("Player.fbx"); 
 	hPlayer_ = Model::Load("chara2.fbx");
 	assert(hPlayer_ >= 0);
 	hAttackArrow_ = Model::Load("AttackArrow.fbx");
@@ -654,16 +653,6 @@ void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
 	PlayerState_ = S_HIT;
 }
 
-void Player::SetChargeEffect()
-{
-	Chargedata.textureFileName = "PaticleAssets\\circle_R.png";
-	Chargedata.position = this->transform_.position_;
-	Chargedata.positionRnd = { 1,1,1 };
-	Chargedata.number = (DWORD)3;
-	Chargedata.direction = { 0,1,0 };
-	hChargeEmit_ = VFX::Start(Chargedata);
-}
-
 void Player::SetChargingEffect()
 {
 	EmitterData charge;
@@ -671,9 +660,9 @@ void Player::SetChargingEffect()
 	charge.delay = 0;
 	charge.lifeTime = 20;
 	charge.position = this->transform_.position_;
-	charge.positionRnd = XMFLOAT3(3, 3, 3);
-	charge.direction = { -1,-1,0 };
-	charge.directionRnd = XMFLOAT3(90, 90, 90);
+	charge.positionRnd = XMFLOAT3(1, 1, 1);
+	charge.direction = { 0,1,0 };
+	//charge.directionRnd = XMFLOAT3(90, 90, 90);
 	charge.speed = 0.15;
 	charge.number = (DWORD)1;
 	VFX::Start(charge);
@@ -682,14 +671,14 @@ void Player::SetChargingEffect()
 
 void Player::SetAttackAuraEffect()
 {
-	//プレイヤーの周りにオーラ
-	Attackdata_locus.textureFileName = "PaticleAssets\\rlingB_Y.png";
-	Attackdata_locus.number = (DWORD)1;
-	Attackdata_locus.position = this->transform_.position_;
-	Attackdata_locus.direction = { 0,0,1 };
-	hAttackEmitAura_ = VFX::Start(Attackdata_locus);
-	AuraEffectCount = 5;
-	IsAuraEffect = true;
+	////プレイヤーの周りにオーラ
+	//Attackdata_locus.textureFileName = "PaticleAssets\\rlingB_Y.png";
+	//Attackdata_locus.number = (DWORD)1;
+	//Attackdata_locus.position = this->transform_.position_;
+	//Attackdata_locus.direction = { 0,0,1 };
+	//hAttackEmitAura_ = VFX::Start(Attackdata_locus);
+	//AuraEffectCount = 5;
+	//IsAuraEffect = true;
 }
 
 void Player::SetAttackLocusEffect()
@@ -769,54 +758,3 @@ void Player::SetHitEffect()
 //	}
 //}
 
-void Player::LocusEffectStop()
-{
-	if (IsLocusEffect)
-	{
-		if (--LocusEffectCount < 0)
-		{
-			LocusEffectCount = 0;
-			IsLocusEffect = false;
-			VFX::End(hAttackEmitLocus_);
-			if(PlayerState_ == S_ATTACK)
-			{
-				SetAttackLocusEffect();
-			}
-		}
-	}
-}
-
-void Player::AuraEffectStop()
-{
-	if (IsAuraEffect)
-	{
-		if (--AuraEffectCount < 0)
-		{
-			AuraEffectCount = 0;
-			IsAuraEffect = false;
-			VFX::End(hAttackEmitAura_);
-			if (PlayerState_ == S_ATTACK)
-			{
-				SetAttackAuraEffect();
-			}
-		}
-	}
-}
-
-//void Player::AttackEffectStop(int& EffectEndCount, bool& _IsEffect,  int& VFXhandle)
-//{
-//	if (_IsEffect)
-//	{
-//		if (--EffectEndCount < 0)
-//		{
-//			EffectEndCount = 0;
-//			_IsEffect = false;
-//			VFX::End(VFXhandle);
-//			if (PlayerState_ == S_ATTACK)
-//			{
-//				SetAttackLocusEffect();
-//				SetAttackAuraEffect();
-//			}
-//		}
-//	}
-//}

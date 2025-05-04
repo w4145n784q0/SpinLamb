@@ -8,6 +8,7 @@
 #include"Enemy.h"
 #include"EnemyManager.h"
 #include"Fence.h"
+#include"MiniMap.h"
 
 PracticeScene::PracticeScene(GameObject* parent)
 	:GameObject(parent,"PracticeScene"),Press_(0)
@@ -24,6 +25,7 @@ void PracticeScene::Initialize()
 	Instantiate<Fence>(this);
 	Instantiate<Player>(this);
 	Instantiate<EnemyManager>(this);
+	Instantiate<MiniMap>(this);
 
 	EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
 	pEnemyManager->EnemyInitialize();

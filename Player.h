@@ -132,7 +132,6 @@ public:
 	bool IsAttackState() { if (PlayerState_ == S_ATTACK) return true; else return false; }
 
 	//チャージ状態エフェクトをつける
-	void SetChargeEffect();
 	void SetChargingEffect();
 
 	//突撃エフェクトつける

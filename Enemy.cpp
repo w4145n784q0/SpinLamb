@@ -61,7 +61,7 @@ void Enemy::Initialize()
 	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), ColliderSize_);
 	this->AddCollider(collision);
 
-	EnemyState_ = S_AIM;
+	EnemyState_ = S_IDLE;
 
 }
 
