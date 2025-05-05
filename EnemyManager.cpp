@@ -12,7 +12,7 @@ EnemyManager::~EnemyManager()
 
 void EnemyManager::Initialize()
 {
-	
+	EnemyInitialize();
 }
 
 void EnemyManager::Update()

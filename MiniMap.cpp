@@ -37,7 +37,8 @@ void MiniMap::Update()
 	pTrans.position_.x = (pPlayer_->GetPosition().x * reductionX) + 0.895;
 	pTrans.position_.y = (pPlayer_->GetPosition().z * reductionY) - 0.81;
 
-
+	eTrans.position_.x = (pEnemy_->GetPosition().x * reductionX) + 0.895;
+	eTrans.position_.y = (pEnemy_->GetPosition().z * reductionY) - 0.81;
 
 	//pEnemy_ = (Enemy*)FindObject("Enemy");
 	//eTrans.position_ = pEnemy_->GetPosition();
@@ -60,8 +61,8 @@ void MiniMap::Draw()
 	Image::SetTransform(hPlayerIcon_, pTrans);
 	Image::Draw(hPlayerIcon_);
 
-	//Image::SetTransform(hEnemyIcon_, eTrans);
-	//Image::Draw(hEnemyIcon_);
+	Image::SetTransform(hEnemyIcon_, eTrans);
+	Image::Draw(hEnemyIcon_);
 
 
 }

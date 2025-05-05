@@ -18,6 +18,7 @@ private:
 	//ステート
 	enum State {
 		S_IDLE = 0,//待機
+		S_ROOT,//判断用
 		S_CHASE,//追いかける
 		S_ATTACK,//攻撃
 		S_HITSTOP,//ヒットストップ
@@ -33,6 +34,8 @@ private:
 	//追跡関係
 	XMVECTOR EnemyFrontDirection_;//敵の正面ベクトル
 	XMVECTOR EnemyPosition_;//敵の位置ベクトル
+	XMFLOAT3 PlayerPosition_;//プレイヤーの位置(座標)
+
 	float RotateY_;//回転角度（基本Ｙ軸のみ）
 	float FrontLength_;//敵の視界の長さ
 	float Eye_;
@@ -40,7 +43,6 @@ private:
 	bool IsOnGround_;//地面にいるか
 	float JumpSpeed_;//+ならジャンプしている状態 -なら下降～地面にいる状態
 	XMVECTOR pPositionVec_;//プレイヤーの位置を保管
-	XMFLOAT3 ChasePoint_;
 
 	//ヒット関係
 	int CharacterLife_;//キャラクターのHP
@@ -75,6 +77,7 @@ public:
 	void Draw() override;
 	void Release() override;
 	void UpdateIdle();//待機(デバッグ用)
+	void UpdateRoot();
 	void UpdateChase();//追跡
 	void UpdateAttack();//攻撃
 	void UpdateHitStop();//ヒットストップ
@@ -101,5 +104,10 @@ public:
 	void SetStateStop() { EnemyState_ = S_MAX; }
 
 	void LookPlayer();
+
+	//敵とプレイヤーの距離を返す
+	XMFLOAT3 PlayerEnemyDistanceFloat3();
+
+	float PlayerEnemyDistanceX();
 };
 

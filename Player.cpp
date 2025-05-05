@@ -669,18 +669,6 @@ void Player::SetChargingEffect()
 
 }
 
-void Player::SetAttackAuraEffect()
-{
-	////プレイヤーの周りにオーラ
-	//Attackdata_locus.textureFileName = "PaticleAssets\\rlingB_Y.png";
-	//Attackdata_locus.number = (DWORD)1;
-	//Attackdata_locus.position = this->transform_.position_;
-	//Attackdata_locus.direction = { 0,0,1 };
-	//hAttackEmitAura_ = VFX::Start(Attackdata_locus);
-	//AuraEffectCount = 5;
-	//IsAuraEffect = true;
-}
-
 void Player::SetAttackLocusEffect()
 {
 	//プレイヤーの背後に光の粒子

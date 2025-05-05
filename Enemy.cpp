@@ -16,8 +16,9 @@ namespace
 	const int EyeAngle = 60;
 	const float EyeLength = 10.0f;
 	const float DeltaTime = 0.016f;
+	const float ChaseLength = 50.0f;
 
-	const float FullAccelerate = 40.0f;//最大加速度
+	const float FullAccelerate = 60.0f;//最大加速度
 	const float MoveRotateX = 10.0f;//移動時の1fの回転量
 	const float FastRotateX = 30.0f;//(チャージ中など)高速回転中の1fの回転量
 
@@ -45,7 +46,7 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 
-	hEnemy_ = Model::Load("chara.fbx");
+	hEnemy_ = Model::Load("chara2.fbx");
 	assert(hEnemy_ >= 0);
 
 	transform_.position_ = { 0.0,0.5 ,5.0 };
@@ -67,14 +68,17 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	XMFLOAT3 tmp = pPlayer_->GetWorldPosition();
-	pPositionVec_ = XMLoadFloat3(&tmp);
-	EnemyPosition_ = XMLoadFloat3(&this->transform_.position_);
+	PlayerPosition_ = pPlayer_->GetWorldPosition();//プレイヤーの位置（ワールド座標）
+	pPositionVec_ = XMLoadFloat3(&PlayerPosition_);//プレイヤーの位置をベクトル化し取り続ける
+	EnemyPosition_ = XMLoadFloat3(&this->transform_.position_);//敵の位置をベクトル化し取り続ける
 
 	switch (EnemyState_)
 	{
 	case Enemy::S_IDLE:
 		UpdateIdle();
+		break;
+	case Enemy::S_ROOT:
+		UpdateRoot();
 		break;
 	case Enemy::S_CHASE:
 		UpdateChase();
@@ -129,13 +133,7 @@ void Enemy::Update()
 	{
 		this->transform_.position_.y = 0.5f;
 	}
-	if (this->transform_.position_.y < -400)
-	{
-		//this->transform_.position_.y = -200;//高さの最低値
-		//BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
-		//pBossBattleScene->PhasePlus();
-		KillMe();
-	}
+
 }
 
 void Enemy::Draw()
@@ -153,7 +151,6 @@ void Enemy::Draw()
 
 	}
 
-	//ImGui::Text("E:mutekijkan:%.3f", (float)InvincibilityTime_);
 	ImGui::Text("EnemyLife:%.3f", (float)CharacterLife_);
 #endif
 }
@@ -187,6 +184,20 @@ void Enemy::UpdateIdle()
 	//}
 }
 
+void Enemy::UpdateRoot()
+{
+	float dist = PlayerEnemyDistanceX();
+
+	if (dist > ChaseLength)//一定距離以上離れているなら追跡
+	{
+		EnemyState_ = S_CHASE;
+	}
+	else//接近しているなら攻撃準備
+	{
+		EnemyState_ = S_AIM;
+	}
+}
+
 void Enemy::UpdateChase()
 {
 	LookPlayer();
@@ -195,12 +206,18 @@ void Enemy::UpdateChase()
 	XMVECTOR NewPos = PrevPos + MoveVector;
 	
 	XMStoreFloat3(&this->transform_.position_, NewPos);
-	this->transform_.position_.y = 0.5f;
+	//this->transform_.position_.y = 0.5f;
 
+	float dist = PlayerEnemyDistanceX();
+	if (dist < ChaseLength)
+	{
+		EnemyState_ = S_AIM;
+	}
 }
 
 void Enemy::UpdateHitStop()
 {
+	//ヒットストップ活用時のみ使用
 	if (++HitStopTimer_ > 2)
 	{
 		HitStopTimer_ = 0;
@@ -225,7 +242,7 @@ void Enemy::UpdateHit()
 	if (KnockBack_Velocity_.x <= 0.5f || KnockBack_Velocity_.z <= 0.5f)
 	{
 		transform_.rotate_.x = 0.0f;
-		EnemyState_ = S_AIM;
+		EnemyState_ = S_ROOT;
 	}
 
 }
@@ -236,7 +253,7 @@ void Enemy::UpdateWallHit()
 	{
 		CharacterLife_--;
 		deadTimer_ = deadTimerValue;
-		EnemyState_ = S_AIM;
+		EnemyState_ = S_ROOT;
 		IsInvincibility_ = true;
 		this->transform_.position_ = { 0,0,0 };
 	}
@@ -281,7 +298,7 @@ void Enemy::UpdateAttack()
 	if (Acceleration_ <= 0.0f)
 	{
 		transform_.rotate_.x = 0.0f;
-		EnemyState_ = S_AIM;
+		EnemyState_ = S_ROOT;
 	}
 }
 
@@ -321,18 +338,18 @@ void Enemy::PlayerReflect(XMVECTOR _vector,bool _isDush)
 void Enemy::LookPlayer()
 {
 	//自分(enemy)と相手(player)の距離をはかる(ベクトル)
-	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition_, pPositionVec_);
-	float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
+	//XMVECTOR DistVec = XMVectorSubtract(EnemyPosition_, pPositionVec_);
+	//float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
 
-	//敵と自機の距離
-	XMFLOAT3 playerPos = pPlayer_->GetWorldPosition();//プレイヤーの位置（ワールド座標）
-	ChasePoint_ = playerPos - this->transform_.position_;//プレイヤーの位置-敵の位置で距離をとる
+	//敵と自機の距離（座標）
+	XMFLOAT3 LookPoint = PlayerEnemyDistanceFloat3();//プレイヤーの位置-敵の位置で距離をとる
 
 	//敵と自機の回転処理
 	XMVECTOR front = EnemyFrontDirection_;//計算用の前向きベクトル（初期値が入る）
 	XMMATRIX mvec = transform_.matRotate_;//現在の回転している方向（自分の回転行列）
-	front = XMVector3Transform(front, mvec);
-	XMVECTOR PlayerDist = XMLoadFloat3(&ChasePoint_);//ベクトルにする
+	front = XMVector3Transform(front, mvec);//正面からどれだけ回転しているか
+
+	XMVECTOR PlayerDist = XMLoadFloat3(&LookPoint);//ベクトルにする
 	XMVECTOR normDist = XMVector3Normalize(PlayerDist);//プレイヤーとの距離を正規化
 	XMVECTOR angle = XMVector3AngleBetweenVectors(normDist, front);//二つのベクトル間のラジアン角を求める
 	XMVECTOR cross = XMVector3Cross(front, normDist);
@@ -358,4 +375,17 @@ void Enemy::LookPlayer()
 	}
 
 	transform_.Calclation();
+}
+
+XMFLOAT3 Enemy::PlayerEnemyDistanceFloat3()
+{
+	XMFLOAT3 dist = PlayerPosition_ - this->transform_.position_;
+	return dist;
+}
+
+float Enemy::PlayerEnemyDistanceX()
+{
+	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition_, pPositionVec_);
+	float tmp = XMVectorGetX(XMVector3Length(DistVec));
+	return tmp;
 }

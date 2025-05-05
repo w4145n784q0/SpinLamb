@@ -27,8 +27,8 @@ void PracticeScene::Initialize()
 	Instantiate<EnemyManager>(this);
 	Instantiate<MiniMap>(this);
 
-	EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
-	pEnemyManager->EnemyInitialize();
+	//EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
+	//pEnemyManager->EnemyInitialize();
 }
 
 void PracticeScene::Update()

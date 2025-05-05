@@ -129,13 +129,13 @@ public:
 	//初期位置に戻す
 	void SetStartPosition() { this->transform_.position_ = StartPosition; }
 
+	//攻撃中かどうか取得(接触判定に使用)
 	bool IsAttackState() { if (PlayerState_ == S_ATTACK) return true; else return false; }
 
 	//チャージ状態エフェクトをつける
 	void SetChargingEffect();
 
 	//突撃エフェクトつける
-	void SetAttackAuraEffect();
 	void SetAttackLocusEffect();
 
 	//衝撃エフェクトつける
