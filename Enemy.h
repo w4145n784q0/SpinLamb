@@ -32,7 +32,8 @@ private:
 	State EnemyState_;
 
 	//追跡関係
-	XMVECTOR EnemyFrontDirection_;//敵の正面ベクトル
+	XMVECTOR ForwardVector_;//敵の正面ベクトル
+	//XMVECTOR EnemyFrontDirection_;
 	XMVECTOR EnemyPosition_;//敵の位置ベクトル
 	XMFLOAT3 PlayerPosition_;//プレイヤーの位置(座標)
 
@@ -86,7 +87,7 @@ public:
 	void UpdateAim();//プレイヤーを狙っている
 	void UpdateOnAlert();//様子見
 	//void UpdateRandomAim();
-
+	void Blown();
 
 	void OnCollision(GameObject* pTarget) override;
 

@@ -18,7 +18,7 @@ namespace
 	const float DeltaTime = 0.016f;
 	const float ChaseLength = 50.0f;
 
-	const float FullAccelerate = 60.0f;//最大加速度
+	const float FullAccelerate = 50.0f;//最大加速度
 	const float MoveRotateX = 10.0f;//移動時の1fの回転量
 	const float FastRotateX = 30.0f;//(チャージ中など)高速回転中の1fの回転量
 
@@ -29,11 +29,13 @@ namespace
 	const int deadTimerValue = 60;//復活までの時間
 	const int Invincibility = 120;//無敵時間の定数
 
+	const XMVECTOR EnemyFrontDirection = { 0,0,1 };//敵の正面の初期値 ここからどれだけ回転したか
 }
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr), IsHit_(false), FrontLength_(EyeLength),
-	Eye_(XMConvertToRadians(EyeAngle)), EnemyFrontDirection_({ 0,0,1 }), IsOnGround_(true),Acceleration_(0.0f), AcceleValue_(1.0f),
+	:GameObject(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr), IsHit_(false), FrontLength_(EyeLength)
+    ,ForwardVector_({0,0,0}),
+	Eye_(XMConvertToRadians(EyeAngle)), IsOnGround_(true),Acceleration_(0.0f), AcceleValue_(1.0f),
 	HitStopTimer_(0), deadTimer_(deadTimerValue),IsInvincibility_(false),InvincibilityTime_(Invincibility),ColliderSize_(1.5f), CharacterLife_(3)
 {
 	transform_.position_ = { 0,0,0 };
@@ -71,6 +73,7 @@ void Enemy::Update()
 	PlayerPosition_ = pPlayer_->GetWorldPosition();//プレイヤーの位置（ワールド座標）
 	pPositionVec_ = XMLoadFloat3(&PlayerPosition_);//プレイヤーの位置をベクトル化し取り続ける
 	EnemyPosition_ = XMLoadFloat3(&this->transform_.position_);//敵の位置をベクトル化し取り続ける
+	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, EnemyFrontDirection);//自分の前方ベクトル(回転した分も含む)を更新
 
 	switch (EnemyState_)
 	{
@@ -151,6 +154,13 @@ void Enemy::Draw()
 
 	}
 
+	/*XMFLOAT3 tmp;
+	XMStoreFloat3(&tmp, ForwardVector_);
+
+	ImGui::Text("front.x:%3f", (float)tmp.x);
+	ImGui::Text("front.y:%3f", (float)tmp.y);
+	ImGui::Text("front.z:%3f", (float)tmp.z);*/
+
 	ImGui::Text("EnemyLife:%.3f", (float)CharacterLife_);
 #endif
 }
@@ -227,36 +237,35 @@ void Enemy::UpdateHitStop()
 
 void Enemy::UpdateHit()
 {
-
-	this->transform_.rotate_.x -= FastRotateX;
-
-	//速度を下げていく
-	KnockBack_Velocity_.x *= 0.9;
-	KnockBack_Velocity_.z *= 0.9;
-
-	//毎フレームpositionに方向を加算
-	//位置 = 位置 + 方向 * 速度
-	transform_.position_.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
-	transform_.position_.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
-
+	Blown();
 	if (KnockBack_Velocity_.x <= 0.5f || KnockBack_Velocity_.z <= 0.5f)
 	{
 		transform_.rotate_.x = 0.0f;
 		EnemyState_ = S_ROOT;
 	}
-
 }
 
 void Enemy::UpdateWallHit()
 {
-	if (--deadTimer_ < 0)
+	Blown();
+	if (KnockBack_Velocity_.x <= 0.1f || KnockBack_Velocity_.z <= 0.1f)
+	{
+		transform_.rotate_.x = 0.0f;
+		CharacterLife_--;
+		deadTimer_ = deadTimerValue;
+		EnemyState_ = S_ROOT;
+		IsInvincibility_ = true;
+		//this->transform_.position_ = { 0,0,0 };
+	}
+
+	/*if (--deadTimer_ < 0)
 	{
 		CharacterLife_--;
 		deadTimer_ = deadTimerValue;
 		EnemyState_ = S_ROOT;
 		IsInvincibility_ = true;
 		this->transform_.position_ = { 0,0,0 };
-	}
+	}*/
 }
 
 void Enemy::UpdateAim()
@@ -276,6 +285,20 @@ void Enemy::UpdateAim()
 void Enemy::UpdateOnAlert()
 {
 	LookPlayer();
+}
+
+void Enemy::Blown()
+{
+	this->transform_.rotate_.x -= FastRotateX;
+
+	//速度を下げていく
+	KnockBack_Velocity_.x *= 0.9;
+	KnockBack_Velocity_.z *= 0.9;
+
+	//毎フレームpositionに方向を加算
+	//位置 = 位置 + 方向 * 速度
+	transform_.position_.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
+	transform_.position_.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
 }
 
 void Enemy::UpdateAttack()
@@ -308,8 +331,14 @@ void Enemy::OnCollision(GameObject* pTarget)
 	{
 		if (!IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
 		{
-			KnockBack_Velocity_ = { 0,0,0 };
+		//	KnockBack_Velocity_ = { 0,0,0 };
 			Acceleration_ = 0.0f;
+			XMFLOAT3 inverse;
+			XMStoreFloat3(&inverse, ForwardVector_);
+			KnockBack_Direction_ = { inverse.x * -1, inverse.y * -1, inverse.z * -1 };
+			KnockBack_Velocity_.x = KnockBackPower;
+			KnockBack_Velocity_.z = KnockBackPower;
+
 			EnemyState_ = S_WALLHIT;
 		}
 	}
@@ -345,7 +374,7 @@ void Enemy::LookPlayer()
 	XMFLOAT3 LookPoint = PlayerEnemyDistanceFloat3();//プレイヤーの位置-敵の位置で距離をとる
 
 	//敵と自機の回転処理
-	XMVECTOR front = EnemyFrontDirection_;//計算用の前向きベクトル（初期値が入る）
+	XMVECTOR front = EnemyFrontDirection;//計算用の前向きベクトル（初期値が入る）
 	XMMATRIX mvec = transform_.matRotate_;//現在の回転している方向（自分の回転行列）
 	front = XMVector3Transform(front, mvec);//正面からどれだけ回転しているか
 

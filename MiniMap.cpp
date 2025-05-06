@@ -36,6 +36,7 @@ void MiniMap::Update()
 {
 	pTrans.position_.x = (pPlayer_->GetPosition().x * reductionX) + 0.895;
 	pTrans.position_.y = (pPlayer_->GetPosition().z * reductionY) - 0.81;
+	//pTrans.rotate_.z = pPlayer_->GetRotate().y;
 
 	eTrans.position_.x = (pEnemy_->GetPosition().x * reductionX) + 0.895;
 	eTrans.position_.y = (pEnemy_->GetPosition().z * reductionY) - 0.81;

@@ -70,10 +70,10 @@ private:
 	XMFLOAT3 Direction_;//プレイヤーの方向(xzどこに進むか)
 	XMVECTOR PlayerPosition_;//位置ベクトル
 	XMVECTOR NewPos_;//プレイヤーの移動先
-	XMFLOAT3 PlayerFront;//プレイヤーの正面位置 
+	//XMFLOAT3 PlayerFront;//プレイヤーの正面位置 
 	XMVECTOR ForwardVector_;//プレイヤーの正面ベクトル
 	Transform ArrowTransform_;//矢印モデルの位置情報
-
+	
 	//カメラ関係
 	XMFLOAT3 CameraPosition_;
 	XMFLOAT3 CameraTarget_;
@@ -114,6 +114,9 @@ public:
 	void UpdateDead();
 	void PlayerStop() { PlayerState_ = S_MAX; }
 	
+	void PlayerMove();
+	void Blown();
+
 	/// <summary>
 	/// カメラの操作（一部のステートのみ）
 	/// </summary>

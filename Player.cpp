@@ -26,12 +26,10 @@ namespace {
 	const float FastRotateX = 30.0f;////(チャージ中など)高速回転中の1fの回転量
 	const float FullAccelerate = 120.0f;//チャージ最大値
 	XMVECTOR BackCameraPos = { 0,3,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
-	
-	float PrevHeight = 0.0f;
 
-	const float KnockBackPower = 2.5f; //ノックバックする強さ
+	const float KnockBackPower = 2.0f; //ノックバックする強さ
 
-	XMVECTOR PlayerFrontDirection = { 0,0,1 };//正面ベクトル ここからどれだけ回転したか
+	XMVECTOR PlayerFrontDirection = { 0,0,1 };//正面の初期値 ここからどれだけ回転したか
 	const int deadTimerValue = 60;//復活までの時間
 	const int Invincibility = 120;//無敵時間の定数
 
@@ -149,6 +147,14 @@ void Player::Draw()
 	//ImGui::Text("camera x :%.3f", CameraPosition_.x);
 
 	//ImGui::Text("dash:%.3f", Acceleration_);
+	
+	XMFLOAT3 tmp;
+    XMStoreFloat3(&tmp, ForwardVector_);
+
+	ImGui::Text("front.x:%3f", (float)tmp.x);
+	ImGui::Text("front.y:%3f", (float)tmp.y);
+	ImGui::Text("front.z:%3f", (float)tmp.z);
+
 	ImGui::Text("PlayerLife:%.3f", (float)CharacterLife_);
 #endif
 
@@ -197,11 +203,9 @@ void Player::OnCollision(GameObject* pTarget)
 				//敵のノックバック処理
 				pEnemy->PlayerReflect(EnemynormalDirection, true);
 				EnemyReflect(PlayernormalDirection, IsEnemyAttack);
-				//PlayerState_ = S_HIT;
 			}
 			else//プレイヤー:通常
 			{
-				//PlayerState_ = S_HIT;
 				EnemyReflect(PlayernormalDirection, IsEnemyAttack);
 			}
 			//ヒットエフェクト
@@ -218,7 +222,8 @@ void Player::OnCollision(GameObject* pTarget)
 			}
 			else//プレイヤー:通常
 			{
-				
+				pEnemy->PlayerReflect(EnemynormalDirection, false);
+				EnemyReflect(PlayernormalDirection, IsEnemyAttack);
 			}
 		}
 
@@ -236,6 +241,11 @@ void Player::OnCollision(GameObject* pTarget)
 		if(!IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
 		{
 			Acceleration_ = 0.0f;
+			XMFLOAT3 tmp;
+			XMStoreFloat3(&tmp, ForwardVector_);
+			KnockBack_Direction_ = tmp;
+			KnockBack_Velocity_.x = KnockBackPower;
+			KnockBack_Velocity_.z = KnockBackPower;
 			PlayerState_ = S_WALLHIT;
 		}
 	}
@@ -333,35 +343,10 @@ void Player::UpdateIdle()
 		}
 	}
 
+	PlayerMove();
 
-	//プレイヤーのy回転をラジアン化して行列に
-	XMMATRIX playerRot = XMMatrixRotationY(XMConvertToRadians(this->transform_.rotate_.y));
-
-	//プレイヤーの進行方向をベクトル化
-	XMVECTOR PrevDir = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
-
-	//方向ベクトルを回転行列で変換
-	PrevDir = XMVector3TransformCoord(PrevDir, playerRot);
-
-	//単位ベクトル化する
-	XMVECTOR norm = XMVector3Normalize(PrevDir);
-
-	//移動ベクトル化する
-	XMVECTOR MoveVector = XMVectorScale(norm, (speed + Acceleration_) * DeltaTime);
-
-	//現在位置と移動ベクトルを加算
-	XMVECTOR PrevPos = PlayerPosition_;
-	NewPos_ = PrevPos + MoveVector;
-
-	//位置更新
-	XMFLOAT3 f;
-	XMStoreFloat3(&f, NewPos_);
-
-	if(!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
-	{
-		XMStoreFloat3(&this->transform_.position_, NewPos_);
-	}
-
+	//自分の前方ベクトル(回転した分も含む)を更新
+	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, PlayerFrontDirection);
 
 	//プレイヤーの正面ベクトルを更新
 	//自分の前方ベクトル(回転した分も含む)
@@ -379,7 +364,6 @@ void Player::UpdateIdle()
 		if (IsOnGround_)
 		{
 			IsOnGround_ = false;
-			PrevHeight = transform_.position_.y;
 			JumpSpeed_ = 2.2f;//一時的にy方向にマイナスされている値を大きくする
 		}
 	}
@@ -400,10 +384,10 @@ void Player::UpdateIdle()
 		SetStartPosition();
 	}
 
-	if (Input::IsKeyDown(DIK_ESCAPE))
+	/*if (Input::IsKeyDown(DIK_ESCAPE))
 	{
 		SetStartPosition();
-	}
+	}*/
 
 
 	CameraControl();
@@ -415,19 +399,20 @@ void Player::UpdateIdle()
 void Player::UpdateHit()
 {
 	//速度を下げていく
-	KnockBack_Velocity_.x *= 0.9;
-	KnockBack_Velocity_.z *= 0.9;
+	//KnockBack_Velocity_.x *= 0.9;
+	//KnockBack_Velocity_.z *= 0.9;
 
 	//毎フレームpositionに方向を加算
 	//位置 = 位置 + 方向 * 速度
-	transform_.position_.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
-	transform_.position_.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
-	cameraTransform_.position_ = transform_.position_;
+	//transform_.position_.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
+	//transform_.position_.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
+	//cameraTransform_.position_ = transform_.position_;
 
 	if (KnockBack_Velocity_.x <= 0.5f || KnockBack_Velocity_.z <= 0.5f)
 	{
 		PlayerState_ = S_IDLE;
 	}
+	Blown();
 }
 
 void Player::UpdateCharge()
@@ -497,6 +482,76 @@ void Player::UpdateAttack()
 		PlayerState_ = S_IDLE;
 	}
 
+	PlayerMove();
+}
+
+void Player::UpdateOut()
+{
+	if (--deadTimer_ < 0)
+	{
+		//BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
+		//pBossBattleScene->DeadCountPlus();
+
+		deadTimer_ = deadTimerValue;
+		PlayerState_ = S_IDLE;
+		SetStartPosition();
+	}
+}
+
+void Player::UpdateWallHit()
+{	
+	Blown();
+	if (KnockBack_Velocity_.x <= 0.1f || KnockBack_Velocity_.z <= 0.1f)
+	{
+		CharacterLife_--;
+		deadTimer_ = deadTimerValue;
+		PlayerState_ = S_IDLE;
+		IsInvincibility_ = true;
+
+		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
+		if (pSM->IsBattleScene())
+		{
+			BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
+			pBattleScene->SetPlayerHp(CharacterLife_);
+		}
+		else
+		{
+
+		}
+	}
+
+	//if (--deadTimer_ < 0)
+	//{
+	//	//BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
+	//	//pBossBattleScene->DeadCountPlus();
+
+	//	CharacterLife_--;
+	//	deadTimer_ = deadTimerValue;
+	//	PlayerState_ = S_IDLE;
+	//	IsInvincibility_ = true;
+
+	//	SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
+	//	if (pSM->IsBattleScene())
+	//	{
+	//		BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
+	//		pBattleScene->SetPlayerHp(CharacterLife_);
+	//	}
+	//	else
+	//	{
+
+	//	}
+
+	//	//SetStartPosition();
+	//}
+}
+
+void Player::UpdateDead()
+{
+
+}
+
+void Player::PlayerMove()
+{
 	//プレイヤーのy回転をラジアン化して行列に
 	XMMATRIX playerRot = XMMatrixRotationY(XMConvertToRadians(this->transform_.rotate_.y));
 
@@ -516,52 +571,37 @@ void Player::UpdateAttack()
 	XMVECTOR PrevPos = PlayerPosition_;
 	NewPos_ = PrevPos + MoveVector;
 
-	XMStoreFloat3(&this->transform_.position_, NewPos_);
-}
-
-void Player::UpdateOut()
-{
-	if (--deadTimer_ < 0)
+	//場外でなければ位置更新 
+	XMFLOAT3 f;
+	XMStoreFloat3(&f, NewPos_);
+	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
 	{
-		//BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
-		//pBossBattleScene->DeadCountPlus();
-
-		deadTimer_ = deadTimerValue;
-		PlayerState_ = S_IDLE;
-		SetStartPosition();
+		XMStoreFloat3(&this->transform_.position_, NewPos_);
 	}
 }
 
-void Player::UpdateWallHit()
+void Player::Blown()
 {
-	if (--deadTimer_ < 0)
+	this->transform_.rotate_.x += MoveRotateX;
+
+	//毎フレーム速度を減少
+	KnockBack_Velocity_.x *= 0.9;
+	KnockBack_Velocity_.z *= 0.9;
+
+	//位置 = 位置 + 方向 * 速度
+	XMFLOAT3 TmpPos = this->transform_.position_;
+	TmpPos.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
+	TmpPos.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
+
+	NewPos_ = XMLoadFloat3(&TmpPos);
+
+	//場外でなければ位置更新 
+	XMFLOAT3 f;
+	XMStoreFloat3(&f, NewPos_);
+	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
 	{
-		//BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
-		//pBossBattleScene->DeadCountPlus();
-
-		CharacterLife_--;
-		deadTimer_ = deadTimerValue;
-		PlayerState_ = S_IDLE;
-		IsInvincibility_ = true;
-
-		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
-		if (pSM->IsBattleScene())
-		{
-			BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
-			pBattleScene->SetPlayerHp(CharacterLife_);
-		}
-		else
-		{
-
-		}
-
-		//SetStartPosition();
+		XMStoreFloat3(&this->transform_.position_, NewPos_);
 	}
-}
-
-void Player::UpdateDead()
-{
-
 }
 
 void Player::CameraControl()
@@ -643,11 +683,6 @@ void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
 	{
 		KnockBack_Velocity_.x = KnockBackPower;
 		KnockBack_Velocity_.z = KnockBackPower;
-	}
-
-	if (PlayerState_ == S_CHARGE)
-	{
-		VFX::End(hChargeEmit_);
 	}
 
 	PlayerState_ = S_HIT;
@@ -732,17 +767,4 @@ void Player::SetHitEffect()
 	HitEffectCount = 5;
 	IsHitEffect = true;*/
 }
-
-//void Player::HitEffectStop()
-//{
-//	if(IsHitEffect)
-//	{
-//		if (--HitEffectCount < 0)
-//		{
-//			HitEffectCount = 0;
-//			IsHitEffect = false;
-//			VFX::End(hHitEmit_);
-//		}
-//	}
-//}
 
