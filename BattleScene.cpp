@@ -8,19 +8,23 @@
 #include"Ground.h"
 #include"Enemy.h"
 #include"EnemyManager.h"
+#include"MiniMap.h"
 #include"Fence.h"
 #include"Logo.h"
 
 namespace
 {
-	const float LifeStartPosition = -0.9;//HP‚Ì•`‰æˆÊ’u‚Ì‰Šú’n“_
-	const float LifeWidth = 0.1;//HP‚Ì•`‰æ‚ÌŠÔŠu
+	//const float PlayerLifeStart = -0.9;//HP‚Ì•`‰æˆÊ’u‚Ì‰Šú’n“_(ƒvƒŒƒCƒ„[)
+	//const float EnemyLifeStart = 0.9;//HP‚Ì•`‰æˆÊ’u‚Ì‰Šú’n“_(“G)
+	//const float LifeWidth = 0.1;//HP‚Ì•`‰æ‚ÌŠÔŠu
+
+	int Timecounter = 0;
 }
 
 BattleScene::BattleScene(GameObject* parent)
 	:GameObject(parent,"BattleScene") ,BattleState(NOW),
-	hWin_(-1),hLose_(-1),hFinish_(-1),hLife_(-1), hBattleSound_(-1),hWhistle_(-1),
-	PlayerLife_(0),EnemyLife_(0),pPlayer_(nullptr)
+	hWin_(-1),hLose_(-1),hFinish_(-1),hPlayerLife_(-1), hEnemyLife_(-1), hBattleSound_(-1),hWhistle_(-1),
+	PlayerScore_(0),EnemyScore_(0),GameTime_(30)
 {
 	HUD_Trans_[0].position_ = { -0.7,0.8,0 };
 	HUD_Trans_[1].position_ = { 0.7,0.8,0 };
@@ -31,22 +35,36 @@ void BattleScene::Initialize()
 	Instantiate<Ground>(this);
 	Instantiate<Fence>(this);
 	Instantiate<Player>(this);
-	Instantiate<EnemyManager>(this);
+	Instantiate<Enemy>(this);
+	//Instantiate<EnemyManager>(this);
+	Instantiate<MiniMap>(this);
 
-	EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
-	pEnemyManager->EnemyInitialize();
+	//EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
+	//pEnemyManager->EnemyInitialize();
 
 	hWin_ = Image::Load("YouWin.png");
 	hLose_ = Image::Load("YouLose.png");
 	hFinish_ = Image::Load("finish.png");
-	hLife_ = Image::Load("arrow.png");
+	//hPlayerLife_ = Image::Load("arrow.png");
+	//hEnemyLife_ = Image::Load("arrow.png");
 
 	hBattleSound_ = Audio::Load("maou_game_rock51.wav");
 	hWhistle_ = Audio::Load("maou_se_sound_whistle01.wav");
 
-	pPlayer_ = (Player*)FindObject("Player");
+	pTime_ = new Text;
+	pTime_->Initialize();
 
-	PlayerLife_ = pPlayer_->GetCharacterLife();
+	pPlayerScore_ = new Text;
+	pPlayerScore_->Initialize();
+
+	pEnemyScore_ = new Text;
+	pEnemyScore_->Initialize();
+
+	//pPlayer_ = (Player*)FindObject("Player");
+	
+
+	//PlayerLife_ = pPlayer_->GetCharacterLife();
+	//EnemyLife_ = pEnemy_->GetCharacterLife();
 }
 
 void BattleScene::Update()
@@ -71,21 +89,29 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
+	pTime_->Draw(640, 30, GameTime_);
+	pPlayerScore_->Draw(30, 30, PlayerScore_);
+	pEnemyScore_->Draw(1250, 30, EnemyScore_);
+
 	/*pText_->Draw(140, 30, Phase_);
 	pText_->Draw(30, 30, "PHASE:");
 
 	pText2_->Draw(140, 60, deadCount_);
 	pText2_->Draw(30, 60, "LIFE :");*/
 
-	//Image::SetTransform(hLife_,HUD_Trans_[0]);
-	//Image::Draw(hLife_);
-
-	for (int i = 0; i < PlayerLife_; i++)
+	/*for (int i = 0; i < PlayerLife_; i++)
 	{
-		HUD_Trans_[0].position_.x = LifeStartPosition + i * LifeWidth;
-		Image::SetTransform(hLife_, HUD_Trans_[0]);
-		Image::Draw(hLife_);
+		HUD_Trans_[0].position_.x = PlayerLifeStart + i * LifeWidth;
+		Image::SetTransform(hPlayerLife_, HUD_Trans_[0]);
+		Image::Draw(hPlayerLife_);
 	}
+
+	for (int i = 0; i < EnemyLife_; i++)
+	{
+		HUD_Trans_[1].position_.x = PlayerLifeStart + i * LifeWidth;
+		Image::SetTransform(hEnemyLife_, HUD_Trans_[1]);
+		Image::Draw(hEnemyLife_);
+	}*/
 
 	switch (BattleState)
 	{
@@ -116,41 +142,20 @@ void BattleScene::UpdateBattleBefore()
 
 void BattleScene::UpdateBattle()
 {
+	if (GameTime_ <= 0)
+	{
+		BattleState = AFTER;
+	}
 
 	Audio::Play(hBattleSound_);
-
-	//if (FindObject("Enemy") == nullptr && Phase_ < 3)
-	//{
-	//	//Phase_++;
-	//	EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
-	//	pEnemyManager->EnemyInitialize();
-	//}
-	//if (Phase_ == 3)
-	//{
-	//	Player* pPlayer = (Player*)FindObject("Player");
-	//	pPlayer->PlayerStop();
-
-	//	IsWin_ = true;
-	//	BattleState = AFTER;
-	//	Instantiate<Logo>(this);
-	//	/*SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-	//	pSceneManager->ChangeScene(SCENE_ID_CLEAR);*/
-	//}
-	//if (deadCount_ == 0)
-	//{
-	//	Enemy* pEnemy = (Enemy*)FindObject("Enemy");
-	//	pEnemy->SetStateStop();
-	//	Player* pPlayer = (Player*)FindObject("Player");
-	//	pPlayer->PlayerStop();
-
-	//	BattleState = AFTER;
-	//	IsWin_ = false;
-	//	Instantiate<Logo>(this);
-	//	/*SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-	//	pSceneManager->ChangeScene(SCENE_ID_TITLE);*/
-	//}
-
-
+	if (++Timecounter > 60 )
+	{
+		Timecounter = 0;
+		if(GameTime_ > 0)
+		{
+			GameTime_--;
+		}
+	}
 }
 
 void BattleScene::UpdateBattleAfter()
@@ -166,10 +171,8 @@ void BattleScene::UpdateBattleAfter()
 	static int time = 120;
 	if (--time < 0)
 	{
-		Logo* pLogo = (Logo*)FindObject("Logo");
-		pLogo->SetMax();
 		
-		if (IsWin_)
+		if (PlayerScore_ > EnemyScore_)
 		{
 			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 			pSceneManager->ChangeScene(SCENE_ID_CLEAR);
@@ -197,5 +200,5 @@ void BattleScene::DrawBattle()
 }
 
 void BattleScene::DrawBattleAfter()
-{
+{	
 }

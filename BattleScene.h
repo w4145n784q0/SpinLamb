@@ -2,6 +2,7 @@
 #include"Engine/Text.h"
 #include "Engine/GameObject.h"
 #include"Player.h"
+#include"Enemy.h"
 
 class BattleScene :
     public GameObject
@@ -9,7 +10,9 @@ class BattleScene :
 private:
 
 	//インスタンス
-	Player* pPlayer_;
+	Text* pTime_;
+	Text* pPlayerScore_;
+	Text* pEnemyScore_;
 
 	enum Battle
 	{
@@ -25,7 +28,8 @@ private:
 	int hWin_;
 	int hLose_;
 	int hFinish_;
-	int hLife_;
+	int hPlayerLife_;//プレイヤーのHP画像
+	int hEnemyLife_;//敵のHP画像
 
 	//音ハンドル
 	int hBattleSound_;
@@ -34,8 +38,13 @@ private:
 	bool IsWin_;
 
 	std::array<Transform, 2> HUD_Trans_;
-	int PlayerLife_;
-	int EnemyLife_;
+	//int PlayerLife_;
+	//int EnemyLife_;
+
+	int GameTime_;
+	int PlayerScore_;
+	int EnemyScore_;
+
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
@@ -61,7 +70,10 @@ public:
 	void DrawBattle();
 	void DrawBattleAfter();
 
-	void SetPlayerHp(int _hp) { PlayerLife_ = _hp; }
+	//void SetPlayerHp(int _hp) { PlayerLife_ = _hp; }
+
+	void PlusPlayerScore() { PlayerScore_++; }
+	void PlusEnemyScore() { EnemyScore_++; }
 
 };
 

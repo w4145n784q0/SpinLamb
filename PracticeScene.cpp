@@ -24,7 +24,8 @@ void PracticeScene::Initialize()
 	Instantiate<Ground>(this);
 	Instantiate<Fence>(this);
 	Instantiate<Player>(this);
-	Instantiate<EnemyManager>(this);
+	Instantiate<Enemy>(this);
+	//Instantiate<EnemyManager>(this);
 	Instantiate<MiniMap>(this);
 
 	//EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");

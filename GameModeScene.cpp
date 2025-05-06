@@ -122,7 +122,7 @@ void GameModeScene::Draw()
 	Image::Draw(hArrow_);
 
 #ifdef _DEBUG
-	ImGui::Text("mode :%.1f", itr);
+	//ImGui::Text("mode :%.1f", itr);
 #endif
 
 

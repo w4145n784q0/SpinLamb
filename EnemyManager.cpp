@@ -1,8 +1,13 @@
 #include "EnemyManager.h"
 #include"Enemy.h"
 
+namespace
+{
+	const int EnemyNum = 1;
+}
+
 EnemyManager::EnemyManager(GameObject* parent)
-	:GameObject(parent,"EnemyManager"),EnemyNum_(1)
+	:GameObject(parent,"EnemyManager"),EnemyNum_(EnemyNum)
 {
 }
 

@@ -108,7 +108,8 @@ public:
 
 	//“G‚ÆƒvƒŒƒCƒ„[‚Ì‹——£‚ğ•Ô‚·
 	XMFLOAT3 PlayerEnemyDistanceFloat3();
-
 	float PlayerEnemyDistanceX();
+
+	int GetCharacterLife() { return CharacterLife_; }
 };
 

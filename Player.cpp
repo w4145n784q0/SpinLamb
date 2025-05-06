@@ -512,11 +512,8 @@ void Player::UpdateWallHit()
 		if (pSM->IsBattleScene())
 		{
 			BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
-			pBattleScene->SetPlayerHp(CharacterLife_);
-		}
-		else
-		{
-
+			//pBattleScene->SetPlayerHp(CharacterLife_);
+			pBattleScene->PlusEnemyScore();
 		}
 	}
 

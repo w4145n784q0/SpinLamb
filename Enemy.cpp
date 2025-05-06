@@ -5,6 +5,7 @@
 #include"Engine/Camera.h"
 #include"Engine/SphereCollider.h"
 #include"BattleScene.h"
+#include"Engine/SceneManager.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
@@ -255,7 +256,14 @@ void Enemy::UpdateWallHit()
 		deadTimer_ = deadTimerValue;
 		EnemyState_ = S_ROOT;
 		IsInvincibility_ = true;
-		//this->transform_.position_ = { 0,0,0 };
+
+		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
+		if (pSM->IsBattleScene())
+		{
+			BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
+			//pBattleScene->SetPlayerHp(CharacterLife_);
+			pBattleScene->PlusPlayerScore();
+		}
 	}
 
 	/*if (--deadTimer_ < 0)
