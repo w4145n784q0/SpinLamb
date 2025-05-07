@@ -37,11 +37,14 @@ void PracticeScene::Initialize()
 
 	//EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
 	//pEnemyManager->EnemyInitialize();
+
+	HUD* pHUD = (HUD*)FindObject("HUD");
+	pHUD->SetStatePractice();
 }
 
 void PracticeScene::Update()
 {
-	if (Input::IsKey(DIK_P))//ボタン長押しでタイトルに戻る
+	if (Input::IsKey(DIK_P) || Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsPadButton(XINPUT_GAMEPAD_LEFT_SHOULDER))//ボタン長押しでタイトルに戻る
 	{
 		Press_++;
 	}

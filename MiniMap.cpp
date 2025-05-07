@@ -58,6 +58,7 @@ void MiniMap::Draw()
 
 	Image::SetTransform(hMap_,mTrans);
 	Image::Draw(hMap_);
+	Image::SetAlpha(hMap_, 128);
 
 	Image::SetTransform(hPlayerIcon_, pTrans);
 	Image::Draw(hPlayerIcon_);

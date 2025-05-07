@@ -50,8 +50,6 @@ void SceneManager::Update()
 		case SCENE_ID_GAMEMODE: Instantiate<GameModeScene>(this); break;
 		case SCENE_ID_PRACTICE: Instantiate<PracticeScene>(this); break;
 		case SCENE_ID_BATTLE: Instantiate<BattleScene>(this); break;
-
-		case SCENE_ID_PLAY: Instantiate<PlayScene>(this); break;
 		case SCENE_ID_CLEAR: Instantiate<ClearScene>(this); break;
 		case SCENE_ID_GAMEOVER: Instantiate<GameOverScene>(this); break;
 
