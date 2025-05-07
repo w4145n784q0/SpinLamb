@@ -36,11 +36,12 @@ namespace {
 }
 
 Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hPlayer_(-1), hAttackArrow_(-1),
-	IsOnGround_(true),
-	JumpSpeed_(0.0f),
+	:GameObject(parent, "Player"), hPlayer_(-1), /*hAttackArrow_(-1),*/ hCollisionSound_(-1),
+	pGround_(nullptr),PlayerState_(S_IDLE),CameraState_(S_NORMALCAMERA),
+	IsOnGround_(true),JumpSpeed_(0.0f),
+
 	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),BackCamera_(BackCameraPos),
-	PlayerState_(S_IDLE),CameraState_(S_NORMALCAMERA), PlayerHeight_(0),AcceleValue_(2.0f),
+	PlayerHeight_(0),AcceleValue_(2.0f),
 	deadTimer_(deadTimerValue),InvincibilityTime_(Invincibility),IsInvincibility_(false),ColliderSize_(0.3f),CharacterLife_(3)
 {
 	cameraTransform_ = this->transform_;
@@ -59,8 +60,8 @@ void Player::Initialize()
 {
 	hPlayer_ = Model::Load("chara2.fbx");
 	assert(hPlayer_ >= 0);
-	hAttackArrow_ = Model::Load("AttackArrow.fbx");
-	assert(hAttackArrow_ >= 0);
+	//hAttackArrow_ = Model::Load("AttackArrow.fbx");
+	//assert(hAttackArrow_ >= 0);
 
 	hCollisionSound_ = Audio::Load("maou_se_battle15.wav");
 	assert(hCollisionSound_ >= 0);
@@ -534,11 +535,6 @@ void Player::UpdateWallHit()
 
 	//	//SetStartPosition();
 	//}
-}
-
-void Player::UpdateDead()
-{
-
 }
 
 void Player::PlayerMove()

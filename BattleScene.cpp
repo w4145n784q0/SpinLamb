@@ -10,7 +10,7 @@
 #include"EnemyManager.h"
 #include"MiniMap.h"
 #include"Fence.h"
-#include"Logo.h"
+#include"HUD.h"
 
 namespace
 {
@@ -23,7 +23,7 @@ namespace
 
 BattleScene::BattleScene(GameObject* parent)
 	:GameObject(parent,"BattleScene") ,BattleState(NOW),
-	hWin_(-1),hLose_(-1),hFinish_(-1),hPlayerLife_(-1), hEnemyLife_(-1), hBattleSound_(-1),hWhistle_(-1),
+	hFinish_(-1),hPlayerLife_(-1), hEnemyLife_(-1), hBattleSound_(-1),hWhistle_(-1),
 	PlayerScore_(0),EnemyScore_(0),GameTime_(30)
 {
 	HUD_Trans_[0].position_ = { -0.7,0.8,0 };
@@ -38,12 +38,13 @@ void BattleScene::Initialize()
 	Instantiate<Enemy>(this);
 	//Instantiate<EnemyManager>(this);
 	Instantiate<MiniMap>(this);
+	Instantiate<HUD>(this);
 
 	//EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
 	//pEnemyManager->EnemyInitialize();
 
-	hWin_ = Image::Load("YouWin.png");
-	hLose_ = Image::Load("YouLose.png");
+	//hWin_ = Image::Load("YouWin.png");
+	//hLose_ = Image::Load("YouLose.png");
 	hFinish_ = Image::Load("finish.png");
 	//hPlayerLife_ = Image::Load("arrow.png");
 	//hEnemyLife_ = Image::Load("arrow.png");

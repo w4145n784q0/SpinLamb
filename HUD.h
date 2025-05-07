@@ -4,7 +4,7 @@ class HUD :
     public GameObject
 {
 private:
-	//画像ハンドル
+	//----------画像ハンドル----------
 
 	//タイトルに戻る(練習モード用)
 	int hBackTitleLogo_;

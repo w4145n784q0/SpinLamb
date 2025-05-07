@@ -11,6 +11,8 @@ namespace
 	Transform logo_backtitle;
 	Transform logo_practice;
 
+	const XMFLOAT3 BackTitlePosition = { -0.55,-0.9,0 };
+	const XMFLOAT3 PracticePosition = { -0.8,0.9,0 };
 }
 
 HUD::HUD(GameObject* parent)
@@ -27,8 +29,8 @@ void HUD::Initialize()
 	hBackTitleLogo_ = Image::Load("BackTitleLogo.png");
 	hPracticeNow_ = Image::Load("PracticeLogo.png");
 
-	logo_backtitle.position_ = { -0.55,-0.9,0 };
-	logo_practice.position_ = { -0.8,0.9,0 };
+	logo_backtitle.position_ = BackTitlePosition;
+	logo_practice.position_ = PracticePosition;
 }
 
 void HUD::Update()

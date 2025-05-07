@@ -11,30 +11,23 @@ class Player :
     public GameObject
 {
 private:
-	//モデルハンドル
+	//----------モデルハンドル----------
+
+	//プレイヤーモデル
 	int hPlayer_;
 
-	int hPlayerIdle_;//待機モーション
-	int hPlayerMove_;//移動
-	int hPlayerDash_;//ダッシュ
-	int hPlayerHit_;//攻撃を食らった
-	int hPlayerDead_;//倒れる
+	//チャージ中の矢印
+	//int hAttackArrow_;
 
-	int hAttackArrow_;//チャージ中の矢印
+	//----------サウンドハンドル----------
 
-	//サウンド関係
+	//接触音
 	int hCollisionSound_;
-
-	//VFX関係
-	int hChargeEmit_;//チャージエフェクト
-	int hHitEmit_;//敵とのヒットエフェクト
-	int hAttackEmitLocus_;//攻撃エフェクト(軌跡)
-	int hAttackEmitAura_;//攻撃エフェクト(オーラ)
 
 	//インスタンス関係
 	Ground* pGround_;
 
-	//プレイヤーステート
+	//----------プレイヤーステート----------
 	enum State
 	{
 		S_IDLE,//通常
@@ -42,11 +35,11 @@ private:
 		S_CHARGE,//チャージ中
 		S_ATTACK,//攻撃
 		S_WALLHIT,//壁にヒット
-		S_DEAD,//倒れる
 		S_MAX
 	};
 	State PlayerState_;
 
+	//----------カメラステート----------
 	enum CameraState
 	{
 		S_NORMALCAMERA,//通常カメラ
@@ -55,37 +48,36 @@ private:
 	};
 	CameraState CameraState_;
 
-	//ジャンプ関係
+	//----------ジャンプ関係----------
 	bool IsOnGround_;
 	float JumpSpeed_;//+ならジャンプしている状態 -なら下降～地面にいる状態
 
 
-	//ダッシュ関係
+	//----------ダッシュ関係----------
 	float Acceleration_;//加速度
 	float AcceleValue_;//1fで加速度に加算する量
 	
-	//移動関係
-	bool CanMove_;
+	//----------移動関係----------
 	int PlayerHeight_;//プレイヤーの高さ
-	XMFLOAT3 Direction_;//プレイヤーの方向(xzどこに進むか)
+	XMFLOAT3 Direction_;//プレイヤーの進行方向(xzどこに進むか)
 	XMVECTOR PlayerPosition_;//位置ベクトル
 	XMVECTOR NewPos_;//プレイヤーの移動先
 	//XMFLOAT3 PlayerFront;//プレイヤーの正面位置 
 	XMVECTOR ForwardVector_;//プレイヤーの正面ベクトル
 	Transform ArrowTransform_;//矢印モデルの位置情報
 	
-	//カメラ関係
+	//----------カメラ関係----------
 	XMFLOAT3 CameraPosition_;
 	XMFLOAT3 CameraTarget_;
 	Transform cameraTransform_;//カメラのTransform 回転だけ使う
 	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
 
-	//被弾(HIT)関係
+	//----------被弾(HIT)関係----------
 	float ColliderSize_;//スフィアコライダーのサイズ
 	XMFLOAT3 KnockBack_Direction_;//ノックバックする方向
 	XMFLOAT3 KnockBack_Velocity_;//ノックバックする速度
 
-	//ダメージ関係
+	//----------ダメージ関係----------
 	int CharacterLife_;//キャラクターのHP
 	int deadTimer_;//復活までの時間
 	int InvincibilityTime_;//ダメージ後の無敵時間
@@ -111,7 +103,6 @@ public:
 	void UpdateAttack();
 	void UpdateOut();
 	void UpdateWallHit();
-	void UpdateDead();
 	void PlayerStop() { PlayerState_ = S_MAX; }
 	
 	void PlayerMove();

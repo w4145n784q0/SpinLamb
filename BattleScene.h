@@ -25,17 +25,18 @@ private:
 
 	//画像ハンドル
 
-	int hWin_;
-	int hLose_;
+	//"finish"のロゴ
 	int hFinish_;
-	int hPlayerLife_;//プレイヤーのHP画像
-	int hEnemyLife_;//敵のHP画像
+
+	//プレイヤーのHP画像
+	int hPlayerLife_;
+
+	//敵のHP画像
+	int hEnemyLife_;
 
 	//音ハンドル
 	int hBattleSound_;
 	int hWhistle_;
-
-	bool IsWin_;
 
 	std::array<Transform, 2> HUD_Trans_;
 	//int PlayerLife_;
