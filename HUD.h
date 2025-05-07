@@ -12,15 +12,36 @@ private:
 	//練習中(練習モード用)
 	int hPracticeNow_;
 
-	
+	//プレイヤーのスコアスプライト(バトルモード用)
+	int hPlayerScore_;
+
+	//敵のスコアスプライト(バトルモード用)
+	int hEnemyScore_;
+
+	//制限時間
+	int hTime_;
+
+	//カウントダウン
+	int hCountDown3_;
+	int hCountDown2_;
+	int hCountDown1_;
+
+	//フィニッシュのロゴ
+	int hFinish_;
+
+	//std::array<int, 3> CountDownArray_;
 
 	enum GameMode
 	{
-		Battle,
+		BattlePreStart,
+		BattleInProgress,
+		BattleEnd,
 		Practice,
 		Max,
 	};
 	GameMode GameModeHUD_;
+
+	int countDownNumber_;
 
 public:
 	//コンストラクタ
@@ -41,14 +62,23 @@ public:
 	//開放
 	void Release() override;
 
-	void UpdateBattle();
+
+	void UpdateBattlePreStart();
+	void UpdateBattleInProgress();
+	void UpdateBattleEnd();
 	void UpdatePractice();
 
-	void DrawBattle();
+	void DrawBattlePreStart();
+	void DrawBattleInProgress();
+	void DrawBattleEnd();
 	void DrawPractice();
 
-	void SetStateBattle() { GameModeHUD_ = Battle; }
+	void SetStateBattle() { GameModeHUD_ = BattlePreStart; }
+	void SetStateBattleInProgress() { GameModeHUD_ = BattleInProgress; }
+	void SetStateBattleEnd(){ GameModeHUD_ = BattleEnd; }
 	void SetStatePractice() { GameModeHUD_ = Practice; }
+
+	void SetNumber(int _num) { countDownNumber_ = _num; }
 
 };
 

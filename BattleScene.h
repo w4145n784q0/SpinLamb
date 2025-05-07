@@ -42,7 +42,12 @@ private:
 	//int PlayerLife_;
 	//int EnemyLife_;
 
+	//ゲーム開始カウント
+	int StartCount_;
+
+	//制限時間
 	int GameTime_;
+
 	int PlayerScore_;
 	int EnemyScore_;
 

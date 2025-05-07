@@ -4,6 +4,7 @@ class PracticeScene :
     public GameObject
 {
 private:
+	//長押しでタイトルに遷移するカウント
 	int Press_;
 public:
 	//コンストラクタ

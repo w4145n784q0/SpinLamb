@@ -91,6 +91,12 @@ public:
 
 	void OnCollision(GameObject* pTarget) override;
 
+	//“G‚ÉˆÚ“®‚ğ‹–‰Â
+	void EnemyStart() { EnemyState_ = S_ROOT; }
+
+	//“G‚ğ~‚ß‚é
+	void EnemyStop() { EnemyState_ = S_MAX; }
+
 	/// <summary>
 	/// ƒvƒŒƒCƒ„[‚©‚ç‚Í‚¶‚©‚ê‚éˆ—
 	/// </summary>

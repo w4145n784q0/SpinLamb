@@ -103,9 +103,17 @@ public:
 	void UpdateAttack();
 	void UpdateOut();
 	void UpdateWallHit();
+
+	//プレイヤーに移動を許可
+	void PlayerStart() { PlayerState_ = S_IDLE; }
+
+	//プレイヤーを止める
 	void PlayerStop() { PlayerState_ = S_MAX; }
 	
+	//プレイヤーの能動的移動
 	void PlayerMove();
+
+	//プレイヤーがはじかれる動作
 	void Blown();
 
 	/// <summary>

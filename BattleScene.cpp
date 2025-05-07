@@ -12,6 +12,10 @@
 #include"Fence.h"
 #include"HUD.h"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_win32.h"
+
 namespace
 {
 	//const float PlayerLifeStart = -0.9;//HPの描画位置の初期地点(プレイヤー)
@@ -19,12 +23,13 @@ namespace
 	//const float LifeWidth = 0.1;//HPの描画の間隔
 
 	int Timecounter = 0;
+	const int oneSecond = 60;
 }
 
 BattleScene::BattleScene(GameObject* parent)
-	:GameObject(parent,"BattleScene") ,BattleState(NOW),
+	:GameObject(parent,"BattleScene") ,BattleState(BEFORE),
 	hFinish_(-1),hPlayerLife_(-1), hEnemyLife_(-1), hBattleSound_(-1),hWhistle_(-1),
-	PlayerScore_(0),EnemyScore_(0),GameTime_(30)
+	PlayerScore_(0),EnemyScore_(0),GameTime_(10),StartCount_(3)
 {
 	HUD_Trans_[0].position_ = { -0.7,0.8,0 };
 	HUD_Trans_[1].position_ = { 0.7,0.8,0 };
@@ -39,6 +44,10 @@ void BattleScene::Initialize()
 	//Instantiate<EnemyManager>(this);
 	Instantiate<MiniMap>(this);
 	Instantiate<HUD>(this);
+
+	HUD* pHUD = (HUD*)FindObject("HUD");
+	pHUD->SetStateBattle();
+	pHUD->SetNumber(StartCount_);
 
 	//EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
 	//pEnemyManager->EnemyInitialize();
@@ -90,6 +99,9 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
+	
+	ImGui::Text("count :%1f", (float)StartCount_);
+
 	pTime_->Draw(640, 30, GameTime_);
 	pPlayerScore_->Draw(30, 30, PlayerScore_);
 	pEnemyScore_->Draw(1250, 30, EnemyScore_);
@@ -138,7 +150,27 @@ void BattleScene::Release()
 
 void BattleScene::UpdateBattleBefore()
 {
+	if (StartCount_ <= 0)
+	{
+		BattleState = NOW;
+		Player* pPlayer_ = (Player*)FindObject("Player");
+		pPlayer_->PlayerStart();
 
+		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
+		pEnemy->EnemyStart();
+
+		HUD* pHUD = (HUD*)FindObject("HUD");
+		pHUD->SetStateBattleInProgress();
+	}
+
+	if (++Timecounter > oneSecond)
+	{
+		Timecounter = 0;
+		if (StartCount_ > 0)
+		{
+			StartCount_--;
+		}
+	}
 }
 
 void BattleScene::UpdateBattle()
@@ -146,10 +178,18 @@ void BattleScene::UpdateBattle()
 	if (GameTime_ <= 0)
 	{
 		BattleState = AFTER;
+		Player* pPlayer_ = (Player*)FindObject("Player");
+		pPlayer_->PlayerStop();
+
+		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
+		pEnemy->EnemyStop();
+
+		HUD* pHUD = (HUD*)FindObject("HUD");
+		pHUD->SetStateBattleEnd();
 	}
 
 	Audio::Play(hBattleSound_);
-	if (++Timecounter > 60 )
+	if (++Timecounter > oneSecond)
 	{
 		Timecounter = 0;
 		if(GameTime_ > 0)
@@ -192,8 +232,6 @@ void BattleScene::UpdateBattleAfter()
 
 void BattleScene::DrawBattleBefore()
 {
-	//Image::SetTransform(hLife_,transform_);
-	//Image::Draw(hLife_);
 }
 
 void BattleScene::DrawBattle()

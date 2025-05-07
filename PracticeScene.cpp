@@ -13,7 +13,7 @@
 
 namespace
 {
-	const int BackTitleValue = 120;
+	const int BackTitleValue = 120;//’·‰Ÿ‚µ‚Åƒ^ƒCƒgƒ‹‚É–ß‚é‚Ü‚Å‚ÌŽžŠÔ
 }
 
 PracticeScene::PracticeScene(GameObject* parent)
@@ -37,6 +37,12 @@ void PracticeScene::Initialize()
 
 	//EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
 	//pEnemyManager->EnemyInitialize();
+
+	Player* pPlayer_ = (Player*)FindObject("Player");
+	pPlayer_->PlayerStart();
+
+	Enemy* pEnemy = (Enemy*)FindObject("Enemy");
+	pEnemy->EnemyStart();
 
 	HUD* pHUD = (HUD*)FindObject("HUD");
 	pHUD->SetStatePractice();

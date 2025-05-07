@@ -158,11 +158,11 @@ void Enemy::Draw()
 	/*XMFLOAT3 tmp;
 	XMStoreFloat3(&tmp, ForwardVector_);*/
 
-	ImGui::Text("front.x:%3f", (float)this->transform_.position_.x);
-	ImGui::Text("front.y:%3f", (float)this->transform_.position_.y);
-	ImGui::Text("front.z:%3f", (float)this->transform_.position_.z);
+	//ImGui::Text("front.x:%3f", (float)this->transform_.position_.x);
+	//ImGui::Text("front.y:%3f", (float)this->transform_.position_.y);
+	//ImGui::Text("front.z:%3f", (float)this->transform_.position_.z);
 
-	ImGui::Text("EnemyLife:%.3f", (float)CharacterLife_);
+	//ImGui::Text("EnemyLife:%.3f", (float)CharacterLife_);
 #endif
 }
 

@@ -37,7 +37,7 @@ namespace {
 
 Player::Player(GameObject* parent)
 	:GameObject(parent, "Player"), hPlayer_(-1), /*hAttackArrow_(-1),*/ hCollisionSound_(-1),
-	pGround_(nullptr),PlayerState_(S_IDLE),CameraState_(S_NORMALCAMERA),
+	pGround_(nullptr),PlayerState_(S_MAX),CameraState_(S_NORMALCAMERA),
 	IsOnGround_(true),JumpSpeed_(0.0f),
 
 	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),BackCamera_(BackCameraPos),
@@ -152,9 +152,9 @@ void Player::Draw()
 	XMFLOAT3 tmp;
     XMStoreFloat3(&tmp, ForwardVector_);
 
-	ImGui::Text("front.x:%3f", (float)tmp.x);
-	ImGui::Text("front.y:%3f", (float)tmp.y);
-	ImGui::Text("front.z:%3f", (float)tmp.z);
+	//ImGui::Text("front.x:%3f", (float)tmp.x);
+	//ImGui::Text("front.y:%3f", (float)tmp.y);
+	//ImGui::Text("front.z:%3f", (float)tmp.z);
 
 	ImGui::Text("PlayerLife:%.3f", (float)CharacterLife_);
 #endif
