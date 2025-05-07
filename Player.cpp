@@ -181,18 +181,12 @@ void Player::OnCollision(GameObject* pTarget)
 		XMFLOAT3 Playerdirection = this->transform_.position_ - pEnemy->GetPosition();
 		XMVECTOR PlayernormalDirection = XMVector3Normalize(XMLoadFloat3(&Playerdirection));
 
-		////敵のノックバック処理
-		//pEnemy->PlayerReflect(normalDirection, IsDash_);
-
 		//プレイヤーの衝突時処理
 		//プレイヤー:通常 敵:通常 双方がはじかれる(軽度)
 		//プレイヤー:通常 敵:攻撃 プレイヤーを大きくはじく
 		//プレイヤー:ダッシュ 敵:攻撃 敵をはじく プレイヤーは方向ベクトル(敵の位置-自機の位置)に対し垂直方向に移動（正面からぶつかったらプレイヤーは停止
 		//プレイヤー:ダッシュ 敵:通常 敵を大きくはじく
 		//プレイヤーは方向ベクトル(敵の位置-自機の位置)に対し垂直方向に移動（正面からぶつかったらプレイヤーは停止
-
-		//XMFLOAT3 normal;
-		//XMStoreFloat3(&normal, normalDirection);
 
 		bool IsEnemyAttack = pEnemy->GetStateAttack();
 

@@ -156,11 +156,11 @@ void Enemy::Draw()
 	}
 
 	/*XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, ForwardVector_);
+	XMStoreFloat3(&tmp, ForwardVector_);*/
 
-	ImGui::Text("front.x:%3f", (float)tmp.x);
-	ImGui::Text("front.y:%3f", (float)tmp.y);
-	ImGui::Text("front.z:%3f", (float)tmp.z);*/
+	ImGui::Text("front.x:%3f", (float)this->transform_.position_.x);
+	ImGui::Text("front.y:%3f", (float)this->transform_.position_.y);
+	ImGui::Text("front.z:%3f", (float)this->transform_.position_.z);
 
 	ImGui::Text("EnemyLife:%.3f", (float)CharacterLife_);
 #endif
@@ -238,12 +238,12 @@ void Enemy::UpdateHitStop()
 
 void Enemy::UpdateHit()
 {
-	Blown();
 	if (KnockBack_Velocity_.x <= 0.5f || KnockBack_Velocity_.z <= 0.5f)
 	{
 		transform_.rotate_.x = 0.0f;
 		EnemyState_ = S_ROOT;
 	}
+	Blown();
 }
 
 void Enemy::UpdateWallHit()
@@ -297,16 +297,27 @@ void Enemy::UpdateOnAlert()
 
 void Enemy::Blown()
 {
-	this->transform_.rotate_.x -= FastRotateX;
+	this->transform_.rotate_.x -= MoveRotateX;
 
-	//速度を下げていく
+	//毎フレーム速度を減少
 	KnockBack_Velocity_.x *= 0.9;
 	KnockBack_Velocity_.z *= 0.9;
 
 	//毎フレームpositionに方向を加算
 	//位置 = 位置 + 方向 * 速度
-	transform_.position_.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
-	transform_.position_.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
+	XMFLOAT3 TmpPos = this->transform_.position_;
+	TmpPos.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
+	TmpPos.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
+
+	XMVECTOR NewPos = XMLoadFloat3(&TmpPos);
+
+	//場外でなければ位置更新 
+	XMFLOAT3 f;
+	XMStoreFloat3(&f, NewPos);
+	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
+	{
+		XMStoreFloat3(&this->transform_.position_, NewPos);
+	}
 }
 
 void Enemy::UpdateAttack()
@@ -318,7 +329,13 @@ void Enemy::UpdateAttack()
 	XMVECTOR PrevPos = EnemyPosition_;
 	XMVECTOR NewPos = PrevPos + MoveVector;
 
-	XMStoreFloat3(&this->transform_.position_, NewPos);
+	//場外でなければ位置更新 
+	XMFLOAT3 f;
+	XMStoreFloat3(&f, NewPos);
+	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
+	{
+		XMStoreFloat3(&this->transform_.position_, NewPos);
+	}
 
 	//速度を毎フレーム減少
 	Acceleration_ -= AcceleValue_;
@@ -349,6 +366,11 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 			EnemyState_ = S_WALLHIT;
 		}
+	}
+
+	if (pTarget->GetObjectName() == "Player")
+	{
+		Acceleration_ = 0;
 	}
 }
 

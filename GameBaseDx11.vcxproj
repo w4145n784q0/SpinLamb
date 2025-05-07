@@ -168,6 +168,7 @@
     <ClCompile Include="GameModeScene.cpp" />
     <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="HUD.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="GameModeScene.h" />
     <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="Ground.h" />
+    <ClInclude Include="HUD.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />

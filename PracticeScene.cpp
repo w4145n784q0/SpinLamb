@@ -9,6 +9,12 @@
 #include"EnemyManager.h"
 #include"Fence.h"
 #include"MiniMap.h"
+#include"HUD.h"
+
+namespace
+{
+	const int BackTitleValue = 120;
+}
 
 PracticeScene::PracticeScene(GameObject* parent)
 	:GameObject(parent,"PracticeScene"),Press_(0)
@@ -27,6 +33,7 @@ void PracticeScene::Initialize()
 	Instantiate<Enemy>(this);
 	//Instantiate<EnemyManager>(this);
 	Instantiate<MiniMap>(this);
+	Instantiate<HUD>(this);
 
 	//EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
 	//pEnemyManager->EnemyInitialize();
@@ -34,8 +41,6 @@ void PracticeScene::Initialize()
 
 void PracticeScene::Update()
 {
-	
-
 	if (Input::IsKey(DIK_P))//ボタン長押しでタイトルに戻る
 	{
 		Press_++;
@@ -45,7 +50,7 @@ void PracticeScene::Update()
 		Press_ = 0;
 	}
 
-	if (Press_ >= 120)
+	if (Press_ >= BackTitleValue)
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_TITLE);
