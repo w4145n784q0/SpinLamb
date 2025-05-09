@@ -15,14 +15,23 @@ GameModeScene::GameModeScene(GameObject* parent)
 
 void GameModeScene::Initialize()
 {
-	//hBack_ = Image::Load("Black.png");
-	hBattle_ = Image::Load("play.png");
-	hPractice_ = Image::Load("practice.png");
-	hBackTitle_ = Image::Load("title.png");
-	hArrow_ = Image::Load("arrow.png");
-	hModeSelect_ = Image::Load("ModeSelect.png");
+	hBattle_ = Image::Load("Image\\play.png");
+	assert(hBattle_ >= 0);
 
-	hModeSound_ = Audio::Load("maou_game_rock54.wav");
+	hPractice_ = Image::Load("Image\\practice.png");
+	assert(hPractice_ >= 0);
+
+	hBackTitle_ = Image::Load("Image\\title.png");
+	assert(hBackTitle_ >= 0);
+
+	hArrow_ = Image::Load("Image\\arrow.png");
+	assert(hArrow_ >= 0);
+
+	hModeSelect_ = Image::Load("Image\\ModeSelect.png");
+	assert(hModeSelect_>= 0);
+
+	hModeSound_ = Audio::Load("Sound\\maou_game_rock54.wav");
+	assert(hModeSound_ >= 0);
 
 	ModeSetTrans[0].position_ = { -0.5,0.5,0 };//モードセレクトの位置
 	ModeSetTrans[1].position_ = { 0.5,0.5,0 };//プレイの位置

@@ -11,8 +11,11 @@ GameOverScene::GameOverScene(GameObject* parent)
 
 void GameOverScene::Initialize()
 {
-	hImage_ = Image::Load("GameOverScreen.png");
-	hGameOverSound_ = Audio::Load("maou_game_jingle10.wav");
+	hImage_ = Image::Load("Image\\GameOverScreen.png");
+	assert(hImage_ >= 0);
+
+	hGameOverSound_ = Audio::Load("Sound\\maou_game_jingle10.wav");
+	assert(hGameOverSound_ >= 0);
 }
 
 void GameOverScene::Update()

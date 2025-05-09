@@ -52,14 +52,15 @@ void BattleScene::Initialize()
 	//EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
 	//pEnemyManager->EnemyInitialize();
 
-	//hWin_ = Image::Load("YouWin.png");
-	//hLose_ = Image::Load("YouLose.png");
-	hFinish_ = Image::Load("finish.png");
-	//hPlayerLife_ = Image::Load("arrow.png");
-	//hEnemyLife_ = Image::Load("arrow.png");
 
-	hBattleSound_ = Audio::Load("maou_game_rock51.wav");
-	hWhistle_ = Audio::Load("maou_se_sound_whistle01.wav");
+	hFinish_ = Image::Load("Image\\finish_logo.png");
+	assert(hFinish_ >= 0);
+
+	hBattleSound_ = Audio::Load("Sound\\maou_game_rock51.wav");
+	assert(hBattleSound_>= 0);
+
+	hWhistle_ = Audio::Load("Sound\\maou_se_sound_whistle01.wav");
+	assert(hWhistle_ >= 0);
 
 	pTime_ = new Text;
 	pTime_->Initialize();

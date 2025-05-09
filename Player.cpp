@@ -58,12 +58,13 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	hPlayer_ = Model::Load("chara2.fbx");
+	hPlayer_ = Model::Load("Model\\chara2.fbx");
 	assert(hPlayer_ >= 0);
-	//hAttackArrow_ = Model::Load("AttackArrow.fbx");
+
+	//hAttackArrow_ = Model::Load("Model\\AttackArrow.fbx");
 	//assert(hAttackArrow_ >= 0);
 
-	hCollisionSound_ = Audio::Load("maou_se_battle15.wav");
+	hCollisionSound_ = Audio::Load("Sound\\maou_se_battle15.wav");
 	assert(hCollisionSound_ >= 0);
 
 	SetStartPosition();
@@ -125,6 +126,11 @@ void Player::Update()
 	Camera::SetPosition(CameraPosition_);//カメラの位置をセット 
 	Camera::SetTarget(CameraTarget_);//カメラの焦点をセット
 	BackCamera_ = { BackCameraPos };//バックカメラベクトルをリセット
+
+	if (Input::IsKeyDown(DIK_ESCAPE))
+	{
+		SetStartPosition();
+	}
 
 }
 
@@ -359,25 +365,11 @@ void Player::UpdateIdle()
 		if (IsOnGround_)
 		{
 			IsOnGround_ = false;
-			JumpSpeed_ = 2.2f;//一時的にy方向にマイナスされている値を大きくする
+			JumpSpeed_ = 1.8f;//一時的にy方向にマイナスされている値を大きくする
 		}
 	}
 
-	
-
-	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
-	this->transform_.position_.y += JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
-
-	if (this->transform_.position_.y <= 0.5f)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
-	{
-		this->transform_.position_.y = 0.5f;
-		IsOnGround_ = true;
-	}
-	if (this->transform_.position_.y < -500) 
-	{
-		this->transform_.position_.y = -500;//高さの最低値
-		SetStartPosition();
-	}
+	Gravity();
 
 	/*if (Input::IsKeyDown(DIK_ESCAPE))
 	{
@@ -403,11 +395,13 @@ void Player::UpdateHit()
 	//transform_.position_.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
 	//cameraTransform_.position_ = transform_.position_;
 
+	Blown();
+	Gravity();
+
 	if (KnockBack_Velocity_.x <= 0.5f || KnockBack_Velocity_.z <= 0.5f)
 	{
 		PlayerState_ = S_IDLE;
 	}
-	Blown();
 }
 
 void Player::UpdateCharge()
@@ -480,22 +474,11 @@ void Player::UpdateAttack()
 	PlayerMove();
 }
 
-void Player::UpdateOut()
-{
-	if (--deadTimer_ < 0)
-	{
-		//BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
-		//pBossBattleScene->DeadCountPlus();
-
-		deadTimer_ = deadTimerValue;
-		PlayerState_ = S_IDLE;
-		SetStartPosition();
-	}
-}
-
 void Player::UpdateWallHit()
 {	
 	Blown();
+	Gravity();
+
 	if (KnockBack_Velocity_.x <= 0.1f || KnockBack_Velocity_.z <= 0.1f)
 	{
 		CharacterLife_--;
@@ -589,6 +572,19 @@ void Player::Blown()
 	{
 		XMStoreFloat3(&this->transform_.position_, NewPos_);
 	}
+}
+
+void Player::Gravity()
+{
+	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
+	this->transform_.position_.y += JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
+
+	if (this->transform_.position_.y <= 0.5f)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	{
+		this->transform_.position_.y = 0.5f;
+		IsOnGround_ = true;
+	}
+
 }
 
 void Player::CameraControl()

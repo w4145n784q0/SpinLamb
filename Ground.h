@@ -19,5 +19,4 @@ public:
 	void Draw() override;
 	void Release() override;
 
-	Point GetRandomMovePoint();
 };

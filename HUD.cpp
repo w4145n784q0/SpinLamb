@@ -32,19 +32,33 @@ HUD::~HUD()
 
 void HUD::Initialize()
 {
-	hBackTitleLogo_ = Image::Load("BackTitleLogo.png");
-	hPracticeNow_ = Image::Load("PracticeLogo.png");
+	hBackTitleLogo_ = Image::Load("Image\\BackTitleLogo.png");
+	assert(hBackTitleLogo_ >= 0);
+	hPracticeNow_ = Image::Load("Image\\PracticeLogo.png");
+	assert(hPracticeNow_ >= 0);
 
-	std::string Number = "number.png";
+	std::string Number = "Image\\number.png";
 
 	hPlayerScore_ = Image::Load(Number);
+	assert(hPlayerScore_ >= 0);
+
 	hEnemyScore_ = Image::Load(Number);
-	hTime_ = Image::Load(Number);
-	hFinish_ = Image::Load("finish_logo.png");
+	assert(hEnemyScore_ >= 0);
 	
-	hCountDown3_ = Image::Load("number_3.png");
-	hCountDown2_ = Image::Load("number_2.png");
-	hCountDown1_ = Image::Load("number_1.png");
+	hTime_ = Image::Load(Number);
+	assert(hTime_ >= 0);
+
+	hFinish_ = Image::Load("Image\\finish_logo.png");
+	assert(hFinish_ >= 0);
+	
+	hCountDown3_ = Image::Load("Image\\number_3.png");
+	assert(hCountDown3_ >= 0);
+
+	hCountDown2_ = Image::Load("Image\\number_2.png");
+	assert(hCountDown2_ >= 0);
+
+	hCountDown1_ = Image::Load("Image\\number_1.png");
+	assert(hCountDown1_ >= 0);
 
 	logo_backtitle.position_ = BackTitlePosition;
 	logo_practice.position_ = PracticePosition;

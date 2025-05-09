@@ -5,8 +5,9 @@
 
 #include"Engine/VFX.h"
 
-namespace {
-	Point MovePoint[] = { {0,0},{15,15},{-15,15},{15,-15},{-15,-15} };
+namespace
+{
+
 }
 
 Ground::Ground(GameObject* parent)
@@ -21,9 +22,12 @@ Ground::~Ground()
 
 void Ground::Initialize()
 {
-	hGrass_ = Model::Load("ironField.fbx");
+	//hGrass_ = Model::Load("Model\\ironField.fbx");
+	hGrass_ = Model::Load("Model\\GrassField.fbx");
 	assert(hGrass_ >= 0);
 	transform_.position_ = { 0,-0.5,0 };
+	this->transform_.scale_.x = 2.0;
+	this->transform_.scale_.z = 2.0;
 }
 
 void Ground::Update()
@@ -40,9 +44,3 @@ void Ground::Release()
 {
 }
 
-Point Ground::GetRandomMovePoint()
-{
-	int index = 5;
-	int random = rand() % index;
-	return MovePoint[random];
-}

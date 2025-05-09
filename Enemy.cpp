@@ -49,7 +49,7 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 
-	hEnemy_ = Model::Load("chara2.fbx");
+	hEnemy_ = Model::Load("Model\\chara2.fbx");
 	assert(hEnemy_ >= 0);
 
 	transform_.position_ = { 0.0,0.5 ,5.0 };

@@ -9,10 +9,11 @@ namespace
 {
 	const double reductionX = 0.00122;
 	const double reductionY = 0.0022;
+	const XMFLOAT3 MapPositon = { 0.891,-0.809,0 };
 }
 
 MiniMap::MiniMap(GameObject* parent)
-	:GameObject(parent,"MiniMap"),hMap_(-1),hPlayerIcon_(-1),hEnemyIcon_(-1)
+	:GameObject(parent,"MiniMap"),hMap_(-1),hPlayerIcon_(-1),hEnemyIcon_(-1),pPlayer_(nullptr), pEnemy_(nullptr)
 {
 }
 
@@ -22,14 +23,19 @@ MiniMap::~MiniMap()
 
 void MiniMap::Initialize()
 {
-	hMap_ = Image::Load("minimap.png");
-	hPlayerIcon_ = Image::Load("blue_circle.png");
-	hEnemyIcon_ = Image::Load("red_circle.png");
+	hMap_ = Image::Load("Image\\minimap.png");
+	assert(hMap_ >= 0);
+
+	hPlayerIcon_ = Image::Load("Image\\blue_circle.png");
+	assert(hPlayerIcon_ >= 0);
+
+	hEnemyIcon_ = Image::Load("Image\\red_circle.png");
+	assert(hEnemyIcon_ >= 0);
 
 	pPlayer_ = (Player*)FindObject("Player");
 	pEnemy_ = (Enemy*)FindObject("Enemy");
 
-	mTrans.position_ = {0.891,-0.809,0};
+	mTrans.position_ = MapPositon;
 }
 
 void MiniMap::Update()

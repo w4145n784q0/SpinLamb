@@ -101,7 +101,6 @@ public:
 	void UpdateHit();
 	void UpdateCharge();
 	void UpdateAttack();
-	void UpdateOut();
 	void UpdateWallHit();
 
 	//プレイヤーに移動を許可
@@ -115,6 +114,9 @@ public:
 
 	//プレイヤーがはじかれる動作
 	void Blown();
+
+	//プレイヤーの重力
+	void Gravity();
 
 	/// <summary>
 	/// カメラの操作（一部のステートのみ）

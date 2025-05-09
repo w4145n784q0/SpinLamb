@@ -11,8 +11,10 @@ ClearScene::ClearScene(GameObject* parent)
 
 void ClearScene::Initialize()
 {
-	hImage_ = Image::Load("ClearScreen.png");
-	hClearSound_ = Audio::Load("maou_game_jingle05.wav");
+	hImage_ = Image::Load("Image\\ClearScreen.png");
+	assert(hImage_ >= 0);
+	hClearSound_ = Audio::Load("Sound\\maou_game_jingle05.wav");
+	assert(hClearSound_ >= 0);
 }
 
 void ClearScene::Update()
