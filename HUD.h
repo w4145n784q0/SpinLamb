@@ -1,5 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"array"
+
 class HUD :
     public GameObject
 {
@@ -25,6 +27,9 @@ private:
 	int hCountDown3_;
 	int hCountDown2_;
 	int hCountDown1_;
+
+	//カウントダウンハンドルの配列
+	std::array<int, 3> Array_Number_;
 
 	//フィニッシュのロゴ
 	int hFinish_;

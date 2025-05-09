@@ -10,10 +10,13 @@
 //•`‰æ‘€ì‚Ì‚Ýˆµ‚¤ƒNƒ‰ƒX
 namespace
 {
+	int CountdownNum = 0;
+
 	Transform logo_backtitle;
 	Transform logo_practice;
-	Transform Number_CountDown;
+	Transform CountDown;
 	Transform logo_Finish;
+	Transform Time;
 
 	const XMFLOAT3 BackTitlePosition = { -0.55,-0.9,0 };
 	const XMFLOAT3 PracticePosition = { -0.8,0.9,0 };
@@ -59,6 +62,8 @@ void HUD::Initialize()
 
 	hCountDown1_ = Image::Load("Image\\number_1.png");
 	assert(hCountDown1_ >= 0);
+
+	Array_Number_ = { hCountDown3_, hCountDown2_,hCountDown1_ };
 
 	logo_backtitle.position_ = BackTitlePosition;
 	logo_practice.position_ = PracticePosition;
@@ -126,10 +131,20 @@ void HUD::Release()
 
 void HUD::UpdateBattlePreStart()
 {
+	/*static int count = 0;
+	if (++count > 60)
+	{
+		count = 0;
+		if(CountdownNum < Array_Number_.size() - 1)
+		{
+			CountdownNum++;
+		}
+	}*/
 }
 
 void HUD::UpdateBattleInProgress()
 {
+	//CountdownNum = 0;
 }
 
 void HUD::UpdateBattleEnd()
@@ -142,14 +157,15 @@ void HUD::UpdatePractice()
 
 void HUD::DrawBattlePreStart()
 {	
-	//Image::SetRect(hCountDown_, 51.2 * countDownNumber_, 0, 51.2, 118);
-	//Image::SetTransform(CountDownArray_[0], Number_CountDown);
-	//Image::Draw(CountDownArray_[0]);
-	
+	//Image::SetTransform(Array_Number_[CountdownNum], CountDown);
+	//Image::Draw(Array_Number_[CountdownNum]);
 }
 
 void HUD::DrawBattleInProgress()
 {
+	//Image::SetRect(hCountDown_, 51.2 * countDownNumber_, 0, 51.2, 118);
+	//Image::SetTransform(CountDownArray_[0], Number_CountDown);
+	//Image::Draw(CountDownArray_[0]);
 }
 
 void HUD::DrawBattleEnd()
