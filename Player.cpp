@@ -105,28 +105,10 @@ void Player::Update()
 		break;
 	}
 
+	//カメラの更新
+	CameraUpdate();
 
-	//AttackEffectStop(LocusEffectCount, IsLocusEffect, hAttackEmitLocus_);
-	//AttackEffectStop(AuraEffectCount, IsAuraEffect, hAttackEmitAura_);
-
-	//--------------カメラ追従--------------
-	CameraTarget_ = { this->transform_.position_ };//カメラの焦点は自機の位置に固定
-	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform_.rotate_.y));//カメラの回転行列作成(Y軸)
-	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(cameraTransform_.rotate_.x));//カメラの回転行列作成(X軸)
-	XMMATRIX rotCamera = XMMatrixMultiply(rotX, rotY);
-	BackCamera_ = XMVector3TransformCoord(BackCamera_, rotCamera);//バックカメラのベクトルにかける
-	XMStoreFloat3(&CameraPosition_, NewPos_ + BackCamera_);//移動ベクトルと加算
-
-	//--------------カメラ振動--------------
-	//CameraPosition_.y += Camera::CameraShake();
-	CameraPosition_.x += Camera::CameraShakeFloat3().x;
-	CameraPosition_.y += Camera::CameraShakeFloat3().y;
-	CameraPosition_.z += Camera::CameraShakeFloat3().z;
-
-	Camera::SetPosition(CameraPosition_);//カメラの位置をセット 
-	Camera::SetTarget(CameraTarget_);//カメラの焦点をセット
-	BackCamera_ = { BackCameraPos };//バックカメラベクトルをリセット
-
+	//degug
 	if (Input::IsKeyDown(DIK_ESCAPE))
 	{
 		SetStartPosition();
@@ -371,12 +353,6 @@ void Player::UpdateIdle()
 
 	Gravity();
 
-	/*if (Input::IsKeyDown(DIK_ESCAPE))
-	{
-		SetStartPosition();
-	}*/
-
-
 	CameraControl();
 
 
@@ -589,6 +565,8 @@ void Player::Gravity()
 
 void Player::CameraControl()
 {
+#ifdef _DEBUG
+	//カメラを上部に移動
 	if (Input::IsKeyDown(DIK_Q))
 	{
 		if (CameraState_ == S_NORMALCAMERA)
@@ -601,6 +579,7 @@ void Player::CameraControl()
 			cameraTransform_.rotate_.x = 0.0f;
 		}
 	}
+#endif 
 
 	if(CameraState_ == S_NORMALCAMERA)
 	{
@@ -648,7 +627,69 @@ void Player::CameraControl()
 	{
 		cameraTransform_.rotate_.x = 90.0f;
 	}
+	else if (CameraState_ == S_ROCKONCAMERA)
+	{
+
+	}
+
+}
+
+void Player::CameraUpdate()
+{
+	/*switch (CameraState_)
+	{
+	case Player::S_NORMALCAMERA:
+		NormalCamera();
+		break;
+	case Player::S_DEBUGCAMERA:
+		DebugCamera();
+		break;
+	case Player::S_ROCKONCAMERA:
+		RockOnCamra();
+		break;
+	case Player::S_MAXCAMERA:
+		break;
+	default:
+		break;
+	}*/
+
+
+	//--------------カメラ追従--------------
 	
+	//カメラが通常の時の処理
+
+	//Enemy* pEnemy = (Enemy*)FindObject("Enemy");
+	//XMFLOAT3 tmp = pEnemy->GetWorldPosition();
+
+	CameraTarget_ = { this->transform_.position_ };//カメラの焦点は自機の位置
+	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform_.rotate_.y));//カメラの回転行列作成(Y軸)
+	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(cameraTransform_.rotate_.x));//カメラの回転行列作成(X軸)
+	XMMATRIX rotCamera = XMMatrixMultiply(rotX, rotY);
+	BackCamera_ = XMVector3TransformCoord(BackCamera_, rotCamera);//バックカメラのベクトルにかける
+	XMStoreFloat3(&CameraPosition_, NewPos_ + BackCamera_);//プレイヤーの移動ベクトルとバックカメラを加算
+
+	//--------------カメラ振動--------------
+	// 全ステート共有
+	CameraPosition_.x += Camera::CameraShakeFloat3().x;
+	CameraPosition_.y += Camera::CameraShakeFloat3().y;
+	CameraPosition_.z += Camera::CameraShakeFloat3().z;
+
+	Camera::SetPosition(CameraPosition_);//カメラの位置をセット 
+	Camera::SetTarget(CameraTarget_);//カメラの焦点をセット
+	BackCamera_ = { BackCameraPos };//バックカメラベクトルをリセット
+}
+
+void Player::NormalCamera()
+{
+}
+
+void Player::DebugCamera()
+{
+	cameraTransform_.rotate_.x = 90.0f;
+}
+
+void Player::RockOnCamra()
+{
 }
 
 void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)

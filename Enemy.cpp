@@ -17,7 +17,8 @@ namespace
 	const int EyeAngle = 60;
 	const float EyeLength = 10.0f;
 	const float DeltaTime = 0.016f;
-	const float ChaseLength = 50.0f;
+	const float ChaseLength = 10.0f;//追跡状態から攻撃準備に移る距離
+	const int HitStop = 2;//ヒットストップする時間
 
 	const float FullAccelerate = 50.0f;//最大加速度
 	const float MoveRotateX = 10.0f;//移動時の1fの回転量
@@ -30,7 +31,7 @@ namespace
 	const int deadTimerValue = 60;//復活までの時間
 	const int Invincibility = 120;//無敵時間の定数
 
-	const XMVECTOR EnemyFrontDirection = { 0,0,1 };//敵の正面の初期値 ここからどれだけ回転したか
+	const XMVECTOR EnemyFrontDirection = { 0,0,1 };//敵の正面の基準ベクトル ここからどれだけ回転したか
 }
 
 Enemy::Enemy(GameObject* parent)
@@ -53,10 +54,7 @@ void Enemy::Initialize()
 	assert(hEnemy_ >= 0);
 
 	transform_.position_ = { 0.0,0.5 ,5.0 };
-	//transform_.scale_ = { 1.5,1.5,1.5 };
-	//transform_.rotate_.y = 180.0;
 
-	//基準ベクトルをつくる　0,0,1
 	//EnemyFrontDirection = XMVector3TransformCoord(EnemyFrontDirection, GetWorldMatrix());  //getworldmatrixで変換
 
 
@@ -151,8 +149,7 @@ void Enemy::Draw()
 		if (!EnemyState_ == S_IDLE)
 			EnemyState_ = S_IDLE;
 		else
-			EnemyState_ = S_AIM;
-
+			EnemyState_ = S_ROOT;
 	}
 
 	/*XMFLOAT3 tmp;
@@ -211,6 +208,8 @@ void Enemy::UpdateRoot()
 
 void Enemy::UpdateChase()
 {
+	this->transform_.rotate_.x -= MoveRotateX;
+
 	LookPlayer();
 	XMVECTOR MoveVector = XMVectorScale(AttackVector_, speed * DeltaTime);//移動ベクトル化する
 	XMVECTOR PrevPos = EnemyPosition_;
@@ -223,13 +222,14 @@ void Enemy::UpdateChase()
 	if (dist < ChaseLength)
 	{
 		EnemyState_ = S_AIM;
+		this->transform_.rotate_.x = 0.0f;
 	}
 }
 
 void Enemy::UpdateHitStop()
 {
 	//ヒットストップ活用時のみ使用
-	if (++HitStopTimer_ > 2)
+	if (++HitStopTimer_ > HitStop)
 	{
 		HitStopTimer_ = 0;
 		EnemyState_ = S_HIT;

@@ -44,6 +44,7 @@ private:
 	{
 		S_NORMALCAMERA,//通常カメラ
 		S_DEBUGCAMERA,//デバッグ用カメラ
+		S_ROCKONCAMERA,//敵を注視するカメラ
 		S_MAXCAMERA,
 	};
 	CameraState CameraState_;
@@ -67,13 +68,13 @@ private:
 	Transform ArrowTransform_;//矢印モデルの位置情報
 	
 	//----------カメラ関係----------
-	XMFLOAT3 CameraPosition_;
-	XMFLOAT3 CameraTarget_;
+	XMFLOAT3 CameraPosition_;//カメラ位置
+	XMFLOAT3 CameraTarget_;//カメラ注視点
 	Transform cameraTransform_;//カメラのTransform 回転だけ使う
 	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
 
 	//----------被弾(HIT)関係----------
-	float ColliderSize_;//スフィアコライダーのサイズ
+	float ColliderSize_;//スフィアコライダー（当たり判定）のサイズ
 	XMFLOAT3 KnockBack_Direction_;//ノックバックする方向
 	XMFLOAT3 KnockBack_Velocity_;//ノックバックする速度
 
@@ -118,10 +119,17 @@ public:
 	//プレイヤーの重力
 	void Gravity();
 
-	/// <summary>
-	/// カメラの操作（一部のステートのみ）
-	/// </summary>
+	//カメラの操作（一部のステートのみ）
 	void CameraControl();
+
+	//カメラの設定(毎フレーム呼び出す)
+	void CameraUpdate();
+
+
+
+	void NormalCamera();
+	void DebugCamera();
+	void RockOnCamra();
 
 	/// <summary>
 	/// 敵からはじかれる処理
