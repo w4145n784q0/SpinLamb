@@ -13,32 +13,32 @@
 
 namespace
 {
-	float speed = 6.0f;
-	const int EyeAngle = 60;
-	const float EyeLength = 10.0f;
-	const float DeltaTime = 0.016f;
-	const float ChaseLength = 10.0f;//追跡状態から攻撃準備に移る距離
+	//const int EyeAngle = 60;
+	//const float EyeLength = 10.0f;
 	const int HitStop = 2;//ヒットストップする時間
-
-	const float FullAccelerate = 50.0f;//最大加速度
-	const float MoveRotateX = 10.0f;//移動時の1fの回転量
-	const float FastRotateX = 30.0f;//(チャージ中など)高速回転中の1fの回転量
-
-	const float Enemy_Gravity = 0.08; //0.16333f
-	const float KnockBackPower = 2.0f; //ノックバックする強さ
+	const float ChaseLength = 10.0f;//追跡状態から攻撃準備に移る距離
 	const int EnemyAttackTime = 180;//敵が攻撃するまでの時間
 
-	const int deadTimerValue = 60;//復活までの時間
-	const int Invincibility = 120;//無敵時間の定数
-
 	const XMVECTOR EnemyFrontDirection = { 0,0,1 };//敵の正面の基準ベクトル ここからどれだけ回転したか
-}
+	float velocity = 6.0f;//初速度
+	const float Enemy_Gravity = 0.08;
+	
+	const float MoveRotateX = 10.0f;//移動時の1fの回転量
+	const float FastRotateX = 30.0f;//(チャージ中など)高速回転中の1fの回転量
+	const float FullAccelerate = 50.0f;//最大加速度
+
+
+	const float KnockBackPower = 2.0f; //ノックバックする強さ
+	
+	const int InvincibilityValue = 120;//無敵時間の定数
+
+	}
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr), IsHit_(false), FrontLength_(EyeLength)
-    ,ForwardVector_({0,0,0}),
-	Eye_(XMConvertToRadians(EyeAngle)), IsOnGround_(true),Acceleration_(0.0f), AcceleValue_(1.0f),
-	HitStopTimer_(0), deadTimer_(deadTimerValue),IsInvincibility_(false),InvincibilityTime_(Invincibility),ColliderSize_(1.5f), CharacterLife_(3)
+	:GameObject(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr),pGround_(nullptr),
+    ForwardVector_({0,0,0}),
+	IsOnGround_(true),Acceleration_(0.0f), AcceleValue_(1.0f),
+	HitStopTimer_(0),IsInvincibility_(false),InvincibilityTime_(InvincibilityValue),ColliderSize_(1.5f)
 {
 	transform_.position_ = { 0,0,0 };
 }
@@ -59,7 +59,7 @@ void Enemy::Initialize()
 
 
 	pPlayer_ = (Player*)FindObject("Player");
-	pGround_ = (Ground*)FindObject("Ground");
+	//pGround_ = (Ground*)FindObject("Ground");
 	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), ColliderSize_);
 	this->AddCollider(collision);
 
@@ -123,7 +123,7 @@ void Enemy::Update()
 	{
 		if (--InvincibilityTime_ < 0)
 		{
-			InvincibilityTime_ = Invincibility;
+			InvincibilityTime_ = InvincibilityValue;
 			IsInvincibility_ = false;
 		}
 	}
@@ -211,7 +211,7 @@ void Enemy::UpdateChase()
 	this->transform_.rotate_.x -= MoveRotateX;
 
 	LookPlayer();
-	XMVECTOR MoveVector = XMVectorScale(AttackVector_, speed * DeltaTime);//移動ベクトル化する
+	XMVECTOR MoveVector = XMVectorScale(AttackVector_, velocity * DeltaTime);//移動ベクトル化する
 	XMVECTOR PrevPos = EnemyPosition_;
 	XMVECTOR NewPos = PrevPos + MoveVector;
 	
@@ -252,8 +252,6 @@ void Enemy::UpdateWallHit()
 	if (KnockBack_Velocity_.x <= 0.1f || KnockBack_Velocity_.z <= 0.1f)
 	{
 		transform_.rotate_.x = 0.0f;
-		CharacterLife_--;
-		deadTimer_ = deadTimerValue;
 		EnemyState_ = S_ROOT;
 		IsInvincibility_ = true;
 
@@ -323,7 +321,7 @@ void Enemy::Blown()
 void Enemy::UpdateAttack()
 {
 	//移動ベクトルを計算(方向 * 速度(初速 + 加速))
-	XMVECTOR MoveVector = XMVectorScale(AttackVector_,(speed + Acceleration_) * DeltaTime);
+	XMVECTOR MoveVector = XMVectorScale(AttackVector_,(velocity + Acceleration_) * DeltaTime);
 
 	//敵の位置に移動ベクトルを加算
 	XMVECTOR PrevPos = EnemyPosition_;

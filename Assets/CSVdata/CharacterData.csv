@@ -1,0 +1,16 @@
+﻿,Player,CPU,
+transform_position_,,,初期位置(pos.x)
+transform_position_,,,初期位置(pos.y)
+transform_position_,,,初期位置(pos.z)
+ForwardVector,,,正面ベクトル
+FrontDirection,,,開始時の正面ベクトル
+velocity,,,初速度
+Accelerate,,,加速度
+AcceleValue_,,,チャージ中の1fあたりの加速量
+FullAccelerate,,,最大加速度
+Gravity,,,重力
+,,,
+KnockBackPower ,,,ノックバック時の押し出される力
+MoveRotateX,,,通常時のモデル回転量
+FastRotateX,,,チャージ中のモデル回転量
+InvincibilityValue,,,被弾後の無敵時間

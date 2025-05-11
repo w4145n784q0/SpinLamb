@@ -8,14 +8,16 @@ class Enemy :
     public GameObject
 {
 private:
-	//モデルハンドル
+	//----------モデルハンドル----------
+
+	//敵モデル
     int hEnemy_;
 
 	//インスタンス関係
 	Player* pPlayer_;
 	Ground* pGround_;
 
-	//ステート
+	//敵(CPU)ステート
 	enum State {
 		S_IDLE = 0,//待機
 		S_ROOT,//判断用
@@ -31,43 +33,35 @@ private:
 	};
 	State EnemyState_;
 
-	//追跡関係
-	XMVECTOR ForwardVector_;//敵の正面ベクトル
-	//XMVECTOR EnemyFrontDirection_;
-	XMVECTOR EnemyPosition_;//敵の位置ベクトル
-	XMFLOAT3 PlayerPosition_;//プレイヤーの位置(座標)
-
-	float RotateY_;//回転角度（基本Ｙ軸のみ）
-	float FrontLength_;//敵の視界の長さ
-	float Eye_;
-	bool IsHit_;
+	//----------ジャンプ関係----------
 	bool IsOnGround_;//地面にいるか
 	float JumpSpeed_;//+ならジャンプしている状態 -なら下降～地面にいる状態
-	XMVECTOR pPositionVec_;//プレイヤーの位置を保管
 
-	//ヒット関係
-	int CharacterLife_;//キャラクターのHP
+	//----------攻撃関係----------
+	float Acceleration_;//加速度
+	float AcceleValue_;//1fで加速度に加算する量
+	int AimTimer_;//狙ってから攻撃までのタイマー
+	XMVECTOR AttackVector_;//攻撃方向
+
+	//----------移動関係----------
+	XMVECTOR EnemyPosition_;//敵の位置ベクトル(毎フレーム保存)
+	XMVECTOR ForwardVector_;//敵の正面ベクトル
+	//float FrontLength_;//敵の視界の長さ
+	//float Eye_;
+	//bool IsHit_;
+	XMVECTOR pPositionVec_;//プレイヤーの位置を保管
+	XMFLOAT3 PlayerPosition_;//プレイヤーの位置(座標)
+
+	//----------被弾(HIT)関係----------
 	float ColliderSize_;//スフィアコライダーのサイズ
 	XMFLOAT3 KnockBack_Direction_;//ノックバックする方向
 	XMFLOAT3 KnockBack_Velocity_;//ノックバックする速度
 	//ノックバックする速度= ノックバックする強さ(定数) * ノックバックする方向
- 
-	//移動関係
-	Point EnemyMovePoint_;//敵の移動先
-	float moveLengthX_;//移動距離
-	float moveLengthZ_;//移動距離
-
-	//攻撃関係
-	int AimTimer_;//狙ってから攻撃までのタイマー
-	XMVECTOR AttackVector_;//攻撃方向
-	float Acceleration_;//加速度
-	float AcceleValue_;//1fで加速度に加算する量
 
 	//ダメージ関係
-	int HitStopTimer_;//ヒットストップ時間
-	int deadTimer_;//復活までの時間
 	int InvincibilityTime_;//ダメージ後の無敵時間
 	bool IsInvincibility_;//無敵時間か
+	int HitStopTimer_;//ヒットストップ時間
 
 public:
 	Enemy(GameObject* parent);
@@ -116,6 +110,5 @@ public:
 	XMFLOAT3 PlayerEnemyDistanceFloat3();
 	float PlayerEnemyDistanceX();
 
-	int GetCharacterLife() { return CharacterLife_; }
 };
 

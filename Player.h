@@ -24,7 +24,7 @@ private:
 	//接触音
 	int hCollisionSound_;
 
-	//インスタンス関係
+	//----------インスタンス関係----------
 	Ground* pGround_;
 
 	//----------プレイヤーステート----------
@@ -50,21 +50,19 @@ private:
 	CameraState CameraState_;
 
 	//----------ジャンプ関係----------
-	bool IsOnGround_;
+	bool IsOnGround_;//地面にいるか
 	float JumpSpeed_;//+ならジャンプしている状態 -なら下降～地面にいる状態
 
 
-	//----------ダッシュ関係----------
+	//----------攻撃関係----------
 	float Acceleration_;//加速度
 	float AcceleValue_;//1fで加速度に加算する量
 	
 	//----------移動関係----------
-	int PlayerHeight_;//プレイヤーの高さ
-	XMFLOAT3 Direction_;//プレイヤーの進行方向(xzどこに進むか)
-	XMVECTOR PlayerPosition_;//位置ベクトル
-	XMVECTOR NewPos_;//プレイヤーの移動先
-	//XMFLOAT3 PlayerFront;//プレイヤーの正面位置 
+	XMVECTOR PlayerPosition_;//位置ベクトル(毎フレーム保存)
 	XMVECTOR ForwardVector_;//プレイヤーの正面ベクトル
+	XMVECTOR NewPos_;//プレイヤーの移動先 
+	XMFLOAT3 Direction_;//プレイヤーの進行方向(xzどこに進むか)
 	Transform ArrowTransform_;//矢印モデルの位置情報
 	
 	//----------カメラ関係----------
@@ -79,8 +77,6 @@ private:
 	XMFLOAT3 KnockBack_Velocity_;//ノックバックする速度
 
 	//----------ダメージ関係----------
-	int CharacterLife_;//キャラクターのHP
-	int deadTimer_;//復活までの時間
 	int InvincibilityTime_;//ダメージ後の無敵時間
 	bool IsInvincibility_;//無敵時間か
 
@@ -144,6 +140,8 @@ public:
 	//攻撃中かどうか取得(接触判定に使用)
 	bool IsAttackState() { if (PlayerState_ == S_ATTACK) return true; else return false; }
 
+	bool GetIsInvincibility() { if (IsInvincibility_) return true; else return false; }
+
 	//チャージ状態エフェクトをつける
 	void SetChargingEffect();
 
@@ -152,9 +150,6 @@ public:
 
 	//衝撃エフェクトつける
 	void SetHitEffect();
-	
-	void SetCharacterLife(int _hp) { CharacterLife_ = _hp; }
-	int GetCharacterLife() { return CharacterLife_; }
 
 };
 

@@ -40,6 +40,8 @@ public:
 	//戻値：取得した値
 	int GetValue(DWORD x, DWORD y);
 
+	float GetValueFloat(DWORD x, DWORD y);
+
 	//ファイルの列数を取得
 	//引数：なし
 	//戻値：列数

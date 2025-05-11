@@ -14,24 +14,20 @@
 
 #include"Enemy.h"
 
-#include <algorithm>
-#include<list>
-
 namespace {
-	const float speed = 9.0f;
-	const float Player_Gravity = 0.08f; //0.16333f
-	const float DeltaTime = 0.016f;
+	XMVECTOR BackCameraPos = { 0,3,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
+
+	XMVECTOR PlayerFrontDirection = { 0,0,1 };//正面の初期値 ここからどれだけ回転したか
+	const float velocity = 9.0f;//初速度
+	const float Player_Gravity = 0.08f; 
 
 	const float MoveRotateX = 10.0f;//移動時の1fの回転量
 	const float FastRotateX = 30.0f;////(チャージ中など)高速回転中の1fの回転量
 	const float FullAccelerate = 120.0f;//チャージ最大値
-	XMVECTOR BackCameraPos = { 0,3,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
-
+	
 	const float KnockBackPower = 2.0f; //ノックバックする強さ
 
-	XMVECTOR PlayerFrontDirection = { 0,0,1 };//正面の初期値 ここからどれだけ回転したか
-	const int deadTimerValue = 60;//復活までの時間
-	const int Invincibility = 120;//無敵時間の定数
+	const int InvincibilityValue = 120;//無敵時間の定数
 
 }
 
@@ -41,8 +37,8 @@ Player::Player(GameObject* parent)
 	IsOnGround_(true),JumpSpeed_(0.0f),
 
 	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),BackCamera_(BackCameraPos),
-	PlayerHeight_(0),AcceleValue_(2.0f),
-	deadTimer_(deadTimerValue),InvincibilityTime_(Invincibility),IsInvincibility_(false),ColliderSize_(0.3f),CharacterLife_(3)
+	AcceleValue_(2.0f),
+	InvincibilityTime_(InvincibilityValue),IsInvincibility_(false),ColliderSize_(0.3f)
 {
 	cameraTransform_ = this->transform_;
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -144,7 +140,6 @@ void Player::Draw()
 	//ImGui::Text("front.y:%3f", (float)tmp.y);
 	//ImGui::Text("front.z:%3f", (float)tmp.z);
 
-	ImGui::Text("PlayerLife:%.3f", (float)CharacterLife_);
 #endif
 
 }
@@ -241,7 +236,7 @@ void Player::UpdateIdle()
 	{
 		if (--InvincibilityTime_ < 0)
 		{
-			InvincibilityTime_ = Invincibility;
+			InvincibilityTime_ = InvincibilityValue;
 			IsInvincibility_ = false;
 		}
 	}
@@ -457,8 +452,6 @@ void Player::UpdateWallHit()
 
 	if (KnockBack_Velocity_.x <= 0.1f || KnockBack_Velocity_.z <= 0.1f)
 	{
-		CharacterLife_--;
-		deadTimer_ = deadTimerValue;
 		PlayerState_ = S_IDLE;
 		IsInvincibility_ = true;
 
@@ -511,7 +504,7 @@ void Player::PlayerMove()
 	XMVECTOR norm = XMVector3Normalize(PrevDir);
 
 	//移動ベクトル化する
-	XMVECTOR MoveVector = XMVectorScale(norm, (speed + Acceleration_) * DeltaTime);
+	XMVECTOR MoveVector = XMVectorScale(norm, (velocity + Acceleration_) * DeltaTime);
 
 	//現在位置と移動ベクトルを加算
 	XMVECTOR PrevPos = PlayerPosition_;

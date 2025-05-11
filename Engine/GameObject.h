@@ -193,6 +193,8 @@ public:
 	/// <returns></returns>
 	XMVECTOR RotateVecFront(float rotY,XMVECTOR front);
 
+	const float DeltaTime = 0.016f;
+
 private:
 
 	//オブジェクト削除（再帰）
