@@ -1,10 +1,16 @@
 ﻿変数名,Player,概要
-transform_position_,0,初期位置(pos.x)
-transform_position_,0,初期位置(pos.y)
-transform_position_,0,初期位置(pos.z)
+transform_position_.x,0,初期位置(pos.x)
+transform_position_.y,0,初期位置(pos.y)
+transform_position_.z,0,初期位置(pos.z)
+transform_rotate_.x,0,初期回転(rot.x)
+transform_rotate_.y,180,初期回転(rot.y)
+transform_rotate_.z,0,初期回転(rot.z)
+transform_scale.x,1,初期拡大量(sca.x)
+transform_scale.y,1,初期拡大量(sca.y)
+transform_scale.z,1,初期拡大量(sca.z)
 FrontDirection,0,開始時の正面ベクトル(x)
 FrontDirection,0,開始時の正面ベクトル(y)
-FrontDirection,-1,開始時の正面ベクトル(z)
+FrontDirection,1,開始時の正面ベクトル(z)
 velocity,9,初速度
 Accelerate,0,加速度
 AcceleValue_,2,チャージ中の1fあたりの加速量
@@ -17,8 +23,12 @@ FastRotateX,30,チャージ中など高速回転中のモデル回転量
 Gravity,0.08,重力
 JumpSpeed,0,プレイヤーの上方向に向く力
 ColliderSize,1.2,当たり判定（球体）のサイズ
-KnockBack_Direction,,ノックバックする方向
-KnockBack_Velocity,,ノックバックする速度
-KnockBackPower ,,ノックバック時の押し出される力
+KnockBack_Direction_.x,0,ノックバックする方向(x)
+KnockBack_Direction_.y,0,ノックバックする方向(y)
+KnockBack_Direction_.z,0,ノックバックする方向(z)
+KnockBack_Velocity_.x,0,ノックバックする速度(x)
+KnockBack_Velocity_.y,0,ノックバックする速度(y)
+KnockBack_Velocity_.z,0,ノックバックする速度(z)
+KnockBackPower ,2,ノックバック時の押し出される力
 InvincibilityTime,0,ダメージ後の無敵時間　1fごとに減少
 InvincibilityValue,120,無敵時間の値 無敵時間が０になるとこの値を再度代入

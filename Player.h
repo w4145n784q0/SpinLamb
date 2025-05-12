@@ -1,15 +1,12 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"Character.h"
 #include"Ground.h"
 #include"Engine/VFX.h"
 #include"Engine/CsvReader.h"
 
-namespace {
-	const XMFLOAT3 StartPosition = { 0.0f,0.5f,0.0f };
-}
-
 class Player :
-    public GameObject
+    public Character
 {
 private:
 	//----------モデルハンドル----------
@@ -49,21 +46,11 @@ private:
 		S_MAXCAMERA,
 	};
 	CameraState CameraState_;
-
-	//----------ジャンプ関係----------
-	bool IsOnGround_;//地面にいるか
-	float JumpSpeed_;//+ならジャンプしている状態 -なら下降～地面にいる状態
-
-
-	//----------攻撃関係----------
-	float Acceleration_;//加速度
-	float AcceleValue_;//1fで加速度に加算する量
 	
 	//----------移動関係----------
 	XMVECTOR PlayerPosition_;//位置ベクトル(毎フレーム保存)
-	XMVECTOR ForwardVector_;//プレイヤーの正面ベクトル
 	XMVECTOR NewPos_;//プレイヤーの移動先 
-	XMFLOAT3 Direction_;//プレイヤーの進行方向(xzどこに進むか)
+	XMFLOAT3 Direction_;//プレイヤーの操作方向(xzどこに進むか)
 	Transform ArrowTransform_;//矢印モデルの位置情報
 	
 	//----------カメラ関係----------
@@ -72,19 +59,10 @@ private:
 	Transform cameraTransform_;//カメラのTransform 回転だけ使う
 	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
 
-	//----------被弾(HIT)関係----------
-	float ColliderSize_;//スフィアコライダー（当たり判定）のサイズ
-	XMFLOAT3 KnockBack_Direction_;//ノックバックする方向
-	XMFLOAT3 KnockBack_Velocity_;//ノックバックする速度
-
-	//----------ダメージ関係----------
-	int InvincibilityTime_;//ダメージ後の無敵時間
-	bool IsInvincibility_;//無敵時間か
-
 public:
 
-	XMVECTOR GetPlayerDirection() { return ForwardVector_; }//方向ベクトル取得
-	XMVECTOR GetPlayerPosition() { return PlayerPosition_; }//位置ベクトル取得
+	//XMVECTOR GetPlayerDirection() { return ForwardVector_; }//方向ベクトル取得
+	//XMVECTOR GetPlayerPosition() { return PlayerPosition_; }//位置ベクトル取得
 
 	Player(GameObject* parent);
 	~Player();
@@ -137,9 +115,7 @@ public:
 
 	//初期位置に戻す
 	void SetStartPosition() { 
-
-		XMFLOAT3 tmp = { 0,0,0 };
-		this->transform_.position_ = tmp;
+		this->transform_.position_ = StartPosition_;
 	}
 
 	//攻撃中かどうか取得(接触判定に使用)

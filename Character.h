@@ -42,7 +42,7 @@ protected:
 
 public:
     Character(GameObject* parent);
-    ~Character();
+    virtual ~Character();
 
     /// <summary>
     /// CSVから各ステータスを読み込みする

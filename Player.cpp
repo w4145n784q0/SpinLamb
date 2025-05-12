@@ -31,14 +31,14 @@ namespace {
 
 }
 
-Player::Player(GameObject* parent)
-	:GameObject(parent, "Player"), hPlayer_(-1), /*hAttackArrow_(-1),*/ hCollisionSound_(-1),
+Player::Player(GameObject* parent) 
+	: Character(parent),
+	hPlayer_(-1), /*hAttackArrow_(-1),*/ hCollisionSound_(-1),
 	pGround_(nullptr),PlayerState_(S_MAX),CameraState_(S_NORMALCAMERA),
-	IsOnGround_(true),JumpSpeed_(0.0f),
+	
 
-	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),BackCamera_(BackCameraPos),
-	AcceleValue_(2.0f),
-	InvincibilityTime_(InvincibilityValue),IsInvincibility_(false),ColliderSize_(1.2f)
+	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }),BackCamera_(BackCameraPos)
+	
 {
 	cameraTransform_ = this->transform_;
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -54,6 +54,9 @@ Player::~Player()
 
 void Player::Initialize()
 {
+	std::string path = "CSVdata\\PlayerData.csv";
+	SetcsvStatus(path);
+
 	hPlayer_ = Model::Load("Model\\chara2.fbx");
 	assert(hPlayer_ >= 0);
 
