@@ -38,7 +38,7 @@ Player::Player(GameObject* parent)
 
 	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }), Acceleration_(0.0f),BackCamera_(BackCameraPos),
 	AcceleValue_(2.0f),
-	InvincibilityTime_(InvincibilityValue),IsInvincibility_(false),ColliderSize_(0.3f)
+	InvincibilityTime_(InvincibilityValue),IsInvincibility_(false),ColliderSize_(1.2f)
 {
 	cameraTransform_ = this->transform_;
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -219,9 +219,9 @@ void Player::OnCollision(GameObject* pTarget)
 		if(!IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
 		{
 			Acceleration_ = 0.0f;
-			XMFLOAT3 tmp;
-			XMStoreFloat3(&tmp, ForwardVector_);
-			KnockBack_Direction_ = tmp;
+			XMFLOAT3 inverse;
+			XMStoreFloat3(&inverse, ForwardVector_);
+			KnockBack_Direction_ = { inverse.x, inverse.y, inverse.z };
 			KnockBack_Velocity_.x = KnockBackPower;
 			KnockBack_Velocity_.z = KnockBackPower;
 			PlayerState_ = S_WALLHIT;

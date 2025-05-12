@@ -1,0 +1,28 @@
+﻿変数名,Player,Enemy,概要
+transform_position_,0,0,初期位置(pos.x)
+transform_position_,0,0,初期位置(pos.y)
+transform_position_,0,5,初期位置(pos.z)
+FrontDirection,0,0,開始時の正面ベクトル(x)
+FrontDirection,0,0,開始時の正面ベクトル(y)
+FrontDirection,1,1,開始時の正面ベクトル(z)
+velocity,9,6,初速度
+Accelerate,0,0,加速度
+AcceleValue_,2,2,チャージ中の1fあたりの加速量
+FullAccelerate,120,60,最大加速度
+ForwardVector.x,0,0,現在の正面ベクトル(x)
+ForwardVector.y,0,0,現在の正面ベクトル(y)
+ForwardVector.z,0,0,現在の正面ベクトル(z)
+MoveRotateX,10,10,通常時のモデル回転量
+FastRotateX,30,30,チャージ中など高速回転中のモデル回転量
+Gravity,0.08,0.08,重力
+JumpSpeed,0,0,プレイヤーの上方向に向く力
+ColliderSize,1.2,1.2,当たり判定（球体）のサイズ
+KnockBack_Direction_.x,0,0,ノックバックする方向(x)
+KnockBack_Direction_.y,0,0,ノックバックする方向(y)
+KnockBack_Direction_.z,0,0,ノックバックする方向(z)
+KnockBack_Velocity_.x,0,0,ノックバックする速度(x)
+KnockBack_Velocity_.y,0,0,ノックバックする速度(y)
+KnockBack_Velocity_.z,0,0,ノックバックする速度(z)
+KnockBackPower ,2,2,ノックバック時の押し出される力
+InvincibilityTime,0,0,ダメージ後の無敵時間　1fごとに減少
+InvincibilityValue,120,120,無敵時間の値 無敵時間が０になるとこの値を再度代入

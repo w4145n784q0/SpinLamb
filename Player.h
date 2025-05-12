@@ -137,13 +137,8 @@ public:
 
 	//‰ŠúˆÊ’u‚É–ß‚·
 	void SetStartPosition() { 
-		CsvReader csv;
-		csv.Load("CSVdata\\CharacterData.csv");
+
 		XMFLOAT3 tmp = { 0,0,0 };
-		tmp.x = csv.GetValueFloat(1, 1);
-		tmp.y = csv.GetValueFloat(1, 2);
-		tmp.z = csv.GetValueFloat(1, 3);
-	
 		this->transform_.position_ = tmp;
 	}
 

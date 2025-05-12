@@ -38,7 +38,7 @@ Enemy::Enemy(GameObject* parent)
 	:GameObject(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr),pGround_(nullptr),
     ForwardVector_({0,0,0}),
 	IsOnGround_(true),Acceleration_(0.0f), AcceleValue_(1.0f),
-	HitStopTimer_(0),IsInvincibility_(false),InvincibilityTime_(InvincibilityValue),ColliderSize_(1.5f)
+	HitStopTimer_(0),IsInvincibility_(false),InvincibilityTime_(InvincibilityValue),ColliderSize_(1.2f)
 {
 	transform_.position_ = { 0,0,0 };
 }

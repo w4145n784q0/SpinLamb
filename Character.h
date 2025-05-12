@@ -7,7 +7,7 @@ class Character :
     public GameObject
 {
 private:
-    CsvReader csv;//csvを読み込むインスタンス
+    CsvReader csv_;//csvを読み込むインスタンス
 protected:
     //----------初期状態----------
     XMFLOAT3 StartPosition_;//初期位置
@@ -26,6 +26,7 @@ protected:
 
     //----------空中----------
     float Gravity_; //重力 キャラクターの下方向にかかる力
+    bool IsOnGround_;//地面にいるか
     float JumpSpeed_; //プレイヤーの上方向に向く力 +ならジャンプしている状態 -なら下降～地面にいる状態
 
     //----------被弾----------
@@ -42,7 +43,11 @@ protected:
 public:
     Character(GameObject* parent);
     ~Character();
-    
-    XMFLOAT3 GetStartPosition();
+
+    /// <summary>
+    /// CSVから各ステータスを読み込みする
+    /// </summary>
+    /// <param name="_path">csvファイルのパス</param>
+    void SetcsvStatus(std::string _path);
 };
 

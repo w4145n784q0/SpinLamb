@@ -3,18 +3,21 @@
 Character::Character(GameObject* parent)
 	:GameObject(parent,"Character")
 {
-	csv.Load("CSVdata\\CharacterData.csv");
+	//csv_.Load("CSVdata\\CharacterDataSample.csv");
 }
 
 Character::~Character()
 {
 }
 
-XMFLOAT3 Character::GetStartPosition()
+void Character::SetcsvStatus(std::string _path)
 {
-	XMFLOAT3 tmp = { 0,0,0 };
-	tmp.x = csv.GetValueFloat(2, 2);
-	tmp.y = csv.GetValueFloat(2, 3);
-	tmp.z = csv.GetValueFloat(2, 4);
-	return tmp;
+	CsvReader csv;
+	csv.Load(_path);
+
+	//StartPosition_.x = csv.GetValueFloat(1, 1);
+	//StartPosition_.y = csv.GetValueFloat(1, 2);
+	//StartPosition_.z = csv.GetValueFloat(1, 3);
+	Velocity_ = csv.GetValueFloat(1, 7);
+	
 }
