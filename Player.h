@@ -2,6 +2,7 @@
 #include "Engine/GameObject.h"
 #include"Ground.h"
 #include"Engine/VFX.h"
+#include"Engine/CsvReader.h"
 
 namespace {
 	const XMFLOAT3 StartPosition = { 0.0f,0.5f,0.0f };
@@ -135,7 +136,16 @@ public:
 	void EnemyReflect(XMVECTOR _vector, bool _IsAttack);
 
 	//‰ŠúˆÊ’u‚É–ß‚·
-	void SetStartPosition() { this->transform_.position_ = StartPosition; }
+	void SetStartPosition() { 
+		CsvReader csv;
+		csv.Load("CSVdata\\CharacterData.csv");
+		XMFLOAT3 tmp = { 0,0,0 };
+		tmp.x = csv.GetValueFloat(1, 1);
+		tmp.y = csv.GetValueFloat(1, 2);
+		tmp.z = csv.GetValueFloat(1, 3);
+	
+		this->transform_.position_ = tmp;
+	}
 
 	//UŒ‚’†‚©‚Ç‚¤‚©æ“¾(ÚG”»’è‚Ég—p)
 	bool IsAttackState() { if (PlayerState_ == S_ATTACK) return true; else return false; }

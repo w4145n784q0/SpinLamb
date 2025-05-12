@@ -211,7 +211,7 @@ void Enemy::UpdateChase()
 	this->transform_.rotate_.x -= MoveRotateX;
 
 	LookPlayer();
-	XMVECTOR MoveVector = XMVectorScale(AttackVector_, velocity * DeltaTime);//移動ベクトル化する
+	XMVECTOR MoveVector = XMVectorScale(AttackVector_, (velocity + Acceleration_) * DeltaTime);//移動ベクトル化する
 	XMVECTOR PrevPos = EnemyPosition_;
 	XMVECTOR NewPos = PrevPos + MoveVector;
 	
