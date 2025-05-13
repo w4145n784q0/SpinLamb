@@ -7,18 +7,18 @@ class Character :
     public GameObject
 {
 private:
-    CsvReader csv_;//csvを読み込むインスタンス
+    //CsvReader csv_;//csvを読み込むインスタンス
 protected:
     //----------初期状態----------
     XMFLOAT3 StartPosition_;//初期位置
-    XMVECTOR FrontDirection_;//正面の初期値 ここからどれだけ回転したか
+    XMVECTOR FrontDirection_;//正面の初期値(ローカル座標系) ここからどれだけ回転したか
 
     //----------移動----------
     float Velocity_;//初速度 この速度に加速度が加算される
     float Acceleration_;//加速度
     float AcceleValue_;//Acceleration_上昇時、1fあたりの蓄積量
     float FullAccelerate_;//加速度の最大
-    XMVECTOR ForwardVector_;//キャラクターから見た正面の方向
+    XMVECTOR ForwardVector_;//キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算
 
     //----------回転----------
     float MoveRotateX;//移動時の1fの回転量
@@ -46,6 +46,7 @@ public:
 
     /// <summary>
     /// CSVから各ステータスを読み込みする
+    /// Characterクラス限定
     /// </summary>
     /// <param name="_path">csvファイルのパス</param>
     void SetcsvStatus(std::string _path);

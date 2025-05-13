@@ -12,7 +12,7 @@ FrontDirection,0,開始時の正面ベクトル(x)
 FrontDirection,0,開始時の正面ベクトル(y)
 FrontDirection,1,開始時の正面ベクトル(z)
 velocity,9,初速度
-Accelerate,0,加速度
+Acceleration,0,加速度
 AcceleValue_,2,チャージ中の1fあたりの加速量
 FullAccelerate,120,最大加速度
 ForwardVector.x,0,現在の正面ベクトル(x)

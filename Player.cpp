@@ -17,7 +17,7 @@
 namespace {
 	XMVECTOR BackCameraPos = { 0,3,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 
-	XMVECTOR PlayerFrontDirection = { 0,0,1 };//正面の初期値 ここからどれだけ回転したか
+	XMVECTOR PlayerFrontDirection = { 0,0,1 };//正面の初期値(ローカル) ここからどれだけ回転したか
 	const float velocity = 9.0f;//初速度
 	const float Player_Gravity = 0.08f; 
 
