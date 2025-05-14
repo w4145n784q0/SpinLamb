@@ -189,12 +189,14 @@ void Enemy::UpdateChase()
 {
 	this->transform_.rotate_.x -= MoveRotateX;
 
-	LookPlayer();
-	XMVECTOR MoveVector = XMVectorScale(AttackVector_, (Velocity_ + Acceleration_) * DeltaTime);//移動ベクトル化する
-	XMVECTOR PrevPos = EnemyPosition_;
-	XMVECTOR NewPos = PrevPos + MoveVector;
+	//LookPlayer();
+	//XMVECTOR MoveVector = XMVectorScale(AttackVector_, (Velocity_ + Acceleration_) * DeltaTime);//移動ベクトル化する
+	//XMVECTOR PrevPos = XMLoadFloat3(&this->transform_.position_);
+	//XMVECTOR NewPos = PrevPos + MoveVector;
+
+	CreateMoveVector();
 	
-	XMStoreFloat3(&this->transform_.position_, NewPos);
+	XMStoreFloat3(&this->transform_.position_, NewPositon_);
 	//this->transform_.position_.y = 0.5f;
 
 	float dist = PlayerEnemyDistanceX();
@@ -299,25 +301,27 @@ void Enemy::Blown()
 
 void Enemy::UpdateAttack()
 {
-	//移動ベクトルを計算(方向 * 速度(初速 + 加速))
-	XMVECTOR MoveVector = XMVectorScale(AttackVector_,(Velocity_ + Acceleration_) * DeltaTime);
+	////移動ベクトルを計算(方向 * 速度(初速 + 加速))
+	//XMVECTOR MoveVector = XMVectorScale(AttackVector_,(Velocity_ + Acceleration_) * DeltaTime);
 
-	//敵の位置に移動ベクトルを加算
-	XMVECTOR PrevPos = EnemyPosition_;
-	XMVECTOR NewPos = PrevPos + MoveVector;
+	////敵の位置に移動ベクトルを加算
+	//XMVECTOR PrevPos = EnemyPosition_;
+	//XMVECTOR NewPos = PrevPos + MoveVector;
+
+	CreateMoveVector();
 
 	//場外でなければ位置更新 
 	XMFLOAT3 f;
-	XMStoreFloat3(&f, NewPos);
+	XMStoreFloat3(&f, NewPositon_);
 	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
 	{
-		XMStoreFloat3(&this->transform_.position_, NewPos);
+		XMStoreFloat3(&this->transform_.position_, NewPositon_);
 	}
 
 	//速度を毎フレーム減少
 	Acceleration_ -= AcceleValue_;
 
-	//ノックバック時回転
+	//キャラモデル回転
 	this->transform_.rotate_.x -= FastRotateX;
 
 	if (Acceleration_ <= 0.0f)
@@ -377,26 +381,38 @@ void Enemy::LookPlayer()
 	//XMVECTOR DistVec = XMVectorSubtract(EnemyPosition_, pPositionVec_);
 	//float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
 
-	//敵と自機の距離（座標）
-	XMFLOAT3 LookPoint = PlayerEnemyDistanceFloat3();//プレイヤーの位置-敵の位置で距離をとる
+	
+	//------------敵と自機の回転処理------------
 
-	//敵と自機の回転処理
-	XMVECTOR front = FrontDirection_;//計算用の前向きベクトル（初期値が入る）
-	XMMATRIX mvec = transform_.matRotate_;//現在の回転している方向（自分の回転行列）
-	front = XMVector3Transform(front, mvec);//正面からどれだけ回転しているか
+	//XMMATRIX mvec = transform_.matRotate_;//現在の回転している方向（自分の回転行列）
 
-	XMVECTOR PlayerDist = XMLoadFloat3(&LookPoint);//ベクトルにする
-	XMVECTOR normDist = XMVector3Normalize(PlayerDist);//プレイヤーとの距離を正規化
-	XMVECTOR angle = XMVector3AngleBetweenVectors(normDist, front);//二つのベクトル間のラジアン角を求める
-	XMVECTOR cross = XMVector3Cross(front, normDist);
+	//正面ベクトルからどれだけ回転したかを計算し、前向きベクトルを計算
+	XMVECTOR front = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);
 
-	AttackVector_ = normDist;//攻撃方向を保存
+	//プレイヤーの位置-敵の位置で距離をとり、ベクトル化する
+	XMFLOAT3 LookDir = PlayerEnemyDistanceFloat3();
+	XMVECTOR PlayerDist = XMLoadFloat3(&LookDir);
 
-	float crossY = XMVectorGetY(cross);//外積のY軸（+か-で左右どちらにいるか判断）
+	//距離を単位ベクトル化
+	MoveDirection_ = XMVector3Normalize(PlayerDist);
 
-	//float angleX = XMVectorGetX(angle);
-	//float dig = XMConvertToDegrees(angleX);
+	//攻撃方向を保存
+	//AttackVector_ = MoveDirection_;
 
+
+	//------------角度に応じて回転------------
+	
+	//二つのベクトル間のラジアン角を求める
+	XMVECTOR angle = XMVector3AngleBetweenVectors(MoveDirection_, front);
+
+	//前向きベクトルとプレイヤーのいる方向のベクトルの外積を求める
+	XMVECTOR cross = XMVector3Cross(front, MoveDirection_);
+
+	//外積のY軸（+か-で左右どちらにいるか判断）を求める
+	float crossY = XMVectorGetY(cross);
+
+	//二つのベクトル間のラジアン角を度数に戻し
+	//一定以上開いているなら回転
 	float Dig = XMConvertToDegrees(XMVectorGetX(angle));
 	if (Dig > 3)
 	{
@@ -411,6 +427,11 @@ void Enemy::LookPlayer()
 	}
 
 	transform_.Calclation();
+}
+
+void Enemy::Look()
+{
+
 }
 
 XMFLOAT3 Enemy::PlayerEnemyDistanceFloat3()

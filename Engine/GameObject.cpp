@@ -192,14 +192,6 @@ void GameObject::KillAllChildren(void)
 	childList_.clear();
 }
 
-XMVECTOR GameObject::RotateVecFront(float rotY, XMVECTOR front)
-{
-	XMVECTOR v = front;
-	XMMATRIX m = XMMatrixRotationY(XMConvertToRadians(rotY));
-	v = XMVector3TransformCoord(v, m);
-	return v;
-}
-
 //オブジェクト削除（再帰）
 void GameObject::KillObjectSub(GameObject * obj)
 {

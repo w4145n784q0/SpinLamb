@@ -311,7 +311,9 @@ void Player::UpdateIdle()
 		}
 	}
 
-	PlayerMove();
+	//PlayerMove();
+	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
+	CharacterMove(move);
 
 	//自分の前方ベクトル(回転した分も含む)を更新
 	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);
@@ -432,7 +434,10 @@ void Player::UpdateAttack()
 		PlayerState_ = S_IDLE;
 	}
 
-	PlayerMove();
+	//PlayerMove();
+
+	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
+	CharacterMove(move);
 }
 
 void Player::UpdateWallHit()
@@ -479,35 +484,36 @@ void Player::UpdateWallHit()
 	//}
 }
 
-void Player::PlayerMove()
-{
-	//プレイヤーのy回転をラジアン化して行列に
-	XMMATRIX playerRot = XMMatrixRotationY(XMConvertToRadians(this->transform_.rotate_.y));
-
-	//プレイヤーの進行方向をベクトル化
-	XMVECTOR PrevDir = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
-
-	//方向ベクトルを回転行列で変換
-	PrevDir = XMVector3TransformCoord(PrevDir, playerRot);
-
-	//単位ベクトル化する
-	XMVECTOR norm = XMVector3Normalize(PrevDir);
-
-	//移動ベクトル化する
-	XMVECTOR MoveVector = XMVectorScale(norm, (Velocity_ + Acceleration_) * DeltaTime);
-
-	//現在位置と移動ベクトルを加算
-	XMVECTOR PrevPos = PlayerPosition_;
-	NewPos_ = PrevPos + MoveVector;
-
-	//場外でなければ位置更新 
-	XMFLOAT3 f;
-	XMStoreFloat3(&f, NewPos_);
-	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
-	{
-		XMStoreFloat3(&this->transform_.position_, NewPos_);
-	}
-}
+//void Player::PlayerMove()
+//{
+//	//プレイヤーのy回転をラジアン化して行列に
+//	XMMATRIX playerRot = XMMatrixRotationY(XMConvertToRadians(this->transform_.rotate_.y));
+//
+//	//プレイヤーの進行方向ベクトルを作成
+//	XMVECTOR PrevDir = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
+//
+//	//方向ベクトルを回転行列で変換
+//	PrevDir = XMVector3TransformCoord(PrevDir, playerRot);
+//
+//	//単位ベクトル化し、移動方向を確定
+//	XMVECTOR norm = XMVector3Normalize(PrevDir);
+//
+//	//移動ベクトル = 移動方向 * (初速度 + 加速度) * 移動量のスケーリング(60fpsのため0.016f)
+//	//移動ベクトル化する
+//	XMVECTOR MoveVector = XMVectorScale(norm, (Velocity_ + Acceleration_) * DeltaTime);
+//
+//	//現在位置と移動ベクトルを加算
+//	XMVECTOR PrevPos = PlayerPosition_;
+//	NewPos_ = PrevPos + MoveVector;
+//
+//	//場外でなければ位置更新 
+//	XMFLOAT3 f;
+//	XMStoreFloat3(&f, NewPos_);
+//	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
+//	{
+//		XMStoreFloat3(&this->transform_.position_, NewPos_);
+//	}
+//}
 
 void Player::Blown()
 {
@@ -522,14 +528,14 @@ void Player::Blown()
 	TmpPos.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
 	TmpPos.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
 
-	NewPos_ = XMLoadFloat3(&TmpPos);
+	NewPositon_ = XMLoadFloat3(&TmpPos);
 
 	//場外でなければ位置更新 
 	XMFLOAT3 f;
-	XMStoreFloat3(&f, NewPos_);
+	XMStoreFloat3(&f, NewPositon_);
 	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
 	{
-		XMStoreFloat3(&this->transform_.position_, NewPos_);
+		XMStoreFloat3(&this->transform_.position_, NewPositon_);
 	}
 }
 
@@ -636,7 +642,7 @@ void Player::CameraUpdate()
 	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(cameraTransform_.rotate_.x));//カメラの回転行列作成(X軸)
 	XMMATRIX rotCamera = XMMatrixMultiply(rotX, rotY);
 	BackCamera_ = XMVector3TransformCoord(BackCamera_, rotCamera);//バックカメラのベクトルにかける
-	XMStoreFloat3(&CameraPosition_, NewPos_ + BackCamera_);//プレイヤーの移動ベクトルとバックカメラを加算
+	XMStoreFloat3(&CameraPosition_, NewPositon_ + BackCamera_);//プレイヤーの移動ベクトルとバックカメラを加算
 
 	//--------------カメラ振動--------------
 	// 全ステート共有

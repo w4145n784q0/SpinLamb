@@ -184,15 +184,8 @@ public:
 	void SetScale(XMFLOAT3 scale) { transform_.scale_ = scale; }
 	void SetScale(float x, float y, float z) { SetScale(XMFLOAT3(x, y, z)); }
 
-	//追加
-	/// <summary>
-	/// Y軸の回転行列をベクトルに変換
-	/// </summary>
-	/// <param name="rotY">Y軸に回転したい角度（Degree）</param>
-	/// <param name="front">正面ベクトル(ワールド空間)</param>
-	/// <returns></returns>
-	XMVECTOR RotateVecFront(float rotY,XMVECTOR front);
-
+	//60fpsにおける1フレームの時間
+	//使用端末によるフレームレート依存防止
 	const float DeltaTime = 0.016f;
 
 private:

@@ -95,6 +95,8 @@ public:
 	/// </summary>
 	void LookPlayer();
 
+	void Look();
+
 	//“G‚ÆƒvƒŒƒCƒ„[‚Ì‹——£‚ğ•Ô‚·
 	XMFLOAT3 PlayerEnemyDistanceFloat3();
 	float PlayerEnemyDistanceX();

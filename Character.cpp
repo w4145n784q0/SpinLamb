@@ -14,18 +14,6 @@ Character::~Character()
 {
 }
 
-void Character::CharacterGravity()
-{
-	JumpSpeed_ -= Gravity_;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
-	this->transform_.position_.y += JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
-
-	if (this->transform_.position_.y <= HeightLowerLimit_)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
-	{
-		this->transform_.position_.y = HeightLowerLimit_;
-		IsOnGround_ = true;
-	}
-}
-
 void Character::SetcsvStatus(std::string _path)
 {
 	CsvReader csv;
@@ -66,4 +54,69 @@ void Character::SetcsvStatus(std::string _path)
     InvincibilityTime_ = csv.GetValueFloat(1, 34);
 	IsInvincibility_ = false;
     InvincibilityValue = csv.GetValueFloat(1, 35);
+}
+
+void Character::CharacterGravity()
+{
+	JumpSpeed_ -= Gravity_;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
+	this->transform_.position_.y += JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
+
+	if (this->transform_.position_.y <= HeightLowerLimit_)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	{
+		this->transform_.position_.y = HeightLowerLimit_;
+		IsOnGround_ = true;
+	}
+}
+
+void Character::CharacterMove(XMVECTOR _direction)
+{
+	//Ｙ軸回転する
+	XMVECTOR prev = RotateVecFront(this->transform_.rotate_.y, _direction);
+
+	//単位ベクトル化し、移動方向を確定
+	MoveDirection_ = XMVector3Normalize(prev);
+
+	CreateMoveVector();
+
+	//場外でなければ位置更新 
+	XMFLOAT3 tmp;
+	XMStoreFloat3(&tmp, NewPositon_);
+	if (!(tmp.x > 60.0f || tmp.x < -60.0f || tmp.z > 60.0f || tmp.z < -60.0f))
+	{
+		XMStoreFloat3(&this->transform_.position_, NewPositon_);
+	}
+}
+
+void Character::CreateMoveVector()
+{
+	//移動ベクトル = 移動方向 * ((初速度 + 加速度) * 1fの移動量のスケーリング)
+	//移動ベクトル化する
+	XMVECTOR MoveVector = XMVectorScale(MoveDirection_, (Velocity_ + Acceleration_) * DeltaTime);
+
+	//現在位置と移動ベクトルを加算
+	XMVECTOR PrevPos = XMLoadFloat3(&this->transform_.position_);
+	NewPositon_ = PrevPos + MoveVector;
+}
+
+XMVECTOR Character::RotateVecFront(float rotY, XMVECTOR front)
+{
+	//回転させたいベクトル（方向）を代入
+	//基本はローカル正面ベクトル
+	XMVECTOR v = front;
+
+	//Y回転をラジアンにし、回転行列を作成
+	XMMATRIX m = XMMatrixRotationY(XMConvertToRadians(rotY));
+
+	//方向ベクトルを回転行列で変換し、ワールド座標での向いている方向が出る
+	v = XMVector3TransformCoord(v, m);
+
+	return v;
+}
+
+XMVECTOR Character::CalclationForward(float rotY, XMVECTOR front)
+{
+	XMVECTOR v = front;
+	XMMATRIX m = XMMatrixRotationY(XMConvertToRadians(rotY));
+	XMVECTOR forward = XMVector3TransformNormal(v,m);
+	return  forward;
 }

@@ -86,7 +86,7 @@ public:
 	void PlayerStop() { PlayerState_ = S_MAX; }
 	
 	//プレイヤーの能動的移動
-	void PlayerMove();
+	//void PlayerMove();
 
 	//プレイヤーがはじかれる動作
 	void Blown();

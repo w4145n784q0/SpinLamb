@@ -3,7 +3,7 @@ transform_position_.x,0,初期位置(pos.x)
 transform_position_.y,0,初期位置(pos.y)
 transform_position_.z,5,初期位置(pos.z)
 transform_rotate_.x,0,初期回転(rot.x)
-transform_rotate_.y,180,初期回転(rot.y)
+transform_rotate_.y,0,初期回転(rot.y)
 transform_rotate_.z,0,初期回転(rot.z)
 transform_scale.x,1,初期拡大量(sca.x)
 transform_scale.y,1,初期拡大量(sca.y)
@@ -14,7 +14,7 @@ FrontDirection,1,開始時の正面ベクトル(z)
 velocity,9,初速度
 Acceleration,0,加速度
 AcceleValue_,2,チャージ中の1fあたりの加速量
-FullAccelerate,80,最大加速度
+FullAccelerate,60,最大加速度
 ForwardVector.x,0,現在の正面ベクトル(x)
 ForwardVector.y,0,現在の正面ベクトル(y)
 ForwardVector.z,0,現在の正面ベクトル(z)

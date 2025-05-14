@@ -19,6 +19,8 @@ protected:
     float AcceleValue_;//Acceleration_上昇時、1fあたりの増加量
     float FullAccelerate_;//加速度の最大
     XMVECTOR ForwardVector_;//キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算
+    XMVECTOR MoveDirection_;//移動方向 この値に速さの要素をかけて移動ベクトル化する
+    XMVECTOR NewPositon_;//移動後のベクトル
 
     //----------回転----------
     float MoveRotateX;//移動時の1fの回転量
@@ -69,5 +71,33 @@ public:
     /// 重力処理
     /// </summary>
     void CharacterGravity();
+
+    /// <summary>
+    /// キャラクターの移動処理
+    /// </summary>
+    /// <param name="_direction">動かす方向ベクトル</param>
+    void CharacterMove(XMVECTOR _direction);
+
+    /// <summary>
+    /// 移動ベクトルをつくる
+    /// </summary>
+    void CreateMoveVector();
+
+    /// <summary>
+    /// Y軸の回転行列をベクトルに変換
+    /// </summary>
+    /// <param name="rotY">Y軸に回転したい角度（Degree）</param>
+    /// <param name="front">正面ベクトル(ローカル空間)</param>
+    /// <returns>変形したベクトル（ワールド空間）</returns>
+    XMVECTOR RotateVecFront(float rotY, XMVECTOR front);
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="rotY"></param>
+    /// <param name="front"></param>
+    /// <returns></returns>
+    XMVECTOR CalclationForward(float rotY, XMVECTOR front);
+
 };
 
