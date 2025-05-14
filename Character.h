@@ -16,7 +16,7 @@ protected:
     //----------移動----------
     float Velocity_;//初速度 この速度に加速度が加算される
     float Acceleration_;//加速度
-    float AcceleValue_;//Acceleration_上昇時、1fあたりの蓄積量
+    float AcceleValue_;//Acceleration_上昇時、1fあたりの増加量
     float FullAccelerate_;//加速度の最大
     XMVECTOR ForwardVector_;//キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算
 
@@ -42,6 +42,8 @@ protected:
 
 public:
     Character(GameObject* parent);
+    Character(GameObject* parent, const std::string& name);
+
     virtual ~Character();
 
     /// <summary>

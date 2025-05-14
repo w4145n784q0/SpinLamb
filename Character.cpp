@@ -6,6 +6,10 @@ Character::Character(GameObject* parent)
 	//csv_.Load("CSVdata\\CharacterDataSample.csv");
 }
 
+Character::Character(GameObject* parent, const std::string& name):GameObject(parent, name)
+{
+}
+
 Character::~Character()
 {
 }
@@ -45,7 +49,7 @@ void Character::SetcsvStatus(std::string _path)
     KnockBack_Velocity_ = { csv.GetValueFloat(1, 28), csv.GetValueFloat(1, 29) , csv.GetValueFloat(1, 30) };
 	KnockBackPower = csv.GetValueFloat(1, 31);
 
-    InvincibilityTime_;
+    InvincibilityTime_ = csv.GetValueFloat(1, 32);
 	IsInvincibility_ = false;
-    InvincibilityValue;
+    InvincibilityValue = csv.GetValueFloat(1, 33);
 }

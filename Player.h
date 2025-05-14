@@ -23,7 +23,7 @@ private:
 	int hCollisionSound_;
 
 	//----------インスタンス関係----------
-	Ground* pGround_;
+	//Ground* pGround_;
 
 	//----------プレイヤーステート----------
 	enum State
@@ -115,7 +115,7 @@ public:
 
 	//初期位置に戻す
 	void SetStartPosition() { 
-		this->transform_.position_ = StartPosition_;
+		this-> transform_.position_ = StartPosition_;
 	}
 
 	//攻撃中かどうか取得(接触判定に使用)

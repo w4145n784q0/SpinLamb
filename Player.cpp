@@ -17,28 +17,15 @@
 namespace {
 	XMVECTOR BackCameraPos = { 0,3,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 
-	XMVECTOR PlayerFrontDirection = { 0,0,1 };//正面の初期値(ローカル) ここからどれだけ回転したか
-	const float velocity = 9.0f;//初速度
-	const float Player_Gravity = 0.08f; 
-
-	const float MoveRotateX = 10.0f;//移動時の1fの回転量
-	const float FastRotateX = 30.0f;////(チャージ中など)高速回転中の1fの回転量
-	const float FullAccelerate = 120.0f;//チャージ最大値
-	
-	const float KnockBackPower = 2.0f; //ノックバックする強さ
-
-	const int InvincibilityValue = 120;//無敵時間の定数
-
 }
 
 Player::Player(GameObject* parent) 
-	: Character(parent),
+	: Character(parent,"Player"),
 	hPlayer_(-1), /*hAttackArrow_(-1),*/ hCollisionSound_(-1),
-	pGround_(nullptr),PlayerState_(S_MAX),CameraState_(S_NORMALCAMERA),
+	/*pGround_(nullptr),*/PlayerState_(S_MAX),CameraState_(S_NORMALCAMERA),
 	
 
-	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }),BackCamera_(BackCameraPos)
-	
+	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }),BackCamera_(BackCameraPos),NewPos_({0,0,0})
 {
 	cameraTransform_ = this->transform_;
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -70,7 +57,7 @@ void Player::Initialize()
 	transform_.rotate_.y = 180.0f;
 	//ArrowTransform_.rotate_.y = 180.0f;
 
-	pGround_ = (Ground*)FindObject("Ground");
+	//pGround_ = (Ground*)FindObject("Ground");
 	
 	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),ColliderSize_);
 	this->AddCollider(collider);
@@ -327,7 +314,7 @@ void Player::UpdateIdle()
 	PlayerMove();
 
 	//自分の前方ベクトル(回転した分も含む)を更新
-	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, PlayerFrontDirection);
+	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);
 
 	//プレイヤーの正面ベクトルを更新
 	//自分の前方ベクトル(回転した分も含む)
@@ -419,13 +406,13 @@ void Player::UpdateCharge()
 	}
 
 	//チャージ中一定の加速量を加算し続ける
-	if (Acceleration_ < FullAccelerate)
+	if (Acceleration_ < FullAccelerate_)
 	{
 		Acceleration_ += AcceleValue_;
 	}
 	else
 	{
-		Acceleration_ = FullAccelerate;
+		Acceleration_ = FullAccelerate_;
 	}
 
 	this->transform_.rotate_.x -= FastRotateX;
@@ -507,7 +494,7 @@ void Player::PlayerMove()
 	XMVECTOR norm = XMVector3Normalize(PrevDir);
 
 	//移動ベクトル化する
-	XMVECTOR MoveVector = XMVectorScale(norm, (velocity + Acceleration_) * DeltaTime);
+	XMVECTOR MoveVector = XMVectorScale(norm, (Velocity_ + Acceleration_) * DeltaTime);
 
 	//現在位置と移動ベクトルを加算
 	XMVECTOR PrevPos = PlayerPosition_;
@@ -548,7 +535,7 @@ void Player::Blown()
 
 void Player::Gravity()
 {
-	JumpSpeed_ -= Player_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
+	JumpSpeed_ -= Gravity_;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
 	this->transform_.position_.y += JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
 
 	if (this->transform_.position_.y <= 0.5f)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
