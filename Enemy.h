@@ -5,7 +5,7 @@
 class Player;
 
 class Enemy :
-    public GameObject
+    public Character
 {
 private:
 	//----------モデルハンドル----------
@@ -33,34 +33,20 @@ private:
 	};
 	State EnemyState_;
 
-	//----------ジャンプ関係----------
-	bool IsOnGround_;//地面にいるか
-	float JumpSpeed_;//+ならジャンプしている状態 -なら下降～地面にいる状態
-
 	//----------攻撃関係----------
-	float Acceleration_;//加速度
-	float AcceleValue_;//1fで加速度に加算する量
 	int AimTimer_;//狙ってから攻撃までのタイマー
 	XMVECTOR AttackVector_;//攻撃方向
 
 	//----------移動関係----------
 	XMVECTOR EnemyPosition_;//敵の位置ベクトル(毎フレーム保存)
-	XMVECTOR ForwardVector_;//敵の正面ベクトル
 	//float FrontLength_;//敵の視界の長さ
 	//float Eye_;
 	//bool IsHit_;
 	XMVECTOR pPositionVec_;//プレイヤーの位置を保管
 	XMFLOAT3 PlayerPosition_;//プレイヤーの位置(座標)
 
-	//----------被弾(HIT)関係----------
-	float ColliderSize_;//スフィアコライダーのサイズ
-	XMFLOAT3 KnockBack_Direction_;//ノックバックする方向
-	XMFLOAT3 KnockBack_Velocity_;//ノックバックする速度
-	//ノックバックする速度= ノックバックする強さ(定数) * ノックバックする方向
 
 	//ダメージ関係
-	int InvincibilityTime_;//ダメージ後の無敵時間
-	bool IsInvincibility_;//無敵時間か
 	int HitStopTimer_;//ヒットストップ時間
 
 public:
@@ -104,6 +90,9 @@ public:
 
 	void SetStateStop() { EnemyState_ = S_MAX; }
 
+	/// <summary>
+	/// プレイヤーの方向に回転する
+	/// </summary>
 	void LookPlayer();
 
 	//敵とプレイヤーの距離を返す

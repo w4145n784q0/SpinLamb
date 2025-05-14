@@ -22,6 +22,8 @@ MoveRotateX,10,通常時のモデル回転量
 FastRotateX,30,チャージ中など高速回転中のモデル回転量
 Gravity,0.08,重力
 JumpSpeed,0,プレイヤーの上方向に向く力
+HeightLowerLimit_,0.5,高さの下限
+HeightUpperLimit_,50,高さの上限
 ColliderSize,1.2,当たり判定（球体）のサイズ
 KnockBack_Direction_.x,0,ノックバックする方向(x)
 KnockBack_Direction_.y,0,ノックバックする方向(y)

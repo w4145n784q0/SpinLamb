@@ -336,7 +336,7 @@ void Player::UpdateIdle()
 		}
 	}
 
-	Gravity();
+	CharacterGravity();
 
 	CameraControl();
 
@@ -357,7 +357,7 @@ void Player::UpdateHit()
 	//cameraTransform_.position_ = transform_.position_;
 
 	Blown();
-	Gravity();
+	CharacterGravity();
 
 	if (KnockBack_Velocity_.x <= 0.5f || KnockBack_Velocity_.z <= 0.5f)
 	{
@@ -438,7 +438,7 @@ void Player::UpdateAttack()
 void Player::UpdateWallHit()
 {	
 	Blown();
-	Gravity();
+	CharacterGravity();
 
 	if (KnockBack_Velocity_.x <= 0.1f || KnockBack_Velocity_.z <= 0.1f)
 	{
@@ -531,19 +531,6 @@ void Player::Blown()
 	{
 		XMStoreFloat3(&this->transform_.position_, NewPos_);
 	}
-}
-
-void Player::Gravity()
-{
-	JumpSpeed_ -= Gravity_;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
-	this->transform_.position_.y += JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
-
-	if (this->transform_.position_.y <= 0.5f)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
-	{
-		this->transform_.position_.y = 0.5f;
-		IsOnGround_ = true;
-	}
-
 }
 
 void Player::CameraControl()

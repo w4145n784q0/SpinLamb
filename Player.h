@@ -92,7 +92,7 @@ public:
 	void Blown();
 
 	//プレイヤーの重力
-	void Gravity();
+	//void Gravity();
 
 	//カメラの操作（一部のステートのみ）
 	void CameraControl();
@@ -112,11 +112,6 @@ public:
 	/// <param name="_vector">敵からノックバックする方向(正規化済)</param>
 	/// <param name="_IsAttack">敵が攻撃中か</param>
 	void EnemyReflect(XMVECTOR _vector, bool _IsAttack);
-
-	//初期位置に戻す
-	void SetStartPosition() { 
-		this-> transform_.position_ = StartPosition_;
-	}
 
 	//攻撃中かどうか取得(接触判定に使用)
 	bool IsAttackState() { if (PlayerState_ == S_ATTACK) return true; else return false; }

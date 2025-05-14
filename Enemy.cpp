@@ -18,27 +18,11 @@ namespace
 	const int HitStop = 2;//ヒットストップする時間
 	const float ChaseLength = 10.0f;//追跡状態から攻撃準備に移る距離
 	const int EnemyAttackTime = 180;//敵が攻撃するまでの時間
-
-	const XMVECTOR EnemyFrontDirection = { 0,0,1 };//敵の正面の基準ベクトル ここからどれだけ回転したか
-	float velocity = 6.0f;//初速度
-	const float Enemy_Gravity = 0.08;
-	
-	const float MoveRotateX = 10.0f;//移動時の1fの回転量
-	const float FastRotateX = 30.0f;//(チャージ中など)高速回転中の1fの回転量
-	const float FullAccelerate = 50.0f;//最大加速度
-
-
-	const float KnockBackPower = 2.0f; //ノックバックする強さ
-	
-	const int InvincibilityValue = 120;//無敵時間の定数
-
 	}
 
 Enemy::Enemy(GameObject* parent)
-	:GameObject(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr),pGround_(nullptr),
-    ForwardVector_({0,0,0}),
-	IsOnGround_(true),Acceleration_(0.0f), AcceleValue_(1.0f),
-	HitStopTimer_(0),IsInvincibility_(false),InvincibilityTime_(InvincibilityValue),ColliderSize_(1.2f)
+	:Character(parent,"Enemy"), hEnemy_(-1), pPlayer_(nullptr), pGround_(nullptr),
+	HitStopTimer_(0)
 {
 	transform_.position_ = { 0,0,0 };
 }
@@ -53,10 +37,12 @@ void Enemy::Initialize()
 	hEnemy_ = Model::Load("Model\\chara2.fbx");
 	assert(hEnemy_ >= 0);
 
-	transform_.position_ = { 0.0,0.5 ,5.0 };
+	std::string path = "CSVdata\\EnemyData.csv";
+	SetcsvStatus(path);
 
 	//EnemyFrontDirection = XMVector3TransformCoord(EnemyFrontDirection, GetWorldMatrix());  //getworldmatrixで変換
 
+	SetStartPosition();
 
 	pPlayer_ = (Player*)FindObject("Player");
 	//pGround_ = (Ground*)FindObject("Ground");
@@ -72,7 +58,7 @@ void Enemy::Update()
 	PlayerPosition_ = pPlayer_->GetWorldPosition();//プレイヤーの位置（ワールド座標）
 	pPositionVec_ = XMLoadFloat3(&PlayerPosition_);//プレイヤーの位置をベクトル化し取り続ける
 	EnemyPosition_ = XMLoadFloat3(&this->transform_.position_);//敵の位置をベクトル化し取り続ける
-	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, EnemyFrontDirection);//自分の前方ベクトル(回転した分も含む)を更新
+	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);//自分の前方ベクトル(回転した分も含む)を更新
 
 	switch (EnemyState_)
 	{
@@ -127,15 +113,8 @@ void Enemy::Update()
 			IsInvincibility_ = false;
 		}
 	}
-
-	JumpSpeed_ -= Enemy_Gravity;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
-	this->transform_.position_.y += JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
-
-	if (this->transform_.position_.y <= 0.5f && IsOnGround_)//めりこみ防止に一定以下のy座標で値を固定
-	{
-		this->transform_.position_.y = 0.5f;
-	}
-
+	
+	CharacterGravity();
 }
 
 void Enemy::Draw()
@@ -211,7 +190,7 @@ void Enemy::UpdateChase()
 	this->transform_.rotate_.x -= MoveRotateX;
 
 	LookPlayer();
-	XMVECTOR MoveVector = XMVectorScale(AttackVector_, (velocity + Acceleration_) * DeltaTime);//移動ベクトル化する
+	XMVECTOR MoveVector = XMVectorScale(AttackVector_, (Velocity_ + Acceleration_) * DeltaTime);//移動ベクトル化する
 	XMVECTOR PrevPos = EnemyPosition_;
 	XMVECTOR NewPos = PrevPos + MoveVector;
 	
@@ -282,7 +261,7 @@ void Enemy::UpdateAim()
 	if (++AimTimer_ > EnemyAttackTime)
 	{
 		AimTimer_ = 0;
-		Acceleration_ = FullAccelerate;
+		Acceleration_ = FullAccelerate_;
 		EnemyState_ = S_ATTACK;
 	}
 
@@ -321,7 +300,7 @@ void Enemy::Blown()
 void Enemy::UpdateAttack()
 {
 	//移動ベクトルを計算(方向 * 速度(初速 + 加速))
-	XMVECTOR MoveVector = XMVectorScale(AttackVector_,(velocity + Acceleration_) * DeltaTime);
+	XMVECTOR MoveVector = XMVectorScale(AttackVector_,(Velocity_ + Acceleration_) * DeltaTime);
 
 	//敵の位置に移動ベクトルを加算
 	XMVECTOR PrevPos = EnemyPosition_;
@@ -402,7 +381,7 @@ void Enemy::LookPlayer()
 	XMFLOAT3 LookPoint = PlayerEnemyDistanceFloat3();//プレイヤーの位置-敵の位置で距離をとる
 
 	//敵と自機の回転処理
-	XMVECTOR front = EnemyFrontDirection;//計算用の前向きベクトル（初期値が入る）
+	XMVECTOR front = FrontDirection_;//計算用の前向きベクトル（初期値が入る）
 	XMMATRIX mvec = transform_.matRotate_;//現在の回転している方向（自分の回転行列）
 	front = XMVector3Transform(front, mvec);//正面からどれだけ回転しているか
 

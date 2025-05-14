@@ -28,12 +28,17 @@ protected:
     float Gravity_; //重力 キャラクターの下方向にかかる力
     bool IsOnGround_;//地面にいるか
     float JumpSpeed_; //プレイヤーの上方向に向く力 +ならジャンプしている状態 -なら下降～地面にいる状態
+    float HeightLowerLimit_;//高さの下限
+    float HeightUpperLimit_;//高さの上限
+
 
     //----------被弾----------
     float ColliderSize_; //当たり判定(球体)のサイズ
     XMFLOAT3 KnockBack_Direction_;//ノックバックする方向
     XMFLOAT3 KnockBack_Velocity_;//ノックバックする速度
     float KnockBackPower; //ノックバックする強さ
+
+    //ノックバックする速度= ノックバックする強さ(定数) * ノックバックする方向
 
     //----------壁の接触ダメージ----------
     int InvincibilityTime_;//ダメージ後の無敵時間 1fごとに減少
@@ -52,5 +57,17 @@ public:
     /// </summary>
     /// <param name="_path">csvファイルのパス</param>
     void SetcsvStatus(std::string _path);
+
+    //----------共通処理----------
+
+    /// <summary>
+    /// 初期位置の設定
+    /// </summary>
+    void SetStartPosition() { this->transform_.position_ = StartPosition_; }
+
+    /// <summary>
+    /// 重力処理
+    /// </summary>
+    void CharacterGravity();
 };
 
