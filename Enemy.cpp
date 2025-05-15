@@ -24,7 +24,6 @@ Enemy::Enemy(GameObject* parent)
 	:Character(parent,"Enemy"), hEnemy_(-1), pPlayer_(nullptr), pGround_(nullptr),
 	HitStopTimer_(0)
 {
-	transform_.position_ = { 0,0,0 };
 }
 
 Enemy::~Enemy()
@@ -57,8 +56,9 @@ void Enemy::Update()
 {
 	PlayerPosition_ = pPlayer_->GetWorldPosition();//プレイヤーの位置（ワールド座標）
 	pPositionVec_ = XMLoadFloat3(&PlayerPosition_);//プレイヤーの位置をベクトル化し取り続ける
-	EnemyPosition_ = XMLoadFloat3(&this->transform_.position_);//敵の位置をベクトル化し取り続ける
-	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);//自分の前方ベクトル(回転した分も含む)を更新
+	
+	//正面ベクトルからどれだけ回転したかを計算し、前向きベクトルを計算
+	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);
 
 	switch (EnemyState_)
 	{
@@ -131,12 +131,12 @@ void Enemy::Draw()
 			EnemyState_ = S_ROOT;
 	}
 
-	/*XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, ForwardVector_);*/
+	XMFLOAT3 tmp;
+	XMStoreFloat3(&tmp, MoveDirection_);
 
-	//ImGui::Text("front.x:%3f", (float)this->transform_.position_.x);
-	//ImGui::Text("front.y:%3f", (float)this->transform_.position_.y);
-	//ImGui::Text("front.z:%3f", (float)this->transform_.position_.z);
+	ImGui::Text("front.x:%3f", (float)tmp.x);
+	ImGui::Text("front.y:%3f", (float)tmp.y);
+	ImGui::Text("front.z:%3f", (float)tmp.z);
 
 	//ImGui::Text("EnemyLife:%.3f", (float)CharacterLife_);
 #endif
@@ -189,15 +189,21 @@ void Enemy::UpdateChase()
 {
 	this->transform_.rotate_.x -= MoveRotateX;
 
-	//LookPlayer();
-	//XMVECTOR MoveVector = XMVectorScale(AttackVector_, (Velocity_ + Acceleration_) * DeltaTime);//移動ベクトル化する
-	//XMVECTOR PrevPos = XMLoadFloat3(&this->transform_.position_);
-	//XMVECTOR NewPos = PrevPos + MoveVector;
+	LookPlayer();
+	//CharacterMove(ForwardVector_);
+
+
+
 
 	CreateMoveVector();
-	
-	XMStoreFloat3(&this->transform_.position_, NewPositon_);
-	//this->transform_.position_.y = 0.5f;
+
+	//場外でなければ位置更新 
+	XMFLOAT3 tmp;
+	XMStoreFloat3(&tmp, NewPositon_);
+	if (!(tmp.x > 60.0f || tmp.x < -60.0f || tmp.z > 60.0f || tmp.z < -60.0f))
+	{
+		XMStoreFloat3(&this->transform_.position_, NewPositon_);
+	}
 
 	float dist = PlayerEnemyDistanceX();
 	if (dist < ChaseLength)
@@ -224,12 +230,12 @@ void Enemy::UpdateHit()
 		transform_.rotate_.x = 0.0f;
 		EnemyState_ = S_ROOT;
 	}
-	Blown();
+	KnockBack();
 }
 
 void Enemy::UpdateWallHit()
 {
-	Blown();
+	KnockBack();
 	if (KnockBack_Velocity_.x <= 0.1f || KnockBack_Velocity_.z <= 0.1f)
 	{
 		transform_.rotate_.x = 0.0f;
@@ -258,7 +264,8 @@ void Enemy::UpdateWallHit()
 void Enemy::UpdateAim()
 {
 	LookPlayer();
-	//this->transform_.rotate_.x -= ChargeRotateX;
+	SetChargingEffect("PaticleAssets\\circle_R.png");
+	this->transform_.rotate_.x -= FastRotateX;
 
 	if (++AimTimer_ > EnemyAttackTime)
 	{
@@ -274,46 +281,17 @@ void Enemy::UpdateOnAlert()
 	LookPlayer();
 }
 
-void Enemy::Blown()
-{
-	this->transform_.rotate_.x -= MoveRotateX;
-
-	//毎フレーム速度を減少
-	KnockBack_Velocity_.x *= 0.9;
-	KnockBack_Velocity_.z *= 0.9;
-
-	//毎フレームpositionに方向を加算
-	//位置 = 位置 + 方向 * 速度
-	XMFLOAT3 TmpPos = this->transform_.position_;
-	TmpPos.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
-	TmpPos.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
-
-	XMVECTOR NewPos = XMLoadFloat3(&TmpPos);
-
-	//場外でなければ位置更新 
-	XMFLOAT3 f;
-	XMStoreFloat3(&f, NewPos);
-	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
-	{
-		XMStoreFloat3(&this->transform_.position_, NewPos);
-	}
-}
-
 void Enemy::UpdateAttack()
 {
-	////移動ベクトルを計算(方向 * 速度(初速 + 加速))
-	//XMVECTOR MoveVector = XMVectorScale(AttackVector_,(Velocity_ + Acceleration_) * DeltaTime);
-
-	////敵の位置に移動ベクトルを加算
-	//XMVECTOR PrevPos = EnemyPosition_;
-	//XMVECTOR NewPos = PrevPos + MoveVector;
+	SetAttackLocusEffect();
+	//CharacterMove(ForwardVector_);
 
 	CreateMoveVector();
 
 	//場外でなければ位置更新 
-	XMFLOAT3 f;
-	XMStoreFloat3(&f, NewPositon_);
-	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
+	XMFLOAT3 tmp;
+	XMStoreFloat3(&tmp, NewPositon_);
+	if (!(tmp.x > 60.0f || tmp.x < -60.0f || tmp.z > 60.0f || tmp.z < -60.0f))
 	{
 		XMStoreFloat3(&this->transform_.position_, NewPositon_);
 	}
@@ -342,8 +320,8 @@ void Enemy::OnCollision(GameObject* pTarget)
 			XMFLOAT3 inverse;
 			XMStoreFloat3(&inverse, ForwardVector_);
 			KnockBack_Direction_ = { inverse.x * -1, inverse.y * -1, inverse.z * -1 };
-			KnockBack_Velocity_.x = KnockBackPower;
-			KnockBack_Velocity_.z = KnockBackPower;
+			KnockBack_Velocity_.x = KnockBackPower_;
+			KnockBack_Velocity_.z = KnockBackPower_;
 
 			EnemyState_ = S_WALLHIT;
 		}
@@ -363,13 +341,13 @@ void Enemy::PlayerReflect(XMVECTOR _vector,bool _isDush)
 
 	if (_isDush)
 	{
-		KnockBack_Velocity_.x = KnockBackPower * 1.5;
-		KnockBack_Velocity_.z = KnockBackPower * 1.5;
+		KnockBack_Velocity_.x = KnockBackPower_ * 1.5;
+		KnockBack_Velocity_.z = KnockBackPower_ * 1.5;
 	}
 	else
 	{
-		KnockBack_Velocity_.x = KnockBackPower;
-		KnockBack_Velocity_.z = KnockBackPower;
+		KnockBack_Velocity_.x = KnockBackPower_;
+		KnockBack_Velocity_.z = KnockBackPower_;
 	}
 
 	EnemyState_ = S_HIT;
@@ -386,27 +364,28 @@ void Enemy::LookPlayer()
 
 	//XMMATRIX mvec = transform_.matRotate_;//現在の回転している方向（自分の回転行列）
 
-	//正面ベクトルからどれだけ回転したかを計算し、前向きベクトルを計算
-	XMVECTOR front = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);
+	//プレイヤーの位置(ベクトル)から敵の位置(ベクトル)を引く
+	XMVECTOR enemyVector = XMLoadFloat3(&this->transform_.position_);
+	XMVECTOR PlayerDist = XMVectorSubtract(pPositionVec_ ,enemyVector);
 
-	//プレイヤーの位置-敵の位置で距離をとり、ベクトル化する
-	XMFLOAT3 LookDir = PlayerEnemyDistanceFloat3();
-	XMVECTOR PlayerDist = XMLoadFloat3(&LookDir);
+	//回転する方向を設定(初期化)
+	XMVECTOR RotateDirection = XMVectorZero();
 
-	//距離を単位ベクトル化
-	MoveDirection_ = XMVector3Normalize(PlayerDist);
+	//距離を単位ベクトル化(PlayerDistが0,0,0でエラー防止)
+	if(!XMVector3Equal(PlayerDist, XMVectorZero()))
+	{
+		RotateDirection = XMVector3Normalize(PlayerDist);
+	}
 
-	//攻撃方向を保存
-	//AttackVector_ = MoveDirection_;
-
+	MoveDirection_ = RotateDirection;
 
 	//------------角度に応じて回転------------
 	
 	//二つのベクトル間のラジアン角を求める
-	XMVECTOR angle = XMVector3AngleBetweenVectors(MoveDirection_, front);
+	XMVECTOR angle = XMVector3AngleBetweenVectors(RotateDirection, ForwardVector_);
 
 	//前向きベクトルとプレイヤーのいる方向のベクトルの外積を求める
-	XMVECTOR cross = XMVector3Cross(front, MoveDirection_);
+	XMVECTOR cross = XMVector3Cross(ForwardVector_, RotateDirection);
 
 	//外積のY軸（+か-で左右どちらにいるか判断）を求める
 	float crossY = XMVectorGetY(cross);
@@ -434,15 +413,11 @@ void Enemy::Look()
 
 }
 
-XMFLOAT3 Enemy::PlayerEnemyDistanceFloat3()
-{
-	XMFLOAT3 dist = PlayerPosition_ - this->transform_.position_;
-	return dist;
-}
-
 float Enemy::PlayerEnemyDistanceX()
 {
-	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition_, pPositionVec_);
+	XMVECTOR EnemyPosition = XMLoadFloat3(&this->transform_.position_);
+	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition, pPositionVec_);
+	//XMVECTOR v = XMVector3Length(DistVec);
 	float tmp = XMVectorGetX(XMVector3Length(DistVec));
 	return tmp;
 }

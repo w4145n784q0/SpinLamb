@@ -25,7 +25,7 @@ Player::Player(GameObject* parent)
 	/*pGround_(nullptr),*/PlayerState_(S_MAX),CameraState_(S_NORMALCAMERA),
 	
 
-	Direction_({ 0,0,0 }),  PlayerPosition_({ 0,0,0 }),BackCamera_(BackCameraPos),NewPos_({0,0,0})
+	Direction_({ 0,0,0 }),BackCamera_(BackCameraPos)
 {
 	cameraTransform_ = this->transform_;
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
@@ -68,7 +68,6 @@ void Player::Initialize()
 void Player::Update()
 {
 	cameraTransform_.position_ = this->transform_.position_;
-	PlayerPosition_ = XMLoadFloat3(&this->transform_.position_); 
 
 	switch (PlayerState_)
 	{
@@ -124,7 +123,7 @@ void Player::Draw()
 	//ImGui::Text("dash:%.3f", Acceleration_);
 	
 	XMFLOAT3 tmp;
-    XMStoreFloat3(&tmp, ForwardVector_);
+    XMStoreFloat3(&tmp, MoveDirection_);
 
 	//ImGui::Text("front.x:%3f", (float)tmp.x);
 	//ImGui::Text("front.y:%3f", (float)tmp.y);
@@ -212,8 +211,8 @@ void Player::OnCollision(GameObject* pTarget)
 			XMFLOAT3 inverse;
 			XMStoreFloat3(&inverse, ForwardVector_);
 			KnockBack_Direction_ = { inverse.x, inverse.y, inverse.z };
-			KnockBack_Velocity_.x = KnockBackPower;
-			KnockBack_Velocity_.z = KnockBackPower;
+			KnockBack_Velocity_.x = KnockBackPower_;
+			KnockBack_Velocity_.z = KnockBackPower_;
 			PlayerState_ = S_WALLHIT;
 		}
 	}
@@ -311,9 +310,8 @@ void Player::UpdateIdle()
 		}
 	}
 
-	//PlayerMove();
 	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
-	CharacterMove(move);
+	CharacterMoveRotate(move);
 
 	//自分の前方ベクトル(回転した分も含む)を更新
 	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);
@@ -358,7 +356,7 @@ void Player::UpdateHit()
 	//transform_.position_.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
 	//cameraTransform_.position_ = transform_.position_;
 
-	Blown();
+	KnockBack();
 	CharacterGravity();
 
 	if (KnockBack_Velocity_.x <= 0.5f || KnockBack_Velocity_.z <= 0.5f)
@@ -369,7 +367,7 @@ void Player::UpdateHit()
 
 void Player::UpdateCharge()
 {
-	SetChargingEffect();
+	SetChargingEffect("PaticleAssets\\circle_B.png");
 
 	if (Input::IsKey(DIK_LEFT))
 	{
@@ -437,12 +435,12 @@ void Player::UpdateAttack()
 	//PlayerMove();
 
 	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
-	CharacterMove(move);
+	CharacterMoveRotate(move);
 }
 
 void Player::UpdateWallHit()
 {	
-	Blown();
+	KnockBack();
 	CharacterGravity();
 
 	if (KnockBack_Velocity_.x <= 0.1f || KnockBack_Velocity_.z <= 0.1f)
@@ -520,8 +518,8 @@ void Player::Blown()
 	this->transform_.rotate_.x += MoveRotateX;
 
 	//毎フレーム速度を減少
-	KnockBack_Velocity_.x *= 0.9;
-	KnockBack_Velocity_.z *= 0.9;
+	KnockBack_Velocity_.x *= DecelerationRate_;
+	KnockBack_Velocity_.z *= DecelerationRate_;
 
 	//位置 = 位置 + 方向 * 速度
 	XMFLOAT3 TmpPos = this->transform_.position_;
@@ -676,60 +674,16 @@ void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
 
 	if (_IsAttack)
 	{
-		KnockBack_Velocity_.x = KnockBackPower * 1.5;
-		KnockBack_Velocity_.z = KnockBackPower * 1.5;
+		KnockBack_Velocity_.x = KnockBackPower_ * 1.5;
+		KnockBack_Velocity_.z = KnockBackPower_ * 1.5;
 	}
 	else
 	{
-		KnockBack_Velocity_.x = KnockBackPower;
-		KnockBack_Velocity_.z = KnockBackPower;
+		KnockBack_Velocity_.x = KnockBackPower_;
+		KnockBack_Velocity_.z = KnockBackPower_;
 	}
 
 	PlayerState_ = S_HIT;
-}
-
-void Player::SetChargingEffect()
-{
-	EmitterData charge;
-	charge.textureFileName = "PaticleAssets\\circle_R.png";
-	charge.delay = 0;
-	charge.lifeTime = 20;
-	charge.position = this->transform_.position_;
-	charge.positionRnd = XMFLOAT3(1, 1, 1);
-	charge.direction = { 0,1,0 };
-	//charge.directionRnd = XMFLOAT3(90, 90, 90);
-	charge.speed = 0.15;
-	charge.number = (DWORD)1;
-	VFX::Start(charge);
-
-}
-
-void Player::SetAttackLocusEffect()
-{
-	//プレイヤーの背後に光の粒子
-	EmitterData locus;
-	locus.textureFileName = "PaticleAssets\\flashB_Y.png";
-	locus.delay = 0;
-	locus.number = (DWORD)3;
-	locus.position = this->transform_.position_;
-	locus.position.z = this->transform_.position_.z - 0.5f;
-	locus.positionRnd = { 1,1,1 };
-	locus.direction = { 0,0,1 };
-	locus.sizeRnd = { 0.5,0.5 };
-	locus.lifeTime = (DWORD)10;
-	VFX::Start(locus);
-
-	/*Attackdata_locus.textureFileName = "PaticleAssets\\flashB_Y.png";
-	Attackdata_locus.number = (DWORD)3;
-	Attackdata_locus.position = this->transform_.position_;
-	Attackdata_locus.position.z = this->transform_.position_.z - 0.5f;
-	Attackdata_locus.positionRnd = { 1,1,1 };
-	Attackdata_locus.direction = { 0,0,1 };
-	Attackdata_locus.sizeRnd = { 0.5,0.5 };
-	Attackdata_locus.lifeTime = (DWORD)10;
-	hAttackEmitLocus_ = VFX::Start(Attackdata_locus);
-	LocusEffectCount = 5;
-	IsLocusEffect = true;*/
 }
 
 void Player::SetHitEffect()

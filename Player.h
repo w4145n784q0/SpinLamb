@@ -48,8 +48,6 @@ private:
 	CameraState CameraState_;
 	
 	//----------移動関係----------
-	XMVECTOR PlayerPosition_;//位置ベクトル(毎フレーム保存)
-	XMVECTOR NewPos_;//プレイヤーの移動先 
 	XMFLOAT3 Direction_;//プレイヤーの操作方向(xzどこに進むか)
 	Transform ArrowTransform_;//矢印モデルの位置情報
 	
@@ -118,11 +116,7 @@ public:
 
 	bool GetIsInvincibility() { if (IsInvincibility_) return true; else return false; }
 
-	//チャージ状態エフェクトをつける
-	void SetChargingEffect();
 
-	//突撃エフェクトつける
-	void SetAttackLocusEffect();
 
 	//衝撃エフェクトつける
 	void SetHitEffect();

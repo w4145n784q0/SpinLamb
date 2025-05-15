@@ -1,9 +1,9 @@
 #include "Character.h"
+#include"Engine/VFX.h"
 
 Character::Character(GameObject* parent)
 	:GameObject(parent,"Character")
 {
-	//csv_.Load("CSVdata\\CharacterDataSample.csv");
 }
 
 Character::Character(GameObject* parent, const std::string& name):GameObject(parent, name)
@@ -49,11 +49,12 @@ void Character::SetcsvStatus(std::string _path)
     ColliderSize_ = csv.GetValueFloat(1, 26);
 	KnockBack_Direction_ = { csv.GetValueFloat(1, 27), csv.GetValueFloat(1, 28) , csv.GetValueFloat(1, 29) };
     KnockBack_Velocity_ = { csv.GetValueFloat(1, 30), csv.GetValueFloat(1, 31) , csv.GetValueFloat(1, 32) };
-	KnockBackPower = csv.GetValueFloat(1, 33);
+	KnockBackPower_ = csv.GetValueFloat(1, 33);
+	DecelerationRate_ = csv.GetValueFloat(1, 34);
 
-    InvincibilityTime_ = csv.GetValueFloat(1, 34);
+    InvincibilityTime_ = csv.GetValueFloat(1, 35);
 	IsInvincibility_ = false;
-    InvincibilityValue = csv.GetValueFloat(1, 35);
+    InvincibilityValue = csv.GetValueFloat(1, 36);
 }
 
 void Character::CharacterGravity()
@@ -68,13 +69,29 @@ void Character::CharacterGravity()
 	}
 }
 
-void Character::CharacterMove(XMVECTOR _direction)
+void Character::CharacterMoveRotate(XMVECTOR _direction)
 {
-	//Ｙ軸回転する
+	//向いているローカルの方向ベクトルをＹ軸回転する
 	XMVECTOR prev = RotateVecFront(this->transform_.rotate_.y, _direction);
 
 	//単位ベクトル化し、移動方向を確定
 	MoveDirection_ = XMVector3Normalize(prev);
+
+	CreateMoveVector();
+
+	//場外でなければ位置更新 
+	XMFLOAT3 tmp;
+	XMStoreFloat3(&tmp, NewPositon_);
+	if (!(tmp.x > 60.0f || tmp.x < -60.0f || tmp.z > 60.0f || tmp.z < -60.0f))
+	{
+		XMStoreFloat3(&this->transform_.position_, NewPositon_);
+	}
+}
+
+void Character::CharacterMove(XMVECTOR _direction)
+{
+	//単位ベクトル化し、移動方向を確定
+	MoveDirection_ = XMVector3Normalize(_direction);
 
 	CreateMoveVector();
 
@@ -98,6 +115,30 @@ void Character::CreateMoveVector()
 	NewPositon_ = PrevPos + MoveVector;
 }
 
+void Character::KnockBack()
+{
+	this->transform_.rotate_.x += MoveRotateX;
+
+	//毎フレーム速度を減少
+	KnockBack_Velocity_.x *= DecelerationRate_;
+	KnockBack_Velocity_.z *= DecelerationRate_;
+
+	//位置 = 位置 + 方向 * 速度
+	XMFLOAT3 TmpPos = this->transform_.position_;
+	TmpPos.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
+	TmpPos.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
+
+	NewPositon_ = XMLoadFloat3(&TmpPos);
+
+	//場外でなければ位置更新 
+	XMFLOAT3 f;
+	XMStoreFloat3(&f, NewPositon_);
+	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
+	{
+		XMStoreFloat3(&this->transform_.position_, NewPositon_);
+	}
+}
+
 XMVECTOR Character::RotateVecFront(float rotY, XMVECTOR front)
 {
 	//回転させたいベクトル（方向）を代入
@@ -119,4 +160,36 @@ XMVECTOR Character::CalclationForward(float rotY, XMVECTOR front)
 	XMMATRIX m = XMMatrixRotationY(XMConvertToRadians(rotY));
 	XMVECTOR forward = XMVector3TransformNormal(v,m);
 	return  forward;
+}
+
+void Character::SetChargingEffect(std::string _path)
+{
+	EmitterData charge;
+	//charge.textureFileName = "PaticleAssets\\circle_B.png";
+	charge.textureFileName = _path;
+	charge.delay = 0;
+	charge.lifeTime = 15;
+	charge.position = this->transform_.position_;
+	charge.positionRnd = XMFLOAT3(1, 1, 1);
+	charge.direction = { 0,1,0 };
+	//charge.directionRnd = XMFLOAT3(90, 90, 90);
+	charge.speed = 0.18;
+	charge.number = (DWORD)1;
+	VFX::Start(charge);
+}
+
+void Character::SetAttackLocusEffect()
+{
+	//プレイヤーの背後に光の粒子
+	EmitterData locus;
+	locus.textureFileName = "PaticleAssets\\flashB_Y.png";
+	locus.delay = 0;
+	locus.number = (DWORD)3;
+	locus.position = this->transform_.position_;
+	locus.position.z = this->transform_.position_.z - 0.5f;
+	locus.positionRnd = { 1,1,1 };
+	locus.direction = { 0,0,1 };
+	locus.sizeRnd = { 0.5,0.5 };
+	locus.lifeTime = (DWORD)10;
+	VFX::Start(locus);
 }

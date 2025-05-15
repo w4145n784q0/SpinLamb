@@ -35,10 +35,8 @@ private:
 
 	//----------攻撃関係----------
 	int AimTimer_;//狙ってから攻撃までのタイマー
-	XMVECTOR AttackVector_;//攻撃方向
 
 	//----------移動関係----------
-	XMVECTOR EnemyPosition_;//敵の位置ベクトル(毎フレーム保存)
 	//float FrontLength_;//敵の視界の長さ
 	//float Eye_;
 	//bool IsHit_;
@@ -67,7 +65,6 @@ public:
 	void UpdateAim();//プレイヤーを狙っている
 	void UpdateOnAlert();//様子見
 	//void UpdateRandomAim();
-	void Blown();
 
 	void OnCollision(GameObject* pTarget) override;
 
@@ -98,7 +95,6 @@ public:
 	void Look();
 
 	//敵とプレイヤーの距離を返す
-	XMFLOAT3 PlayerEnemyDistanceFloat3();
 	float PlayerEnemyDistanceX();
 
 };
