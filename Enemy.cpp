@@ -190,20 +190,7 @@ void Enemy::UpdateChase()
 	this->transform_.rotate_.x -= MoveRotateX;
 
 	LookPlayer();
-	//CharacterMove(ForwardVector_);
-
-
-
-
-	CreateMoveVector();
-
-	//場外でなければ位置更新 
-	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, NewPositon_);
-	if (!(tmp.x > 60.0f || tmp.x < -60.0f || tmp.z > 60.0f || tmp.z < -60.0f))
-	{
-		XMStoreFloat3(&this->transform_.position_, NewPositon_);
-	}
+	CharacterMove(MoveDirection_);
 
 	float dist = PlayerEnemyDistanceX();
 	if (dist < ChaseLength)
@@ -284,17 +271,7 @@ void Enemy::UpdateOnAlert()
 void Enemy::UpdateAttack()
 {
 	SetAttackLocusEffect();
-	//CharacterMove(ForwardVector_);
-
-	CreateMoveVector();
-
-	//場外でなければ位置更新 
-	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, NewPositon_);
-	if (!(tmp.x > 60.0f || tmp.x < -60.0f || tmp.z > 60.0f || tmp.z < -60.0f))
-	{
-		XMStoreFloat3(&this->transform_.position_, NewPositon_);
-	}
+	CharacterMove(MoveDirection_);
 
 	//速度を毎フレーム減少
 	Acceleration_ -= AcceleValue_;
@@ -377,6 +354,7 @@ void Enemy::LookPlayer()
 		RotateDirection = XMVector3Normalize(PlayerDist);
 	}
 
+	//敵への移動方向を保管
 	MoveDirection_ = RotateDirection;
 
 	//------------角度に応じて回転------------
@@ -408,16 +386,10 @@ void Enemy::LookPlayer()
 	transform_.Calclation();
 }
 
-void Enemy::Look()
-{
-
-}
-
 float Enemy::PlayerEnemyDistanceX()
 {
 	XMVECTOR EnemyPosition = XMLoadFloat3(&this->transform_.position_);
 	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition, pPositionVec_);
-	//XMVECTOR v = XMVector3Length(DistVec);
 	float tmp = XMVectorGetX(XMVector3Length(DistVec));
 	return tmp;
 }
