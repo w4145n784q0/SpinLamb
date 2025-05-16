@@ -7,6 +7,20 @@
 #include "BoxCollider.h"
 #include "Transform.h"
 
+namespace
+{
+	/// <summary>
+	/// 60fpsにおける1フレームの時間
+	/// 使用端末によるフレームレート依存防止
+	/// </summary>
+	const float DeltaTime = 0.016f;
+
+	/// <summary>
+	/// スティックを傾けた値(0.0~1.0)がこの値を上回ったか
+	/// </summary>
+	const float sticktilt = 0.5f;
+}
+
 struct Point
 {
 	float x;
@@ -184,9 +198,6 @@ public:
 	void SetScale(XMFLOAT3 scale) { transform_.scale_ = scale; }
 	void SetScale(float x, float y, float z) { SetScale(XMFLOAT3(x, y, z)); }
 
-	//60fpsにおける1フレームの時間
-	//使用端末によるフレームレート依存防止
-	const float DeltaTime = 0.016f;
 
 private:
 

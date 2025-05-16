@@ -15,14 +15,23 @@ GameModeScene::GameModeScene(GameObject* parent)
 
 void GameModeScene::Initialize()
 {
-	hBattle_ = Image::Load("Image\\play.png");
+	std::string path = "Image\\GameMode\\";
+
+	hBattle_ = Image::Load(path + "BattleButton.png");
 	assert(hBattle_ >= 0);
 
-	hPractice_ = Image::Load("Image\\practice.png");
+	hPractice_ = Image::Load(path + "FreeplayButton.png");
 	assert(hPractice_ >= 0);
 
-	hBackTitle_ = Image::Load("Image\\title.png");
+	hHowtoPlay_ = Image::Load(path + "HowToPlayButton.png");
+	assert(hHowtoPlay_ >= 0);
+
+	hBackTitle_ = Image::Load(path + "TitleButton.png");
 	assert(hBackTitle_ >= 0);
+
+	//hFrameLine_ = Image::Load(path + "LineFrame.png");
+	//assert(hFrameLine_ >= 0);
+
 
 	hArrow_ = Image::Load("Image\\arrow.png");
 	assert(hArrow_ >= 0);
@@ -34,19 +43,20 @@ void GameModeScene::Initialize()
 	assert(hModeSound_ >= 0);
 
 	ModeSetTrans[0].position_ = { -0.5,0.5,0 };//モードセレクトの位置
-	ModeSetTrans[1].position_ = { 0.5,0.5,0 };//プレイの位置
-	ModeSetTrans[2].position_ = { 0.5,0.0,0 };//練習の位置
-	ModeSetTrans[3].position_ = { 0.5,-0.5,0 };//タイトルの位置
+	ModeSetTrans[1].position_ = { 0.5,0.6,0 };//プレイの位置
+	ModeSetTrans[2].position_ = { 0.5,0.2,0 };//練習の位置
+	ModeSetTrans[3].position_ = { 0.5,-0.2,0 };//遊び方の位置
+	ModeSetTrans[4].position_ = { 0.5,-0.6,0 };//タイトルの位置
 	
-	Trans_Arrow_.position_ = { 0.0,0.5,0 };
+	Trans_Arrow_.position_ = { 0.0,0.6,0 };
 
-	ModeList_ = { Battle,Practice,Title };
+	ModeList_ = { Battle,Practice,HowToPlay,Title };
 	itr = ModeList_.begin();
 }
 
 void GameModeScene::Update()
 {
-	if (Input::IsKeyDown(DIK_UP) || Input::GetPadStickL().y >= 0.5)
+	if (Input::IsKeyDown(DIK_UP) || Input::GetPadStickL().y >= sticktilt)
 	{
 		if (itr == ModeList_.begin())
 		{
@@ -58,7 +68,7 @@ void GameModeScene::Update()
 		}
 		SelectMode_ = *itr;
 	}
-	if (Input::IsKeyDown(DIK_DOWN) || Input::GetPadStickL().y <= -0.5)
+	if (Input::IsKeyDown(DIK_DOWN) || Input::GetPadStickL().y <= -sticktilt)
 	{
 		if (itr == --ModeList_.end())
 		{
@@ -74,13 +84,16 @@ void GameModeScene::Update()
 	switch (SelectMode_)
 	{
 	case GameModeScene::Battle:
-		Trans_Arrow_.position_.y = 0.5f;
+		Trans_Arrow_.position_.y = 0.6f;
 		break;
 	case GameModeScene::Practice:
-		Trans_Arrow_.position_.y = 0.0f;
+		Trans_Arrow_.position_.y = 0.2f;
+		break;
+	case GameModeScene::HowToPlay:
+		Trans_Arrow_.position_.y = -0.2f;
 		break;
 	case GameModeScene::Title:
-		Trans_Arrow_.position_.y = -0.5f;
+		Trans_Arrow_.position_.y = -0.6f;
 		break;
 	default:
 		break;
@@ -124,17 +137,21 @@ void GameModeScene::Draw()
 	Image::SetTransform(hPractice_, ModeSetTrans[2]);
 	Image::Draw(hPractice_);
 
-	Image::SetTransform(hBackTitle_, ModeSetTrans[3]);
+	Image::SetTransform(hHowtoPlay_, ModeSetTrans[3]);
+	Image::Draw(hHowtoPlay_);
+
+	Image::SetTransform(hBackTitle_, ModeSetTrans[4]);
 	Image::Draw(hBackTitle_);
 
 	Image::SetTransform(hArrow_, Trans_Arrow_);
 	Image::Draw(hArrow_);
 
 #ifdef _DEBUG
-	//ImGui::Text("mode :%.1f", itr);
+	ImGui::SliderFloat("battle", &ModeSetTrans[1].position_.y, 1.0, -1.0);
+	ImGui::SliderFloat("free", &ModeSetTrans[2].position_.y, 1.0, -1.0);
+	ImGui::SliderFloat("how", &ModeSetTrans[3].position_.y, 1.0, -1.0);
+	ImGui::SliderFloat("title", &ModeSetTrans[4].position_.y, 1.0, -1.0);
 #endif
-
-
 }
 
 void GameModeScene::Release()

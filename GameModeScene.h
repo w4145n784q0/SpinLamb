@@ -9,7 +9,10 @@ private:
 	int hBack_;//背景
 	int hBattle_;//バトルスタートボタン
 	int hPractice_;//練習モードボタン
+	int hHowtoPlay_;//あそびかた説明ボタン
 	int hBackTitle_;//タイトルのボタン
+	int hFrameLine_;//枠線
+
 	int hArrow_;//選択の矢印
 	int hModeSelect_;//モードセレクト
 
@@ -19,6 +22,7 @@ private:
 	{
 		Battle,
 		Practice,
+		HowToPlay,
 		Title,
 		Max
 	};
@@ -28,7 +32,7 @@ private:
 	
 
 	Transform Trans_Arrow_;
-	std::array<Transform, 4> ModeSetTrans;
+	std::array<Transform, 5> ModeSetTrans;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
