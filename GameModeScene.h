@@ -6,33 +6,45 @@ class GameModeScene :
     public GameObject
 {
 private:
+	//----------背景----------
 	int hBack_;//背景
+
+	//----------ボタン----------
 	int hBattle_;//バトルスタートボタン
 	int hPractice_;//練習モードボタン
 	int hHowtoPlay_;//あそびかた説明ボタン
 	int hBackTitle_;//タイトルのボタン
-	int hFrameLine_;//枠線
+	int hFrameLine_;//選択枠の枠線
+	std::array<Transform, 5> ModeSetTrans;//各ボタンのトランスフォーム管理配列
 
-	int hArrow_;//選択の矢印
+	//----------ロゴ・テキスト----------
 	int hModeSelect_;//モードセレクト
+	int hBattleText_;//画面下部のテキスト(バトル用)
+	int hFreePlayText_;//画面下部のテキスト(フリープレイ用)
+	int hHowtoPlayText_;//画面下部のテキスト(あそびかた用)
+	int hTitleText_;//画面下部のテキスト(タイトル用)
+	std::array<int, 4> TextArray_;//各テキストのハンドル配列
 
+	//----------サウンド----------
 	int hModeSound_;
 
 	enum Mode
 	{
-		Battle,
+		Battle = 0,
 		Practice,
 		HowToPlay,
 		Title,
 		Max
 	};
 	Mode SelectMode_;
+
 	std::list<Mode> ModeList_;//各モードのリスト
 	std::list<Mode>::iterator itr;//ModeList_のインデックスを指す値
 	
+	Transform Trans_Select_;//ゲームモードロゴのトランスフォーム
+	Transform Trans_Text_;//テキストの固定位置
 
-	Transform Trans_Arrow_;
-	std::array<Transform, 5> ModeSetTrans;
+	
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

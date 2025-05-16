@@ -29,26 +29,38 @@ void GameModeScene::Initialize()
 	hBackTitle_ = Image::Load(path + "TitleButton.png");
 	assert(hBackTitle_ >= 0);
 
-	//hFrameLine_ = Image::Load(path + "LineFrame.png");
-	//assert(hFrameLine_ >= 0);
+	hFrameLine_ = Image::Load(path + "LineFrame.png");
+	assert(hFrameLine_ >= 0);
 
-
-	hArrow_ = Image::Load("Image\\arrow.png");
-	assert(hArrow_ >= 0);
-
-	hModeSelect_ = Image::Load("Image\\ModeSelect.png");
+	hModeSelect_ = Image::Load(path + "ModeSelect.png");
 	assert(hModeSelect_>= 0);
+
+	hBattleText_ = Image::Load(path + "BattleText.png");
+	assert(hBattleText_ >= 0);
+
+	hFreePlayText_ = Image::Load(path + "FreeplayText.png"); 
+	assert(hFreePlayText_ >= 0);
+
+	hHowtoPlayText_ = Image::Load(path + "HowToPlayText.png");
+	assert(hHowtoPlayText_ >= 0);
+
+	hTitleText_ = Image::Load(path + "TitleText.png");
+	assert(hTitleText_ >= 0);
 
 	hModeSound_ = Audio::Load("Sound\\maou_game_rock54.wav");
 	assert(hModeSound_ >= 0);
 
-	ModeSetTrans[0].position_ = { -0.5,0.5,0 };//モードセレクトの位置
+	ModeSetTrans[0].position_ = { 0.5,0.6,0 };//選択枠の位置
 	ModeSetTrans[1].position_ = { 0.5,0.6,0 };//プレイの位置
 	ModeSetTrans[2].position_ = { 0.5,0.2,0 };//練習の位置
 	ModeSetTrans[3].position_ = { 0.5,-0.2,0 };//遊び方の位置
 	ModeSetTrans[4].position_ = { 0.5,-0.6,0 };//タイトルの位置
+
+	//各テキストハンドルを配列に入れる
+	TextArray_ = {hBattleText_, hFreePlayText_, hHowtoPlayText_, hTitleText_};
 	
-	Trans_Arrow_.position_ = { 0.0,0.6,0 };
+	Trans_Select_.position_ = { -0.5,0.5,0 };
+	Trans_Text_.position_ = { -0.17,-0.9,0 };
 
 	ModeList_ = { Battle,Practice,HowToPlay,Title };
 	itr = ModeList_.begin();
@@ -84,16 +96,16 @@ void GameModeScene::Update()
 	switch (SelectMode_)
 	{
 	case GameModeScene::Battle:
-		Trans_Arrow_.position_.y = 0.6f;
+		ModeSetTrans[0].position_.y = 0.6f;
 		break;
 	case GameModeScene::Practice:
-		Trans_Arrow_.position_.y = 0.2f;
+		ModeSetTrans[0].position_.y = 0.2f;
 		break;
 	case GameModeScene::HowToPlay:
-		Trans_Arrow_.position_.y = -0.2f;
+		ModeSetTrans[0].position_.y = -0.2f;
 		break;
 	case GameModeScene::Title:
-		Trans_Arrow_.position_.y = -0.6f;
+		ModeSetTrans[0].position_.y = -0.6f;
 		break;
 	default:
 		break;
@@ -128,7 +140,7 @@ void GameModeScene::Update()
 
 void GameModeScene::Draw()
 {
-	Image::SetTransform(hModeSelect_, ModeSetTrans[0]);
+	Image::SetTransform(hModeSelect_, Trans_Select_);
 	Image::Draw(hModeSelect_);
 
 	Image::SetTransform(hBattle_, ModeSetTrans[1]);
@@ -143,14 +155,45 @@ void GameModeScene::Draw()
 	Image::SetTransform(hBackTitle_, ModeSetTrans[4]);
 	Image::Draw(hBackTitle_);
 
-	Image::SetTransform(hArrow_, Trans_Arrow_);
-	Image::Draw(hArrow_);
+	Image::SetTransform(hFrameLine_, ModeSetTrans[0]);
+	Image::Draw(hFrameLine_);
+
+	switch (SelectMode_)
+	{
+	case GameModeScene::Battle:
+	{
+		Image::SetTransform(TextArray_[0], Trans_Text_);
+		Image::Draw(TextArray_[0]);
+	}
+		break;
+	case GameModeScene::Practice:
+	{
+		Image::SetTransform(TextArray_[1], Trans_Text_);
+		Image::Draw(TextArray_[1]);
+	}
+		break;
+	case GameModeScene::HowToPlay:
+	{
+		Image::SetTransform(TextArray_[2], Trans_Text_);
+		Image::Draw(TextArray_[2]);
+	}
+		break;
+	case GameModeScene::Title:
+	{
+		Image::SetTransform(TextArray_[3], Trans_Text_);
+		Image::Draw(TextArray_[3]);
+	}
+		break;
+	default:
+		break;
+	}
 
 #ifdef _DEBUG
-	ImGui::SliderFloat("battle", &ModeSetTrans[1].position_.y, 1.0, -1.0);
-	ImGui::SliderFloat("free", &ModeSetTrans[2].position_.y, 1.0, -1.0);
-	ImGui::SliderFloat("how", &ModeSetTrans[3].position_.y, 1.0, -1.0);
-	ImGui::SliderFloat("title", &ModeSetTrans[4].position_.y, 1.0, -1.0);
+	ImGui::SliderFloat("text", &Trans_Text_.position_.x, -1.0, 1.0);
+	//ImGui::SliderFloat("battle", &ModeSetTrans[1].position_.y, 1.0, -1.0);
+	//ImGui::SliderFloat("free", &ModeSetTrans[2].position_.y, 1.0, -1.0);
+	//ImGui::SliderFloat("how", &ModeSetTrans[3].position_.y, 1.0, -1.0);
+	//ImGui::SliderFloat("title", &ModeSetTrans[4].position_.y, 1.0, -1.0);
 #endif
 }
 
