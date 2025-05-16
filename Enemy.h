@@ -57,6 +57,7 @@ public:
 	void Release() override;
 	void UpdateIdle();//待機(デバッグ用)
 	void UpdateRoot();
+	//void UpdateThink();//思考中
 	void UpdateChase();//追跡
 	void UpdateAttack();//攻撃
 	void UpdateHitStop();//ヒットストップ
@@ -81,8 +82,8 @@ public:
 	/// <param name="_isDush">プレイヤーがダッシュ中か</param>
 	void PlayerReflect(XMVECTOR _vector, bool _isDush);
 	
-	void SetState(State s) { EnemyState_ = s; }
-	State GetState() { return EnemyState_; }
+	//void SetState(State s) { EnemyState_ = s; }
+	//State GetState() { return EnemyState_; }
 	bool GetStateAttack() { if (EnemyState_ == S_ATTACK) return true; else return false; }
 
 	void SetStateStop() { EnemyState_ = S_MAX; }

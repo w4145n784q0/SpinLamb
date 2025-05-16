@@ -33,5 +33,6 @@ KnockBack_Velocity_.y,0,ノックバックする速度(y)
 KnockBack_Velocity_.z,0,ノックバックする速度(z)
 KnockBackPower ,2,ノックバック時の押し出される力
 DecelerationRate,0.9,ノックバック時の1fごとの減速率
+KnockBackEnd,0.1,ノックバック終了する値　
 InvincibilityTime,0,ダメージ後の無敵時間　1fごとに減少
 InvincibilityValue,120,無敵時間の値 無敵時間が０になるとこの値を再度代入

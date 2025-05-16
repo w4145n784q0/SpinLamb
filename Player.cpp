@@ -54,7 +54,6 @@ void Player::Initialize()
 	assert(hCollisionSound_ >= 0);
 
 	SetStartPosition();
-	transform_.rotate_.y = 180.0f;
 	//ArrowTransform_.rotate_.y = 180.0f;
 
 	//pGround_ = (Ground*)FindObject("Ground");
@@ -346,20 +345,10 @@ void Player::UpdateIdle()
 
 void Player::UpdateHit()
 {
-	//速度を下げていく
-	//KnockBack_Velocity_.x *= 0.9;
-	//KnockBack_Velocity_.z *= 0.9;
-
-	//毎フレームpositionに方向を加算
-	//位置 = 位置 + 方向 * 速度
-	//transform_.position_.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
-	//transform_.position_.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
-	//cameraTransform_.position_ = transform_.position_;
-
 	KnockBack();
 	CharacterGravity();
 
-	if (KnockBack_Velocity_.x <= 0.5f || KnockBack_Velocity_.z <= 0.5f)
+	if (KnockBack_Velocity_.x <= KnockBackEnd_ || KnockBack_Velocity_.z <= KnockBackEnd_)
 	{
 		PlayerState_ = S_IDLE;
 	}
@@ -405,15 +394,7 @@ void Player::UpdateCharge()
 		PlayerState_ = S_ATTACK;
 	}
 
-	//チャージ中一定の加速量を加算し続ける
-	if (Acceleration_ < FullAccelerate_)
-	{
-		Acceleration_ += AcceleValue_;
-	}
-	else
-	{
-		Acceleration_ = FullAccelerate_;
-	}
+	Charging();
 
 	this->transform_.rotate_.x -= FastRotateX;
 	CameraControl();
@@ -443,7 +424,7 @@ void Player::UpdateWallHit()
 	KnockBack();
 	CharacterGravity();
 
-	if (KnockBack_Velocity_.x <= 0.1f || KnockBack_Velocity_.z <= 0.1f)
+	if (KnockBack_Velocity_.x <= KnockBackEnd_ || KnockBack_Velocity_.z <= KnockBackEnd_)
 	{
 		PlayerState_ = S_IDLE;
 		IsInvincibility_ = true;

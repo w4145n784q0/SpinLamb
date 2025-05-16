@@ -40,6 +40,7 @@ protected:
     XMFLOAT3 KnockBack_Velocity_;//ノックバックする速度
     float KnockBackPower_; //ノックバックする強さ
     float DecelerationRate_;//ノックバック時の1fごとの減速率
+    float KnockBackEnd_;//ノックバックを終了する値
 
     //ノックバックする速度= ノックバックする強さ(定数) * ノックバックする方向
 
@@ -94,6 +95,26 @@ public:
     /// ノックバック移動処理
     /// </summary>
     void KnockBack();
+
+    /// <summary>
+    /// 通常X軸回転
+    /// </summary>
+    void MoveRotate(){ this->transform_.rotate_.x -= MoveRotateX; }
+
+    /// <summary>
+    /// 高速X軸回転
+    /// </summary>
+    void FastRotate(){ this->transform_.rotate_.x -= FastRotateX; }
+
+    /// <summary>
+    /// 回転を止める
+    /// </summary>
+    void RotateStop(){ this->transform_.rotate_.x = 0.0f; }
+
+    /// <summary>
+    /// 加速度の加算
+    /// </summary>
+    void Charging();
 
 
     /// <summary>

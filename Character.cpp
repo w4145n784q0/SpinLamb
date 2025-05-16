@@ -51,10 +51,11 @@ void Character::SetcsvStatus(std::string _path)
     KnockBack_Velocity_ = { csv.GetValueFloat(1, 30), csv.GetValueFloat(1, 31) , csv.GetValueFloat(1, 32) };
 	KnockBackPower_ = csv.GetValueFloat(1, 33);
 	DecelerationRate_ = csv.GetValueFloat(1, 34);
+	KnockBackEnd_ = csv.GetValueFloat(1, 35);
 
-    InvincibilityTime_ = csv.GetValueFloat(1, 35);
+    InvincibilityTime_ =  csv.GetValueFloat(1, 36);
 	IsInvincibility_ = false;
-    InvincibilityValue = csv.GetValueFloat(1, 36);
+    InvincibilityValue = csv.GetValueFloat(1, 37);
 }
 
 void Character::CharacterGravity()
@@ -136,6 +137,19 @@ void Character::KnockBack()
 	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
 	{
 		XMStoreFloat3(&this->transform_.position_, NewPositon_);
+	}
+}
+
+void Character::Charging()
+{
+	//ƒ`ƒƒ[ƒW’†ˆê’è‚Ì‰Á‘¬—Ê‚ğ‰ÁZ‚µ‘±‚¯‚é
+	if (Acceleration_ < FullAccelerate_)
+	{
+		Acceleration_ += AcceleValue_;
+	}
+	else
+	{
+		Acceleration_ = FullAccelerate_;
 	}
 }
 

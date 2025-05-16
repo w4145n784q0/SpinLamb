@@ -212,7 +212,7 @@ void Enemy::UpdateHitStop()
 
 void Enemy::UpdateHit()
 {
-	if (KnockBack_Velocity_.x <= 0.5f || KnockBack_Velocity_.z <= 0.5f)
+	if (KnockBack_Velocity_.x <= KnockBackEnd_ || KnockBack_Velocity_.z <= KnockBackEnd_)
 	{
 		transform_.rotate_.x = 0.0f;
 		EnemyState_ = S_ROOT;
@@ -223,7 +223,7 @@ void Enemy::UpdateHit()
 void Enemy::UpdateWallHit()
 {
 	KnockBack();
-	if (KnockBack_Velocity_.x <= 0.1f || KnockBack_Velocity_.z <= 0.1f)
+	if (KnockBack_Velocity_.x <= KnockBackEnd_ || KnockBack_Velocity_.z <= KnockBackEnd_)
 	{
 		transform_.rotate_.x = 0.0f;
 		EnemyState_ = S_ROOT;
@@ -254,6 +254,7 @@ void Enemy::UpdateAim()
 	SetChargingEffect("PaticleAssets\\circle_R.png");
 	this->transform_.rotate_.x -= FastRotateX;
 
+	//	EnemyAttackTime = 180
 	if (++AimTimer_ > EnemyAttackTime)
 	{
 		AimTimer_ = 0;
