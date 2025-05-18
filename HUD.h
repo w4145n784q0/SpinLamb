@@ -14,22 +14,24 @@ private:
 	//練習中(練習モード用)
 	int hPracticeNow_;
 
-	//プレイヤーのスコアスプライト(バトルモード用)
-	int hPlayerScore_;
-
-	//敵のスコアスプライト(バトルモード用)
-	int hEnemyScore_;
+	//ゲーム開始ロゴ
+	int hStart_;
 
 	//制限時間
 	int hTime_;
 
-	//カウントダウン
-	int hCountDown3_;
-	int hCountDown2_;
-	int hCountDown1_;
-
-	//カウントダウンハンドルの配列
-	std::array<int, 3> Array_Number_;
+	//ナンバー
+	int hNumber0_;
+	int hNumber1_;
+	int hNumber2_;
+	int hNumber3_;
+	int hNumber4_;
+	int hNumber5_;
+	int hNumber6_;
+	int hNumber7_;
+	int hNumber8_;
+	int hNumber9_;
+	std::array<int, 10> ArrayHandle_;
 
 	//フィニッシュのロゴ
 	int hFinish_;
@@ -46,7 +48,19 @@ private:
 	};
 	GameMode GameModeHUD_;
 
-	int countDownNumber_;
+	//時間描画
+	int TimeNumber_;
+	int Timeten_;
+	int Timeone_;
+
+	//score描画
+	int PlayerScore_;
+	int EnemyScore_;
+
+	int PlayerOne_;
+	int PlayerTen_;
+	int EnemyOne_;
+	int EnemyTen_;
 
 public:
 	//コンストラクタ
@@ -83,7 +97,9 @@ public:
 	void SetStateBattleEnd(){ GameModeHUD_ = BattleEnd; }
 	void SetStatePractice() { GameModeHUD_ = Practice; }
 
-	void SetNumber(int _num) { countDownNumber_ = _num; }
-
+	//void SetNumber(int _num) { countDownNumber_ = _num; }
+	void SetTime(int _time) { TimeNumber_ = _time; }
+	void SetPlayerScore(int _score) { PlayerScore_ = _score; }
+	void SetEnemyScore(int _score) {EnemyScore_ = _score; }
 };
 

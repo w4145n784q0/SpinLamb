@@ -28,8 +28,8 @@ namespace
 
 BattleScene::BattleScene(GameObject* parent)
 	:GameObject(parent,"BattleScene") ,BattleState(BEFORE),
-	hFinish_(-1),hPlayerLife_(-1), hEnemyLife_(-1), hBattleSound_(-1),hWhistle_(-1),
-	PlayerScore_(0),EnemyScore_(0),GameTime_(10),StartCount_(3)
+	 hBattleSound_(-1),hWhistle_(-1),
+	PlayerScore_(0),EnemyScore_(0),GameTime_(15),StartCount_(3)
 {
 	HUD_Trans_[0].position_ = { -0.7,0.8,0 };
 	HUD_Trans_[1].position_ = { 0.7,0.8,0 };
@@ -47,14 +47,11 @@ void BattleScene::Initialize()
 
 	HUD* pHUD = (HUD*)FindObject("HUD");
 	pHUD->SetStateBattle();
-	pHUD->SetNumber(StartCount_);
+	pHUD->SetTime(GameTime_);
+	//pHUD->SetNumber(StartCount_);
 
 	//EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
 	//pEnemyManager->EnemyInitialize();
-
-
-	hFinish_ = Image::Load("Image\\finish_logo.png");
-	assert(hFinish_ >= 0);
 
 	hBattleSound_ = Audio::Load("Sound\\maou_game_rock51.wav");
 	assert(hBattleSound_>= 0);
@@ -101,11 +98,11 @@ void BattleScene::Update()
 void BattleScene::Draw()
 {
 	
-	ImGui::Text("count :%1f", (float)StartCount_);
+	//ImGui::Text("count :%1f", (float)Timecounter);
 
-	pTime_->Draw(640, 30, GameTime_);
-	pPlayerScore_->Draw(30, 30, PlayerScore_);
-	pEnemyScore_->Draw(1250, 30, EnemyScore_);
+	//pTime_->Draw(640, 30, GameTime_);
+	//pPlayerScore_->Draw(30, 30, PlayerScore_);
+	//pEnemyScore_->Draw(1250, 30, EnemyScore_);
 
 	/*pText_->Draw(140, 30, Phase_);
 	pText_->Draw(30, 30, "PHASE:");
@@ -151,8 +148,11 @@ void BattleScene::Release()
 
 void BattleScene::UpdateBattleBefore()
 {
-	if (StartCount_ <= 0)
+//	if (StartCount_ <= 0)
+	if (++Timecounter > 120)
 	{
+		Timecounter = 0;
+
 		BattleState = NOW;
 		Player* pPlayer_ = (Player*)FindObject("Player");
 		pPlayer_->PlayerStart();
@@ -164,14 +164,14 @@ void BattleScene::UpdateBattleBefore()
 		pHUD->SetStateBattleInProgress();
 	}
 
-	if (++Timecounter > oneSecond)
+	/*if (++Timecounter > oneSecond)
 	{
 		Timecounter = 0;
 		if (StartCount_ > 0)
 		{
 			StartCount_--;
 		}
-	}
+	}*/
 }
 
 void BattleScene::UpdateBattle()
@@ -196,6 +196,8 @@ void BattleScene::UpdateBattle()
 		if(GameTime_ > 0)
 		{
 			GameTime_--;
+			HUD* pHUD = (HUD*)FindObject("HUD");
+			pHUD->SetTime(GameTime_);
 		}
 	}
 }
@@ -218,16 +220,13 @@ void BattleScene::UpdateBattleAfter()
 		{
 			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 			pSceneManager->ChangeScene(SCENE_ID_CLEAR);
-			time = 120;
-			
 		}
 		else
 		{
 			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 			pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
-			time = 120;
 		}
-		
+		time = 120;
 	}
 }
 

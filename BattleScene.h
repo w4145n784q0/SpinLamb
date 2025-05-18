@@ -23,17 +23,6 @@ private:
 	};
 	Battle BattleState;
 
-	//画像ハンドル
-
-	//"finish"のロゴ
-	int hFinish_;
-
-	//プレイヤーのHP画像
-	int hPlayerLife_;
-
-	//敵のHP画像
-	int hEnemyLife_;
-
 	//音ハンドル
 	int hBattleSound_;
 	int hWhistle_;
@@ -80,6 +69,7 @@ public:
 
 	void PlusPlayerScore() { PlayerScore_++; }
 	void PlusEnemyScore() { EnemyScore_++; }
+	int GetGameTime() { return GameTime_; }
 
 };
 
