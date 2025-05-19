@@ -35,7 +35,7 @@ void GameModeScene::Initialize()
 	hFrameLine_ = Image::Load(path + "LineFrame.png");
 	assert(hFrameLine_ >= 0);
 
-	hModeSelect_ = Image::Load(path + "ModeSelect.png");
+	hModeSelect_ = Image::Load(path + "ModeSelect2.png");
 	assert(hModeSelect_>= 0);
 
 	hBattleText_ = Image::Load(path + "BattleText.png");
@@ -62,7 +62,7 @@ void GameModeScene::Initialize()
 	//各テキストハンドルを配列に入れる
 	TextArray_ = {hBattleText_, hFreePlayText_, hHowtoPlayText_, hTitleText_};
 	
-	Trans_Select_.position_ = { -0.5,0.5,0 };
+	Trans_Select_.position_ = { -0.5,0.7,0 };
 	Trans_Text_.position_ = { -0.17,-0.9,0 };
 
 	ModeList_ = { Battle,Practice,HowToPlay,Title };
