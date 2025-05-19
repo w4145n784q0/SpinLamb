@@ -17,13 +17,16 @@ namespace
 	//const float EyeLength = 10.0f;
 	const int HitStop = 2;//ƒqƒbƒgƒXƒgƒbƒv‚·‚éŽžŠÔ
 	const float ChaseLength = 10.0f;//’ÇÕó‘Ô‚©‚çUŒ‚€”õ‚ÉˆÚ‚é‹——£
-	const int EnemyAttackTime = 180;//“G‚ªUŒ‚‚·‚é‚Ü‚Å‚ÌŽžŠÔ
+	//const int EnemyAttackTime = 180;//“G‚ªUŒ‚‚·‚é‚Ü‚Å‚ÌŽžŠÔ
+
+	const int EnemyAttackTimeArray[] = { 180,150,120,60 };
 	}
 
 Enemy::Enemy(GameObject* parent)
 	:Character(parent,"Enemy"), hEnemy_(-1), pPlayer_(nullptr), pGround_(nullptr),
 	HitStopTimer_(0)
 {
+	srand((unsigned)time(NULL));
 }
 
 Enemy::~Enemy()
@@ -50,6 +53,7 @@ void Enemy::Initialize()
 
 	EnemyState_ = S_IDLE;
 
+	randaim = rand() % 4;
 }
 
 void Enemy::Update()
@@ -255,7 +259,8 @@ void Enemy::UpdateAim()
 	this->transform_.rotate_.x -= FastRotateX;
 
 	//	EnemyAttackTime = 180
-	if (++AimTimer_ > EnemyAttackTime)
+
+	if (++AimTimer_ > EnemyAttackTimeArray[randaim])
 	{
 		AimTimer_ = 0;
 		Acceleration_ = FullAccelerate_;
@@ -308,6 +313,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 	if (pTarget->GetObjectName() == "Player")
 	{
 		Acceleration_ = 0;
+		AimTimer_ = 0;
 	}
 }
 

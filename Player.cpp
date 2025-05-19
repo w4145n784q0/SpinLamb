@@ -31,7 +31,7 @@ Player::Player(GameObject* parent)
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
 	CameraTarget_ = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 
-	srand((unsigned)time(NULL));
+	//srand((unsigned)time(NULL));
 }
 
 Player::~Player()
@@ -128,8 +128,8 @@ void Player::Draw()
 	//ImGui::Text("front.y:%3f", (float)tmp.y);
 	//ImGui::Text("front.z:%3f", (float)tmp.z);
 
-	ImGui::Text("front.x:%3f", Input::GetPadStickL().x);
-	ImGui::Text("front.y:%3f", Input::GetPadStickL().y);
+	ImGui::Text("x:%3f", Input::GetPadStickL().x);
+	ImGui::Text("y:%3f", Input::GetPadStickL().y);
 
 #endif
 
@@ -314,12 +314,27 @@ void Player::UpdateIdle()
 		}
 	}
 	//マウス用方向ベクトル
-	//XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
+	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
+	CharacterMoveRotate(move,this->transform_.rotate_.y);
 
-	XMVECTOR cont = XMVectorSet(Input::GetPadStickL().x, Input::GetPadStickL().y, Input::GetPadStickL().z, 0.0f);
+	//コントローラーを倒した方向・角度を取得
+	/*XMVECTOR cont = XMVectorSet(Input::GetPadStickL().x, Input::GetPadStickL().y, Input::GetPadStickL().z, 0.0f);
+	float length = XMVectorGetX(XMVector3Length(cont));
+	
+	if(length > 0.0001f)
+	{
+		cont = XMVector3Normalize(cont);
+		XMVECTOR r = XMVector3AngleBetweenVectors(cont, FrontDirection_);
+		float angle = XMVectorGetX(r);
+		float angleDeg = XMConvertToDegrees(angle);
+		this->transform_.rotate_.y = angleDeg;
+		CharacterMoveRotate(cont,angleDeg);
+	}
+	else
+	{
 
+	}*/
 
-	//CharacterMoveRotate(move);
 
 	//自分の前方ベクトル(回転した分も含む)を更新
 	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);
@@ -437,7 +452,7 @@ void Player::UpdateAttack()
 	//PlayerMove();
 
 	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
-	CharacterMoveRotate(move);
+	CharacterMoveRotate(move,this->transform_.rotate_.y);
 }
 
 void Player::UpdateWallHit()
@@ -670,6 +685,9 @@ void Player::RockOnCamra()
 
 void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
 {
+	
+	if (!this->IsInvincibility_)
+	{
 	XMFLOAT3 f;
 	XMStoreFloat3(&f, _vector);
 	KnockBack_Direction_ = f;
@@ -686,6 +704,7 @@ void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
 	}
 
 	PlayerState_ = S_HIT;
+	}
 }
 
 void Player::SetHitEffect()

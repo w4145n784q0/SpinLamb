@@ -70,10 +70,10 @@ void Character::CharacterGravity()
 	}
 }
 
-void Character::CharacterMoveRotate(XMVECTOR _direction)
+void Character::CharacterMoveRotate(XMVECTOR _direction,float rotateY)
 {
 	//向いているローカルの方向ベクトルをＹ軸回転する
-	XMVECTOR prev = RotateVecFront(this->transform_.rotate_.y, _direction);
+	XMVECTOR prev = RotateVecFront(rotateY, _direction);
 
 	//単位ベクトル化し、移動方向を確定
 	MoveDirection_ = XMVector3Normalize(prev);

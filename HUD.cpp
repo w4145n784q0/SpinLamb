@@ -242,7 +242,7 @@ void HUD::DrawBattleInProgress()
 	Image::SetTransform(ArrayHandle_[Timeone_], OneTime);
 	Image::Draw(ArrayHandle_[Timeone_]);
 
-	Image::SetTransform(ArrayHandle_[PlayerTen_],pScoreTen );
+	/*Image::SetTransform(ArrayHandle_[PlayerTen_],pScoreTen );
 	Image::Draw(ArrayHandle_[PlayerTen_]);
 	Image::SetTransform(ArrayHandle_[PlayerOne_], pScoreOne);
 	Image::Draw(ArrayHandle_[PlayerOne_]);
@@ -250,7 +250,7 @@ void HUD::DrawBattleInProgress()
 	Image::SetTransform(ArrayHandle_[EnemyTen_], eScoreTen);
 	Image::Draw(ArrayHandle_[EnemyTen_]);
 	Image::SetTransform(ArrayHandle_[EnemyOne_], eScoreOne);
-	Image::Draw(ArrayHandle_[EnemyOne_]);
+	Image::Draw(ArrayHandle_[EnemyOne_]);*/
 }
 
 void HUD::DrawBattleEnd()

@@ -78,7 +78,7 @@ public:
     /// キャラクターの移動処理(回転も行う)
     /// </summary>
     /// <param name="_direction">動かす方向ベクトル</param>
-    void CharacterMoveRotate(XMVECTOR _direction);
+    void CharacterMoveRotate(XMVECTOR _direction, float rotateY);
 
     /// <summary>
     /// キャラクターの移動処理

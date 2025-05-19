@@ -15,6 +15,9 @@ GameModeScene::GameModeScene(GameObject* parent)
 
 void GameModeScene::Initialize()
 {
+	hBack_ = Image::Load("Image\\back_mode.jpg");
+	assert(hBack_ >= 0);
+
 	std::string path = "Image\\GameMode\\";
 
 	hBattle_ = Image::Load(path + "BattleButton.png");
@@ -142,6 +145,9 @@ void GameModeScene::Update()
 
 void GameModeScene::Draw()
 {
+	Image::SetTransform(hBack_, transform_);
+	Image::Draw(hBack_);
+
 	Image::SetTransform(hModeSelect_, Trans_Select_);
 	Image::Draw(hModeSelect_);
 

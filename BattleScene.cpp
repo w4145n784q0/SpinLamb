@@ -29,7 +29,7 @@ namespace
 BattleScene::BattleScene(GameObject* parent)
 	:GameObject(parent,"BattleScene") ,BattleState(BEFORE),
 	 hBattleSound_(-1),hWhistle_(-1),
-	PlayerScore_(0),EnemyScore_(0),GameTime_(15),StartCount_(3)
+	PlayerScore_(0),EnemyScore_(0),GameTime_(60),StartCount_(3)
 {
 	HUD_Trans_[0].position_ = { -0.7,0.8,0 };
 	HUD_Trans_[1].position_ = { 0.7,0.8,0 };
@@ -101,8 +101,8 @@ void BattleScene::Draw()
 	//ImGui::Text("count :%1f", (float)Timecounter);
 
 	//pTime_->Draw(640, 30, GameTime_);
-	//pPlayerScore_->Draw(30, 30, PlayerScore_);
-	//pEnemyScore_->Draw(1250, 30, EnemyScore_);
+	pPlayerScore_->Draw(30, 30, PlayerScore_);
+	pEnemyScore_->Draw(1250, 30, EnemyScore_);
 
 	/*pText_->Draw(140, 30, Phase_);
 	pText_->Draw(30, 30, "PHASE:");
