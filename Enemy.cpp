@@ -134,9 +134,9 @@ void Enemy::Draw()
 	XMFLOAT3 tmp;
 	XMStoreFloat3(&tmp, MoveDirection_);
 
-	ImGui::Text("front.x:%3f", (float)tmp.x);
-	ImGui::Text("front.y:%3f", (float)tmp.y);
-	ImGui::Text("front.z:%3f", (float)tmp.z);
+	//ImGui::Text("front.x:%3f", (float)tmp.x);
+	//ImGui::Text("front.y:%3f", (float)tmp.y);
+	//ImGui::Text("front.z:%3f", (float)tmp.z);
 
 	//ImGui::Text("EnemyLife:%.3f", (float)CharacterLife_);
 #endif

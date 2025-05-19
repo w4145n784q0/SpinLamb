@@ -128,6 +128,9 @@ void Player::Draw()
 	//ImGui::Text("front.y:%3f", (float)tmp.y);
 	//ImGui::Text("front.z:%3f", (float)tmp.z);
 
+	ImGui::Text("front.x:%3f", Input::GetPadStickL().x);
+	ImGui::Text("front.y:%3f", Input::GetPadStickL().y);
+
 #endif
 
 }
@@ -253,50 +256,52 @@ void Player::UpdateIdle()
 
 	//------------------ゲームパッドスティックの移動------------------//
 
-	//前方だけに移動
-	if (Input::GetPadStickL().y >= 0.5 /*&& Input::GetPadStickL().x <= 0.5 && Input::GetPadStickL().x >= -0.5*/)
-	{
-		Direction_.z = -1.0;
-		this->transform_.rotate_.x -= MoveRotateX;
-	}
+	////前方だけに移動
+	//if (Input::GetPadStickL().y >= 0.5 /*&& Input::GetPadStickL().x <= 0.5 && Input::GetPadStickL().x >= -0.5*/)
+	//{
+	//	Direction_.z = -1.0;
+	//	this->transform_.rotate_.x -= MoveRotateX;
+	//}
 
-	//後方だけに移動
-	if (Input::GetPadStickL().y <= -0.5 /*&& Input::GetPadStickL().x >= 0.5 && Input::GetPadStickL().x <= -0.5*/)
-	{
-		Direction_.z = 1.0;
-		this->transform_.rotate_.x += MoveRotateX;
-	}
+	////後方だけに移動
+	//if (Input::GetPadStickL().y <= -0.5 /*&& Input::GetPadStickL().x >= 0.5 && Input::GetPadStickL().x <= -0.5*/)
+	//{
+	//	Direction_.z = 1.0;
+	//	this->transform_.rotate_.x += MoveRotateX;
+	//}
 
-	//前進&左回転
-	if (Input::GetPadStickL().y >= 0.5 && Input::GetPadStickL().x <= -0.25)
-	{
-		Direction_.z = -1.0;
-		this->transform_.rotate_.y -= 1;
-		this->transform_.rotate_.x -= MoveRotateX;
-		cameraTransform_.rotate_.y -= 1;
-	}
+	////前進&左回転
+	//if (Input::GetPadStickL().y >= 0.5 && Input::GetPadStickL().x <= -0.1)
+	//{
+	//	//Direction_.z = -1.0;
+	//	this->transform_.rotate_.y -= 1;
+	//	this->transform_.rotate_.x -= MoveRotateX;
+	//	cameraTransform_.rotate_.y -= 1;
+	//}
 
-	//前進&右回転
-	if (Input::GetPadStickL().y >= 0.5 && Input::GetPadStickL().x >= 0.25)
-	{
-		Direction_.z = -1.0;
-		this->transform_.rotate_.y += 1;
-		this->transform_.rotate_.x += MoveRotateX;
-		cameraTransform_.rotate_.y += 1;
-	}
+	////前進&右回転
+	//if (Input::GetPadStickL().y >= 0.5 && Input::GetPadStickL().x >= 0.1)
+	//{
+	//	//Direction_.z = -1.0;
+	//	this->transform_.rotate_.y += 1;
+	//	this->transform_.rotate_.x += MoveRotateX;
+	//	cameraTransform_.rotate_.y += 1;
+	//}
 
-	//左回転だけ
-	if (Input::GetPadStickL().x <= -0.8 && Input::GetPadStickL().y <= 0.8)
-	{
-		this->transform_.rotate_.y -= 1;
-		cameraTransform_.rotate_.y -= 1;
-	}
-	//右回転だけ
-	if (Input::GetPadStickL().x >= 0.8 && Input::GetPadStickL().y <= 0.8)
-	{
-		this->transform_.rotate_.y += 1;
-		cameraTransform_.rotate_.y += 1;
-	}
+	////左回転だけ
+	//if (Input::GetPadStickL().x <= -0.25 && Input::GetPadStickL().y <= 0.25)
+	//{
+	//	this->transform_.rotate_.y -= 1;
+	//	cameraTransform_.rotate_.y -= 1;
+	//}
+	////右回転だけ
+	//if (Input::GetPadStickL().x >= 0.25 && Input::GetPadStickL().y <= 0.25)
+	//{
+	//	this->transform_.rotate_.y += 1;
+	//	cameraTransform_.rotate_.y += 1;
+	//}
+
+
 
 	//--------------ダッシュ関係--------------
 
@@ -308,9 +313,13 @@ void Player::UpdateIdle()
 			PlayerState_ = S_CHARGE;
 		}
 	}
+	//マウス用方向ベクトル
+	//XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
 
-	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
-	CharacterMoveRotate(move);
+	XMVECTOR cont = XMVectorSet(Input::GetPadStickL().x, Input::GetPadStickL().y, Input::GetPadStickL().z, 0.0f);
+
+
+	//CharacterMoveRotate(move);
 
 	//自分の前方ベクトル(回転した分も含む)を更新
 	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);
@@ -357,6 +366,18 @@ void Player::UpdateHit()
 void Player::UpdateCharge()
 {
 	SetChargingEffect("PaticleAssets\\circle_B.png");
+
+	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
+	{
+		if (IsOnGround_)
+		{
+			Acceleration_ = 0.0f;
+			PlayerState_ = S_IDLE;
+			IsOnGround_ = false;
+			JumpSpeed_ = 1.8f;//一時的にy方向にマイナスされている値を大きくする
+		}
+	}
+
 
 	if (Input::IsKey(DIK_LEFT))
 	{
