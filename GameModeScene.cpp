@@ -15,8 +15,14 @@ GameModeScene::GameModeScene(GameObject* parent)
 
 void GameModeScene::Initialize()
 {
-	hBack_ = Image::Load("Image\\back_mode.jpg");
-	assert(hBack_ >= 0);
+	hBackScreen_ = Image::Load("Image\\back_mode.jpg");
+	assert(hBackScreen_ >= 0);
+
+	//hBackChara_ = Image::Load("Image\\sheepimg.png");
+	//assert(hBackChara_ >= 0);
+
+	//hExplanation_ = Image::Load("Image\\spinlamb_exp.jpg");
+	//assert(hExplanation_ >= 0);
 
 	std::string path = "Image\\GameMode\\";
 
@@ -130,6 +136,8 @@ void GameModeScene::Update()
 			pSceneManager->ChangeScene(SCENE_ID_PRACTICE);
 			Audio::Stop(hModeSound_);
 			break;
+		case GameModeScene::HowToPlay:
+			break;
 		case GameModeScene::Title:
 			pSceneManager->ChangeScene(SCENE_ID_TITLE);
 			Audio::Stop(hModeSound_);
@@ -145,8 +153,8 @@ void GameModeScene::Update()
 
 void GameModeScene::Draw()
 {
-	Image::SetTransform(hBack_, transform_);
-	Image::Draw(hBack_);
+	Image::SetTransform(hBackScreen_, transform_);
+	Image::Draw(hBackScreen_);
 
 	Image::SetTransform(hModeSelect_, Trans_Select_);
 	Image::Draw(hModeSelect_);

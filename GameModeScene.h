@@ -7,7 +7,9 @@ class GameModeScene :
 {
 private:
 	//----------背景----------
-	int hBack_;//背景
+	int hBackScreen_;//背景色
+	int hBackChara_;//背景キャラ
+	int hExplanation_;//ゲーム説明
 
 	//----------ボタン----------
 	int hBattle_;//バトルスタートボタン

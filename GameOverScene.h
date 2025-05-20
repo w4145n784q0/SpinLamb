@@ -5,6 +5,8 @@ class GameOverScene :
 {
 private:
 	int hImage_;
+	int hlogoResult_;
+	int hlogoTitle_;
 	int hGameOverSound_;
 public:
 	//コンストラクタ

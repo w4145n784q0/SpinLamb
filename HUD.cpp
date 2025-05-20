@@ -30,7 +30,7 @@ namespace
 	const XMFLOAT3 PracticePosition = { -0.8,0.9,0 };
 	//const XMFLOAT3 CountDownPosition = { 0.5,0.5,0 };
 	const XMFLOAT3 StartPosition = { 0.0,0.5,0 };
-	const XMFLOAT3 FinishPosition = { 0.0,0.5,0 };
+	const XMFLOAT3 FinishPosition = { 0.0,0,0 };
 	const XMFLOAT3 TenTimePosition = { -0.05,0.9,0 };
 	const XMFLOAT3 OneTimePosition = { 0.05,0.9,0 };
 

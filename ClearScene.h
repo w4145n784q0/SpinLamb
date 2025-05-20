@@ -5,6 +5,8 @@ class ClearScene :
 {
 private:
 	int hImage_;
+	int hlogoResult_;
+	int hlogoTitle_;
 	int hClearSound_;
 public:
 	//コンストラクタ
