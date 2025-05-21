@@ -150,8 +150,8 @@ void Player::Draw()
 	//ImGui::Text("front.y:%3f", (float)tmp.y);
 	//ImGui::Text("front.z:%3f", (float)tmp.z);
 
-	//ImGui::Text("x:%3f", Input::GetPadStickL().x);
-	//ImGui::Text("y:%3f", Input::GetPadStickL().y);
+	ImGui::Text("x:%3f", Input::GetPadStickL().x);
+	ImGui::Text("y:%3f", Input::GetPadStickL().y);
 #endif
 
 }
@@ -329,22 +329,37 @@ void Player::UpdateIdle()
 	CharacterMoveRotate(move,this->transform_.rotate_.y);
 
 	//コントローラーを倒した方向・角度を取得
-	/*XMVECTOR cont = XMVectorSet(Input::GetPadStickL().x, Input::GetPadStickL().y, Input::GetPadStickL().z, 0.0f);
-	float length = XMVectorGetX(XMVector3Length(cont));
-	
-	if(length > 0.0001f)
+	XMVECTOR controller = XMVectorSet(Input::GetPadStickL().x, Input::GetPadStickL().y, Input::GetPadStickL().z, 0.0f);
+	XMFLOAT3 controllfloat = { XMVectorGetX(controller) , 0, XMVectorGetY(controller) };
+	XMVECTOR SetController = { controllfloat.x, controllfloat.y , controllfloat.z };
+
+	//ベクトルの長さを取得して、倒したかどうかを判別
+	float length = XMVectorGetX(XMVector3Length(controller));
+
+	if(length > 0.01f)
 	{
-		cont = XMVector3Normalize(cont);
-		XMVECTOR r = XMVector3AngleBetweenVectors(cont, FrontDirection_);
+		/*
+		//正規化
+		//controller = XMVector3Normalize(controller);
+
+		//正面ベクトルとのラジアン角をとる
+		XMVECTOR r = XMVector3AngleBetweenVectors(SetController, FrontDirection_);
+
+		//ラジアン角度を取得
 		float angle = XMVectorGetX(r);
+
+		//ディグリー角に直す
 		float angleDeg = XMConvertToDegrees(angle);
+
+		//Y座標に設定
 		this->transform_.rotate_.y = angleDeg;
-		CharacterMoveRotate(cont,angleDeg);
+*/
+		//CharacterMoveRotate(controller,angleDeg);
 	}
 	else
 	{
 
-	}*/
+	}
 
 
 	//自分の前方ベクトル(回転した分も含む)を更新
