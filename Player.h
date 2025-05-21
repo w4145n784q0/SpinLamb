@@ -26,7 +26,7 @@ private:
 	int hCollisionSound_;
 
 	//----------インスタンス関係----------
-	Ground* pGround_;
+	//Ground* pGround_;
 
 	//----------プレイヤーステート----------
 	enum State
@@ -60,8 +60,6 @@ private:
 	Transform cameraTransform_;//カメラのTransform 回転だけ使う
 	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
 
-	//影付け
-	float shadow;
 
 public:
 

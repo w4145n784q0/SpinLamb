@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include "Engine/CsvReader.h"
+#include "Ground.h"
 
 //プレイヤー,敵クラスの共通事項クラス
 class Character :
@@ -49,6 +50,14 @@ protected:
     bool IsInvincibility_;//無敵時間か
     int InvincibilityValue;//無敵時間の値　この値を超えると無敵時間終了
 
+    
+    //----------影付け----------
+    int hShadow_;//影のモデルハンドル
+    float ShadowHeight_;//影をつける高さ
+    float ShadowCorrection_;//影の位置の調整値
+    Transform ShadowTrans_;//影の描画トランスフォーム
+    Ground* pGround_;//地面のインスタンス
+
 public:
     Character(GameObject* parent);
     Character(GameObject* parent, const std::string& name);
@@ -73,6 +82,21 @@ public:
     /// 重力処理
     /// </summary>
     void CharacterGravity();
+
+    /// <summary>
+    /// 影モデルの初期化
+    /// </summary>
+    void ShadowInit();
+
+    /// <summary>
+    /// 影付け（毎フレーム更新）
+    /// </summary>
+    void ShadowSet();
+
+    /// <summary>
+    /// 影モデル描画
+    /// </summary>
+    void ShadowDraw();
 
     /// <summary>
     /// キャラクターの移動処理(回転も行う)

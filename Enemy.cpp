@@ -36,14 +36,14 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 
-	hEnemy_ = Model::Load("Model\\chara2.fbx");
-	assert(hEnemy_ >= 0);
-
 	std::string path = "CSVdata\\EnemyData.csv";
 	SetcsvStatus(path);
 
-	//EnemyFrontDirection = XMVector3TransformCoord(EnemyFrontDirection, GetWorldMatrix());  //getworldmatrixで変換
+	hEnemy_ = Model::Load("Model\\chara2.fbx");
+	assert(hEnemy_ >= 0);
 
+	//EnemyFrontDirection = XMVector3TransformCoord(EnemyFrontDirection, GetWorldMatrix());  //getworldmatrixで変換
+	ShadowInit();
 	SetStartPosition();
 
 	pPlayer_ = (Player*)FindObject("Player");
@@ -63,6 +63,8 @@ void Enemy::Update()
 	
 	//正面ベクトルからどれだけ回転したかを計算し、前向きベクトルを計算
 	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);
+
+	ShadowSet();
 
 	switch (EnemyState_)
 	{
@@ -117,6 +119,8 @@ void Enemy::Draw()
 {
 	Model::SetTransform(hEnemy_, transform_);
 	Model::Draw(hEnemy_);
+
+	ShadowDraw();
 
 #ifdef _DEBUG
 	if (ImGui::Button("EnemystateChange"))

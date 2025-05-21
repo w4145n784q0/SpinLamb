@@ -1,5 +1,6 @@
 #include "Character.h"
 #include"Engine/VFX.h"
+#include"Engine/Model.h"
 
 Character::Character(GameObject* parent)
 	:GameObject(parent,"Character")
@@ -68,6 +69,37 @@ void Character::CharacterGravity()
 		this->transform_.position_.y = HeightLowerLimit_;
 		IsOnGround_ = true;
 	}
+}
+
+void Character::ShadowInit()
+{
+	pGround_ = (Ground*)FindObject("Ground");
+	hShadow_ = Model::Load("Model\\ShadowPoint.fbx");
+	assert(hShadow_ >= 0);
+}
+
+void Character::ShadowSet()
+{
+	int hGroundModel = pGround_->GetModelHandle();    //モデル番号を取得
+	RayCastData data;
+	data.start = this->transform_.position_;//レイの発射位置
+	data.dir = XMFLOAT3(0, -1, 0);    //レイの方向
+	Model::RayCast(hGroundModel, &data); //レイを発射
+
+	//レイが当たったら
+	if (data.hit)
+	{
+		ShadowHeight_ = (this->transform_.position_.y - data.dist) + 0.05;
+	}
+	this->ShadowTrans_.position_.x = this->transform_.position_.x;
+	this->ShadowTrans_.position_.z = this->transform_.position_.z;
+	this->ShadowTrans_.position_.y = ShadowHeight_;
+}
+
+void Character::ShadowDraw()
+{
+	Model::SetTransform(hShadow_, this->ShadowTrans_);
+	Model::Draw(hShadow_);
 }
 
 void Character::CharacterMoveRotate(XMVECTOR _direction,float rotateY)

@@ -18,7 +18,6 @@ namespace {
 	XMVECTOR BackCameraPos = { 0,3,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 	int blinkTimer = 0;
 	const int blink = 15;
-	Transform ShadowTrans;
 }
 
 Player::Player(GameObject* parent) 
@@ -52,8 +51,7 @@ void Player::Initialize()
 	//hAttackArrow_ = Model::Load("Model\\AttackArrow.fbx");
 	//assert(hAttackArrow_ >= 0);
 
-	hShadow_ = Model::Load("Model\\ShadowPoint.fbx");
-	assert(hShadow_ >= 0);
+	ShadowInit();
 
 	hCollisionSound_ = Audio::Load("Sound\\maou_se_battle15.wav");
 	assert(hCollisionSound_ >= 0);
@@ -61,32 +59,17 @@ void Player::Initialize()
 	SetStartPosition();
 	//ArrowTransform_.rotate_.y = 180.0f;
 
-	pGround_ = (Ground*)FindObject("Ground");
+	//pGround_ = (Ground*)FindObject("Ground");
 	
 	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),ColliderSize_);
 	this->AddCollider(collider);
-
-	
 }
 
 void Player::Update()
 {
 	cameraTransform_.position_ = this->transform_.position_;
 
-	int hGroundModel = pGround_->GetModelHandle();    //モデル番号を取得
-	RayCastData data;
-	data.start = this->transform_.position_;//レイの発射位置
-	data.dir = XMFLOAT3(0, -1, 0);    //レイの方向
-	Model::RayCast(hGroundModel, &data); //レイを発射
-
-	//レイが当たったら
-	if (data.hit)
-	{
-		shadow = (this->transform_.position_.y - data.dist) + 0.05;
-	}
-	ShadowTrans.position_.x = this->transform_.position_.x;
-	ShadowTrans.position_.z = this->transform_.position_.z;
-	ShadowTrans.position_.y = shadow;
+	ShadowSet();
 
 	switch (PlayerState_)
 	{
@@ -127,8 +110,7 @@ void Player::Draw()
 	//Model::SetTransform(hPlayer_, this->transform_);
 	//Model::Draw(hPlayer_);
 
-	Model::SetTransform(hShadow_, ShadowTrans);
-	Model::Draw(hShadow_);
+	ShadowDraw();
 
 	if (IsInvincibility_)
 	{			
@@ -156,7 +138,7 @@ void Player::Draw()
 	ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
 	ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
 
-	ImGui::Text("shadow:%3f", shadow);
+	//ImGui::Text("shadow:%3f", shadow);
 
 	//ImGui::Text("camera y :%.3f", CameraPosition_.y);
 	//ImGui::Text("camera x :%.3f", CameraPosition_.x);
