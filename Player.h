@@ -14,6 +14,9 @@ private:
 	//プレイヤーモデル
 	int hPlayer_;
 
+	//影のモデル
+	int hShadow_;
+
 	//チャージ中の矢印
 	//int hAttackArrow_;
 
@@ -23,7 +26,7 @@ private:
 	int hCollisionSound_;
 
 	//----------インスタンス関係----------
-	//Ground* pGround_;
+	Ground* pGround_;
 
 	//----------プレイヤーステート----------
 	enum State
@@ -56,6 +59,9 @@ private:
 	XMFLOAT3 CameraTarget_;//カメラ注視点
 	Transform cameraTransform_;//カメラのTransform 回転だけ使う
 	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
+
+	//影付け
+	float shadow;
 
 public:
 

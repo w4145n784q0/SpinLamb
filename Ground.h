@@ -19,4 +19,5 @@ public:
 	void Draw() override;
 	void Release() override;
 
+	int GetModelHandle() { return hGrass_; }
 };
