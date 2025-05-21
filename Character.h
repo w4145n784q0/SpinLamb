@@ -174,5 +174,10 @@ public:
     /// 突撃エフェクトつける
     /// </summary>
     void SetAttackLocusEffect();
+
+    /// <summary>
+    /// 衝撃エフェクトつける
+    /// </summary>
+    void SetHitEffect();
 };
 

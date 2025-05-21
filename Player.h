@@ -118,12 +118,7 @@ public:
 	//攻撃中かどうか取得(接触判定に使用)
 	bool IsAttackState() { if (PlayerState_ == S_ATTACK) return true; else return false; }
 
-	bool GetIsInvincibility() { if (IsInvincibility_) return true; else return false; }
-
-
-
-	//衝撃エフェクトつける
-	void SetHitEffect();
+	//bool GetIsInvincibility() { if (IsInvincibility_) return true; else return false; }
 
 };
 

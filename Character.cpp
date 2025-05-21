@@ -252,3 +252,26 @@ void Character::SetAttackLocusEffect()
 	locus.lifeTime = (DWORD)10;
 	VFX::Start(locus);
 }
+
+void Character::SetHitEffect()
+{
+	EmitterData hit;
+	hit.textureFileName = "PaticleAssets\\flashB_W.png";
+	hit.position = this->transform_.position_;
+	hit.position.y = this->transform_.position_.y + 1.0f;
+	hit.delay = 0;
+	hit.direction = { 1,1,0 };
+	hit.directionRnd = XMFLOAT3(90, 90, 90);
+	hit.speed = 0.5;
+	hit.speedRnd = 1.0;
+	hit.accel = 1.0;
+	hit.lifeTime = 10.0;
+	hit.number = (DWORD)10;
+	//hit.size = XMFLOAT2(0.1, 0.1);
+	hit.sizeRnd = XMFLOAT2(0.4, 0.4);
+	//hit.scale = XMFLOAT2(0.99, 0.99);
+	//hit.color = XMFLOAT4(1, 1, 0.1, 1);
+	//hit.deltaColor = XMFLOAT4(0, 0, 0, 0);
+	//hit.gravity = 0.0f;
+	VFX::Start(hit);
+}
