@@ -140,6 +140,19 @@ void Character::KnockBack()
 	}
 }
 
+void Character::InvincibilityTimeCalclation()
+{
+	//–³“GŽžŠÔ‚ÌŒvŽZ
+	if (IsInvincibility_)
+	{
+		if (--InvincibilityTime_ < 0)
+		{
+			InvincibilityTime_ = InvincibilityValue;
+			IsInvincibility_ = false;
+		}
+	}
+}
+
 void Character::Charging()
 {
 	//ƒ`ƒƒ[ƒW’†ˆê’è‚Ì‰Á‘¬—Ê‚ð‰ÁŽZ‚µ‘±‚¯‚é

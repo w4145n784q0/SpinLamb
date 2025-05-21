@@ -97,6 +97,11 @@ public:
     void KnockBack();
 
     /// <summary>
+    /// ダメージ後の無敵時間の計算
+    /// </summary>
+    void InvincibilityTimeCalclation();
+
+    /// <summary>
     /// 通常X軸回転
     /// </summary>
     void MoveRotate(){ this->transform_.rotate_.x -= MoveRotateX; }

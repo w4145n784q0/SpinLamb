@@ -16,7 +16,8 @@
 
 namespace {
 	XMVECTOR BackCameraPos = { 0,3,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
-
+	int blinkTimer = 0;
+	const int blink = 15;
 }
 
 Player::Player(GameObject* parent) 
@@ -89,6 +90,8 @@ void Player::Update()
 		break;
 	}
 
+	InvincibilityTimeCalclation();
+
 	//カメラの更新
 	CameraUpdate();
 
@@ -102,8 +105,23 @@ void Player::Update()
 
 void Player::Draw()
 {
-	Model::SetTransform(hPlayer_, transform_);
-	Model::Draw(hPlayer_);
+	//Model::SetTransform(hPlayer_, this->transform_);
+	//Model::Draw(hPlayer_);
+
+	if (IsInvincibility_)
+	{			
+		if (++blinkTimer > blink) {
+
+			blinkTimer = 0;	
+			Model::SetTransform(hPlayer_, this->transform_);
+			Model::Draw(hPlayer_);
+		}
+	}
+	else
+	{
+		Model::SetTransform(hPlayer_, this->transform_);
+		Model::Draw(hPlayer_);
+	}
 
 	/*if (PlayerState_ == S_CHARGE)
 	{
@@ -118,19 +136,16 @@ void Player::Draw()
 
 	//ImGui::Text("camera y :%.3f", CameraPosition_.y);
 	//ImGui::Text("camera x :%.3f", CameraPosition_.x);
-
-	//ImGui::Text("dash:%.3f", Acceleration_);
 	
-	XMFLOAT3 tmp;
-    XMStoreFloat3(&tmp, MoveDirection_);
+	//XMFLOAT3 tmp;
+    //XMStoreFloat3(&tmp, MoveDirection_);
 
 	//ImGui::Text("front.x:%3f", (float)tmp.x);
 	//ImGui::Text("front.y:%3f", (float)tmp.y);
 	//ImGui::Text("front.z:%3f", (float)tmp.z);
 
-	ImGui::Text("x:%3f", Input::GetPadStickL().x);
-	ImGui::Text("y:%3f", Input::GetPadStickL().y);
-
+	//ImGui::Text("x:%3f", Input::GetPadStickL().x);
+	//ImGui::Text("y:%3f", Input::GetPadStickL().y);
 #endif
 
 }
@@ -222,16 +237,6 @@ void Player::OnCollision(GameObject* pTarget)
 
 void Player::UpdateIdle()
 {
-	//無敵時間の計算
-	if (IsInvincibility_)
-	{
-		if (--InvincibilityTime_ < 0)
-		{
-			InvincibilityTime_ = InvincibilityValue;
-			IsInvincibility_ = false;
-		}
-	}
-
 	//------------------キーボード入力の移動------------------//
 	if (Input::IsKey(DIK_UP))
 	{

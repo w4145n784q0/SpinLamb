@@ -108,15 +108,7 @@ void Enemy::Update()
 		}
 	}
 
-	//–³“GŽžŠÔ‚ÌŒvŽZ
-	if (IsInvincibility_)
-	{
-		if (--InvincibilityTime_ < 0)
-		{
-			InvincibilityTime_ = InvincibilityValue;
-			IsInvincibility_ = false;
-		}
-	}
+	InvincibilityTimeCalclation();
 	
 	CharacterGravity();
 }
