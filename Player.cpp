@@ -338,6 +338,8 @@ void Player::UpdateIdle()
 
 	if(length > 0.01f)
 	{
+		//æ‚ÉŠOÏ‹‚ß‚é
+
 		/*
 		//³‹K‰»
 		//controller = XMVector3Normalize(controller);

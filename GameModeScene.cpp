@@ -8,23 +8,32 @@
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
 
+namespace
+{
+	const float sheepRotate = 5.0f;
+}
+
 GameModeScene::GameModeScene(GameObject* parent)
-	:GameObject(parent,"GameModeScene"),SelectMode_(Battle)
+	:GameObject(parent, "GameModeScene"), 
+	hBackScreen_(-1), hBackChara_(-1),hExplanation_(-1),
+	hBattle_(-1),hPractice_(-1), hHowtoPlay_(-1),hBackTitle_(-1), hFrameLine_(-1),
+	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),
+	TextArray_({}),hModeSound_(-1),SelectMode_(Battle)
 {
 }
 
 void GameModeScene::Initialize()
 {
-	hBackScreen_ = Image::Load("Image\\back_mode.jpg");
+	std::string path = "Image\\GameMode\\";
+
+	hBackScreen_ = Image::Load(path + "back_mode2.jpg");
 	assert(hBackScreen_ >= 0);
 
-	//hBackChara_ = Image::Load("Image\\sheepimg.png");
-	//assert(hBackChara_ >= 0);
+	hBackChara_ = Image::Load(path + "sheepImage.png");
+	assert(hBackChara_ >= 0);
 
-	//hExplanation_ = Image::Load("Image\\spinlamb_exp.jpg");
+	//hExplanation_ = Image::Load(path + "spinlamb_exp.jpg");
 	//assert(hExplanation_ >= 0);
-
-	std::string path = "Image\\GameMode\\";
 
 	hBattle_ = Image::Load(path + "BattleButton.png");
 	assert(hBattle_ >= 0);
@@ -148,6 +157,8 @@ void GameModeScene::Update()
 		
 	}
 
+	BackChara_.rotate_.z -= sheepRotate;
+
 	Audio::Play(hModeSound_);
 }
 
@@ -155,6 +166,9 @@ void GameModeScene::Draw()
 {
 	Image::SetTransform(hBackScreen_, transform_);
 	Image::Draw(hBackScreen_);
+
+	Image::SetTransform(hBackChara_, BackChara_);
+	Image::Draw(hBackChara_);
 
 	Image::SetTransform(hModeSelect_, Trans_Select_);
 	Image::Draw(hModeSelect_);

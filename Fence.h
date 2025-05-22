@@ -4,6 +4,7 @@ class Fence :
     public GameObject
 {
 private:
+	int hPiller_;
 	int hFence_;
 public:
 	Fence(GameObject* parent);

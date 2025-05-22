@@ -10,6 +10,7 @@ private:
 	int hBackScreen_;//背景色
 	int hBackChara_;//背景キャラ
 	int hExplanation_;//ゲーム説明
+	Transform BackChara_;
 
 	//----------ボタン----------
 	int hBattle_;//バトルスタートボタン
