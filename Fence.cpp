@@ -11,13 +11,14 @@ namespace
 {
 	const int pillerNum = 4;
 	std::vector<Transform> pillers(pillerNum);
-	XMFLOAT3 pos[] = { piller_UpperLeft_ ,piller_UpperRight_ , piller_LowerLeft_,piller_LowerRight_ };
+	//XMFLOAT3 pos[] = { piller_UpperLeft_ ,piller_UpperRight_ , piller_LowerLeft_,piller_LowerRight_ };
 	//Transform piller[4];
 	
 }
 
 Fence::Fence(GameObject* parent)
-	:GameObject(parent,"Fence"),hPiller_(-1), hFence_(-1)
+	:GameObject(parent,"Fence"),hPiller_(-1), hFence_(-1),
+	piller_UpperLeft_({0,0,0}),piller_UpperRight_({0,0,0}),piller_LowerLeft_({0,0,0}),piller_LowerRight_({0,0,0})
 {
 }
 
