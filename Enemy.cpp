@@ -368,6 +368,7 @@ void Enemy::LookPlayer()
 	//前向きベクトルとプレイヤーのいる方向のベクトルの外積を求める
 	XMVECTOR cross = XMVector3Cross(ForwardVector_, RotateDirection);
 
+	//前向きベクトルとプレイヤー方向ベクトルはXZに伸びるベクトルなので
 	//外積のY軸（+か-で左右どちらにいるか判断）を求める
 	float crossY = XMVectorGetY(cross);
 
@@ -376,10 +377,12 @@ void Enemy::LookPlayer()
 	float Dig = XMConvertToDegrees(XMVectorGetX(angle));
 	if (Dig > 3)
 	{
+		//外積Yが0以上なら左周り(半時計周り)
 		if (crossY > 0.0)
 		{
 			transform_.rotate_.y -= 1.5f;
 		}
+		//外積Yが0以下なら右周り(時計周り)
 		else if (crossY < 0.0)
 		{
 			transform_.rotate_.y += 1.5f;

@@ -17,12 +17,12 @@
 namespace {
 	XMVECTOR BackCameraPos = { 0,3,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 	int blinkTimer = 0;
-	const int blink = 15;
+	const int blink = 20;
 }
 
 Player::Player(GameObject* parent) 
 	: Character(parent,"Player"),
-	hPlayer_(-1), /*hAttackArrow_(-1),*/ hCollisionSound_(-1),
+	hPlayer_(-1), /*hAttackArrow_(-1),*/ hShadow_(-1), hCollisionSound_(-1),
 	/*pGround_(nullptr),*/PlayerState_(S_MAX),CameraState_(S_NORMALCAMERA),
 	
 
@@ -143,12 +143,12 @@ void Player::Draw()
 	//ImGui::Text("camera y :%.3f", CameraPosition_.y);
 	//ImGui::Text("camera x :%.3f", CameraPosition_.x);
 	
-	//XMFLOAT3 tmp;
-    //XMStoreFloat3(&tmp, MoveDirection_);
+	XMFLOAT3 tmp;
+    XMStoreFloat3(&tmp, MoveDirection_);
 
-	//ImGui::Text("front.x:%3f", (float)tmp.x);
-	//ImGui::Text("front.y:%3f", (float)tmp.y);
-	//ImGui::Text("front.z:%3f", (float)tmp.z);
+	ImGui::Text("front.x:%3f", (float)tmp.x);
+	ImGui::Text("front.y:%3f", (float)tmp.y);
+	ImGui::Text("front.z:%3f", (float)tmp.z);
 
 	ImGui::Text("x:%3f", Input::GetPadStickL().x);
 	ImGui::Text("y:%3f", Input::GetPadStickL().y);
@@ -330,6 +330,9 @@ void Player::UpdateIdle()
 
 	//コントローラーを倒した方向・角度を取得
 	XMVECTOR controller = XMVectorSet(Input::GetPadStickL().x, Input::GetPadStickL().y, Input::GetPadStickL().z, 0.0f);
+
+	//コントローラで受けとったベクトルはXYなので
+	//XZ方向のベクトルに直す
 	XMFLOAT3 controllfloat = { XMVectorGetX(controller) , 0, XMVectorGetY(controller) };
 	XMVECTOR SetController = { controllfloat.x, controllfloat.y , controllfloat.z };
 
@@ -339,23 +342,43 @@ void Player::UpdateIdle()
 	if(length > 0.01f)
 	{
 		//先に外積求める
+		XMVECTOR cross = XMVector3Cross(SetController,FrontDirection_);
+		
+		//Y外積をとり+か-かで倒し回転方向を求める
+		float crossY = XMVectorGetY(cross);
 
-		/*
-		//正規化
-		//controller = XMVector3Normalize(controller);
+		if (crossY > 0.0)
+		{
+			//正面ベクトルとのラジアン角をとる
+			XMVECTOR r = XMVector3AngleBetweenVectors(SetController, FrontDirection_);
 
-		//正面ベクトルとのラジアン角をとる
-		XMVECTOR r = XMVector3AngleBetweenVectors(SetController, FrontDirection_);
+			//ラジアン角度を取得
+			float angle = XMVectorGetX(r);
 
-		//ラジアン角度を取得
-		float angle = XMVectorGetX(r);
+			//ディグリー角に直す
+			float angleDeg = XMConvertToDegrees(angle);
 
-		//ディグリー角に直す
-		float angleDeg = XMConvertToDegrees(angle);
+			//Y座標に設定
+			this->transform_.rotate_.y = angleDeg;
+		}
+		//外積Yが0以下なら右周り(時計周り)
+		else if (crossY < 0.0)
+		{
+			//正面ベクトルとのラジアン角をとる
+			XMVECTOR r = XMVector3AngleBetweenVectors(SetController, FrontDirection_);
 
-		//Y座標に設定
-		this->transform_.rotate_.y = angleDeg;
-*/
+			//ラジアン角度を取得
+			float angle = XMVectorGetX(r);
+
+			//ディグリー角に直す
+			float angleDeg = XMConvertToDegrees(angle);
+
+			//Y座標に設定
+			this->transform_.rotate_.y = angleDeg;
+		}
+
+
+
 		//CharacterMoveRotate(controller,angleDeg);
 	}
 	else
@@ -639,7 +662,8 @@ void Player::CameraControl()
 		{
 			cameraTransform_.rotate_.y = 0;
 			cameraTransform_.rotate_.x = 0;
-			this->transform_.rotate_.y = 180;
+			this->transform_.rotate_.x = 0;
+			this->transform_.rotate_.y = 0;
 		}
 	}
 	else if (CameraState_ == S_DEBUGCAMERA)
