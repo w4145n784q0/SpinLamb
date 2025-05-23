@@ -4,15 +4,12 @@
 #include <DirectXMath.h>
 #include "Texture.h"
 #include "Transform.h"
-#include <string>
-#include <unordered_map>
 
 using namespace DirectX;
 
 class Fbx;
 struct RayCastData;
-using std::string;
-using std::unordered_map;
+
 //-----------------------------------------------------------
 //FBXの１つのパーツを扱うクラス
 //-----------------------------------------------------------
@@ -104,40 +101,25 @@ class FbxParts
 	FbxCluster** ppCluster_;		// クラスタ情報（関節ごとに関連付けられた頂点情報）
 	int				numBone_;		// FBXに含まれている関節の数
 	Bone* pBoneArray_;	// 各関節の情報
-	std::unordered_map<string, Bone*> 		bonePair;
 	Weight* pWeightArray_;	// ウェイト情報（頂点の対する各関節の影響度合い）
 
-	//struct SkinAnimeInfo
-	//{
-	//	Bone*		pBoneArray_;	// 各関節の情報
-	//	Weight*		pWeightArray_;	// ウェイト情報（頂点の対する各関節の影響度合い）
-	//};
 
 	/////////privateな関数（Init関数から呼ばれる）//////////////////////////
-	void InitVertex(fbxsdk::FbxMesh* pMesh);	//頂点バッファ準備
+	void InitVertex(fbxsdk::FbxMesh* mesh);	//頂点バッファ準備
 	void InitMaterial(fbxsdk::FbxNode* pNode);	//マテリアル準備
-	void InitMaterial(fbxsdk::FbxMesh* pMesh);	//マテリアル準備
 	void InitTexture(fbxsdk::FbxSurfaceMaterial* pMaterial, const DWORD& i);	//テクスチャ準備
-	void InitIndex(fbxsdk::FbxMesh* pMesh);		//インデックスバッファ準備
+	void InitIndex(fbxsdk::FbxMesh* mesh);		//インデックスバッファ準備
 	void InitSkelton(FbxMesh* pMesh);			//骨の情報を準備
 	void IntConstantBuffer();	//コンスタントバッファ（シェーダーに情報を送るやつ）準備
 
 public:
 	FbxParts();
-	FbxParts(Fbx* parent);
 	~FbxParts();
 
-
-	Fbx* parent_;
 	//FBXファイルから情報をロードして諸々準備する
 	//引数：pNode　情報が入っているノード
 	//戻値：結果
 	HRESULT Init(FbxNode* pNode);
-
-	//FBXファイルから情報をロードして諸々準備する
-	//引数：pNode　情報が入っているノード
-	//戻値：結果
-	HRESULT Init(FbxMesh* pMesh);
 
 
 	//描画
@@ -148,11 +130,6 @@ public:
 	//引数：transform	行列情報
 	//引数：time		フレーム情報（１アニメーション内の今どこか）
 	void DrawSkinAnime(Transform& transform, FbxTime time);
-
-	//ボーン有りのモデルを描画
-	//引数：transform	行列情報	
-	//引数：time		フレーム情報（１アニメーション内の今どこか）
-	void DrawSkinAnime(std::string takeName, Transform& transform, FbxTime time);
 
 	//ボーン無しのモデルを描画
 	//引数：transform	行列情報
@@ -166,12 +143,6 @@ public:
 	//戻値：見つかればtrue
 	bool GetBonePosition(std::string boneName, XMFLOAT3* position);
 
-	//任意のボーンの位置を取得（スキンメッシュアニメーションの時）
-	//引数：boneName	取得したいボーンの位置
-	//引数：position	ワールド座標での位置【out】
-	//戻値：見つかればtrue
-	bool GetBonePositionAtNow(std::string boneName, XMFLOAT3* position);
-
 	//スキンメッシュ情報を取得
 	//戻値：スキンメッシュ情報
 	FbxSkin* GetSkinInfo() { return pSkinInfo_; }
@@ -180,4 +151,3 @@ public:
 	//引数：data	必要なものをまとめたデータ
 	void RayCast(RayCastData* data);
 };
-

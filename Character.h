@@ -128,12 +128,12 @@ public:
     /// <summary>
     /// ’ÊíX²‰ñ“]
     /// </summary>
-    void MoveRotate(){ this->transform_.rotate_.x -= MoveRotateX; }
+    void MoveRotate(){ this->transform_.rotate_.x += MoveRotateX; }
 
     /// <summary>
     /// ‚‘¬X²‰ñ“]
     /// </summary>
-    void FastRotate(){ this->transform_.rotate_.x -= FastRotateX; }
+    void FastRotate(){ this->transform_.rotate_.x += FastRotateX; }
 
     /// <summary>
     /// ‰ñ“]‚ğ~‚ß‚é

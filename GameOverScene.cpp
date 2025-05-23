@@ -22,7 +22,7 @@ GameOverScene::GameOverScene(GameObject* parent)
 
 void GameOverScene::Initialize()
 {
-	hImage_ = Image::Load("Image\\back_mode2.jpg");
+	hImage_ = Image::Load("Image\\GameMode\\back_mode2.jpg");
 	assert(hImage_ >= 0);
 
 	hlogoResult_ = Image::Load("Image\\YouLose.png");

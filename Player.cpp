@@ -233,7 +233,7 @@ void Player::OnCollision(GameObject* pTarget)
 			Acceleration_ = 0.0f;
 			XMFLOAT3 inverse;
 			XMStoreFloat3(&inverse, ForwardVector_);
-			KnockBack_Direction_ = { inverse.x, inverse.y, inverse.z };
+			KnockBack_Direction_ = { inverse.x * -1, inverse.y * -1, inverse.z * -1 };
 			KnockBack_Velocity_.x = KnockBackPower_;
 			KnockBack_Velocity_.z = KnockBackPower_;
 			PlayerState_ = S_WALLHIT;
@@ -246,13 +246,13 @@ void Player::UpdateIdle()
 	//------------------キーボード入力の移動------------------//
 	if (Input::IsKey(DIK_UP))
 	{
-		Direction_.z = -1.0;
-		this->transform_.rotate_.x -= MoveRotateX;
+		Direction_.z = 1.0;
+		this->transform_.rotate_.x += MoveRotateX;
 	}
 	if (Input::IsKey(DIK_DOWN))
 	{
-		Direction_.z = 1.0;
-		this->transform_.rotate_.x += MoveRotateX;
+		Direction_.z = -1.0;
+		this->transform_.rotate_.x -= MoveRotateX;
 	}
 	if (Input::IsKey(DIK_LEFT))
 	{
@@ -460,7 +460,7 @@ void Player::UpdateCharge()
 
 	Charging();
 
-	this->transform_.rotate_.x -= FastRotateX;
+	this->transform_.rotate_.x += FastRotateX;
 	CameraControl();
 }
 
@@ -469,7 +469,7 @@ void Player::UpdateAttack()
 	SetAttackLocusEffect();
 
 	Acceleration_ -= AcceleValue_;
-	Direction_.z = -1.0;
+	Direction_.z = 1.0;
 	this->transform_.rotate_.x -= FastRotateX;
 	if (Acceleration_ <= 0)
 	{
@@ -560,7 +560,7 @@ void Player::UpdateWallHit()
 
 void Player::Blown()
 {
-	this->transform_.rotate_.x += MoveRotateX;
+	this->transform_.rotate_.x -= MoveRotateX;
 
 	//毎フレーム速度を減少
 	KnockBack_Velocity_.x *= DecelerationRate_;

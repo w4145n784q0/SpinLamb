@@ -41,7 +41,6 @@ class Fbx
 	FbxScene* pFbxScene_;
 
 
-
 	// アニメーションのフレームレート
 	FbxTime::EMode	_frameRate;
 
@@ -60,13 +59,6 @@ public:
 	Fbx();
 	~Fbx();
 
-	FbxManager* GetFbxManager() {
-		return pFbxManager_;
-	}
-	FbxScene* GetFbxScene() {
-		return pFbxScene_;
-	}
-
 	//ロード
 	//引数：fileName	ファイル名
 	//戻値：成功したかどうか
@@ -84,13 +76,7 @@ public:
 	//戻値：ボーンの位置
 	XMFLOAT3 GetBonePosition(std::string boneName);
 
-	//スキンメッシュアニメ中の現在の任意のボーンの位置を取得
-	//引数：boneName	取得したいボーンの位置
-	//戻値：ボーンの位置
-	XMFLOAT3 GetAnimBonePosition(std::string boneName);
-
 	//レイキャスト（レイを飛ばして当たり判定）
 	//引数：data	必要なものをまとめたデータ
 	void RayCast(RayCastData* data);
 };
-
