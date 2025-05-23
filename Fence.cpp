@@ -1,6 +1,7 @@
 #include "Fence.h"
 #include"Engine/Model.h"
 #include"Engine/BoxCollider.h"
+#include"Engine/CsvReader.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
@@ -8,13 +9,11 @@
 
 namespace
 {
-	Transform piller[4];
-
-	XMFLOAT3 piller_UpperLeft = { -60,0,60 };
-	XMFLOAT3 piller_UpperRight = { 60,0,60 };
-	XMFLOAT3 piller_LowerLeft = { -60,0,-60 };
-	XMFLOAT3 piller_LowerRight = { 60,0,-60 };
-
+	const int pillerNum = 4;
+	std::vector<Transform> pillers(pillerNum);
+	XMFLOAT3 pos[] = { piller_UpperLeft_ ,piller_UpperRight_ , piller_LowerLeft_,piller_LowerRight_ };
+	//Transform piller[4];
+	
 }
 
 Fence::Fence(GameObject* parent)
@@ -28,14 +27,13 @@ Fence::~Fence()
 
 void Fence::Initialize()
 {
+	SetSCV();
 
 	hPiller_ = Model::Load("Model\\piller.fbx");
 	assert(hPiller_ >= 0);
 
 	hFence_ = Model::Load("Model\\wire.fbx");
 	assert(hFence_ >= 0);
-
-	transform_.position_ = { 0,5.0f,0 };
 
 	BoxCollider* collision_wall1 = new BoxCollider(XMFLOAT3(0, 0, 60.5), XMFLOAT3(120, 10, 1));
 	AddCollider(collision_wall1);
@@ -46,10 +44,15 @@ void Fence::Initialize()
 	BoxCollider* collision_wall4 = new BoxCollider(XMFLOAT3(-60.5, 0, 0), XMFLOAT3(1, 10, 120));
 	AddCollider(collision_wall4);
 
-	piller[0].position_ = piller_UpperLeft;
-	piller[1].position_ = piller_UpperRight;
-	piller[2].position_ = piller_LowerLeft;
-	piller[3].position_ = piller_LowerRight;
+	/*for (int i = 0; i < pillers.size(); i++)
+	{
+		pillers[i].position_ = pos[i];
+	}*/
+
+	pillers[0].position_ = piller_UpperLeft_;
+	pillers[1].position_ = piller_UpperRight_;
+	pillers[2].position_ = piller_LowerLeft_;
+	pillers[3].position_ = piller_LowerRight_;
 }
 
 void Fence::Update()
@@ -67,9 +70,9 @@ void Fence::Draw()
 	Model::SetTransform(hFence_, transform_);
 	Model::Draw(hFence_);
 
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < pillers.size(); i++)
 	{
-		Model::SetTransform(hPiller_, piller[i]);
+		Model::SetTransform(hPiller_, pillers[i]);
 		Model::Draw(hPiller_);
 	}
 }
@@ -80,4 +83,16 @@ void Fence::Release()
 
 void Fence::OnCollision(GameObject* pTarget)
 {
+}
+
+void Fence::SetSCV()
+{
+	CsvReader csv;
+	csv.Load("CSVdata\\StageData.csv");
+
+	this->transform_.position_ = { csv.GetValueFloat(1, 1), csv.GetValueFloat(1, 2), csv.GetValueFloat(1, 3) };
+	piller_UpperLeft_ = { csv.GetValueFloat(1, 4), csv.GetValueFloat(1, 5), csv.GetValueFloat(1, 6) };
+	piller_UpperRight_ = { csv.GetValueFloat(1, 7), csv.GetValueFloat(1, 8), csv.GetValueFloat(1, 9) };
+	piller_LowerLeft_ = { csv.GetValueFloat(1, 10), csv.GetValueFloat(1, 11), csv.GetValueFloat(1, 12) };
+	piller_LowerRight_ = { csv.GetValueFloat(1, 13), csv.GetValueFloat(1, 14), csv.GetValueFloat(1, 15) };
 }

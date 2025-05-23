@@ -1,0 +1,16 @@
+﻿変数名,数値,概要
+transform_.position_.x,0,柱の初期位置.x
+transform_.position_.y,5,柱の初期位置.y
+transform_.position_.z,0,柱の初期位置.z
+piller_UpperLeft.x,-60,左上の柱位置.x
+piller_UpperLeft.y,0,左上の柱位置.y
+piller_UpperLeft.z,60,左上の柱位置.z
+piller_UpperRight.x,60,右上の柱位置.x
+piller_UpperRight.y,0,右上の柱位置.y
+piller_UpperRight.z,60,右上の柱位置.z
+piller_LowerLeft.x,-60,左下の柱位置.x
+piller_LowerLeft.y,0,左下の柱位置.y
+piller_LowerLeft.z,-60,左下の柱位置.z
+piller_LowerRight.x,60,右下の柱位置.x
+piller_LowerRight.y,0,右下の柱位置.y
+piller_LowerRight.z,-60,右下の柱位置.z
