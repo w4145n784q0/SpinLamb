@@ -27,7 +27,7 @@ private:
 	int hBattleSound_;
 	int hWhistle_;
 
-	std::array<Transform, 2> HUD_Trans_;
+	/*std::array<Transform, 2> HUD_Trans_;*/
 	//int PlayerLife_;
 	//int EnemyLife_;
 

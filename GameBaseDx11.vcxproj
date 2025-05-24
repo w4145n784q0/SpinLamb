@@ -181,6 +181,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PracticeScene.cpp" />
+    <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="TitleScene.cpp" />
   </ItemGroup>
@@ -231,6 +232,7 @@
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PracticeScene.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="StageManager.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="TitleScene.h" />
   </ItemGroup>

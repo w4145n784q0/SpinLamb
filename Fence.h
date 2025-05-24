@@ -14,10 +14,8 @@ private:
 
 	//----------ò‚ÌˆÊ’u----------
 
-	float NorthEnd_;
-	float SouthEnd_;
-	float EastEnd_;
-	float WestEnd_;
+	Transform wire;
+	Transform piller;
 
 	XMFLOAT3 piller_UpperLeft_;
 	XMFLOAT3 piller_UpperRight_;
@@ -33,10 +31,17 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
-	//‰½‚©‚É“–‚½‚Á‚½
-	//ˆø”FpTarget “–‚½‚Á‚½‘Šè
-	void OnCollision(GameObject* pTarget) override;
 
-	void SetSCV();
+	void OnCollision(GameObject* pTarget) override;
+	void SetPiller(float upper, float lower, float left, float right);
+
+	void SetWireTransform(Transform _t) {
+		wire = _t;
+	}
+	void SetPillerTransform(Transform _t) {
+		piller = _t;
+	}
+
+	//void SetSCV();
 };
 

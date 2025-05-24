@@ -32,8 +32,8 @@ BattleScene::BattleScene(GameObject* parent)
 	 hBattleSound_(-1),hWhistle_(-1),
 	PlayerScore_(0),EnemyScore_(0),GameTime_(GameTimeLimit),StartCount_(3)
 {
-	HUD_Trans_[0].position_ = { -0.7,0.8,0 };
-	HUD_Trans_[1].position_ = { 0.7,0.8,0 };
+	//HUD_Trans_[0].position_ = { -0.7,0.8,0 };
+	//HUD_Trans_[1].position_ = { 0.7,0.8,0 };
 }
 
 void BattleScene::Initialize()

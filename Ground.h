@@ -1,8 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"Engine/CsvReader.h"
-#include<array>
-#include<vector>
+#include"StageManager.h"
 
 class Ground :
     public GameObject
@@ -20,8 +19,6 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
-
-	void SetSCV();
 
 	int GetModelHandle() { return hGrass_; }
 };

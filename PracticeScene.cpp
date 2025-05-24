@@ -10,6 +10,7 @@
 #include"Fence.h"
 #include"MiniMap.h"
 #include"HUD.h"
+#include"StageManager.h"
 
 namespace
 {
@@ -27,8 +28,10 @@ PracticeScene::~PracticeScene()
 
 void PracticeScene::Initialize()
 {
-	Instantiate<Ground>(this);
-	Instantiate<Fence>(this);
+	//Instantiate<Ground>(this);
+	//Instantiate<Fence>(this);
+
+	Instantiate<StageManager>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
 	//Instantiate<EnemyManager>(this);
