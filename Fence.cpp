@@ -18,6 +18,7 @@ namespace
 
 Fence::Fence(GameObject* parent)
 	:GameObject(parent,"Fence"),hPiller_(-1), hFence_(-1),
+	NorthEnd_(0.0f),SouthEnd_(0.0f),EastEnd_(0.0f),WestEnd_(0.0f),
 	piller_UpperLeft_({0,0,0}),piller_UpperRight_({0,0,0}),piller_LowerLeft_({0,0,0}),piller_LowerRight_({0,0,0})
 {
 }

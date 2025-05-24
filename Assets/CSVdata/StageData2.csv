@@ -1,0 +1,6 @@
+﻿変数名,数値,概要
+NorthEnd_,60,北端
+SouthEnd_,-60,南端
+EastEnd_,60,東端
+WestEnd_,-60,西端
+transform_.position_.x,,

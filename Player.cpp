@@ -339,52 +339,48 @@ void Player::UpdateIdle()
 	//ベクトルの長さを取得して、倒したかどうかを判別
 	float length = XMVectorGetX(XMVector3Length(controller));
 
-	if(length > 0.01f)
-	{
-		//先に外積求める
-		XMVECTOR cross = XMVector3Cross(SetController,FrontDirection_);
-		
-		//Y外積をとり+か-かで倒し回転方向を求める
-		float crossY = XMVectorGetY(cross);
+	//if(length > 0.01f)
+	//{
+	//	//先に外積求める
+	//	XMVECTOR cross = XMVector3Cross(SetController,FrontDirection_);
+	//	
+	//	//Y外積をとり+か-かで倒し回転方向を求める
+	//	float crossY = XMVectorGetY(cross);
 
-		if (crossY > 0.0)
-		{
-			//正面ベクトルとのラジアン角をとる
-			XMVECTOR r = XMVector3AngleBetweenVectors(SetController, FrontDirection_);
+	//	if (crossY > 0.0)
+	//	{
+	//		//正面ベクトルとのラジアン角をとる
+	//		XMVECTOR r = XMVector3AngleBetweenVectors(SetController, FrontDirection_);
 
-			//ラジアン角度を取得
-			float angle = XMVectorGetX(r);
+	//		//ラジアン角度を取得
+	//		float angle = XMVectorGetX(r);
 
-			//ディグリー角に直す
-			float angleDeg = XMConvertToDegrees(angle);
+	//		//ディグリー角に直す
+	//		float angleDeg = XMConvertToDegrees(angle);
 
-			//Y座標に設定
-			this->transform_.rotate_.y = angleDeg;
-		}
-		//外積Yが0以下なら右周り(時計周り)
-		else if (crossY < 0.0)
-		{
-			//正面ベクトルとのラジアン角をとる
-			XMVECTOR r = XMVector3AngleBetweenVectors(SetController, FrontDirection_);
+	//		//Y座標に設定
+	//		this->transform_.rotate_.y = angleDeg;
+	//	}
+	//	//外積Yが0以下なら右周り(時計周り)
+	//	else if (crossY < 0.0)
+	//	{
+	//		//正面ベクトルとのラジアン角をとる
+	//		XMVECTOR r = XMVector3AngleBetweenVectors(SetController, FrontDirection_);
 
-			//ラジアン角度を取得
-			float angle = XMVectorGetX(r);
+	//		//ラジアン角度を取得
+	//		float angle = XMVectorGetX(r);
 
-			//ディグリー角に直す
-			float angleDeg = XMConvertToDegrees(angle);
+	//		//ディグリー角に直す
+	//		float angleDeg = XMConvertToDegrees(angle);
 
-			//Y座標に設定
-			this->transform_.rotate_.y = angleDeg;
-		}
-
-
-
-		//CharacterMoveRotate(controller,angleDeg);
-	}
-	else
-	{
-
-	}
+	//		//Y座標に設定
+	//		this->transform_.rotate_.y = angleDeg;
+	//	}
+	//	//CharacterMoveRotate(controller,angleDeg);
+	//}
+	//else
+	//{
+	//}
 
 
 	//自分の前方ベクトル(回転した分も含む)を更新

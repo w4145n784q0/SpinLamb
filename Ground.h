@@ -4,11 +4,13 @@
 #include<array>
 #include<vector>
 
-using std::vector;
-
 class Ground :
     public GameObject
 {
+private:
+	//----------モデルハンドル----------
+
+	//地面モデル
 	int hGrass_;
 public:
 	Ground(GameObject* parent);
@@ -18,6 +20,8 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
+
+	void SetSCV();
 
 	int GetModelHandle() { return hGrass_; }
 };

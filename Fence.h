@@ -13,6 +13,12 @@ private:
 	int hFence_;
 
 	//----------çÚÇÃà íu----------
+
+	float NorthEnd_;
+	float SouthEnd_;
+	float EastEnd_;
+	float WestEnd_;
+
 	XMFLOAT3 piller_UpperLeft_;
 	XMFLOAT3 piller_UpperRight_;
 	XMFLOAT3 piller_LowerLeft_;
