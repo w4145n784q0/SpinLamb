@@ -103,9 +103,9 @@ void Enemy::Update()
 
 	if (!IsInvincibility_ && !(EnemyState_ == S_WALLHIT))//•Çƒ_ƒ[ƒW”»’è
 	{
-		if (transform_.position_.x > 60.0f || transform_.position_.x < -60.0f ||
-			transform_.position_.z > 60.0f || transform_.position_.z < -60.0f)
+		if (IsOutsideStage(this->transform_.position_))
 		{
+			WallHit();
 			EnemyState_ = S_WALLHIT;
 		}
 	}
@@ -252,7 +252,7 @@ void Enemy::UpdateAim()
 {
 	LookPlayer();
 	SetChargingEffect("PaticleAssets\\circle_R.png");
-	this->transform_.rotate_.x -= FastRotateX;
+	FastRotate();
 
 	//	EnemyAttackTime = 180
 
@@ -294,13 +294,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 	{
 		if (!IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
 		{
-		//	KnockBack_Velocity_ = { 0,0,0 };
-			Acceleration_ = 0.0f;
-			XMFLOAT3 inverse;
-			XMStoreFloat3(&inverse, ForwardVector_);
-			KnockBack_Direction_ = { inverse.x * -1, inverse.y * -1, inverse.z * -1 };
-			KnockBack_Velocity_.x = KnockBackPower_;
-			KnockBack_Velocity_.z = KnockBackPower_;
+			WallHit();
 
 			EnemyState_ = S_WALLHIT;
 		}

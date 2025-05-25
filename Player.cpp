@@ -92,6 +92,15 @@ void Player::Update()
 		break;
 	}
 
+	if(!IsInvincibility_ && !PlayerState_ == S_WALLHIT)
+	{
+		if (IsOutsideStage(this->transform_.position_))
+		{
+			WallHit();
+			PlayerState_ = S_WALLHIT;
+		}
+	}
+
 	InvincibilityTimeCalclation();
 
 	//ÉJÉÅÉâÇÃçXêV
@@ -230,12 +239,7 @@ void Player::OnCollision(GameObject* pTarget)
 	{
 		if(!IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
 		{
-			Acceleration_ = 0.0f;
-			XMFLOAT3 inverse;
-			XMStoreFloat3(&inverse, ForwardVector_);
-			KnockBack_Direction_ = { inverse.x * -1, inverse.y * -1, inverse.z * -1 };
-			KnockBack_Velocity_.x = KnockBackPower_;
-			KnockBack_Velocity_.z = KnockBackPower_;
+			WallHit();
 			PlayerState_ = S_WALLHIT;
 		}
 	}

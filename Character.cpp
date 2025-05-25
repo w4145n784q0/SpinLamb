@@ -115,9 +115,9 @@ void Character::CharacterMoveRotate(XMVECTOR _direction,float rotateY)
 	//場外でなければ位置更新 
 	XMFLOAT3 tmp;
 	XMStoreFloat3(&tmp, NewPositon_);
-	if (!(tmp.x > 60.0f || tmp.x < -60.0f || tmp.z > 60.0f || tmp.z < -60.0f))
+	if (!IsOutsideStage(tmp))
 	{
-		XMStoreFloat3(&this->transform_.position_, NewPositon_);
+		MoveConfirm();
 	}
 }
 
@@ -131,9 +131,9 @@ void Character::CharacterMove(XMVECTOR _direction)
 	//場外でなければ位置更新 
 	XMFLOAT3 tmp;
 	XMStoreFloat3(&tmp, NewPositon_);
-	if (!(tmp.x > 60.0f || tmp.x < -60.0f || tmp.z > 60.0f || tmp.z < -60.0f))
+	if (!IsOutsideStage(tmp))
 	{
-		XMStoreFloat3(&this->transform_.position_, NewPositon_);
+		MoveConfirm();
 	}
 }
 
@@ -146,6 +146,21 @@ void Character::CreateMoveVector()
 	//現在位置と移動ベクトルを加算
 	XMVECTOR PrevPos = XMLoadFloat3(&this->transform_.position_);
 	NewPositon_ = PrevPos + MoveVector;
+}
+
+bool Character::IsOutsideStage(XMFLOAT3 _position)
+{
+	if (_position.x > EastEnd || _position.x < WestEnd || _position.z > NorthEnd || _position.z < SouthEnd){
+			return true;
+	}
+	else {
+		return false;
+	}
+}
+
+void Character::MoveConfirm()
+{
+	XMStoreFloat3(&this->transform_.position_, NewPositon_);
 }
 
 void Character::KnockBack()
@@ -164,12 +179,29 @@ void Character::KnockBack()
 	NewPositon_ = XMLoadFloat3(&TmpPos);
 
 	//場外でなければ位置更新 
-	XMFLOAT3 f;
-	XMStoreFloat3(&f, NewPositon_);
-	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
+	XMFLOAT3 tmp;
+	XMStoreFloat3(&tmp, NewPositon_);
+	if (!IsOutsideStage(tmp))
 	{
-		XMStoreFloat3(&this->transform_.position_, NewPositon_);
+		MoveConfirm();
 	}
+}
+
+void Character::WallHit()
+{
+	//速度リセット
+	Acceleration_ = 0.0f;
+
+	//正面ベクトルの逆ベクトルを計算
+	XMVECTOR negate = XMVectorNegate(ForwardVector_);
+	XMFLOAT3 inverse;
+	XMStoreFloat3(&inverse, negate);
+
+	//ノックバック方向に代入
+	KnockBack_Direction_ = { inverse.x, inverse.y, inverse.z };
+
+	KnockBack_Velocity_.x = KnockBackPower_;
+	KnockBack_Velocity_.z = KnockBackPower_;
 }
 
 void Character::InvincibilityTimeCalclation()

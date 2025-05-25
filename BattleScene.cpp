@@ -11,6 +11,7 @@
 #include"MiniMap.h"
 #include"Fence.h"
 #include"HUD.h"
+#include"StageManager.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
@@ -38,8 +39,8 @@ BattleScene::BattleScene(GameObject* parent)
 
 void BattleScene::Initialize()
 {
-	Instantiate<Ground>(this);
-	Instantiate<Fence>(this);
+
+	Instantiate<StageManager>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
 	//Instantiate<EnemyManager>(this);

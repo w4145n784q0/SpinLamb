@@ -8,7 +8,10 @@ class Character :
     public GameObject
 {
 private:
-    //CsvReader csv_;//csvを読み込むインスタンス
+   float NorthEnd;
+   float SouthEnd;
+   float EastEnd;
+   float WestEnd;
 protected:
     //----------初期状態----------
     XMFLOAT3 StartPosition_;//初期位置
@@ -116,9 +119,26 @@ public:
     void CreateMoveVector();
 
     /// <summary>
+    /// 場外判定
+    /// </summary>
+    /// <param name="_position">更新予定の位置</param>
+    /// <returns>移動可能か</returns>
+    bool IsOutsideStage(XMFLOAT3 _position);
+
+    /// <summary>
+    /// 移動確定処理
+    /// </summary>
+    void MoveConfirm();
+
+    /// <summary>
     /// ノックバック移動処理
     /// </summary>
     void KnockBack();
+
+    /// <summary>
+    /// 壁に接触した際の計算処理
+    /// </summary>
+    void WallHit();
 
     /// <summary>
     /// ダメージ後の無敵時間の計算
@@ -179,5 +199,13 @@ public:
     /// 衝撃エフェクトつける
     /// </summary>
     void SetHitEffect();
-};
 
+
+    //setter,getter関数
+    void SetEnd(float upper, float lower, float left, float right) {
+        NorthEnd = upper;
+        SouthEnd = lower;
+        WestEnd = left;
+        EastEnd = right;
+    }
+};

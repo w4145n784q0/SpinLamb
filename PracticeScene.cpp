@@ -34,18 +34,22 @@ void PracticeScene::Initialize()
 	Instantiate<StageManager>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
-	//Instantiate<EnemyManager>(this);
 	Instantiate<MiniMap>(this);
 	Instantiate<HUD>(this);
 
-	//EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
-	//pEnemyManager->EnemyInitialize();
+	StageManager* pS = (StageManager*)FindObject("StageManager");
+	float north = pS->GetNorthEnd();
+	float south = pS->GetSouthEnd();
+	float west = pS->GetWestEnd();
+	float east = pS->GetEastEnd();
 
 	Player* pPlayer_ = (Player*)FindObject("Player");
 	pPlayer_->PlayerStart();
+	pPlayer_->SetEnd(north, south, west, east);
 
 	Enemy* pEnemy = (Enemy*)FindObject("Enemy");
 	pEnemy->EnemyStart();
+	pEnemy->SetEnd(north, south, west, east);
 
 	HUD* pHUD = (HUD*)FindObject("HUD");
 	pHUD->SetStatePractice();

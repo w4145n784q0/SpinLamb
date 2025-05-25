@@ -1,7 +1,7 @@
 ﻿変数名,Enemy,概要
 transform_position_.x,0,初期位置(pos.x)
 transform_position_.y,0,初期位置(pos.y)
-transform_position_.z,5,初期位置(pos.z)
+transform_position_.z,20,初期位置(pos.z)
 transform_rotate_.x,0,初期回転(rot.x)
 transform_rotate_.y,0,初期回転(rot.y)
 transform_rotate_.z,0,初期回転(rot.z)

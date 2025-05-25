@@ -1,6 +1,7 @@
 #include "StageManager.h"
 #include"Engine/CsvReader.h"
 #include"Engine/Global.h"
+#include"Character.h"
 
 StageManager::StageManager(GameObject* parent)
 	:GameObject(parent,"StageManager"),
@@ -20,7 +21,6 @@ void StageManager::Initialize()
 	Instantiate<Fence>(this);
 	InitFenceData();
 	InitEndData();
-
 }
 
 void StageManager::Update()
