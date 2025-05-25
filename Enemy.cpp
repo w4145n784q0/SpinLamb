@@ -23,7 +23,7 @@ namespace
 	}
 
 Enemy::Enemy(GameObject* parent)
-	:Character(parent,"Enemy"), hEnemy_(-1), pPlayer_(nullptr), pGround_(nullptr),
+	:Character(parent,"Enemy"), hEnemy_(-1), pPlayer_(nullptr),
 	HitStopTimer_(0)
 {
 	srand((unsigned)time(NULL));
@@ -60,6 +60,7 @@ void Enemy::Update()
 {
 	PlayerPosition_ = pPlayer_->GetWorldPosition();//プレイヤーの位置（ワールド座標）
 	pPositionVec_ = XMLoadFloat3(&PlayerPosition_);//プレイヤーの位置をベクトル化し取り続ける
+	PlayerAcceleration_ = pPlayer_->GetAcceleration();
 	
 	//正面ベクトルからどれだけ回転したかを計算し、前向きベクトルを計算
 	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);
@@ -138,7 +139,7 @@ void Enemy::Draw()
 	//ImGui::Text("front.y:%3f", (float)tmp.y);
 	//ImGui::Text("front.z:%3f", (float)tmp.z);
 
-	//ImGui::Text("EnemyLife:%.3f", (float)CharacterLife_);
+	ImGui::Text("knockback:%.3f",this->KnockBack_Velocity_.x );
 #endif
 }
 
@@ -214,7 +215,8 @@ void Enemy::UpdateHit()
 {
 	if (KnockBack_Velocity_.x <= KnockBackEnd_ || KnockBack_Velocity_.z <= KnockBackEnd_)
 	{
-		transform_.rotate_.x = 0.0f;
+		RotateStop();
+		KnockBack_Velocity_ = { 0,0,0 };
 		EnemyState_ = S_ROOT;
 	}
 	KnockBack();
@@ -301,9 +303,16 @@ void Enemy::OnCollision(GameObject* pTarget)
 	}
 
 	if (pTarget->GetObjectName() == "Player")
-	{
+	{	
+		XMVECTOR ev = XMLoadFloat3(&this->transform_.position_);
+		XMFLOAT3 getpositon = PlayerPosition_;
+		XMVECTOR pv = XMLoadFloat3(&getpositon);
+		float pa = PlayerAcceleration_;
+
+		Reflect(ev, pv, this->Acceleration_, pa);
 		Acceleration_ = 0;
 		AimTimer_ = 0;
+		EnemyState_ = S_HIT;
 	}
 }
 

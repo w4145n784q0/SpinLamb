@@ -130,7 +130,13 @@ public:
     /// </summary>
     void MoveConfirm();
 
-
+    /// <summary>
+    /// 反射処理
+    /// </summary>
+    /// <param name="myVector">自身の位置ベクトル</param>
+    /// <param name="eVector">相手の位置ベクトル</param>
+    /// <param name="myVelocity">自身の加速度</param>
+    /// <param name="eVelocity">相手の加速度</param>
     void Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, float eVelocity);
 
     /// <summary>
@@ -205,6 +211,11 @@ public:
 
 
     //setter,getter関数
+
+    void SetAcceleration(float _acceleration) { Acceleration_ = _acceleration; }
+    float GetAcceleration() { return Acceleration_; }
+
+    //キャラクターの移動制限をセット
     void SetEnd(float upper, float lower, float left, float right) {
         NorthEnd = upper;
         SouthEnd = lower;

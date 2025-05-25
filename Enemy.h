@@ -15,7 +15,6 @@ private:
 
 	//インスタンス関係
 	Player* pPlayer_;
-	Ground* pGround_;
 
 	//敵(CPU)ステート
 	enum State {
@@ -43,6 +42,7 @@ private:
 	//bool IsHit_;
 	XMVECTOR pPositionVec_;//プレイヤーの位置を保管
 	XMFLOAT3 PlayerPosition_;//プレイヤーの位置(座標)
+	float PlayerAcceleration_;
 
 
 	//ダメージ関係

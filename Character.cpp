@@ -165,8 +165,19 @@ void Character::MoveConfirm()
 
 void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, float eVelocity)
 {
+	//無敵状態なら処理しない
+	if (this->IsInvincibility_)
+	{
+		return;
+	}
+
+	//接触した面に垂直な方向に反射する
+
 	//接触相手のベクトルから自身のベクトルを引き、正規化
-	XMVECTOR subVector = XMVector3Normalize(XMVectorSubtract(eVector, myVector));
+	XMVECTOR subVector = XMVector3Normalize(XMVectorSubtract(eVector ,myVector ));
+	
+	//逆ベクトルにして反射方向を決定
+	subVector = XMVectorNegate(subVector);
 	XMFLOAT3 tmp;
 	XMStoreFloat3(&tmp,subVector);
 
@@ -187,13 +198,15 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 		{
 			subVelocity = -subVelocity;
 		}
-		KnockBackPower_ = LinearCompletion(subVelocity, 0, 20, 1, 4);
+		if (subVelocity > 20.0f)
+		{
+			subVelocity = 20.0f;
+		}
+		KnockBackPower_ = LinearCompletion(subVelocity, 0, 20, 2, 4);
 	}
-
 
 	KnockBack_Velocity_.x = KnockBackPower_;
 	KnockBack_Velocity_.z = KnockBackPower_;
-
 }
 
 void Character::KnockBack()

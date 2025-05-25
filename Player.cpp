@@ -178,18 +178,24 @@ void Player::OnCollision(GameObject* pTarget)
 
 		//敵-自分のベクトル（相手の反射）,自分-敵のベクトル（自分の反射）をとる
 		//相手のスピードと自分のスピードをとる
-		//
+		XMFLOAT3 s =  pEnemy->GetPosition();
+		XMVECTOR ev = XMLoadFloat3(&s);
+		XMVECTOR pv = XMLoadFloat3(&this->transform_.position_);
+		float ea = pEnemy->GetAcceleration();
+
+		Reflect(pv, ev, this->Acceleration_, ea);
+
+		PlayerState_ = S_HIT;
+		SetHitEffect();
 
 
 		//敵の位置-自機の位置を計算（敵の反射）
 		//単位ベクトルにする
-		XMFLOAT3 Enemydirection = pEnemy->GetPosition() - this->transform_.position_;
-		XMVECTOR EnemynormalDirection = XMVector3Normalize(XMLoadFloat3(&Enemydirection));
 
 		//自機の位置-敵の位置を計算（自機の反射）
 		//単位ベクトルにする
-		XMFLOAT3 Playerdirection = this->transform_.position_ - pEnemy->GetPosition();
-		XMVECTOR PlayernormalDirection = XMVector3Normalize(XMLoadFloat3(&Playerdirection));
+		//XMFLOAT3 Playerdirection = this->transform_.position_ - pEnemy->GetPosition();
+		//XMVECTOR PlayernormalDirection = XMVector3Normalize(XMLoadFloat3(&Playerdirection));
 
 		//プレイヤーの衝突時処理
 		//プレイヤー:通常 敵:通常 双方がはじかれる(軽度)
@@ -198,38 +204,38 @@ void Player::OnCollision(GameObject* pTarget)
 		//プレイヤー:ダッシュ 敵:通常 敵を大きくはじく
 		//プレイヤーは方向ベクトル(敵の位置-自機の位置)に対し垂直方向に移動（正面からぶつかったらプレイヤーは停止
 
-		bool IsEnemyAttack = pEnemy->GetStateAttack();
+		//bool IsEnemyAttack = pEnemy->GetStateAttack();
 
-		if (IsEnemyAttack)//敵:攻撃
-		{
-			if (IsAttackState())//プレイヤー:攻撃
-			{
-				//敵のノックバック処理
-				pEnemy->PlayerReflect(EnemynormalDirection, true);
-				EnemyReflect(PlayernormalDirection, IsEnemyAttack);
-			}
-			else//プレイヤー:通常
-			{
-				EnemyReflect(PlayernormalDirection, IsEnemyAttack);
-			}
-			//ヒットエフェクト
-			SetHitEffect();
-		}
-		else//敵:通常
-		{
-			if (IsAttackState())//プレイヤー:攻撃
-			{
-				//敵のノックバック処理
-				pEnemy->PlayerReflect(EnemynormalDirection,true);
-				//ヒットエフェクト
-				SetHitEffect();
-			}
-			else//プレイヤー:通常
-			{
-				pEnemy->PlayerReflect(EnemynormalDirection, false);
-				EnemyReflect(PlayernormalDirection, IsEnemyAttack);
-			}
-		}
+		//if (IsEnemyAttack)//敵:攻撃
+		//{
+		//	if (IsAttackState())//プレイヤー:攻撃
+		//	{
+		//		//敵のノックバック処理
+		//		pEnemy->PlayerReflect(EnemynormalDirection, true);
+		//		EnemyReflect(PlayernormalDirection, IsEnemyAttack);
+		//	}
+		//	else//プレイヤー:通常
+		//	{
+		//		EnemyReflect(PlayernormalDirection, IsEnemyAttack);
+		//	}
+		//	//ヒットエフェクト
+		//	SetHitEffect();
+		//}
+		//else//敵:通常
+		//{
+		//	if (IsAttackState())//プレイヤー:攻撃
+		//	{
+		//		//敵のノックバック処理
+		//		pEnemy->PlayerReflect(EnemynormalDirection,true);
+		//		//ヒットエフェクト
+		//		SetHitEffect();
+		//	}
+		//	else//プレイヤー:通常
+		//	{
+		//		pEnemy->PlayerReflect(EnemynormalDirection, false);
+		//		EnemyReflect(PlayernormalDirection, IsEnemyAttack);
+		//	}
+		//}
 
 		//カメラ振動
 		Camera::CameraShakeStart(0.3f);
