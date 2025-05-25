@@ -130,6 +130,9 @@ public:
     /// </summary>
     void MoveConfirm();
 
+
+    void Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, float eVelocity);
+
     /// <summary>
     /// ノックバック移動処理
     /// </summary>

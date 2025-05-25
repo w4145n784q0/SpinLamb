@@ -198,6 +198,23 @@ public:
 	void SetScale(XMFLOAT3 scale) { transform_.scale_ = scale; }
 	void SetScale(float x, float y, float z) { SetScale(XMFLOAT3(x, y, z)); }
 
+	//追加
+
+	/// <summary>
+	/// 線形補完(floatで受け取り返す)
+	/// </summary>
+	/// <param name="convert">変換したい値</param>
+	/// <param name="originalMin">変換元の範囲の最小値</param>
+	/// <param name="originalMax">変換元の範囲の最大値</param>
+	/// <param name="conversionMin">変換後の範囲の最小値</param>
+	/// <param name="conversionMax">変換後の範囲の最大値</param>
+	/// <returns>補正後の値</returns>
+	float LinearCompletion(float convert,float originalMin,float originalMax, 
+		float conversionMin,float conversionMax)
+	{
+		//y = y1 + (x - x1) * (y2 - y1) / (x2 - x1);
+		return  conversionMin + (convert - originalMin) * (conversionMax - conversionMin) / (originalMax - originalMin);
+	}
 
 private:
 

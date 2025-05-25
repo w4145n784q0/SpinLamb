@@ -163,6 +163,39 @@ void Character::MoveConfirm()
 	XMStoreFloat3(&this->transform_.position_, NewPositon_);
 }
 
+void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, float eVelocity)
+{
+	//接触相手のベクトルから自身のベクトルを引き、正規化
+	XMVECTOR subVector = XMVector3Normalize(XMVectorSubtract(eVector, myVector));
+	XMFLOAT3 tmp;
+	XMStoreFloat3(&tmp,subVector);
+
+	//反射方向を設定
+	KnockBack_Direction_ = tmp;
+
+	//自身の速度と相手の速度の差分をとる
+	float subVelocity = myVelocity - eVelocity;
+
+	//速度差が自身の方が一定以上なら、自身のノックバック量は0
+	if (subVelocity >= 20.0f)
+	{
+		KnockBackPower_ = 0.0f;
+	}
+	else 
+	{
+		if (signbit(subVelocity)) 
+		{
+			subVelocity = -subVelocity;
+		}
+		KnockBackPower_ = LinearCompletion(subVelocity, 0, 20, 1, 4);
+	}
+
+
+	KnockBack_Velocity_.x = KnockBackPower_;
+	KnockBack_Velocity_.z = KnockBackPower_;
+
+}
+
 void Character::KnockBack()
 {
 	this->transform_.rotate_.x += MoveRotateX;

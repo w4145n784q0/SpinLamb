@@ -176,6 +176,11 @@ void Player::OnCollision(GameObject* pTarget)
 		//敵のノックバック
 		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
 
+		//敵-自分のベクトル（相手の反射）,自分-敵のベクトル（自分の反射）をとる
+		//相手のスピードと自分のスピードをとる
+		//
+
+
 		//敵の位置-自機の位置を計算（敵の反射）
 		//単位ベクトルにする
 		XMFLOAT3 Enemydirection = pEnemy->GetPosition() - this->transform_.position_;
