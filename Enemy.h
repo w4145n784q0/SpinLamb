@@ -34,7 +34,7 @@ private:
 
 	//----------UŒ‚ŠÖŒW----------
 	int AimTimer_;//‘_‚Á‚Ä‚©‚çUŒ‚‚Ü‚Å‚Ìƒ^ƒCƒ}[
-	int randaim;
+	//int randaim;
 
 	//----------ˆÚ“®ŠÖŒW----------
 	//float FrontLength_;//“G‚Ì‹ŠE‚Ì’·‚³
@@ -85,7 +85,7 @@ public:
 	
 	//void SetState(State s) { EnemyState_ = s; }
 	//State GetState() { return EnemyState_; }
-	bool GetStateAttack() { if (EnemyState_ == S_ATTACK) return true; else return false; }
+	//bool GetStateAttack() { if (EnemyState_ == S_ATTACK) return true; else return false; }
 
 	void SetStateStop() { EnemyState_ = S_MAX; }
 

@@ -17,14 +17,14 @@ namespace
 	//const float EyeLength = 10.0f;
 	const int HitStop = 2;//ヒットストップする時間
 	const float ChaseLength = 10.0f;//追跡状態から攻撃準備に移る距離
-	//const int EnemyAttackTime = 180;//敵が攻撃するまでの時間
-
-	const int EnemyAttackTimeArray[] = { 180,150,120,60 };
+	const float lookRotateValue = 1.5f;//プレイヤー方向を向く際の1fごとの回転量
+	int RandomAim = 0;//EnemyAttackTimeArrayの添え字 
+	const int EnemyAttackTimeArray[] = { 180,150,120,60 };//敵が攻撃するまでの時間の配列　ランダムに選ばれる
 	}
 
 Enemy::Enemy(GameObject* parent)
 	:Character(parent,"Enemy"), hEnemy_(-1), pPlayer_(nullptr),
-	HitStopTimer_(0)
+	EnemyState_(S_IDLE),HitStopTimer_(0)
 {
 	srand((unsigned)time(NULL));
 }
@@ -51,9 +51,7 @@ void Enemy::Initialize()
 	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), ColliderSize_);
 	this->AddCollider(collision);
 
-	EnemyState_ = S_IDLE;
-
-	randaim = rand() % 4;
+	RandomAim = rand() % 4;
 }
 
 void Enemy::Update()
@@ -188,7 +186,8 @@ void Enemy::UpdateRoot()
 
 void Enemy::UpdateChase()
 {
-	this->transform_.rotate_.x -= MoveRotateX;
+	MoveRotateReverse();
+	//this->transform_.rotate_.x -= MoveRotateX;
 
 	LookPlayer();
 	CharacterMove(MoveDirection_);
@@ -197,7 +196,7 @@ void Enemy::UpdateChase()
 	if (dist < ChaseLength)
 	{
 		EnemyState_ = S_AIM;
-		this->transform_.rotate_.x = 0.0f;
+		RotateStop();
 	}
 }
 
@@ -227,7 +226,7 @@ void Enemy::UpdateWallHit()
 	KnockBack();
 	if (KnockBack_Velocity_.x <= KnockBackEnd_ || KnockBack_Velocity_.z <= KnockBackEnd_)
 	{
-		transform_.rotate_.x = 0.0f;
+		RotateStop();
 		EnemyState_ = S_ROOT;
 		IsInvincibility_ = true;
 
@@ -258,7 +257,7 @@ void Enemy::UpdateAim()
 
 	//	EnemyAttackTime = 180
 
-	if (++AimTimer_ > EnemyAttackTimeArray[randaim])
+	if (++AimTimer_ > EnemyAttackTimeArray[RandomAim])
 	{
 		AimTimer_ = 0;
 		Acceleration_ = FullAccelerate_;
@@ -281,12 +280,14 @@ void Enemy::UpdateAttack()
 	Acceleration_ -= AcceleValue_;
 
 	//キャラモデル回転
-	this->transform_.rotate_.x -= FastRotateX;
+	MoveRotateReverse();
+	//this->transform_.rotate_.x -= FastRotateX;
 
 	if (Acceleration_ <= 0.0f)
 	{
-		transform_.rotate_.x = 0.0f;
+		RotateStop();
 		EnemyState_ = S_ROOT;
+		RandomAim = rand() % 4;//攻撃終了後に攻撃時間をリセット
 	}
 }
 
@@ -304,37 +305,37 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 	if (pTarget->GetObjectName() == "Player")
 	{	
-		XMVECTOR ev = XMLoadFloat3(&this->transform_.position_);
+		XMVECTOR enemyvector = XMLoadFloat3(&this->transform_.position_);
 		XMFLOAT3 getpositon = PlayerPosition_;
-		XMVECTOR pv = XMLoadFloat3(&getpositon);
-		float pa = PlayerAcceleration_;
+		XMVECTOR playervector = XMLoadFloat3(&getpositon);
+		float playeraccele = PlayerAcceleration_;
 
-		Reflect(ev, pv, this->Acceleration_, pa);
-		Acceleration_ = 0;
+		Reflect(enemyvector, playervector, this->Acceleration_, playeraccele);
+		//Acceleration_ = 0;
 		AimTimer_ = 0;
 		EnemyState_ = S_HIT;
 	}
 }
 
-void Enemy::PlayerReflect(XMVECTOR _vector,bool _isDush)
-{
-	XMFLOAT3 f;
-	XMStoreFloat3(&f, _vector);
-	KnockBack_Direction_ = f;
-
-	if (_isDush)
-	{
-		KnockBack_Velocity_.x = KnockBackPower_ * 1.5;
-		KnockBack_Velocity_.z = KnockBackPower_ * 1.5;
-	}
-	else
-	{
-		KnockBack_Velocity_.x = KnockBackPower_;
-		KnockBack_Velocity_.z = KnockBackPower_;
-	}
-
-	EnemyState_ = S_HIT;
-}
+//void Enemy::PlayerReflect(XMVECTOR _vector,bool _isDush)
+//{
+//	XMFLOAT3 f;
+//	XMStoreFloat3(&f, _vector);
+//	KnockBack_Direction_ = f;
+//
+//	if (_isDush)
+//	{
+//		KnockBack_Velocity_.x = KnockBackPower_ * 1.5;
+//		KnockBack_Velocity_.z = KnockBackPower_ * 1.5;
+//	}
+//	else
+//	{
+//		KnockBack_Velocity_.x = KnockBackPower_;
+//		KnockBack_Velocity_.z = KnockBackPower_;
+//	}
+//
+//	EnemyState_ = S_HIT;
+//}
 
 void Enemy::LookPlayer()
 {
@@ -383,12 +384,12 @@ void Enemy::LookPlayer()
 		//外積Yが0以上なら左周り(半時計周り)
 		if (crossY > 0.0)
 		{
-			transform_.rotate_.y -= 1.5f;
+			transform_.rotate_.y -= lookRotateValue;
 		}
 		//外積Yが0以下なら右周り(時計周り)
 		else if (crossY < 0.0)
 		{
-			transform_.rotate_.y += 1.5f;
+			transform_.rotate_.y += lookRotateValue;
 		}
 	}
 

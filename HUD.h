@@ -98,6 +98,7 @@ public:
 	void SetStatePractice() { GameModeHUD_ = Practice; }
 
 	//void SetNumber(int _num) { countDownNumber_ = _num; }
+	
 	void SetTime(int _time) { TimeNumber_ = _time; }
 	void SetPlayerScore(int _score) { PlayerScore_ = _score; }
 	void SetEnemyScore(int _score) {EnemyScore_ = _score; }

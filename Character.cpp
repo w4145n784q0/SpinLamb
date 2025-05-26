@@ -207,6 +207,8 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 
 	KnockBack_Velocity_.x = KnockBackPower_;
 	KnockBack_Velocity_.z = KnockBackPower_;
+
+	Acceleration_ = 0;
 }
 
 void Character::KnockBack()

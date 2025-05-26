@@ -43,17 +43,27 @@ void BattleScene::Initialize()
 	Instantiate<StageManager>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
-	//Instantiate<EnemyManager>(this);
 	Instantiate<MiniMap>(this);
 	Instantiate<HUD>(this);
+
+	StageManager* pS = (StageManager*)FindObject("StageManager");
+	float north = pS->GetNorthEnd();
+	float south = pS->GetSouthEnd();
+	float west = pS->GetWestEnd();
+	float east = pS->GetEastEnd();
+
+	Player* pPlayer_ = (Player*)FindObject("Player");
+	pPlayer_->SetEnd(north, south, west, east);
+
+	Enemy* pEnemy = (Enemy*)FindObject("Enemy");
+	pEnemy->SetEnd(north, south, west, east);
+
 
 	HUD* pHUD = (HUD*)FindObject("HUD");
 	pHUD->SetStateBattle();
 	pHUD->SetTime(GameTime_);
 	//pHUD->SetNumber(StartCount_);
 
-	//EnemyManager* pEnemyManager = (EnemyManager*)FindObject("EnemyManager");
-	//pEnemyManager->EnemyInitialize();
 
 	hBattleSound_ = Audio::Load("Sound\\maou_game_rock51.wav");
 	assert(hBattleSound_>= 0);
@@ -61,20 +71,12 @@ void BattleScene::Initialize()
 	hWhistle_ = Audio::Load("Sound\\maou_se_sound_whistle01.wav");
 	assert(hWhistle_ >= 0);
 
-	pTime_ = new Text;
-	pTime_->Initialize();
-
 	pPlayerScore_ = new Text;
 	pPlayerScore_->Initialize();
 
 	pEnemyScore_ = new Text;
 	pEnemyScore_->Initialize();
 
-	//pPlayer_ = (Player*)FindObject("Player");
-	
-
-	//PlayerLife_ = pPlayer_->GetCharacterLife();
-	//EnemyLife_ = pEnemy_->GetCharacterLife();
 }
 
 void BattleScene::Update()
@@ -102,7 +104,6 @@ void BattleScene::Draw()
 	
 	//ImGui::Text("count :%1f", (float)Timecounter);
 
-	//pTime_->Draw(640, 30, GameTime_);
 	pPlayerScore_->Draw(30, 30, PlayerScore_);
 	pEnemyScore_->Draw(1250, 30, EnemyScore_);
 

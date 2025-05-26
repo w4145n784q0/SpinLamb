@@ -18,6 +18,8 @@ namespace {
 	XMVECTOR BackCameraPos = { 0,3,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 	int blinkTimer = 0;
 	const int blink = 20;
+	const float cameraShakeTime = 0.3f;
+	const float jumpheight = 1.8f;
 }
 
 Player::Player(GameObject* parent) 
@@ -103,6 +105,8 @@ void Player::Update()
 
 	InvincibilityTimeCalclation();
 
+	CharacterGravity();
+
 	//カメラの更新
 	CameraUpdate();
 
@@ -178,72 +182,23 @@ void Player::OnCollision(GameObject* pTarget)
 
 		//敵-自分のベクトル（相手の反射）,自分-敵のベクトル（自分の反射）をとる
 		//相手のスピードと自分のスピードをとる
-		XMFLOAT3 s =  pEnemy->GetPosition();
-		XMVECTOR ev = XMLoadFloat3(&s);
-		XMVECTOR pv = XMLoadFloat3(&this->transform_.position_);
-		float ea = pEnemy->GetAcceleration();
+		XMFLOAT3 getposition =  pEnemy->GetPosition();
+		XMVECTOR enemyvector = XMLoadFloat3(&getposition);
+		XMVECTOR playervector = XMLoadFloat3(&this->transform_.position_);
+		float enemyaccele = pEnemy->GetAcceleration();
 
-		Reflect(pv, ev, this->Acceleration_, ea);
+		Reflect(playervector, enemyvector, this->Acceleration_, enemyaccele);
 
 		PlayerState_ = S_HIT;
 		SetHitEffect();
 
-
-		//敵の位置-自機の位置を計算（敵の反射）
-		//単位ベクトルにする
-
-		//自機の位置-敵の位置を計算（自機の反射）
-		//単位ベクトルにする
-		//XMFLOAT3 Playerdirection = this->transform_.position_ - pEnemy->GetPosition();
-		//XMVECTOR PlayernormalDirection = XMVector3Normalize(XMLoadFloat3(&Playerdirection));
-
-		//プレイヤーの衝突時処理
-		//プレイヤー:通常 敵:通常 双方がはじかれる(軽度)
-		//プレイヤー:通常 敵:攻撃 プレイヤーを大きくはじく
-		//プレイヤー:ダッシュ 敵:攻撃 敵をはじく プレイヤーは方向ベクトル(敵の位置-自機の位置)に対し垂直方向に移動（正面からぶつかったらプレイヤーは停止
-		//プレイヤー:ダッシュ 敵:通常 敵を大きくはじく
-		//プレイヤーは方向ベクトル(敵の位置-自機の位置)に対し垂直方向に移動（正面からぶつかったらプレイヤーは停止
-
-		//bool IsEnemyAttack = pEnemy->GetStateAttack();
-
-		//if (IsEnemyAttack)//敵:攻撃
-		//{
-		//	if (IsAttackState())//プレイヤー:攻撃
-		//	{
-		//		//敵のノックバック処理
-		//		pEnemy->PlayerReflect(EnemynormalDirection, true);
-		//		EnemyReflect(PlayernormalDirection, IsEnemyAttack);
-		//	}
-		//	else//プレイヤー:通常
-		//	{
-		//		EnemyReflect(PlayernormalDirection, IsEnemyAttack);
-		//	}
-		//	//ヒットエフェクト
-		//	SetHitEffect();
-		//}
-		//else//敵:通常
-		//{
-		//	if (IsAttackState())//プレイヤー:攻撃
-		//	{
-		//		//敵のノックバック処理
-		//		pEnemy->PlayerReflect(EnemynormalDirection,true);
-		//		//ヒットエフェクト
-		//		SetHitEffect();
-		//	}
-		//	else//プレイヤー:通常
-		//	{
-		//		pEnemy->PlayerReflect(EnemynormalDirection, false);
-		//		EnemyReflect(PlayernormalDirection, IsEnemyAttack);
-		//	}
-		//}
-
 		//カメラ振動
-		Camera::CameraShakeStart(0.3f);
+		Camera::CameraShakeStart(cameraShakeTime);
 
 		//衝撃音
 		Audio::Play(hCollisionSound_);
 
-		Acceleration_ = 0;
+		//Acceleration_ = 0;
 	}
 
 	if (pTarget->GetObjectName() == "Fence")
@@ -354,48 +309,38 @@ void Player::UpdateIdle()
 	//ベクトルの長さを取得して、倒したかどうかを判別
 	float length = XMVectorGetX(XMVector3Length(controller));
 
-	//if(length > 0.01f)
-	//{
-	//	//先に外積求める
-	//	XMVECTOR cross = XMVector3Cross(SetController,FrontDirection_);
-	//	
-	//	//Y外積をとり+か-かで倒し回転方向を求める
-	//	float crossY = XMVectorGetY(cross);
+	if(length > 0.01f)
+	{
+		//先に外積求める
+		XMVECTOR cross = XMVector3Cross(SetController,FrontDirection_);
+		
+		//Y外積をとり+か-かで倒し回転方向を求める
+		float crossY = XMVectorGetY(cross);
 
-	//	if (crossY > 0.0)
-	//	{
-	//		//正面ベクトルとのラジアン角をとる
-	//		XMVECTOR r = XMVector3AngleBetweenVectors(SetController, FrontDirection_);
+		//外積Yが0以下なら右周り(時計周り)
+		if (crossY < 0.0)
+		{
+			//正面ベクトルとのラジアン角をとる
+			XMVECTOR r = XMVector3AngleBetweenVectors(SetController, FrontDirection_);
 
-	//		//ラジアン角度を取得
-	//		float angle = XMVectorGetX(r);
+			//ラジアン角度を取得
+			float angle = XMVectorGetX(r);
 
-	//		//ディグリー角に直す
-	//		float angleDeg = XMConvertToDegrees(angle);
+			//ディグリー角に直す
+			float angleDeg = XMConvertToDegrees(angle);
 
-	//		//Y座標に設定
-	//		this->transform_.rotate_.y = angleDeg;
-	//	}
-	//	//外積Yが0以下なら右周り(時計周り)
-	//	else if (crossY < 0.0)
-	//	{
-	//		//正面ベクトルとのラジアン角をとる
-	//		XMVECTOR r = XMVector3AngleBetweenVectors(SetController, FrontDirection_);
+			//Y回転に設定
+			this->transform_.rotate_.y = angleDeg;
+		}
 
-	//		//ラジアン角度を取得
-	//		float angle = XMVectorGetX(r);
+		
+		else if (crossY > 0.0)
+		{
+			
+		}
+		//CharacterMoveRotate(controller,angleDeg);
+	}
 
-	//		//ディグリー角に直す
-	//		float angleDeg = XMConvertToDegrees(angle);
-
-	//		//Y座標に設定
-	//		this->transform_.rotate_.y = angleDeg;
-	//	}
-	//	//CharacterMoveRotate(controller,angleDeg);
-	//}
-	//else
-	//{
-	//}
 
 
 	//自分の前方ベクトル(回転した分も含む)を更新
@@ -417,11 +362,11 @@ void Player::UpdateIdle()
 		if (IsOnGround_)
 		{
 			IsOnGround_ = false;
-			JumpSpeed_ = 1.8f;//一時的にy方向にマイナスされている値を大きくする
+			JumpSpeed_ = jumpheight;//一時的にy方向にマイナスされている値を大きくする
 		}
 	}
 
-	CharacterGravity();
+	//CharacterGravity();
 
 	CameraControl();
 
@@ -432,7 +377,7 @@ void Player::UpdateIdle()
 void Player::UpdateHit()
 {
 	KnockBack();
-	CharacterGravity();
+	//CharacterGravity();
 
 	if (KnockBack_Velocity_.x <= KnockBackEnd_ || KnockBack_Velocity_.z <= KnockBackEnd_)
 	{
@@ -451,7 +396,7 @@ void Player::UpdateCharge()
 			Acceleration_ = 0.0f;
 			PlayerState_ = S_IDLE;
 			IsOnGround_ = false;
-			JumpSpeed_ = 1.8f;//一時的にy方向にマイナスされている値を大きくする
+			JumpSpeed_ = jumpheight;//一時的にy方向にマイナスされている値を大きくする
 		}
 	}
 
@@ -520,7 +465,7 @@ void Player::UpdateAttack()
 void Player::UpdateWallHit()
 {	
 	KnockBack();
-	CharacterGravity();
+	//CharacterGravity();
 
 	if (KnockBack_Velocity_.x <= KnockBackEnd_ || KnockBack_Velocity_.z <= KnockBackEnd_)
 	{
@@ -531,34 +476,9 @@ void Player::UpdateWallHit()
 		if (pSM->IsBattleScene())
 		{
 			BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
-			//pBattleScene->SetPlayerHp(CharacterLife_);
 			pBattleScene->PlusEnemyScore();
 		}
 	}
-
-	//if (--deadTimer_ < 0)
-	//{
-	//	//BossBattleScene* pBossBattleScene = (BossBattleScene*)FindObject("BossBattleScene");
-	//	//pBossBattleScene->DeadCountPlus();
-
-	//	CharacterLife_--;
-	//	deadTimer_ = deadTimerValue;
-	//	PlayerState_ = S_IDLE;
-	//	IsInvincibility_ = true;
-
-	//	SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
-	//	if (pSM->IsBattleScene())
-	//	{
-	//		BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
-	//		pBattleScene->SetPlayerHp(CharacterLife_);
-	//	}
-	//	else
-	//	{
-
-	//	}
-
-	//	//SetStartPosition();
-	//}
 }
 
 //void Player::PlayerMove()
@@ -592,29 +512,29 @@ void Player::UpdateWallHit()
 //	}
 //}
 
-void Player::Blown()
-{
-	this->transform_.rotate_.x -= MoveRotateX;
-
-	//毎フレーム速度を減少
-	KnockBack_Velocity_.x *= DecelerationRate_;
-	KnockBack_Velocity_.z *= DecelerationRate_;
-
-	//位置 = 位置 + 方向 * 速度
-	XMFLOAT3 TmpPos = this->transform_.position_;
-	TmpPos.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
-	TmpPos.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
-
-	NewPositon_ = XMLoadFloat3(&TmpPos);
-
-	//場外でなければ位置更新 
-	XMFLOAT3 f;
-	XMStoreFloat3(&f, NewPositon_);
-	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
-	{
-		XMStoreFloat3(&this->transform_.position_, NewPositon_);
-	}
-}
+//void Player::Blown()
+//{
+//	this->transform_.rotate_.x -= MoveRotateX;
+//
+//	//毎フレーム速度を減少
+//	KnockBack_Velocity_.x *= DecelerationRate_;
+//	KnockBack_Velocity_.z *= DecelerationRate_;
+//
+//	//位置 = 位置 + 方向 * 速度
+//	XMFLOAT3 TmpPos = this->transform_.position_;
+//	TmpPos.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
+//	TmpPos.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
+//
+//	NewPositon_ = XMLoadFloat3(&TmpPos);
+//
+//	//場外でなければ位置更新 
+//	XMFLOAT3 f;
+//	XMStoreFloat3(&f, NewPositon_);
+//	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
+//	{
+//		XMStoreFloat3(&this->transform_.position_, NewPositon_);
+//	}
+//}
 
 void Player::CameraControl()
 {
@@ -746,26 +666,26 @@ void Player::RockOnCamra()
 {
 }
 
-void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
-{
-	
-	if (!this->IsInvincibility_)
-	{
-	XMFLOAT3 f;
-	XMStoreFloat3(&f, _vector);
-	KnockBack_Direction_ = f;
-
-	if (_IsAttack)
-	{
-		KnockBack_Velocity_.x = KnockBackPower_ * 1.5;
-		KnockBack_Velocity_.z = KnockBackPower_ * 1.5;
-	}
-	else
-	{
-		KnockBack_Velocity_.x = KnockBackPower_;
-		KnockBack_Velocity_.z = KnockBackPower_;
-	}
-
-	PlayerState_ = S_HIT;
-	}
-}
+//void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
+//{
+//	
+//	if (!this->IsInvincibility_)
+//	{
+//	XMFLOAT3 f;
+//	XMStoreFloat3(&f, _vector);
+//	KnockBack_Direction_ = f;
+//
+//	if (_IsAttack)
+//	{
+//		KnockBack_Velocity_.x = KnockBackPower_ * 1.5;
+//		KnockBack_Velocity_.z = KnockBackPower_ * 1.5;
+//	}
+//	else
+//	{
+//		KnockBack_Velocity_.x = KnockBackPower_;
+//		KnockBack_Velocity_.z = KnockBackPower_;
+//	}
+//
+//	PlayerState_ = S_HIT;
+//	}
+//}

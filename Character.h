@@ -160,9 +160,19 @@ public:
     void MoveRotate(){ this->transform_.rotate_.x += MoveRotateX; }
 
     /// <summary>
+    /// ’ÊíX²‰ñ“](“Gƒ‚ƒfƒ‹—p)
+    /// </summary>
+    void MoveRotateReverse(){ this->transform_.rotate_.x -= MoveRotateX; }
+
+    /// <summary>
     /// ‚‘¬X²‰ñ“]
     /// </summary>
     void FastRotate(){ this->transform_.rotate_.x += FastRotateX; }
+
+    /// <summary>
+    /// ‚‘¬X²‰ñ“](“Gƒ‚ƒfƒ‹—p)
+    /// </summary>
+    void FastRotateReverse() { this->transform_.rotate_.x -= FastRotateX; }
 
     /// <summary>
     /// ‰ñ“]‚ğ~‚ß‚é

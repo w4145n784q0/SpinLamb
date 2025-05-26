@@ -63,9 +63,6 @@ private:
 
 public:
 
-	//XMVECTOR GetPlayerDirection() { return ForwardVector_; }//方向ベクトル取得
-	//XMVECTOR GetPlayerPosition() { return PlayerPosition_; }//位置ベクトル取得
-
 	Player(GameObject* parent);
 	~Player();
 
@@ -116,7 +113,7 @@ public:
 	void EnemyReflect(XMVECTOR _vector, bool _IsAttack);
 
 	//攻撃中かどうか取得(接触判定に使用)
-	bool IsAttackState() { if (PlayerState_ == S_ATTACK) return true; else return false; }
+	//bool IsAttackState() { if (PlayerState_ == S_ATTACK) return true; else return false; }
 
 	//bool GetIsInvincibility() { if (IsInvincibility_) return true; else return false; }
 
