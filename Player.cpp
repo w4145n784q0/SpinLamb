@@ -94,7 +94,7 @@ void Player::Update()
 		break;
 	}
 
-	if(!IsInvincibility_ && !PlayerState_ == S_WALLHIT)
+	if(!IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
 	{
 		if (IsOutsideStage(this->transform_.position_))
 		{
@@ -217,12 +217,12 @@ void Player::UpdateIdle()
 	if (Input::IsKey(DIK_UP))
 	{
 		Direction_.z = 1.0;
-		this->transform_.rotate_.x += MoveRotateX;
+		MoveRotate();
 	}
 	if (Input::IsKey(DIK_DOWN))
 	{
 		Direction_.z = -1.0;
-		this->transform_.rotate_.x -= MoveRotateX;
+		MoveRotateReverse();
 	}
 	if (Input::IsKey(DIK_LEFT))
 	{
@@ -235,55 +235,6 @@ void Player::UpdateIdle()
 		cameraTransform_.rotate_.y += 1;
 	}
 
-	//------------------ゲームパッドスティックの移動------------------//
-
-	////前方だけに移動
-	//if (Input::GetPadStickL().y >= 0.5 /*&& Input::GetPadStickL().x <= 0.5 && Input::GetPadStickL().x >= -0.5*/)
-	//{
-	//	Direction_.z = -1.0;
-	//	this->transform_.rotate_.x -= MoveRotateX;
-	//}
-
-	////後方だけに移動
-	//if (Input::GetPadStickL().y <= -0.5 /*&& Input::GetPadStickL().x >= 0.5 && Input::GetPadStickL().x <= -0.5*/)
-	//{
-	//	Direction_.z = 1.0;
-	//	this->transform_.rotate_.x += MoveRotateX;
-	//}
-
-	////前進&左回転
-	//if (Input::GetPadStickL().y >= 0.5 && Input::GetPadStickL().x <= -0.1)
-	//{
-	//	//Direction_.z = -1.0;
-	//	this->transform_.rotate_.y -= 1;
-	//	this->transform_.rotate_.x -= MoveRotateX;
-	//	cameraTransform_.rotate_.y -= 1;
-	//}
-
-	////前進&右回転
-	//if (Input::GetPadStickL().y >= 0.5 && Input::GetPadStickL().x >= 0.1)
-	//{
-	//	//Direction_.z = -1.0;
-	//	this->transform_.rotate_.y += 1;
-	//	this->transform_.rotate_.x += MoveRotateX;
-	//	cameraTransform_.rotate_.y += 1;
-	//}
-
-	////左回転だけ
-	//if (Input::GetPadStickL().x <= -0.25 && Input::GetPadStickL().y <= 0.25)
-	//{
-	//	this->transform_.rotate_.y -= 1;
-	//	cameraTransform_.rotate_.y -= 1;
-	//}
-	////右回転だけ
-	//if (Input::GetPadStickL().x >= 0.25 && Input::GetPadStickL().y <= 0.25)
-	//{
-	//	this->transform_.rotate_.y += 1;
-	//	cameraTransform_.rotate_.y += 1;
-	//}
-
-
-
 	//--------------ダッシュ関係--------------
 
 	if (Input::IsKeyDown(DIK_LSHIFT) || Input::IsKeyDown(DIK_RSHIFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
@@ -294,9 +245,11 @@ void Player::UpdateIdle()
 			PlayerState_ = S_CHARGE;
 		}
 	}
-	//マウス用方向ベクトル
+	//マウス用移動処理
 	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
 	CharacterMoveRotate(move,this->transform_.rotate_.y);
+
+	//------------------ゲームパッドスティックの移動------------------//
 
 	//コントローラーを倒した方向・角度を取得
 	XMVECTOR controller = XMVectorSet(Input::GetPadStickL().x, Input::GetPadStickL().y, Input::GetPadStickL().z, 0.0f);
@@ -309,37 +262,35 @@ void Player::UpdateIdle()
 	//ベクトルの長さを取得して、倒したかどうかを判別
 	float length = XMVectorGetX(XMVector3Length(controller));
 
-	if(length > 0.01f)
+	if (length > 0.01f)
 	{
-		//先に外積求める
-		XMVECTOR cross = XMVector3Cross(SetController,FrontDirection_);
-		
+		//コントローラー方向と前向きベクトルの外積求める（）
+		XMVECTOR cross = XMVector3Cross(SetController, FrontDirection_);
+
 		//Y外積をとり+か-かで倒し回転方向を求める
 		float crossY = XMVectorGetY(cross);
 
-		//外積Yが0以下なら右周り(時計周り)
-		if (crossY < 0.0)
+		//正面ベクトルとのラジアン角をとる
+		XMVECTOR r = XMVector3AngleBetweenVectors(SetController, FrontDirection_);
+
+		//ラジアン角度を取得
+		float angle = XMVectorGetX(r);
+
+		//ディグリー角に直す
+		float angleDeg = XMConvertToDegrees(angle);
+
+		// crossYの正負に応じて回転角度の符号を変える
+		if (crossY > 0)
 		{
-			//正面ベクトルとのラジアン角をとる
-			XMVECTOR r = XMVector3AngleBetweenVectors(SetController, FrontDirection_);
-
-			//ラジアン角度を取得
-			float angle = XMVectorGetX(r);
-
-			//ディグリー角に直す
-			float angleDeg = XMConvertToDegrees(angle);
-
-			//Y回転に設定
-			this->transform_.rotate_.y = angleDeg;
+			angleDeg = -angleDeg;
 		}
 
-		
-		else if (crossY > 0.0)
-		{
-			
-		}
-		//CharacterMoveRotate(controller,angleDeg);
+		this->transform_.rotate_.y = angleDeg;
+		MoveRotate();
+		CharacterMove(SetController);
 	}
+		
+	
 
 
 
@@ -414,32 +365,14 @@ void Player::UpdateCharge()
 		//ArrowTransform_.rotate_.y += 1;
 	}
 
-	//左回転だけ
-	if (Input::GetPadStickL().x <= -0.8 && Input::GetPadStickL().y <= 0.8)
-	{
-		this->transform_.rotate_.y -= 1;
-		cameraTransform_.rotate_.y -= 1;
-		//ArrowTransform_.rotate_.y -= 1;
-	}
-	//右回転だけ
-	if (Input::GetPadStickL().x >= 0.8 && Input::GetPadStickL().y <= 0.8)
-	{
-		this->transform_.rotate_.y += 1;
-		cameraTransform_.rotate_.y += 1;
-		//ArrowTransform_.rotate_.y += 1;
-	}
-
 	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
 	{
-		//VFX::End(hChargeEmit_);
-		//SetAttackLocusEffect();
-		//SetAttackAuraEffect();
 		PlayerState_ = S_ATTACK;
 	}
 
 	Charging();
 
-	this->transform_.rotate_.x += FastRotateX;
+	FastRotate();
 	CameraControl();
 }
 
@@ -449,7 +382,7 @@ void Player::UpdateAttack()
 
 	Acceleration_ -= AcceleValue_;
 	Direction_.z = 1.0;
-	this->transform_.rotate_.x -= FastRotateX;
+	FastRotate();
 	if (Acceleration_ <= 0)
 	{
 		Acceleration_ = 0.0f;
