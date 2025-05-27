@@ -4,9 +4,20 @@ class ClearScene :
     public GameObject
 {
 private:
-	int hImage_;
+	//----------画像ハンドル----------
+
+	//タイトル画像
+	int hBackScreen_;
+
+	//"you win"のロゴ
 	int hlogoResult_;
+
+	//"push title"のロゴ
 	int hlogoTitle_;
+
+	//----------サウンドハンドル----------
+
+	//ゲームクリアサウンド
 	int hClearSound_;
 public:
 	//コンストラクタ

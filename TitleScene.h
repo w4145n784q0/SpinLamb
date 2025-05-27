@@ -4,7 +4,14 @@ class TitleScene :
     public GameObject
 {
 private:
-	int hImage_;
+	//----------画像ハンドル----------
+
+	//タイトル画像
+	int hBackScreen_;
+
+	//----------サウンドハンドル----------
+
+	//タイトル用サウンド
 	int hTitleSound_;
 public:
 	//コンストラクタ

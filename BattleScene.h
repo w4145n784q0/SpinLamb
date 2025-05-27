@@ -10,24 +10,28 @@ class BattleScene :
 private:
 
 	//インスタンス
-	Text* pTime_;
 	Text* pPlayerScore_;
 	Text* pEnemyScore_;
 
+	//----------バトルシーンステート----------
 	enum Battle
 	{
-		BEFORE,
-		NOW,
-		AFTER,
+		BEFORE,//開始前
+		NOW,//バトル中
+		AFTER,//終了後
 		MAX
 	};
 	Battle BattleState;
 
-	//音ハンドル
+	//----------サウンドハンドル----------
+
+	//バトル中サウンド
 	int hBattleSound_;
+
+	//終了ホイッスルサウンド
 	int hWhistle_;
 
-	//制限時間
+	//現在の時間(1秒ごとに減少)
 	int GameTime_;
 
 	int PlayerScore_;
@@ -53,12 +57,6 @@ public:
 	void UpdateBattleBefore();
 	void UpdateBattle();
 	void UpdateBattleAfter();
-
-	void DrawBattleBefore();
-	void DrawBattle();
-	void DrawBattleAfter();
-
-
 
 	void PlusPlayerScore() { PlayerScore_++; }
 	void PlusEnemyScore() { EnemyScore_++; }

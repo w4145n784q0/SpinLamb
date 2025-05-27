@@ -179,7 +179,6 @@
     <ClCompile Include="imgui\imgui_widgets.cpp" />
     <ClCompile Include="MiniMap.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PlayScene.cpp" />
     <ClCompile Include="PracticeScene.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="TestScene.cpp" />
@@ -229,7 +228,6 @@
     <ClInclude Include="imgui\imstb_truetype.h" />
     <ClInclude Include="MiniMap.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="PlayScene.h" />
     <ClInclude Include="PracticeScene.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="StageManager.h" />

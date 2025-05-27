@@ -10,22 +10,11 @@
 //•`‰æ‘€ì‚Ì‚Ýˆµ‚¤ƒNƒ‰ƒX
 namespace
 {
-
-
-
 	Transform pScoreTen;
 	Transform pScoreOne;
 	Transform eScoreTen;
 	Transform eScoreOne;
 
-
-	const XMFLOAT3 BackTitlePosition = { -0.55,-0.9,0 };
-	const XMFLOAT3 PracticePosition = { -0.8,0.9,0 };
-	//const XMFLOAT3 CountDownPosition = { 0.5,0.5,0 };
-	const XMFLOAT3 StartPosition = { 0.0,0.5,0 };
-	const XMFLOAT3 FinishPosition = { 0.0,0,0 };
-	const XMFLOAT3 TenTimePosition = { -0.05,0.9,0 };
-	const XMFLOAT3 OneTimePosition = { 0.05,0.9,0 };
 
 	const XMFLOAT3 pScoreTenPosition = { -0.95,0.9,0 };
 	const XMFLOAT3 pScoreOnePosition = { -0.9,0.9,0 };
@@ -33,6 +22,8 @@ namespace
 	const XMFLOAT3 eScoreTenPosition = { 0.95,0.9,0 };
 	const XMFLOAT3 eScoreOnePosition = { 0.9,0.9,0 };
 
+	//ŽžŠÔ‚ÉœŽZ‚·‚é’l
+	const int  TimeDivision = 10;
 }
 
 HUD::HUD(GameObject* parent)
@@ -48,9 +39,9 @@ void HUD::Initialize()
 {
 	SetCSV();
 
-	hBackTitleLogo_ = Image::Load("Image\\BackTitleLogo.png");
+	hBackTitleLogo_ = Image::Load("Image\\Practice\\BackTitleLogo.png");
 	assert(hBackTitleLogo_ >= 0);
-	hPracticeNow_ = Image::Load("Image\\PracticeLogo.png");
+	hPracticeNow_ = Image::Load("Image\\Practice\\PracticeLogo.png");
 	assert(hPracticeNow_ >= 0);
 
 	/*std::string Number = "Image\\number.png";
@@ -64,10 +55,10 @@ void HUD::Initialize()
 	hTime_ = Image::Load(Number);
 	assert(hTime_ >= 0);*/
 
-	hStart_ = Image::Load("Image\\start_logo.png");
+	hStart_ = Image::Load("Image\\Battle\\start_logo.png");
 	assert(hStart_ >= 0);
 
-	hFinish_ = Image::Load("Image\\finish_logo.png");
+	hFinish_ = Image::Load("Image\\Battle\\finish_logo.png");
 	assert(hFinish_ >= 0);
 	
 	/*hCountDown3_ = Image::Load("Image\\number_3.png");
@@ -190,14 +181,14 @@ void HUD::UpdateBattlePreStart()
 
 void HUD::UpdateBattleInProgress()
 {
-	Timeten_ = TimeNumber_ / 10;
-	Timeone_ = TimeNumber_ % 10;
+	Timeten_ = TimeNumber_ / TimeDivision;
+	Timeone_ = TimeNumber_ % TimeDivision;
 
-	PlayerTen_ = PlayerScore_ / 10;
-	PlayerOne_ = PlayerScore_ % 10;
+	PlayerTen_ = PlayerScore_ / TimeDivision;
+	PlayerOne_ = PlayerScore_ % TimeDivision;
 
-	EnemyTen_ =  EnemyScore_ / 10;
-	EnemyOne_ = EnemyScore_ % 10;
+	EnemyTen_ =  EnemyScore_ / TimeDivision;
+	EnemyOne_ = EnemyScore_ % TimeDivision;
 }
 
 void HUD::UpdateBattleEnd()

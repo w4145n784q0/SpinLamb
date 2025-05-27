@@ -7,10 +7,10 @@ enum SCENE_ID
 {
 	SCENE_ID_TITLE = 0,
 	SCENE_ID_GAMEMODE,
+	SCENE_ID_BATTLE,
+	SCENE_ID_PRACTICE,
 	SCENE_ID_CLEAR,
 	SCENE_ID_GAMEOVER,
-	SCENE_ID_BATTLE,
-	SCENE_ID_PRACTICE
 };
 
 //-----------------------------------------------------------

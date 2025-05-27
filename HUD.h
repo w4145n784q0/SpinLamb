@@ -40,7 +40,7 @@ private:
 
 	//std::array<int, 3> CountDownArray_;
 
-	//----------ゲームシーン(状態により描画内容を変更)----------
+	//----------ゲームシーンステート(状態により描画内容を変更)----------
 	enum GameMode
 	{
 		BattlePreStart,//バトルシーン開始前

@@ -1,7 +1,6 @@
 #include "Fence.h"
 #include"Engine/Model.h"
 #include"Engine/BoxCollider.h"
-#include"Engine/CsvReader.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
@@ -95,15 +94,3 @@ void Fence::SetPiller(float upper, float lower, float left, float right)
 	pillers[2].position_ = piller_LowerLeft_;
 	pillers[3].position_ = piller_LowerRight_;
 }
-
-//void Fence::SetSCV()
-//{
-//	CsvReader csv;
-//	csv.Load("CSVdata\\StageData.csv");
-//
-//	this->transform_.position_ = { csv.GetValueFloat(1, 1), csv.GetValueFloat(1, 2), csv.GetValueFloat(1, 3) };
-//	piller_UpperLeft_ = { csv.GetValueFloat(1, 4), csv.GetValueFloat(1, 5), csv.GetValueFloat(1, 6) };
-//	piller_UpperRight_ = { csv.GetValueFloat(1, 7), csv.GetValueFloat(1, 8), csv.GetValueFloat(1, 9) };
-//	piller_LowerLeft_ = { csv.GetValueFloat(1, 10), csv.GetValueFloat(1, 11), csv.GetValueFloat(1, 12) };
-//	piller_LowerRight_ = { csv.GetValueFloat(1, 13), csv.GetValueFloat(1, 14), csv.GetValueFloat(1, 15) };
-//}

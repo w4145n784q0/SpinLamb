@@ -5,11 +5,8 @@
 #include"Engine/Audio.h"
 
 #include"Player.h"
-#include"Ground.h"
 #include"Enemy.h"
-#include"EnemyManager.h"
 #include"MiniMap.h"
-#include"Fence.h"
 #include"HUD.h"
 #include"StageManager.h"
 
@@ -19,9 +16,17 @@
 
 namespace
 {
+	//時間計測
 	int Timecounter = 0;
+
+	//1秒カウント
 	const int oneSecond = 60;
+
+	//制限時間
 	const int GameTimeLimit = 60;
+
+	//次のシーン遷移までの時間
+	const int SceneTransition = 120;
 }
 
 BattleScene::BattleScene(GameObject* parent)
@@ -95,9 +100,6 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
-	
-	//ImGui::Text("count :%1f", (float)Timecounter);
-
 	pPlayerScore_->Draw(30, 30, PlayerScore_);
 	pEnemyScore_->Draw(1250, 30, EnemyScore_);
 
@@ -116,22 +118,6 @@ void BattleScene::Draw()
 		Image::Draw(hEnemyLife_);
 	}*/
 
-	switch (BattleState)
-	{
-	case BattleScene::BEFORE:
-		DrawBattleBefore();
-		break;
-	case BattleScene::NOW:
-		DrawBattle();
-		break;
-	case BattleScene::AFTER:
-		DrawBattleAfter();
-		break;
-	case BattleScene::MAX:
-		break;
-	default:
-		break;
-	}
 }
 
 void BattleScene::Release()
@@ -186,40 +172,25 @@ void BattleScene::UpdateBattle()
 
 void BattleScene::UpdateBattleAfter()
 {
-	static bool Issound = true;
-	if (Issound)
+	static bool IsSound = true;
+	if (IsSound)
 	{
 		Audio::Play(hWhistle_);
-		Issound = false;
+		IsSound = false;
 	}
 
 
-	static int time = 120;
-	if (--time < 0)
+	if (++Timecounter > SceneTransition)
 	{
-		
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		if (PlayerScore_ > EnemyScore_)
 		{
-			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 			pSceneManager->ChangeScene(SCENE_ID_CLEAR);
 		}
 		else
 		{
-			SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 			pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
 		}
-		time = 120;
+		Timecounter = 0;
 	}
-}
-
-void BattleScene::DrawBattleBefore()
-{
-}
-
-void BattleScene::DrawBattle()
-{
-}
-
-void BattleScene::DrawBattleAfter()
-{	
 }

@@ -3,6 +3,7 @@
 #include"Engine/Input.h"
 #include"Engine/SceneManager.h"
 #include"Engine/Audio.h"
+#include"Engine/CsvReader.h"
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
@@ -24,9 +25,11 @@ GameModeScene::GameModeScene(GameObject* parent)
 
 void GameModeScene::Initialize()
 {
+	SetSCV();
+
 	std::string path = "Image\\GameMode\\";
 
-	hBackScreen_ = Image::Load(path + "back_mode2.jpg");
+	hBackScreen_ = Image::Load(path + "back_mode.jpg");
 	assert(hBackScreen_ >= 0);
 
 	hBackChara_ = Image::Load(path + "sheepImage.png");
@@ -50,7 +53,7 @@ void GameModeScene::Initialize()
 	hFrameLine_ = Image::Load(path + "LineFrame.png");
 	assert(hFrameLine_ >= 0);
 
-	hModeSelect_ = Image::Load(path + "ModeSelect2.png");
+	hModeSelect_ = Image::Load(path + "ModeSelect.png");
 	assert(hModeSelect_>= 0);
 
 	hBattleText_ = Image::Load(path + "BattleText.png");
@@ -68,18 +71,9 @@ void GameModeScene::Initialize()
 	hModeSound_ = Audio::Load("Sound\\maou_game_rock54.wav");
 	assert(hModeSound_ >= 0);
 
-	ModeSetTrans[0].position_ = { 0.5,0.6,0 };//選択枠の位置
-	ModeSetTrans[1].position_ = { 0.5,0.6,0 };//プレイの位置
-	ModeSetTrans[2].position_ = { 0.5,0.2,0 };//練習の位置
-	ModeSetTrans[3].position_ = { 0.5,-0.2,0 };//遊び方の位置
-	ModeSetTrans[4].position_ = { 0.5,-0.6,0 };//タイトルの位置
-
 	//各テキストハンドルを配列に入れる
 	TextArray_ = {hBattleText_, hFreePlayText_, hHowtoPlayText_, hTitleText_};
 	
-	Trans_Select_.position_ = { -0.5,0.7,0 };
-	Trans_Text_.position_ = { -0.17,-0.9,0 };
-
 	ModeList_ = { Battle,Practice,HowToPlay,Title };
 	itr = ModeList_.begin();
 }
@@ -229,4 +223,45 @@ void GameModeScene::Draw()
 
 void GameModeScene::Release()
 {
+}
+
+void GameModeScene::SetSCV()
+{
+	CsvReader csv;
+	csv.Load("CSVdata\\GameModeData.csv");
+
+	//選択枠
+	ModeSetTrans[0].position_ = { csv.GetValueFloat(1, 1), csv.GetValueFloat(1, 2), csv.GetValueFloat(1, 3) };
+	ModeSetTrans[0].rotate_ = { csv.GetValueFloat(1, 4), csv.GetValueFloat(1, 5), csv.GetValueFloat(1, 6) };
+	ModeSetTrans[0].scale_ = { csv.GetValueFloat(1, 7), csv.GetValueFloat(1, 8), csv.GetValueFloat(1, 9) };
+
+	//プレイボタン
+	ModeSetTrans[1].position_ = { csv.GetValueFloat(2, 1), csv.GetValueFloat(2, 2), csv.GetValueFloat(2, 3) };
+	ModeSetTrans[1].rotate_ = { csv.GetValueFloat(2, 4), csv.GetValueFloat(2, 5), csv.GetValueFloat(2, 6) };
+	ModeSetTrans[1].scale_ = { csv.GetValueFloat(2, 7), csv.GetValueFloat(2, 8), csv.GetValueFloat(2, 9) };
+
+	//フリープレイボタン
+	ModeSetTrans[2].position_ = { csv.GetValueFloat(3, 1), csv.GetValueFloat(3, 2), csv.GetValueFloat(3, 3) };
+	ModeSetTrans[2].rotate_ = { csv.GetValueFloat(3, 4), csv.GetValueFloat(3, 5), csv.GetValueFloat(3, 6) };
+	ModeSetTrans[2].scale_ = { csv.GetValueFloat(3, 7), csv.GetValueFloat(3, 8), csv.GetValueFloat(3, 9) };
+
+	//遊び方ボタン
+	ModeSetTrans[3].position_ = { csv.GetValueFloat(4, 1), csv.GetValueFloat(4, 2), csv.GetValueFloat(4, 3) };
+	ModeSetTrans[3].rotate_ = { csv.GetValueFloat(4, 4), csv.GetValueFloat(4, 5), csv.GetValueFloat(4, 6) };
+	ModeSetTrans[3].scale_ = { csv.GetValueFloat(4, 7), csv.GetValueFloat(4, 8), csv.GetValueFloat(4, 9) };
+
+	//タイトルボタン
+	ModeSetTrans[4].position_ = { csv.GetValueFloat(5, 1), csv.GetValueFloat(5, 2), csv.GetValueFloat(5, 3) };
+	ModeSetTrans[4].rotate_ = { csv.GetValueFloat(5, 4), csv.GetValueFloat(5, 5), csv.GetValueFloat(5, 6) };
+	ModeSetTrans[4].scale_ = { csv.GetValueFloat(5, 7), csv.GetValueFloat(5, 8), csv.GetValueFloat(5, 9) };
+
+	//"モードセレクト"
+	Trans_Select_.position_ = { csv.GetValueFloat(6, 1), csv.GetValueFloat(6, 2), csv.GetValueFloat(6, 3) };
+	Trans_Select_.rotate_ = { csv.GetValueFloat(6, 4), csv.GetValueFloat(6, 5), csv.GetValueFloat(6, 6) };
+	Trans_Select_.scale_ = { csv.GetValueFloat(6, 7), csv.GetValueFloat(6, 8), csv.GetValueFloat(6, 9) };
+
+	//画面下部のテキスト
+	Trans_Text_.position_ = { csv.GetValueFloat(7, 1), csv.GetValueFloat(7, 2), csv.GetValueFloat(7, 3) };
+	Trans_Text_.rotate_ = { csv.GetValueFloat(7, 4), csv.GetValueFloat(7, 5), csv.GetValueFloat(7, 6) };
+	Trans_Text_.scale_ = { csv.GetValueFloat(7, 7), csv.GetValueFloat(7, 8), csv.GetValueFloat(7, 9) };
 }

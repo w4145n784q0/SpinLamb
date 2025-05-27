@@ -1,9 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"Character.h"
-#include"Ground.h"
-#include"Engine/VFX.h"
-#include"Engine/CsvReader.h"
 
 class Player :
     public Character
@@ -24,9 +21,6 @@ private:
 
 	//接触音
 	int hCollisionSound_;
-
-	//----------インスタンス関係----------
-	//Ground* pGround_;
 
 	//----------プレイヤーステート----------
 	enum State
@@ -84,14 +78,9 @@ public:
 	//プレイヤーを止める
 	void PlayerStop() { PlayerState_ = S_MAX; }
 	
-	//プレイヤーの能動的移動
-	//void PlayerMove();
+	//ジャンプ開始
+	void SetJump();
 
-	//プレイヤーがはじかれる動作
-	void Blown();
-
-	//プレイヤーの重力
-	//void Gravity();
 
 	//カメラの操作（一部のステートのみ）
 	void CameraControl();

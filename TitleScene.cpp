@@ -5,14 +5,14 @@
 #include"Engine/Audio.h"
 
 TitleScene::TitleScene(GameObject* parent)
-	:GameObject(parent,"TitleScene"),hImage_(-1),hTitleSound_(-1)
+	:GameObject(parent,"TitleScene"), hBackScreen_(-1),hTitleSound_(-1)
 {
 }
 
 void TitleScene::Initialize()
 {
-	hImage_ = Image::Load("Image\\TitleScreen.jpg");
-	assert(hImage_ >= 0);
+	hBackScreen_ = Image::Load("Image\\Title\\TitleScreen.jpg");
+	assert(hBackScreen_ >= 0);
 	hTitleSound_ = Audio::Load("Sound\\maou_game_rock45.wav"); 
 	assert(hTitleSound_ >= 0);
 }
@@ -32,8 +32,8 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
-	Image::SetTransform(hImage_, transform_);
-	Image::Draw(hImage_);
+	Image::SetTransform(hBackScreen_, this->transform_);
+	Image::Draw(hBackScreen_);
 }
 
 void TitleScene::Release()

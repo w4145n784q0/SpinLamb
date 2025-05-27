@@ -28,7 +28,7 @@ private:
 	int hTitleText_;//画面下部のテキスト(タイトル用)
 	std::array<int, 4> TextArray_;//各テキストのハンドル配列
 
-	//----------サウンド----------
+	//----------サウンドハンドル----------
 	int hModeSound_;
 
 	enum Mode
@@ -64,5 +64,7 @@ public:
 
 	//開放
 	void Release() override;
+
+	void SetSCV();
 };
 

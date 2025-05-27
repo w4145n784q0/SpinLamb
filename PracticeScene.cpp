@@ -4,10 +4,7 @@
 #include"Engine/SceneManager.h"
 
 #include"Player.h"
-#include"Ground.h"
 #include"Enemy.h"
-#include"EnemyManager.h"
-#include"Fence.h"
 #include"MiniMap.h"
 #include"HUD.h"
 #include"StageManager.h"
@@ -28,9 +25,6 @@ PracticeScene::~PracticeScene()
 
 void PracticeScene::Initialize()
 {
-	//Instantiate<Ground>(this);
-	//Instantiate<Fence>(this);
-
 	Instantiate<StageManager>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);

@@ -131,11 +131,6 @@ public:
     void MoveConfirm();
 
     /// <summary>
-    /// 減速処理
-    /// </summary>
-    void Deceleration(){ Acceleration_ -= AcceleValue_; }
-
-    /// <summary>
     /// 反射処理
     /// </summary>
     /// <param name="myVector">自身の位置ベクトル</param>
@@ -154,6 +149,10 @@ public:
     /// </summary>
     void WallHit();
 
+    /// <summary>
+    /// ノックバック終了判定
+    /// </summary>
+    /// <returns>ノックバック速度が終了値以下か</returns>
     bool IsKnockBackEnd();
 
     /// <summary>
@@ -182,7 +181,7 @@ public:
     void FastRotateReverse() { this->transform_.rotate_.x -= FastRotateX; }
 
     /// <summary>
-    /// 回転を止める
+    /// X回転を止める
     /// </summary>
     void RotateStop(){ this->transform_.rotate_.x = 0.0f; }
 
@@ -191,6 +190,16 @@ public:
     /// </summary>
     void Charging();
 
+    /// <summary>
+    /// 減速処理
+    /// </summary>
+    void Deceleration() { Acceleration_ -= AcceleValue_; }
+
+    /// <summary>
+    /// 停止判定
+    /// </summary>
+    /// <returns>加速量が0.0以下かどうか</returns>
+    bool IsDashStop() { if (Acceleration_ <= 0.0f) return true; else return false; }
 
     /// <summary>
     /// Y軸の回転行列をベクトルに変換
@@ -200,24 +209,17 @@ public:
     /// <returns>変形したベクトル（ワールド空間）</returns>
     XMVECTOR RotateVecFront(float rotY, XMVECTOR front);
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="rotY"></param>
-    /// <param name="front"></param>
-    /// <returns></returns>
-    XMVECTOR CalclationForward(float rotY, XMVECTOR front);
-
 
     //----------エフェクト処理----------
-
+    
     /// <summary>
     /// チャージ状態エフェクトをつける
     /// </summary>
+    /// <param name="_path">csvを読み込むパス</param>
     void SetChargingEffect(std::string _path);
 
     /// <summary>
-    /// 突撃エフェクトつける
+    /// 突撃エフェクトつける(プレイヤーの背後に光の粒子)
     /// </summary>
     void SetAttackLocusEffect();
 

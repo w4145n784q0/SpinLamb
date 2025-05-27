@@ -13,14 +13,16 @@
 
 namespace
 {
-	//const int EyeAngle = 60;
-	//const float EyeLength = 10.0f;
+	int blinkTimer = 0;
+	const int blink = 20;
+
 	const int HitStop = 2;//ヒットストップする時間
 	const float ChaseLength = 10.0f;//追跡状態から攻撃準備に移る距離
-	const float lookRotateValue = 1.5f;//プレイヤー方向を向く際の1fごとの回転量
+	const float LookRotaeAngle = 3;//敵がプレイヤーの方向を向く際のトリガー　この値を超えたら回転
+	const float LookRotateValue = 1.5f;//プレイヤー方向を向く際の1fごとの回転量
 	int RandomAim = 0;//EnemyAttackTimeArrayの添え字 
 	const int EnemyAttackTimeArray[] = { 180,150,120,60 };//敵が攻撃するまでの時間の配列　ランダムに選ばれる
-	}
+}
 
 Enemy::Enemy(GameObject* parent)
 	:Character(parent,"Enemy"), hEnemy_(-1), pPlayer_(nullptr),
@@ -116,8 +118,23 @@ void Enemy::Update()
 
 void Enemy::Draw()
 {
-	Model::SetTransform(hEnemy_, transform_);
-	Model::Draw(hEnemy_);
+	//Model::SetTransform(hEnemy_, transform_);
+	//Model::Draw(hEnemy_);
+
+	if (IsInvincibility_)
+	{
+		if (++blinkTimer > blink) {
+
+			blinkTimer = 0;
+			Model::SetTransform(hEnemy_, this->transform_);
+			Model::Draw(hEnemy_);
+		}
+	}
+	else
+	{
+		Model::SetTransform(hEnemy_, this->transform_);
+		Model::Draw(hEnemy_);
+	}
 
 	ShadowDraw();
 
@@ -130,8 +147,8 @@ void Enemy::Draw()
 			EnemyState_ = S_ROOT;
 	}
 
-	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, MoveDirection_);
+	//XMFLOAT3 tmp;
+	//XMStoreFloat3(&tmp, MoveDirection_);
 
 	//ImGui::Text("front.x:%3f", (float)tmp.x);
 	//ImGui::Text("front.y:%3f", (float)tmp.y);
@@ -146,28 +163,7 @@ void Enemy::Release()
 }
 
 void Enemy::UpdateIdle()
-{	
-	////自分(enemy)と相手(player)の距離をはかる(ベクトル)
-	//XMVECTOR DistVec = XMVectorSubtract(EnemyPosition_, pPositionVec_);
-	//float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
-
-	//XMVECTOR forward = RotateVecFront(this->transform_.rotate_.y,EnemyFrontDirection_);//自分の前方ベクトル(回転した分も含む)
-	//DistVec = XMVector3Normalize(DistVec);//自分と相手の距離ベクトル 内積の計算用
-	//XMVECTOR dot = XMVector3Dot(DistVec, forward);//相手とのベクトルと自分の前方ベクトルの内積をとる
-	//float cosine = XMVectorGetX(dot);
-
-	//if (cosine > cosf(Eye_) && Pointdist < FrontLength_) //距離は60度以内か相手との距離がFrontLengthより小さい
-	//{
-	//	IsHit_ = true;
-	//}
-	//else {
-	//	IsHit_ = false;
-	//}
-	//
-	//if (IsHit_)
-	//{
-	//	EnemyState_ = S_CHASE;
-	//}
+{
 }
 
 void Enemy::UpdateRoot()
@@ -187,7 +183,6 @@ void Enemy::UpdateRoot()
 void Enemy::UpdateChase()
 {
 	MoveRotateReverse();
-	//this->transform_.rotate_.x -= MoveRotateX;
 
 	LookPlayer();
 	CharacterMove(MoveDirection_);
@@ -269,12 +264,12 @@ void Enemy::UpdateAttack()
 	CharacterMove(MoveDirection_);
 
 	//速度を毎フレーム減少
-	Acceleration_ -= AcceleValue_;
+	Deceleration();
 
 	//キャラモデル回転
 	FastRotateReverse();
 
-	if (Acceleration_ <= 0.0f)
+	if (IsDashStop())
 	{
 		RotateStop();
 		EnemyState_ = S_ROOT;
@@ -309,11 +304,6 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 void Enemy::LookPlayer()
 {
-	//自分(enemy)と相手(player)の距離をはかる(ベクトル)
-	//XMVECTOR DistVec = XMVectorSubtract(EnemyPosition_, pPositionVec_);
-	//float Pointdist = XMVectorGetX(XMVector3Length(DistVec));
-
-	
 	//------------敵と自機の回転処理------------
 
 	//XMMATRIX mvec = transform_.matRotate_;//現在の回転している方向（自分の回転行列）
@@ -349,17 +339,17 @@ void Enemy::LookPlayer()
 	//二つのベクトル間のラジアン角を度数に戻し
 	//一定以上開いているなら回転
 	float Dig = XMConvertToDegrees(XMVectorGetX(angle));
-	if (Dig > 3)
+	if (Dig > LookRotaeAngle)
 	{
 		//外積Yが0以上なら左周り(半時計周り)
 		if (crossY > 0.0)
 		{
-			transform_.rotate_.y -= lookRotateValue;
+			transform_.rotate_.y -= LookRotateValue;
 		}
 		//外積Yが0以下なら右周り(時計周り)
 		else if (crossY < 0.0)
 		{
-			transform_.rotate_.y += lookRotateValue;
+			transform_.rotate_.y += LookRotateValue;
 		}
 	}
 

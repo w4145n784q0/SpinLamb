@@ -25,13 +25,13 @@ MiniMap::~MiniMap()
 
 void MiniMap::Initialize()
 {
-	hMap_ = Image::Load("Image\\minimap.png");
+	hMap_ = Image::Load("Image\\MiniMap\\minimap.png");
 	assert(hMap_ >= 0);
 
-	hPlayerIcon_ = Image::Load("Image\\blue_circle.png");
+	hPlayerIcon_ = Image::Load("Image\\MiniMap\\blue_circle.png");
 	assert(hPlayerIcon_ >= 0);
 
-	hEnemyIcon_ = Image::Load("Image\\red_circle.png");
+	hEnemyIcon_ = Image::Load("Image\\MiniMap\\red_circle.png");
 	assert(hEnemyIcon_ >= 0);
 
 	pPlayer_ = (Player*)FindObject("Player");

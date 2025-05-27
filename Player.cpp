@@ -25,7 +25,7 @@ namespace {
 Player::Player(GameObject* parent) 
 	: Character(parent,"Player"),
 	hPlayer_(-1), /*hAttackArrow_(-1),*/ hShadow_(-1), hCollisionSound_(-1),
-	/*pGround_(nullptr),*/PlayerState_(S_MAX),CameraState_(S_NORMALCAMERA),
+	PlayerState_(S_MAX),CameraState_(S_NORMALCAMERA),
 	
 
 	Direction_({ 0,0,0 }),BackCamera_(BackCameraPos)
@@ -33,8 +33,6 @@ Player::Player(GameObject* parent)
 	cameraTransform_ = this->transform_;
 	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
 	CameraTarget_ = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
-
-	//srand((unsigned)time(NULL));
 }
 
 Player::~Player()
@@ -60,8 +58,6 @@ void Player::Initialize()
 
 	SetStartPosition();
 	//ArrowTransform_.rotate_.y = 180.0f;
-
-	//pGround_ = (Ground*)FindObject("Ground");
 	
 	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),ColliderSize_);
 	this->AddCollider(collider);
@@ -123,7 +119,7 @@ void Player::Draw()
 	//Model::SetTransform(hPlayer_, this->transform_);
 	//Model::Draw(hPlayer_);
 
-	ShadowDraw();
+
 
 	if (IsInvincibility_)
 	{			
@@ -139,6 +135,8 @@ void Player::Draw()
 		Model::SetTransform(hPlayer_, this->transform_);
 		Model::Draw(hPlayer_);
 	}
+
+	ShadowDraw();
 
 	/*if (PlayerState_ == S_CHARGE)
 	{
@@ -197,8 +195,6 @@ void Player::OnCollision(GameObject* pTarget)
 
 		//衝撃音
 		Audio::Play(hCollisionSound_);
-
-		//Acceleration_ = 0;
 	}
 
 	if (pTarget->GetObjectName() == "Fence")
@@ -235,19 +231,8 @@ void Player::UpdateIdle()
 		cameraTransform_.rotate_.y += 1;
 	}
 
-	//--------------ダッシュ関係--------------
-
-	if (Input::IsKeyDown(DIK_LSHIFT) || Input::IsKeyDown(DIK_RSHIFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
-	{
-		if (IsOnGround_)
-		{
-			//SetChargeEffect();
-			PlayerState_ = S_CHARGE;
-		}
-	}
-	//マウス用移動処理
 	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
-	CharacterMoveRotate(move,this->transform_.rotate_.y);
+	CharacterMoveRotate(move, this->transform_.rotate_.y);
 
 	//------------------ゲームパッドスティックの移動------------------//
 
@@ -286,24 +271,31 @@ void Player::UpdateIdle()
 		}
 
 		this->transform_.rotate_.y = angleDeg;
+		cameraTransform_.rotate_.y = angleDeg;
 		MoveRotate();
 		CharacterMove(SetController);
 	}
-		
-	
-
-
 
 	//自分の前方ベクトル(回転した分も含む)を更新
 	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);
+
+
+	//------------------攻撃状態へ移行------------------//
+
+	if (Input::IsKeyDown(DIK_LSHIFT) || Input::IsKeyDown(DIK_RSHIFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
+	{
+		if (IsOnGround_)
+		{
+			PlayerState_ = S_CHARGE;
+		}
+	}
 
 	//------------------ジャンプ------------------
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
 	{
 		if (IsOnGround_)
 		{
-			IsOnGround_ = false;
-			JumpSpeed_ = jumpheight;//一時的にy方向にマイナスされている値を大きくする
+			SetJump();
 		}
 	}
 
@@ -330,13 +322,10 @@ void Player::UpdateCharge()
 		if (IsOnGround_)
 		{
 			Acceleration_ = 0.0f;
-
-			IsOnGround_ = false;
-			JumpSpeed_ = jumpheight;//一時的にy方向にマイナスされている値を大きくする
+			SetJump();
 			PlayerState_ = S_IDLE;
 		}
 	}
-
 
 	if (Input::IsKey(DIK_LEFT))
 	{
@@ -357,7 +346,6 @@ void Player::UpdateCharge()
 	}
 
 	Charging();
-
 	FastRotate();
 	CameraControl();
 }
@@ -369,7 +357,7 @@ void Player::UpdateAttack()
 	Deceleration();
 	Direction_.z = 1.0;
 	FastRotate();
-	if (Acceleration_ <= 0)
+	if (IsDashStop())
 	{
 		Acceleration_ = 0.0f;
 		PlayerState_ = S_IDLE;
@@ -382,7 +370,6 @@ void Player::UpdateAttack()
 void Player::UpdateWallHit()
 {	
 	KnockBack();
-	//CharacterGravity();
 
 	if (IsKnockBackEnd())
 	{
@@ -396,6 +383,12 @@ void Player::UpdateWallHit()
 			pBattleScene->PlusEnemyScore();
 		}
 	}
+}
+
+void Player::SetJump()
+{
+	IsOnGround_ = false;
+	JumpSpeed_ = jumpheight;//一時的にy方向にマイナスされている値を大きくする
 }
 
 void Player::CameraControl()

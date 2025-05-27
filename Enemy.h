@@ -1,7 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"Player.h"
-#include"Ground.h"
+
 class Player;
 
 class Enemy :
@@ -34,15 +34,11 @@ private:
 
 	//----------攻撃関係----------
 	int AimTimer_;//狙ってから攻撃までのタイマー
-	//int randaim;
 
 	//----------移動関係----------
-	//float FrontLength_;//敵の視界の長さ
-	//float Eye_;
-	//bool IsHit_;
 	XMVECTOR pPositionVec_;//プレイヤーの位置を保管
 	XMFLOAT3 PlayerPosition_;//プレイヤーの位置(座標)
-	float PlayerAcceleration_;
+	float PlayerAcceleration_;//プレイヤーの速度
 
 
 	//ダメージ関係
@@ -57,8 +53,7 @@ public:
 	void Draw() override;
 	void Release() override;
 	void UpdateIdle();//待機(デバッグ用)
-	void UpdateRoot();
-	//void UpdateThink();//思考中
+	void UpdateRoot();//ここから次のUpdateに移る判断をする
 	void UpdateChase();//追跡
 	void UpdateAttack();//攻撃
 	void UpdateHitStop();//ヒットストップ
@@ -66,7 +61,6 @@ public:
 	void UpdateWallHit();//壁に接触
 	void UpdateAim();//プレイヤーを狙っている
 	void UpdateOnAlert();//様子見
-	//void UpdateRandomAim();
 
 	void OnCollision(GameObject* pTarget) override;
 
@@ -75,23 +69,11 @@ public:
 
 	//敵を止める
 	void EnemyStop() { EnemyState_ = S_MAX; }
-
-	/// <summary>
-	/// プレイヤーからはじかれる処理
-	/// </summary>
-	/// <param name="_vector">プレイヤーから渡されたノックバックする方向(正規化済)</param>
-	/// <param name="_isDush">プレイヤーがダッシュ中か</param>
-	void PlayerReflect(XMVECTOR _vector, bool _isDush);
 	
 	//void SetState(State s) { EnemyState_ = s; }
 	//State GetState() { return EnemyState_; }
-	//bool GetStateAttack() { if (EnemyState_ == S_ATTACK) return true; else return false; }
 
-	void SetStateStop() { EnemyState_ = S_MAX; }
-
-	/// <summary>
-	/// プレイヤーの方向に回転する
-	/// </summary>
+	//プレイヤーの方向に回転する
 	void LookPlayer();
 
 	//敵とプレイヤーの距離を返す

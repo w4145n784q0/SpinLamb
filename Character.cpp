@@ -187,10 +187,14 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 	//自身の速度と相手の速度の差分をとる
 	float subVelocity = myVelocity - eVelocity;
 
+	//ノックバック量の初期化
+	//値が変化するのでローカル変数
+	float KnockBackValue = 0.0f;
+
 	//速度差が自身の方が一定以上なら、自身のノックバック量は0
 	if (subVelocity >= 20.0f)
 	{
-		KnockBackPower_ = 0.0f;
+		KnockBackValue = 0.0f;
 	}
 	else 
 	{
@@ -202,11 +206,11 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 		{
 			subVelocity = 20.0f;
 		}
-		KnockBackPower_ = LinearCompletion(subVelocity, 0, 20, 2, 4);
+		KnockBackValue = LinearCompletion(subVelocity, 0, 20, 2, 4);
 	}
 
-	KnockBack_Velocity_.x = KnockBackPower_;
-	KnockBack_Velocity_.z = KnockBackPower_;
+	KnockBack_Velocity_.x = KnockBackValue;
+	KnockBack_Velocity_.z = KnockBackValue;
 
 	Acceleration_ = 0;
 }
@@ -248,6 +252,7 @@ void Character::WallHit()
 	//ノックバック方向に代入
 	KnockBack_Direction_ = { inverse.x, inverse.y, inverse.z };
 
+	//ノックバック量を速度に代入(一定値)
 	KnockBack_Velocity_.x = KnockBackPower_;
 	KnockBack_Velocity_.z = KnockBackPower_;
 }
@@ -305,14 +310,6 @@ XMVECTOR Character::RotateVecFront(float rotY, XMVECTOR front)
 	return v;
 }
 
-XMVECTOR Character::CalclationForward(float rotY, XMVECTOR front)
-{
-	XMVECTOR v = front;
-	XMMATRIX m = XMMatrixRotationY(XMConvertToRadians(rotY));
-	XMVECTOR forward = XMVector3TransformNormal(v,m);
-	return  forward;
-}
-
 void Character::SetChargingEffect(std::string _path)
 {
 	EmitterData charge;
@@ -331,7 +328,6 @@ void Character::SetChargingEffect(std::string _path)
 
 void Character::SetAttackLocusEffect()
 {
-	//プレイヤーの背後に光の粒子
 	EmitterData locus;
 	locus.textureFileName = "PaticleAssets\\flashB_Y.png";
 	locus.delay = 0;

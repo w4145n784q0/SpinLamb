@@ -71,15 +71,11 @@ void StageManager::InitGroundData()
 	pGround->SetScale(GroundData_.scale_);
 	pGround->SetRotate(GroundData_.rotate_);
 	pGround->SetPosition(GroundData_.position_);
-
 }
 
 void StageManager::InitFenceData()
 {
 	Fence* pFence = (Fence*)FindObject("Fence");
-	/*pFence->SetScale(WireData_.scale_);
-	pFence->SetRotate(WireData_.rotate_);
-	pFence->SetPosition(WireData_.position_);*/
 	pFence->SetWireTransform(WireData_);
 	pFence->SetPillerTransform(PillerData_);
 	

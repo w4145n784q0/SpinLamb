@@ -44,7 +44,5 @@ public:
 	void SetPillerTransform(Transform _t) {
 		piller = _t;
 	}
-
-	//void SetSCV();
 };
 

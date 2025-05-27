@@ -4,9 +4,20 @@ class GameOverScene :
     public GameObject
 {
 private:
-	int hImage_;
+	//----------画像ハンドル----------
+
+	//タイトル画像
+	int hBackScreen_;
+
+	//"cpu win"のロゴ
 	int hlogoResult_;
+
+	//"push title"のロゴ
 	int hlogoTitle_;
+
+	//----------サウンドハンドル----------
+
+	//ゲームオーバーサウンド
 	int hGameOverSound_;
 public:
 	//コンストラクタ
