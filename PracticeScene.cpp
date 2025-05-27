@@ -15,7 +15,7 @@ namespace
 }
 
 PracticeScene::PracticeScene(GameObject* parent)
-	:GameObject(parent,"PracticeScene"),Press_(0)
+	:GameObject(parent,"PracticeScene"), hBackScreen_(-1), Press_(0)
 {
 }
 
@@ -25,6 +25,9 @@ PracticeScene::~PracticeScene()
 
 void PracticeScene::Initialize()
 {
+	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");
+	assert(hBackScreen_ >= 0);
+
 	Instantiate<StageManager>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
@@ -69,6 +72,8 @@ void PracticeScene::Update()
 
 void PracticeScene::Draw()
 {
+	Image::SetTransform(hBackScreen_, this->transform_);
+	Image::Draw(hBackScreen_);
 }
 
 void PracticeScene::Release()

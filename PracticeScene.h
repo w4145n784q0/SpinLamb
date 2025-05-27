@@ -4,6 +4,12 @@ class PracticeScene :
     public GameObject
 {
 private:
+
+	//----------画像ハンドル----------
+
+	//タイトル画像
+	int hBackScreen_;
+
 	//長押しでタイトルに遷移するカウント
 	int Press_;
 public:

@@ -1,6 +1,8 @@
 #include "Fence.h"
 #include"Engine/Model.h"
 #include"Engine/BoxCollider.h"
+#include<array>
+#include<vector>
 
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_dx11.h"
@@ -10,9 +12,8 @@ namespace
 {
 	const int pillerNum = 4;
 	std::vector<Transform> pillers(pillerNum);
-	//XMFLOAT3 pos[] = { piller_UpperLeft_ ,piller_UpperRight_ , piller_LowerLeft_,piller_LowerRight_ };
-	//Transform piller[4];
-	
+
+	std::array<XMFLOAT3, pillerNum> PillerPosArray = { };
 }
 
 Fence::Fence(GameObject* parent)
@@ -42,11 +43,7 @@ void Fence::Initialize()
 	BoxCollider* collision_wall4 = new BoxCollider(XMFLOAT3(-60.5, 5, 0), XMFLOAT3(1, 10, 120));
 	AddCollider(collision_wall4);
 
-	/*for (int i = 0; i < pillers.size(); i++)
-	{
-		pillers[i].position_ = pos[i];
-	}*/
-
+	//PillerPosArray = { piller_UpperLeft_ ,piller_UpperRight_ , piller_LowerLeft_,piller_LowerRight_ };
 	
 }
 
@@ -57,12 +54,12 @@ void Fence::Update()
 void Fence::Draw()
 {
 #ifdef _DEBUG
-	ImGui::SliderFloat("mapPos y", &transform_.position_.y, 0.0, 10.0);
+	//ImGui::SliderFloat("Pos y", &transform_.position_.y, 0.0, 10.0);
 	//ImGui::Text("mapPos.x%.1f", mTrans.position_.x);
 	//ImGui::Text("mapPos.y%.1f", mTrans.position_.y);
 #endif
 
-	Model::SetTransform(hFence_, transform_);
+	Model::SetTransform(hFence_, wire);
 	Model::Draw(hFence_);
 
 	for (int i = 0; i < pillers.size(); i++)
@@ -80,17 +77,32 @@ void Fence::OnCollision(GameObject* pTarget)
 {
 }
 
-void Fence::SetPiller(float upper, float lower, float left, float right)
+void Fence::SetPiller(float upper, float lower, float left, float right, float height)
 {
-	float height = piller.position_.y;
 
 	piller_UpperLeft_ = { left,height,upper };
 	piller_UpperRight_ = { right,height,upper };
 	piller_LowerLeft_ = { left, height,lower };
 	piller_LowerRight_ = { right, height,lower };
 
-	pillers[0].position_ = piller_UpperLeft_;
+	//‚±‚ÌŽž“_‚ÅPillerPosArray‚Ì’l‚ð“ü‚ê‚é
+	PillerPosArray = { piller_UpperLeft_ ,piller_UpperRight_ , piller_LowerLeft_,piller_LowerRight_ };
+
+	for (int i = 0; i < pillers.size(); i++)
+	{
+		pillers[i].position_ = PillerPosArray[i];
+	}
+
+	/*pillers[0].position_ = piller_UpperLeft_;
 	pillers[1].position_ = piller_UpperRight_;
 	pillers[2].position_ = piller_LowerLeft_;
-	pillers[3].position_ = piller_LowerRight_;
+	pillers[3].position_ = piller_LowerRight_;*/
+}
+
+void Fence::InitPillerTransform(Transform _t)
+{
+	for (int i = 0; i < pillers.size(); i++)
+	{
+		pillers[i] = _t;
+	}
 }

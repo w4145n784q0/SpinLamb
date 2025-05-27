@@ -1,7 +1,5 @@
 #pragma once
 #include "Engine/GameObject.h"
-#include<array>
-#include<vector>
 
 class Fence :
     public GameObject
@@ -17,12 +15,19 @@ private:
 
 	//----------柵の位置----------
 
+	//鉄線のトランスフォーム
 	Transform wire;
-	Transform piller;
-
+	
+	//左上
 	XMFLOAT3 piller_UpperLeft_;
+
+	//右上
 	XMFLOAT3 piller_UpperRight_;
+
+	//左下
 	XMFLOAT3 piller_LowerLeft_;
+
+	//右下
 	XMFLOAT3 piller_LowerRight_;
 	
 
@@ -36,13 +41,19 @@ public:
 	void Release() override;
 
 	void OnCollision(GameObject* pTarget) override;
-	void SetPiller(float upper, float lower, float left, float right);
 
-	void SetWireTransform(Transform _t) {
-		wire = _t;
-	}
-	void SetPillerTransform(Transform _t) {
-		piller = _t;
-	}
+	/// <summary>
+	/// 4つの柵の位置決定
+	/// </summary>
+	/// <param name="upper">北端</param>
+	/// <param name="lower">南端</param>
+	/// <param name="left">西端</param>
+	/// <param name="right">東端</param>
+	/// <param name="height">柱の高さ</param>
+	void SetPiller(float upper, float lower, float left, float right, float height);
+
+	void InitWireTransform(Transform _t) { wire = _t; }
+
+	void InitPillerTransform(Transform _t);
+	
 };
-

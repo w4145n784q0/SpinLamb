@@ -61,8 +61,7 @@ void StageManager::SetSCV()
 void StageManager::InitEndData()
 {
 	Fence* pFence = (Fence*)FindObject("Fence");
-	pFence->SetPiller(NorthEnd_,SouthEnd_,WestEnd_,EastEnd_);
-
+	pFence->SetPiller(NorthEnd_,SouthEnd_,WestEnd_,EastEnd_, PillerData_.position_.y);
 }
 
 void StageManager::InitGroundData()
@@ -76,7 +75,7 @@ void StageManager::InitGroundData()
 void StageManager::InitFenceData()
 {
 	Fence* pFence = (Fence*)FindObject("Fence");
-	pFence->SetWireTransform(WireData_);
-	pFence->SetPillerTransform(PillerData_);
+	pFence->InitWireTransform(WireData_);
+	pFence->InitPillerTransform(PillerData_);
 	
 }
