@@ -36,6 +36,9 @@
     <Filter Include="00imgui">
       <UniqueIdentifier>{3e9885ce-598b-4c62-ab11-80bf3735eed1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06UI">
+      <UniqueIdentifier>{7061f304-b704-40f1-85e0-4ed10b0d3df8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -167,12 +170,18 @@
     <ClCompile Include="BattleScene.cpp">
       <Filter>03Scene</Filter>
     </ClCompile>
-    <ClCompile Include="MiniMap.cpp">
+    <ClCompile Include="Character.cpp">
+      <Filter>04Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="StageManager.cpp">
       <Filter>05Stage</Filter>
     </ClCompile>
-    <ClCompile Include="HUD.cpp" />
-    <ClCompile Include="Character.cpp" />
-    <ClCompile Include="StageManager.cpp" />
+    <ClCompile Include="MiniMap.cpp">
+      <Filter>06UI</Filter>
+    </ClCompile>
+    <ClCompile Include="HUD.cpp">
+      <Filter>06UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -308,12 +317,18 @@
     <ClInclude Include="BattleScene.h">
       <Filter>03Scene</Filter>
     </ClInclude>
-    <ClInclude Include="MiniMap.h">
+    <ClInclude Include="Character.h">
+      <Filter>04Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="StageManager.h">
       <Filter>05Stage</Filter>
     </ClInclude>
-    <ClInclude Include="HUD.h" />
-    <ClInclude Include="Character.h" />
-    <ClInclude Include="StageManager.h" />
+    <ClInclude Include="MiniMap.h">
+      <Filter>06UI</Filter>
+    </ClInclude>
+    <ClInclude Include="HUD.h">
+      <Filter>06UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

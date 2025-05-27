@@ -297,17 +297,7 @@ void Player::UpdateIdle()
 	//自分の前方ベクトル(回転した分も含む)を更新
 	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);
 
-	//プレイヤーの正面ベクトルを更新
-	//自分の前方ベクトル(回転した分も含む)
-	/*ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, PlayerFrontDirection);
-	XMFLOAT3 rot = { 0,0,0 };
-	XMStoreFloat3(&rot, ForwardVector_);
-	PlayerFront = { transform_.position_ + rot };
-	PlayerFront.z += 1.0;
-	ArrowTransform_.position_ = PlayerFront;*/
-
-
-	//ジャンプ
+	//------------------ジャンプ------------------
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
 	{
 		if (IsOnGround_)
@@ -317,10 +307,7 @@ void Player::UpdateIdle()
 		}
 	}
 
-	//CharacterGravity();
-
 	CameraControl();
-
 
 	Direction_ = { 0,0,0 };//最後に進行方向のリセット毎フレーム行う
 }
@@ -328,9 +315,7 @@ void Player::UpdateIdle()
 void Player::UpdateHit()
 {
 	KnockBack();
-	//CharacterGravity();
-
-	if (KnockBack_Velocity_.x <= KnockBackEnd_ || KnockBack_Velocity_.z <= KnockBackEnd_)
+	if (IsKnockBackEnd())
 	{
 		PlayerState_ = S_IDLE;
 	}
@@ -345,9 +330,10 @@ void Player::UpdateCharge()
 		if (IsOnGround_)
 		{
 			Acceleration_ = 0.0f;
-			PlayerState_ = S_IDLE;
+
 			IsOnGround_ = false;
 			JumpSpeed_ = jumpheight;//一時的にy方向にマイナスされている値を大きくする
+			PlayerState_ = S_IDLE;
 		}
 	}
 
@@ -380,7 +366,7 @@ void Player::UpdateAttack()
 {
 	SetAttackLocusEffect();
 
-	Acceleration_ -= AcceleValue_;
+	Deceleration();
 	Direction_.z = 1.0;
 	FastRotate();
 	if (Acceleration_ <= 0)
@@ -388,8 +374,6 @@ void Player::UpdateAttack()
 		Acceleration_ = 0.0f;
 		PlayerState_ = S_IDLE;
 	}
-
-	//PlayerMove();
 
 	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
 	CharacterMoveRotate(move,this->transform_.rotate_.y);
@@ -400,7 +384,7 @@ void Player::UpdateWallHit()
 	KnockBack();
 	//CharacterGravity();
 
-	if (KnockBack_Velocity_.x <= KnockBackEnd_ || KnockBack_Velocity_.z <= KnockBackEnd_)
+	if (IsKnockBackEnd())
 	{
 		PlayerState_ = S_IDLE;
 		IsInvincibility_ = true;
@@ -413,61 +397,6 @@ void Player::UpdateWallHit()
 		}
 	}
 }
-
-//void Player::PlayerMove()
-//{
-//	//プレイヤーのy回転をラジアン化して行列に
-//	XMMATRIX playerRot = XMMatrixRotationY(XMConvertToRadians(this->transform_.rotate_.y));
-//
-//	//プレイヤーの進行方向ベクトルを作成
-//	XMVECTOR PrevDir = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
-//
-//	//方向ベクトルを回転行列で変換
-//	PrevDir = XMVector3TransformCoord(PrevDir, playerRot);
-//
-//	//単位ベクトル化し、移動方向を確定
-//	XMVECTOR norm = XMVector3Normalize(PrevDir);
-//
-//	//移動ベクトル = 移動方向 * (初速度 + 加速度) * 移動量のスケーリング(60fpsのため0.016f)
-//	//移動ベクトル化する
-//	XMVECTOR MoveVector = XMVectorScale(norm, (Velocity_ + Acceleration_) * DeltaTime);
-//
-//	//現在位置と移動ベクトルを加算
-//	XMVECTOR PrevPos = PlayerPosition_;
-//	NewPos_ = PrevPos + MoveVector;
-//
-//	//場外でなければ位置更新 
-//	XMFLOAT3 f;
-//	XMStoreFloat3(&f, NewPos_);
-//	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
-//	{
-//		XMStoreFloat3(&this->transform_.position_, NewPos_);
-//	}
-//}
-
-//void Player::Blown()
-//{
-//	this->transform_.rotate_.x -= MoveRotateX;
-//
-//	//毎フレーム速度を減少
-//	KnockBack_Velocity_.x *= DecelerationRate_;
-//	KnockBack_Velocity_.z *= DecelerationRate_;
-//
-//	//位置 = 位置 + 方向 * 速度
-//	XMFLOAT3 TmpPos = this->transform_.position_;
-//	TmpPos.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
-//	TmpPos.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
-//
-//	NewPositon_ = XMLoadFloat3(&TmpPos);
-//
-//	//場外でなければ位置更新 
-//	XMFLOAT3 f;
-//	XMStoreFloat3(&f, NewPositon_);
-//	if (!(f.x > 60.0f || f.x < -60.0f || f.z > 60.0f || f.z < -60.0f))
-//	{
-//		XMStoreFloat3(&this->transform_.position_, NewPositon_);
-//	}
-//}
 
 void Player::CameraControl()
 {
@@ -598,27 +527,3 @@ void Player::DebugCamera()
 void Player::RockOnCamra()
 {
 }
-
-//void Player::EnemyReflect(XMVECTOR _vector, bool _IsAttack)
-//{
-//	
-//	if (!this->IsInvincibility_)
-//	{
-//	XMFLOAT3 f;
-//	XMStoreFloat3(&f, _vector);
-//	KnockBack_Direction_ = f;
-//
-//	if (_IsAttack)
-//	{
-//		KnockBack_Velocity_.x = KnockBackPower_ * 1.5;
-//		KnockBack_Velocity_.z = KnockBackPower_ * 1.5;
-//	}
-//	else
-//	{
-//		KnockBack_Velocity_.x = KnockBackPower_;
-//		KnockBack_Velocity_.z = KnockBackPower_;
-//	}
-//
-//	PlayerState_ = S_HIT;
-//	}
-//}

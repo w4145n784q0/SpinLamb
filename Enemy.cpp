@@ -212,7 +212,7 @@ void Enemy::UpdateHitStop()
 
 void Enemy::UpdateHit()
 {
-	if (KnockBack_Velocity_.x <= KnockBackEnd_ || KnockBack_Velocity_.z <= KnockBackEnd_)
+	if (IsKnockBackEnd())
 	{
 		RotateStop();
 		KnockBack_Velocity_ = { 0,0,0 };
@@ -224,9 +224,10 @@ void Enemy::UpdateHit()
 void Enemy::UpdateWallHit()
 {
 	KnockBack();
-	if (KnockBack_Velocity_.x <= KnockBackEnd_ || KnockBack_Velocity_.z <= KnockBackEnd_)
+	if (IsKnockBackEnd())
 	{
 		RotateStop();
+		KnockBack_Velocity_ = { 0,0,0 };
 		EnemyState_ = S_ROOT;
 		IsInvincibility_ = true;
 
@@ -238,15 +239,6 @@ void Enemy::UpdateWallHit()
 			pBattleScene->PlusPlayerScore();
 		}
 	}
-
-	/*if (--deadTimer_ < 0)
-	{
-		CharacterLife_--;
-		deadTimer_ = deadTimerValue;
-		EnemyState_ = S_ROOT;
-		IsInvincibility_ = true;
-		this->transform_.position_ = { 0,0,0 };
-	}*/
 }
 
 void Enemy::UpdateAim()
@@ -280,8 +272,7 @@ void Enemy::UpdateAttack()
 	Acceleration_ -= AcceleValue_;
 
 	//ƒLƒƒƒ‰ƒ‚ƒfƒ‹‰ñ“]
-	MoveRotateReverse();
-	//this->transform_.rotate_.x -= FastRotateX;
+	FastRotateReverse();
 
 	if (Acceleration_ <= 0.0f)
 	{
@@ -311,31 +302,10 @@ void Enemy::OnCollision(GameObject* pTarget)
 		float playeraccele = PlayerAcceleration_;
 
 		Reflect(enemyvector, playervector, this->Acceleration_, playeraccele);
-		//Acceleration_ = 0;
 		AimTimer_ = 0;
 		EnemyState_ = S_HIT;
 	}
 }
-
-//void Enemy::PlayerReflect(XMVECTOR _vector,bool _isDush)
-//{
-//	XMFLOAT3 f;
-//	XMStoreFloat3(&f, _vector);
-//	KnockBack_Direction_ = f;
-//
-//	if (_isDush)
-//	{
-//		KnockBack_Velocity_.x = KnockBackPower_ * 1.5;
-//		KnockBack_Velocity_.z = KnockBackPower_ * 1.5;
-//	}
-//	else
-//	{
-//		KnockBack_Velocity_.x = KnockBackPower_;
-//		KnockBack_Velocity_.z = KnockBackPower_;
-//	}
-//
-//	EnemyState_ = S_HIT;
-//}
 
 void Enemy::LookPlayer()
 {

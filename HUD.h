@@ -8,16 +8,16 @@ class HUD :
 private:
 	//----------画像ハンドル----------
 
-	//タイトルに戻る(練習モード用)
+	//タイトルに戻る(練習シーン用)
 	int hBackTitleLogo_;
 
-	//練習中(練習モード用)
+	//練習中(練習シーン用)
 	int hPracticeNow_;
 
-	//ゲーム開始ロゴ
+	//ゲーム開始ロゴ(バトルシーン用)
 	int hStart_;
 
-	//制限時間
+	//制限時間(バトルシーン用)
 	int hTime_;
 
 	//ナンバー
@@ -31,27 +31,45 @@ private:
 	int hNumber7_;
 	int hNumber8_;
 	int hNumber9_;
+
+	//ナンバーハンドルの配列
 	std::array<int, 10> ArrayHandle_;
 
-	//フィニッシュのロゴ
+	//フィニッシュのロゴ(バトルシーン用)
 	int hFinish_;
 
 	//std::array<int, 3> CountDownArray_;
 
+	//----------ゲームシーン(状態により描画内容を変更)----------
 	enum GameMode
 	{
-		BattlePreStart,
-		BattleInProgress,
-		BattleEnd,
-		Practice,
+		BattlePreStart,//バトルシーン開始前
+		BattleInProgress,//バトルシーンプレイ中
+		BattleEnd,//バトルシーン終了
+		Practice,//練習シーン
 		Max,
 	};
 	GameMode GameModeHUD_;
 
-	//時間描画
+	//----------時間描画----------
+
+	//時間記録
 	int TimeNumber_;
+
+	//時間カウント(10の位)
 	int Timeten_;
+
+	//時間カウント(10の位)
 	int Timeone_;
+
+	//画像描画用トランスフォーム
+	Transform logo_backtitle_;
+	Transform logo_practice_;
+	Transform logo_start_;
+	Transform logo_Finish_;
+	Transform TenTime_;
+	Transform OneTime_;
+
 
 	//score描画
 	int PlayerScore_;
@@ -102,5 +120,7 @@ public:
 	void SetTime(int _time) { TimeNumber_ = _time; }
 	void SetPlayerScore(int _score) { PlayerScore_ = _score; }
 	void SetEnemyScore(int _score) {EnemyScore_ = _score; }
+
+	void SetCSV();
 };
 

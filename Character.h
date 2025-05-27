@@ -131,6 +131,11 @@ public:
     void MoveConfirm();
 
     /// <summary>
+    /// 減速処理
+    /// </summary>
+    void Deceleration(){ Acceleration_ -= AcceleValue_; }
+
+    /// <summary>
     /// 反射処理
     /// </summary>
     /// <param name="myVector">自身の位置ベクトル</param>
@@ -148,6 +153,8 @@ public:
     /// 壁に接触した際の計算処理
     /// </summary>
     void WallHit();
+
+    bool IsKnockBackEnd();
 
     /// <summary>
     /// ダメージ後の無敵時間の計算

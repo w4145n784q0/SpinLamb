@@ -10,6 +10,8 @@ namespace
 	const double reductionX = 0.00122;
 	const double reductionY = 0.0022;
 	const XMFLOAT3 MapPositon = { 0.891,-0.809,0 };
+	const float CorrectionValueX = 0.895f;
+	const float CorrectionValueY = 0.81f;
 }
 
 MiniMap::MiniMap(GameObject* parent)
@@ -40,16 +42,11 @@ void MiniMap::Initialize()
 
 void MiniMap::Update()
 {
-	pTrans.position_.x = (pPlayer_->GetPosition().x * reductionX) + 0.895;
-	pTrans.position_.y = (pPlayer_->GetPosition().z * reductionY) - 0.81;
-	//pTrans.rotate_.z = pPlayer_->GetRotate().y;
+	pTrans.position_.x = (pPlayer_->GetPosition().x * reductionX) + CorrectionValueX;
+	pTrans.position_.y = (pPlayer_->GetPosition().z * reductionY) - CorrectionValueY;
 
-	eTrans.position_.x = (pEnemy_->GetPosition().x * reductionX) + 0.895;
-	eTrans.position_.y = (pEnemy_->GetPosition().z * reductionY) - 0.81;
-
-	//pEnemy_ = (Enemy*)FindObject("Enemy");
-	//eTrans.position_ = pEnemy_->GetPosition();
-
+	eTrans.position_.x = (pEnemy_->GetPosition().x * reductionX) + CorrectionValueX;
+	eTrans.position_.y = (pEnemy_->GetPosition().z * reductionY) - CorrectionValueY;
 }
 
 void MiniMap::Draw()

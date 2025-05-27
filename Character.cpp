@@ -252,6 +252,18 @@ void Character::WallHit()
 	KnockBack_Velocity_.z = KnockBackPower_;
 }
 
+bool Character::IsKnockBackEnd()
+{
+	if (KnockBack_Velocity_.x <= KnockBackEnd_ || KnockBack_Velocity_.z <= KnockBackEnd_)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void Character::InvincibilityTimeCalclation()
 {
 	//–³“GŽžŠÔ‚ÌŒvŽZ

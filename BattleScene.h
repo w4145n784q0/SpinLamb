@@ -27,13 +27,6 @@ private:
 	int hBattleSound_;
 	int hWhistle_;
 
-	/*std::array<Transform, 2> HUD_Trans_;*/
-	//int PlayerLife_;
-	//int EnemyLife_;
-
-	//ゲーム開始カウント
-	int StartCount_;
-
 	//制限時間
 	int GameTime_;
 
@@ -65,7 +58,7 @@ public:
 	void DrawBattle();
 	void DrawBattleAfter();
 
-	//void SetPlayerHp(int _hp) { PlayerLife_ = _hp; }
+
 
 	void PlusPlayerScore() { PlayerScore_++; }
 	void PlusEnemyScore() { EnemyScore_++; }

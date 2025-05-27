@@ -38,7 +38,7 @@ void StageManager::Release()
 void StageManager::SetSCV()
 {
 	CsvReader csv;
-	csv.Load("CSVdata\\StageData2.csv");
+	csv.Load("CSVdata\\StageData.csv");
 	
 	GroundData_.position_ = { csv.GetValueFloat(1, 1), csv.GetValueFloat(1, 2), csv.GetValueFloat(1, 3) };
 	GroundData_.rotate_ = { csv.GetValueFloat(1, 4), csv.GetValueFloat(1, 5), csv.GetValueFloat(1, 6) };

@@ -19,10 +19,6 @@
 
 namespace
 {
-	//const float PlayerLifeStart = -0.9;//HP‚Ì•`‰æˆÊ’u‚Ì‰Šú’n“_(ƒvƒŒƒCƒ„[)
-	//const float EnemyLifeStart = 0.9;//HP‚Ì•`‰æˆÊ’u‚Ì‰Šú’n“_(“G)
-	//const float LifeWidth = 0.1;//HP‚Ì•`‰æ‚ÌŠÔŠu
-
 	int Timecounter = 0;
 	const int oneSecond = 60;
 	const int GameTimeLimit = 60;
@@ -31,10 +27,8 @@ namespace
 BattleScene::BattleScene(GameObject* parent)
 	:GameObject(parent,"BattleScene") ,BattleState(BEFORE),
 	 hBattleSound_(-1),hWhistle_(-1),
-	PlayerScore_(0),EnemyScore_(0),GameTime_(GameTimeLimit),StartCount_(3)
+	PlayerScore_(0),EnemyScore_(0),GameTime_(GameTimeLimit)
 {
-	//HUD_Trans_[0].position_ = { -0.7,0.8,0 };
-	//HUD_Trans_[1].position_ = { 0.7,0.8,0 };
 }
 
 void BattleScene::Initialize()
@@ -107,11 +101,6 @@ void BattleScene::Draw()
 	pPlayerScore_->Draw(30, 30, PlayerScore_);
 	pEnemyScore_->Draw(1250, 30, EnemyScore_);
 
-	/*pText_->Draw(140, 30, Phase_);
-	pText_->Draw(30, 30, "PHASE:");
-
-	pText2_->Draw(140, 60, deadCount_);
-	pText2_->Draw(30, 60, "LIFE :");*/
 
 	/*for (int i = 0; i < PlayerLife_; i++)
 	{
@@ -151,7 +140,6 @@ void BattleScene::Release()
 
 void BattleScene::UpdateBattleBefore()
 {
-//	if (StartCount_ <= 0)
 	if (++Timecounter > 120)
 	{
 		Timecounter = 0;
@@ -166,15 +154,6 @@ void BattleScene::UpdateBattleBefore()
 		HUD* pHUD = (HUD*)FindObject("HUD");
 		pHUD->SetStateBattleInProgress();
 	}
-
-	/*if (++Timecounter > oneSecond)
-	{
-		Timecounter = 0;
-		if (StartCount_ > 0)
-		{
-			StartCount_--;
-		}
-	}*/
 }
 
 void BattleScene::UpdateBattle()

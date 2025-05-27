@@ -1,5 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include<array>
+#include<vector>
+
 class Fence :
     public GameObject
 {
