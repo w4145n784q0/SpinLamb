@@ -10,24 +10,36 @@
 //描画操作のみ扱うクラス
 namespace
 {
-	Transform pScoreTen;
-	Transform pScoreOne;
-	Transform eScoreTen;
-	Transform eScoreOne;
+	//画像描画用トランスフォーム
 
+	//"タイトルに戻ります"
+	Transform logo_backtitle;
 
-	const XMFLOAT3 pScoreTenPosition = { -0.95,0.9,0 };
-	const XMFLOAT3 pScoreOnePosition = { -0.9,0.9,0 };
+	//"練習モード"
+	Transform logo_practice;
 
-	const XMFLOAT3 eScoreTenPosition = { 0.95,0.9,0 };
-	const XMFLOAT3 eScoreOnePosition = { 0.9,0.9,0 };
+	//Start!ロゴ
+	Transform logo_start;
+
+	//Finish!ロゴ
+	Transform logo_Finish;
+
+	//時間表記十の位
+	Transform TenTime;
+
+	//時間表記一の位
+	Transform OneTime;
 
 	//時間に除算する値
 	const int  TimeDivision = 10;
 }
 
 HUD::HUD(GameObject* parent)
-	:GameObject(parent, "HUD"), hBackTitleLogo_(-1),hPracticeNow_(-1), GameModeHUD_(Max)
+	:GameObject(parent, "HUD"), hBackTitleLogo_(-1),hPracticeNow_(-1), hStart_(-1),hTime_(-1),
+	hNumber0_(-1), hNumber1_(-1),hNumber2_(-1),hNumber3_(-1),hNumber4_(-1),
+	hNumber5_(-1),hNumber6_(-1),hNumber7_(-1),hNumber8_(-1),hNumber9_(-1),
+	ArrayHandle_{},hFinish_(-1),GameModeHUD_(Max),TimeNumber_(0),Timeten_(0),Timeone_(0)
+
 {
 }
 
@@ -105,13 +117,6 @@ void HUD::Initialize()
 
 	ArrayHandle_ = { hNumber0_,hNumber1_,hNumber2_,hNumber3_,hNumber4_,
 	hNumber5_,hNumber6_,hNumber7_,hNumber8_,hNumber9_ };
-	
-
-	/*pScoreTen.position_ = pScoreTenPosition;
-	pScoreOne.position_ = pScoreOnePosition;
-
-	eScoreTen.position_ = eScoreTenPosition;
-	eScoreOne.position_ = eScoreOnePosition;*/
 }
 
 void HUD::Update()
@@ -183,12 +188,6 @@ void HUD::UpdateBattleInProgress()
 {
 	Timeten_ = TimeNumber_ / TimeDivision;
 	Timeone_ = TimeNumber_ % TimeDivision;
-
-	PlayerTen_ = PlayerScore_ / TimeDivision;
-	PlayerOne_ = PlayerScore_ % TimeDivision;
-
-	EnemyTen_ =  EnemyScore_ / TimeDivision;
-	EnemyOne_ = EnemyScore_ % TimeDivision;
 }
 
 void HUD::UpdateBattleEnd()
@@ -201,40 +200,31 @@ void HUD::UpdatePractice()
 
 void HUD::DrawBattlePreStart()
 {	
-	Image::SetTransform(hFinish_, logo_start_);
+	Image::SetTransform(hFinish_, logo_start);
 	Image::Draw(hStart_);
 }
 
 void HUD::DrawBattleInProgress()
 {
-	Image::SetTransform(ArrayHandle_[Timeten_], TenTime_);
+	Image::SetTransform(ArrayHandle_[Timeten_], TenTime);
 	Image::Draw(ArrayHandle_[Timeten_]);
-	Image::SetTransform(ArrayHandle_[Timeone_], OneTime_);
+	Image::SetTransform(ArrayHandle_[Timeone_], OneTime);
 	Image::Draw(ArrayHandle_[Timeone_]);
 
-	/*Image::SetTransform(ArrayHandle_[PlayerTen_],pScoreTen );
-	Image::Draw(ArrayHandle_[PlayerTen_]);
-	Image::SetTransform(ArrayHandle_[PlayerOne_], pScoreOne);
-	Image::Draw(ArrayHandle_[PlayerOne_]);
-
-	Image::SetTransform(ArrayHandle_[EnemyTen_], eScoreTen);
-	Image::Draw(ArrayHandle_[EnemyTen_]);
-	Image::SetTransform(ArrayHandle_[EnemyOne_], eScoreOne);
-	Image::Draw(ArrayHandle_[EnemyOne_]);*/
 }
 
 void HUD::DrawBattleEnd()
 {
-	Image::SetTransform(hFinish_, logo_Finish_);
+	Image::SetTransform(hFinish_, logo_Finish);
 	Image::Draw(hFinish_);
 }
 
 void HUD::DrawPractice()
 {
-	Image::SetTransform(hBackTitleLogo_, logo_backtitle_);
+	Image::SetTransform(hBackTitleLogo_, logo_backtitle);
 	Image::Draw(hBackTitleLogo_);
 
-	Image::SetTransform(hPracticeNow_, logo_practice_);
+	Image::SetTransform(hPracticeNow_, logo_practice);
 	Image::Draw(hPracticeNow_);
 }
 
@@ -243,27 +233,27 @@ void HUD::SetCSV()
 	CsvReader csv;
 	csv.Load("CSVdata\\HUDData.csv");
 
-	logo_backtitle_.position_ = { csv.GetValueFloat(1, 1), csv.GetValueFloat(1, 2), csv.GetValueFloat(1, 3) };
-	logo_backtitle_.rotate_ = { csv.GetValueFloat(1, 4), csv.GetValueFloat(1, 5), csv.GetValueFloat(1, 6) };
-	logo_backtitle_.scale_ = { csv.GetValueFloat(1, 7), csv.GetValueFloat(1, 8), csv.GetValueFloat(1, 9) };
+	logo_backtitle.position_ = { csv.GetValueFloat(1, 1), csv.GetValueFloat(1, 2), csv.GetValueFloat(1, 3) };
+	logo_backtitle.rotate_ = { csv.GetValueFloat(1, 4), csv.GetValueFloat(1, 5), csv.GetValueFloat(1, 6) };
+	logo_backtitle.scale_ = { csv.GetValueFloat(1, 7), csv.GetValueFloat(1, 8), csv.GetValueFloat(1, 9) };
 
-	logo_practice_.position_ = { csv.GetValueFloat(2, 1), csv.GetValueFloat(2, 2), csv.GetValueFloat(2, 3) };
-	logo_practice_.rotate_ = { csv.GetValueFloat(2, 4), csv.GetValueFloat(2, 5), csv.GetValueFloat(2, 6) };
-	logo_practice_.scale_ = { csv.GetValueFloat(2, 7), csv.GetValueFloat(2, 8), csv.GetValueFloat(2, 9) };
+	logo_practice.position_ = { csv.GetValueFloat(2, 1), csv.GetValueFloat(2, 2), csv.GetValueFloat(2, 3) };
+	logo_practice.rotate_ = { csv.GetValueFloat(2, 4), csv.GetValueFloat(2, 5), csv.GetValueFloat(2, 6) };
+	logo_practice.scale_ = { csv.GetValueFloat(2, 7), csv.GetValueFloat(2, 8), csv.GetValueFloat(2, 9) };
 
-	logo_start_.position_ = { csv.GetValueFloat(3, 1), csv.GetValueFloat(3, 2), csv.GetValueFloat(3, 3) };
-	logo_start_.rotate_ = { csv.GetValueFloat(3, 4), csv.GetValueFloat(3, 5), csv.GetValueFloat(3, 6) };
-	logo_start_.scale_ = { csv.GetValueFloat(3, 7), csv.GetValueFloat(3, 8), csv.GetValueFloat(3, 9) };
+	logo_start.position_ = { csv.GetValueFloat(3, 1), csv.GetValueFloat(3, 2), csv.GetValueFloat(3, 3) };
+	logo_start.rotate_ = { csv.GetValueFloat(3, 4), csv.GetValueFloat(3, 5), csv.GetValueFloat(3, 6) };
+	logo_start.scale_ = { csv.GetValueFloat(3, 7), csv.GetValueFloat(3, 8), csv.GetValueFloat(3, 9) };
 
-	logo_Finish_.position_ = { csv.GetValueFloat(4, 1), csv.GetValueFloat(4, 2), csv.GetValueFloat(4, 3) };
-	logo_Finish_.rotate_ = { csv.GetValueFloat(4, 4), csv.GetValueFloat(4, 5), csv.GetValueFloat(4, 6) };
-	logo_Finish_.scale_ = { csv.GetValueFloat(4, 7), csv.GetValueFloat(4, 8), csv.GetValueFloat(4, 9) };
+	logo_Finish.position_ = { csv.GetValueFloat(4, 1), csv.GetValueFloat(4, 2), csv.GetValueFloat(4, 3) };
+	logo_Finish.rotate_ = { csv.GetValueFloat(4, 4), csv.GetValueFloat(4, 5), csv.GetValueFloat(4, 6) };
+	logo_Finish.scale_ = { csv.GetValueFloat(4, 7), csv.GetValueFloat(4, 8), csv.GetValueFloat(4, 9) };
 
-	TenTime_.position_ = { csv.GetValueFloat(5, 1), csv.GetValueFloat(5, 2), csv.GetValueFloat(5, 3) };
-	TenTime_.rotate_ = { csv.GetValueFloat(5, 4), csv.GetValueFloat(5, 5), csv.GetValueFloat(5, 6) };
-	TenTime_.scale_ = { csv.GetValueFloat(5, 7), csv.GetValueFloat(5, 8), csv.GetValueFloat(5, 9) };
+	TenTime.position_ = { csv.GetValueFloat(5, 1), csv.GetValueFloat(5, 2), csv.GetValueFloat(5, 3) };
+	TenTime.rotate_ = { csv.GetValueFloat(5, 4), csv.GetValueFloat(5, 5), csv.GetValueFloat(5, 6) };
+	TenTime.scale_ = { csv.GetValueFloat(5, 7), csv.GetValueFloat(5, 8), csv.GetValueFloat(5, 9) };
 
-	OneTime_.position_ = { csv.GetValueFloat(6, 1), csv.GetValueFloat(6, 2), csv.GetValueFloat(6, 3) };
-	OneTime_.rotate_ = { csv.GetValueFloat(6, 4), csv.GetValueFloat(6, 5), csv.GetValueFloat(6, 6) };
-	OneTime_.scale_ = { csv.GetValueFloat(6, 7), csv.GetValueFloat(6, 8), csv.GetValueFloat(6, 9) };;
+	OneTime.position_ = { csv.GetValueFloat(6, 1), csv.GetValueFloat(6, 2), csv.GetValueFloat(6, 3) };
+	OneTime.rotate_ = { csv.GetValueFloat(6, 4), csv.GetValueFloat(6, 5), csv.GetValueFloat(6, 6) };
+	OneTime.scale_ = { csv.GetValueFloat(6, 7), csv.GetValueFloat(6, 8), csv.GetValueFloat(6, 9) };;
 }

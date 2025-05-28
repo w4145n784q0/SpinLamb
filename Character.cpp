@@ -241,6 +241,8 @@ void Character::KnockBack()
 
 void Character::WallHit()
 {
+	SetWallHitEffect();
+
 	//速度リセット
 	Acceleration_ = 0.0f;
 
@@ -362,4 +364,19 @@ void Character::SetHitEffect()
 	//hit.deltaColor = XMFLOAT4(0, 0, 0, 0);
 	//hit.gravity = 0.0f;
 	VFX::Start(hit);
+}
+
+void Character::SetWallHitEffect()
+{
+	EmitterData  wallhit;
+	wallhit.textureFileName = "PaticleAssets\\flashB_W.png";
+	wallhit.position = this->transform_.position_;
+	wallhit.position.y = this->transform_.position_.y + 1.0f;
+	wallhit.direction = { 1,1,0 };
+	wallhit.directionRnd = { 360,360,0 };
+	wallhit.number = (DWORD)20;
+	wallhit.delay = 0;
+	wallhit.speed = 0.3f;
+	wallhit.lifeTime = 20;
+	VFX::Start(wallhit);
 }

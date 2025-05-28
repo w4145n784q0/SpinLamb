@@ -18,9 +18,9 @@ private:
 	//敵のアイコン
 	int hEnemyIcon_;
 
-	Transform mTrans;
-	Transform pTrans;
-	Transform eTrans;
+	Transform Trans_Map;
+	Transform Trans_Player;
+	Transform Trans_Enemy;
 
 	//----------インスタンス----------
 	Player* pPlayer_;

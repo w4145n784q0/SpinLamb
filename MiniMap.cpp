@@ -37,16 +37,16 @@ void MiniMap::Initialize()
 	pPlayer_ = (Player*)FindObject("Player");
 	pEnemy_ = (Enemy*)FindObject("Enemy");
 
-	mTrans.position_ = MapPositon;
+	Trans_Map.position_ = MapPositon;
 }
 
 void MiniMap::Update()
 {
-	pTrans.position_.x = (pPlayer_->GetPosition().x * reductionX) + CorrectionValueX;
-	pTrans.position_.y = (pPlayer_->GetPosition().z * reductionY) - CorrectionValueY;
+	Trans_Player.position_.x = (pPlayer_->GetPosition().x * reductionX) + CorrectionValueX;
+	Trans_Player.position_.y = (pPlayer_->GetPosition().z * reductionY) - CorrectionValueY;
 
-	eTrans.position_.x = (pEnemy_->GetPosition().x * reductionX) + CorrectionValueX;
-	eTrans.position_.y = (pEnemy_->GetPosition().z * reductionY) - CorrectionValueY;
+	Trans_Enemy.position_.x = (pEnemy_->GetPosition().x * reductionX) + CorrectionValueX;
+	Trans_Enemy.position_.y = (pEnemy_->GetPosition().z * reductionY) - CorrectionValueY;
 }
 
 void MiniMap::Draw()
@@ -59,14 +59,14 @@ void MiniMap::Draw()
 	//ImGui::Text("mapPos.y%.1f", mTrans.position_.y);
 #endif
 
-	Image::SetTransform(hMap_,mTrans);
+	Image::SetTransform(hMap_, Trans_Map);
 	Image::Draw(hMap_);
 	Image::SetAlpha(hMap_, 128);
 
-	Image::SetTransform(hPlayerIcon_, pTrans);
+	Image::SetTransform(hPlayerIcon_, Trans_Player);
 	Image::Draw(hPlayerIcon_);
 
-	Image::SetTransform(hEnemyIcon_, eTrans);
+	Image::SetTransform(hEnemyIcon_, Trans_Enemy);
 	Image::Draw(hEnemyIcon_);
 
 

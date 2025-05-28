@@ -48,9 +48,6 @@ void Player::Initialize()
 	hPlayer_ = Model::Load("Model\\chara2.fbx");
 	assert(hPlayer_ >= 0);
 
-	//hAttackArrow_ = Model::Load("Model\\AttackArrow.fbx");
-	//assert(hAttackArrow_ >= 0);
-
 	ShadowInit();
 
 	hCollisionSound_ = Audio::Load("Sound\\maou_se_battle15.wav");

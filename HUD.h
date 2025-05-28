@@ -38,8 +38,6 @@ private:
 	//フィニッシュのロゴ(バトルシーン用)
 	int hFinish_;
 
-	//std::array<int, 3> CountDownArray_;
-
 	//----------ゲームシーンステート(状態により描画内容を変更)----------
 	enum GameMode
 	{
@@ -61,24 +59,6 @@ private:
 
 	//時間カウント(10の位)
 	int Timeone_;
-
-	//画像描画用トランスフォーム
-	Transform logo_backtitle_;
-	Transform logo_practice_;
-	Transform logo_start_;
-	Transform logo_Finish_;
-	Transform TenTime_;
-	Transform OneTime_;
-
-
-	//score描画
-	int PlayerScore_;
-	int EnemyScore_;
-
-	int PlayerOne_;
-	int PlayerTen_;
-	int EnemyOne_;
-	int EnemyTen_;
 
 public:
 	//コンストラクタ
@@ -115,11 +95,7 @@ public:
 	void SetStateBattleEnd(){ GameModeHUD_ = BattleEnd; }
 	void SetStatePractice() { GameModeHUD_ = Practice; }
 
-	//void SetNumber(int _num) { countDownNumber_ = _num; }
-	
 	void SetTime(int _time) { TimeNumber_ = _time; }
-	void SetPlayerScore(int _score) { PlayerScore_ = _score; }
-	void SetEnemyScore(int _score) {EnemyScore_ = _score; }
 
 	void SetCSV();
 };

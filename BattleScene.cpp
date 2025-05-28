@@ -32,7 +32,7 @@ namespace
 BattleScene::BattleScene(GameObject* parent)
 	:GameObject(parent,"BattleScene") ,BattleState(BEFORE),
 	 hBattleSound_(-1),hWhistle_(-1),
-	PlayerScore_(0),EnemyScore_(0),GameTime_(GameTimeLimit)
+	PlayerScore_(0),EnemyScore_(0),GameTime_(GameTimeLimit),pPlayerScore_(0),pEnemyScore_(0)
 {
 }
 
@@ -102,22 +102,6 @@ void BattleScene::Draw()
 {
 	pPlayerScore_->Draw(30, 30, PlayerScore_);
 	pEnemyScore_->Draw(1250, 30, EnemyScore_);
-
-
-	/*for (int i = 0; i < PlayerLife_; i++)
-	{
-		HUD_Trans_[0].position_.x = PlayerLifeStart + i * LifeWidth;
-		Image::SetTransform(hPlayerLife_, HUD_Trans_[0]);
-		Image::Draw(hPlayerLife_);
-	}
-
-	for (int i = 0; i < EnemyLife_; i++)
-	{
-		HUD_Trans_[1].position_.x = PlayerLifeStart + i * LifeWidth;
-		Image::SetTransform(hEnemyLife_, HUD_Trans_[1]);
-		Image::Draw(hEnemyLife_);
-	}*/
-
 }
 
 void BattleScene::Release()
@@ -126,7 +110,7 @@ void BattleScene::Release()
 
 void BattleScene::UpdateBattleBefore()
 {
-	if (++Timecounter > 120)
+	if (++Timecounter > SceneTransition)
 	{
 		Timecounter = 0;
 

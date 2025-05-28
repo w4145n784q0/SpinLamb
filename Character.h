@@ -228,6 +228,7 @@ public:
     /// </summary>
     void SetHitEffect();
 
+    void SetWallHitEffect();
 
     //setter,getterä÷êî
 
