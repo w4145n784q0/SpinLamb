@@ -9,11 +9,6 @@
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
 
-namespace
-{
-	const float sheepRotate = 5.0f;
-}
-
 GameModeScene::GameModeScene(GameObject* parent)
 	:GameObject(parent, "GameModeScene"), 
 	hBackScreen_(-1), hBackChara_(-1),hExplanation_(-1),
@@ -110,16 +105,16 @@ void GameModeScene::Update()
 	switch (SelectMode_)
 	{
 	case GameModeScene::Battle:
-		ModeSetTrans[0].position_.y = 0.6f;
+		ModeSetTrans[0].position_.y = ModeSetTrans[1].position_.y;
 		break;
 	case GameModeScene::Practice:
-		ModeSetTrans[0].position_.y = 0.2f;
+		ModeSetTrans[0].position_.y = ModeSetTrans[2].position_.y;
 		break;
 	case GameModeScene::HowToPlay:
-		ModeSetTrans[0].position_.y = -0.2f;
+		ModeSetTrans[0].position_.y = ModeSetTrans[3].position_.y;
 		break;
 	case GameModeScene::Title:
-		ModeSetTrans[0].position_.y = -0.6f;
+		ModeSetTrans[0].position_.y = ModeSetTrans[4].position_.y;
 		break;
 	default:
 		break;
@@ -150,9 +145,6 @@ void GameModeScene::Update()
 		}
 		
 	}
-
-	BackChara_.rotate_.z -= sheepRotate;
-
 	Audio::Play(hModeSound_);
 }
 
