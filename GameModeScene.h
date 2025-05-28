@@ -9,7 +9,7 @@ private:
 	//----------”wŒi----------
 	int hBackScreen_;//”wŒiF
 	int hBackChara_;//”wŒiƒLƒƒƒ‰
-	int hExplanation_;//ƒQ[ƒ€à–¾
+	//int hExplanation_;//ƒQ[ƒ€à–¾
 	Transform BackChara_;
 
 	//----------ƒ{ƒ^ƒ“----------

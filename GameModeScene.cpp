@@ -11,7 +11,7 @@
 
 GameModeScene::GameModeScene(GameObject* parent)
 	:GameObject(parent, "GameModeScene"), 
-	hBackScreen_(-1), hBackChara_(-1),hExplanation_(-1),
+	hBackScreen_(-1), hBackChara_(-1),
 	hBattle_(-1),hPractice_(-1), hHowtoPlay_(-1),hBackTitle_(-1), hFrameLine_(-1),
 	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),
 	TextArray_({}),hModeSound_(-1),SelectMode_(Battle)
@@ -135,6 +135,7 @@ void GameModeScene::Update()
 			Audio::Stop(hModeSound_);
 			break;
 		case GameModeScene::HowToPlay:
+			pSceneManager->ChangeScene(SCENE_ID_HOWTOPLAY);
 			break;
 		case GameModeScene::Title:
 			pSceneManager->ChangeScene(SCENE_ID_TITLE);
