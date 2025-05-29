@@ -2,6 +2,62 @@
 #include"Engine/VFX.h"
 #include"Engine/Model.h"
 
+namespace {
+	enum init
+	{
+		pos_x = 0,
+		pos_y,
+		pos_z,
+		rot_x,
+		rot_y,
+		rot_z,
+		sca_x,
+		sca_y,
+		sca_z,
+	};
+
+	enum move
+	{
+		vel = 0,
+		accele_value,
+		accele_max,
+	};
+
+	enum rotate
+	{
+		moverot = 0,
+		fastrot ,
+		
+	};
+
+	enum Jump
+	{
+		gravity = 0,
+		upperlimit,
+		lowerlimit,
+	};
+
+	enum Hit
+	{
+		collider = 0,
+		knockbackpower,
+		deceleration,
+		knockbackend,
+	};
+
+	enum WallHit
+	{
+		invincibilityvalue = 0,
+		blinkvalue
+	};
+
+	enum Shadow
+	{
+		shadowcorrection = 0,
+	};
+}
+
+
 Character::Character(GameObject* parent)
 	:GameObject(parent,"Character")
 {
@@ -19,45 +75,70 @@ void Character::SetcsvStatus(std::string _path)
 {
 	CsvReader csv;
 	csv.Load(_path);
+
+	if (csv.IsGetParamName("InitializeParam"))
+	{
+		std::vector<float> v = csv.GetParam("InitializeParam");
+
+		InitParam_.StartPosition_.x = v[pos_x];
+		InitParam_.StartPosition_.y = v[pos_y];
+		InitParam_.StartPosition_.z = v[pos_z];
+		this->transform_.rotate_.x = v[rot_x];
+		this->transform_.rotate_.y = v[rot_y];
+		this->transform_.rotate_.z = v[rot_z];
+		this->transform_.scale_.x = v[sca_x];
+		this->transform_.scale_.y = v[sca_y];
+		this->transform_.scale_.z = v[sca_z];
+		
+	}
+
+	if (csv.IsGetParamName("MoveParam"))
+	{
+		std::vector<float> v = csv.GetParam("MoveParam");
+		MoveParam_.Velocity_ = v[vel];
+		MoveParam_.AcceleValue_ = v[accele_value];
+		MoveParam_.FullAccelerate_ = v[accele_max];
+	}
+
+	if (csv.IsGetParamName("RotateParam"))
+	{
+		std::vector<float> v = csv.GetParam("RotateParam");
+		RotateParam_.MoveRotateX = v[moverot];
+		RotateParam_.FastRotateX = v[fastrot];
+
+	}
+
+	if (csv.IsGetParamName("JumpParam"))
+	{
+		std::vector<float> v = csv.GetParam("JumpParam");
+		JumpParam_.Gravity_ = v[gravity];
+		JumpParam_.HeightLowerLimit_ = v[upperlimit];
+		JumpParam_.HeightUpperLimit_ = v[lowerlimit];
+	}
+
+	if (csv.IsGetParamName("HitParam"))
+	{
+		std::vector<float> v = csv.GetParam("HitParam");
+		HitParam_.ColliderSize_ =v[collider];
+		HitParam_.KnockBackPower_ = v[knockbackpower];
+		HitParam_.DecelerationRate_ = v[deceleration];
+		HitParam_.KnockBackEnd_ = v[knockbackend];
+	}
+
 	
-	InitParam_.StartPosition_.x = csv.GetValueFloat(1, 1);
-	InitParam_.StartPosition_.y = csv.GetValueFloat(1, 2);
-	InitParam_.StartPosition_.z = csv.GetValueFloat(1, 3);
-	this->transform_.rotate_.x = csv.GetValueFloat(1, 4);
-	this->transform_.rotate_.y = csv.GetValueFloat(1, 5);
-	this->transform_.rotate_.z = csv.GetValueFloat(1, 6);
-	this->transform_.scale_.x = csv.GetValueFloat(1, 7);
-	this->transform_.scale_.y = csv.GetValueFloat(1, 8);
-	this->transform_.scale_.z = csv.GetValueFloat(1, 9);
+	if (csv.IsGetParamName("WallHitParam"))
+	{
+		std::vector<float> v = csv.GetParam("WallHitParam");
+		WallHitParam_.InvincibilityValue = v[invincibilityvalue];
+		WallHitParam_.blinkValue = v[blinkvalue];
+	}
 
-	InitParam_.FrontDirection_ = { csv.GetValueFloat(1, 10),csv.GetValueFloat(1, 11),csv.GetValueFloat(1, 12) };
-
-	MoveParam_.Velocity_ = csv.GetValueFloat(1, 13);
-	
-	MoveParam_.Acceleration_ = csv.GetValueFloat(1, 14);
-	MoveParam_.AcceleValue_ = csv.GetValueFloat(1, 15);
-	MoveParam_.FullAccelerate_ = csv.GetValueFloat(1, 16);
-	MoveParam_.ForwardVector_ = { csv.GetValueFloat(1, 17), csv.GetValueFloat(1, 18), csv.GetValueFloat(1, 19) };
-
-	RotateParam_. MoveRotateX = csv.GetValueFloat(1, 20);
-	RotateParam_.FastRotateX = csv.GetValueFloat(1, 21);
-
-	JumpParam_.Gravity_ = csv.GetValueFloat(1, 22);
-	JumpParam_.IsOnGround_ = false;
-	JumpParam_.JumpSpeed_ = csv.GetValueFloat(1, 23);
-	JumpParam_.HeightLowerLimit_ = csv.GetValueFloat(1, 24);
-	JumpParam_.HeightUpperLimit_ = csv.GetValueFloat(1, 25);
-
-	HitParam_.ColliderSize_ = csv.GetValueFloat(1, 26);
-	HitParam_.KnockBack_Direction_ = { csv.GetValueFloat(1, 27), csv.GetValueFloat(1, 28) , csv.GetValueFloat(1, 29) };
-	HitParam_.KnockBack_Velocity_ = { csv.GetValueFloat(1, 30), csv.GetValueFloat(1, 31) , csv.GetValueFloat(1, 32) };
-	HitParam_.KnockBackPower_ = csv.GetValueFloat(1, 33);
-	HitParam_.DecelerationRate_ = csv.GetValueFloat(1, 34);
-	HitParam_.KnockBackEnd_ = csv.GetValueFloat(1, 35);
-	
-	WallHitParam_.InvincibilityTime_ =  csv.GetValueFloat(1, 36);
-	WallHitParam_.IsInvincibility_ = false;
-	WallHitParam_.InvincibilityValue = csv.GetValueFloat(1, 37);
+	if(csv.IsGetParamName("Shadowaram"))
+	{
+		std::vector<float> v = csv.GetParam("Shadowaram");
+		ShadowParam_.ShadowCorrection_ = v[shadowcorrection];
+		
+	}
 }
 
 

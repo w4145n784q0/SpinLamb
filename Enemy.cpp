@@ -52,7 +52,7 @@ void Enemy::Initialize()
 
 	pPlayer_ = (Player*)FindObject("Player");
 	//pGround_ = (Ground*)FindObject("Ground");
-	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), ColliderSize_);
+	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), HitParam_.ColliderSize_);
 	this->AddCollider(collision);
 
 	RandomAim = rand() % 4;
@@ -65,7 +65,7 @@ void Enemy::Update()
 	PlayerAcceleration_ = pPlayer_->GetAcceleration();
 	
 	//正面ベクトルからどれだけ回転したかを計算し、前向きベクトルを計算
-	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);
+	MoveParam_.ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, InitParam_. FrontDirection_);
 
 	ShadowSet();
 
@@ -104,7 +104,7 @@ void Enemy::Update()
 		break;
 	}
 
-	if (!IsInvincibility_ && !(EnemyState_ == S_WALLHIT))//壁ダメージ判定
+	if (!WallHitParam_. IsInvincibility_ && !(EnemyState_ == S_WALLHIT))//壁ダメージ判定
 	{
 		if (IsOutsideStage(this->transform_.position_))
 		{
@@ -120,7 +120,7 @@ void Enemy::Update()
 
 void Enemy::Draw()
 {
-	if (IsInvincibility_)
+	if (WallHitParam_.IsInvincibility_)
 	{
 		if (++blinkTimer > blink) {
 
@@ -153,7 +153,7 @@ void Enemy::Draw()
 	//ImGui::Text("front.y:%3f", (float)tmp.y);
 	//ImGui::Text("front.z:%3f", (float)tmp.z);
 
-	ImGui::Text("knockback:%.3f",this->KnockBack_Velocity_.x );
+	ImGui::Text("knockback:%.3f",this->HitParam_. KnockBack_Velocity_.x );
 #endif
 }
 
@@ -184,7 +184,7 @@ void Enemy::UpdateChase()
 	MoveRotateReverse();
 
 	LookPlayer();
-	CharacterMove(MoveDirection_);
+	CharacterMove(MoveParam_. MoveDirection_);
 
 	float dist = PlayerEnemyDistanceX();
 	if (dist < ChaseLength)
@@ -209,7 +209,7 @@ void Enemy::UpdateHit()
 	if (IsKnockBackEnd())
 	{
 		RotateStop();
-		KnockBack_Velocity_ = { 0,0,0 };
+		HitParam_. KnockBack_Velocity_ = { 0,0,0 };
 		EnemyState_ = S_ROOT;
 	}
 	KnockBack();
@@ -221,9 +221,8 @@ void Enemy::UpdateWallHit()
 	if (IsKnockBackEnd())
 	{
 		RotateStop();
-		KnockBack_Velocity_ = { 0,0,0 };
 		EnemyState_ = S_ROOT;
-		IsInvincibility_ = true;
+		WallHitParam_.IsInvincibility_ = true;
 
 		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
 		if (pSM->IsBattleScene())
@@ -258,7 +257,7 @@ void Enemy::UpdateOnAlert()
 void Enemy::UpdateAttack()
 {
 	SetAttackLocusEffect();
-	CharacterMove(MoveDirection_);
+	CharacterMove(MoveParam_. MoveDirection_);
 	Deceleration();
 	FastRotateReverse();
 
@@ -274,7 +273,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 {
 	if (pTarget->GetObjectName() == "Fence")
 	{
-		if (!IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
+		if (!WallHitParam_.IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
 		{
 			WallHit();
 
@@ -289,7 +288,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 		XMVECTOR playervector = XMLoadFloat3(&getpositon);
 		float playeraccele = PlayerAcceleration_;
 
-		Reflect(enemyvector, playervector, this->Acceleration_, playeraccele);
+		Reflect(enemyvector, playervector, this->MoveParam_. Acceleration_, playeraccele);
 		AimTimer_ = 0;
 		EnemyState_ = S_HIT;
 	}
@@ -315,15 +314,15 @@ void Enemy::LookPlayer()
 	}
 
 	//敵への移動方向を保管
-	MoveDirection_ = RotateDirection;
+	MoveParam_.MoveDirection_ = RotateDirection;
 
 	//------------角度に応じて回転------------
 	
 	//二つのベクトル間のラジアン角を求める
-	XMVECTOR angle = XMVector3AngleBetweenVectors(RotateDirection, ForwardVector_);
+	XMVECTOR angle = XMVector3AngleBetweenVectors(RotateDirection, MoveParam_.ForwardVector_);
 
 	//前向きベクトルとプレイヤーのいる方向のベクトルの外積を求める
-	XMVECTOR cross = XMVector3Cross(ForwardVector_, RotateDirection);
+	XMVECTOR cross = XMVector3Cross(MoveParam_.ForwardVector_, RotateDirection);
 
 	//前向きベクトルとプレイヤー方向ベクトルはXZに伸びるベクトルなので
 	//外積のY軸（+か-で左右どちらにいるか判断）を求める

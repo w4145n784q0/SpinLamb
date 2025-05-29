@@ -51,5 +51,17 @@ public:
 	//引数：なし
 	//戻値：行数
 	size_t GetHeight();
+
+	/// <summary>
+	/// 
+	/// </summary>
+	std::vector<float> GetParam(std::string ParamName);
+
+	/// <summary>
+	/// 指定した名前がcsvに存在するか
+	/// </summary>
+	/// <param name="ParamName">0列目のパラメータの名前</param>
+	/// <returns></returns>
+	bool IsGetParamName(std::string ParamName);
 };
 

@@ -18,7 +18,7 @@ protected:
     struct InitializeParam
     {
         XMFLOAT3 StartPosition_ = {0,0,0};//初期位置
-        XMVECTOR FrontDirection_ = {0,0,0};//正面の初期値(ローカル座標系) ここからどれだけ回転したか
+        XMVECTOR FrontDirection_ = {0,0,1};//正面の初期値(ローカル座標系) ここからどれだけ回転したか
     };
     InitializeParam InitParam_;
 

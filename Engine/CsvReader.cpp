@@ -134,3 +134,31 @@ size_t CsvReader::GetHeight()
 {
 	return data_.size();
 }
+
+std::vector<float> CsvReader::GetParam(std::string ParamName)
+{
+	for (const auto& arr: data_)
+	{
+		if (!arr.empty() && arr[0] == ParamName)
+		{
+			std::vector<float> result;
+			for (size_t i = 1; i < arr.size(); ++i) {
+				result.push_back(std::stof(arr[i]));
+			}
+			return result;
+		}
+	}
+	return {};
+}
+
+bool CsvReader::IsGetParamName(std::string ParamName)
+{
+	for (const auto& arr : data_)
+	{
+		if (!arr.empty() && arr[0] == ParamName)
+		{
+			return true;
+		}
+	}
+	return false;
+}

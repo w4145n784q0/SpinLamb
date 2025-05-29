@@ -51,7 +51,7 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	std::string path = "CSVdata\\PlayerData.csv";
+	std::string path = "CSVdata\\PlayerData_2.csv";
 	SetcsvStatus(path);
 
 	hPlayer_ = Model::Load("Model\\chara2.fbx");
@@ -65,7 +65,7 @@ void Player::Initialize()
 	SetStartPosition();
 	//ArrowTransform_.rotate_.y = 180.0f;
 	
-	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),ColliderSize_);
+	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),HitParam_. ColliderSize_);
 	this->AddCollider(collider);
 }
 
@@ -96,7 +96,7 @@ void Player::Update()
 		break;
 	}
 
-	if(!IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
+	if(!WallHitParam_. IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
 	{
 		if (IsOutsideStage(this->transform_.position_))
 		{
@@ -122,7 +122,7 @@ void Player::Update()
 
 void Player::Draw()
 {
-	if (IsInvincibility_)
+	if (WallHitParam_.IsInvincibility_)
 	{			
 		if (++blinkTimer > blink) {
 
@@ -180,7 +180,7 @@ void Player::OnCollision(GameObject* pTarget)
 		XMVECTOR playervector = XMLoadFloat3(&this->transform_.position_);
 		float enemyaccele = pEnemy->GetAcceleration();
 
-		Reflect(playervector, enemyvector, this->Acceleration_, enemyaccele);
+		Reflect(playervector, enemyvector, this->MoveParam_.Acceleration_, enemyaccele);
 
 		PlayerState_ = S_HIT;
 		SetHitEffect();
@@ -194,7 +194,7 @@ void Player::OnCollision(GameObject* pTarget)
 
 	if (pTarget->GetObjectName() == "Fence")
 	{
-		if(!IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
+		if(!WallHitParam_.IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
 		{
 			WallHit();
 			PlayerState_ = S_WALLHIT;
@@ -244,13 +244,13 @@ void Player::UpdateIdle()
 	if (length > stickMicrotilt)
 	{
 		//コントローラー方向と前向きベクトルの外積求める（）
-		XMVECTOR cross = XMVector3Cross(SetController, FrontDirection_);
+		XMVECTOR cross = XMVector3Cross(SetController, InitParam_. FrontDirection_);
 
 		//Y外積をとり+か-かで倒し回転方向を求める
 		float crossY = XMVectorGetY(cross);
 
 		//正面ベクトルとのラジアン角をとる
-		XMVECTOR r = XMVector3AngleBetweenVectors(SetController, FrontDirection_);
+		XMVECTOR r = XMVector3AngleBetweenVectors(SetController, InitParam_.FrontDirection_);
 
 		//ラジアン角度を取得
 		float angle = XMVectorGetX(r);
@@ -271,14 +271,14 @@ void Player::UpdateIdle()
 	}
 
 	//自分の前方ベクトル(回転した分も含む)を更新
-	ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, FrontDirection_);
+	MoveParam_.ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, InitParam_. FrontDirection_);
 
 
 	//------------------攻撃状態へ移行------------------//
 
 	if (Input::IsKeyDown(DIK_LSHIFT) || Input::IsKeyDown(DIK_RSHIFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
 	{
-		if (IsOnGround_)
+		if (JumpParam_. IsOnGround_)
 		{
 			PlayerState_ = S_CHARGE;
 		}
@@ -287,7 +287,7 @@ void Player::UpdateIdle()
 	//------------------ジャンプ------------------
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
 	{
-		if (IsOnGround_)
+		if (JumpParam_. IsOnGround_)
 		{
 			SetJump();
 		}
@@ -313,7 +313,7 @@ void Player::UpdateCharge()
 
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
 	{
-		if (IsOnGround_)
+		if (JumpParam_. IsOnGround_)
 		{
 			AccelerationStop();
 			SetJump();
@@ -354,7 +354,7 @@ void Player::UpdateWallHit()
 	if (IsKnockBackEnd())
 	{
 		PlayerState_ = S_IDLE;
-		IsInvincibility_ = true;
+		WallHitParam_.IsInvincibility_ = true;
 
 		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
 		if (pSM->IsBattleScene())
@@ -367,8 +367,8 @@ void Player::UpdateWallHit()
 
 void Player::SetJump()
 {
-	IsOnGround_ = false;
-	JumpSpeed_ = jumpheight;//一時的にy方向にマイナスされている値を大きくする
+	JumpParam_. IsOnGround_ = false;
+	JumpParam_. JumpSpeed_ = jumpheight;//一時的にy方向にマイナスされている値を大きくする
 }
 
 void Player::CameraControl()
@@ -446,7 +446,7 @@ void Player::CameraUpdate()
 	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(cameraTransform_.rotate_.x));//カメラの回転行列作成(X軸)
 	XMMATRIX rotCamera = XMMatrixMultiply(rotX, rotY);
 	BackCamera_ = XMVector3TransformCoord(BackCamera_, rotCamera);//バックカメラのベクトルにかける
-	XMStoreFloat3(&CameraPosition_, NewPositon_ + BackCamera_);//プレイヤーの移動ベクトルとバックカメラを加算
+	XMStoreFloat3(&CameraPosition_, MoveParam_. NewPositon_ + BackCamera_);//プレイヤーの移動ベクトルとバックカメラを加算
 
 	//--------------カメラ振動--------------
 	// 全ステート共有
