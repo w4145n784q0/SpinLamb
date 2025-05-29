@@ -39,7 +39,6 @@ private:
 	{
 		S_NORMALCAMERA,//通常カメラ
 		S_DEBUGCAMERA,//デバッグ用カメラ
-		S_ROCKONCAMERA,//敵を注視するカメラ
 		S_MAXCAMERA,
 	};
 	CameraState CameraState_;
@@ -66,11 +65,11 @@ public:
 	void Release() override;
 	void OnCollision(GameObject* pTarget) override;
 
-	void UpdateIdle();
-	void UpdateHit();
-	void UpdateCharge();
-	void UpdateAttack();
-	void UpdateWallHit();
+	void UpdateIdle();//通常状態
+	void UpdateHit();//ヒット状態
+	void UpdateCharge();//チャージ状態
+	void UpdateAttack();//攻撃状態
+	void UpdateWallHit();//壁に接触状態
 
 	//プレイヤーに移動を許可
 	void PlayerStart() { PlayerState_ = S_IDLE; }
@@ -81,30 +80,17 @@ public:
 	//ジャンプ開始
 	void SetJump();
 
-
 	//カメラの操作（一部のステートのみ）
 	void CameraControl();
 
 	//カメラの設定(毎フレーム呼び出す)
 	void CameraUpdate();
 
-
-
-	void NormalCamera();
-	void DebugCamera();
-	void RockOnCamra();
-
 	/// <summary>
-	/// 敵からはじかれる処理
+	/// キーボード移動操作
 	/// </summary>
-	/// <param name="_vector">敵からノックバックする方向(正規化済)</param>
-	/// <param name="_IsAttack">敵が攻撃中か</param>
-	void EnemyReflect(XMVECTOR _vector, bool _IsAttack);
+	void KeyBoradMove();
 
-	//攻撃中かどうか取得(接触判定に使用)
-	//bool IsAttackState() { if (PlayerState_ == S_ATTACK) return true; else return false; }
-
-	//bool GetIsInvincibility() { if (IsInvincibility_) return true; else return false; }
 
 };
 

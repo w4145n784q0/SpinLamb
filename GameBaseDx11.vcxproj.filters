@@ -179,7 +179,9 @@
     <ClCompile Include="HUD.cpp">
       <Filter>06UI</Filter>
     </ClCompile>
-    <ClCompile Include="HowToPlayScene.cpp" />
+    <ClCompile Include="HowToPlayScene.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -324,7 +326,9 @@
     <ClInclude Include="HUD.h">
       <Filter>06UI</Filter>
     </ClInclude>
-    <ClInclude Include="HowToPlayScene.h" />
+    <ClInclude Include="HowToPlayScene.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

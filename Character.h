@@ -196,6 +196,11 @@ public:
     void Deceleration() { Acceleration_ -= AcceleValue_; }
 
     /// <summary>
+    /// 加速度リセット
+    /// </summary>
+    void AccelerationStop(){ Acceleration_ = 0.0f; }
+
+    /// <summary>
     /// 停止判定
     /// </summary>
     /// <returns>加速量が0.0以下かどうか</returns>
@@ -224,10 +229,13 @@ public:
     void SetAttackLocusEffect();
 
     /// <summary>
-    /// 衝撃エフェクトつける
+    /// 相手と接触時の衝撃エフェクトつける
     /// </summary>
     void SetHitEffect();
 
+    /// <summary>
+    /// 壁に接触時の衝撃エフェクトつける
+    /// </summary>
     void SetWallHitEffect();
 
     //setter,getter関数

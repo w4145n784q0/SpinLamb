@@ -16,28 +16,37 @@
 
 namespace {
 	XMVECTOR BackCameraPos = { 0,3,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
+	const float KeyBoardRotateY = 1.0f;
 	int blinkTimer = 0;
 	const int blink = 20;
 	const float cameraShakeTime = 0.3f;
 	const float jumpheight = 1.8f;
+
+	const float cameraInitX = 0.0f;
+	const float cameraInitY = 1.0f;
+	const float cameraInitZ = -8.0f;
+
+	const float cameraRotate = 2.5f;
+	const float cameraUpperLimit = 60.0f;
+	const float cameraLowerLimit = -10.0f;
+	const float cameraDebugPos = 90.0f;
 }
 
 Player::Player(GameObject* parent) 
 	: Character(parent,"Player"),
 	hPlayer_(-1), /*hAttackArrow_(-1),*/ hShadow_(-1), hCollisionSound_(-1),
 	PlayerState_(S_MAX),CameraState_(S_NORMALCAMERA),
-	
-
 	Direction_({ 0,0,0 }),BackCamera_(BackCameraPos)
 {
 	cameraTransform_ = this->transform_;
-	CameraPosition_ = { this->transform_.position_.x ,this->transform_.position_.y + 1, this->transform_.position_.z - 8 };
+	CameraPosition_ = { this->transform_.position_.x + cameraInitX
+		,this->transform_.position_.y + cameraInitY, this->transform_.position_.z + cameraInitZ };
 	CameraTarget_ = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 }
 
 Player::~Player()
 {
-	Release();
+	
 }
 
 void Player::Initialize()
@@ -113,11 +122,6 @@ void Player::Update()
 
 void Player::Draw()
 {
-	//Model::SetTransform(hPlayer_, this->transform_);
-	//Model::Draw(hPlayer_);
-
-
-
 	if (IsInvincibility_)
 	{			
 		if (++blinkTimer > blink) {
@@ -219,17 +223,16 @@ void Player::UpdateIdle()
 	}
 	if (Input::IsKey(DIK_LEFT))
 	{
-		this->transform_.rotate_.y -= 1;
-		cameraTransform_.rotate_.y -= 1;
+		this->transform_.rotate_.y -= KeyBoardRotateY;
+		cameraTransform_.rotate_.y -= KeyBoardRotateY;
 	}
 	if (Input::IsKey(DIK_RIGHT))
 	{
-		this->transform_.rotate_.y += 1;
-		cameraTransform_.rotate_.y += 1;
+		this->transform_.rotate_.y += KeyBoardRotateY;
+		cameraTransform_.rotate_.y += KeyBoardRotateY;
 	}
 
-	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
-	CharacterMoveRotate(move, this->transform_.rotate_.y);
+	KeyBoradMove();
 
 	//------------------ゲームパッドスティックの移動------------------//
 
@@ -244,7 +247,7 @@ void Player::UpdateIdle()
 	//ベクトルの長さを取得して、倒したかどうかを判別
 	float length = XMVectorGetX(XMVector3Length(controller));
 
-	if (length > 0.01f)
+	if (length > stickMicrotilt)
 	{
 		//コントローラー方向と前向きベクトルの外積求める（）
 		XMVECTOR cross = XMVector3Cross(SetController, FrontDirection_);
@@ -318,23 +321,10 @@ void Player::UpdateCharge()
 	{
 		if (IsOnGround_)
 		{
-			Acceleration_ = 0.0f;
+			AccelerationStop();
 			SetJump();
 			PlayerState_ = S_IDLE;
 		}
-	}
-
-	if (Input::IsKey(DIK_LEFT))
-	{
-		this->transform_.rotate_.y -= 1;
-		cameraTransform_.rotate_.y -= 1;
-		//ArrowTransform_.rotate_.y -= 1;
-	}
-	if (Input::IsKey(DIK_RIGHT))
-	{
-		this->transform_.rotate_.y += 1;
-		cameraTransform_.rotate_.y += 1;
-		//ArrowTransform_.rotate_.y += 1;
 	}
 
 	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
@@ -356,12 +346,11 @@ void Player::UpdateAttack()
 	FastRotate();
 	if (IsDashStop())
 	{
-		Acceleration_ = 0.0f;
+		AccelerationStop();
 		PlayerState_ = S_IDLE;
 	}
 
-	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
-	CharacterMoveRotate(move,this->transform_.rotate_.y);
+	KeyBoradMove();
 }
 
 void Player::UpdateWallHit()
@@ -409,35 +398,35 @@ void Player::CameraControl()
 	if(CameraState_ == S_NORMALCAMERA)
 	{
 
-		if (Input::IsKey(DIK_A) || Input::GetPadStickR().x <= -0.7)	//カメラ左右移動
+		if (Input::IsKey(DIK_A) || Input::GetPadStickR().x <= -sticktilt)	//カメラ左右移動
 		{
-			cameraTransform_.rotate_.y -= 2.5;
+			cameraTransform_.rotate_.y -= cameraRotate;
 		}
-		if (Input::IsKey(DIK_D) || Input::GetPadStickR().x >= 0.7)
+		if (Input::IsKey(DIK_D) || Input::GetPadStickR().x >= sticktilt)
 		{
-			cameraTransform_.rotate_.y += 2.5;
+			cameraTransform_.rotate_.y += cameraRotate;
 		}
 
-		if (Input::IsKey(DIK_W) || Input::GetPadStickR().y <= -0.7)	//カメラ上下移動
+		if (Input::IsKey(DIK_W) || Input::GetPadStickR().y <= -sticktilt)	//カメラ上下移動
 		{
-			if (cameraTransform_.rotate_.x >= 60.0f)
+			if (cameraTransform_.rotate_.x >= cameraUpperLimit)
 			{
-				cameraTransform_.rotate_.x = 60.0f;
+				cameraTransform_.rotate_.x = cameraUpperLimit;
 			}
 			else
 			{
-				cameraTransform_.rotate_.x += 2.5;
+				cameraTransform_.rotate_.x += cameraRotate;
 			}
 		}
-		if (Input::IsKey(DIK_S) || Input::GetPadStickR().y >= 0.7)
+		if (Input::IsKey(DIK_S) || Input::GetPadStickR().y >= sticktilt)
 		{
-			if (cameraTransform_.rotate_.x <= -10.0f)
+			if (cameraTransform_.rotate_.x <= cameraLowerLimit)
 			{
-				cameraTransform_.rotate_.x = -10.0f;
+				cameraTransform_.rotate_.x = cameraLowerLimit;
 			}
 			else
 			{
-				cameraTransform_.rotate_.x -= 2.5;
+				cameraTransform_.rotate_.x -= cameraRotate;
 			}
 		}
 
@@ -451,42 +440,13 @@ void Player::CameraControl()
 	}
 	else if (CameraState_ == S_DEBUGCAMERA)
 	{
-		cameraTransform_.rotate_.x = 90.0f;
+		cameraTransform_.rotate_.x = cameraDebugPos;
 	}
-	else if (CameraState_ == S_ROCKONCAMERA)
-	{
-
-	}
-
 }
 
 void Player::CameraUpdate()
 {
-	/*switch (CameraState_)
-	{
-	case Player::S_NORMALCAMERA:
-		NormalCamera();
-		break;
-	case Player::S_DEBUGCAMERA:
-		DebugCamera();
-		break;
-	case Player::S_ROCKONCAMERA:
-		RockOnCamra();
-		break;
-	case Player::S_MAXCAMERA:
-		break;
-	default:
-		break;
-	}*/
-
-
 	//--------------カメラ追従--------------
-	
-	//カメラが通常の時の処理
-
-	//Enemy* pEnemy = (Enemy*)FindObject("Enemy");
-	//XMFLOAT3 tmp = pEnemy->GetWorldPosition();
-
 	CameraTarget_ = { this->transform_.position_ };//カメラの焦点は自機の位置
 	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform_.rotate_.y));//カメラの回転行列作成(Y軸)
 	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(cameraTransform_.rotate_.x));//カメラの回転行列作成(X軸)
@@ -505,15 +465,8 @@ void Player::CameraUpdate()
 	BackCamera_ = { BackCameraPos };//バックカメラベクトルをリセット
 }
 
-void Player::NormalCamera()
+void Player::KeyBoradMove()
 {
-}
-
-void Player::DebugCamera()
-{
-	cameraTransform_.rotate_.x = 90.0f;
-}
-
-void Player::RockOnCamra()
-{
+	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
+	CharacterMoveRotate(move, this->transform_.rotate_.y);
 }

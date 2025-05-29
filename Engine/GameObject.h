@@ -19,6 +19,11 @@ namespace
 	/// スティックを傾けた値(0.0~1.0)がこの値を上回ったか
 	/// </summary>
 	const float sticktilt = 0.5f;
+
+	/// <summary>
+	/// スティックをわずかに傾けた値(0.0~1.0)がこの値を上回ったか
+	/// </summary>
+	const float stickMicrotilt = 0.01f;
 }
 
 struct Point

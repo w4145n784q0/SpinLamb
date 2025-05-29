@@ -26,7 +26,9 @@ namespace
 
 Enemy::Enemy(GameObject* parent)
 	:Character(parent,"Enemy"), hEnemy_(-1), pPlayer_(nullptr),
-	EnemyState_(S_IDLE),HitStopTimer_(0)
+	EnemyState_(S_IDLE),AimTimer_(0), 
+	pPositionVec_({0,0,0}),PlayerPosition_({0,0,0}),PlayerAcceleration_(0.0f),
+	HitStopTimer_(0)
 {
 	srand((unsigned)time(NULL));
 }
@@ -118,9 +120,6 @@ void Enemy::Update()
 
 void Enemy::Draw()
 {
-	//Model::SetTransform(hEnemy_, transform_);
-	//Model::Draw(hEnemy_);
-
 	if (IsInvincibility_)
 	{
 		if (++blinkTimer > blink) {
@@ -241,13 +240,11 @@ void Enemy::UpdateAim()
 	LookPlayer();
 	SetChargingEffect("PaticleAssets\\circle_R.png");
 	FastRotate();
-
-	//	EnemyAttackTime = 180
+	Charging();
 
 	if (++AimTimer_ > EnemyAttackTimeArray[RandomAim])
 	{
 		AimTimer_ = 0;
-		Acceleration_ = FullAccelerate_;
 		EnemyState_ = S_ATTACK;
 	}
 
@@ -262,11 +259,7 @@ void Enemy::UpdateAttack()
 {
 	SetAttackLocusEffect();
 	CharacterMove(MoveDirection_);
-
-	//速度を毎フレーム減少
 	Deceleration();
-
-	//キャラモデル回転
 	FastRotateReverse();
 
 	if (IsDashStop())
