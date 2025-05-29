@@ -20,67 +20,70 @@ void Character::SetcsvStatus(std::string _path)
 	CsvReader csv;
 	csv.Load(_path);
 	
-
-	StartPosition_.x = csv.GetValueFloat(1, 1);
-	StartPosition_.y = csv.GetValueFloat(1, 2);
-	StartPosition_.z = csv.GetValueFloat(1, 3);
+	InitParam_.StartPosition_.x = csv.GetValueFloat(1, 1);
+	InitParam_.StartPosition_.y = csv.GetValueFloat(1, 2);
+	InitParam_.StartPosition_.z = csv.GetValueFloat(1, 3);
 	this->transform_.rotate_.x = csv.GetValueFloat(1, 4);
 	this->transform_.rotate_.y = csv.GetValueFloat(1, 5);
 	this->transform_.rotate_.z = csv.GetValueFloat(1, 6);
 	this->transform_.scale_.x = csv.GetValueFloat(1, 7);
 	this->transform_.scale_.y = csv.GetValueFloat(1, 8);
 	this->transform_.scale_.z = csv.GetValueFloat(1, 9);
-	FrontDirection_ = { csv.GetValueFloat(1, 10),csv.GetValueFloat(1, 11),csv.GetValueFloat(1, 12) };
-	Velocity_ = csv.GetValueFloat(1, 13);
+
+	InitParam_.FrontDirection_ = { csv.GetValueFloat(1, 10),csv.GetValueFloat(1, 11),csv.GetValueFloat(1, 12) };
+
+	MoveParam_.Velocity_ = csv.GetValueFloat(1, 13);
 	
-    Acceleration_ = csv.GetValueFloat(1, 14);
-    AcceleValue_ = csv.GetValueFloat(1, 15);
-    FullAccelerate_ = csv.GetValueFloat(1, 16);
-	ForwardVector_ = { csv.GetValueFloat(1, 17), csv.GetValueFloat(1, 18), csv.GetValueFloat(1, 19) };
+	MoveParam_.Acceleration_ = csv.GetValueFloat(1, 14);
+	MoveParam_.AcceleValue_ = csv.GetValueFloat(1, 15);
+	MoveParam_.FullAccelerate_ = csv.GetValueFloat(1, 16);
+	MoveParam_.ForwardVector_ = { csv.GetValueFloat(1, 17), csv.GetValueFloat(1, 18), csv.GetValueFloat(1, 19) };
 
-	MoveRotateX = csv.GetValueFloat(1, 20);
-    FastRotateX = csv.GetValueFloat(1, 21);
+	RotateParam_. MoveRotateX = csv.GetValueFloat(1, 20);
+	RotateParam_.FastRotateX = csv.GetValueFloat(1, 21);
 
-    Gravity_ = csv.GetValueFloat(1, 22);
-	IsOnGround_ = false;
-    JumpSpeed_ = csv.GetValueFloat(1, 23);
-	HeightLowerLimit_ = csv.GetValueFloat(1, 24);
-	HeightUpperLimit_ = csv.GetValueFloat(1, 25);
+	JumpParam_.Gravity_ = csv.GetValueFloat(1, 22);
+	JumpParam_.IsOnGround_ = false;
+	JumpParam_.JumpSpeed_ = csv.GetValueFloat(1, 23);
+	JumpParam_.HeightLowerLimit_ = csv.GetValueFloat(1, 24);
+	JumpParam_.HeightUpperLimit_ = csv.GetValueFloat(1, 25);
 
-    ColliderSize_ = csv.GetValueFloat(1, 26);
-	KnockBack_Direction_ = { csv.GetValueFloat(1, 27), csv.GetValueFloat(1, 28) , csv.GetValueFloat(1, 29) };
-    KnockBack_Velocity_ = { csv.GetValueFloat(1, 30), csv.GetValueFloat(1, 31) , csv.GetValueFloat(1, 32) };
-	KnockBackPower_ = csv.GetValueFloat(1, 33);
-	DecelerationRate_ = csv.GetValueFloat(1, 34);
-	KnockBackEnd_ = csv.GetValueFloat(1, 35);
-
-    InvincibilityTime_ =  csv.GetValueFloat(1, 36);
-	IsInvincibility_ = false;
-    InvincibilityValue = csv.GetValueFloat(1, 37);
+	HitParam_.ColliderSize_ = csv.GetValueFloat(1, 26);
+	HitParam_.KnockBack_Direction_ = { csv.GetValueFloat(1, 27), csv.GetValueFloat(1, 28) , csv.GetValueFloat(1, 29) };
+	HitParam_.KnockBack_Velocity_ = { csv.GetValueFloat(1, 30), csv.GetValueFloat(1, 31) , csv.GetValueFloat(1, 32) };
+	HitParam_.KnockBackPower_ = csv.GetValueFloat(1, 33);
+	HitParam_.DecelerationRate_ = csv.GetValueFloat(1, 34);
+	HitParam_.KnockBackEnd_ = csv.GetValueFloat(1, 35);
+	
+	WallHitParam_.InvincibilityTime_ =  csv.GetValueFloat(1, 36);
+	WallHitParam_.IsInvincibility_ = false;
+	WallHitParam_.InvincibilityValue = csv.GetValueFloat(1, 37);
 }
+
+
 
 void Character::CharacterGravity()
 {
-	JumpSpeed_ -= Gravity_;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
-	this->transform_.position_.y += JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
+	JumpParam_. JumpSpeed_ -= JumpParam_.Gravity_;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
+	this->transform_.position_.y += JumpParam_.JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
 
-	if (this->transform_.position_.y <= HeightLowerLimit_)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	if (this->transform_.position_.y <= JumpParam_.HeightLowerLimit_)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
 	{
-		this->transform_.position_.y = HeightLowerLimit_;
-		IsOnGround_ = true;
+		this->transform_.position_.y = JumpParam_.HeightLowerLimit_;
+		JumpParam_.IsOnGround_ = true;
 	}
 }
 
 void Character::ShadowInit()
 {
-	pGround_ = (Ground*)FindObject("Ground");
-	hShadow_ = Model::Load("Model\\ShadowPoint.fbx");
-	assert(hShadow_ >= 0);
+	ShadowParam_.pGround_ = (Ground*)FindObject("Ground");
+	ShadowParam_.hShadow_ = Model::Load("Model\\ShadowPoint.fbx");
+	assert(ShadowParam_.hShadow_ >= 0);
 }
 
 void Character::ShadowSet()
 {
-	int hGroundModel = pGround_->GetModelHandle();    //モデル番号を取得
+	int hGroundModel = ShadowParam_.pGround_->GetModelHandle();    //モデル番号を取得
 	RayCastData data;
 	data.start = this->transform_.position_;//レイの発射位置
 	data.dir = XMFLOAT3(0, -1, 0);    //レイの方向
@@ -89,17 +92,17 @@ void Character::ShadowSet()
 	//レイが当たったら
 	if (data.hit)
 	{
-		ShadowHeight_ = (this->transform_.position_.y - data.dist) + 0.05;
+		ShadowParam_.ShadowHeight_ = (this->transform_.position_.y - data.dist) + ShadowParam_.ShadowCorrection_;
 	}
-	this->ShadowTrans_.position_.x = this->transform_.position_.x;
-	this->ShadowTrans_.position_.z = this->transform_.position_.z;
-	this->ShadowTrans_.position_.y = ShadowHeight_;
+	this->ShadowParam_.ShadowTrans_.position_.x = this->transform_.position_.x;
+	this->ShadowParam_.ShadowTrans_.position_.z = this->transform_.position_.z;
+	this->ShadowParam_.ShadowTrans_.position_.y = ShadowParam_.ShadowHeight_;
 }
 
 void Character::ShadowDraw()
 {
-	Model::SetTransform(hShadow_, this->ShadowTrans_);
-	Model::Draw(hShadow_);
+	Model::SetTransform(ShadowParam_.hShadow_, this->ShadowParam_.ShadowTrans_);
+	Model::Draw(ShadowParam_.hShadow_);
 }
 
 void Character::CharacterMoveRotate(XMVECTOR _direction,float rotateY)
@@ -108,13 +111,13 @@ void Character::CharacterMoveRotate(XMVECTOR _direction,float rotateY)
 	XMVECTOR prev = RotateVecFront(rotateY, _direction);
 
 	//単位ベクトル化し、移動方向を確定
-	MoveDirection_ = XMVector3Normalize(prev);
+	MoveParam_.MoveDirection_ = XMVector3Normalize(prev);
 
 	CreateMoveVector();
 
 	//場外でなければ位置更新 
 	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, NewPositon_);
+	XMStoreFloat3(&tmp, MoveParam_.NewPositon_);
 	if (!IsOutsideStage(tmp))
 	{
 		MoveConfirm();
@@ -124,13 +127,13 @@ void Character::CharacterMoveRotate(XMVECTOR _direction,float rotateY)
 void Character::CharacterMove(XMVECTOR _direction)
 {
 	//単位ベクトル化し、移動方向を確定
-	MoveDirection_ = XMVector3Normalize(_direction);
+	MoveParam_.MoveDirection_ = XMVector3Normalize(_direction);
 
 	CreateMoveVector();
 
 	//場外でなければ位置更新 
 	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, NewPositon_);
+	XMStoreFloat3(&tmp, MoveParam_.NewPositon_);
 	if (!IsOutsideStage(tmp))
 	{
 		MoveConfirm();
@@ -141,16 +144,16 @@ void Character::CreateMoveVector()
 {
 	//移動ベクトル = 移動方向 * ((初速度 + 加速度) * 1fの移動量のスケーリング)
 	//移動ベクトル化する
-	XMVECTOR MoveVector = XMVectorScale(MoveDirection_, (Velocity_ + Acceleration_) * DeltaTime);
+	XMVECTOR MoveVector = XMVectorScale(MoveParam_.MoveDirection_, (MoveParam_.Velocity_ + MoveParam_.Acceleration_) * DeltaTime);
 
 	//現在位置と移動ベクトルを加算
 	XMVECTOR PrevPos = XMLoadFloat3(&this->transform_.position_);
-	NewPositon_ = PrevPos + MoveVector;
+	MoveParam_.NewPositon_ = PrevPos + MoveVector;
 }
 
 bool Character::IsOutsideStage(XMFLOAT3 _position)
 {
-	if (_position.x > EastEnd || _position.x < WestEnd || _position.z > NorthEnd || _position.z < SouthEnd){
+	if (_position.x > EastEnd_ || _position.x < WestEnd_ || _position.z > NorthEnd_ || _position.z < SouthEnd_){
 			return true;
 	}
 	else {
@@ -160,13 +163,13 @@ bool Character::IsOutsideStage(XMFLOAT3 _position)
 
 void Character::MoveConfirm()
 {
-	XMStoreFloat3(&this->transform_.position_, NewPositon_);
+	XMStoreFloat3(&this->transform_.position_, MoveParam_.NewPositon_);
 }
 
 void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, float eVelocity)
 {
 	//無敵状態なら処理しない
-	if (this->IsInvincibility_)
+	if (this->WallHitParam_.IsInvincibility_)
 	{
 		return;
 	}
@@ -182,7 +185,7 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 	XMStoreFloat3(&tmp,subVector);
 
 	//反射方向を設定
-	KnockBack_Direction_ = tmp;
+	 HitParam_.KnockBack_Direction_ = tmp;
 
 	//自身の速度と相手の速度の差分をとる
 	float subVelocity = myVelocity - eVelocity;
@@ -209,30 +212,31 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 		KnockBackValue = LinearCompletion(subVelocity, 0, 20, 2, 4);
 	}
 
-	KnockBack_Velocity_.x = KnockBackValue;
-	KnockBack_Velocity_.z = KnockBackValue;
+	HitParam_.KnockBack_Velocity_.x = KnockBackValue;
+	HitParam_.KnockBack_Velocity_.z = KnockBackValue;
 
-	Acceleration_ = 0;
+	MoveParam_. Acceleration_ = 0;
 }
 
 void Character::KnockBack()
 {
-	this->transform_.rotate_.x += MoveRotateX;
+	//ノックバックする速度= ノックバックする強さ(定数) * ノックバックする方向
+	this->transform_.rotate_.x += RotateParam_.MoveRotateX;
 
 	//毎フレーム速度を減少
-	KnockBack_Velocity_.x *= DecelerationRate_;
-	KnockBack_Velocity_.z *= DecelerationRate_;
+	HitParam_.KnockBack_Velocity_.x *= HitParam_.DecelerationRate_;
+	HitParam_.KnockBack_Velocity_.z *= HitParam_.DecelerationRate_;
 
 	//位置 = 位置 + 方向 * 速度
 	XMFLOAT3 TmpPos = this->transform_.position_;
-	TmpPos.x += KnockBack_Direction_.x * KnockBack_Velocity_.x;
-	TmpPos.z += KnockBack_Direction_.z * KnockBack_Velocity_.z;
+	TmpPos.x += HitParam_.KnockBack_Direction_.x * HitParam_.KnockBack_Velocity_.x;
+	TmpPos.z += HitParam_.KnockBack_Direction_.z * HitParam_.KnockBack_Velocity_.z;
 
-	NewPositon_ = XMLoadFloat3(&TmpPos);
+	MoveParam_.NewPositon_ = XMLoadFloat3(&TmpPos);
 
 	//場外でなければ位置更新 
 	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, NewPositon_);
+	XMStoreFloat3(&tmp, MoveParam_. NewPositon_);
 	if (!IsOutsideStage(tmp))
 	{
 		MoveConfirm();
@@ -244,24 +248,25 @@ void Character::WallHit()
 	SetWallHitEffect();
 
 	//速度リセット
-	Acceleration_ = 0.0f;
+	MoveParam_.Acceleration_ = 0.0f;
 
 	//正面ベクトルの逆ベクトルを計算
-	XMVECTOR negate = XMVectorNegate(ForwardVector_);
+	XMVECTOR negate = XMVectorNegate(MoveParam_.ForwardVector_);
 	XMFLOAT3 inverse;
 	XMStoreFloat3(&inverse, negate);
 
 	//ノックバック方向に代入
-	KnockBack_Direction_ = { inverse.x, inverse.y, inverse.z };
+	HitParam_.KnockBack_Direction_ = { inverse.x, inverse.y, inverse.z };
 
 	//ノックバック量を速度に代入(一定値)
-	KnockBack_Velocity_.x = KnockBackPower_;
-	KnockBack_Velocity_.z = KnockBackPower_;
+	HitParam_.KnockBack_Velocity_.x = HitParam_.KnockBackPower_;
+	HitParam_.KnockBack_Velocity_.z = HitParam_.KnockBackPower_;
 }
 
 bool Character::IsKnockBackEnd()
 {
-	if (KnockBack_Velocity_.x <= KnockBackEnd_ || KnockBack_Velocity_.z <= KnockBackEnd_)
+	if (HitParam_.KnockBack_Velocity_.x <= HitParam_.KnockBackEnd_ ||
+		HitParam_.KnockBack_Velocity_.z <= HitParam_.KnockBackEnd_)
 	{
 		return true;
 	}
@@ -274,12 +279,12 @@ bool Character::IsKnockBackEnd()
 void Character::InvincibilityTimeCalclation()
 {
 	//無敵時間の計算
-	if (IsInvincibility_)
+	if (WallHitParam_.IsInvincibility_)
 	{
-		if (--InvincibilityTime_ < 0)
+		if (++WallHitParam_.InvincibilityTime_ > WallHitParam_.InvincibilityValue)
 		{
-			InvincibilityTime_ = InvincibilityValue;
-			IsInvincibility_ = false;
+			WallHitParam_.InvincibilityTime_ = WallHitParam_.InvincibilityValue;
+			WallHitParam_.IsInvincibility_ = false;
 		}
 	}
 }
@@ -287,13 +292,13 @@ void Character::InvincibilityTimeCalclation()
 void Character::Charging()
 {
 	//チャージ中一定の加速量を加算し続ける
-	if (Acceleration_ < FullAccelerate_)
+	if (MoveParam_.Acceleration_ < MoveParam_.FullAccelerate_)
 	{
-		Acceleration_ += AcceleValue_;
+		MoveParam_.Acceleration_ += MoveParam_.AcceleValue_;
 	}
 	else
 	{
-		Acceleration_ = FullAccelerate_;
+		MoveParam_.Acceleration_ = MoveParam_.FullAccelerate_;
 	}
 }
 

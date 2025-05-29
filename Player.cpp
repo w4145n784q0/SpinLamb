@@ -155,12 +155,6 @@ void Player::Draw()
 	//ImGui::Text("camera y :%.3f", CameraPosition_.y);
 	//ImGui::Text("camera x :%.3f", CameraPosition_.x);
 	
-	XMFLOAT3 tmp;
-    XMStoreFloat3(&tmp, MoveDirection_);
-
-	ImGui::Text("front.x:%3f", (float)tmp.x);
-	ImGui::Text("front.y:%3f", (float)tmp.y);
-	ImGui::Text("front.z:%3f", (float)tmp.z);
 
 	ImGui::Text("x:%3f", Input::GetPadStickL().x);
 	ImGui::Text("y:%3f", Input::GetPadStickL().y);
