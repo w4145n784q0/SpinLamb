@@ -13,22 +13,31 @@
 
 namespace
 {
-	int blinkTimer = 0;
-	const int blink = 20;
+	enum enemyonly
+	{
+		hitstop = 0,
+		chaseLength,
+		lookRotateAngle,
+		lookRotateValue,
+		EnemyAttackTime_1,
+		EnemyAttackTime_2,
+		EnemyAttackTime_3,
+		EnemyAttackTime_4,
+	};
 
-	const int HitStop = 2;//ヒットストップする時間
-	const float ChaseLength = 10.0f;//追跡状態から攻撃準備に移る距離
-	const float LookRotaeAngle = 3;//敵がプレイヤーの方向を向く際のトリガー　この値を超えたら回転
-	const float LookRotateValue = 1.5f;//プレイヤー方向を向く際の1fごとの回転量
-	int RandomAim = 0;//EnemyAttackTimeArrayの添え字 
-	const int EnemyAttackTimeArray[] = { 180,150,120,60 };//敵が攻撃するまでの時間の配列　ランダムに選ばれる
+	int HitStop = 0;//ヒットストップする時間
+	float ChaseLength = 0.0f;//追跡状態から攻撃準備に移る距離
+	float LookRotaeAngle = 0;//敵がプレイヤーの方向を向く際のトリガー　この値を超えたら回転
+	float LookRotateValue = 0.0f;//プレイヤー方向を向く際の1fごとの回転量
+	
+	std::vector<int> EnemyAttackTimeArray = {0,0,0,0};//敵が攻撃するまでの時間の配列　ランダムに選ばれる
 }
 
 Enemy::Enemy(GameObject* parent)
 	:Character(parent,"Enemy"), hEnemy_(-1), pPlayer_(nullptr),
 	EnemyState_(S_IDLE),AimTimer_(0), 
 	pPositionVec_({0,0,0}),PlayerPosition_({0,0,0}),PlayerAcceleration_(0.0f),
-	HitStopTimer_(0)
+	RandomAim_(0), HitStopTimer_(0)
 {
 	srand((unsigned)time(NULL));
 }
@@ -42,6 +51,7 @@ void Enemy::Initialize()
 
 	std::string path = "CSVdata\\EnemyData.csv";
 	SetcsvStatus(path);
+	SetCSVEnemy();
 
 	hEnemy_ = Model::Load("Model\\chara2.fbx");
 	assert(hEnemy_ >= 0);
@@ -55,7 +65,7 @@ void Enemy::Initialize()
 	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), HitParam_.ColliderSize_);
 	this->AddCollider(collision);
 
-	RandomAim = rand() % 4;
+	RandomAim_ = rand() % EnemyAttackTimeArray.size();
 }
 
 void Enemy::Update()
@@ -122,9 +132,9 @@ void Enemy::Draw()
 {
 	if (WallHitParam_.IsInvincibility_)
 	{
-		if (++blinkTimer > blink) {
+		if (++WallHitParam_.blinkTimer > WallHitParam_.blinkValue) {
 
-			blinkTimer = 0;
+			WallHitParam_.blinkTimer = 0;
 			Model::SetTransform(hEnemy_, this->transform_);
 			Model::Draw(hEnemy_);
 		}
@@ -145,13 +155,6 @@ void Enemy::Draw()
 		else
 			EnemyState_ = S_ROOT;
 	}
-
-	//XMFLOAT3 tmp;
-	//XMStoreFloat3(&tmp, MoveDirection_);
-
-	//ImGui::Text("front.x:%3f", (float)tmp.x);
-	//ImGui::Text("front.y:%3f", (float)tmp.y);
-	//ImGui::Text("front.z:%3f", (float)tmp.z);
 
 	ImGui::Text("knockback:%.3f",this->HitParam_. KnockBack_Velocity_.x );
 #endif
@@ -228,7 +231,6 @@ void Enemy::UpdateWallHit()
 		if (pSM->IsBattleScene())
 		{
 			BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
-			//pBattleScene->SetPlayerHp(CharacterLife_);
 			pBattleScene->PlusPlayerScore();
 		}
 	}
@@ -241,7 +243,8 @@ void Enemy::UpdateAim()
 	FastRotate();
 	Charging();
 
-	if (++AimTimer_ > EnemyAttackTimeArray[RandomAim])
+	//時間経過で攻撃状態へ（配列中のランダムな時間）
+	if (++AimTimer_ > EnemyAttackTimeArray[RandomAim_])
 	{
 		AimTimer_ = 0;
 		EnemyState_ = S_ATTACK;
@@ -265,7 +268,7 @@ void Enemy::UpdateAttack()
 	{
 		RotateStop();
 		EnemyState_ = S_ROOT;
-		RandomAim = rand() % 4;//攻撃終了後に攻撃時間をリセット
+		RandomAim_ = rand() % EnemyAttackTimeArray.size();//攻撃終了後に攻撃時間をリセット
 	}
 }
 
@@ -354,4 +357,31 @@ float Enemy::PlayerEnemyDistanceX()
 	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition, pPositionVec_);
 	float tmp = XMVectorGetX(XMVector3Length(DistVec));
 	return tmp;
+}
+
+void Enemy::SetCSVEnemy()
+{
+	CsvReader csv;
+	csv.Load("CSVdata\\EnemyData.csv");
+
+	std::string only = "EnemyOnlyParam";
+	if (csv.IsGetParamName(only))
+	{
+		std::vector<float> v = csv.GetParam(only);
+		HitStop = v[hitstop];
+		ChaseLength = v[chaseLength];
+		LookRotaeAngle = v[lookRotateAngle];
+		LookRotateValue = v[lookRotateValue];
+
+		int arr[] = { EnemyAttackTime_1, EnemyAttackTime_2, EnemyAttackTime_3, EnemyAttackTime_4 };
+		for (int i = 0; i < EnemyAttackTimeArray.size(); i++)
+		{
+			EnemyAttackTimeArray[i] = arr[i];
+		}
+
+		//EnemyAttackTimeArray[0] = v[EnemyAttackTime_1];
+		//EnemyAttackTimeArray[1] = v[EnemyAttackTime_2];
+		//EnemyAttackTimeArray[2] = v[EnemyAttackTime_3];
+		//EnemyAttackTimeArray[3] = v[EnemyAttackTime_4];
+	}
 }

@@ -40,9 +40,12 @@ private:
 	XMFLOAT3 PlayerPosition_;//プレイヤーの位置(座標)
 	float PlayerAcceleration_;//プレイヤーの速度
 
+	//----------攻撃関係----------
+	int RandomAim_;//EnemyAttackTimeArrayの添え字 
 
 	//ダメージ関係
 	int HitStopTimer_;//ヒットストップ時間
+
 
 public:
 	Enemy(GameObject* parent);
@@ -78,6 +81,8 @@ public:
 
 	//敵とプレイヤーの距離を返す
 	float PlayerEnemyDistanceX();
+
+	void SetCSVEnemy();
 
 };
 

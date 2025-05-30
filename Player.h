@@ -27,6 +27,7 @@ private:
 		S_CHARGE,//チャージ中
 		S_ATTACK,//攻撃
 		S_WALLHIT,//壁にヒット
+		S_STOP,//プレイヤーを止める状態
 		S_MAX
 	};
 	State PlayerState_;
@@ -67,6 +68,7 @@ public:
 	void UpdateCharge();//チャージ状態
 	void UpdateAttack();//攻撃状態
 	void UpdateWallHit();//壁に接触状態
+	void UpdateStop();//プレイヤーを止める状態
 
 	//プレイヤーに移動を許可
 	void PlayerStart() { PlayerState_ = S_IDLE; }
@@ -88,6 +90,6 @@ public:
 	/// </summary>
 	void KeyBoradMove();
 
-
+	void SetCSVPlayer();
 };
 

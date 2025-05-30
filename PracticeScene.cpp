@@ -11,7 +11,7 @@
 
 namespace
 {
-	const int BackTitleValue = 120;//長押しでタイトルに戻るまでの時間
+	const int BackTitleValue = 0;//長押しでタイトルに戻るまでの時間
 }
 
 PracticeScene::PracticeScene(GameObject* parent)

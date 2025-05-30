@@ -15,32 +15,47 @@
 #include"Enemy.h"
 
 namespace {
-	XMVECTOR BackCameraPos = { 0,3,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
-	const float KeyBoardRotateY = 1.0f;
+
+	enum playeronly
+	{
+		backcameraX = 0,
+		backcameraY,
+		backcameraZ,
+		keyboardrotateY,
+		camerashaketime,
+		jumpheight,
+		camerainitx,
+		camerainity,
+		camerainitz,
+		camerarotate,
+		cameraupperlimit,
+		cameralowerlimit,
+		cameradebugPos,
+	};
+
+	XMVECTOR BackCameraPos = { 0.0f,0.0f,0.0f };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
+	float KeyBoardRotateY = 0.0f;
 	
-	const float cameraShakeTime = 0.3f;
-	const float jumpheight = 1.8f;
+	float cameraShakeTime = 0.0f;
+	float Jumpheight = 0.0f;
 
-	const float cameraInitX = 0.0f;
-	const float cameraInitY = 1.0f;
-	const float cameraInitZ = -8.0f;
+	float cameraInitX = 0.0f;
+	float cameraInitY = 0.0f;
+	float cameraInitZ = 0.0f;
 
-	const float cameraRotate = 2.5f;
-	const float cameraUpperLimit = 60.0f;
-	const float cameraLowerLimit = -10.0f;
-	const float cameraDebugPos = 90.0f;
+	float cameraRotate = 0.0f;
+	float cameraUpperLimit = 0.0f;
+	float cameraLowerLimit = 0.0f;
+	float cameraDebugPos = 0.0f;
 }
 
 Player::Player(GameObject* parent) 
 	: Character(parent,"Player"),
-	hPlayer_(-1), /*hAttackArrow_(-1),*/ hShadow_(-1), hCollisionSound_(-1),
+	hPlayer_(-1),hShadow_(-1), hCollisionSound_(-1),
 	PlayerState_(S_MAX),CameraState_(S_NORMALCAMERA),
-	Direction_({ 0,0,0 }),BackCamera_(BackCameraPos)
+	Direction_({ 0,0,0 }),BackCamera_({0,0,0})
 {
-	cameraTransform_ = this->transform_;
-	CameraPosition_ = { this->transform_.position_.x + cameraInitX
-		,this->transform_.position_.y + cameraInitY, this->transform_.position_.z + cameraInitZ };
-	CameraTarget_ = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
+	
 }
 
 Player::~Player()
@@ -52,6 +67,7 @@ void Player::Initialize()
 {
 	std::string path = "CSVdata\\PlayerData.csv";
 	SetcsvStatus(path);
+	SetCSVPlayer();
 
 	hPlayer_ = Model::Load("Model\\chara2.fbx");
 	assert(hPlayer_ >= 0);
@@ -65,6 +81,11 @@ void Player::Initialize()
 	
 	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),HitParam_. ColliderSize_);
 	this->AddCollider(collider);
+
+	cameraTransform_ = this->transform_;
+	CameraPosition_ = { this->transform_.position_.x + cameraInitX
+		,this->transform_.position_.y + cameraInitY, this->transform_.position_.z + cameraInitZ };
+	CameraTarget_ = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 }
 
 void Player::Update()
@@ -141,12 +162,6 @@ void Player::Draw()
 	ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
 	ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
 	ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
-
-	//ImGui::Text("shadow:%3f", shadow);
-
-	//ImGui::Text("camera y :%.3f", CameraPosition_.y);
-	//ImGui::Text("camera x :%.3f", CameraPosition_.x);
-	
 
 	ImGui::Text("x:%3f", Input::GetPadStickL().x);
 	ImGui::Text("y:%3f", Input::GetPadStickL().y);
@@ -272,6 +287,7 @@ void Player::UpdateIdle()
 	{
 		if (JumpParam_. IsOnGround_)
 		{
+			cameraTransform_.rotate_.y = this->transform_.rotate_.y;
 			PlayerState_ = S_CHARGE;
 		}
 	}
@@ -311,6 +327,17 @@ void Player::UpdateCharge()
 			SetJump();
 			PlayerState_ = S_IDLE;
 		}
+	}
+
+	if (Input::IsKey(DIK_LEFT))
+	{
+		this->transform_.rotate_.y -= KeyBoardRotateY;
+		cameraTransform_.rotate_.y -= KeyBoardRotateY;
+	}
+	if (Input::IsKey(DIK_RIGHT))
+	{
+		this->transform_.rotate_.y += KeyBoardRotateY;
+		cameraTransform_.rotate_.y += KeyBoardRotateY;
 	}
 
 	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
@@ -357,10 +384,14 @@ void Player::UpdateWallHit()
 	}
 }
 
+void Player::UpdateStop()
+{
+}
+
 void Player::SetJump()
 {
 	JumpParam_. IsOnGround_ = false;
-	JumpParam_. JumpSpeed_ = jumpheight;//一時的にy方向にマイナスされている値を大きくする
+	JumpParam_. JumpSpeed_ = Jumpheight;//一時的にy方向にマイナスされている値を大きくする
 }
 
 void Player::CameraControl()
@@ -455,4 +486,29 @@ void Player::KeyBoradMove()
 {
 	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
 	CharacterMoveRotate(move, this->transform_.rotate_.y);
+}
+
+void Player::SetCSVPlayer()
+{
+	CsvReader csv;
+	csv.Load("CSVdata\\PlayerData.csv");
+
+	std::string only = "PlayerOnlyParam";
+	if (csv.IsGetParamName(only))
+	{
+		std::vector<float> v = csv.GetParam(only);
+		BackCameraPos = { v[backcameraX], v[backcameraY], v[backcameraZ] };
+		KeyBoardRotateY = v[keyboardrotateY];
+		cameraShakeTime = v[camerashaketime];
+		Jumpheight = v[jumpheight];
+		cameraInitX = v[camerainitx];
+		cameraInitY = v[camerainity];
+		cameraInitZ = v[camerainitz];
+		cameraRotate = v[camerarotate];
+		cameraUpperLimit = v[cameraupperlimit];
+		cameraLowerLimit = v[cameralowerlimit];
+		cameraDebugPos = v[cameradebugPos];
+		BackCamera_ = { BackCameraPos };//バックカメラの初期値をセット
+
+	}
 }
