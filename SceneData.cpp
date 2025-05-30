@@ -17,10 +17,12 @@ namespace
 }
 
 SceneData::SceneData(GameObject* parent)
+	:GameObject(parent, "SceneData")
 {
 }
 
 SceneData::SceneData(GameObject* parent, const std::string& name)
+	:GameObject(parent, name)
 {
 }
 

@@ -53,7 +53,7 @@ Player::Player(GameObject* parent)
 	: Character(parent,"Player"),
 	hPlayer_(-1),hShadow_(-1), hCollisionSound_(-1),
 	PlayerState_(S_MAX),CameraState_(S_NORMALCAMERA),
-	Direction_({ 0,0,0 }),BackCamera_({0,0,0})
+	Direction_({ 0,0,0 }),BackCamera_({ 0,0,0 }), CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 })
 {
 	
 }
