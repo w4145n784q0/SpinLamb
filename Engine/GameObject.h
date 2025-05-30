@@ -26,12 +26,6 @@ namespace
 	const float stickMicrotilt = 0.01f;
 }
 
-struct Point
-{
-	float x;
-	float z;
-};
-
 inline XMFLOAT3 operator + (const XMFLOAT3& a, const XMFLOAT3& b) {
 	XMFLOAT3 tmp = {0,0,0};
 	tmp.x = a.x + b.x;

@@ -76,9 +76,10 @@ void Character::SetcsvStatus(std::string _path)
 	CsvReader csv;
 	csv.Load(_path);
 
-	if (csv.IsGetParamName("InitializeParam"))
+	std::string p_init = "InitializeParam";
+	if (csv.IsGetParamName(p_init))
 	{
-		std::vector<float> v = csv.GetParam("InitializeParam");
+		std::vector<float> v = csv.GetParam(p_init);
 
 		InitParam_.StartPosition_.x = v[pos_x];
 		InitParam_.StartPosition_.y = v[pos_y];
@@ -89,55 +90,58 @@ void Character::SetcsvStatus(std::string _path)
 		this->transform_.scale_.x = v[sca_x];
 		this->transform_.scale_.y = v[sca_y];
 		this->transform_.scale_.z = v[sca_z];
-		
 	}
 
-	if (csv.IsGetParamName("MoveParam"))
+	std::string p_move = "MoveParam";
+	if (csv.IsGetParamName(p_move))
 	{
-		std::vector<float> v = csv.GetParam("MoveParam");
+		std::vector<float> v = csv.GetParam(p_move);
 		MoveParam_.Velocity_ = v[vel];
 		MoveParam_.AcceleValue_ = v[accele_value];
 		MoveParam_.FullAccelerate_ = v[accele_max];
 	}
 
-	if (csv.IsGetParamName("RotateParam"))
+	std::string p_rotate = "RotateParam";
+	if (csv.IsGetParamName(p_rotate))
 	{
-		std::vector<float> v = csv.GetParam("RotateParam");
+		std::vector<float> v = csv.GetParam(p_rotate);
 		RotateParam_.MoveRotateX = v[moverot];
 		RotateParam_.FastRotateX = v[fastrot];
 
 	}
 
-	if (csv.IsGetParamName("JumpParam"))
+	std::string p_jump = "JumpParam";
+	if (csv.IsGetParamName(p_jump))
 	{
-		std::vector<float> v = csv.GetParam("JumpParam");
+		std::vector<float> v = csv.GetParam(p_jump);
 		JumpParam_.Gravity_ = v[gravity];
 		JumpParam_.HeightLowerLimit_ = v[upperlimit];
 		JumpParam_.HeightUpperLimit_ = v[lowerlimit];
 	}
 
-	if (csv.IsGetParamName("HitParam"))
+	std::string p_hit = "HitParam";
+	if (csv.IsGetParamName(p_hit))
 	{
-		std::vector<float> v = csv.GetParam("HitParam");
+		std::vector<float> v = csv.GetParam(p_hit);
 		HitParam_.ColliderSize_ =v[collider];
 		HitParam_.KnockBackPower_ = v[knockbackpower];
 		HitParam_.DecelerationRate_ = v[deceleration];
 		HitParam_.KnockBackEnd_ = v[knockbackend];
 	}
 
-	
-	if (csv.IsGetParamName("WallHitParam"))
+	std::string p_wallhit = "WallHitParam";
+	if (csv.IsGetParamName(p_wallhit))
 	{
-		std::vector<float> v = csv.GetParam("WallHitParam");
+		std::vector<float> v = csv.GetParam(p_wallhit);
 		WallHitParam_.InvincibilityValue = v[invincibilityvalue];
 		WallHitParam_.blinkValue = v[blinkvalue];
 	}
 
-	if(csv.IsGetParamName("Shadowaram"))
+	std::string p_shadow = "ShadowParam";
+	if(csv.IsGetParamName(p_shadow))
 	{
-		std::vector<float> v = csv.GetParam("Shadowaram");
+		std::vector<float> v = csv.GetParam(p_shadow);
 		ShadowParam_.ShadowCorrection_ = v[shadowcorrection];
-		
 	}
 }
 
@@ -364,7 +368,7 @@ void Character::InvincibilityTimeCalclation()
 	{
 		if (++WallHitParam_.InvincibilityTime_ > WallHitParam_.InvincibilityValue)
 		{
-			WallHitParam_.InvincibilityTime_ = WallHitParam_.InvincibilityValue;
+			WallHitParam_.InvincibilityTime_ = 0;
 			WallHitParam_.IsInvincibility_ = false;
 		}
 	}

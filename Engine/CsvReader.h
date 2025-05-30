@@ -52,9 +52,7 @@ public:
 	//戻値：行数
 	size_t GetHeight();
 
-	/// <summary>
-	/// 
-	/// </summary>
+
 	std::vector<float> GetParam(std::string ParamName);
 
 	/// <summary>
@@ -62,6 +60,7 @@ public:
 	/// </summary>
 	/// <param name="ParamName">0列目のパラメータの名前</param>
 	/// <returns></returns>
+	/// 
 	bool IsGetParamName(std::string ParamName);
 };
 

@@ -17,8 +17,7 @@
 namespace {
 	XMVECTOR BackCameraPos = { 0,3,-10,0 };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
 	const float KeyBoardRotateY = 1.0f;
-	int blinkTimer = 0;
-	const int blink = 20;
+	
 	const float cameraShakeTime = 0.3f;
 	const float jumpheight = 1.8f;
 
@@ -63,7 +62,6 @@ void Player::Initialize()
 	assert(hCollisionSound_ >= 0);
 
 	SetStartPosition();
-	//ArrowTransform_.rotate_.y = 180.0f;
 	
 	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),HitParam_. ColliderSize_);
 	this->AddCollider(collider);
@@ -124,9 +122,9 @@ void Player::Draw()
 {
 	if (WallHitParam_.IsInvincibility_)
 	{			
-		if (++blinkTimer > blink) {
+		if (++WallHitParam_. blinkTimer > WallHitParam_.blinkValue) {
 
-			blinkTimer = 0;	
+			WallHitParam_.blinkTimer = 0;
 			Model::SetTransform(hPlayer_, this->transform_);
 			Model::Draw(hPlayer_);
 		}
@@ -138,12 +136,6 @@ void Player::Draw()
 	}
 
 	ShadowDraw();
-
-	/*if (PlayerState_ == S_CHARGE)
-	{
-		Model::SetTransform(hAttackArrow_, ArrowTransform_);
-		Model::Draw(hAttackArrow_);
-	}*/
 
 #ifdef _DEBUG
 	ImGui::Text("PositionX:%.3f", this->transform_.position_.x);

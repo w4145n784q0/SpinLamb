@@ -70,7 +70,7 @@ protected:
     //----------壁の接触ダメージ----------
     struct WallHitParam
     {
-        int InvincibilityTime_ = 0;//ダメージ後の無敵時間 1fごとに減少
+        int InvincibilityTime_ = 0;//ダメージ後の無敵時間 1fごとに上昇
         bool IsInvincibility_ = false;//無敵時間か
         int InvincibilityValue = 0;//無敵時間の値　この値を超えると無敵時間終了
         int blinkTimer = 0;//ダメージ後の点滅カウント

@@ -40,7 +40,7 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 
-	std::string path = "CSVdata\\EnemyData.csv";
+	std::string path = "CSVdata\\EnemyData_2.csv";
 	SetcsvStatus(path);
 
 	hEnemy_ = Model::Load("Model\\chara2.fbx");

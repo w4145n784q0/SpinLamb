@@ -2,6 +2,7 @@
 #include "CsvReader.h"
 
 
+
 //コンストラクタ
 CsvReader::CsvReader()
 {
@@ -137,6 +138,7 @@ size_t CsvReader::GetHeight()
 
 std::vector<float> CsvReader::GetParam(std::string ParamName)
 {
+	ParamName.push_back('\0');
 	for (const auto& arr: data_)
 	{
 		if (!arr.empty() && arr[0] == ParamName)
@@ -153,6 +155,7 @@ std::vector<float> CsvReader::GetParam(std::string ParamName)
 
 bool CsvReader::IsGetParamName(std::string ParamName)
 {
+	ParamName.push_back('\0');
 	for (const auto& arr : data_)
 	{
 		if (!arr.empty() && arr[0] == ParamName)
