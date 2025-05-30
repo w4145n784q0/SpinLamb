@@ -230,24 +230,11 @@ public:
 		return  conversionMin + (convert - originalMin) * (conversionMax - conversionMin) / (originalMax - originalMin);
 	}
 
-	/// <summary>
-	/// CSVからTransformの値を読み込み、設定する
-	/// 読み込む値がTransformの場合活用
-	/// </summary>
-	/// <param name="tf">設定するトランスフォーム</param>
-	/// <param name="path">csvファイルのパス</param>
-	/// <param name="paramName">読み込む行</param>
-	void CSVTransformSet(Transform& tf, std::string path, std::string paramName)
+	void SetTransformPRS(Transform &tr, std::vector<float> v)
 	{
-		CsvReader csv;
-		csv.Load(path);
-		if (csv.IsGetParamName(paramName))
-		{
-			std::vector<float> v = csv.GetParam(paramName);
-			tf.position_ = { v[pos_x],v[pos_y],v[pos_z] };
-			tf.rotate_ = { v[rot_x], v[rot_y],v[rot_z] };
-			tf.scale_ = { v[sca_x] ,v[sca_y],v[sca_z] };
-		}
+		tr.position_ = { v[pos_x],v[pos_y],v[pos_z] };
+		tr.rotate_ = { v[rot_x], v[rot_y],v[rot_z] };
+		tr.scale_ = { v[sca_x] ,v[sca_y],v[sca_z] };
 	}
 
 private:

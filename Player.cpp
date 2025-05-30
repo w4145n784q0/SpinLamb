@@ -50,7 +50,7 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	std::string path = "CSVdata\\PlayerData_2.csv";
+	std::string path = "CSVdata\\PlayerData.csv";
 	SetcsvStatus(path);
 
 	hPlayer_ = Model::Load("Model\\chara2.fbx");

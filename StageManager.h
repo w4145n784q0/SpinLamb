@@ -11,10 +11,11 @@ private:
 	Transform WireData_;//柵クラス(鉄線)に渡すデータ
 	Transform PillerData_;//柵クラス(柱)に渡すデータ
 
-	float NorthEnd_;//ステージ北端
-	float SouthEnd_; //ステージ南端
-	float EastEnd_;//ステージ東端
-	float WestEnd_;//ステージ西端
+	float UpperEnd_;//ステージ北端
+	float LowerEnd_; //ステージ南端
+	float RightEnd_;//ステージ東端
+	float LeftEnd_;//ステージ西端
+	int PillerNum_;//柱の数
 
 public:
 	StageManager(GameObject* parent);
@@ -31,9 +32,9 @@ public:
 	void InitFenceData();
 	void InitEndData();
 
-	float GetNorthEnd() { return NorthEnd_; }
-	float GetSouthEnd() { return SouthEnd_; }
-	float GetEastEnd() { return EastEnd_; }
-	float GetWestEnd() { return WestEnd_; }
+	float GetNorthEnd() { return UpperEnd_; }
+	float GetSouthEnd() { return LowerEnd_; }
+	float GetEastEnd() { return RightEnd_; }
+	float GetWestEnd() { return LeftEnd_; }
 };
 

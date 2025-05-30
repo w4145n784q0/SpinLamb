@@ -7,11 +7,25 @@
 
 namespace
 {
-	const double reductionX = 0.00122;
-	const double reductionY = 0.0022;
-	const XMFLOAT3 MapPositon = { 0.891,-0.809,0 };
-	const float CorrectionValueX = 0.895f;
-	const float CorrectionValueY = 0.81f;
+	enum MiniMapParam 
+	{
+		reductionXParam = 0,
+		reductionZParam,
+		MapPositonXParam,
+		MapPositonYParam,
+		MapPositonZParam,
+		CorrectionValueXParam,
+		CorrectionValueYParam,
+		MapAlphaParam,
+	};
+
+
+	double reductionX = 0.0;//キャラクターのX座標を縮小する値
+	double reductionY = 0.00;//キャラクターのZ座標を縮小する値
+	XMFLOAT3 MapPositon = { 0.0f,0.0f,0.0f };//マップの位置
+	float CorrectionValueX = 0.0f;//マップのX座標を補正する値
+	float CorrectionValueY = 0.0f;//マップのY座標を補正する値
+	float MapAlpha = 0;//マップの透明度
 }
 
 MiniMap::MiniMap(GameObject* parent)
@@ -25,6 +39,8 @@ MiniMap::~MiniMap()
 
 void MiniMap::Initialize()
 {
+	SetCSV();
+
 	hMap_ = Image::Load("Image\\MiniMap\\minimap.png");
 	assert(hMap_ >= 0);
 
@@ -61,7 +77,7 @@ void MiniMap::Draw()
 
 	Image::SetTransform(hMap_, Trans_Map);
 	Image::Draw(hMap_);
-	Image::SetAlpha(hMap_, 128);
+	Image::SetAlpha(hMap_, MapAlpha);
 
 	Image::SetTransform(hPlayerIcon_, Trans_Player);
 	Image::Draw(hPlayerIcon_);
@@ -74,4 +90,24 @@ void MiniMap::Draw()
 
 void MiniMap::Release()
 {
+}
+
+void MiniMap::SetCSV()
+{
+	CsvReader csv;
+	csv.Load("CSVdata\\MiniMapData.csv");
+
+	std::string init = "MIniMapInit";
+	if (csv.IsGetParamName(init))
+	{
+		std::vector<float> v = csv.GetParam(init);
+		reductionX = v[reductionXParam];
+		reductionY = v[reductionZParam];
+		MapPositon.x = v[MapPositonXParam];
+		MapPositon.y = v[MapPositonYParam];
+		MapPositon.z = v[MapPositonZParam];
+		CorrectionValueX = v[CorrectionValueXParam];
+		CorrectionValueY = v[CorrectionValueYParam];
+		MapAlpha = v[MapAlphaParam];
+	}
 }

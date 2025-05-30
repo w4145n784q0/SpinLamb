@@ -52,6 +52,8 @@ public:
 	/// <param name="height">’Œ‚Ì‚‚³</param>
 	void SetPiller(float upper, float lower, float left, float right, float height);
 
+	void SetPillerNum(int num);
+
 	void InitWireTransform(Transform _t) { wire = _t; }
 
 	void InitPillerTransform(Transform _t);

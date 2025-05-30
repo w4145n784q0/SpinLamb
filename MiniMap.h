@@ -18,8 +18,15 @@ private:
 	//敵のアイコン
 	int hEnemyIcon_;
 
+	//各画像のトランスフォーム	
+
+	//マップのトランスフォーム
 	Transform Trans_Map;
+
+	//プレイヤーアイコンのトランスフォーム
 	Transform Trans_Player;
+
+	//敵アイコンのトランスフォーム
 	Transform Trans_Enemy;
 
 	//----------インスタンス----------
@@ -34,5 +41,7 @@ public:
 	void Update() override;
 	void Draw() override;
 	void Release() override;
+
+	void SetCSV();
 };
 

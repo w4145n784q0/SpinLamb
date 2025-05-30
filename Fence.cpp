@@ -10,10 +10,14 @@
 
 namespace
 {
-	const int pillerNum = 4;
-	std::vector<Transform> pillers(pillerNum);
+	//柱の数
+	int pillerNum = 0;
 
-	std::array<XMFLOAT3, pillerNum> PillerPosArray = { };
+	//柱の位置を格納するTransform配列
+	std::vector<Transform> pillers = {};
+
+	//柱の位置(XMFLOAT3)の配列
+	std::vector<XMFLOAT3> PillerPosArray = {};
 }
 
 Fence::Fence(GameObject* parent)
@@ -42,9 +46,6 @@ void Fence::Initialize()
 	AddCollider(collision_wall3);
 	BoxCollider* collision_wall4 = new BoxCollider(XMFLOAT3(-60.5, 5, 0), XMFLOAT3(1, 10, 120));
 	AddCollider(collision_wall4);
-
-	//PillerPosArray = { piller_UpperLeft_ ,piller_UpperRight_ , piller_LowerLeft_,piller_LowerRight_ };
-	
 }
 
 void Fence::Update()
@@ -88,15 +89,17 @@ void Fence::SetPiller(float upper, float lower, float left, float right, float h
 	//この時点でPillerPosArrayの値を入れる
 	PillerPosArray = { piller_UpperLeft_ ,piller_UpperRight_ , piller_LowerLeft_,piller_LowerRight_ };
 
-	for (int i = 0; i < pillers.size(); i++)
+	pillers.resize(pillerNum);
+
+	for (int i = 0; i < pillerNum; i++)
 	{
 		pillers[i].position_ = PillerPosArray[i];
 	}
+}
 
-	/*pillers[0].position_ = piller_UpperLeft_;
-	pillers[1].position_ = piller_UpperRight_;
-	pillers[2].position_ = piller_LowerLeft_;
-	pillers[3].position_ = piller_LowerRight_;*/
+void Fence::SetPillerNum(int num)
+{
+	pillerNum = num;
 }
 
 void Fence::InitPillerTransform(Transform _t)

@@ -209,59 +209,46 @@ void HUD::DrawPractice()
 void HUD::SetCSV()
 {
 	CsvReader csv;
-	csv.Load("CSVdata\\HUDData_2.csv");
+	csv.Load("CSVdata\\HUDData.csv");
 
 	std::string title = "backtitle";
 	if (csv.IsGetParamName(title))
 	{
 		std::vector<float> v = csv.GetParam(title);
-		logo_backtitle.position_ = { v[pos_x],v[pos_y],v[pos_z] };
-		logo_backtitle.rotate_ = { v[rot_x], v[rot_y],v[rot_z] };
-		logo_backtitle.scale_ = { v[sca_x] ,v[sca_y],v[sca_z] };
+		SetTransformPRS(logo_backtitle, v);
 	}
 
 	std::string practice = "practice";
 	if (csv.IsGetParamName(practice)) {
 		std::vector<float> v = csv.GetParam(practice);
-
-		logo_practice.position_ = { v[pos_x], v[pos_y], v[pos_z] };
-		logo_practice.rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
-		logo_practice.scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+		SetTransformPRS(logo_practice, v);
 	}
 
 	std::string start = "start";
 	if (csv.IsGetParamName(start))
 	{
 		std::vector<float> v = csv.GetParam(start);
-		logo_start.position_ = { v[pos_x], v[pos_y], v[pos_z] };
-		logo_start.rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
-		logo_start.scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+		SetTransformPRS(logo_start, v);
 	}
 
 	std::string finish = "finish";
 	if (csv.IsGetParamName(finish))
 	{
 		std::vector<float> v = csv.GetParam(finish);
-		logo_Finish.position_ = { v[pos_x], v[pos_y], v[pos_z] };
-		logo_Finish.rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
-		logo_Finish.scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+		SetTransformPRS(logo_Finish, v);
 	}
 
 	std::string ten = "tentime";
 	if (csv.IsGetParamName(ten))
 	{
 		std::vector<float> v = csv.GetParam(ten);
-		TenTime.position_ = { v[pos_x], v[pos_y], v[pos_z] };
-		TenTime.rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
-		TenTime.scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+		SetTransformPRS(TenTime, v);
 	}
 
 	std::string one = "onetime";
 	if (csv.IsGetParamName(one))
 	{
 		std::vector<float> v = csv.GetParam(one);
-		OneTime.position_ = { v[pos_x], v[pos_y], v[pos_z] };
-		OneTime.rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
-		OneTime.scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+		SetTransformPRS(OneTime, v);
 	}
 }
