@@ -6,9 +6,24 @@
 #include "SphereCollider.h"
 #include "BoxCollider.h"
 #include "Transform.h"
+#include"CsvReader.h"
 
 namespace
 {
+	//トランスフォームの初期化値をCSVから読み込む際のインデックス
+	enum initTransform
+	{
+		pos_x = 0,
+		pos_y,
+		pos_z,
+		rot_x,
+		rot_y,
+		rot_z,
+		sca_x,
+		sca_y,
+		sca_z,
+	};
+
 	/// <summary>
 	/// 60fpsにおける1フレームの時間
 	/// 使用端末によるフレームレート依存防止
@@ -213,6 +228,26 @@ public:
 	{
 		//y = y1 + (x - x1) * (y2 - y1) / (x2 - x1);
 		return  conversionMin + (convert - originalMin) * (conversionMax - conversionMin) / (originalMax - originalMin);
+	}
+
+	/// <summary>
+	/// CSVからTransformの値を読み込み、設定する
+	/// 読み込む値がTransformの場合活用
+	/// </summary>
+	/// <param name="tf">設定するトランスフォーム</param>
+	/// <param name="path">csvファイルのパス</param>
+	/// <param name="paramName">読み込む行</param>
+	void CSVTransformSet(Transform& tf, std::string path, std::string paramName)
+	{
+		CsvReader csv;
+		csv.Load(path);
+		if (csv.IsGetParamName(paramName))
+		{
+			std::vector<float> v = csv.GetParam(paramName);
+			tf.position_ = { v[pos_x],v[pos_y],v[pos_z] };
+			tf.rotate_ = { v[rot_x], v[rot_y],v[rot_z] };
+			tf.scale_ = { v[sca_x] ,v[sca_y],v[sca_z] };
+		}
 	}
 
 private:

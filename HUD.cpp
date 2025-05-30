@@ -53,37 +53,15 @@ void HUD::Initialize()
 
 	hBackTitleLogo_ = Image::Load("Image\\Practice\\BackTitleLogo.png");
 	assert(hBackTitleLogo_ >= 0);
+
 	hPracticeNow_ = Image::Load("Image\\Practice\\PracticeLogo.png");
 	assert(hPracticeNow_ >= 0);
-
-	/*std::string Number = "Image\\number.png";
-
-	hPlayerScore_ = Image::Load(Number);
-	assert(hPlayerScore_ >= 0);
-
-	hEnemyScore_ = Image::Load(Number);
-	assert(hEnemyScore_ >= 0);
-	
-	hTime_ = Image::Load(Number);
-	assert(hTime_ >= 0);*/
 
 	hStart_ = Image::Load("Image\\Battle\\start_logo.png");
 	assert(hStart_ >= 0);
 
 	hFinish_ = Image::Load("Image\\Battle\\finish_logo.png");
 	assert(hFinish_ >= 0);
-	
-	/*hCountDown3_ = Image::Load("Image\\number_3.png");
-	assert(hCountDown3_ >= 0);
-
-	hCountDown2_ = Image::Load("Image\\number_2.png");
-	assert(hCountDown2_ >= 0);
-
-	hCountDown1_ = Image::Load("Image\\number_1.png");
-	assert(hCountDown1_ >= 0);
-	
-	Array_Number_ = { hCountDown3_, hCountDown2_,hCountDown1_ };
-	*/
 
 	hNumber0_ = Image::Load("Image\\number\\number_0.png");
 	assert(hNumber0_ >= 0);
@@ -231,29 +209,59 @@ void HUD::DrawPractice()
 void HUD::SetCSV()
 {
 	CsvReader csv;
-	csv.Load("CSVdata\\HUDData.csv");
+	csv.Load("CSVdata\\HUDData_2.csv");
 
-	logo_backtitle.position_ = { csv.GetValueFloat(1, 1), csv.GetValueFloat(1, 2), csv.GetValueFloat(1, 3) };
-	logo_backtitle.rotate_ = { csv.GetValueFloat(1, 4), csv.GetValueFloat(1, 5), csv.GetValueFloat(1, 6) };
-	logo_backtitle.scale_ = { csv.GetValueFloat(1, 7), csv.GetValueFloat(1, 8), csv.GetValueFloat(1, 9) };
+	std::string title = "backtitle";
+	if (csv.IsGetParamName(title))
+	{
+		std::vector<float> v = csv.GetParam(title);
+		logo_backtitle.position_ = { v[pos_x],v[pos_y],v[pos_z] };
+		logo_backtitle.rotate_ = { v[rot_x], v[rot_y],v[rot_z] };
+		logo_backtitle.scale_ = { v[sca_x] ,v[sca_y],v[sca_z] };
+	}
 
-	logo_practice.position_ = { csv.GetValueFloat(2, 1), csv.GetValueFloat(2, 2), csv.GetValueFloat(2, 3) };
-	logo_practice.rotate_ = { csv.GetValueFloat(2, 4), csv.GetValueFloat(2, 5), csv.GetValueFloat(2, 6) };
-	logo_practice.scale_ = { csv.GetValueFloat(2, 7), csv.GetValueFloat(2, 8), csv.GetValueFloat(2, 9) };
+	std::string practice = "practice";
+	if (csv.IsGetParamName(practice)) {
+		std::vector<float> v = csv.GetParam(practice);
 
-	logo_start.position_ = { csv.GetValueFloat(3, 1), csv.GetValueFloat(3, 2), csv.GetValueFloat(3, 3) };
-	logo_start.rotate_ = { csv.GetValueFloat(3, 4), csv.GetValueFloat(3, 5), csv.GetValueFloat(3, 6) };
-	logo_start.scale_ = { csv.GetValueFloat(3, 7), csv.GetValueFloat(3, 8), csv.GetValueFloat(3, 9) };
+		logo_practice.position_ = { v[pos_x], v[pos_y], v[pos_z] };
+		logo_practice.rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
+		logo_practice.scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+	}
 
-	logo_Finish.position_ = { csv.GetValueFloat(4, 1), csv.GetValueFloat(4, 2), csv.GetValueFloat(4, 3) };
-	logo_Finish.rotate_ = { csv.GetValueFloat(4, 4), csv.GetValueFloat(4, 5), csv.GetValueFloat(4, 6) };
-	logo_Finish.scale_ = { csv.GetValueFloat(4, 7), csv.GetValueFloat(4, 8), csv.GetValueFloat(4, 9) };
+	std::string start = "start";
+	if (csv.IsGetParamName(start))
+	{
+		std::vector<float> v = csv.GetParam(start);
+		logo_start.position_ = { v[pos_x], v[pos_y], v[pos_z] };
+		logo_start.rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
+		logo_start.scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+	}
 
-	TenTime.position_ = { csv.GetValueFloat(5, 1), csv.GetValueFloat(5, 2), csv.GetValueFloat(5, 3) };
-	TenTime.rotate_ = { csv.GetValueFloat(5, 4), csv.GetValueFloat(5, 5), csv.GetValueFloat(5, 6) };
-	TenTime.scale_ = { csv.GetValueFloat(5, 7), csv.GetValueFloat(5, 8), csv.GetValueFloat(5, 9) };
+	std::string finish = "finish";
+	if (csv.IsGetParamName(finish))
+	{
+		std::vector<float> v = csv.GetParam(finish);
+		logo_Finish.position_ = { v[pos_x], v[pos_y], v[pos_z] };
+		logo_Finish.rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
+		logo_Finish.scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+	}
 
-	OneTime.position_ = { csv.GetValueFloat(6, 1), csv.GetValueFloat(6, 2), csv.GetValueFloat(6, 3) };
-	OneTime.rotate_ = { csv.GetValueFloat(6, 4), csv.GetValueFloat(6, 5), csv.GetValueFloat(6, 6) };
-	OneTime.scale_ = { csv.GetValueFloat(6, 7), csv.GetValueFloat(6, 8), csv.GetValueFloat(6, 9) };;
+	std::string ten = "tentime";
+	if (csv.IsGetParamName(ten))
+	{
+		std::vector<float> v = csv.GetParam(ten);
+		TenTime.position_ = { v[pos_x], v[pos_y], v[pos_z] };
+		TenTime.rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
+		TenTime.scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+	}
+
+	std::string one = "onetime";
+	if (csv.IsGetParamName(one))
+	{
+		std::vector<float> v = csv.GetParam(one);
+		OneTime.position_ = { v[pos_x], v[pos_y], v[pos_z] };
+		OneTime.rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
+		OneTime.scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+	}
 }

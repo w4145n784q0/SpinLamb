@@ -18,7 +18,8 @@ private:
 	int hHowtoPlay_;//あそびかた説明ボタン
 	int hBackTitle_;//タイトルのボタン
 	int hFrameLine_;//選択枠の枠線
-	std::array<Transform, 5> ModeSetTrans;//各ボタンのトランスフォーム管理配列
+	//std::array<Transform, 5> ModeSetTrans;//各ボタンのトランスフォーム管理配列
+	
 
 	//----------ロゴ・テキスト----------
 	int hModeSelect_;//モードセレクト

@@ -3,18 +3,8 @@
 #include"Engine/Model.h"
 
 namespace {
-	enum init
-	{
-		pos_x = 0,
-		pos_y,
-		pos_z,
-		rot_x,
-		rot_y,
-		rot_z,
-		sca_x,
-		sca_y,
-		sca_z,
-	};
+	
+	//キャラクタークラスの共通変数を初期化するインデックス
 
 	enum move
 	{

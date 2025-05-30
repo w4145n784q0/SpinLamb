@@ -9,6 +9,12 @@
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
 
+namespace
+{
+	const int Mode = 4;//モードの数
+	std::array<Transform, 5> ModeSetTrans;//各ボタンのトランスフォーム管理配列
+}
+
 GameModeScene::GameModeScene(GameObject* parent)
 	:GameObject(parent, "GameModeScene"), 
 	hBackScreen_(-1), hBackChara_(-1),
@@ -29,9 +35,6 @@ void GameModeScene::Initialize()
 
 	hBackChara_ = Image::Load(path + "sheepImage.png");
 	assert(hBackChara_ >= 0);
-
-	//hExplanation_ = Image::Load(path + "spinlamb_exp.jpg");
-	//assert(hExplanation_ >= 0);
 
 	hBattle_ = Image::Load(path + "BattleButton.png");
 	assert(hBattle_ >= 0);
@@ -223,38 +226,38 @@ void GameModeScene::SetSCV()
 	CsvReader csv;
 	csv.Load("CSVdata\\GameModeData.csv");
 
-	//選択枠
-	ModeSetTrans[0].position_ = { csv.GetValueFloat(1, 1), csv.GetValueFloat(1, 2), csv.GetValueFloat(1, 3) };
-	ModeSetTrans[0].rotate_ = { csv.GetValueFloat(1, 4), csv.GetValueFloat(1, 5), csv.GetValueFloat(1, 6) };
-	ModeSetTrans[0].scale_ = { csv.GetValueFloat(1, 7), csv.GetValueFloat(1, 8), csv.GetValueFloat(1, 9) };
+	//選択枠,プレイボタン,フリープレイボタン,遊び方ボタン,タイトルボタン
+	std::string ParamArray[] = { "FrameLine","Battle", "Practice", "HowToPlay", "BackTitle"};
 
-	//プレイボタン
-	ModeSetTrans[1].position_ = { csv.GetValueFloat(2, 1), csv.GetValueFloat(2, 2), csv.GetValueFloat(2, 3) };
-	ModeSetTrans[1].rotate_ = { csv.GetValueFloat(2, 4), csv.GetValueFloat(2, 5), csv.GetValueFloat(2, 6) };
-	ModeSetTrans[1].scale_ = { csv.GetValueFloat(2, 7), csv.GetValueFloat(2, 8), csv.GetValueFloat(2, 9) };
+    for (int i = 0; i < sizeof(ParamArray) / sizeof(ParamArray[0]); i++)
+    {
+		if (csv.IsGetParamName(ParamArray[i]))
+		{
+			std::vector<float> v = csv.GetParam(ParamArray[i]);
+			ModeSetTrans[i].position_ = { v[pos_x] , v[pos_y], v[pos_z] };
+			ModeSetTrans[i].rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
+			ModeSetTrans[i].scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+		}
+    }
 
-	//フリープレイボタン
-	ModeSetTrans[2].position_ = { csv.GetValueFloat(3, 1), csv.GetValueFloat(3, 2), csv.GetValueFloat(3, 3) };
-	ModeSetTrans[2].rotate_ = { csv.GetValueFloat(3, 4), csv.GetValueFloat(3, 5), csv.GetValueFloat(3, 6) };
-	ModeSetTrans[2].scale_ = { csv.GetValueFloat(3, 7), csv.GetValueFloat(3, 8), csv.GetValueFloat(3, 9) };
-
-	//遊び方ボタン
-	ModeSetTrans[3].position_ = { csv.GetValueFloat(4, 1), csv.GetValueFloat(4, 2), csv.GetValueFloat(4, 3) };
-	ModeSetTrans[3].rotate_ = { csv.GetValueFloat(4, 4), csv.GetValueFloat(4, 5), csv.GetValueFloat(4, 6) };
-	ModeSetTrans[3].scale_ = { csv.GetValueFloat(4, 7), csv.GetValueFloat(4, 8), csv.GetValueFloat(4, 9) };
-
-	//タイトルボタン
-	ModeSetTrans[4].position_ = { csv.GetValueFloat(5, 1), csv.GetValueFloat(5, 2), csv.GetValueFloat(5, 3) };
-	ModeSetTrans[4].rotate_ = { csv.GetValueFloat(5, 4), csv.GetValueFloat(5, 5), csv.GetValueFloat(5, 6) };
-	ModeSetTrans[4].scale_ = { csv.GetValueFloat(5, 7), csv.GetValueFloat(5, 8), csv.GetValueFloat(5, 9) };
 
 	//"モードセレクト"
-	Trans_Select_.position_ = { csv.GetValueFloat(6, 1), csv.GetValueFloat(6, 2), csv.GetValueFloat(6, 3) };
-	Trans_Select_.rotate_ = { csv.GetValueFloat(6, 4), csv.GetValueFloat(6, 5), csv.GetValueFloat(6, 6) };
-	Trans_Select_.scale_ = { csv.GetValueFloat(6, 7), csv.GetValueFloat(6, 8), csv.GetValueFloat(6, 9) };
+	std::string modeselect = "ModeSelect";
+	if (csv.IsGetParamName(modeselect))
+	{
+		std::vector<float> v = csv.GetParam(modeselect);
+		Trans_Select_.position_ = { v[pos_x] , v[pos_y], v[pos_z] };
+		Trans_Select_.rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
+		Trans_Select_.scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+	}
 
 	//画面下部のテキスト
-	Trans_Text_.position_ = { csv.GetValueFloat(7, 1), csv.GetValueFloat(7, 2), csv.GetValueFloat(7, 3) };
-	Trans_Text_.rotate_ = { csv.GetValueFloat(7, 4), csv.GetValueFloat(7, 5), csv.GetValueFloat(7, 6) };
-	Trans_Text_.scale_ = { csv.GetValueFloat(7, 7), csv.GetValueFloat(7, 8), csv.GetValueFloat(7, 9) };
+	std::string text = "Text";
+	if (csv.IsGetParamName(text))
+	{
+		std::vector<float> v = csv.GetParam(text);
+		Trans_Text_.position_ = { v[pos_x], v[pos_y], v[pos_z] };
+		Trans_Text_.rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
+		Trans_Text_.scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+	}
 }
