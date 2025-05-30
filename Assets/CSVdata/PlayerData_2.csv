@@ -1,4 +1,4 @@
-InitializeParam,0,0,-20,0,0,0,0,0,0
+InitializeParam,0,0,-20,0,0,0,1,1,1
 MoveParam,9,2,120,,,,,,
 RotateParam,10,30,,,,,,,
 JumpParam,0.08,1.5,50,,,,,,
