@@ -32,9 +32,6 @@ private:
 	int hNumber8_;
 	int hNumber9_;
 
-	//ナンバーハンドルの配列
-	std::array<int, 10> ArrayHandle_;
-
 	//フィニッシュのロゴ(バトルシーン用)
 	int hFinish_;
 

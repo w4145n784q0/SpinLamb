@@ -6,10 +6,19 @@ class GameModeScene :
     public GameObject
 {
 private:
+	enum Mode
+	{
+		Battle = 0,
+		Practice,
+		HowToPlay,
+		Title,
+		MaxCount //モードの最大値
+	};
+	Mode SelectMode_;
+
 	//----------背景----------
 	int hBackScreen_;//背景色
 	int hBackChara_;//背景キャラ
-	//int hExplanation_;//ゲーム説明
 	Transform BackChara_;
 
 	//----------ボタン----------
@@ -18,7 +27,8 @@ private:
 	int hHowtoPlay_;//あそびかた説明ボタン
 	int hBackTitle_;//タイトルのボタン
 	int hFrameLine_;//選択枠の枠線
-	//std::array<Transform, 5> ModeSetTrans;//各ボタンのトランスフォーム管理配列
+	std::array<Transform, MaxCount> ModeArray_;//各ボタンのトランスフォーム管理配列
+	std::array<int, MaxCount> ButtonArray_;//各ボタンのハンドル配列
 	
 
 	//----------ロゴ・テキスト----------
@@ -27,24 +37,17 @@ private:
 	int hFreePlayText_;//画面下部のテキスト(フリープレイ用)
 	int hHowtoPlayText_;//画面下部のテキスト(あそびかた用)
 	int hTitleText_;//画面下部のテキスト(タイトル用)
-	std::array<int, 4> TextArray_;//各テキストのハンドル配列
+	std::array<int, MaxCount> TextArray_;//各テキストのハンドル配列
 
 	//----------サウンドハンドル----------
 	int hModeSound_;
 
-	enum Mode
-	{
-		Battle = 0,
-		Practice,
-		HowToPlay,
-		Title,
-		Max
-	};
-	Mode SelectMode_;
+
 
 	std::list<Mode> ModeList_;//各モードのリスト
 	std::list<Mode>::iterator itr;//ModeList_のインデックスを指す値
 	
+	Transform Trans_Frame_;//選択枠のトランスフォーム
 	Transform Trans_Select_;//ゲームモードロゴのトランスフォーム
 	Transform Trans_Text_;//テキストの固定位置
 
@@ -66,6 +69,7 @@ public:
 	//開放
 	void Release() override;
 
+	//csvファイルの読み込み
 	void SetSCV();
 };
 

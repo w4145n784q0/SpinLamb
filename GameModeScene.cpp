@@ -9,17 +9,12 @@
 #include "imgui/imgui_impl_dx11.h"
 #include "imgui/imgui_impl_win32.h"
 
-namespace
-{
-	std::array<Transform, 5> ModeSetTrans;//各ボタンのトランスフォーム管理配列
-}
-
 GameModeScene::GameModeScene(GameObject* parent)
 	:GameObject(parent, "GameModeScene"), 
 	hBackScreen_(-1), hBackChara_(-1),
 	hBattle_(-1),hPractice_(-1), hHowtoPlay_(-1),hBackTitle_(-1), hFrameLine_(-1),
 	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),
-	TextArray_({}),hModeSound_(-1),SelectMode_(Battle)
+	TextArray_({}),ButtonArray_({}), hModeSound_(-1), SelectMode_(Battle)
 {
 }
 
@@ -68,9 +63,13 @@ void GameModeScene::Initialize()
 	hModeSound_ = Audio::Load("Sound\\maou_game_rock54.wav");
 	assert(hModeSound_ >= 0);
 
+	//各モードのハンドルを配列に入れる
+	ButtonArray_ = { hBattle_, hPractice_, hHowtoPlay_, hBackTitle_ };
+
 	//各テキストハンドルを配列に入れる
 	TextArray_ = {hBattleText_, hFreePlayText_, hHowtoPlayText_, hTitleText_};
 	
+	//各モードをリストに入れる
 	ModeList_ = { Battle,Practice,HowToPlay,Title };
 	itr = ModeList_.begin();
 }
@@ -107,16 +106,10 @@ void GameModeScene::Update()
 	switch (SelectMode_)
 	{
 	case GameModeScene::Battle:
-		ModeSetTrans[0].position_.y = ModeSetTrans[1].position_.y;
-		break;
 	case GameModeScene::Practice:
-		ModeSetTrans[0].position_.y = ModeSetTrans[2].position_.y;
-		break;
 	case GameModeScene::HowToPlay:
-		ModeSetTrans[0].position_.y = ModeSetTrans[3].position_.y;
-		break;
 	case GameModeScene::Title:
-		ModeSetTrans[0].position_.y = ModeSetTrans[4].position_.y;
+		Trans_Frame_.position_.y = ModeArray_[SelectMode_].position_.y;
 		break;
 	default:
 		break;
@@ -153,7 +146,7 @@ void GameModeScene::Update()
 
 void GameModeScene::Draw()
 {
-	Image::SetTransform(hBackScreen_, transform_);
+	Image::SetTransform(hBackScreen_, this->transform_);
 	Image::Draw(hBackScreen_);
 
 	Image::SetTransform(hBackChara_, BackChara_);
@@ -162,57 +155,36 @@ void GameModeScene::Draw()
 	Image::SetTransform(hModeSelect_, Trans_Select_);
 	Image::Draw(hModeSelect_);
 
-	Image::SetTransform(hBattle_, ModeSetTrans[1]);
-	Image::Draw(hBattle_);
-
-	Image::SetTransform(hPractice_, ModeSetTrans[2]);
-	Image::Draw(hPractice_);
-
-	Image::SetTransform(hHowtoPlay_, ModeSetTrans[3]);
-	Image::Draw(hHowtoPlay_);
-
-	Image::SetTransform(hBackTitle_, ModeSetTrans[4]);
-	Image::Draw(hBackTitle_);
-
-	Image::SetTransform(hFrameLine_, ModeSetTrans[0]);
-	Image::Draw(hFrameLine_);
+	for(int i = 0; i < ModeArray_.size(); i++)
+	{
+		Image::SetTransform(ButtonArray_[i], ModeArray_[i]);
+		Image::Draw(ButtonArray_[i]);
+	}
 
 	switch (SelectMode_)
 	{
 	case GameModeScene::Battle:
-	{
-		Image::SetTransform(TextArray_[0], Trans_Text_);
-		Image::Draw(TextArray_[0]);
-	}
-		break;
 	case GameModeScene::Practice:
-	{
-		Image::SetTransform(TextArray_[1], Trans_Text_);
-		Image::Draw(TextArray_[1]);
-	}
-		break;
 	case GameModeScene::HowToPlay:
-	{
-		Image::SetTransform(TextArray_[2], Trans_Text_);
-		Image::Draw(TextArray_[2]);
-	}
-		break;
 	case GameModeScene::Title:
 	{
-		Image::SetTransform(TextArray_[3], Trans_Text_);
-		Image::Draw(TextArray_[3]);
+		Image::SetTransform(TextArray_[SelectMode_], Trans_Text_);
+		Image::Draw(TextArray_[SelectMode_]);
 	}
 		break;
 	default:
 		break;
 	}
 
+	Image::SetTransform(hFrameLine_, Trans_Frame_);
+	Image::Draw(hFrameLine_);
+
 #ifdef _DEBUG
-	ImGui::SliderFloat("text", &Trans_Text_.position_.x, -1.0, 1.0);
-	//ImGui::SliderFloat("battle", &ModeSetTrans[1].position_.y, 1.0, -1.0);
-	//ImGui::SliderFloat("free", &ModeSetTrans[2].position_.y, 1.0, -1.0);
-	//ImGui::SliderFloat("how", &ModeSetTrans[3].position_.y, 1.0, -1.0);
-	//ImGui::SliderFloat("title", &ModeSetTrans[4].position_.y, 1.0, -1.0);
+	//ImGui::SliderFloat("text", &Trans_Text_.position_.x, -1.0, 1.0);
+	//ImGui::SliderFloat("battle", &ModeArray_[1].position_.y, 1.0, -1.0);
+	//ImGui::SliderFloat("free", &ModeArray_[2].position_.y, 1.0, -1.0);
+	//ImGui::SliderFloat("how", &ModeArray_[3].position_.y, 1.0, -1.0);
+	//ImGui::SliderFloat("title", &ModeArray_[4].position_.y, 1.0, -1.0);
 #endif
 }
 
@@ -225,17 +197,23 @@ void GameModeScene::SetSCV()
 	CsvReader csv;
 	csv.Load("CSVdata\\GameModeData.csv");
 
-	//選択枠,プレイボタン,フリープレイボタン,遊び方ボタン,タイトルボタン
-	std::string ParamArray[] = { "FrameLine","Battle", "Practice", "HowToPlay", "BackTitle"};
+	//選択枠
+	std::string frame = "FrameLine";
+	if (csv.IsGetParamName(frame))
+	{
+		std::vector<float> v = csv.GetParam(frame);
+		SetTransformPRS(Trans_Frame_, v);
+	}
+
+	//プレイボタン,フリープレイボタン,遊び方ボタン,タイトルボタン
+	std::string ParamArray[] = {"Battle", "Practice", "HowToPlay", "BackTitle"};
 
     for (int i = 0; i < sizeof(ParamArray) / sizeof(ParamArray[0]); i++)
     {
 		if (csv.IsGetParamName(ParamArray[i]))
 		{
 			std::vector<float> v = csv.GetParam(ParamArray[i]);
-			ModeSetTrans[i].position_ = { v[pos_x] , v[pos_y], v[pos_z] };
-			ModeSetTrans[i].rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
-			ModeSetTrans[i].scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+			SetTransformPRS(ModeArray_[i], v);
 		}
     }
 
@@ -245,9 +223,7 @@ void GameModeScene::SetSCV()
 	if (csv.IsGetParamName(modeselect))
 	{
 		std::vector<float> v = csv.GetParam(modeselect);
-		Trans_Select_.position_ = { v[pos_x] , v[pos_y], v[pos_z] };
-		Trans_Select_.rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
-		Trans_Select_.scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+		SetTransformPRS(Trans_Select_, v);
 	}
 
 	//画面下部のテキスト
@@ -255,8 +231,6 @@ void GameModeScene::SetSCV()
 	if (csv.IsGetParamName(text))
 	{
 		std::vector<float> v = csv.GetParam(text);
-		Trans_Text_.position_ = { v[pos_x], v[pos_y], v[pos_z] };
-		Trans_Text_.rotate_ = { v[rot_x], v[rot_y], v[rot_z] };
-		Trans_Text_.scale_ = { v[sca_x], v[sca_y], v[sca_z] };
+		SetTransformPRS(Trans_Text_, v);
 	}
 }

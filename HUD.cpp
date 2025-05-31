@@ -10,8 +10,23 @@
 //描画操作のみ扱うクラス
 namespace
 {
-	//画像描画用トランスフォーム
+	//時間の数字表記のインデックス
+	enum NumberIndex
+	{
+		Number0 = 0,
+		Number1,
+		Number2,
+		Number3,
+		Number4,
+		Number5,
+		Number6,
+		Number7,
+		Number8,
+		Number9,
+		MaxNumberIndex,
+	};
 
+	//画像描画用トランスフォーム
 	//"タイトルに戻ります"
 	Transform logo_backtitle;
 
@@ -30,6 +45,9 @@ namespace
 	//時間表記一の位
 	Transform OneTime;
 
+	//ナンバーハンドルの配列
+	std::array<int, MaxNumberIndex> ArrayHandle;
+
 	//時間に除算する値
 	const int  TimeDivision = 10;
 }
@@ -38,7 +56,7 @@ HUD::HUD(GameObject* parent)
 	:GameObject(parent, "HUD"), hBackTitleLogo_(-1),hPracticeNow_(-1), hStart_(-1),hTime_(-1),
 	hNumber0_(-1), hNumber1_(-1),hNumber2_(-1),hNumber3_(-1),hNumber4_(-1),
 	hNumber5_(-1),hNumber6_(-1),hNumber7_(-1),hNumber8_(-1),hNumber9_(-1),
-	ArrayHandle_{},hFinish_(-1),GameModeHUD_(Max),TimeNumber_(0),Timeten_(0),Timeone_(0)
+	hFinish_(-1),GameModeHUD_(Max),TimeNumber_(0),Timeten_(0),Timeone_(0)
 
 {
 }
@@ -93,7 +111,7 @@ void HUD::Initialize()
 	hNumber9_ = Image::Load("Image\\number\\number_9.png");
 	assert(hNumber9_ >= 0);
 
-	ArrayHandle_ = { hNumber0_,hNumber1_,hNumber2_,hNumber3_,hNumber4_,
+	ArrayHandle = { hNumber0_,hNumber1_,hNumber2_,hNumber3_,hNumber4_,
 	hNumber5_,hNumber6_,hNumber7_,hNumber8_,hNumber9_ };
 }
 
@@ -184,10 +202,10 @@ void HUD::DrawBattlePreStart()
 
 void HUD::DrawBattleInProgress()
 {
-	Image::SetTransform(ArrayHandle_[Timeten_], TenTime);
-	Image::Draw(ArrayHandle_[Timeten_]);
-	Image::SetTransform(ArrayHandle_[Timeone_], OneTime);
-	Image::Draw(ArrayHandle_[Timeone_]);
+	Image::SetTransform(ArrayHandle[Timeten_], TenTime);
+	Image::Draw(ArrayHandle[Timeten_]);
+	Image::SetTransform(ArrayHandle[Timeone_], OneTime);
+	Image::Draw(ArrayHandle[Timeone_]);
 
 }
 
