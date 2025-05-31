@@ -21,7 +21,6 @@ GameModeScene::GameModeScene(GameObject* parent)
 void GameModeScene::Initialize()
 {
 	SetSCV();
-
 	std::string path = "Image\\GameMode\\";
 
 	hBackScreen_ = Image::Load(path + "back_mode.jpg");
@@ -76,7 +75,8 @@ void GameModeScene::Initialize()
 
 void GameModeScene::Update()
 {
-	if (Input::IsKeyDown(DIK_UP) || Input::GetPadStickL().y >= sticktilt 
+	int i = StickTilt; //スティックの傾き閾値
+	if (Input::IsKeyDown(DIK_UP) || Input::GetPadStickL().y >= StickTilt 
 		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP))
 	{
 		if (itr == ModeList_.begin())
@@ -89,7 +89,7 @@ void GameModeScene::Update()
 		}
 		SelectMode_ = *itr;
 	}
-	if (Input::IsKeyDown(DIK_DOWN) || Input::GetPadStickL().y <= -sticktilt
+	if (Input::IsKeyDown(DIK_DOWN) || Input::GetPadStickL().y <= -StickTilt
 		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN))
 	{
 		if (itr == --ModeList_.end())

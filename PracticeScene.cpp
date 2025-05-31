@@ -60,7 +60,7 @@ void PracticeScene::Update()
 		Press_ = 0;
 	}
 
-	if (Press_ >= SceneEnd_)//長押しでタイトルに戻る
+	if (Press_ >= SceneTransition)//長押しでタイトルに戻る
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_TITLE);

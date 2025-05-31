@@ -430,7 +430,7 @@ void Character::SetHitEffect()
 	hit.speed = 0.5;
 	hit.speedRnd = 1.0;
 	hit.accel = 1.0;
-	hit.lifeTime = 10.0;
+	hit.lifeTime = (DWORD)10.0;
 	hit.number = (DWORD)10;
 	//hit.size = XMFLOAT2(0.1, 0.1);
 	hit.sizeRnd = XMFLOAT2(0.4, 0.4);

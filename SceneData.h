@@ -17,9 +17,6 @@ protected:
 	Transform PushTitle;
 	XMFLOAT3 UnderPosition_ = { 0,0,0 };
 
-	//練習モードの終了時のカウント
-	int SceneEnd_ = 0;
-
 public:
 	SceneData(GameObject* parent);
 	SceneData(GameObject* parent, const std::string& name);
@@ -28,7 +25,6 @@ public:
 	//csv読み込み(必要なシーン初期化時に行う)
 	void SetCSVScene();
 
-	int GetPracticeEnd() { return SceneEnd_; }
 	XMFLOAT3 GetResultPosition() { return ResultPosition_; }
 	XMFLOAT3 GetUnderPosition() { return UnderPosition_; }
 };

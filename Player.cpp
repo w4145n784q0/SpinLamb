@@ -248,7 +248,7 @@ void Player::UpdateIdle()
 	//ベクトルの長さを取得して、倒したかどうかを判別
 	float length = XMVectorGetX(XMVector3Length(controller));
 
-	if (length > stickMicrotilt)
+	if (length > StickMicroTilt)
 	{
 		//コントローラー方向と前向きベクトルの外積求める（）
 		XMVECTOR cross = XMVector3Cross(SetController, InitParam_. FrontDirection_);
@@ -415,16 +415,16 @@ void Player::CameraControl()
 	if(CameraState_ == S_NORMALCAMERA)
 	{
 
-		if (Input::IsKey(DIK_A) || Input::GetPadStickR().x <= -sticktilt)	//カメラ左右移動
+		if (Input::IsKey(DIK_A) || Input::GetPadStickR().x <= -StickTilt)	//カメラ左右移動
 		{
 			cameraTransform_.rotate_.y -= cameraRotate;
 		}
-		if (Input::IsKey(DIK_D) || Input::GetPadStickR().x >= sticktilt)
+		if (Input::IsKey(DIK_D) || Input::GetPadStickR().x >= StickTilt)
 		{
 			cameraTransform_.rotate_.y += cameraRotate;
 		}
 
-		if (Input::IsKey(DIK_W) || Input::GetPadStickR().y <= -sticktilt)	//カメラ上下移動
+		if (Input::IsKey(DIK_W) || Input::GetPadStickR().y <= -StickTilt)	//カメラ上下移動
 		{
 			if (cameraTransform_.rotate_.x >= cameraUpperLimit)
 			{
@@ -435,7 +435,7 @@ void Player::CameraControl()
 				cameraTransform_.rotate_.x += cameraRotate;
 			}
 		}
-		if (Input::IsKey(DIK_S) || Input::GetPadStickR().y >= sticktilt)
+		if (Input::IsKey(DIK_S) || Input::GetPadStickR().y >= StickTilt)
 		{
 			if (cameraTransform_.rotate_.x <= cameraLowerLimit)
 			{

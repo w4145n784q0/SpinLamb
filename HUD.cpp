@@ -48,8 +48,7 @@ namespace
 	//ナンバーハンドルの配列
 	std::array<int, MaxNumberIndex> ArrayHandle;
 
-	//時間に除算する値
-	const int  TimeDivision = 10;
+
 }
 
 HUD::HUD(GameObject* parent)

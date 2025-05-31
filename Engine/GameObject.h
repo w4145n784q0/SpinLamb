@@ -24,21 +24,17 @@ namespace
 		sca_z,
 	};
 
-	/// <summary>
-	/// 60fpsにおける1フレームの時間
-	/// 使用端末によるフレームレート依存防止
-	/// </summary>
-	const float DeltaTime = 0.016f;
+	enum CommonIndex
+	{
+		i_deltatime = 0,	
+		i_onesecond,		
+		i_timedivision,
+		i_scenetransition,
+		i_gametimeLimit,
+		i_sticktilt,
+		i_stickMicrotilt,
+	};
 
-	/// <summary>
-	/// スティックを傾けた値(0.0~1.0)がこの値を上回ったか
-	/// </summary>
-	const float sticktilt = 0.5f;
-
-	/// <summary>
-	/// スティックをわずかに傾けた値(0.0~1.0)がこの値を上回ったか
-	/// </summary>
-	const float stickMicrotilt = 0.01f;
 }
 
 inline XMFLOAT3 operator + (const XMFLOAT3& a, const XMFLOAT3& b) {
@@ -94,6 +90,42 @@ protected:
 
 	//衝突判定リスト
 	std::list<Collider*>	colliderList_;	
+
+	/// <summary>
+	/// 60fpsにおける1フレームの時間
+	/// 使用端末によるフレームレート依存防止
+	/// </summary>
+	float DeltaTime = 0.0f;
+
+	/// <summary>
+	/// 1秒を表す定数
+	/// </summary>
+	int oneSecond = 0;
+
+	/// <summary>
+	/// //時間に除算する値
+	/// </summary>
+	int  TimeDivision = 0;
+
+	/// <summary>
+	/// 次のシーン遷移までの時間
+	/// </summary>
+	int SceneTransition = 0;
+
+	/// <summary>
+	/// バトルモードの制限時間
+	/// </summary>
+	int GameTimeLimit = 0;
+
+	/// <summary>
+	/// スティックを傾けた値(0.0~1.0)がこの値を上回ったか
+	/// </summary>
+	float StickTilt = 0.0f;
+
+	/// <summary>
+	/// スティックをわずかに傾けた値(0.0~1.0)がこの値を上回ったか
+	/// </summary>
+	float StickMicroTilt = 0.0f;
 
 public:
 	//コンストラクタ
@@ -240,6 +272,27 @@ public:
 		tr.rotate_ = { v[rot_x], v[rot_y],v[rot_z] };
 		tr.scale_ = { v[sca_x] ,v[sca_y],v[sca_z] };
 	}
+
+	/// <summary>
+	/// GameObjectの共通データ初期化
+	/// </summary>
+    void SCVCommonDataInitialize() {  
+        CsvReader csv;  
+        csv.Load("CSVdata\\CommonData.csv");  
+
+        std::string common = "CommonData";  
+        if (csv.IsGetParamName(common))  
+        {  
+            std::vector<float> v = csv.GetParam(common);  
+            DeltaTime = v[i_deltatime];  
+            oneSecond = static_cast<int>(v[i_onesecond]);  
+            TimeDivision = static_cast<int>(v[i_timedivision]);  
+            SceneTransition = static_cast<int>(v[i_scenetransition]);  
+            GameTimeLimit = static_cast<int>(v[i_gametimeLimit]);  
+            StickTilt = v[i_sticktilt];  
+            StickMicroTilt = v[i_stickMicrotilt];  
+        }  
+    }
 
 private:
 

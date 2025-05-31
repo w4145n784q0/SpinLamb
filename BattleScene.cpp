@@ -18,15 +18,6 @@ namespace
 {
 	//時間計測
 	int Timecounter = 0;
-
-	//1秒カウント
-	const int oneSecond = 60;
-
-	//制限時間
-	const int GameTimeLimit = 60;
-
-	//次のシーン遷移までの時間
-	const int SceneTransition = 120;
 }
 
 BattleScene::BattleScene(GameObject* parent)
@@ -38,7 +29,6 @@ BattleScene::BattleScene(GameObject* parent)
 
 void BattleScene::Initialize()
 {
-
 	Instantiate<StageManager>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
@@ -61,8 +51,6 @@ void BattleScene::Initialize()
 	HUD* pHUD = (HUD*)FindObject("HUD");
 	pHUD->SetStateBattle();
 	pHUD->SetTime(GameTime_);
-	//pHUD->SetNumber(StartCount_);
-
 
 	hBattleSound_ = Audio::Load("Sound\\maou_game_rock51.wav");
 	assert(hBattleSound_>= 0);

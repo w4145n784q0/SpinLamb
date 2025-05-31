@@ -56,12 +56,10 @@ void Enemy::Initialize()
 	hEnemy_ = Model::Load("Model\\chara2.fbx");
 	assert(hEnemy_ >= 0);
 
-	//EnemyFrontDirection = XMVector3TransformCoord(EnemyFrontDirection, GetWorldMatrix());  //getworldmatrix‚Å•ÏŠ·
 	ShadowInit();
 	SetStartPosition();
 
 	pPlayer_ = (Player*)FindObject("Player");
-	//pGround_ = (Ground*)FindObject("Ground");
 	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), HitParam_.ColliderSize_);
 	this->AddCollider(collision);
 
@@ -368,12 +366,13 @@ void Enemy::SetCSVEnemy()
 	if (csv.IsGetParamName(only))
 	{
 		std::vector<float> v = csv.GetParam(only);
-		HitStop = v[hitstop];
+		HitStop = static_cast<int>(v[hitstop]);
 		ChaseLength = v[chaseLength];
 		LookRotaeAngle = v[lookRotateAngle];
 		LookRotateValue = v[lookRotateValue];
 
-		int arr[] = { EnemyAttackTime_1, EnemyAttackTime_2, EnemyAttackTime_3, EnemyAttackTime_4 };
+		int arr[] = { static_cast<int>(v[EnemyAttackTime_1]), static_cast<int>(v[EnemyAttackTime_2]),
+			static_cast<int>(v[EnemyAttackTime_3]), static_cast<int>(v[EnemyAttackTime_4]) };
 		for (int i = 0; i < EnemyAttackTimeArray.size(); i++)
 		{
 			EnemyAttackTimeArray[i] = arr[i];
