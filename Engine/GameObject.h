@@ -212,7 +212,6 @@ public:
 	void SetScale(XMFLOAT3 scale) { transform_.scale_ = scale; }
 	void SetScale(float x, float y, float z) { SetScale(XMFLOAT3(x, y, z)); }
 
-	//追加
 
 	/// <summary>
 	/// 線形補完(floatで受け取り返す)
@@ -230,6 +229,11 @@ public:
 		return  conversionMin + (convert - originalMin) * (conversionMax - conversionMin) / (originalMax - originalMin);
 	}
 
+	/// <summary>
+	/// csv読み込み時の各トランスフォーム初期化
+	/// </summary>
+	/// <param name="tr">代入するトランスフォーム変数</param>
+	/// <param name="v">受け取った一行分のTransformデータ配列</param>
 	void SetTransformPRS(Transform &tr, std::vector<float> v)
 	{
 		tr.position_ = { v[pos_x],v[pos_y],v[pos_z] };

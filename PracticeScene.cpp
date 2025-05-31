@@ -9,13 +9,8 @@
 #include"HUD.h"
 #include"StageManager.h"
 
-namespace
-{
-	const int BackTitleValue = 0;//長押しでタイトルに戻るまでの時間
-}
-
 PracticeScene::PracticeScene(GameObject* parent)
-	:GameObject(parent,"PracticeScene"), hBackScreen_(-1), Press_(0)
+	:SceneData(parent,"PracticeScene"), hBackScreen_(-1), Press_(0)
 {
 }
 
@@ -50,6 +45,8 @@ void PracticeScene::Initialize()
 
 	HUD* pHUD = (HUD*)FindObject("HUD");
 	pHUD->SetStatePractice();
+
+	SetCSVScene();
 }
 
 void PracticeScene::Update()
@@ -63,7 +60,7 @@ void PracticeScene::Update()
 		Press_ = 0;
 	}
 
-	if (Press_ >= BackTitleValue)
+	if (Press_ >= SceneEnd_)//長押しでタイトルに戻る
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_TITLE);

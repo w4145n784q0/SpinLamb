@@ -1,20 +1,34 @@
 #pragma once
 #include "Engine/GameObject.h"
+
+//title,practice,gameover,clearシーンで継承する
+//各シーンの共通処理をまとめたクラス
+
 class SceneData :
     public GameObject
 {
 protected:
-	XMFLOAT3 ResultPosition_ = { 0,0,0 }; //結果画面のロゴの位置
-	XMFLOAT3 UnderPosition_ = { 0,0,0 }; //結果画面の下のロゴの位置
-	int practiceEnd_ = 0; //練習モードの終了時のカウント
+
+	//結果画面のロゴの位置
+	Transform Result;
+	XMFLOAT3 ResultPosition_ = { 0,0,0 }; 
+
+	//結果画面の下のロゴの位置
+	Transform PushTitle;
+	XMFLOAT3 UnderPosition_ = { 0,0,0 };
+
+	//練習モードの終了時のカウント
+	int SceneEnd_ = 0;
 
 public:
 	SceneData(GameObject* parent);
 	SceneData(GameObject* parent, const std::string& name);
 	virtual ~SceneData();
 
-	void SetCSV();
-	int GetPracticeEnd() { return practiceEnd_; }
+	//csv読み込み(必要なシーン初期化時に行う)
+	void SetCSVScene();
+
+	int GetPracticeEnd() { return SceneEnd_; }
 	XMFLOAT3 GetResultPosition() { return ResultPosition_; }
 	XMFLOAT3 GetUnderPosition() { return UnderPosition_; }
 };

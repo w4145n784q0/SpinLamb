@@ -6,7 +6,7 @@ namespace
 	//各シーンで仕様するロゴ等の位置などの変数
 	enum scene_pos
 	{
-		practiceend = 0,
+		sceneend = 0,
 		resultposition_x,
 		resultposition_y,
 		resultposition_z,
@@ -30,7 +30,7 @@ SceneData::~SceneData()
 {
 }
 
-void SceneData::SetCSV()
+void SceneData::SetCSVScene()
 {
 	CsvReader csv;
 	csv.Load("CSVdata\\SceneData.csv");
@@ -39,9 +39,11 @@ void SceneData::SetCSV()
 	if (csv.IsGetParamName(scene))
 	{
 		std::vector<float> v = csv.GetParam(scene);
-		practiceEnd_ = static_cast<int>(v[practiceend]);
+		SceneEnd_ = static_cast<int>(v[sceneend]);
 		ResultPosition_ = { v[resultposition_x], v[resultposition_y], v[resultposition_z] };
 		UnderPosition_ = { v[underposition_x], v[underposition_y], v[underposition_z] };
-
+		
+		//SetTransformPRS(Result, v);
+		//SetTransformPRS(PushTitle, v);
 	}
 }

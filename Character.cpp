@@ -53,7 +53,8 @@ Character::Character(GameObject* parent)
 {
 }
 
-Character::Character(GameObject* parent, const std::string& name):GameObject(parent, name)
+Character::Character(GameObject* parent, const std::string& name)
+	:GameObject(parent, name)
 {
 }
 
@@ -71,15 +72,9 @@ void Character::SetcsvStatus(std::string _path)
 	{
 		std::vector<float> v = csv.GetParam(p_init);
 
-		InitParam_.StartPosition_.x = v[pos_x];
-		InitParam_.StartPosition_.y = v[pos_y];
-		InitParam_.StartPosition_.z = v[pos_z];
-		this->transform_.rotate_.x = v[rot_x];
-		this->transform_.rotate_.y = v[rot_y];
-		this->transform_.rotate_.z = v[rot_z];
-		this->transform_.scale_.x = v[sca_x];
-		this->transform_.scale_.y = v[sca_y];
-		this->transform_.scale_.z = v[sca_z];
+		InitParam_.StartPosition_ = { v[pos_x], v[pos_y],v[pos_z] };
+		this->transform_.rotate_ = { v[rot_x], v[rot_y],v[rot_z] };
+		this->transform_.scale_ = { v[sca_x] , v[sca_y] ,v[sca_z] };
 	}
 
 	std::string p_move = "MoveParam";

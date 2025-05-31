@@ -90,6 +90,9 @@ public:
 	/// </summary>
 	void KeyBoradMove();
 
+	/// <summary>
+	/// PlayerŒÀ’è‚Ìƒf[ƒ^‚ğCSV“Ç‚İ‚İ
+	/// </summary>
 	void SetCSVPlayer();
 };
 

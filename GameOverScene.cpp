@@ -13,17 +13,17 @@ namespace
 {
 	Transform LogoResult;
 	Transform LogoTitle;
-	XMFLOAT3 LogoResultPosition = { 0,0,0 };
-	XMFLOAT3 LogoTitlePosition = {0,-0.8,0};
 }
 
 GameOverScene::GameOverScene(GameObject* parent)
-	:GameObject(parent,"GameOverScene"), hBackScreen_(-1), hlogoResult_(-1), hlogoTitle_(-1), hGameOverSound_(-1)
+	:SceneData(parent,"GameOverScene"), hBackScreen_(-1), hlogoResult_(-1), hlogoTitle_(-1), hGameOverSound_(-1)
 {
 }
 
 void GameOverScene::Initialize()
 {
+	SetCSVScene();
+
 	hBackScreen_ = Image::Load("Image\\GameMode\\back_mode.jpg");
 	assert(hBackScreen_ >= 0);
 
@@ -36,8 +36,8 @@ void GameOverScene::Initialize()
 	hGameOverSound_ = Audio::Load("Sound\\maou_game_jingle10.wav");
 	assert(hGameOverSound_ >= 0);
 
-	LogoResult.position_ = LogoResultPosition;
-	LogoTitle.position_ = LogoTitlePosition;
+	LogoResult.position_ = ResultPosition_;
+	LogoTitle.position_ = UnderPosition_;
 }
 
 void GameOverScene::Update()

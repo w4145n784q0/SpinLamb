@@ -1,7 +1,9 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"SceneData.h"
+
 class ClearScene :
-    public GameObject
+    public SceneData
 {
 private:
 	//----------‰æ‘œƒnƒ“ƒhƒ‹----------

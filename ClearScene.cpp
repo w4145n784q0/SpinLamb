@@ -8,17 +8,17 @@ namespace
 {
 	Transform LogoResult;
 	Transform LogoTitle;
-	XMFLOAT3 LogoResultPosition = { 0,0,0 };
-	XMFLOAT3 LogoTitlePosition = { 0,-0.8,0 };
 }
 
 ClearScene::ClearScene(GameObject* parent)
-	:GameObject(parent,"ClearScene"), hBackScreen_(-1), hlogoResult_(-1),hlogoTitle_(-1), hClearSound_(-1)
+	:SceneData(parent,"ClearScene"), hBackScreen_(-1), hlogoResult_(-1),hlogoTitle_(-1), hClearSound_(-1)
 {
 }
 
 void ClearScene::Initialize()
 {
+	SetCSVScene();
+
 	hBackScreen_ = Image::Load("Image\\GameMode\\back_mode.jpg");
 	assert(hBackScreen_ >= 0);
 
@@ -31,8 +31,8 @@ void ClearScene::Initialize()
 	hClearSound_ = Audio::Load("Sound\\maou_game_jingle05.wav");
 	assert(hClearSound_ >= 0);
 
-	LogoResult.position_ = LogoResultPosition;
-	LogoTitle.position_ = LogoTitlePosition;
+	LogoResult.position_ = ResultPosition_;
+	LogoTitle.position_ = UnderPosition_;
 }
 
 void ClearScene::Update()

@@ -11,7 +11,6 @@
 
 namespace
 {
-	const int Mode = 4;//モードの数
 	std::array<Transform, 5> ModeSetTrans;//各ボタンのトランスフォーム管理配列
 }
 

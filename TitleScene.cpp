@@ -5,7 +5,7 @@
 #include"Engine/Audio.h"
 
 TitleScene::TitleScene(GameObject* parent)
-	:GameObject(parent,"TitleScene"), hBackScreen_(-1),hTitleSound_(-1)
+	:SceneData(parent,"TitleScene"), hBackScreen_(-1),hTitleSound_(-1)
 {
 }
 
@@ -15,6 +15,7 @@ void TitleScene::Initialize()
 	assert(hBackScreen_ >= 0);
 	hTitleSound_ = Audio::Load("Sound\\maou_game_rock45.wav"); 
 	assert(hTitleSound_ >= 0);
+	SetCSVScene();
 }
 
 void TitleScene::Update()
