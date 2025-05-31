@@ -13,7 +13,7 @@ void TitleScene::Initialize()
 {
 	hBackScreen_ = Image::Load("Image\\Title\\TitleScreen.jpg");
 	assert(hBackScreen_ >= 0);
-	hTitleSound_ = Audio::Load("Sound\\maou_game_rock45.wav"); 
+	hTitleSound_ = Audio::Load("Sound\\BGM\\title.wav",true); 
 	assert(hTitleSound_ >= 0);
 	SetCSVScene();
 }

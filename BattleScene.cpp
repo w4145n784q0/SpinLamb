@@ -18,6 +18,18 @@ namespace
 {
 	//ŽžŠÔŒv‘ª
 	int Timecounter = 0;
+	int PlayerScorePosX = 0;
+	int PlayerScorePosY = 0;
+	int EnemyScorePosX = 0;
+	int EnemyScorePosY = 0;
+
+	enum ScorePosIndex
+	{
+		i_PlayerScorePosX = 0,
+		i_PlayerScorePosY,
+		i_EnemyScorePosX,
+		i_EnemyScorePosY,
+	};
 }
 
 BattleScene::BattleScene(GameObject* parent)
@@ -52,10 +64,10 @@ void BattleScene::Initialize()
 	pHUD->SetStateBattle();
 	pHUD->SetTime(GameTime_);
 
-	hBattleSound_ = Audio::Load("Sound\\maou_game_rock51.wav");
+	hBattleSound_ = Audio::Load("Sound\\BGM\\battle.wav",true);
 	assert(hBattleSound_>= 0);
 
-	hWhistle_ = Audio::Load("Sound\\maou_se_sound_whistle01.wav");
+	hWhistle_ = Audio::Load("Sound\\SE\\Whistle.wav");
 	assert(hWhistle_ >= 0);
 
 	pPlayerScore_ = new Text;
@@ -63,6 +75,8 @@ void BattleScene::Initialize()
 
 	pEnemyScore_ = new Text;
 	pEnemyScore_->Initialize();
+
+	SetCSVBattle();
 
 }
 
@@ -88,8 +102,8 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
-	pPlayerScore_->Draw(30, 30, PlayerScore_);
-	pEnemyScore_->Draw(1250, 30, EnemyScore_);
+	pPlayerScore_->Draw(PlayerScorePosX, PlayerScorePosY, PlayerScore_);
+	pEnemyScore_->Draw(EnemyScorePosX, EnemyScorePosY, EnemyScore_);
 }
 
 void BattleScene::Release()
@@ -164,5 +178,22 @@ void BattleScene::UpdateBattleAfter()
 			pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
 		}
 		Timecounter = 0;
+	}
+}
+
+void BattleScene::SetCSVBattle()
+{
+
+	CsvReader csv;
+	csv.Load("CSVdata\\BattleData.csv");
+
+	std::string pos = "Position";
+	if (csv.IsGetParamName(pos))
+	{
+		std::vector<float> v = csv.GetParam(pos);
+		PlayerScorePosX = v[i_PlayerScorePosX];
+		PlayerScorePosY = v[i_PlayerScorePosY];
+		EnemyScorePosX = v[i_EnemyScorePosX];
+		EnemyScorePosY = v[i_EnemyScorePosY];
 	}
 }

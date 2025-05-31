@@ -28,7 +28,7 @@ void ClearScene::Initialize()
 	hlogoTitle_ = Image::Load("Image\\Result\\PushToTitle.png");
 	assert(hlogoTitle_ >= 0);
 
-	hClearSound_ = Audio::Load("Sound\\maou_game_jingle05.wav");
+	hClearSound_ = Audio::Load("Sound\\BGM\\end.wav",true);
 	assert(hClearSound_ >= 0);
 
 	LogoResult.position_ = ResultPosition_;

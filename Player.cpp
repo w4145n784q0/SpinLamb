@@ -51,8 +51,8 @@ namespace {
 
 Player::Player(GameObject* parent) 
 	: Character(parent,"Player"),
-	hPlayer_(-1),hShadow_(-1), hCollisionSound_(-1),
-	PlayerState_(S_MAX),CameraState_(S_NORMALCAMERA),
+	hPlayer_(-1),hShadow_(-1),
+	PlayerState_(S_STOP),CameraState_(S_NORMALCAMERA),
 	Direction_({ 0,0,0 }),BackCamera_({ 0,0,0 }), CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 })
 {
 	
@@ -74,17 +74,18 @@ void Player::Initialize()
 
 	ShadowInit();
 
-	hCollisionSound_ = Audio::Load("Sound\\maou_se_battle15.wav");
-	assert(hCollisionSound_ >= 0);
+
 
 	SetStartPosition();
 	
 	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),HitParam_. ColliderSize_);
 	this->AddCollider(collider);
 
+	XMVECTOR cameraAdd = XMLoadFloat3(&this->transform_.position_);
+	BackCamera_ = { BackCameraPos + cameraAdd };//バックカメラの初期値をセット
 	cameraTransform_ = this->transform_;
 	CameraPosition_ = { this->transform_.position_.x + cameraInitX
-		,this->transform_.position_.y + cameraInitY, this->transform_.position_.z + cameraInitZ };
+	,this->transform_.position_.y + cameraInitY, this->transform_.position_.z + cameraInitZ };
 	CameraTarget_ = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 }
 
@@ -111,6 +112,9 @@ void Player::Update()
 	case Player::S_WALLHIT:
 		UpdateWallHit();
 		break;
+	case Player::S_STOP:
+		UpdateStop();
+		break;
 	default:
 		break;
 	}
@@ -131,11 +135,12 @@ void Player::Update()
 	//カメラの更新
 	CameraUpdate();
 
-	//degug
+#ifdef _DEBUG
 	if (Input::IsKeyDown(DIK_ESCAPE))
 	{
 		SetStartPosition();
 	}
+#endif
 
 }
 
@@ -163,8 +168,14 @@ void Player::Draw()
 	ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
 	ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
 
-	ImGui::Text("x:%3f", Input::GetPadStickL().x);
-	ImGui::Text("y:%3f", Input::GetPadStickL().y);
+	ImGui::Text("PlayerState:.%d", (float)PlayerState_);
+	ImGui::Text("CameraPosition:%.3f", (float)CameraPosition_.x);
+	ImGui::Text("CameraPositionY:%.3f", CameraPosition_.y);
+	ImGui::Text("CameraPositionZ:%.3f", CameraPosition_.z);
+	ImGui::Text("CameraTargetX:%.3f", CameraTarget_.x);
+	ImGui::Text("CameraTargetY:%.3f", CameraTarget_.y);
+	ImGui::Text("CameraTargetZ:%.3f", CameraTarget_.z);
+
 #endif
 
 }
@@ -196,7 +207,7 @@ void Player::OnCollision(GameObject* pTarget)
 		Camera::CameraShakeStart(cameraShakeTime);
 
 		//衝撃音
-		Audio::Play(hCollisionSound_);
+		Audio::Play(hSoundCollision_);
 	}
 
 	if (pTarget->GetObjectName() == "Fence")
@@ -352,6 +363,7 @@ void Player::UpdateCharge()
 
 void Player::UpdateAttack()
 {
+	Audio::Play(hSoundattack_);
 	SetAttackLocusEffect();
 
 	Deceleration();
@@ -386,6 +398,7 @@ void Player::UpdateWallHit()
 
 void Player::UpdateStop()
 {
+
 }
 
 void Player::SetJump()
@@ -479,7 +492,11 @@ void Player::CameraUpdate()
 
 	Camera::SetPosition(CameraPosition_);//カメラの位置をセット 
 	Camera::SetTarget(CameraTarget_);//カメラの焦点をセット
-	BackCamera_ = { BackCameraPos };//バックカメラベクトルをリセット
+
+	if (!(PlayerState_ == Player::S_STOP))
+	{
+		BackCamera_ = { BackCameraPos };//バックカメラベクトルをリセット
+	}
 }
 
 void Player::KeyBoradMove()
@@ -508,7 +525,5 @@ void Player::SetCSVPlayer()
 		cameraUpperLimit = v[cameraupperlimit];
 		cameraLowerLimit = v[cameralowerlimit];
 		cameraDebugPos = v[cameradebugPos];
-		BackCamera_ = { BackCameraPos };//バックカメラの初期値をセット
-
 	}
 }

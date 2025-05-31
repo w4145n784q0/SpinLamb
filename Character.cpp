@@ -1,6 +1,7 @@
 #include "Character.h"
 #include"Engine/VFX.h"
 #include"Engine/Model.h"
+#include"Engine/Audio.h"
 
 namespace {
 	
@@ -45,6 +46,14 @@ namespace {
 	{
 		shadowcorrection = 0,
 	};
+
+	//ゲームに登場するキャラクターの数
+	enum GameChara
+	{
+		player = 0,
+		enemy,
+		MaxChara
+	};
 }
 
 
@@ -56,6 +65,12 @@ Character::Character(GameObject* parent)
 Character::Character(GameObject* parent, const std::string& name)
 	:GameObject(parent, name)
 {
+	hSoundcharge_ = Audio::Load("Sound\\SE\\charge.wav",false,MaxChara);
+	assert(hSoundcharge_ >= 0);
+	hSoundattack_ = Audio::Load("Sound\\SE\\attack.wav", false, MaxChara);
+	assert(hSoundattack_ >= 0);
+	hSoundCollision_ = Audio::Load("Sound\\SE\\collision.wav",false,1);
+	assert(hSoundCollision_ >= 0);
 }
 
 Character::~Character()
@@ -361,6 +376,8 @@ void Character::InvincibilityTimeCalclation()
 
 void Character::Charging()
 {
+	Audio::Play(hSoundcharge_);
+
 	//チャージ中一定の加速量を加算し続ける
 	if (MoveParam_.Acceleration_ < MoveParam_.FullAccelerate_)
 	{
@@ -390,14 +407,12 @@ XMVECTOR Character::RotateVecFront(float rotY, XMVECTOR front)
 void Character::SetChargingEffect(std::string _path)
 {
 	EmitterData charge;
-	//charge.textureFileName = "PaticleAssets\\circle_B.png";
 	charge.textureFileName = _path;
 	charge.delay = 0;
 	charge.lifeTime = 15;
 	charge.position = this->transform_.position_;
 	charge.positionRnd = XMFLOAT3(1, 1, 1);
 	charge.direction = { 0,1,0 };
-	//charge.directionRnd = XMFLOAT3(90, 90, 90);
 	charge.speed = 0.18;
 	charge.number = (DWORD)1;
 	VFX::Start(charge);
@@ -432,12 +447,7 @@ void Character::SetHitEffect()
 	hit.accel = 1.0;
 	hit.lifeTime = (DWORD)10.0;
 	hit.number = (DWORD)10;
-	//hit.size = XMFLOAT2(0.1, 0.1);
 	hit.sizeRnd = XMFLOAT2(0.4, 0.4);
-	//hit.scale = XMFLOAT2(0.99, 0.99);
-	//hit.color = XMFLOAT4(1, 1, 0.1, 1);
-	//hit.deltaColor = XMFLOAT4(0, 0, 0, 0);
-	//hit.gravity = 0.0f;
 	VFX::Start(hit);
 }
 

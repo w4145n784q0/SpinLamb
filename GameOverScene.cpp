@@ -33,7 +33,7 @@ void GameOverScene::Initialize()
 	hlogoTitle_ = Image::Load("Image\\Result\\PushToTitle.png");
 	assert(hlogoTitle_ >= 0);
 
-	hGameOverSound_ = Audio::Load("Sound\\maou_game_jingle10.wav");
+	hGameOverSound_ = Audio::Load("Sound\\BGM\\end.wav",true);
 	assert(hGameOverSound_ >= 0);
 
 	LogoResult.position_ = ResultPosition_;

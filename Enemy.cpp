@@ -4,6 +4,8 @@
 #include"Engine/Input.h"
 #include"Engine/Camera.h"
 #include"Engine/SphereCollider.h"
+#include"Engine/Audio.h"
+
 #include"BattleScene.h"
 #include"Engine/SceneManager.h"
 
@@ -35,7 +37,7 @@ namespace
 
 Enemy::Enemy(GameObject* parent)
 	:Character(parent,"Enemy"), hEnemy_(-1), pPlayer_(nullptr),
-	EnemyState_(S_IDLE),AimTimer_(0), 
+	EnemyState_(S_STOP),AimTimer_(0), 
 	pPositionVec_({0,0,0}),PlayerPosition_({0,0,0}),PlayerAcceleration_(0.0f),
 	RandomAim_(0), HitStopTimer_(0)
 {
@@ -79,9 +81,6 @@ void Enemy::Update()
 
 	switch (EnemyState_)
 	{
-	case Enemy::S_IDLE:
-		UpdateIdle();
-		break;
 	case Enemy::S_ROOT:
 		UpdateRoot();
 		break;
@@ -103,10 +102,8 @@ void Enemy::Update()
 	case Enemy::S_AIM:
 		UpdateAim();
 		break;
-	case Enemy::S_ONALEAT:
-		UpdateOnAlert();
-		break;
-	case Enemy::S_MAX:
+	case Enemy::S_STOP:
+		UpdateStop();
 		break;
 	default:
 		break;
@@ -146,10 +143,10 @@ void Enemy::Draw()
 	ShadowDraw();
 
 #ifdef _DEBUG
-	if (ImGui::Button("EnemystateChange"))
+	if (ImGui::Button("EnemyStop"))
 	{
-		if (!EnemyState_ == S_IDLE)
-			EnemyState_ = S_IDLE;
+		if (EnemyState_ != S_STOP)
+			EnemyState_ = S_STOP;
 		else
 			EnemyState_ = S_ROOT;
 	}
@@ -159,10 +156,6 @@ void Enemy::Draw()
 }
 
 void Enemy::Release()
-{
-}
-
-void Enemy::UpdateIdle()
 {
 }
 
@@ -250,13 +243,9 @@ void Enemy::UpdateAim()
 
 }
 
-void Enemy::UpdateOnAlert()
-{
-	LookPlayer();
-}
-
 void Enemy::UpdateAttack()
 {
+	Audio::Play(hSoundattack_);
 	SetAttackLocusEffect();
 	CharacterMove(MoveParam_. MoveDirection_);
 	Deceleration();
@@ -268,6 +257,11 @@ void Enemy::UpdateAttack()
 		EnemyState_ = S_ROOT;
 		RandomAim_ = rand() % EnemyAttackTimeArray.size();//攻撃終了後に攻撃時間をリセット
 	}
+}
+
+void Enemy::UpdateStop()
+{
+
 }
 
 void Enemy::OnCollision(GameObject* pTarget)

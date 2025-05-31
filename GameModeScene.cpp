@@ -59,7 +59,7 @@ void GameModeScene::Initialize()
 	hTitleText_ = Image::Load(path + "TitleText.png");
 	assert(hTitleText_ >= 0);
 
-	hModeSound_ = Audio::Load("Sound\\maou_game_rock54.wav");
+	hModeSound_ = Audio::Load("Sound\\BGM\\GameMode.wav",true);
 	assert(hModeSound_ >= 0);
 
 	//各モードのハンドルを配列に入れる

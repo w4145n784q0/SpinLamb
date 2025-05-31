@@ -1,6 +1,7 @@
 #include "PracticeScene.h"
 #include"Engine/Image.h"
 #include"Engine/Input.h"
+#include"Engine/Audio.h"
 #include"Engine/SceneManager.h"
 
 #include"Player.h"
@@ -22,6 +23,9 @@ void PracticeScene::Initialize()
 {
 	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");
 	assert(hBackScreen_ >= 0);
+
+	hSoundPractice_ = Audio::Load("Sound\\BGM\\practice.wav",true);
+	assert(hSoundPractice_ >= 0);
 
 	Instantiate<StageManager>(this);
 	Instantiate<Player>(this);
@@ -51,6 +55,8 @@ void PracticeScene::Initialize()
 
 void PracticeScene::Update()
 {
+	Audio::Play(hSoundPractice_);
+
 	if (Input::IsKey(DIK_P) || Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsPadButton(XINPUT_GAMEPAD_LEFT_SHOULDER))//ボタン長押しでタイトルに戻る
 	{
 		Press_++;

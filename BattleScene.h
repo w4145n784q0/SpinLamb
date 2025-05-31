@@ -61,6 +61,8 @@ public:
 	void PlusPlayerScore() { PlayerScore_++; }
 	void PlusEnemyScore() { EnemyScore_++; }
 	int GetGameTime() { return GameTime_; }
+	void SetGameTime(int time) { GameTime_ = time; }
 
+	void SetCSVBattle();
 };
 

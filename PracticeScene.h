@@ -14,6 +14,10 @@ private:
 
 	//長押しでタイトルに遷移するカウント
 	int Press_;
+
+	//----------サウンドハンドル----------
+	int hSoundPractice_; 
+
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

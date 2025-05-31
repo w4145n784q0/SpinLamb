@@ -14,11 +14,6 @@ private:
 	//影のモデル
 	int hShadow_;
 
-	//----------サウンドハンドル----------
-
-	//接触音
-	int hCollisionSound_;
-
 	//----------プレイヤーステート----------
 	enum State
 	{
@@ -74,7 +69,7 @@ public:
 	void PlayerStart() { PlayerState_ = S_IDLE; }
 
 	//プレイヤーを止める
-	void PlayerStop() { PlayerState_ = S_MAX; }
+	void PlayerStop() { PlayerState_ = S_STOP; }
 	
 	//ジャンプ開始
 	void SetJump();
@@ -85,14 +80,10 @@ public:
 	//カメラの設定(毎フレーム呼び出す)
 	void CameraUpdate();
 
-	/// <summary>
 	/// キーボード移動操作
-	/// </summary>
 	void KeyBoradMove();
 
-	/// <summary>
 	/// Player限定のデータをCSV読み込み
-	/// </summary>
 	void SetCSVPlayer();
 };
 
