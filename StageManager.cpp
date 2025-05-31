@@ -10,14 +10,17 @@ namespace
 		down,
 		right,
 		left,
-		pillernum
+		pillernum,
+		collisionheight,
+		collisionwidth,
 	};
 
 }
 
 StageManager::StageManager(GameObject* parent)
 	:GameObject(parent,"StageManager"),
-	UpperEnd_(0.0f), LowerEnd_(0.0f), RightEnd_(0.0f),LeftEnd_(0.0f)
+	UpperEnd_(0.0f), LowerEnd_(0.0f), RightEnd_(0.0f), LeftEnd_(0.0f),
+	PillerNum_(0), CollisionHeight_(0.0f), CollisionWidth_(0.0f)
 {
 }
 
@@ -85,6 +88,8 @@ void StageManager::SetSCV()
 		RightEnd_ = v[right];
 		LeftEnd_ = v[left];
 		PillerNum_ = v[pillernum];
+		CollisionHeight_ = v[collisionheight];
+		CollisionWidth_ = v[collisionwidth];
 	}
 }
 
@@ -93,6 +98,8 @@ void StageManager::InitEndData()
 	Fence* pFence = (Fence*)FindObject("Fence");
 	pFence->SetPillerNum(PillerNum_);
 	pFence->SetPiller(UpperEnd_,LowerEnd_,RightEnd_,LeftEnd_, PillerData_.position_.y);
+	pFence->SetCollisionFence(UpperEnd_, LowerEnd_, RightEnd_, LeftEnd_,PillerData_.position_.y, 
+		CollisionHeight_, CollisionWidth_);
 }
 
 void StageManager::InitGroundData()

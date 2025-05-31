@@ -16,6 +16,8 @@ private:
 	float RightEnd_;//ステージ東端
 	float LeftEnd_;//ステージ西端
 	int PillerNum_;//柱の数
+	float CollisionHeight_;//柱の当たり判定の大きさ 柱の高さを基準にする
+	float CollisionWidth_;//柱の当たり判定の幅
 
 public:
 	StageManager(GameObject* parent);

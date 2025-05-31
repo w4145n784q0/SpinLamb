@@ -38,14 +38,7 @@ void Fence::Initialize()
 	hFence_ = Model::Load("Model\\wire.fbx");
 	assert(hFence_ >= 0);
 
-	BoxCollider* collision_wall1 = new BoxCollider(XMFLOAT3(0, 5, 60.5), XMFLOAT3(120, 10, 1));
-	AddCollider(collision_wall1);
-	BoxCollider* collision_wall2 = new BoxCollider(XMFLOAT3(0, 5, -60.5), XMFLOAT3(120, 10, 1));
-	AddCollider(collision_wall2);
-	BoxCollider* collision_wall3 = new BoxCollider(XMFLOAT3(60.5, 5, 0), XMFLOAT3(1, 10, 120));
-	AddCollider(collision_wall3);
-	BoxCollider* collision_wall4 = new BoxCollider(XMFLOAT3(-60.5, 5, 0), XMFLOAT3(1, 10, 120));
-	AddCollider(collision_wall4);
+	
 }
 
 void Fence::Update()
@@ -108,4 +101,20 @@ void Fence::InitPillerTransform(Transform _t)
 	{
 		pillers[i] = _t;
 	}
+}
+
+void Fence::SetCollisionFence(float upper, float lower, float left, float right,
+	float height, float raito, float width)
+{
+	float heightY = height * raito;
+	float widthX = height * raito;
+
+	BoxCollider* collision_wall1 = new BoxCollider(XMFLOAT3(0, height, upper), XMFLOAT3(right * raito, heightY, width));
+	AddCollider(collision_wall1);
+	BoxCollider* collision_wall2 = new BoxCollider(XMFLOAT3(0, height, lower), XMFLOAT3(right * raito, heightY, width));
+	AddCollider(collision_wall2);
+	BoxCollider* collision_wall3 = new BoxCollider(XMFLOAT3(right, height, 0), XMFLOAT3(width, heightY, upper * raito));
+	AddCollider(collision_wall3);
+	BoxCollider* collision_wall4 = new BoxCollider(XMFLOAT3(left, height, 0), XMFLOAT3(width, heightY, upper * raito));
+	AddCollider(collision_wall4);
 }

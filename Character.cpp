@@ -425,7 +425,6 @@ void Character::SetAttackLocusEffect()
 	locus.delay = 0;
 	locus.number = (DWORD)3;
 	locus.position = this->transform_.position_;
-	locus.position.z = this->transform_.position_.z - 0.5f;
 	locus.positionRnd = { 1,1,1 };
 	locus.direction = { 0,0,1 };
 	locus.sizeRnd = { 0.5,0.5 };
@@ -455,11 +454,12 @@ void Character::SetWallHitEffect()
 {
 	EmitterData  wallhit;
 	wallhit.textureFileName = "PaticleAssets\\flashB_W.png";
+
+
 	wallhit.position = this->transform_.position_;
-	wallhit.position.y = this->transform_.position_.y + 1.0f;
 	wallhit.direction = { 1,1,0 };
 	wallhit.directionRnd = { 360,360,0 };
-	wallhit.number = (DWORD)20;
+	wallhit.number = (DWORD)10;
 	wallhit.delay = 0;
 	wallhit.speed = 0.3f;
 	wallhit.lifeTime = 20;

@@ -57,5 +57,18 @@ public:
 	void InitWireTransform(Transform _t) { wire = _t; }
 
 	void InitPillerTransform(Transform _t);
+
+	/// <summary>
+	/// ƒtƒFƒ“ƒX‚ÌÕ“Ë”»’è‚ğİ’è
+	/// </summary>
+	/// <param name="upper">z²‚ÌãŒÀ</param>
+	/// <param name="lower">z²‚Ì‰ºŒÀ</param>
+	/// <param name="left">x²‚ÌãŒÀ</param>
+	/// <param name="right">z²‚ÌãŒÀ</param>
+	/// <param name="height">’Œ‚Ì‚‚³</param>
+	/// <param name="raito">“–‚½‚è”»’è‚É‚©‚¯‚é”{—¦</param>
+	/// <param name="width"></param>
+	void SetCollisionFence(float upper, float lower, float left, float right,
+		float height,float raito, float width);
 	
 };
