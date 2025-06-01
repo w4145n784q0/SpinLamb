@@ -38,7 +38,6 @@ private:
 	
 	//----------移動関係----------
 	XMFLOAT3 Direction_;//プレイヤーの操作方向(xzどこに進むか)
-	Transform ArrowTransform_;//矢印モデルの位置情報
 	
 	//----------カメラ関係----------
 	XMFLOAT3 CameraPosition_;//カメラ位置

@@ -14,7 +14,7 @@ private:
 	//----------サウンドハンドル----------
 
 	//タイトル用サウンド
-	int hTitleSound_;
+	int hSoundTitle_;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

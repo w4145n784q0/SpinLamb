@@ -40,7 +40,7 @@ private:
 	std::array<int, MaxCount> TextArray_;//各テキストのハンドル配列
 
 	//----------サウンドハンドル----------
-	int hModeSound_;
+	int hSoundGameMode_;
 
 
 

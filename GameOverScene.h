@@ -20,7 +20,7 @@ private:
 	//----------サウンドハンドル----------
 
 	//ゲームオーバーサウンド
-	int hGameOverSound_;
+	int hSoundGameOver_;
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）

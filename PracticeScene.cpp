@@ -11,7 +11,7 @@
 #include"StageManager.h"
 
 PracticeScene::PracticeScene(GameObject* parent)
-	:SceneData(parent,"PracticeScene"), hBackScreen_(-1), Press_(0)
+	:SceneData(parent,"PracticeScene"), hBackScreen_(-1),hSoundPractice_(-1), Press_(0)
 {
 }
 

@@ -5,7 +5,7 @@
 #include"Engine/Audio.h"
 
 TitleScene::TitleScene(GameObject* parent)
-	:SceneData(parent,"TitleScene"), hBackScreen_(-1),hTitleSound_(-1)
+	:SceneData(parent,"TitleScene"), hBackScreen_(-1),hSoundTitle_(-1)
 {
 }
 
@@ -13,8 +13,8 @@ void TitleScene::Initialize()
 {
 	hBackScreen_ = Image::Load("Image\\Title\\TitleScreen.jpg");
 	assert(hBackScreen_ >= 0);
-	hTitleSound_ = Audio::Load("Sound\\BGM\\title.wav",true); 
-	assert(hTitleSound_ >= 0);
+	hSoundTitle_ = Audio::Load("Sound\\BGM\\title.wav",true); 
+	assert(hSoundTitle_ >= 0);
 	SetCSVScene();
 }
 
@@ -24,10 +24,10 @@ void TitleScene::Update()
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
-		Audio::Stop(hTitleSound_);
+		Audio::Stop(hSoundTitle_);
 	}
 
-	Audio::Play(hTitleSound_);
+	Audio::Play(hSoundTitle_);
 }
 
 void TitleScene::Draw()

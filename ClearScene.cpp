@@ -11,7 +11,7 @@ namespace
 }
 
 ClearScene::ClearScene(GameObject* parent)
-	:SceneData(parent,"ClearScene"), hBackScreen_(-1), hlogoResult_(-1),hlogoTitle_(-1), hClearSound_(-1)
+	:SceneData(parent,"ClearScene"), hBackScreen_(-1), hlogoResult_(-1),hlogoTitle_(-1), hSoundClear_(-1)
 {
 }
 
@@ -28,8 +28,8 @@ void ClearScene::Initialize()
 	hlogoTitle_ = Image::Load("Image\\Result\\PushToTitle.png");
 	assert(hlogoTitle_ >= 0);
 
-	hClearSound_ = Audio::Load("Sound\\BGM\\end.wav",true);
-	assert(hClearSound_ >= 0);
+	hSoundClear_ = Audio::Load("Sound\\BGM\\end.wav",true);
+	assert(hSoundClear_ >= 0);
 
 	LogoResult.position_ = ResultPosition_;
 	LogoTitle.position_ = UnderPosition_;
@@ -37,7 +37,7 @@ void ClearScene::Initialize()
 
 void ClearScene::Update()
 {
-	Audio::Play(hClearSound_);
+	Audio::Play(hSoundClear_);
 	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");

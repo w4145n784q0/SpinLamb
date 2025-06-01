@@ -16,7 +16,7 @@ namespace
 }
 
 GameOverScene::GameOverScene(GameObject* parent)
-	:SceneData(parent,"GameOverScene"), hBackScreen_(-1), hlogoResult_(-1), hlogoTitle_(-1), hGameOverSound_(-1)
+	:SceneData(parent,"GameOverScene"), hBackScreen_(-1), hlogoResult_(-1), hlogoTitle_(-1), hSoundGameOver_(-1)
 {
 }
 
@@ -33,8 +33,8 @@ void GameOverScene::Initialize()
 	hlogoTitle_ = Image::Load("Image\\Result\\PushToTitle.png");
 	assert(hlogoTitle_ >= 0);
 
-	hGameOverSound_ = Audio::Load("Sound\\BGM\\end.wav",true);
-	assert(hGameOverSound_ >= 0);
+	hSoundGameOver_ = Audio::Load("Sound\\BGM\\end.wav",true);
+	assert(hSoundGameOver_ >= 0);
 
 	LogoResult.position_ = ResultPosition_;
 	LogoTitle.position_ = UnderPosition_;
@@ -42,7 +42,7 @@ void GameOverScene::Initialize()
 
 void GameOverScene::Update()
 {
-	Audio::Play(hGameOverSound_);
+	Audio::Play(hSoundGameOver_);
 	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");

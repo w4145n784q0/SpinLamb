@@ -26,10 +26,10 @@ private:
 	//----------サウンドハンドル----------
 
 	//バトル中サウンド
-	int hBattleSound_;
+	int hSoundBattle_;
 
 	//終了ホイッスルサウンド
-	int hWhistle_;
+	int hSoundWhistle_;
 
 	//現在の時間(1秒ごとに減少)
 	int GameTime_;

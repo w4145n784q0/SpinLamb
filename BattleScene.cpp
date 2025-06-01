@@ -34,7 +34,7 @@ namespace
 
 BattleScene::BattleScene(GameObject* parent)
 	:GameObject(parent,"BattleScene") ,BattleState(BEFORE),
-	 hBattleSound_(-1),hWhistle_(-1),
+	 hSoundBattle_(-1),hSoundWhistle_(-1),
 	PlayerScore_(0),EnemyScore_(0),GameTime_(GameTimeLimit),pPlayerScore_(0),pEnemyScore_(0)
 {
 }
@@ -64,11 +64,11 @@ void BattleScene::Initialize()
 	pHUD->SetStateBattle();
 	pHUD->SetTime(GameTime_);
 
-	hBattleSound_ = Audio::Load("Sound\\BGM\\battle.wav",true);
-	assert(hBattleSound_>= 0);
+	hSoundBattle_ = Audio::Load("Sound\\BGM\\battle.wav",true);
+	assert(hSoundBattle_>= 0);
 
-	hWhistle_ = Audio::Load("Sound\\SE\\Whistle.wav");
-	assert(hWhistle_ >= 0);
+	hSoundWhistle_ = Audio::Load("Sound\\SE\\Whistle.wav");
+	assert(hSoundWhistle_ >= 0);
 
 	pPlayerScore_ = new Text;
 	pPlayerScore_->Initialize();
@@ -141,9 +141,11 @@ void BattleScene::UpdateBattle()
 
 		HUD* pHUD = (HUD*)FindObject("HUD");
 		pHUD->SetStateBattleEnd();
+
+		Audio::Play(hSoundWhistle_);
 	}
 
-	Audio::Play(hBattleSound_);
+	Audio::Play(hSoundBattle_);
 	if (++Timecounter > oneSecond)
 	{
 		Timecounter = 0;
@@ -158,13 +160,6 @@ void BattleScene::UpdateBattle()
 
 void BattleScene::UpdateBattleAfter()
 {
-	static bool IsSound = true;
-	if (IsSound)
-	{
-		Audio::Play(hWhistle_);
-		IsSound = false;
-	}
-
 
 	if (++Timecounter > SceneTransition)
 	{

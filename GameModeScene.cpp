@@ -14,7 +14,7 @@ GameModeScene::GameModeScene(GameObject* parent)
 	hBackScreen_(-1), hBackChara_(-1),
 	hBattle_(-1),hPractice_(-1), hHowtoPlay_(-1),hBackTitle_(-1), hFrameLine_(-1),
 	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),
-	TextArray_({}),ButtonArray_({}), hModeSound_(-1), SelectMode_(Battle)
+	TextArray_({}),ButtonArray_({}), hSoundGameMode_(-1), SelectMode_(Battle)
 {
 }
 
@@ -59,8 +59,8 @@ void GameModeScene::Initialize()
 	hTitleText_ = Image::Load(path + "TitleText.png");
 	assert(hTitleText_ >= 0);
 
-	hModeSound_ = Audio::Load("Sound\\BGM\\GameMode.wav",true);
-	assert(hModeSound_ >= 0);
+	hSoundGameMode_ = Audio::Load("Sound\\BGM\\GameMode.wav",true);
+	assert(hSoundGameMode_ >= 0);
 
 	//各モードのハンドルを配列に入れる
 	ButtonArray_ = { hBattle_, hPractice_, hHowtoPlay_, hBackTitle_ };
@@ -123,25 +123,26 @@ void GameModeScene::Update()
 		{
 		case GameModeScene::Battle:
 			pSceneManager->ChangeScene(SCENE_ID_BATTLE);
-			Audio::Stop(hModeSound_);
+			Audio::Stop(hSoundGameMode_);
 			break;
 		case GameModeScene::Practice:
 			pSceneManager->ChangeScene(SCENE_ID_PRACTICE);
-			Audio::Stop(hModeSound_);
+			Audio::Stop(hSoundGameMode_);
 			break;
 		case GameModeScene::HowToPlay:
 			pSceneManager->ChangeScene(SCENE_ID_HOWTOPLAY);
+			Audio::Stop(hSoundGameMode_);
 			break;
 		case GameModeScene::Title:
 			pSceneManager->ChangeScene(SCENE_ID_TITLE);
-			Audio::Stop(hModeSound_);
+			Audio::Stop(hSoundGameMode_);
 			break;
 		default:
 			break;
 		}
 		
 	}
-	Audio::Play(hModeSound_);
+	Audio::Play(hSoundGameMode_);
 }
 
 void GameModeScene::Draw()
