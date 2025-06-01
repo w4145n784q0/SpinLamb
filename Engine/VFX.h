@@ -121,5 +121,14 @@ namespace VFX
 	//エミッタを削除（エフェクト終了）
 	//引数：handle	エフェクトの番号
 	void End(int handle);
+
+	/// <summary>
+	/// エミッターデータに各値を入れる
+	/// CSVで読み取れる値の初期化
+	/// transform_.position_等を入れる際はこの関数の処理後に行う
+	/// </summary>
+	/// <param name="data">設定対象のEmitterData</param>
+	/// <param name="v">エミッターに設定するfloat型の値</param>
+	void SetEmitter(EmitterData &data, std::vector<float> v);
 };
 

@@ -94,6 +94,14 @@ protected:
     };
     ShadowParam ShadowParam_;
 
+    //----------エフェクト関連----------
+
+    std::vector<float> ChargeParam_ = {};//チャージ状態エフェクトのパラメータ
+	std::vector<float> AttackLocusParam_ = {};//突撃エフェクトのパラメータ
+	std::vector<float> HitEffectParam_ = {};//接触時の衝撃エフェクトのパラメータ
+	std::vector<float> WallHitEffectParam_ = {};//壁に接触時の衝撃エフェクトのパラメータ
+	std::vector<std::vector<float>> EffectArray_ = {};//エフェクトパラメータをまとめる配列
+
 public:
     Character(GameObject* parent);
     Character(GameObject* parent, const std::string& name);
@@ -257,6 +265,11 @@ public:
 
     //----------エフェクト処理----------
     
+    /// <summary>
+    /// CSV用データの初期化
+    /// </summary>
+    void InitCSVEffect();
+
     /// <summary>
     /// チャージ状態エフェクトをつける
     /// </summary>

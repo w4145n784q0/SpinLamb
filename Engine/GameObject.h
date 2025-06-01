@@ -7,7 +7,6 @@
 #include "BoxCollider.h"
 #include "Transform.h"
 #include"CsvReader.h"
-
 namespace
 {
 	//トランスフォームの初期化値をCSVから読み込む際のインデックス

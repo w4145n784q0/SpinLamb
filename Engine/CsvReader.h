@@ -52,7 +52,11 @@ public:
 	//戻値：行数
 	size_t GetHeight();
 
-
+	/// <summary>
+	/// CSVの行の中身を取得
+	/// </summary>
+	/// <param name="ParamName">csvの0列目の文字列</param>
+	/// <returns>取得したvector配列</returns>
 	std::vector<float> GetParam(std::string ParamName);
 
 	/// <summary>
@@ -60,7 +64,6 @@ public:
 	/// </summary>
 	/// <param name="ParamName">0列目のパラメータの名前</param>
 	/// <returns></returns>
-	/// 
 	bool IsGetParamName(std::string ParamName);
 };
 

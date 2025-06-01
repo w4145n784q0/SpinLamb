@@ -109,12 +109,12 @@ void Fence::SetCollisionFence(float upper, float lower, float left, float right,
 	float heightY = height * raito;
 	float widthX = height * raito;
 
-	BoxCollider* collision_wall1 = new BoxCollider(XMFLOAT3(0, height, upper), XMFLOAT3(right * raito, heightY, width));
+	BoxCollider* collision_wall1 = new BoxCollider(XMFLOAT3(0, height, upper), XMFLOAT3(left * raito, heightY, width));
 	AddCollider(collision_wall1);
-	BoxCollider* collision_wall2 = new BoxCollider(XMFLOAT3(0, height, lower), XMFLOAT3(right * raito, heightY, width));
+	BoxCollider* collision_wall2 = new BoxCollider(XMFLOAT3(0, height, lower), XMFLOAT3(left * raito, heightY, width));
 	AddCollider(collision_wall2);
-	BoxCollider* collision_wall3 = new BoxCollider(XMFLOAT3(right, height, 0), XMFLOAT3(width, heightY, upper * raito));
+	BoxCollider* collision_wall3 = new BoxCollider(XMFLOAT3(left, height, 0), XMFLOAT3(width, heightY, upper * raito));
 	AddCollider(collision_wall3);
-	BoxCollider* collision_wall4 = new BoxCollider(XMFLOAT3(left, height, 0), XMFLOAT3(width, heightY, upper * raito));
+	BoxCollider* collision_wall4 = new BoxCollider(XMFLOAT3(right, height, 0), XMFLOAT3(width, heightY, upper * raito));
 	AddCollider(collision_wall4);
 }

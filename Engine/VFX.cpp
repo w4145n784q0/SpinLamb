@@ -5,7 +5,70 @@ namespace VFX
 {
     std::list<Emitter*>		emitterList_;	//エミッター達
     std::list<Particle*>	particleList_;	//パーティクル達
+
+    
+    enum VFXIndex
+    {
+        i_position_x = 0,
+        i_position_y,
+        i_position_z,
+
+        i_positionRnd_x,
+        i_positionRnd_y,
+        i_positionRnd_z,
+
+        i_direction_x,
+        i_direction_y,
+        i_direction_z,
+
+        i_directionRnd_x,
+        i_directionRnd_y,
+        i_directionRnd_z,
+
+        i_speed,
+        i_speedRnd,
+        i_accel,
+        i_gravity,
+
+        i_color_x,
+        i_color_y,
+        i_color_z,
+        i_color_w,
+
+        i_deltaColor_x,
+        i_deltaColor_y,
+        i_deltaColor_z,
+        i_deltaColor_w,
+
+        i_rotate_x,
+        i_rotate_y,
+        i_rotate_z,
+
+        i_rotateRnd_x,
+        i_rotateRnd_y,
+        i_rotateRnd_z,
+
+        i_spin_x,
+        i_spin_y,
+        i_spin_z,
+
+        i_size_x,
+        i_size_y,
+
+        i_sizeRnd_x,
+        i_sizeRnd_y,
+
+        i_scale_x,
+        i_scale_y,
+
+        i_lifeTime,
+        i_delay,
+        i_number,
+        i_isBillBoard,
+    };
+
 };
+
 
 //更新
 void VFX::Update()
@@ -279,4 +342,28 @@ void VFX::End(int handle)
             break;
         }
     }
+}
+
+void VFX::SetEmitter(EmitterData &data, std::vector<float> v)
+{
+    data.position = {v[i_position_x],v[i_position_y],v[i_position_z]};
+    data.positionRnd = { v[i_positionRnd_x],v[i_positionRnd_y],v[i_positionRnd_z] };
+	data.direction = { v[i_direction_x],v[i_direction_y],v[i_direction_z] };
+	data.directionRnd = { v[i_directionRnd_x],v[i_directionRnd_y],v[i_directionRnd_z] };
+	data.speed = v[i_speed];
+	data.speedRnd = v[i_speedRnd];
+	data.accel = v[i_accel];
+	data.gravity = v[i_gravity];
+	data.color = { v[i_color_x],v[i_color_y],v[i_color_z],v[i_color_w] };
+	data.deltaColor = { v[i_deltaColor_x],v[i_deltaColor_y],v[i_deltaColor_z],v[i_deltaColor_w] };
+    data.rotate = { v[i_rotate_x],v[i_rotate_y],v[i_rotate_z] };
+	data.rotateRnd = { v[i_rotateRnd_x],v[i_rotateRnd_y],v[i_rotateRnd_z] };
+	data.spin = { v[i_spin_x],v[i_spin_y],v[i_spin_z] };
+	data.size = { v[i_size_x],v[i_size_y] };
+	data.sizeRnd = { v[i_sizeRnd_x],v[i_sizeRnd_y] };
+	data.scale = { v[i_scale_x],v[i_scale_y] };
+	data.lifeTime = (DWORD)v[i_lifeTime];
+	data.delay = (DWORD)v[i_delay];
+	data.number = (DWORD)v[i_number];
+	data.isBillBoard = (bool)v[i_isBillBoard];
 }

@@ -2,6 +2,7 @@
 #include"Engine/VFX.h"
 #include"Engine/Model.h"
 #include"Engine/Audio.h"
+#include"Engine/Global.h"
 
 namespace {
 	
@@ -54,6 +55,15 @@ namespace {
 		enemy,
 		MaxChara
 	};
+
+	//エフェクト初期化時のインデックス
+	enum EffectParam
+	{
+		Charge = 0,
+		Locus,
+		Hit,
+		WallHit,
+	};
 }
 
 
@@ -65,6 +75,7 @@ Character::Character(GameObject* parent)
 Character::Character(GameObject* parent, const std::string& name)
 	:GameObject(parent, name)
 {
+	InitCSVEffect();
 	hSoundcharge_ = Audio::Load("Sound\\SE\\charge.wav",false,MaxChara);
 	assert(hSoundcharge_ >= 0);
 	hSoundattack_ = Audio::Load("Sound\\SE\\attack.wav", false, MaxChara);
@@ -404,40 +415,70 @@ XMVECTOR Character::RotateVecFront(float rotY, XMVECTOR front)
 	return v;
 }
 
+void Character::InitCSVEffect()
+{
+	CsvReader csv;
+	csv.Load("CSVData\\VFXData.csv");
+
+	//ChargeParam_...はvector<float>型のパラメータ
+	std::string effects[] = { "Charge","Locus" , "Hit" , "WallHit" };
+    std::vector<float>* param[] = { &ChargeParam_, &AttackLocusParam_, &HitEffectParam_, &WallHitEffectParam_ };  
+    for (int i = 0; i < sizeof(effects) / sizeof(effects[0]); i++)  
+    {  
+		if (csv.IsGetParamName(effects[i]))  
+        {  
+			std::vector<float> v = csv.GetParam(effects[i]);  
+			*param[i] = v;  
+            // SetEmitterで実際にVFXのパラメータにセットされる  
+        }  
+    }
+}
+
 void Character::SetChargingEffect(std::string _path)
 {
 	EmitterData charge;
+	
+	VFX::SetEmitter(charge, ChargeParam_);
 	charge.textureFileName = _path;
-	charge.delay = 0;
-	charge.lifeTime = 15;
 	charge.position = this->transform_.position_;
+
+	/*charge.delay = 0;
+	charge.lifeTime = 15;
+	
 	charge.positionRnd = XMFLOAT3(1, 1, 1);
 	charge.direction = { 0,1,0 };
 	charge.speed = 0.18;
-	charge.number = (DWORD)1;
+	charge.number = (DWORD)1;*/
+
 	VFX::Start(charge);
 }
 
 void Character::SetAttackLocusEffect()
 {
 	EmitterData locus;
+	VFX::SetEmitter(locus, AttackLocusParam_);
 	locus.textureFileName = "PaticleAssets\\flashB_Y.png";
-	locus.delay = 0;
+	locus.position = this->transform_.position_;
+	
+
+	/*locus.delay = 0;
 	locus.number = (DWORD)3;
 	locus.position = this->transform_.position_;
 	locus.positionRnd = { 1,1,1 };
 	locus.direction = { 0,0,1 };
 	locus.sizeRnd = { 0.5,0.5 };
-	locus.lifeTime = (DWORD)10;
+	locus.lifeTime = (DWORD)10;*/
 	VFX::Start(locus);
 }
 
 void Character::SetHitEffect()
 {
 	EmitterData hit;
+
+	VFX::SetEmitter(hit, HitEffectParam_);
 	hit.textureFileName = "PaticleAssets\\flashB_W.png";
 	hit.position = this->transform_.position_;
-	hit.position.y = this->transform_.position_.y + 1.0f;
+	/*hit.position.y = this->transform_.position_.y + 1.0f;
 	hit.delay = 0;
 	hit.direction = { 1,1,0 };
 	hit.directionRnd = XMFLOAT3(90, 90, 90);
@@ -446,22 +487,23 @@ void Character::SetHitEffect()
 	hit.accel = 1.0;
 	hit.lifeTime = (DWORD)10.0;
 	hit.number = (DWORD)10;
-	hit.sizeRnd = XMFLOAT2(0.4, 0.4);
+	hit.sizeRnd = XMFLOAT2(0.4, 0.4);*/
 	VFX::Start(hit);
 }
 
 void Character::SetWallHitEffect()
 {
 	EmitterData  wallhit;
+	VFX::SetEmitter(wallhit, WallHitEffectParam_);
 	wallhit.textureFileName = "PaticleAssets\\flashB_W.png";
-
-
 	wallhit.position = this->transform_.position_;
-	wallhit.direction = { 1,1,0 };
+
+
+	/*wallhit.direction = { 1,1,0 };
 	wallhit.directionRnd = { 360,360,0 };
 	wallhit.number = (DWORD)10;
 	wallhit.delay = 0;
 	wallhit.speed = 0.3f;
-	wallhit.lifeTime = 20;
+	wallhit.lifeTime = 20;*/
 	VFX::Start(wallhit);
 }
