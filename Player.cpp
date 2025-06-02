@@ -100,14 +100,14 @@ void Player::Update()
 	case Player::S_IDLE:
 		UpdateIdle();
 		break;
-	case Player::S_HIT:
-		UpdateHit();
-		break;
 	case Player::S_CHARGE:
 		UpdateCharge();
 		break;
 	case Player::S_ATTACK:
 		UpdateAttack();
+		break;
+	case Player::S_HIT:
+		UpdateHit();
 		break;
 	case Player::S_WALLHIT:
 		UpdateWallHit();
@@ -317,15 +317,6 @@ void Player::UpdateIdle()
 	Direction_ = { 0,0,0 };//最後に進行方向のリセット毎フレーム行う
 }
 
-void Player::UpdateHit()
-{
-	KnockBack();
-	if (IsKnockBackEnd())
-	{
-		PlayerState_ = S_IDLE;
-	}
-}
-
 void Player::UpdateCharge()
 {
 	SetChargingEffect("PaticleAssets\\circle_B.png");
@@ -378,6 +369,15 @@ void Player::UpdateAttack()
 	KeyBoradMove();
 }
 
+void Player::UpdateHit()
+{
+	KnockBack();
+	if (IsKnockBackEnd())
+	{
+		PlayerState_ = S_IDLE;
+	}
+}
+
 void Player::UpdateWallHit()
 {	
 	KnockBack();
@@ -398,7 +398,7 @@ void Player::UpdateWallHit()
 
 void Player::UpdateStop()
 {
-
+	//動かない
 }
 
 void Player::SetJump()

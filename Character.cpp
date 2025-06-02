@@ -32,6 +32,10 @@ namespace {
 	enum Hit
 	{
 		collider = 0,
+		originalrangemin,
+		originalrangemax,
+		convertedrangemin,
+		convertedrangemax,
 		knockbackpower,
 		deceleration,
 		knockbackend,
@@ -135,6 +139,12 @@ void Character::SetcsvStatus(std::string _path)
 	{
 		std::vector<float> v = csv.GetParam(p_hit);
 		HitParam_.ColliderSize_ =v[collider];
+
+		HitParam_.OriginaRangeMin_ = v[originalrangemin];
+		HitParam_.OriginaRangeMax_ = v[originalrangemax];
+		HitParam_.ConvertedRangeMin_ = v[convertedrangemin];
+		HitParam_.ConvertedRangeMax_ = v[convertedrangemax];
+
 		HitParam_.KnockBackPower_ = v[knockbackpower];
 		HitParam_.DecelerationRate_ = v[deceleration];
 		HitParam_.KnockBackEnd_ = v[knockbackend];
@@ -290,8 +300,9 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 	//値が変化するのでローカル変数
 	float KnockBackValue = 0.0f;
 
+	//速度差の判定は線形補完元の最大値を適用
 	//速度差が自身の方が一定以上なら、自身のノックバック量は0
-	if (subVelocity >= 20.0f)
+	if (subVelocity >= HitParam_.OriginaRangeMax_)
 	{
 		KnockBackValue = 0.0f;
 	}
@@ -301,17 +312,17 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 		{
 			subVelocity = -subVelocity;
 		}
-		if (subVelocity > 20.0f)
-		{
-			subVelocity = 20.0f;
-		}
-		KnockBackValue = LinearCompletion(subVelocity, 0, 20, 2, 4);
+
+		//ノックバック量の線形補完を行う
+		KnockBackValue = LinearCompletion(subVelocity,
+			HitParam_.OriginaRangeMin_, HitParam_.OriginaRangeMax_,
+			HitParam_.ConvertedRangeMin_, HitParam_.ConvertedRangeMax_);
 	}
 
 	HitParam_.KnockBack_Velocity_.x = KnockBackValue;
 	HitParam_.KnockBack_Velocity_.z = KnockBackValue;
 
-	MoveParam_. Acceleration_ = 0;
+	AccelerationStop();
 }
 
 void Character::KnockBack()
@@ -344,7 +355,7 @@ void Character::WallHit()
 	SetWallHitEffect();
 
 	//速度リセット
-	MoveParam_.Acceleration_ = 0.0f;
+	AccelerationStop();
 
 	//正面ベクトルの逆ベクトルを計算
 	XMVECTOR negate = XMVectorNegate(MoveParam_.ForwardVector_);

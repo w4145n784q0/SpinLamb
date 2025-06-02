@@ -64,9 +64,13 @@ protected:
     struct HitParam
     {
         float ColliderSize_ = 0.0f; //当たり判定(球体)のサイズ
+		float OriginaRangeMin_ = 0.0f; //変換元のノックバック量の最小値
+		float OriginaRangeMax_ = 0.0f;  //変換元のノックバック量の最大値
+		float ConvertedRangeMin_ = 0.0f; //変換後のノックバック量の最小値
+		float ConvertedRangeMax_ = 0.0f; //変換後のノックバック量の最大値
         XMFLOAT3 KnockBack_Direction_ = { 0,0,0 };//ノックバックする方向
         XMFLOAT3 KnockBack_Velocity_ = {0,0,0};//ノックバックする速度
-        float KnockBackPower_ = 0.0f; //ノックバックする強さ
+        float KnockBackPower_ = 0.0f; //ノックバックする強さ（変化なし）
         float DecelerationRate_ = 0.0f;//ノックバック時の1fごとの減速率
         float KnockBackEnd_ = 0.0f;//ノックバックを終了する値
     };

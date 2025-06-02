@@ -18,9 +18,9 @@ private:
 	enum State
 	{
 		S_IDLE,//通常
-		S_HIT,//弾かれる
 		S_CHARGE,//チャージ中
 		S_ATTACK,//攻撃
+		S_HIT,//弾かれる
 		S_WALLHIT,//壁にヒット
 		S_STOP,//プレイヤーを止める状態
 		S_MAX
@@ -58,9 +58,9 @@ public:
 	void OnCollision(GameObject* pTarget) override;
 
 	void UpdateIdle();//通常状態
-	void UpdateHit();//ヒット状態
 	void UpdateCharge();//チャージ状態
 	void UpdateAttack();//攻撃状態
+	void UpdateHit();//ヒット状態
 	void UpdateWallHit();//壁に接触状態
 	void UpdateStop();//プレイヤーを止める状態
 

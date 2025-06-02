@@ -20,11 +20,11 @@ private:
 	enum State {
 		S_ROOT = 0,//判断用
 		S_CHASE,//追いかける
+		S_AIM,//プレイヤーを狙う(攻撃準備)
 		S_ATTACK,//攻撃
 		S_HITSTOP,//ヒットストップ
 		S_HIT,//攻撃を食らった
 		S_WALLHIT,//壁に当たりダメージ
-		S_AIM,//プレイヤーを狙う(攻撃準備)
 		S_STOP,//敵を止める
 		S_MAX
 	};
@@ -55,11 +55,11 @@ public:
 	void Release() override;
 	void UpdateRoot();//ここから次のUpdateに移る判断をする
 	void UpdateChase();//追跡
+	void UpdateAim();//攻撃準備
 	void UpdateAttack();//攻撃
 	void UpdateHitStop();//ヒットストップ
 	void UpdateHit();//攻撃を喰らった
 	void UpdateWallHit();//壁に接触
-	void UpdateAim();//攻撃準備
 	void UpdateStop();//敵を止める
 
 	void OnCollision(GameObject* pTarget) override;

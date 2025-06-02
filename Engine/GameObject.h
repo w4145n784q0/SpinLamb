@@ -247,17 +247,32 @@ public:
 	/// <summary>
 	/// 線形補完(floatで受け取り返す)
 	/// </summary>
-	/// <param name="convert">変換したい値</param>
-	/// <param name="originalMin">変換元の範囲の最小値</param>
-	/// <param name="originalMax">変換元の範囲の最大値</param>
-	/// <param name="conversionMin">変換後の範囲の最小値</param>
-	/// <param name="conversionMax">変換後の範囲の最大値</param>
-	/// <returns>補正後の値</returns>
+	/// <param name="convert">変換したい値(x)</param>
+	/// <param name="originalMin">変換元の範囲の最小値(x1)</param>
+	/// <param name="originalMax">変換元の範囲の最大値(x2)</param>
+	/// <param name="conversionMin">変換後の範囲の最小値(y1)</param>
+	/// <param name="conversionMax">変換後の範囲の最大値(y2)</param>
+	/// <returns>補正後の値(y)</returns>
 	float LinearCompletion(float convert,float originalMin,float originalMax, 
 		float conversionMin,float conversionMax)
 	{
 		//y = y1 + (x - x1) * (y2 - y1) / (x2 - x1);
-		return  conversionMin + (convert - originalMin) * (conversionMax - conversionMin) / (originalMax - originalMin);
+
+		if (originalMin == originalMax)
+		{
+			return conversionMin; // originalMinとoriginalMaxが同じ場合はconversionMinを返す(0除算対策)
+		}
+		if (convert < originalMin)
+		{
+			return conversionMin; // convertがoriginalMinより小さい場合はconversionMinを返す(外挿対策)
+		}
+		if (convert > originalMax)
+		{
+			return conversionMax; // convertがoriginalMaxより大きい場合はconversionMaxを返す(外挿対策)
+		}
+
+		float y =  conversionMin + (convert - originalMin) * (conversionMax - conversionMin) / (originalMax - originalMin);
+		return y;
 	}
 
 	/// <summary>

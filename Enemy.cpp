@@ -87,6 +87,9 @@ void Enemy::Update()
 	case Enemy::S_CHASE:
 		UpdateChase();
 		break;
+	case Enemy::S_AIM:
+		UpdateAim();
+		break;
 	case Enemy::S_ATTACK:
 		UpdateAttack();
 		break;
@@ -98,9 +101,6 @@ void Enemy::Update()
 		break;
 	case Enemy::S_WALLHIT:
 		UpdateWallHit();
-		break;
-	case Enemy::S_AIM:
-		UpdateAim();
 		break;
 	case Enemy::S_STOP:
 		UpdateStop();
@@ -188,6 +188,38 @@ void Enemy::UpdateChase()
 	}
 }
 
+void Enemy::UpdateAim()
+{
+	LookPlayer();
+	SetChargingEffect("PaticleAssets\\circle_R.png");
+	FastRotate();
+	Charging();
+
+	//時間経過で攻撃状態へ（配列中のランダムな時間）
+	if (++AimTimer_ > EnemyAttackTimeArray[RandomAim_])
+	{
+		AimTimer_ = 0;
+		EnemyState_ = S_ATTACK;
+	}
+
+}
+
+void Enemy::UpdateAttack()
+{
+	Audio::Play(hSoundattack_);
+	SetAttackLocusEffect();
+	CharacterMove(MoveParam_.MoveDirection_);
+	Deceleration();
+	FastRotateReverse();
+
+	if (IsDashStop())
+	{
+		RotateStop();
+		EnemyState_ = S_ROOT;
+		RandomAim_ = rand() % EnemyAttackTimeArray.size();//攻撃終了後に攻撃時間をリセット
+	}
+}
+
 void Enemy::UpdateHitStop()
 {
 	//ヒットストップ活用時のみ使用
@@ -224,38 +256,6 @@ void Enemy::UpdateWallHit()
 			BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
 			pBattleScene->PlusPlayerScore();
 		}
-	}
-}
-
-void Enemy::UpdateAim()
-{
-	LookPlayer();
-	SetChargingEffect("PaticleAssets\\circle_R.png");
-	FastRotate();
-	Charging();
-
-	//時間経過で攻撃状態へ（配列中のランダムな時間）
-	if (++AimTimer_ > EnemyAttackTimeArray[RandomAim_])
-	{
-		AimTimer_ = 0;
-		EnemyState_ = S_ATTACK;
-	}
-
-}
-
-void Enemy::UpdateAttack()
-{
-	Audio::Play(hSoundattack_);
-	SetAttackLocusEffect();
-	CharacterMove(MoveParam_. MoveDirection_);
-	Deceleration();
-	FastRotateReverse();
-
-	if (IsDashStop())
-	{
-		RotateStop();
-		EnemyState_ = S_ROOT;
-		RandomAim_ = rand() % EnemyAttackTimeArray.size();//攻撃終了後に攻撃時間をリセット
 	}
 }
 
