@@ -1,2 +1,3 @@
-﻿Data,ResultPosition,ResultPosition,ResultPosition,LogoUnder,LogoUnder,LogoUnder
-Scene,0,0,0,0,-0.8,0
+﻿Data,pos.x,pos.y,pos.z,rot.x,rot.y,rot.z,sca.x,sca.y,sca.z
+Result,0,0,0,0,0,0,1,1,1
+PushTitle,0,-0.8,0,0,0,0,1,1,1

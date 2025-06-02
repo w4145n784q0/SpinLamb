@@ -154,8 +154,8 @@ void Character::SetcsvStatus(std::string _path)
 	if (csv.IsGetParamName(p_wallhit))
 	{
 		std::vector<float> v = csv.GetParam(p_wallhit);
-		WallHitParam_.InvincibilityValue = v[invincibilityvalue];
-		WallHitParam_.blinkValue = v[blinkvalue];
+		WallHitParam_.InvincibilityValue = static_cast<int>(v[invincibilityvalue]);
+		WallHitParam_.blinkValue = static_cast<int>(v[blinkvalue]);
 	}
 
 	std::string p_shadow = "ShadowParam";

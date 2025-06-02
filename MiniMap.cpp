@@ -1,9 +1,9 @@
 #include "MiniMap.h"
 #include"Engine/Image.h"
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_dx11.h"
-#include "imgui/imgui_impl_win32.h"
+//#include "imgui/imgui.h"
+//#include "imgui/imgui_impl_dx11.h"
+//#include "imgui/imgui_impl_win32.h"
 
 namespace
 {
@@ -69,10 +69,8 @@ void MiniMap::Draw()
 {
 #ifdef _DEBUG
 	//ImGui::Begin("config 2");
-	//ImGui::SliderFloat("mapPos x", &mTrans.position_.x, 0.0, 1.0);
-	//ImGui::SliderFloat("mapPos y", &mTrans.position_.y, -1.0, 0.0);
-	//ImGui::Text("mapPos.x%.1f", mTrans.position_.x);
-	//ImGui::Text("mapPos.y%.1f", mTrans.position_.y);
+	ImGui::SliderFloat("mapPos x", &Trans_Map.position_.x, 0.0, 1.0);
+	ImGui::SliderFloat("mapPos y", &Trans_Map.position_.y, -1.0, 0.0);
 #endif
 
 	Image::SetTransform(hMap_, Trans_Map);

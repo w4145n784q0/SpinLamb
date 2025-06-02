@@ -7,6 +7,11 @@
 #include "BoxCollider.h"
 #include "Transform.h"
 #include"CsvReader.h"
+
+#include "../imgui/imgui.h"t
+#include "../imgui/imgui_impl_dx11.h"
+#include "../imgui/imgui_impl_win32.h"
+
 namespace
 {
 	//トランスフォームの初期化値をCSVから読み込む際のインデックス

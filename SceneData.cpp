@@ -18,7 +18,7 @@ SceneData::~SceneData()
 void SceneData::SetCSVScene()
 {
 	CsvReader csv;
-	csv.Load("CSVdata\\SceneData_2.csv");
+	csv.Load("CSVdata\\SceneData.csv");
 
 	std::string result = "Result";
 	if (csv.IsGetParamName(result))
