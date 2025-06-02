@@ -20,12 +20,12 @@ namespace
 	};
 
 
-	double reductionX = 0.0;//キャラクターのX座標を縮小する値
-	double reductionY = 0.00;//キャラクターのZ座標を縮小する値
+	float reductionX = 0.0;//キャラクターのX座標を縮小する値
+	float reductionY = 0.00;//キャラクターのZ座標を縮小する値
 	XMFLOAT3 MapPositon = { 0.0f,0.0f,0.0f };//マップの位置
 	float CorrectionValueX = 0.0f;//マップのX座標を補正する値
 	float CorrectionValueY = 0.0f;//マップのY座標を補正する値
-	float MapAlpha = 0;//マップの透明度
+	int MapAlpha = 0;//マップの透明度
 }
 
 MiniMap::MiniMap(GameObject* parent)
@@ -108,6 +108,7 @@ void MiniMap::SetCSV()
 		MapPositon.z = v[MapPositonZParam];
 		CorrectionValueX = v[CorrectionValueXParam];
 		CorrectionValueY = v[CorrectionValueYParam];
-		MapAlpha = v[MapAlphaParam];
+		MapAlpha = (int)v[MapAlphaParam];
+		MapAlpha = (int)v[MapAlphaParam];
 	}
 }

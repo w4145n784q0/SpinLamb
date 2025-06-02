@@ -3,7 +3,7 @@
 #include"SceneData.h"
 
 class TitleScene :
-    public SceneData
+    public GameObject
 {
 private:
 	//----------‰æ‘œƒnƒ“ƒhƒ‹----------

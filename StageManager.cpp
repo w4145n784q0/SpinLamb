@@ -87,7 +87,7 @@ void StageManager::SetSCV()
 		LowerEnd_ = v[down];
 		RightEnd_ = v[right];
 		LeftEnd_ = v[left];
-		PillerNum_ = v[pillernum];
+		PillerNum_ = static_cast<int>(v[pillernum]);
 		CollisionHeight_ = v[collisionheight];
 		CollisionWidth_ = v[collisionwidth];
 	}

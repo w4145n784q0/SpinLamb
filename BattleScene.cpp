@@ -186,9 +186,9 @@ void BattleScene::SetCSVBattle()
 	if (csv.IsGetParamName(pos))
 	{
 		std::vector<float> v = csv.GetParam(pos);
-		PlayerScorePosX = v[i_PlayerScorePosX];
-		PlayerScorePosY = v[i_PlayerScorePosY];
-		EnemyScorePosX = v[i_EnemyScorePosX];
-		EnemyScorePosY = v[i_EnemyScorePosY];
+		PlayerScorePosX = static_cast<int> (v[i_PlayerScorePosX]);
+		PlayerScorePosY = static_cast<int> (v[i_PlayerScorePosY]);
+		EnemyScorePosX = static_cast<int> (v[i_EnemyScorePosX]);
+		EnemyScorePosY = static_cast<int> (v[i_EnemyScorePosY]);
 	}
 }

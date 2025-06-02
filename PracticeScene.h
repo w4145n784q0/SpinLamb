@@ -1,9 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
-#include"SceneData.h"
 
 class PracticeScene :
-    public SceneData
+    public GameObject
 {
 private:
 

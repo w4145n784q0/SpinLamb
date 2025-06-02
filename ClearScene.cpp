@@ -4,6 +4,10 @@
 #include"Engine/Audio.h"
 #include"Engine/SceneManager.h"
 
+#include "imgui/imgui.h"
+#include "imgui/imgui_impl_dx11.h"
+#include "imgui/imgui_impl_win32.h"
+
 namespace
 {
 	Transform LogoResult;
@@ -31,8 +35,6 @@ void ClearScene::Initialize()
 	hSoundClear_ = Audio::Load("Sound\\BGM\\end.wav",true);
 	assert(hSoundClear_ >= 0);
 
-	LogoResult.position_ = ResultPosition_;
-	LogoTitle.position_ = UnderPosition_;
 }
 
 void ClearScene::Update()
@@ -50,11 +52,17 @@ void ClearScene::Draw()
 	Image::SetTransform(hBackScreen_, this->transform_);
 	Image::Draw(hBackScreen_);
 
-	Image::SetTransform(hlogoResult_, LogoResult);
+	Image::SetTransform(hlogoResult_, Result);
 	Image::Draw(hlogoResult_);
 
-	Image::SetTransform(hlogoTitle_, LogoTitle);
+	Image::SetTransform(hlogoTitle_, PushTitle);
 	Image::Draw(hlogoTitle_);
+
+#ifdef _DEBUG
+	ImGui::SliderFloat("x", &Result.position_.x, -1.0, 1.0);
+	ImGui::SliderFloat("y", &PushTitle.position_.y, -1.0, 1.0);
+#endif
+
 }
 
 void ClearScene::Release()

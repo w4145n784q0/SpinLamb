@@ -11,7 +11,7 @@
 #include"StageManager.h"
 
 PracticeScene::PracticeScene(GameObject* parent)
-	:SceneData(parent,"PracticeScene"), hBackScreen_(-1),hSoundPractice_(-1), Press_(0)
+	:GameObject(parent,"PracticeScene"), hBackScreen_(-1),hSoundPractice_(-1), Press_(0)
 {
 }
 
@@ -49,8 +49,6 @@ void PracticeScene::Initialize()
 
 	HUD* pHUD = (HUD*)FindObject("HUD");
 	pHUD->SetStatePractice();
-
-	SetCSVScene();
 }
 
 void PracticeScene::Update()

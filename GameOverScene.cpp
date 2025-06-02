@@ -36,8 +36,6 @@ void GameOverScene::Initialize()
 	hSoundGameOver_ = Audio::Load("Sound\\BGM\\end.wav",true);
 	assert(hSoundGameOver_ >= 0);
 
-	LogoResult.position_ = ResultPosition_;
-	LogoTitle.position_ = UnderPosition_;
 }
 
 void GameOverScene::Update()
@@ -55,15 +53,15 @@ void GameOverScene::Draw()
 	Image::SetTransform(hBackScreen_, this->transform_);
 	Image::Draw(hBackScreen_);
 
-	Image::SetTransform(hlogoResult_, LogoResult);
+	Image::SetTransform(hlogoResult_, Result);
 	Image::Draw(hlogoResult_);
 
-	Image::SetTransform(hlogoTitle_, LogoTitle);
+	Image::SetTransform(hlogoTitle_, PushTitle);
 	Image::Draw(hlogoTitle_);
 
 #ifdef _DEBUG
-	ImGui::SliderFloat("x", &LogoTitle.position_.x, -1.0, 1.0);
-	ImGui::SliderFloat("y", &LogoTitle.position_.y, -1.0, 1.0);
+	ImGui::SliderFloat("x", &Result.position_.x, -1.0, 1.0);
+	ImGui::SliderFloat("y", &PushTitle.position_.y, -1.0, 1.0);
 #endif
 }
 

@@ -75,7 +75,6 @@ void GameModeScene::Initialize()
 
 void GameModeScene::Update()
 {
-	int i = StickTilt; //スティックの傾き閾値
 	if (Input::IsKeyDown(DIK_UP) || Input::GetPadStickL().y >= StickTilt 
 		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP))
 	{
