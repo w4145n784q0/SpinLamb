@@ -218,7 +218,7 @@ public:
     void MoveRotate(){ this->transform_.rotate_.x += RotateParam_.MoveRotateX; }
 
     /// <summary>
-    /// ’ÊíX²‰ñ“](“Gƒ‚ƒfƒ‹—p)
+    /// ’ÊíX²‰ñ“](-x‰ñ“])
     /// </summary>
     void MoveRotateReverse(){ this->transform_.rotate_.x -= RotateParam_.MoveRotateX; }
 
@@ -228,7 +228,7 @@ public:
     void FastRotate(){ this->transform_.rotate_.x += RotateParam_.FastRotateX; }
 
     /// <summary>
-    /// ‚‘¬X²‰ñ“](“Gƒ‚ƒfƒ‹—p)
+    /// ‚‘¬X²‰ñ“](-x‰ñ“])
     /// </summary>
     void FastRotateReverse() { this->transform_.rotate_.x -= RotateParam_.FastRotateX; }
 

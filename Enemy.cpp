@@ -118,8 +118,11 @@ void Enemy::Update()
 		}
 	}
 
-	InvincibilityTimeCalclation();
-	
+	if (!(EnemyState_ == S_WALLHIT))//•Çƒ_ƒ[ƒW”»’è
+	{
+		InvincibilityTimeCalclation();
+	}
+
 	CharacterGravity();
 }
 
@@ -248,7 +251,7 @@ void Enemy::UpdateWallHit()
 	{
 		RotateStop();
 		EnemyState_ = S_ROOT;
-		WallHitParam_.IsInvincibility_ = true;
+		//WallHitParam_.IsInvincibility_ = true;
 
 		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
 		if (pSM->IsBattleScene())

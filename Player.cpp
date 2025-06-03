@@ -128,7 +128,10 @@ void Player::Update()
 		}
 	}
 
-	InvincibilityTimeCalclation();
+	if(!(PlayerState_ == S_WALLHIT))
+	{
+		InvincibilityTimeCalclation();
+	}
 
 	CharacterGravity();
 
@@ -385,7 +388,7 @@ void Player::UpdateWallHit()
 	if (IsKnockBackEnd())
 	{
 		PlayerState_ = S_IDLE;
-		WallHitParam_.IsInvincibility_ = true;
+		//WallHitParam_.IsInvincibility_ = true;
 
 		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
 		if (pSM->IsBattleScene())

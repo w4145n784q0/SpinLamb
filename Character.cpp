@@ -280,8 +280,6 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 		return;
 	}
 
-	//接触した面に垂直な方向に反射する
-
 	//接触相手のベクトルから自身のベクトルを引き、正規化
 	XMVECTOR subVector = XMVector3Normalize(XMVectorSubtract(eVector ,myVector ));
 	
@@ -327,9 +325,9 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 
 void Character::KnockBack()
 {
-	//ノックバックする速度= ノックバックする強さ(定数) * ノックバックする方向
-	this->transform_.rotate_.x += RotateParam_.MoveRotateX;
+	MoveRotateReverse();
 
+	//ノックバックする速度= ノックバックする強さ(定数) * ノックバックする方向
 	//毎フレーム速度を減少
 	HitParam_.KnockBack_Velocity_.x *= HitParam_.DecelerationRate_;
 	HitParam_.KnockBack_Velocity_.z *= HitParam_.DecelerationRate_;
@@ -353,8 +351,6 @@ void Character::KnockBack()
 void Character::WallHit()
 {
 	SetWallHitEffect();
-
-	//速度リセット
 	AccelerationStop();
 
 	//正面ベクトルの逆ベクトルを計算
@@ -368,6 +364,8 @@ void Character::WallHit()
 	//ノックバック量を速度に代入(一定値)
 	HitParam_.KnockBack_Velocity_.x = HitParam_.KnockBackPower_;
 	HitParam_.KnockBack_Velocity_.z = HitParam_.KnockBackPower_;
+
+	WallHitParam_.IsInvincibility_ = true;
 }
 
 bool Character::IsKnockBackEnd()
