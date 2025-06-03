@@ -15,9 +15,6 @@ private:
 
 	//----------柵の位置----------
 
-	//鉄線のトランスフォーム
-	Transform wire;
-	
 	//左上
 	XMFLOAT3 piller_UpperLeft_;
 
@@ -52,23 +49,36 @@ public:
 	/// <param name="height">柱の高さ</param>
 	void SetPiller(float upper, float lower, float left, float right, float height);
 
+	/// <summary>
+	///	柱の数を設定
+	/// </summary>
+	/// <param name="num">柱の数</param>
 	void SetPillerNum(int num);
 
-	void InitWireTransform(Transform _t); 
-
-	void InitPillerTransform(Transform _t);
-
 	/// <summary>
-	/// フェンスの衝突判定を設定
+	/// 鉄線のトランスフォームを初期化
 	/// </summary>
-	/// <param name="upper">z軸の上限</param>
-	/// <param name="lower">z軸の下限</param>
-	/// <param name="left">x軸の上限</param>
-	/// <param name="right">z軸の上限</param>
-	/// <param name="height">柱の高さ</param>
-	/// <param name="raito">当たり判定にかける倍率</param>
-	/// <param name="width"></param>
-	void SetCollisionFence(float upper, float lower, float left, float right,
-		float height,float raito, float width);
+	/// <param name="_t">StageManagerで初期化したトランスフォーム</param>
+	void InitWireTransform(Transform _t); 
 	
+	/// <summary>
+	/// 柱のトランスフォームを初期化
+	/// </summary>
+	/// <param name="_t">StageManagerで初期化したトランスフォーム</param>
+	void InitPillerTransform(Transform _t);
+	
+	/// <summary>
+	/// 各鉄線の衝突判定を設定
+	/// </summary>
+	/// <param name="pos">箱形の当たり判定の位置</param>
+	/// <param name="size">箱形の当たり判定の大きさ</param>
+	/// <param name="normal">各鉄線クラスに渡す法線</param>
+	
+	void SetWireCollisionUpper(XMFLOAT3 pos, XMFLOAT3 size,XMFLOAT3 normal);
+
+	void SetWireCollisionLower(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal);
+
+	void SetWireCollisionLeft(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal);
+
+	void SetWireCollisionRight(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal);
 };

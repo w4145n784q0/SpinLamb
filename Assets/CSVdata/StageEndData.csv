@@ -1,2 +1,2 @@
-﻿Data,upper,lower,right,left,pillernum,collisionheight,collisionwidth
-end,60,-60,60,-60,4,2,1
+﻿Data,upper,lower,right,left,pillernum
+end,60,-60,60,-60,4

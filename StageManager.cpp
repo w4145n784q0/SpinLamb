@@ -6,21 +6,25 @@ namespace
 {
 	enum GroundEndIndex
 	{
-		up = 0,
-		down,
-		right,
-		left,
-		pillernum,
-		collisionheight,
-		collisionwidth,
+		i_up = 0,
+		i_down,
+		i_right,
+		i_left,
+		i_pillernum,
+	};
+
+	enum StageCollisionIndex
+	{
+		i_collisionX = 0,
+		i_collisionY,
+		i_collisionZ,
 	};
 
 }
 
 StageManager::StageManager(GameObject* parent)
 	:GameObject(parent,"StageManager"),
-	UpperEnd_(0.0f), LowerEnd_(0.0f), RightEnd_(0.0f), LeftEnd_(0.0f),
-	PillerNum_(0), CollisionHeight_(0.0f), CollisionWidth_(0.0f)
+	UpperEnd_(0.0f), LowerEnd_(0.0f), RightEnd_(0.0f), LeftEnd_(0.0f),PillerNum_(0)
 {
 }
 
@@ -83,13 +87,34 @@ void StageManager::SetSCV()
 	if (csv_end.IsGetParamName(end))
 	{
 		std::vector<float> v = csv_end.GetParam(end);
-		UpperEnd_ = v[up];
-		LowerEnd_ = v[down];
-		RightEnd_ = v[right];
-		LeftEnd_ = v[left];
-		PillerNum_ = static_cast<int>(v[pillernum]);
-		CollisionHeight_ = v[collisionheight];
-		CollisionWidth_ = v[collisionwidth];
+		UpperEnd_ = v[i_up];
+		LowerEnd_ = v[i_down];
+		RightEnd_ = v[i_right];
+		LeftEnd_ = v[i_left];
+		PillerNum_ = static_cast<int>(v[i_pillernum]);
+	}
+
+	CsvReader csv_wire;
+	csv_wire.Load("CSVdata\\StageWireData.csv");//当たり判定の位置、サイズ
+
+	std::string collision[] = { "UpperPos","LowerPos","RightPos","LeftPos",
+	"UpperSize","LowerSize","RightSize","LeftSize",
+	"UpperNormal","LowerNormal","RightNormal","LeftNormal"};
+
+	XMFLOAT3* CollisionData[] = { &WirePosUpper_ ,&WirePosLower_,&WirePosRight_,&WirePosLeft_,
+	&WireSizeUpper_,&WireSizeLower_,&WireSizeRight_,&WireSizeLeft_,
+	&UpperNormal_,&LowerNormal_,&RightNormal_,&LeftNormal_ };
+
+	for (int i = 0; i < sizeof(collision) / sizeof(collision[0]); i++)
+	{
+		if (csv_wire.IsGetParamName(collision[i]))
+		{
+			std::vector<float> v = csv_wire.GetParam(collision[i]);
+
+			CollisionData[i]->x = v[i_collisionX];
+			CollisionData[i]->y = v[i_collisionY];
+			CollisionData[i]->z = v[i_collisionZ];
+		}
 	}
 }
 
@@ -98,8 +123,12 @@ void StageManager::InitEndData()
 	Fence* pFence = (Fence*)FindObject("Fence");
 	pFence->SetPillerNum(PillerNum_);
 	pFence->SetPiller(UpperEnd_,LowerEnd_,RightEnd_,LeftEnd_, PillerData_.position_.y);
-	//pFence->SetCollisionFence(UpperEnd_, LowerEnd_, RightEnd_, LeftEnd_,WireData_.position_.y, 
-	//	CollisionHeight_, CollisionWidth_);
+
+	pFence->SetWireCollisionUpper(WirePosUpper_, WireSizeUpper_, UpperNormal_);
+	pFence->SetWireCollisionLower(WirePosLower_, WireSizeLower_,LowerNormal_);
+	pFence->SetWireCollisionRight(WirePosRight_, WireSizeRight_, RightNormal_);
+	pFence->SetWireCollisionLeft(WirePosLeft_, WireSizeLeft_, LeftNormal_);
+
 }
 
 void StageManager::InitGroundData()

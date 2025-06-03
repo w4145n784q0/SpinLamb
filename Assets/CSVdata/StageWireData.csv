@@ -1,0 +1,13 @@
+Data,x,y,z
+UpperPos,0,5,60.5
+LowerPos,0,5,-60.5
+RightPos,60.5,5,0
+LeftPos,-60.5,5,0
+UpperSize,120,10,1
+LowerSize,120,10,1
+RightSize,1,10,120
+LeftSize,1,10,120
+UpperNormal,0,0,-1
+LowerNormal,0,0,1
+RightNormal,-1,0,0
+LeftNormal,1,0,0

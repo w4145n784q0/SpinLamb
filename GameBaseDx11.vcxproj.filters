@@ -180,6 +180,10 @@
       <Filter>03Scene</Filter>
     </ClCompile>
     <ClCompile Include="SceneData.cpp" />
+    <ClCompile Include="UpperWire.cpp" />
+    <ClCompile Include="LowerWire.cpp" />
+    <ClCompile Include="LeftWire.cpp" />
+    <ClCompile Include="RightWire.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -325,6 +329,10 @@
       <Filter>03Scene</Filter>
     </ClInclude>
     <ClInclude Include="SceneData.h" />
+    <ClInclude Include="UpperWire.h" />
+    <ClInclude Include="LowerWire.h" />
+    <ClInclude Include="LeftWire.h" />
+    <ClInclude Include="RightWire.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

@@ -269,7 +269,7 @@ void Enemy::UpdateStop()
 
 void Enemy::OnCollision(GameObject* pTarget)
 {
-	if (pTarget->GetObjectName() == "Fence")
+	/*if (pTarget->GetObjectName() == "Fence")
 	{
 		if (!WallHitParam_.IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
 		{
@@ -277,7 +277,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 			EnemyState_ = S_WALLHIT;
 		}
-	}
+	}*/
 
 	if (pTarget->GetObjectName() == "Player")
 	{	
@@ -289,6 +289,42 @@ void Enemy::OnCollision(GameObject* pTarget)
 		Reflect(enemyvector, playervector, this->MoveParam_. Acceleration_, playeraccele);
 		AimTimer_ = 0;
 		EnemyState_ = S_HIT;
+	}
+
+	if (pTarget->GetObjectName() == "UpperWire")
+	{
+		if (!WallHitParam_.IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
+		{
+			WallReflect(WallHitParam_.UpperNormal_);
+			EnemyState_ = S_WALLHIT;
+		}
+	}
+
+	if (pTarget->GetObjectName() == "LowerWire")
+	{
+		if (!WallHitParam_.IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
+		{
+			WallReflect(WallHitParam_.LowerNormal_);
+			EnemyState_ = S_WALLHIT;
+		}
+	}
+
+	if (pTarget->GetObjectName() == "RightWire")
+	{
+		if (!WallHitParam_.IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
+		{
+			WallReflect(WallHitParam_.RightNormal_);
+			EnemyState_ = S_WALLHIT;
+		}
+	}
+
+	if (pTarget->GetObjectName() == "LeftWire")
+	{
+		if (!WallHitParam_.IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
+		{
+			WallReflect(WallHitParam_.LeftNormal_);
+			EnemyState_ = S_WALLHIT;
+		}
 	}
 }
 

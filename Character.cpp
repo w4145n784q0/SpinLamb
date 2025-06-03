@@ -86,6 +86,8 @@ Character::Character(GameObject* parent, const std::string& name)
 	assert(hSoundattack_ >= 0);
 	hSoundCollision_ = Audio::Load("Sound\\SE\\collision.wav",false,1);
 	assert(hSoundCollision_ >= 0);
+
+	GetWireNormal();
 }
 
 Character::~Character()
@@ -224,10 +226,10 @@ void Character::CharacterMoveRotate(XMVECTOR _direction,float rotateY)
 	//場外でなければ位置更新 
 	XMFLOAT3 tmp;
 	XMStoreFloat3(&tmp, MoveParam_.NewPositon_);
-	//if (!IsOutsideStage(tmp))
-	//{
+	if (!IsOutsideStage(tmp))
+	{
 		MoveConfirm();
-	//}
+	}
 }
 
 void Character::CharacterMove(XMVECTOR _direction)
@@ -240,10 +242,10 @@ void Character::CharacterMove(XMVECTOR _direction)
 	//場外でなければ位置更新 
 	XMFLOAT3 tmp;
 	XMStoreFloat3(&tmp, MoveParam_.NewPositon_);
-	//if (!IsOutsideStage(tmp))
-	//
+	if (!IsOutsideStage(tmp))
+	{
 		MoveConfirm();
-	//}
+	}
 }
 
 void Character::CreateMoveVector()
@@ -360,6 +362,24 @@ void Character::WallHit()
 
 	//ノックバック方向に代入
 	HitParam_.KnockBack_Direction_ = { inverse.x, inverse.y, inverse.z };
+
+	//ノックバック量を速度に代入(一定値)
+	HitParam_.KnockBack_Velocity_.x = HitParam_.KnockBackPower_;
+	HitParam_.KnockBack_Velocity_.z = HitParam_.KnockBackPower_;
+
+	WallHitParam_.IsInvincibility_ = true;
+}
+
+void Character::WallReflect(XMVECTOR pos)
+{
+	SetWallHitEffect();
+	AccelerationStop();
+
+	XMFLOAT3 tmp;
+	XMStoreFloat3(&tmp, pos);
+
+	//受け取った法線をノックバック方向に代入
+	HitParam_.KnockBack_Direction_ = { tmp };
 
 	//ノックバック量を速度に代入(一定値)
 	HitParam_.KnockBack_Velocity_.x = HitParam_.KnockBackPower_;

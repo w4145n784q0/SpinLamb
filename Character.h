@@ -3,11 +3,17 @@
 #include "Engine/CsvReader.h"
 #include "Ground.h"
 
+#include"UpperWire.h"
+#include"LowerWire.h"
+#include"LeftWire.h"
+#include"RightWire.h"
+
 //プレイヤー,敵クラスの共通事項クラス
 class Character :
     public GameObject
 {
 private:
+	//----------ステージの端----------
    float NorthEnd_ = 0.0f;
    float SouthEnd_ = 0.0f;
    float EastEnd_ = 0.0f;
@@ -79,6 +85,11 @@ protected:
     //----------壁の接触ダメージ----------
     struct WallHitParam
     {
+        XMVECTOR UpperNormal_;//ステージ北端の法線ベクトル
+        XMVECTOR LowerNormal_;//ステージ南端の法線ベクトル
+        XMVECTOR RightNormal_;//ステージ東端の法線ベクトル
+        XMVECTOR LeftNormal_;//ステージ西端の法線ベクトル
+
         int InvincibilityTime_ = 0;//ダメージ後の無敵時間 1fごとに上昇
         bool IsInvincibility_ = false;//無敵時間か
         int InvincibilityValue = 0;//無敵時間の値　この値を超えると無敵時間終了
@@ -118,6 +129,20 @@ public:
     /// </summary>
     /// <param name="_path">csvファイルのパス</param>
     void SetcsvStatus(std::string _path);
+
+    void GetWireNormal() {
+        UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");
+        WallHitParam_.UpperNormal_ = pUpperWire->GetNormal();
+
+        LowerWire* pLowerWire = (LowerWire*)FindObject("LowerWire");
+		WallHitParam_.LowerNormal_ = pLowerWire->GetNormal();
+
+        LeftWire* pLeftWire = (LeftWire*)FindObject("LeftWire");
+		WallHitParam_.LeftNormal_ = pLeftWire->GetNormal();
+
+        RightWire* pRightWire = (RightWire*)FindObject("RightWire");
+		WallHitParam_.RightNormal_ = pRightWire->GetNormal();
+    }
 
     //----------基本処理----------
 
@@ -202,9 +227,7 @@ public:
     void WallHit();
 
 
-    void WallReflect(XMFLOAT3 pos) {
-
-    }
+    void WallReflect(XMVECTOR pos);
 
     /// <summary>
     /// ノックバック終了判定

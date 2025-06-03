@@ -1,6 +1,12 @@
 #include "Fence.h"
 #include"Engine/Model.h"
 #include"Engine/BoxCollider.h"
+#include"UpperWire.h"
+#include"LowerWire.h"
+#include"LeftWire.h"
+#include"RightWire.h"
+
+
 #include<array>
 #include<vector>
 
@@ -12,6 +18,12 @@ namespace
 {
 	//柱の数
 	int pillerNum = 0;
+
+	//鉄線のトランスフォーム
+	Transform wire;
+
+	//柱のトランスフォーム(回転・拡大率のみ 位置は別に扱う)
+	Transform piller;
 
 	//柱の位置を格納するTransform配列
 	std::vector<Transform> pillersTransform = {};
@@ -38,7 +50,11 @@ void Fence::Initialize()
 	hFence_ = Model::Load("Model\\wire.fbx");
 	assert(hFence_ >= 0);
 
-	
+	Instantiate<UpperWire>(this);
+	Instantiate<LowerWire>(this);
+	Instantiate<RightWire>(this);
+	Instantiate<LeftWire>(this);
+
 }
 
 void Fence::Update()
@@ -87,6 +103,8 @@ void Fence::SetPiller(float upper, float lower, float left, float right, float h
 	for (int i = 0; i < pillerNum; i++)
 	{
 		pillersTransform[i].position_ = PillerPosArray[i];
+		pillersTransform[i].rotate_ = piller.rotate_;
+		pillersTransform[i].scale_ = piller.scale_;
 	}
 }
 
@@ -102,23 +120,33 @@ void Fence::InitWireTransform(Transform _t)
 
 void Fence::InitPillerTransform(Transform _t)
 {
-	for (int i = 0; i < pillersTransform.size(); i++)
-	{
-		pillersTransform[i] = _t;
-	}
+	piller = _t;
 }
 
-void Fence::SetCollisionFence(float upper, float lower, float left, float right,
-	float height, float raito, float width)
+void Fence::SetWireCollisionUpper(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal)
 {
-	float heightY = height * raito;
+	UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");
+	pUpperWire->InitCollision(pos,size);
+	pUpperWire->SetNormal(XMVECTOR({ normal.x,normal.y,normal.z }));
+}
 
-	BoxCollider* collision_wall1 = new BoxCollider(XMFLOAT3(0, height, upper), XMFLOAT3(left * raito, heightY, width));
-	AddCollider(collision_wall1);
-	BoxCollider* collision_wall2 = new BoxCollider(XMFLOAT3(0, height, lower), XMFLOAT3(left * raito, heightY, width));
-	AddCollider(collision_wall2);
-	BoxCollider* collision_wall3 = new BoxCollider(XMFLOAT3(left, height, 0), XMFLOAT3(width, heightY, upper * raito));
-	AddCollider(collision_wall3);
-	BoxCollider* collision_wall4 = new BoxCollider(XMFLOAT3(right, height, 0), XMFLOAT3(width, heightY, upper * raito));
-	AddCollider(collision_wall4);
+void Fence::SetWireCollisionLower(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal)
+{
+	LowerWire* pLowerWire = (LowerWire*)FindObject("LowerWire");
+	pLowerWire->InitCollision(pos, size);
+	pLowerWire->SetNormal(XMVECTOR({ normal.x,normal.y,normal.z }));
+}
+
+void Fence::SetWireCollisionRight(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal)
+{
+	RightWire* pRightWire = (RightWire*)FindObject("RightWire");
+	pRightWire->InitCollision(pos, size);
+	pRightWire->SetNormal(XMVECTOR({ normal.x,normal.y,normal.z }));
+}
+
+void Fence::SetWireCollisionLeft(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal)
+{
+	LeftWire* pLeftWire = (LeftWire*)FindObject("LeftWire");
+	pLeftWire->InitCollision(pos, size);
+	pLeftWire->SetNormal(XMVECTOR({ normal.x,normal.y,normal.z }));
 }

@@ -16,8 +16,21 @@ private:
 	float RightEnd_;//ステージ東端
 	float LeftEnd_;//ステージ西端
 	int PillerNum_;//柱の数
-	float CollisionHeight_;//柱の当たり判定の大きさ 柱の高さを基準にする
-	float CollisionWidth_;//柱の当たり判定の幅
+
+	XMFLOAT3 WirePosUpper_;//鉄線の当たり判定の位置（+z方向）
+	XMFLOAT3 WirePosLower_;//鉄線の当たり判定の位置（-z方向）
+	XMFLOAT3 WirePosRight_;//鉄線の当たり判定の位置（+x方向）
+	XMFLOAT3 WirePosLeft_;//鉄線の当たり判定の位置（-x方向）
+
+	XMFLOAT3 WireSizeUpper_;//鉄線の当たり判定の大きさ（+z方向）
+	XMFLOAT3 WireSizeLower_;//鉄線の当たり判定の大きさ（-z方向）
+	XMFLOAT3 WireSizeRight_;//鉄線の当たり判定の大きさ（+x方向）
+	XMFLOAT3 WireSizeLeft_;//鉄線の当たり判定の大きさ（-x方向）
+
+	XMFLOAT3 UpperNormal_;//ステージ北端の法線ベクトル
+	XMFLOAT3 LowerNormal_;//ステージ南端の法線ベクトル
+	XMFLOAT3 RightNormal_;//ステージ東端の法線ベクトル
+	XMFLOAT3 LeftNormal_;//ステージ西端の法線ベクトル
 
 public:
 	StageManager(GameObject* parent);
@@ -30,8 +43,19 @@ public:
 
 	void SetSCV();
 
+	/// <summary>
+	/// 地面クラスのトランスフォーム初期化
+	/// </summary>
 	void InitGroundData();
+
+	/// <summary>
+	/// 柵クラスのトランスフォームの初期化
+	/// </summary>
 	void InitFenceData();
+
+	/// <summary>
+	/// 柵クラスの柱の本数・位置・鉄線クラスの当たり判定を設定
+	/// </summary>
 	void InitEndData();
 
 	float GetNorthEnd() { return UpperEnd_; }

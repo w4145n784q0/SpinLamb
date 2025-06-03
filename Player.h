@@ -64,6 +64,18 @@ public:
 	void UpdateWallHit();//壁に接触状態
 	void UpdateStop();//プレイヤーを止める状態
 
+	bool IsCanWallReflect(){
+		if (!WallHitParam_.IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
+			return true;
+		else
+			return false;
+	}
+
+	void PlayerReflect(XMVECTOR reflect) {
+		WallReflect(reflect);
+		PlayerState_ = S_WALLHIT;
+	}
+
 	//プレイヤーに移動を許可
 	void PlayerStart() { PlayerState_ = S_IDLE; }
 
