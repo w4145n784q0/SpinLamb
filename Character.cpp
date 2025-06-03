@@ -224,10 +224,10 @@ void Character::CharacterMoveRotate(XMVECTOR _direction,float rotateY)
 	//場外でなければ位置更新 
 	XMFLOAT3 tmp;
 	XMStoreFloat3(&tmp, MoveParam_.NewPositon_);
-	if (!IsOutsideStage(tmp))
-	{
+	//if (!IsOutsideStage(tmp))
+	//{
 		MoveConfirm();
-	}
+	//}
 }
 
 void Character::CharacterMove(XMVECTOR _direction)
@@ -240,10 +240,10 @@ void Character::CharacterMove(XMVECTOR _direction)
 	//場外でなければ位置更新 
 	XMFLOAT3 tmp;
 	XMStoreFloat3(&tmp, MoveParam_.NewPositon_);
-	if (!IsOutsideStage(tmp))
-	{
+	//if (!IsOutsideStage(tmp))
+	//
 		MoveConfirm();
-	}
+	//}
 }
 
 void Character::CreateMoveVector()

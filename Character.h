@@ -201,6 +201,11 @@ public:
     /// </summary>
     void WallHit();
 
+
+    void WallReflect(XMFLOAT3 pos) {
+
+    }
+
     /// <summary>
     /// ノックバック終了判定
     /// </summary>

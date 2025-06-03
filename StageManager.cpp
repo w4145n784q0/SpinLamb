@@ -98,8 +98,8 @@ void StageManager::InitEndData()
 	Fence* pFence = (Fence*)FindObject("Fence");
 	pFence->SetPillerNum(PillerNum_);
 	pFence->SetPiller(UpperEnd_,LowerEnd_,RightEnd_,LeftEnd_, PillerData_.position_.y);
-	pFence->SetCollisionFence(UpperEnd_, LowerEnd_, RightEnd_, LeftEnd_,WireData_.position_.y, 
-		CollisionHeight_, CollisionWidth_);
+	//pFence->SetCollisionFence(UpperEnd_, LowerEnd_, RightEnd_, LeftEnd_,WireData_.position_.y, 
+	//	CollisionHeight_, CollisionWidth_);
 }
 
 void StageManager::InitGroundData()

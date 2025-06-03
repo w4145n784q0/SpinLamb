@@ -54,7 +54,7 @@ public:
 
 	void SetPillerNum(int num);
 
-	void InitWireTransform(Transform _t) { wire = _t; }
+	void InitWireTransform(Transform _t); 
 
 	void InitPillerTransform(Transform _t);
 

@@ -14,7 +14,7 @@ namespace
 	int pillerNum = 0;
 
 	//柱の位置を格納するTransform配列
-	std::vector<Transform> pillers = {};
+	std::vector<Transform> pillersTransform = {};
 
 	//柱の位置(XMFLOAT3)の配列
 	std::vector<XMFLOAT3> PillerPosArray = {};
@@ -56,9 +56,9 @@ void Fence::Draw()
 	Model::SetTransform(hFence_, wire);
 	Model::Draw(hFence_);
 
-	for (int i = 0; i < pillers.size(); i++)
+	for (int i = 0; i < pillersTransform.size(); i++)
 	{
-		Model::SetTransform(hPiller_, pillers[i]);
+		Model::SetTransform(hPiller_, pillersTransform[i]);
 		Model::Draw(hPiller_);
 	}
 }
@@ -82,11 +82,11 @@ void Fence::SetPiller(float upper, float lower, float left, float right, float h
 	//この時点でPillerPosArrayの値を入れる
 	PillerPosArray = { piller_UpperLeft_ ,piller_UpperRight_ , piller_LowerLeft_,piller_LowerRight_ };
 
-	pillers.resize(pillerNum);
+	pillersTransform.resize(pillerNum);
 
 	for (int i = 0; i < pillerNum; i++)
 	{
-		pillers[i].position_ = PillerPosArray[i];
+		pillersTransform[i].position_ = PillerPosArray[i];
 	}
 }
 
@@ -95,11 +95,16 @@ void Fence::SetPillerNum(int num)
 	pillerNum = num;
 }
 
+void Fence::InitWireTransform(Transform _t)
+{
+	wire = _t; 
+}
+
 void Fence::InitPillerTransform(Transform _t)
 {
-	for (int i = 0; i < pillers.size(); i++)
+	for (int i = 0; i < pillersTransform.size(); i++)
 	{
-		pillers[i] = _t;
+		pillersTransform[i] = _t;
 	}
 }
 
@@ -107,7 +112,6 @@ void Fence::SetCollisionFence(float upper, float lower, float left, float right,
 	float height, float raito, float width)
 {
 	float heightY = height * raito;
-	float widthX = height * raito;
 
 	BoxCollider* collision_wall1 = new BoxCollider(XMFLOAT3(0, height, upper), XMFLOAT3(left * raito, heightY, width));
 	AddCollider(collision_wall1);
