@@ -116,12 +116,6 @@
     <ClCompile Include="TitleScene.cpp">
       <Filter>03Scene</Filter>
     </ClCompile>
-    <ClCompile Include="ClearScene.cpp">
-      <Filter>03Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameOverScene.cpp">
-      <Filter>03Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>04Chara</Filter>
     </ClCompile>
@@ -179,11 +173,21 @@
     <ClCompile Include="HowToPlayScene.cpp">
       <Filter>03Scene</Filter>
     </ClCompile>
-    <ClCompile Include="SceneData.cpp" />
-    <ClCompile Include="UpperWire.cpp" />
-    <ClCompile Include="LowerWire.cpp" />
-    <ClCompile Include="LeftWire.cpp" />
-    <ClCompile Include="RightWire.cpp" />
+    <ClCompile Include="LeftWire.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="LowerWire.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="RightWire.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="UpperWire.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="ResultScene.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -262,12 +266,6 @@
     <ClInclude Include="TitleScene.h">
       <Filter>03Scene</Filter>
     </ClInclude>
-    <ClInclude Include="ClearScene.h">
-      <Filter>03Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameOverScene.h">
-      <Filter>03Scene</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>04Chara</Filter>
     </ClInclude>
@@ -328,11 +326,21 @@
     <ClInclude Include="HowToPlayScene.h">
       <Filter>03Scene</Filter>
     </ClInclude>
-    <ClInclude Include="SceneData.h" />
-    <ClInclude Include="UpperWire.h" />
-    <ClInclude Include="LowerWire.h" />
-    <ClInclude Include="LeftWire.h" />
-    <ClInclude Include="RightWire.h" />
+    <ClInclude Include="LeftWire.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="LowerWire.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="RightWire.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="UpperWire.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="ResultScene.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

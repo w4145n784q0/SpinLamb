@@ -17,6 +17,9 @@ private:
 	//"cpu win"‚ÌƒƒS
 	int hCpuWin_;
 
+	//"Draw"‚ÌƒƒS
+	int hDraw_;
+
 	//"push title"‚ÌƒƒS
 	int hlogoTitle_;
 
@@ -41,7 +44,7 @@ private:
 	};
 	WinnerState winner_;
 
-	std::array<int, RESULTMAX> Array_;
+	std::array<int, RESULTMAX> ResultArray_;
 public:
 	ResultScene(GameObject* parent);
 	~ResultScene();

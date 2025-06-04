@@ -139,7 +139,6 @@
   <ItemGroup>
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Character.cpp" />
-    <ClCompile Include="ClearScene.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BillBoard.cpp" />
@@ -166,7 +165,6 @@
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Fence.cpp" />
     <ClCompile Include="GameModeScene.cpp" />
-    <ClCompile Include="GameOverScene.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="HowToPlayScene.cpp" />
     <ClCompile Include="HUD.cpp" />
@@ -184,7 +182,6 @@
     <ClCompile Include="PracticeScene.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="RightWire.cpp" />
-    <ClCompile Include="SceneData.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="TitleScene.cpp" />
@@ -193,7 +190,6 @@
   <ItemGroup>
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Character.h" />
-    <ClInclude Include="ClearScene.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BillBoard.h" />
@@ -220,7 +216,6 @@
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="Fence.h" />
     <ClInclude Include="GameModeScene.h" />
-    <ClInclude Include="GameOverScene.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="HowToPlayScene.h" />
     <ClInclude Include="HUD.h" />
@@ -240,7 +235,6 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="RightWire.h" />
-    <ClInclude Include="SceneData.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="TitleScene.h" />

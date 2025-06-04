@@ -14,8 +14,9 @@ namespace
 }
 
 ResultScene::ResultScene(GameObject* parent)
-	:GameObject(parent, "ResultScene"), hBackScreen_(-1), hYouWin_(-1),hCpuWin_(-1), hlogoTitle_(-1),
-	hSoundResult_(-1),winner_(RESULTMAX)
+	:GameObject(parent, "ResultScene"), hBackScreen_(-1), hYouWin_(-1),hCpuWin_(-1),
+	hDraw_(-1), hlogoTitle_(-1),
+	hSoundResult_(-1),winner_(RESULTMAX),ResultArray_({})
 {
 }
 
@@ -33,8 +34,11 @@ void ResultScene::Initialize()
 	hYouWin_ = Image::Load("Image\\Result\\YouWin.png");
 	assert(hYouWin_ >= 0);
 
-	hCpuWin_ = Image::Load("Image\\Result\\YouLose.png");
+	hCpuWin_ = Image::Load("Image\\Result\\CPUWin.png");
 	assert(hCpuWin_ >= 0);
+
+	hDraw_ = Image::Load("Image\\Result\\Draw.png");
+	assert(hDraw_ >= 0);
 
 	hlogoTitle_ = Image::Load("Image\\Result\\PushToTitle.png");
 	assert(hlogoTitle_ >= 0);
@@ -59,7 +63,7 @@ void ResultScene::Initialize()
 		winner_ = DRAW;
 	}
 
-	//Array_;
+	ResultArray_ = { hYouWin_, hCpuWin_, hDraw_ };
 }
 
 void ResultScene::Update()
@@ -88,9 +92,10 @@ void ResultScene::Draw()
 	case ResultScene::CPU_WIN:
 	case ResultScene::DRAW:
 	{
-		Image::SetTransform(hCpuWin_, Result_);
-		Image::Draw(hCpuWin_);
+		Image::SetTransform(ResultArray_[winner_], Result_);
+		Image::Draw(ResultArray_[winner_]);
 	}
+		break;
 	default:
 		break;
 	}
