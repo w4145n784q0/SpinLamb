@@ -64,9 +64,8 @@ private:
 
 	
 public:
-	//コンストラクタ
-	//引数：parent  親オブジェクト（SceneManager）
 	GameModeScene(GameObject* parent);
+	~GameModeScene();
 
 	//初期化
 	void Initialize() override;

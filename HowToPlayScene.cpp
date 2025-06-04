@@ -12,6 +12,10 @@ HowToPlayScene::HowToPlayScene(GameObject* parent)
 {
 }
 
+HowToPlayScene::~HowToPlayScene()
+{
+}
+
 void HowToPlayScene::Initialize()
 {
 	std::string path = "Image\\HowToPlay\\";

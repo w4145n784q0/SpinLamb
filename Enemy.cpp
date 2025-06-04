@@ -13,16 +13,16 @@
 
 namespace
 {
-	enum enemyonly
+	enum enemyonlyIndex
 	{
-		hitstop = 0,
-		chaseLength,
-		lookRotateAngle,
-		lookRotateValue,
-		EnemyAttackTime_1,
-		EnemyAttackTime_2,
-		EnemyAttackTime_3,
-		EnemyAttackTime_4,
+		i_hitstop = 0,
+		i_chaseLength,
+		i_lookRotateAngle,
+		i_lookRotateValue,
+		i_EnemyAttackTime_1,
+		i_EnemyAttackTime_2,
+		i_EnemyAttackTime_3,
+		i_EnemyAttackTime_4,
 	};
 
 	int HitStop = 0;//ヒットストップする時間
@@ -397,21 +397,16 @@ void Enemy::SetCSVEnemy()
 	if (csv.IsGetParamName(only))
 	{
 		std::vector<float> v = csv.GetParam(only);
-		HitStop = static_cast<int>(v[hitstop]);
-		ChaseLength = v[chaseLength];
-		LookRotaeAngle = v[lookRotateAngle];
-		LookRotateValue = v[lookRotateValue];
+		HitStop = static_cast<int>(v[i_hitstop]);
+		ChaseLength = v[i_chaseLength];
+		LookRotaeAngle = v[i_lookRotateAngle];
+		LookRotateValue = v[i_lookRotateValue];
 
-		int arr[] = { static_cast<int>(v[EnemyAttackTime_1]), static_cast<int>(v[EnemyAttackTime_2]),
-			static_cast<int>(v[EnemyAttackTime_3]), static_cast<int>(v[EnemyAttackTime_4]) };
+		int arr[] = { static_cast<int>(v[i_EnemyAttackTime_1]), static_cast<int>(v[i_EnemyAttackTime_2]),
+			static_cast<int>(v[i_EnemyAttackTime_3]), static_cast<int>(v[i_EnemyAttackTime_4]) };
 		for (int i = 0; i < EnemyAttackTimeArray.size(); i++)
 		{
 			EnemyAttackTimeArray[i] = arr[i];
 		}
-
-		//EnemyAttackTimeArray[0] = v[EnemyAttackTime_1];
-		//EnemyAttackTimeArray[1] = v[EnemyAttackTime_2];
-		//EnemyAttackTimeArray[2] = v[EnemyAttackTime_3];
-		//EnemyAttackTimeArray[3] = v[EnemyAttackTime_4];
 	}
 }

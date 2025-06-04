@@ -9,6 +9,10 @@ TitleScene::TitleScene(GameObject* parent)
 {
 }
 
+TitleScene::~TitleScene()
+{
+}
+
 void TitleScene::Initialize()
 {
 	hBackScreen_ = Image::Load("Image\\Title\\TitleScreen.jpg");

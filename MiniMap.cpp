@@ -9,14 +9,14 @@ namespace
 {
 	enum MiniMapParam 
 	{
-		reductionXParam = 0,
-		reductionZParam,
-		MapPositonXParam,
-		MapPositonYParam,
-		MapPositonZParam,
-		CorrectionValueXParam,
-		CorrectionValueYParam,
-		MapAlphaParam,
+		i_reductionXParam = 0,
+		i_reductionZParam,
+		i_MapPositonXParam,
+		i_MapPositonYParam,
+		i_MapPositonZParam,
+		i_CorrectionValueXParam,
+		i_CorrectionValueYParam,
+		i_MapAlphaParam,
 	};
 
 
@@ -99,14 +99,14 @@ void MiniMap::SetCSV()
 	if (csv.IsGetParamName(init))
 	{
 		std::vector<float> v = csv.GetParam(init);
-		reductionX = v[reductionXParam];
-		reductionY = v[reductionZParam];
-		MapPositon.x = v[MapPositonXParam];
-		MapPositon.y = v[MapPositonYParam];
-		MapPositon.z = v[MapPositonZParam];
-		CorrectionValueX = v[CorrectionValueXParam];
-		CorrectionValueY = v[CorrectionValueYParam];
-		MapAlpha = (int)v[MapAlphaParam];
-		MapAlpha = (int)v[MapAlphaParam];
+		reductionX = v[i_reductionXParam];
+		reductionY = v[i_reductionZParam];
+		MapPositon.x = v[i_MapPositonXParam];
+		MapPositon.y = v[i_MapPositonYParam];
+		MapPositon.z = v[i_MapPositonZParam];
+		CorrectionValueX = v[i_CorrectionValueXParam];
+		CorrectionValueY = v[i_CorrectionValueYParam];
+		MapAlpha = (int)v[i_MapAlphaParam];
+		MapAlpha = (int)v[i_MapAlphaParam];
 	}
 }

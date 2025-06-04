@@ -20,6 +20,10 @@ GameModeScene::GameModeScene(GameObject* parent)
 {
 }
 
+GameModeScene::~GameModeScene()
+{
+}
+
 void GameModeScene::Initialize()
 {
 	SetSCV();

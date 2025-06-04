@@ -15,9 +15,8 @@ private:
 	//タイトル用サウンド
 	int hSoundTitle_;
 public:
-	//コンストラクタ
-	//引数：parent  親オブジェクト（SceneManager）
 	TitleScene(GameObject* parent);
+	~TitleScene();
 
 	//初期化
 	void Initialize() override;

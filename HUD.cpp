@@ -13,16 +13,16 @@ namespace
 	//時間の数字表記のインデックス
 	enum NumberIndex
 	{
-		Number0 = 0,
-		Number1,
-		Number2,
-		Number3,
-		Number4,
-		Number5,
-		Number6,
-		Number7,
-		Number8,
-		Number9,
+		i_Number0 = 0,
+		i_Number1,
+		i_Number2,
+		i_Number3,
+		i_Number4,
+		i_Number5,
+		i_Number6,
+		i_Number7,
+		i_Number8,
+		i_Number9,
 		MaxNumberIndex,
 	};
 

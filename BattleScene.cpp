@@ -10,10 +10,6 @@
 #include"HUD.h"
 #include"StageManager.h"
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_dx11.h"
-#include "imgui/imgui_impl_win32.h"
-
 namespace
 {
 	//ŽžŠÔŒv‘ª
@@ -34,8 +30,12 @@ namespace
 
 BattleScene::BattleScene(GameObject* parent)
 	:GameObject(parent,"BattleScene") ,BattleState(BEFORE),
-	 hSoundBattle_(-1),hSoundWhistle_(-1),
+	 hBackScreen_(-1),hSoundBattle_(-1), hSoundWhistle_(-1),
 	PlayerScore_(0),EnemyScore_(0),GameTime_(GameTimeLimit),pPlayerScore_(0),pEnemyScore_(0)
+{
+}
+
+BattleScene::~BattleScene()
 {
 }
 

@@ -37,13 +37,15 @@ private:
 	//現在の時間(1秒ごとに減少)
 	int GameTime_;
 
+	//プレイヤーのスコア
 	int PlayerScore_;
+
+	//敵のスコア
 	int EnemyScore_;
 
 public:
-	//コンストラクタ
-	//引数：parent  親オブジェクト（SceneManager）
 	BattleScene(GameObject* parent);
+	~BattleScene();
 
 	//初期化
 	void Initialize() override;

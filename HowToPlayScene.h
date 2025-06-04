@@ -31,9 +31,8 @@ private:
 	std::list<HowtoImage>::iterator itr;//ModeList_のインデックスを指す値
 
 public:
-	//コンストラクタ
-	//引数：parent  親オブジェクト（SceneManager）
 	HowToPlayScene(GameObject* parent);
+	~HowToPlayScene();
 
 	//初期化
 	void Initialize() override;

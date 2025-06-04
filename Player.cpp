@@ -12,21 +12,21 @@
 
 namespace {
 
-	enum playeronly
+	enum playeronlyIndex
 	{
-		backcameraX = 0,
-		backcameraY,
-		backcameraZ,
-		keyboardrotateY,
-		camerashaketime,
-		jumpheight,
-		camerainitx,
-		camerainity,
-		camerainitz,
-		camerarotate,
-		cameraupperlimit,
-		cameralowerlimit,
-		cameradebugPos,
+		i_backcameraX = 0,
+		i_backcameraY,
+		i_backcameraZ,
+		i_keyboardrotateY,
+		i_camerashaketime,
+		i_jumpheight,
+		i_camerainitx,
+		i_camerainity,
+		i_camerainitz,
+		i_camerarotate,
+		i_cameraupperlimit,
+		i_cameralowerlimit,
+		i_cameradebugPos,
 	};
 
 	XMVECTOR BackCameraPos = { 0.0f,0.0f,0.0f };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
@@ -56,7 +56,7 @@ Player::Player(GameObject* parent)
 
 Player::~Player()
 {
-	
+
 }
 
 void Player::Initialize()
@@ -164,14 +164,6 @@ void Player::Draw()
 	ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
 	ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
 	ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
-
-	ImGui::Text("PlayerState:.%d", (float)PlayerState_);
-	ImGui::Text("CameraPosition:%.3f", (float)CameraPosition_.x);
-	ImGui::Text("CameraPositionY:%.3f", CameraPosition_.y);
-	ImGui::Text("CameraPositionZ:%.3f", CameraPosition_.z);
-	ImGui::Text("CameraTargetX:%.3f", CameraTarget_.x);
-	ImGui::Text("CameraTargetY:%.3f", CameraTarget_.y);
-	ImGui::Text("CameraTargetZ:%.3f", CameraTarget_.z);
 
 #endif
 
@@ -543,16 +535,16 @@ void Player::SetCSVPlayer()
 	if (csv.IsGetParamName(only))
 	{
 		std::vector<float> v = csv.GetParam(only);
-		BackCameraPos = { v[backcameraX], v[backcameraY], v[backcameraZ] };
-		KeyBoardRotateY = v[keyboardrotateY];
-		cameraShakeTime = v[camerashaketime];
-		Jumpheight = v[jumpheight];
-		cameraInitX = v[camerainitx];
-		cameraInitY = v[camerainity];
-		cameraInitZ = v[camerainitz];
-		cameraRotate = v[camerarotate];
-		cameraUpperLimit = v[cameraupperlimit];
-		cameraLowerLimit = v[cameralowerlimit];
-		cameraDebugPos = v[cameradebugPos];
+		BackCameraPos = { v[i_backcameraX], v[i_backcameraY], v[i_backcameraZ] };
+		KeyBoardRotateY = v[i_keyboardrotateY];
+		cameraShakeTime = v[i_camerashaketime];
+		Jumpheight = v[i_jumpheight];
+		cameraInitX = v[i_camerainitx];
+		cameraInitY = v[i_camerainity];
+		cameraInitZ = v[i_camerainitz];
+		cameraRotate = v[i_camerarotate];
+		cameraUpperLimit = v[i_cameraupperlimit];
+		cameraLowerLimit = v[i_cameralowerlimit];
+		cameraDebugPos = v[i_cameradebugPos];
 	}
 }
