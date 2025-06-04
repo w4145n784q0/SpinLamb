@@ -144,15 +144,15 @@ void Enemy::Draw()
 	ShadowDraw();
 
 #ifdef _DEBUG
-	if (ImGui::Button("EnemyStop"))
+	/*if (ImGui::Button("EnemyStop"))
 	{
 		if (EnemyState_ != S_STOP)
 			EnemyState_ = S_STOP;
 		else
 			EnemyState_ = S_ROOT;
-	}
+	}*/
 
-	ImGui::Text("knockback:%.3f",this->HitParam_. KnockBack_Velocity_.x );
+	//ImGui::Text("knockback:%.3f",this->HitParam_. KnockBack_Velocity_.x );
 #endif
 }
 

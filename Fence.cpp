@@ -60,8 +60,7 @@ void Fence::Update()
 void Fence::Draw()
 {
 #ifdef _DEBUG
-	//ImGui::Text("mapPos.x%.1f", mTrans.position_.x);
-	//ImGui::Text("mapPos.y%.1f", mTrans.position_.y);
+
 #endif
 
 	Model::SetTransform(hFence_, wire);

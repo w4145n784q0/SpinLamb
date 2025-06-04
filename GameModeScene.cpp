@@ -138,7 +138,6 @@ void GameModeScene::Draw()
 	Image::Draw(hFrameLine_);
 
 #ifdef _DEBUG
-	ImGui::SliderFloat("text", &Trans_Text_.position_.x, -1.0, 1.0);
 #endif
 }
 

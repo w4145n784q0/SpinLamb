@@ -102,8 +102,6 @@ void ResultScene::Draw()
 	
 
 #ifdef _DEBUG
-	//ImGui::SliderFloat("x", &Result_.position_.x, -1.0, 1.0);
-	//ImGui::SliderFloat("y", &PushTitle_.position_.y, -1.0, 1.0);
 #endif
 }
 

@@ -64,9 +64,6 @@ void MiniMap::Update()
 void MiniMap::Draw()
 {
 #ifdef _DEBUG
-	//ImGui::Begin("config 2");
-	ImGui::SliderFloat("mapPos x", &Trans_Map.position_.x, 0.0, 1.0);
-	ImGui::SliderFloat("mapPos y", &Trans_Map.position_.y, -1.0, 0.0);
 #endif
 
 	Image::SetTransform(hMap_, Trans_Map);

@@ -161,9 +161,9 @@ void Player::Draw()
 	ShadowDraw();
 
 #ifdef _DEBUG
-	ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
-	ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
-	ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
+	//ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
+	//ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
+	//ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
 
 #endif
 
