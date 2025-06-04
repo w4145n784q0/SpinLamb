@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 
+//タイトルシーン
 class TitleScene :
     public GameObject
 {

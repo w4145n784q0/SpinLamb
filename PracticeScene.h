@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 
+//"フリープレイ"から始まる練習モードシーン
 class PracticeScene :
     public GameObject
 {

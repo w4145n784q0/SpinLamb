@@ -2,6 +2,7 @@
 #include "Engine/GameObject.h"
 #include<array>
 
+//ゲーム終了後のリザルトシーン
 class ResultScene :
     public GameObject
 {

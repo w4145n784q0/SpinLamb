@@ -162,9 +162,6 @@ void HUD::Draw()
 
 
 #ifdef _DEBUG
-	//ImGui::Begin("config 2");
-	//ImGui::SliderFloat("mapPos x", &logo_backtitle.position_.x, -1.0, 1.0);
-	//ImGui::SliderFloat("mapPos y", &logo_backtitle.position_.y, -1.0, 1.0);
 	//ImGui::Text("mapPos.x%.1f", logo.position_.x);
 	//ImGui::Text("mapPos.y%.1f", logo.position_.y);
 #endif

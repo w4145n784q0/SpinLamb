@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 
+//Œã•û‚Ìò‚Ì“–‚½‚è”»’è‚ğs‚¤ƒNƒ‰ƒX
 class LowerWire :
     public GameObject
 {

@@ -2,8 +2,7 @@
 #include "Engine/GameObject.h"
 #include"Player.h"
 
-class Player;
-
+//敵キャラクターの処理を行うクラス
 class Enemy :
     public Character
 {

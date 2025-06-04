@@ -3,6 +3,7 @@
 #include"Ground.h"
 #include"Fence.h"
 
+//ステージ全体管理クラス
 class StageManager :
     public GameObject
 {

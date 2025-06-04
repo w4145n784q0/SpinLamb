@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 
+//柵の鉄線・柱の位置やサイズを扱うクラス
 class Fence :
     public GameObject
 {

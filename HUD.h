@@ -2,6 +2,7 @@
 #include "Engine/GameObject.h"
 #include"array"
 
+//時間表示・ロゴ・モード表示クラスを表示
 class HUD :
     public GameObject
 {

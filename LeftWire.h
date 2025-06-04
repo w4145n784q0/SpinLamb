@@ -1,5 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
+
+//¶‚Ìò‚Ì“–‚½‚è”»’è‚ğs‚¤ƒNƒ‰ƒX
 class LeftWire :
     public GameObject
 {

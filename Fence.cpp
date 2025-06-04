@@ -10,10 +10,6 @@
 #include<array>
 #include<vector>
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_dx11.h"
-#include "imgui/imgui_impl_win32.h"
-
 namespace
 {
 	//íåÇÃêî
@@ -64,7 +60,6 @@ void Fence::Update()
 void Fence::Draw()
 {
 #ifdef _DEBUG
-	//ImGui::SliderFloat("Pos y", &transform_.position_.y, 0.0, 10.0);
 	//ImGui::Text("mapPos.x%.1f", mTrans.position_.x);
 	//ImGui::Text("mapPos.y%.1f", mTrans.position_.y);
 #endif

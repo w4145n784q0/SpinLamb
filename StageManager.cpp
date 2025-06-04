@@ -60,7 +60,7 @@ void StageManager::Release()
 void StageManager::SetSCV()
 {
 	CsvReader csv;
-	csv.Load("CSVdata\\StageData.csv");//ステージオブジェクトのトランスフォーム
+	csv.Load("CSVdata\\StageData.csv");
 
 	std::string ground = "Ground";
 	if (csv.IsGetParamName(ground))

@@ -2,6 +2,8 @@
 #include "Engine/GameObject.h"
 #include<array>
 #include<list>
+
+//ゲームモードを選択するシーン
 class GameModeScene :
     public GameObject
 {

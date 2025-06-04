@@ -2,6 +2,7 @@
 #include "Engine/GameObject.h"
 #include"StageManager.h"
 
+//地面の描画・更新を行うクラス
 class Ground :
     public GameObject
 {

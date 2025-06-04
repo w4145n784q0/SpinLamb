@@ -1,5 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
+
+//Ç†ÇªÇ—Ç©ÇΩê‡ñæÉVÅ[Éì
 class HowToPlayScene :
     public GameObject
 {

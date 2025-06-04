@@ -1,5 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
+
+//右の柵の当たり判定を行うクラス
 class RightWire :
     public GameObject
 {
