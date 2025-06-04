@@ -164,14 +164,18 @@ void BattleScene::UpdateBattleAfter()
 	if (++Timecounter > SceneTransition)
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		if (PlayerScore_ > EnemyScore_)
+		pSceneManager->ChangeScene(SCENE_ID_RESULT);
+		pSceneManager->SetPlayerScore(PlayerScore_);
+		pSceneManager->SetEnemyScore(EnemyScore_);
+
+		/*if (PlayerScore_ > EnemyScore_)
 		{
 			pSceneManager->ChangeScene(SCENE_ID_CLEAR);
 		}
 		else
 		{
 			pSceneManager->ChangeScene(SCENE_ID_GAMEOVER);
-		}
+		}*/
 		Timecounter = 0;
 	}
 }

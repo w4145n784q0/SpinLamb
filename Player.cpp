@@ -6,12 +6,8 @@
 #include"Engine/SphereCollider.h"
 #include"Engine/VFX.h"
 #include"Engine/SceneManager.h"
+
 #include"BattleScene.h"
-
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_dx11.h"
-#include "imgui/imgui_impl_win32.h"
-
 #include"Enemy.h"
 
 namespace {
@@ -47,8 +43,6 @@ namespace {
 	float cameraUpperLimit = 0.0f;
 	float cameraLowerLimit = 0.0f;
 	float cameraDebugPos = 0.0f;
-
-	//const std::string wallName[] = { "UpperWire", "LowerWire", "RightWire", "LeftWire" };
 }
 
 Player::Player(GameObject* parent) 
@@ -75,8 +69,6 @@ void Player::Initialize()
 	assert(hPlayer_ >= 0);
 
 	ShadowInit();
-
-
 
 	SetStartPosition();
 	
@@ -214,25 +206,6 @@ void Player::OnCollision(GameObject* pTarget)
 		//ÕŒ‚‰¹
 		Audio::Play(hSoundCollision_);
 	}
-
-	//if (pTarget->GetObjectName() == "Fence")
-	//{
-	//	if(!WallHitParam_.IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
-	//	{
-	//		WallHit();
-	//		PlayerState_ = S_WALLHIT;
-	//	}
-	//}
-
-	/*if (pTarget->GetObjectName() == "UpperWire" || pTarget->GetObjectName() == "LowerWire" ||
-		pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
-	{
-		if (!WallHitParam_.IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
-		{
-			WallHit();
-			PlayerState_ = S_WALLHIT;
-		}
-	}*/
 
 	if (pTarget->GetObjectName() == "UpperWire")
 	{

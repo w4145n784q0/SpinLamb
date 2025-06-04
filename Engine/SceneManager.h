@@ -6,6 +6,7 @@
 enum SCENE_ID
 {
 	SCENE_ID_TITLE = 0,
+	SCENE_ID_RESULT,
 	SCENE_ID_GAMEMODE,
 	SCENE_ID_BATTLE,
 	SCENE_ID_PRACTICE,
@@ -37,8 +38,17 @@ public:
 	bool IsBattleScene() { if (currentSceneID_ == SCENE_ID_BATTLE) return true; else return false; }
 	bool IsPracticeScene() { if (currentSceneID_ == SCENE_ID_PRACTICE) return true; else return false; }
 
+	void SetPlayerScore(int score) { PlayerScore_ = score; }
+	void SetEnemyScore(int score) { EnemyScore_ = score; }
+
+	int GetPlayerScore() const { return PlayerScore_; }
+	int GetEnemyScore() const { return EnemyScore_; }
+
 private:
 	SCENE_ID currentSceneID_;	//現在のシーン
 	SCENE_ID nextSceneID_;		//次のシーン
+
+	int PlayerScore_;		//プレイヤーのスコア
+	int EnemyScore_;		//敵のスコア
 
 };

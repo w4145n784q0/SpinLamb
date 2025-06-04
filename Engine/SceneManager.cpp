@@ -6,6 +6,7 @@
 #include "Audio.h"
 
 #include"../TitleScene.h"
+#include"../ResultScene.h"
 #include"../ClearScene.h"
 #include"../GameOverScene.h"
 #include"../GameModeScene.h"
@@ -47,6 +48,7 @@ void SceneManager::Update()
 		switch (nextSceneID_)
 		{
 		case SCENE_ID_TITLE: Instantiate<TitleScene>(this); break;
+		case SCENE_ID_RESULT: Instantiate<ResultScene>(this); break;
 		case SCENE_ID_GAMEMODE: Instantiate<GameModeScene>(this); break;
 		case SCENE_ID_PRACTICE: Instantiate<PracticeScene>(this); break;
 		case SCENE_ID_BATTLE: Instantiate<BattleScene>(this); break;
