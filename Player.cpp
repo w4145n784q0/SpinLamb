@@ -522,6 +522,10 @@ void Player::CameraUpdate()
 	{
 		BackCamera_ = { BackCameraPos };//バックカメラベクトルをリセット
 	}
+	else
+	{
+		cameraTransform_.rotate_.y = 0;//開始前・終了後はカメラのY回転固定
+	}
 }
 
 void Player::KeyBoradMove()

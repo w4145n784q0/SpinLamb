@@ -23,6 +23,9 @@ private:
 	};
 	Battle BattleState;
 
+	//タイトル画像
+	int hBackScreen_;
+
 	//----------サウンドハンドル----------
 
 	//バトル中サウンド

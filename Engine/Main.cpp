@@ -141,8 +141,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 				//このフレームの描画開始
 				Direct3D::BeginDraw();
-				ImGui::Begin("config");
 
+#ifdef _DEBUG
+				ImGui::Begin("config");
+#endif
 				//全オブジェクトを描画
 				//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 				pRootObject->DrawSub();
@@ -151,7 +153,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				VFX::Draw();
 
 				//描画終了
+#ifdef _DEBUG
 				ImGui::End();
+#endif
 				Direct3D::EndDraw();
 
 

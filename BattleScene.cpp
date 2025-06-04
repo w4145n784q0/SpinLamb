@@ -64,6 +64,9 @@ void BattleScene::Initialize()
 	pHUD->SetStateBattle();
 	pHUD->SetTime(GameTime_);
 
+	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");
+	assert(hBackScreen_ >= 0);
+
 	hSoundBattle_ = Audio::Load("Sound\\BGM\\battle.wav",true);
 	assert(hSoundBattle_>= 0);
 
@@ -102,6 +105,9 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
+	Image::SetTransform(hBackScreen_, this->transform_);
+	Image::Draw(hBackScreen_);
+
 	pPlayerScore_->Draw(PlayerScorePosX, PlayerScorePosY, PlayerScore_);
 	pEnemyScore_->Draw(EnemyScorePosX, EnemyScorePosY, EnemyScore_);
 }
@@ -181,9 +187,9 @@ void BattleScene::SetCSVBattle()
 	if (csv.IsGetParamName(pos))
 	{
 		std::vector<float> v = csv.GetParam(pos);
-		PlayerScorePosX = static_cast<int> (v[i_PlayerScorePosX]);
-		PlayerScorePosY = static_cast<int> (v[i_PlayerScorePosY]);
-		EnemyScorePosX = static_cast<int> (v[i_EnemyScorePosX]);
-		EnemyScorePosY = static_cast<int> (v[i_EnemyScorePosY]);
+		PlayerScorePosX = static_cast<int>(v[i_PlayerScorePosX]);
+		PlayerScorePosY = static_cast<int>(v[i_PlayerScorePosY]);
+		EnemyScorePosX = static_cast<int>(v[i_EnemyScorePosX]);
+		EnemyScorePosY = static_cast<int>(v[i_EnemyScorePosY]);
 	}
 }

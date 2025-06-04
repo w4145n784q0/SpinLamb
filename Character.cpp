@@ -191,11 +191,11 @@ void Character::ShadowInit()
 
 void Character::ShadowSet()
 {
-	int hGroundModel = ShadowParam_.pGround_->GetModelHandle();    //モデル番号を取得
+	int hGroundModel = ShadowParam_.pGround_->GetModelHandle();//ステージのモデル番号を取得
 	RayCastData data;
-	data.start = this->transform_.position_;//レイの発射位置
-	data.dir = XMFLOAT3(0, -1, 0);    //レイの方向
-	Model::RayCast(hGroundModel, &data); //レイを発射
+	data.start = this->transform_.position_;//レイの発射位置を設定
+	data.dir = XMFLOAT3(0, -1, 0);//レイの方向を設定
+	Model::RayCast(hGroundModel, &data);//レイを発射
 
 	//レイが当たったら
 	if (data.hit)
@@ -283,7 +283,7 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 	}
 
 	//接触相手のベクトルから自身のベクトルを引き、正規化
-	XMVECTOR subVector = XMVector3Normalize(XMVectorSubtract(eVector ,myVector ));
+	XMVECTOR subVector = XMVector3Normalize(XMVectorSubtract(eVector ,myVector));
 	
 	//逆ベクトルにして反射方向を決定
 	subVector = XMVectorNegate(subVector);
@@ -466,19 +466,9 @@ void Character::InitCSVEffect()
 void Character::SetChargingEffect(std::string _path)
 {
 	EmitterData charge;
-	
 	VFX::SetEmitter(charge, ChargeParam_);
 	charge.textureFileName = _path;
 	charge.position = this->transform_.position_;
-
-	/*charge.delay = 0;
-	charge.lifeTime = 15;
-	
-	charge.positionRnd = XMFLOAT3(1, 1, 1);
-	charge.direction = { 0,1,0 };
-	charge.speed = 0.18;
-	charge.number = (DWORD)1;*/
-
 	VFX::Start(charge);
 }
 
@@ -488,15 +478,6 @@ void Character::SetAttackLocusEffect()
 	VFX::SetEmitter(locus, AttackLocusParam_);
 	locus.textureFileName = "PaticleAssets\\flashB_Y.png";
 	locus.position = this->transform_.position_;
-	
-
-	/*locus.delay = 0;
-	locus.number = (DWORD)3;
-	locus.position = this->transform_.position_;
-	locus.positionRnd = { 1,1,1 };
-	locus.direction = { 0,0,1 };
-	locus.sizeRnd = { 0.5,0.5 };
-	locus.lifeTime = (DWORD)10;*/
 	VFX::Start(locus);
 }
 
@@ -507,16 +488,6 @@ void Character::SetHitEffect()
 	VFX::SetEmitter(hit, HitEffectParam_);
 	hit.textureFileName = "PaticleAssets\\flashB_W.png";
 	hit.position = this->transform_.position_;
-	/*hit.position.y = this->transform_.position_.y + 1.0f;
-	hit.delay = 0;
-	hit.direction = { 1,1,0 };
-	hit.directionRnd = XMFLOAT3(90, 90, 90);
-	hit.speed = 0.5;
-	hit.speedRnd = 1.0;
-	hit.accel = 1.0;
-	hit.lifeTime = (DWORD)10.0;
-	hit.number = (DWORD)10;
-	hit.sizeRnd = XMFLOAT2(0.4, 0.4);*/
 	VFX::Start(hit);
 }
 
@@ -526,13 +497,5 @@ void Character::SetWallHitEffect()
 	VFX::SetEmitter(wallhit, WallHitEffectParam_);
 	wallhit.textureFileName = "PaticleAssets\\flashB_W.png";
 	wallhit.position = this->transform_.position_;
-
-
-	/*wallhit.direction = { 1,1,0 };
-	wallhit.directionRnd = { 360,360,0 };
-	wallhit.number = (DWORD)10;
-	wallhit.delay = 0;
-	wallhit.speed = 0.3f;
-	wallhit.lifeTime = 20;*/
 	VFX::Start(wallhit);
 }
