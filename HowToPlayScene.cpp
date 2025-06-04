@@ -5,13 +5,10 @@
 #include"Engine/Audio.h"
 #include"Engine/CsvReader.h"
 
-namespace
-{
-}
-
 HowToPlayScene::HowToPlayScene(GameObject* parent)
 	:GameObject(parent, "GameModeScene"),
-	hExplanation_(-1), hOperateKeyboard_(-1), hOperateController_(-1),ImageState_(Explanation)
+	hExplanation_(-1), hOperateKeyboard_(-1), hOperateController_(-1),
+	hSoundHowtoPlay_(-1), ImageState_(Explanation)
 {
 }
 
@@ -27,6 +24,9 @@ void HowToPlayScene::Initialize()
 
 	hOperateController_ = Image::Load(path + "Howto_controller.jpg");
 	assert(hOperateController_ >= 0);
+
+	hSoundHowtoPlay_ = Audio::Load("Sound\\BGM\\HowToPlay.wav", true);
+	assert(hSoundHowtoPlay_ >= 0);
 
 	ImageList_ = { Explanation ,OperateKeyBoard,OperateController};
 	itr = ImageList_.begin();
@@ -65,8 +65,10 @@ void HowToPlayScene::Update()
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
+		Audio::Stop(hSoundHowtoPlay_);
 	}
 
+	Audio::Play(hSoundHowtoPlay_);
 }
 
 void HowToPlayScene::Draw()

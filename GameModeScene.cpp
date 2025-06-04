@@ -5,16 +5,18 @@
 #include"Engine/Audio.h"
 #include"Engine/CsvReader.h"
 
-//#include "imgui/imgui.h"
-//#include "imgui/imgui_impl_dx11.h"
-//#include "imgui/imgui_impl_win32.h"
+namespace
+{
+	int SceneTransitionTimer	= 0; //シーン遷移のフラグ
+}
 
 GameModeScene::GameModeScene(GameObject* parent)
 	:GameObject(parent, "GameModeScene"), 
 	hBackScreen_(-1), hBackChara_(-1),
 	hBattle_(-1),hPractice_(-1), hHowtoPlay_(-1),hBackTitle_(-1), hFrameLine_(-1),
 	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),
-	TextArray_({}),ButtonArray_({}), hSoundGameMode_(-1), SelectMode_(Battle)
+	TextArray_({}),ButtonArray_({}),
+	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), SelectMode_(Battle), ModeDecide_(Selected)
 {
 }
 
@@ -62,6 +64,12 @@ void GameModeScene::Initialize()
 	hSoundGameMode_ = Audio::Load("Sound\\BGM\\GameMode.wav",true);
 	assert(hSoundGameMode_ >= 0);
 
+	hSoundDecide_ = Audio::Load("Sound\\SE\\decide.wav");
+	assert(hSoundDecide_ >= 0);
+
+	hSoundSelect_ = Audio::Load("Sound\\SE\\Select.wav");
+	assert(hSoundSelect_ >= 0);
+
 	//各モードのハンドルを配列に入れる
 	ButtonArray_ = { hBattle_, hPractice_, hHowtoPlay_, hBackTitle_ };
 
@@ -75,72 +83,18 @@ void GameModeScene::Initialize()
 
 void GameModeScene::Update()
 {
-	if (Input::IsKeyDown(DIK_UP) || Input::GetPadStickL().y >= StickTilt 
-		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP))
+	switch (ModeDecide_)
 	{
-		if (itr == ModeList_.begin())
-		{
-			itr = --ModeList_.end();
-		}
-		else
-		{
-			--itr;
-		}
-		SelectMode_ = *itr;
-	}
-	if (Input::IsKeyDown(DIK_DOWN) || Input::GetPadStickL().y <= -StickTilt
-		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN))
-	{
-		if (itr == --ModeList_.end())
-		{
-			itr = ModeList_.begin();
-		}
-		else
-		{
-			++itr;
-		}
-		SelectMode_ = *itr;
-	}
-
-	switch (SelectMode_)
-	{
-	case GameModeScene::Battle:
-	case GameModeScene::Practice:
-	case GameModeScene::HowToPlay:
-	case GameModeScene::Title:
-		Trans_Frame_.position_.y = ModeArray_[SelectMode_].position_.y;
+	case GameModeScene::Selected:
+		UpdateSelect();
+		break;
+	case GameModeScene::Decided:
+		UpdateDecide();
 		break;
 	default:
 		break;
 	}
 
-
-	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
-	{
-		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		switch (SelectMode_)
-		{
-		case GameModeScene::Battle:
-			pSceneManager->ChangeScene(SCENE_ID_BATTLE);
-			Audio::Stop(hSoundGameMode_);
-			break;
-		case GameModeScene::Practice:
-			pSceneManager->ChangeScene(SCENE_ID_PRACTICE);
-			Audio::Stop(hSoundGameMode_);
-			break;
-		case GameModeScene::HowToPlay:
-			pSceneManager->ChangeScene(SCENE_ID_HOWTOPLAY);
-			Audio::Stop(hSoundGameMode_);
-			break;
-		case GameModeScene::Title:
-			pSceneManager->ChangeScene(SCENE_ID_TITLE);
-			Audio::Stop(hSoundGameMode_);
-			break;
-		default:
-			break;
-		}
-		
-	}
 	Audio::Play(hSoundGameMode_);
 }
 
@@ -180,11 +134,7 @@ void GameModeScene::Draw()
 	Image::Draw(hFrameLine_);
 
 #ifdef _DEBUG
-	//ImGui::SliderFloat("text", &Trans_Text_.position_.x, -1.0, 1.0);
-	//ImGui::SliderFloat("battle", &ModeArray_[1].position_.y, 1.0, -1.0);
-	//ImGui::SliderFloat("free", &ModeArray_[2].position_.y, 1.0, -1.0);
-	//ImGui::SliderFloat("how", &ModeArray_[3].position_.y, 1.0, -1.0);
-	//ImGui::SliderFloat("title", &ModeArray_[4].position_.y, 1.0, -1.0);
+	ImGui::SliderFloat("text", &Trans_Text_.position_.x, -1.0, 1.0);
 #endif
 }
 
@@ -232,5 +182,83 @@ void GameModeScene::SetSCV()
 	{
 		std::vector<float> v = csv.GetParam(text);
 		SetTransformPRS(Trans_Text_, v);
+	}
+}
+
+void GameModeScene::UpdateSelect()
+{
+	if (Input::IsKeyDown(DIK_UP) || Input::GetPadStickL().y >= StickTilt
+		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP))
+	{
+		if (itr == ModeList_.begin())
+		{
+			itr = --ModeList_.end();
+		}
+		else
+		{
+			--itr;
+		}
+		SelectMode_ = *itr;
+		Audio::Play(hSoundSelect_);
+	}
+	if (Input::IsKeyDown(DIK_DOWN) || Input::GetPadStickL().y <= -StickTilt
+		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN))
+	{
+		if (itr == --ModeList_.end())
+		{
+			itr = ModeList_.begin();
+		}
+		else
+		{
+			++itr;
+		}
+		SelectMode_ = *itr;
+		Audio::Play(hSoundSelect_);
+	}
+
+	switch (SelectMode_)
+	{
+		case GameModeScene::Battle:
+		case GameModeScene::Practice:
+		case GameModeScene::HowToPlay:
+		case GameModeScene::Title:
+			Trans_Frame_.position_.y = ModeArray_[SelectMode_].position_.y;
+			break;
+		default:
+			break;
+	}
+
+	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	{
+		Audio::Play(hSoundDecide_);
+		ModeDecide_ = Decided;
+	}
+}
+
+void GameModeScene::UpdateDecide()
+{
+	if(++SceneTransitionTimer > SceneTransition)
+	{
+		
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		switch (SelectMode_)
+		{
+		case GameModeScene::Battle:
+			pSceneManager->ChangeScene(SCENE_ID_BATTLE);
+			break;
+		case GameModeScene::Practice:
+			pSceneManager->ChangeScene(SCENE_ID_PRACTICE);
+			break;
+		case GameModeScene::HowToPlay:
+			pSceneManager->ChangeScene(SCENE_ID_HOWTOPLAY);
+			break;
+		case GameModeScene::Title:
+			pSceneManager->ChangeScene(SCENE_ID_TITLE);
+			break;
+		default:
+			break;
+		}
+		Audio::Stop(hSoundGameMode_);
+		SceneTransitionTimer = 0;
 	}
 }

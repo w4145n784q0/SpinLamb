@@ -16,7 +16,7 @@ private:
 	int hOperateController_;
 
 	//----------サウンドハンドル----------
-	//int hHowtoPlaySound_;
+	int hSoundHowtoPlay_;
 	
 	//表示画像ステート
 	enum HowtoImage 

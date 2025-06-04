@@ -6,6 +6,15 @@ class GameModeScene :
     public GameObject
 {
 private:
+
+	enum Decide
+	{
+		Selected,
+		Decided,
+		MaxSelect
+	};
+	Decide ModeDecide_;
+
 	enum Mode
 	{
 		Battle = 0,
@@ -40,7 +49,9 @@ private:
 	std::array<int, MaxCount> TextArray_;//各テキストのハンドル配列
 
 	//----------サウンドハンドル----------
-	int hSoundGameMode_;
+	int hSoundGameMode_;//ゲームモードシーンのBGM
+	int hSoundSelect_;//モード選択時のSE
+	int hSoundDecide_;//モード決定時のSE
 
 
 
@@ -71,5 +82,8 @@ public:
 
 	//csvファイルの読み込み
 	void SetSCV();
+
+	void UpdateSelect();
+	void UpdateDecide();
 };
 
