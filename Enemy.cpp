@@ -176,7 +176,7 @@ void Enemy::UpdateRoot()
 
 void Enemy::UpdateChase()
 {
-	MoveRotateReverse();
+	MoveRotate();
 
 	LookPlayer();
 	CharacterMove(MoveParam_. MoveDirection_);
