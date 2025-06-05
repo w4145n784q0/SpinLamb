@@ -38,7 +38,7 @@ private:
 	CameraState CameraState_;
 	
 	//----------移動関係----------
-	XMFLOAT3 Direction_;//プレイヤーの操作方向(xzどこに進むか)
+	XMFLOAT3 Direction_;//キーボード使用時、プレイヤーの操作方向(xzどこに進むか)
 	
 	//----------カメラ関係----------
 	XMFLOAT3 CameraPosition_;//カメラ位置

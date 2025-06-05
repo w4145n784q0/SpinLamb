@@ -184,7 +184,7 @@ public:
     void CharacterMove(XMVECTOR _direction);
 
     /// <summary>
-    /// 移動ベクトルをつくる
+    /// 移動ベクトルをつくる(方向ベクトルが必要)
     /// </summary>
     void CreateMoveVector();
 

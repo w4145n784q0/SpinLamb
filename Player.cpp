@@ -259,12 +259,10 @@ void Player::UpdateIdle()
 	if (Input::IsKey(DIK_LEFT))
 	{
 		this->transform_.rotate_.y -= KeyBoardRotateY;
-		//cameraTransform_.rotate_.y -= KeyBoardRotateY;
 	}
 	if (Input::IsKey(DIK_RIGHT))
 	{
 		this->transform_.rotate_.y += KeyBoardRotateY;
-		//cameraTransform_.rotate_.y += KeyBoardRotateY;
 	}
 
 	KeyBoradMove();
@@ -320,7 +318,6 @@ void Player::UpdateIdle()
 	{
 		if (JumpParam_. IsOnGround_)
 		{
-			//cameraTransform_.rotate_.y = this->transform_.rotate_.y;
 			PlayerState_ = S_CHARGE;
 		}
 	}
@@ -335,8 +332,6 @@ void Player::UpdateIdle()
 	}
 
 	CameraControl();
-
-	Direction_ = { 0,0,0 };//最後に進行方向のリセット毎フレーム行う
 }
 
 void Player::UpdateCharge()
@@ -356,12 +351,10 @@ void Player::UpdateCharge()
 	if (Input::IsKey(DIK_LEFT) || Input::GetPadStickL().x < -StickTilt)
 	{
 		this->transform_.rotate_.y -= KeyBoardRotateY;
-		//cameraTransform_.rotate_.y -= KeyBoardRotateY;
 	}
 	if (Input::IsKey(DIK_RIGHT) || Input::GetPadStickL().x > StickTilt)
 	{
 		this->transform_.rotate_.y += KeyBoardRotateY;
-		//cameraTransform_.rotate_.y += KeyBoardRotateY;
 	}
 
 	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
@@ -380,15 +373,13 @@ void Player::UpdateAttack()
 	SetAttackLocusEffect();
 
 	Deceleration();
-	Direction_.z = 1.0;
+	CharacterMove(MoveParam_.ForwardVector_);
 	FastRotate();
 	if (IsDashStop())
 	{
 		AccelerationStop();
 		PlayerState_ = S_IDLE;
 	}
-
-	KeyBoradMove();
 }
 
 void Player::UpdateHit()
@@ -528,6 +519,7 @@ void Player::KeyBoradMove()
 {
 	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
 	CharacterMoveRotate(move, this->transform_.rotate_.y);
+	Direction_ = { 0,0,0 };//最後に進行方向のリセット毎フレーム行う
 }
 
 void Player::SetCSVPlayer()
