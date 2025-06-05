@@ -39,7 +39,7 @@ void HowToPlayScene::Initialize()
 void HowToPlayScene::Update()
 {
 	if (Input::IsKeyDown(DIK_RIGHT) || Input::GetPadStickL().y >= StickTilt
-		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP))
+		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT))
 	{
 		if (itr == ImageList_.begin())
 		{
@@ -52,7 +52,7 @@ void HowToPlayScene::Update()
 		ImageState_ = *itr;
 	}
 	if (Input::IsKeyDown(DIK_LEFT) || Input::GetPadStickL().y <= -StickTilt
-		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN))
+		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT))
 	{
 		if (itr == --ImageList_.end())
 		{
@@ -65,7 +65,7 @@ void HowToPlayScene::Update()
 		ImageState_ = *itr;
 	}
 
-	if (Input::IsKeyUp(DIK_A) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	if (Input::IsKeyUp(DIK_A) || Input::IsPadButtonUp(XINPUT_GAMEPAD_A) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);

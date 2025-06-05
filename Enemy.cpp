@@ -73,7 +73,7 @@ void Enemy::Update()
 	PlayerAcceleration_ = pPlayer_->GetAcceleration();
 	
 	//正面ベクトルからどれだけ回転したかを計算し、前向きベクトルを計算
-	MoveParam_.ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, InitParam_. FrontDirection_);
+	FrontVectorConfirm();
 
 	ShadowSet();
 
@@ -144,13 +144,13 @@ void Enemy::Draw()
 	ShadowDraw();
 
 #ifdef _DEBUG
-	/*if (ImGui::Button("EnemyStop"))
+	if (ImGui::Button("EnemyStop"))
 	{
 		if (EnemyState_ != S_STOP)
 			EnemyState_ = S_STOP;
 		else
 			EnemyState_ = S_ROOT;
-	}*/
+	}
 
 	//ImGui::Text("knockback:%.3f",this->HitParam_. KnockBack_Velocity_.x );
 #endif
@@ -249,7 +249,6 @@ void Enemy::UpdateWallHit()
 	{
 		RotateStop();
 		EnemyState_ = S_ROOT;
-		//WallHitParam_.IsInvincibility_ = true;
 
 		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
 		if (pSM->IsBattleScene())
@@ -267,15 +266,6 @@ void Enemy::UpdateStop()
 
 void Enemy::OnCollision(GameObject* pTarget)
 {
-	/*if (pTarget->GetObjectName() == "Fence")
-	{
-		if (!WallHitParam_.IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
-		{
-			WallHit();
-
-			EnemyState_ = S_WALLHIT;
-		}
-	}*/
 
 	if (pTarget->GetObjectName() == "Player")
 	{	

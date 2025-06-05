@@ -165,6 +165,12 @@ void Player::Draw()
 	//ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
 	//ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
 
+	XMFLOAT3 tmp;
+	XMStoreFloat3(&tmp, MoveParam_.ForwardVector_);
+	ImGui::Text("forward:%.3f", tmp.x);
+	ImGui::Text("forward:%.3f", tmp.y);
+	ImGui::Text("forward:%.3f", tmp.z);
+
 #endif
 
 }
@@ -253,12 +259,12 @@ void Player::UpdateIdle()
 	if (Input::IsKey(DIK_LEFT))
 	{
 		this->transform_.rotate_.y -= KeyBoardRotateY;
-		cameraTransform_.rotate_.y -= KeyBoardRotateY;
+		//cameraTransform_.rotate_.y -= KeyBoardRotateY;
 	}
 	if (Input::IsKey(DIK_RIGHT))
 	{
 		this->transform_.rotate_.y += KeyBoardRotateY;
-		cameraTransform_.rotate_.y += KeyBoardRotateY;
+		//cameraTransform_.rotate_.y += KeyBoardRotateY;
 	}
 
 	KeyBoradMove();
@@ -270,7 +276,7 @@ void Player::UpdateIdle()
 
 	//コントローラで受けとったベクトルはXYなので
 	//XZ方向のベクトルに直す
-	XMFLOAT3 controllfloat = { XMVectorGetX(controller) , 0, XMVectorGetY(controller) };
+	XMFLOAT3 controllfloat = { XMVectorGetX(controller) , 0.0f, XMVectorGetY(controller) };
 	XMVECTOR SetController = { controllfloat.x, controllfloat.y , controllfloat.z };
 
 	//ベクトルの長さを取得して、倒したかどうかを判別
@@ -278,8 +284,8 @@ void Player::UpdateIdle()
 
 	if (length > StickMicroTilt)
 	{
-		//コントローラー方向と前向きベクトルの外積求める（）
-		XMVECTOR cross = XMVector3Cross(SetController, InitParam_. FrontDirection_);
+		//コントローラー方向と前向きベクトルの外積求める
+		XMVECTOR cross = XMVector3Cross(SetController, InitParam_.FrontDirection_);
 
 		//Y外積をとり+か-かで倒し回転方向を求める
 		float crossY = XMVectorGetY(cross);
@@ -300,13 +306,12 @@ void Player::UpdateIdle()
 		}
 
 		this->transform_.rotate_.y = angleDeg;
-		cameraTransform_.rotate_.y = angleDeg;
 		MoveRotate();
 		CharacterMove(SetController);
 	}
 
 	//自分の前方ベクトル(回転した分も含む)を更新
-	MoveParam_.ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, InitParam_. FrontDirection_);
+	FrontVectorConfirm();
 
 
 	//------------------攻撃状態へ移行------------------//
@@ -315,7 +320,7 @@ void Player::UpdateIdle()
 	{
 		if (JumpParam_. IsOnGround_)
 		{
-			cameraTransform_.rotate_.y = this->transform_.rotate_.y;
+			//cameraTransform_.rotate_.y = this->transform_.rotate_.y;
 			PlayerState_ = S_CHARGE;
 		}
 	}
@@ -348,15 +353,15 @@ void Player::UpdateCharge()
 		}
 	}
 
-	if (Input::IsKey(DIK_LEFT))
+	if (Input::IsKey(DIK_LEFT) || Input::GetPadStickL().x < -StickTilt)
 	{
 		this->transform_.rotate_.y -= KeyBoardRotateY;
-		cameraTransform_.rotate_.y -= KeyBoardRotateY;
+		//cameraTransform_.rotate_.y -= KeyBoardRotateY;
 	}
-	if (Input::IsKey(DIK_RIGHT))
+	if (Input::IsKey(DIK_RIGHT) || Input::GetPadStickL().x > StickTilt)
 	{
 		this->transform_.rotate_.y += KeyBoardRotateY;
-		cameraTransform_.rotate_.y += KeyBoardRotateY;
+		//cameraTransform_.rotate_.y += KeyBoardRotateY;
 	}
 
 	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
@@ -402,7 +407,6 @@ void Player::UpdateWallHit()
 	if (IsKnockBackEnd())
 	{
 		PlayerState_ = S_IDLE;
-		//WallHitParam_.IsInvincibility_ = true;
 
 		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
 		if (pSM->IsBattleScene())
