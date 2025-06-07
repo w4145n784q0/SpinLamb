@@ -113,15 +113,6 @@ void Player::Update()
 		break;
 	}
 
-	//if(!WallHitParam_.IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
-	//{
-	//	if (IsOutsideStage(this->transform_.position_))
-	//	{
-	//		WallHit();
-	//		PlayerState_ = S_WALLHIT;
-	//	}
-	//}
-
 	if(!(PlayerState_ == S_WALLHIT))
 	{
 		InvincibilityTimeCalclation();
@@ -143,20 +134,7 @@ void Player::Update()
 
 void Player::Draw()
 {
-	if (WallHitParam_.IsInvincibility_)
-	{			
-		if (++WallHitParam_. blinkTimer_ > WallHitParam_.blinkValue_) {
-
-			WallHitParam_.blinkTimer_ = 0;
-			Model::SetTransform(hPlayer_, this->transform_);
-			Model::Draw(hPlayer_);
-		}
-	}
-	else
-	{
-		Model::SetTransform(hPlayer_, this->transform_);
-		Model::Draw(hPlayer_);
-	}
+	DrawCharacterModel(hPlayer_, this->transform_);
 
 	ShadowDraw();
 
@@ -165,17 +143,18 @@ void Player::Draw()
 	{
 		if (ImGui::TreeNode("Position"))
 		{
-			ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
-			ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
-			ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
+			ImGui::SliderFloat("PositionX:%.3f", &this->transform_.position_.x, WestEnd_, EastEnd_);
+			ImGui::SliderFloat("PositionZ:%.3f", &this->transform_.position_.z, SouthEnd_, NorthEnd_);
 			ImGui::TreePop();
 		}
 
-		if (ImGui::TreeNode("CameraPosition"))
+		if (ImGui::TreeNode("Forward"))
 		{
-			ImGui::InputFloat("CameraPositionX:%.3f", &CameraPosition_.x);
-			ImGui::InputFloat("CameraPositionY:%.3f", &CameraPosition_.y);
-			ImGui::InputFloat("CameraPositionZ:%.3f", &CameraPosition_.z);
+			XMFLOAT3 tmp;
+			XMStoreFloat3(&tmp, MoveParam_.ForwardVector_);
+			ImGui::Text("ForwardX:%.3f", tmp.x);
+			ImGui::Text("ForwardY:%.3f", tmp.y);
+			ImGui::Text("ForwardZ:%.3f", tmp.z);
 			ImGui::TreePop();
 		}
 
@@ -214,7 +193,7 @@ void Player::Draw()
 			ImGui::TreePop();
 		}
 
-		if (ImGui::TreeNode("Hit"))
+		if (ImGui::TreeNode("WallHit"))
 		{
 			ImGui::InputFloat("Collider", &this->WallHitParam_.KnockBackPower_);
 			ImGui::InputInt("InvincibilityTime", &this->WallHitParam_.InvincibilityValue_);
@@ -222,21 +201,15 @@ void Player::Draw()
 			ImGui::TreePop();
 		}
 
-		if (ImGui::TreeNode("Hit"))
+		if (ImGui::TreeNode("Shadow"))
 		{
 			ImGui::InputFloat("Collider", &this->ShadowParam_.ShadowCorrection_);
 			ImGui::TreePop();
 		}
+
 		ImGui::TreePop();
 	}
 	
-
-	/*XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, MoveParam_.ForwardVector_);
-	ImGui::Text("forward:%.3f", tmp.x);
-	ImGui::Text("forward:%.3f", tmp.y);
-	ImGui::Text("forward:%.3f", tmp.z);*/
-
 #endif
 
 }

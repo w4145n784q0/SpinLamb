@@ -44,7 +44,7 @@ namespace {
 	enum WallHitIndex
 	{
 		i_knockbackpower = 0,
-		i_invincibilityvalue ,
+		i_invincibilityvalue,
 		i_blinkvalue,
 
 	};
@@ -173,6 +173,24 @@ void Character::SetcsvStatus(std::string _path)
 }
 
 
+
+void Character::DrawCharacterModel(int _handle, Transform _transform)
+{
+	if (WallHitParam_.IsInvincibility_)
+	{
+		if (++WallHitParam_.blinkTimer_ > WallHitParam_.blinkValue_) {
+
+			WallHitParam_.blinkTimer_ = 0;
+			Model::SetTransform(_handle, _transform);
+			Model::Draw(_handle);
+		}
+	}
+	else
+	{
+		Model::SetTransform(_handle, _transform);
+		Model::Draw(_handle);
+	}
+}
 
 void Character::CharacterGravity()
 {

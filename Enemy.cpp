@@ -126,24 +126,82 @@ void Enemy::Update()
 
 void Enemy::Draw()
 {
-	if (WallHitParam_.IsInvincibility_)
-	{
-		if (++WallHitParam_.blinkTimer_ > WallHitParam_.blinkValue_) {
-
-			WallHitParam_.blinkTimer_ = 0;
-			Model::SetTransform(hEnemy_, this->transform_);
-			Model::Draw(hEnemy_);
-		}
-	}
-	else
-	{
-		Model::SetTransform(hEnemy_, this->transform_);
-		Model::Draw(hEnemy_);
-	}
+	DrawCharacterModel(hEnemy_, this->transform_);
 
 	ShadowDraw();
 
 #ifdef _DEBUG
+	if (ImGui::TreeNode("EnemyStatus"))
+	{
+		if (ImGui::TreeNode("Position"))
+		{
+			ImGui::InputFloat("PositionX:%.3f", &this->transform_.position_.x);
+			ImGui::InputFloat("PositionY:%.3f", &this->transform_.position_.y);
+			ImGui::InputFloat("PositionZ:%.3f", &this->transform_.position_.z);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Forward"))
+		{
+			XMFLOAT3 tmp;
+			XMStoreFloat3(&tmp, MoveParam_.ForwardVector_);
+			ImGui::Text("ForwardX:%.3f", tmp.x);
+			ImGui::Text("ForwardY:%.3f", tmp.y);
+			ImGui::Text("ForwardZ:%.3f", tmp.z);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Move"))
+		{
+			ImGui::InputFloat("velocity", &this->MoveParam_.Velocity_);
+			ImGui::InputFloat("AcceleValue", &this->MoveParam_.AcceleValue_);
+			ImGui::InputFloat("FullAccelerate", &this->MoveParam_.FullAccelerate_);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Rotate"))
+		{
+			ImGui::InputFloat("normalRotate", &this->RotateParam_.MoveRotateX);
+			ImGui::InputFloat("fastRotate", &this->RotateParam_.FastRotateX);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Jump"))
+		{
+			ImGui::InputFloat("Gravity", &this->JumpParam_.Gravity_);
+			ImGui::InputFloat("HeightLowerLimit", &this->JumpParam_.HeightLowerLimit_);
+			ImGui::InputFloat("HeightUpperLimit", &this->JumpParam_.HeightUpperLimit_);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Hit"))
+		{
+			ImGui::InputFloat("Collider", &this->HitParam_.ColliderSize_);
+			ImGui::InputFloat("OriginaRangeMin", &this->HitParam_.OriginaRangeMin_);
+			ImGui::InputFloat("OriginaRangeMax", &this->HitParam_.OriginaRangeMax_);
+			ImGui::InputFloat("ConvertedRangeMin", &this->HitParam_.ConvertedRangeMin_);
+			ImGui::InputFloat("ConvertedRangeMax", &this->HitParam_.ConvertedRangeMax_);
+			ImGui::InputFloat("DecelerationRate", &this->HitParam_.DecelerationRate_);
+			ImGui::InputFloat("KnockBackEnd", &this->HitParam_.KnockBackEnd_);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("WallHit"))
+		{
+			ImGui::InputFloat("Collider", &this->WallHitParam_.KnockBackPower_);
+			ImGui::InputInt("InvincibilityTime", &this->WallHitParam_.InvincibilityValue_);
+			ImGui::InputInt("blinkValue", &this->WallHitParam_.blinkValue_);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Shadow"))
+		{
+			ImGui::InputFloat("Collider", &this->ShadowParam_.ShadowCorrection_);
+			ImGui::TreePop();
+		}
+		ImGui::TreePop();
+	}
+
 	if (ImGui::Button("EnemyStop"))
 	{
 		if (EnemyState_ != S_STOP)
@@ -151,8 +209,6 @@ void Enemy::Draw()
 		else
 			EnemyState_ = S_ROOT;
 	}
-
-	//ImGui::Text("knockback:%.3f",this->HitParam_. KnockBack_Velocity_.x );
 #endif
 }
 

@@ -60,7 +60,7 @@ void Fence::Update()
 void Fence::Draw()
 {
 #ifdef _DEBUG
-
+	
 #endif
 
 	Model::SetTransform(hFence_, wire);
@@ -74,10 +74,6 @@ void Fence::Draw()
 }
 
 void Fence::Release()
-{
-}
-
-void Fence::OnCollision(GameObject* pTarget)
 {
 }
 

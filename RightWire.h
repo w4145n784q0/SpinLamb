@@ -7,6 +7,8 @@ class RightWire :
 {
 private:
 	XMVECTOR Normal_;//柵の法線
+	XMFLOAT3 CollisionPos_;//当たり判定の位置
+	XMFLOAT3 CollisionSize_;//当たり判定のサイズ
 public:
 	RightWire(GameObject* parent);
 	~RightWire();

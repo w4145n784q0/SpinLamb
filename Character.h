@@ -12,14 +12,14 @@
 class Character :
     public GameObject
 {
-private:
-	//----------ステージの端----------
-   float NorthEnd_ = 0.0f;
-   float SouthEnd_ = 0.0f;
-   float EastEnd_ = 0.0f;
-   float WestEnd_ = 0.0f;
 protected:
-    
+
+    //----------ステージの端----------
+	float NorthEnd_ = 0.0f;//ステージ北端(前方)の位置
+	float SouthEnd_ = 0.0f;//ステージ南端(後方)の位置
+	float EastEnd_ = 0.0f;//ステージ東端(右側)の位置
+	float WestEnd_ = 0.0f;//ステージ西端(左側)の位置
+
 	//----------サウンドハンドル----------
 	int hSoundcharge_ = -1; //チャージ音のハンドル
 	int hSoundattack_ = -1; //突撃音のハンドル
@@ -152,6 +152,13 @@ public:
     /// 初期位置の設定
     /// </summary>
     void SetStartPosition() { this->transform_.position_ = InitParam_.StartPosition_; }
+
+    /// <summary>
+    /// キャラクターモデル描画
+    /// </summary>
+    /// <param name="_handle">モデルハンドル</param>
+    /// <param name="_transform">描画位置のトランスフォーム</param>
+    void DrawCharacterModel(int _handle, Transform _transform);
 
     /// <summary>
     /// 重力処理
