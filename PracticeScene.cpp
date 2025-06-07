@@ -44,7 +44,7 @@ void PracticeScene::Initialize()
 	pPlayer_->SetEnd(north, south, west, east);
 
 	Enemy* pEnemy = (Enemy*)FindObject("Enemy");
-	pEnemy->EnemyStart();
+	pEnemy->EnemyStop();
 	pEnemy->SetEnd(north, south, west, east);
 
 	HUD* pHUD = (HUD*)FindObject("HUD");

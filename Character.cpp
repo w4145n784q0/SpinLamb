@@ -8,65 +8,65 @@ namespace {
 	
 	//キャラクタークラスの共通変数を初期化するインデックス
 
-	enum move
+	enum moveIndex
 	{
-		vel = 0,
-		accele_value,
-		accele_max,
+		i_vel = 0,
+		i_accele_value,
+		i_accele_max,
+		i_friction
 	};
 
-	enum rotate
+	enum RotateIndex
 	{
-		moverot = 0,
-		fastrot ,
-		
+		i_moverot = 0,
+		i_fastrot ,
 	};
 
-	enum Jump
+	enum JumpIndex
 	{
-		gravity = 0,
-		upperlimit,
-		lowerlimit,
+		i_gravity = 0,
+		i_upperlimit,
+		i_lowerlimit,
 	};
 
-	enum Hit
+	enum HitIndex
 	{
-		collider = 0,
-		originalrangemin,
-		originalrangemax,
-		convertedrangemin,
-		convertedrangemax,
-		knockbackpower,
-		deceleration,
-		knockbackend,
+		i_collider = 0,
+		i_originalrangemin,
+		i_originalrangemax,
+		i_convertedrangemin,
+		i_convertedrangemax,
+		i_knockbackpower,
+		i_deceleration,
+		i_knockbackend,
 	};
 
-	enum WallHit
+	enum WallHitIndex
 	{
-		invincibilityvalue = 0,
-		blinkvalue
+		i_invincibilityvalue = 0,
+		i_blinkvalue
 	};
 
-	enum Shadow
+	enum ShadowIndex
 	{
-		shadowcorrection = 0,
+		i_shadowcorrection = 0,
 	};
 
 	//ゲームに登場するキャラクターの数
-	enum GameChara
+	enum GameCharaIndex
 	{
-		player = 0,
-		enemy,
-		MaxChara
+		i_player = 0,
+		i_enemy,
+		i_MaxChara
 	};
 
 	//エフェクト初期化時のインデックス
-	enum EffectParam
+	enum EffectParamIndex
 	{
-		Charge = 0,
-		Locus,
-		Hit,
-		WallHit,
+		i_Charge = 0,
+		i_Locus,
+		i_Hit,
+		i_WallHit,
 	};
 }
 
@@ -80,9 +80,9 @@ Character::Character(GameObject* parent, const std::string& name)
 	:GameObject(parent, name)
 {
 	InitCSVEffect();
-	hSoundcharge_ = Audio::Load("Sound\\SE\\charge.wav",false,MaxChara);
+	hSoundcharge_ = Audio::Load("Sound\\SE\\charge.wav",false, i_MaxChara);
 	assert(hSoundcharge_ >= 0);
-	hSoundattack_ = Audio::Load("Sound\\SE\\attack.wav", false, MaxChara);
+	hSoundattack_ = Audio::Load("Sound\\SE\\attack.wav", false, i_MaxChara);
 	assert(hSoundattack_ >= 0);
 	hSoundCollision_ = Audio::Load("Sound\\SE\\collision.wav",false,1);
 	assert(hSoundCollision_ >= 0);
@@ -113,17 +113,18 @@ void Character::SetcsvStatus(std::string _path)
 	if (csv.IsGetParamName(p_move))
 	{
 		std::vector<float> v = csv.GetParam(p_move);
-		MoveParam_.Velocity_ = v[vel];
-		MoveParam_.AcceleValue_ = v[accele_value];
-		MoveParam_.FullAccelerate_ = v[accele_max];
+		MoveParam_.Velocity_ = v[i_vel];
+		MoveParam_.AcceleValue_ = v[i_accele_value];
+		MoveParam_.FullAccelerate_ = v[i_accele_max];
+		MoveParam_.Friction_ = v[i_friction];
 	}
 
 	std::string p_rotate = "RotateParam";
 	if (csv.IsGetParamName(p_rotate))
 	{
 		std::vector<float> v = csv.GetParam(p_rotate);
-		RotateParam_.MoveRotateX = v[moverot];
-		RotateParam_.FastRotateX = v[fastrot];
+		RotateParam_.MoveRotateX = v[i_moverot];
+		RotateParam_.FastRotateX = v[i_fastrot];
 
 	}
 
@@ -131,40 +132,40 @@ void Character::SetcsvStatus(std::string _path)
 	if (csv.IsGetParamName(p_jump))
 	{
 		std::vector<float> v = csv.GetParam(p_jump);
-		JumpParam_.Gravity_ = v[gravity];
-		JumpParam_.HeightLowerLimit_ = v[upperlimit];
-		JumpParam_.HeightUpperLimit_ = v[lowerlimit];
+		JumpParam_.Gravity_ = v[i_gravity];
+		JumpParam_.HeightLowerLimit_ = v[i_upperlimit];
+		JumpParam_.HeightUpperLimit_ = v[i_lowerlimit];
 	}
 
 	std::string p_hit = "HitParam";
 	if (csv.IsGetParamName(p_hit))
 	{
 		std::vector<float> v = csv.GetParam(p_hit);
-		HitParam_.ColliderSize_ =v[collider];
+		HitParam_.ColliderSize_ =v[i_collider];
 
-		HitParam_.OriginaRangeMin_ = v[originalrangemin];
-		HitParam_.OriginaRangeMax_ = v[originalrangemax];
-		HitParam_.ConvertedRangeMin_ = v[convertedrangemin];
-		HitParam_.ConvertedRangeMax_ = v[convertedrangemax];
+		HitParam_.OriginaRangeMin_ = v[i_originalrangemin];
+		HitParam_.OriginaRangeMax_ = v[i_originalrangemax];
+		HitParam_.ConvertedRangeMin_ = v[i_convertedrangemin];
+		HitParam_.ConvertedRangeMax_ = v[i_convertedrangemax];
 
-		HitParam_.KnockBackPower_ = v[knockbackpower];
-		HitParam_.DecelerationRate_ = v[deceleration];
-		HitParam_.KnockBackEnd_ = v[knockbackend];
+		HitParam_.KnockBackPower_ = v[i_knockbackpower];
+		HitParam_.DecelerationRate_ = v[i_deceleration];
+		HitParam_.KnockBackEnd_ = v[i_knockbackend];
 	}
 
 	std::string p_wallhit = "WallHitParam";
 	if (csv.IsGetParamName(p_wallhit))
 	{
 		std::vector<float> v = csv.GetParam(p_wallhit);
-		WallHitParam_.InvincibilityValue = static_cast<int>(v[invincibilityvalue]);
-		WallHitParam_.blinkValue = static_cast<int>(v[blinkvalue]);
+		WallHitParam_.InvincibilityValue = static_cast<int>(v[i_invincibilityvalue]);
+		WallHitParam_.blinkValue = static_cast<int>(v[i_blinkvalue]);
 	}
 
 	std::string p_shadow = "ShadowParam";
 	if(csv.IsGetParamName(p_shadow))
 	{
 		std::vector<float> v = csv.GetParam(p_shadow);
-		ShadowParam_.ShadowCorrection_ = v[shadowcorrection];
+		ShadowParam_.ShadowCorrection_ = v[i_shadowcorrection];
 	}
 }
 
@@ -329,8 +330,7 @@ void Character::KnockBack()
 {
 	MoveRotateReverse();
 
-	//ノックバックする速度= ノックバックする強さ(定数) * ノックバックする方向
-	//毎フレーム速度を減少
+	//毎フレームノックバック速度を減少
 	HitParam_.KnockBack_Velocity_.x *= HitParam_.DecelerationRate_;
 	HitParam_.KnockBack_Velocity_.z *= HitParam_.DecelerationRate_;
 

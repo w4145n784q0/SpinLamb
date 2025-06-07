@@ -161,6 +161,25 @@ void Player::Draw()
 	ShadowDraw();
 
 #ifdef _DEBUG
+	if (ImGui::TreeNode("PlayerStatus"))
+	{
+		if (ImGui::TreeNode("Move"))
+		{
+			ImGui::InputFloat("velocity", &this->MoveParam_.Velocity_);
+			ImGui::InputFloat("AcceleValue", &this->MoveParam_.AcceleValue_);
+			ImGui::InputFloat("FullAccelerate", &this->MoveParam_.FullAccelerate_);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Jump"))
+		{
+			ImGui::InputFloat("Gravity", &this->JumpParam_.Gravity_);
+			ImGui::InputFloat("HeightLowerLimit", &this->JumpParam_.HeightLowerLimit_);
+			ImGui::InputFloat("HeightUpperLimit", &this->JumpParam_.HeightUpperLimit_);
+			ImGui::TreePop();
+		}
+		ImGui::TreePop();
+	}
 	//ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
 	//ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
 	//ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
@@ -371,9 +390,8 @@ void Player::UpdateAttack()
 {
 	Audio::Play(hSoundattack_);
 	SetAttackLocusEffect();
-
-	Deceleration();
 	CharacterMove(MoveParam_.ForwardVector_);
+	FrictionDeceleration();
 	FastRotate();
 	if (IsDashStop())
 	{

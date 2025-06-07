@@ -210,8 +210,8 @@ void Enemy::UpdateAttack()
 	Audio::Play(hSoundattack_);
 	SetAttackLocusEffect();
 	CharacterMove(MoveParam_.MoveDirection_);
-	Deceleration();
-	FastRotateReverse();
+	FrictionDeceleration();
+	FastRotate();
 
 	if (IsDashStop())
 	{

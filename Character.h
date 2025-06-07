@@ -40,6 +40,7 @@ protected:
         float Acceleration_ = 0.0f;//加速度
         float AcceleValue_ = 0.0f;//Acceleration_上昇時、1fあたりの増加量
         float FullAccelerate_ = 0.0f;//加速度の最大
+		float Friction_ = 0.0f;//摩擦係数(減速率) 1fあたりの減速量
         XMVECTOR ForwardVector_ = { 0,0,0 };//キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算 正規化した値を入れる
         XMVECTOR MoveDirection_ = { 0,0,0 };//移動方向 この値に速さの要素をかけて移動ベクトル化する
         XMVECTOR NewPositon_ = { 0,0,0 };//移動後の位置ベクトル
@@ -85,10 +86,10 @@ protected:
     //----------壁の接触ダメージ----------
     struct WallHitParam
     {
-        XMVECTOR UpperNormal_;//ステージ北端の法線ベクトル
-        XMVECTOR LowerNormal_;//ステージ南端の法線ベクトル
-        XMVECTOR RightNormal_;//ステージ東端の法線ベクトル
-        XMVECTOR LeftNormal_;//ステージ西端の法線ベクトル
+        XMVECTOR UpperNormal_ = {0,0,0};//ステージ北端(前方)の法線ベクトル
+        XMVECTOR LowerNormal_ = { 0,0,0 };//ステージ南端(後方)の法線ベクトル
+        XMVECTOR RightNormal_ = { 0,0,0 };//ステージ東端(右側)の法線ベクトル
+        XMVECTOR LeftNormal_ = { 0,0,0 };//ステージ西端(左側)の法線ベクトル
 
         int InvincibilityTime_ = 0;//ダメージ後の無敵時間 1fごとに上昇
         bool IsInvincibility_ = false;//無敵時間か
@@ -271,9 +272,14 @@ public:
     void Charging();
 
     /// <summary>
-    /// 減速処理
+    /// 減速処理(加速時の増加量使用)
     /// </summary>
     void Deceleration() { MoveParam_.Acceleration_ -= MoveParam_.AcceleValue_; }
+
+	/// <summary>
+	/// 摩擦による減速処理
+	/// </summary>
+	void FrictionDeceleration() { MoveParam_.Acceleration_ -= MoveParam_.Friction_; }
 
     /// <summary>
     /// 加速度リセット
