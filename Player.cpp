@@ -113,14 +113,14 @@ void Player::Update()
 		break;
 	}
 
-	if(!WallHitParam_. IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
-	{
-		if (IsOutsideStage(this->transform_.position_))
-		{
-			WallHit();
-			PlayerState_ = S_WALLHIT;
-		}
-	}
+	//if(!WallHitParam_.IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
+	//{
+	//	if (IsOutsideStage(this->transform_.position_))
+	//	{
+	//		WallHit();
+	//		PlayerState_ = S_WALLHIT;
+	//	}
+	//}
 
 	if(!(PlayerState_ == S_WALLHIT))
 	{
@@ -145,9 +145,9 @@ void Player::Draw()
 {
 	if (WallHitParam_.IsInvincibility_)
 	{			
-		if (++WallHitParam_. blinkTimer > WallHitParam_.blinkValue) {
+		if (++WallHitParam_. blinkTimer_ > WallHitParam_.blinkValue_) {
 
-			WallHitParam_.blinkTimer = 0;
+			WallHitParam_.blinkTimer_ = 0;
 			Model::SetTransform(hPlayer_, this->transform_);
 			Model::Draw(hPlayer_);
 		}
@@ -163,11 +163,34 @@ void Player::Draw()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("PlayerStatus"))
 	{
+		if (ImGui::TreeNode("Position"))
+		{
+			ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
+			ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
+			ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("CameraPosition"))
+		{
+			ImGui::InputFloat("CameraPositionX:%.3f", &CameraPosition_.x);
+			ImGui::InputFloat("CameraPositionY:%.3f", &CameraPosition_.y);
+			ImGui::InputFloat("CameraPositionZ:%.3f", &CameraPosition_.z);
+			ImGui::TreePop();
+		}
+
 		if (ImGui::TreeNode("Move"))
 		{
 			ImGui::InputFloat("velocity", &this->MoveParam_.Velocity_);
 			ImGui::InputFloat("AcceleValue", &this->MoveParam_.AcceleValue_);
 			ImGui::InputFloat("FullAccelerate", &this->MoveParam_.FullAccelerate_);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Rotate"))
+		{
+			ImGui::InputFloat("normalRotate", &this->RotateParam_.MoveRotateX);
+			ImGui::InputFloat("fastRotate", &this->RotateParam_.FastRotateX);
 			ImGui::TreePop();
 		}
 
@@ -178,17 +201,41 @@ void Player::Draw()
 			ImGui::InputFloat("HeightUpperLimit", &this->JumpParam_.HeightUpperLimit_);
 			ImGui::TreePop();
 		}
+
+		if (ImGui::TreeNode("Hit"))
+		{
+			ImGui::InputFloat("Collider", &this->HitParam_.ColliderSize_);
+			ImGui::InputFloat("OriginaRangeMin", &this->HitParam_.OriginaRangeMin_);
+			ImGui::InputFloat("OriginaRangeMax", &this->HitParam_.OriginaRangeMax_);
+			ImGui::InputFloat("ConvertedRangeMin", &this->HitParam_.ConvertedRangeMin_);
+			ImGui::InputFloat("ConvertedRangeMax", &this->HitParam_.ConvertedRangeMax_);
+			ImGui::InputFloat("DecelerationRate", &this->HitParam_.DecelerationRate_);
+			ImGui::InputFloat("KnockBackEnd", &this->HitParam_.KnockBackEnd_);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Hit"))
+		{
+			ImGui::InputFloat("Collider", &this->WallHitParam_.KnockBackPower_);
+			ImGui::InputInt("InvincibilityTime", &this->WallHitParam_.InvincibilityValue_);
+			ImGui::InputInt("blinkValue", &this->WallHitParam_.blinkValue_);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Hit"))
+		{
+			ImGui::InputFloat("Collider", &this->ShadowParam_.ShadowCorrection_);
+			ImGui::TreePop();
+		}
 		ImGui::TreePop();
 	}
-	//ImGui::Text("PositionX:%.3f", this->transform_.position_.x);
-	//ImGui::Text("PositionY:%.3f", this->transform_.position_.y);
-	//ImGui::Text("PositionZ:%.3f", this->transform_.position_.z);
+	
 
-	XMFLOAT3 tmp;
+	/*XMFLOAT3 tmp;
 	XMStoreFloat3(&tmp, MoveParam_.ForwardVector_);
 	ImGui::Text("forward:%.3f", tmp.x);
 	ImGui::Text("forward:%.3f", tmp.y);
-	ImGui::Text("forward:%.3f", tmp.z);
+	ImGui::Text("forward:%.3f", tmp.z);*/
 
 #endif
 
@@ -512,7 +559,7 @@ void Player::CameraUpdate()
 	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(cameraTransform_.rotate_.x));//カメラの回転行列作成(X軸)
 	XMMATRIX rotCamera = XMMatrixMultiply(rotX, rotY);
 	BackCamera_ = XMVector3TransformCoord(BackCamera_, rotCamera);//バックカメラのベクトルにかける
-	XMStoreFloat3(&CameraPosition_, MoveParam_. NewPositon_ + BackCamera_);//プレイヤーの移動ベクトルとバックカメラを加算
+	XMStoreFloat3(&CameraPosition_, MoveParam_.NewPositon_ + BackCamera_);//プレイヤーの移動ベクトルとバックカメラを加算
 
 	//--------------カメラ振動--------------
 	// 全ステート共有

@@ -77,7 +77,7 @@ protected:
 		float ConvertedRangeMax_ = 0.0f; //変換後のノックバック量の最大値
         XMFLOAT3 KnockBack_Direction_ = { 0,0,0 };//ノックバックする方向
         XMFLOAT3 KnockBack_Velocity_ = {0,0,0};//ノックバックする速度
-        float KnockBackPower_ = 0.0f; //ノックバックする強さ（変化なし）
+        //float KnockBackPower_ = 0.0f; //ノックバックする強さ（変化なし）
         float DecelerationRate_ = 0.0f;//ノックバック時の1fごとの減速率
         float KnockBackEnd_ = 0.0f;//ノックバックを終了する値
     };
@@ -91,11 +91,12 @@ protected:
         XMVECTOR RightNormal_ = { 0,0,0 };//ステージ東端(右側)の法線ベクトル
         XMVECTOR LeftNormal_ = { 0,0,0 };//ステージ西端(左側)の法線ベクトル
 
+        float KnockBackPower_ = 0.0f; //壁ヒットでノックバックする強さ（変化なし）
         int InvincibilityTime_ = 0;//ダメージ後の無敵時間 1fごとに上昇
         bool IsInvincibility_ = false;//無敵時間か
-        int InvincibilityValue = 0;//無敵時間の値　この値を超えると無敵時間終了
-        int blinkTimer = 0;//ダメージ後の点滅カウント
-        int blinkValue = 0;//この値にblinkTimerが到達すると描画する
+        int InvincibilityValue_ = 0;//無敵時間の値　この値を超えると無敵時間終了
+        int blinkTimer_ = 0;//ダメージ後の点滅カウント
+        int blinkValue_ = 0;//この値にblinkTimerが到達すると描画する
     };
     WallHitParam WallHitParam_;
     

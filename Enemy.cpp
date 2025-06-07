@@ -107,14 +107,14 @@ void Enemy::Update()
 		break;
 	}
 
-	if (!WallHitParam_. IsInvincibility_ && !(EnemyState_ == S_WALLHIT))//壁ダメージ判定
-	{
-		if (IsOutsideStage(this->transform_.position_))
-		{
-			WallHit();
-			EnemyState_ = S_WALLHIT;
-		}
-	}
+	//if (!WallHitParam_.IsInvincibility_ && !(EnemyState_ == S_WALLHIT))//壁ダメージ判定
+	//{
+	//	if (IsOutsideStage(this->transform_.position_))
+	//	{
+	//		WallHit();
+	//		EnemyState_ = S_WALLHIT;
+	//	}
+	//}
 
 	if (!(EnemyState_ == S_WALLHIT))//壁ダメージ判定
 	{
@@ -128,9 +128,9 @@ void Enemy::Draw()
 {
 	if (WallHitParam_.IsInvincibility_)
 	{
-		if (++WallHitParam_.blinkTimer > WallHitParam_.blinkValue) {
+		if (++WallHitParam_.blinkTimer_ > WallHitParam_.blinkValue_) {
 
-			WallHitParam_.blinkTimer = 0;
+			WallHitParam_.blinkTimer_ = 0;
 			Model::SetTransform(hEnemy_, this->transform_);
 			Model::Draw(hEnemy_);
 		}

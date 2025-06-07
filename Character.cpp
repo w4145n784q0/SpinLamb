@@ -36,15 +36,17 @@ namespace {
 		i_originalrangemax,
 		i_convertedrangemin,
 		i_convertedrangemax,
-		i_knockbackpower,
+
 		i_deceleration,
 		i_knockbackend,
 	};
 
 	enum WallHitIndex
 	{
-		i_invincibilityvalue = 0,
-		i_blinkvalue
+		i_knockbackpower = 0,
+		i_invincibilityvalue ,
+		i_blinkvalue,
+
 	};
 
 	enum ShadowIndex
@@ -148,7 +150,7 @@ void Character::SetcsvStatus(std::string _path)
 		HitParam_.ConvertedRangeMin_ = v[i_convertedrangemin];
 		HitParam_.ConvertedRangeMax_ = v[i_convertedrangemax];
 
-		HitParam_.KnockBackPower_ = v[i_knockbackpower];
+		//HitParam_.KnockBackPower_ = v[i_knockbackpower];
 		HitParam_.DecelerationRate_ = v[i_deceleration];
 		HitParam_.KnockBackEnd_ = v[i_knockbackend];
 	}
@@ -157,8 +159,9 @@ void Character::SetcsvStatus(std::string _path)
 	if (csv.IsGetParamName(p_wallhit))
 	{
 		std::vector<float> v = csv.GetParam(p_wallhit);
-		WallHitParam_.InvincibilityValue = static_cast<int>(v[i_invincibilityvalue]);
-		WallHitParam_.blinkValue = static_cast<int>(v[i_blinkvalue]);
+		WallHitParam_.KnockBackPower_ = v[i_knockbackpower];
+		WallHitParam_.InvincibilityValue_ = static_cast<int>(v[i_invincibilityvalue]);
+		WallHitParam_.blinkValue_ = static_cast<int>(v[i_blinkvalue]);
 	}
 
 	std::string p_shadow = "ShadowParam";
@@ -364,8 +367,8 @@ void Character::WallHit()
 	HitParam_.KnockBack_Direction_ = { inverse.x, inverse.y, inverse.z };
 
 	//ノックバック量を速度に代入(一定値)
-	HitParam_.KnockBack_Velocity_.x = HitParam_.KnockBackPower_;
-	HitParam_.KnockBack_Velocity_.z = HitParam_.KnockBackPower_;
+	HitParam_.KnockBack_Velocity_.x = WallHitParam_.KnockBackPower_;
+	HitParam_.KnockBack_Velocity_.z = WallHitParam_.KnockBackPower_;
 
 	WallHitParam_.IsInvincibility_ = true;
 }
@@ -382,8 +385,8 @@ void Character::WallReflect(XMVECTOR pos)
 	HitParam_.KnockBack_Direction_ = { tmp };
 
 	//ノックバック量を速度に代入(一定値)
-	HitParam_.KnockBack_Velocity_.x = HitParam_.KnockBackPower_;
-	HitParam_.KnockBack_Velocity_.z = HitParam_.KnockBackPower_;
+	HitParam_.KnockBack_Velocity_.x = WallHitParam_.KnockBackPower_;
+	HitParam_.KnockBack_Velocity_.z = WallHitParam_.KnockBackPower_;
 
 	WallHitParam_.IsInvincibility_ = true;
 }
@@ -406,7 +409,7 @@ void Character::InvincibilityTimeCalclation()
 	//無敵時間の計算
 	if (WallHitParam_.IsInvincibility_)
 	{
-		if (++WallHitParam_.InvincibilityTime_ > WallHitParam_.InvincibilityValue)
+		if (++WallHitParam_.InvincibilityTime_ > WallHitParam_.InvincibilityValue_)
 		{
 			WallHitParam_.InvincibilityTime_ = 0;
 			WallHitParam_.IsInvincibility_ = false;
