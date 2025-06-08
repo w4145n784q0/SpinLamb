@@ -7,7 +7,7 @@
 
 namespace
 {
-	int SceneTransitionTimer	= 0; //シーン遷移のフラグ
+	int SceneTransitionTimer = 0; //シーン遷移のフラグ
 }
 
 GameModeScene::GameModeScene(GameObject* parent)

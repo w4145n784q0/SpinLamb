@@ -3,7 +3,7 @@
 
 namespace
 {
-	enum MiniMapParam 
+	enum MiniMapIndex
 	{
 		i_reductionXParam = 0,
 		i_reductionZParam,
@@ -64,6 +64,12 @@ void MiniMap::Update()
 void MiniMap::Draw()
 {
 #ifdef _DEBUG
+	if (ImGui::TreeNode("MiniMap"))
+	{
+		ImGui::SliderFloat("positionX", &Trans_Map.position_.x, -1.0f, 1.0f);
+		ImGui::SliderFloat("positionY", &Trans_Map.position_.y, -1.0f, 1.0f);
+		ImGui::TreePop();
+	}
 #endif
 
 	Image::SetTransform(hMap_, Trans_Map);

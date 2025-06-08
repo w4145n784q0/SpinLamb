@@ -162,8 +162,7 @@ void HUD::Draw()
 
 
 #ifdef _DEBUG
-	//ImGui::Text("mapPos.x%.1f", logo.position_.x);
-	//ImGui::Text("mapPos.y%.1f", logo.position_.y);
+
 #endif
 }
 
@@ -213,6 +212,17 @@ void HUD::DrawBattleEnd()
 
 void HUD::DrawPractice()
 {
+#ifdef _DEBUG
+	if (ImGui::TreeNode("PracticeLogo"))
+	{
+		ImGui::SliderFloat("positionX", &logo_backtitle.position_.x, -1.0f, 1.0f);
+		ImGui::SliderFloat("positionY", &logo_backtitle.position_.y, -1.0f, 1.0f);
+
+		ImGui::SliderFloat("positionX", &logo_practice.position_.x, -1.0f, 1.0f);
+		ImGui::SliderFloat("positionY", &logo_practice.position_.y, -1.0f, 1.0f);
+		ImGui::TreePop();
+	}
+#endif
 	Image::SetTransform(hBackTitleLogo_, logo_backtitle);
 	Image::Draw(hBackTitleLogo_);
 
