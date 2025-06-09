@@ -296,21 +296,19 @@ void Player::UpdateIdle()
 	//------------------キーボード入力の移動------------------//
 	if (Input::IsKey(DIK_UP))
 	{
-		Direction_.z = 1.0;
-		MoveRotate();
+		Direction_.z += 1.0f;
 	}
 	if (Input::IsKey(DIK_DOWN))
 	{
-		Direction_.z = -1.0;
-		MoveRotateReverse();
+		Direction_.z -= 1.0f;
 	}
 	if (Input::IsKey(DIK_LEFT))
 	{
-		this->transform_.rotate_.y -= KeyBoardRotateY;
+		Direction_.x -= 1.0f;
 	}
 	if (Input::IsKey(DIK_RIGHT))
 	{
-		this->transform_.rotate_.y += KeyBoardRotateY;
+		Direction_.x += 1.0f;
 	}
 
 	KeyBoradMove();
@@ -384,10 +382,11 @@ void Player::UpdateIdle()
 
 void Player::UpdateCharge()
 {
-	XMFLOAT3 rot = { 0,0,0 };
-	XMStoreFloat3(&rot, MoveParam_.ForwardVector_);
-	AttackArrowTransform_.position_ = { transform_.position_ + rot };
-	AttackArrowTransform_.rotate_.y = this->transform_.rotate_.y;
+	/*XMVECTOR frontArrow = XMVectorScale(MoveParam_.ForwardVector_, 2.0);
+	XMVECTOR pPosition = XMLoadFloat3(&this->transform_.position_);
+	XMVECTOR arrowPosVec = XMVectorAdd(pPosition, frontArrow);
+	XMStoreFloat3(&AttackArrowTransform_.position_, arrowPosVec);
+	AttackArrowTransform_.rotate_.y = this->transform_.rotate_.y;*/
 
 	SetChargingEffect("PaticleAssets\\circle_B.png");
 
@@ -534,6 +533,7 @@ void Player::CameraControl()
 	}
 	else if (CameraState_ == S_DEBUGCAMERA)
 	{
+
 		cameraTransform_.rotate_.x = cameraDebugPos;
 	}
 }
@@ -570,7 +570,17 @@ void Player::CameraUpdate()
 void Player::KeyBoradMove()
 {
 	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
-	CharacterMoveRotate(move, this->transform_.rotate_.y);
+
+	//if (!XMVector3Equal(move, XMVectorZero()))
+	//{
+	//	move = XMVector3Normalize(move);
+	//	//move = RotateVecFront(this->transform_.rotate_.y, move);
+	//	CharacterMoveRotate(move, this->transform_.rotate_.y);
+	//}
+
+
+
+	//CharacterMoveRotate(move, this->transform_.rotate_.y);
 	Direction_ = { 0,0,0 };//最後に進行方向のリセット毎フレーム行う
 }
 
