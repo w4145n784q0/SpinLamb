@@ -47,7 +47,7 @@ namespace {
 
 Player::Player(GameObject* parent) 
 	: Character(parent,"Player"),
-	hPlayer_(-1),hShadow_(-1),
+	hPlayer_(-1), hArrow_(-1),
 	PlayerState_(S_STOP),CameraState_(S_NORMALCAMERA),
 	Direction_({ 0,0,0 }),BackCamera_({ 0,0,0 }), CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 })
 {
@@ -67,6 +67,9 @@ void Player::Initialize()
 
 	hPlayer_ = Model::Load("Model\\chara2.fbx");
 	assert(hPlayer_ >= 0);
+
+	hArrow_ = Model::Load("Model\\AttackArrow2.fbx");
+	assert(hArrow_ >= 0);
 
 	ShadowInit();
 
@@ -137,6 +140,12 @@ void Player::Draw()
 	DrawCharacterModel(hPlayer_, this->transform_);
 
 	ShadowDraw();
+
+	/*if (PlayerState_ == S_CHARGE)
+	{
+		Model::SetTransform(hArrow_, AttackArrowTransform_);
+		Model::Draw(hArrow_);
+	}*/
 
 #ifdef _DEBUG
 	if (ImGui::TreeNode("PlayerStatus"))
@@ -375,6 +384,11 @@ void Player::UpdateIdle()
 
 void Player::UpdateCharge()
 {
+	XMFLOAT3 rot = { 0,0,0 };
+	XMStoreFloat3(&rot, MoveParam_.ForwardVector_);
+	AttackArrowTransform_.position_ = { transform_.position_ + rot };
+	AttackArrowTransform_.rotate_.y = this->transform_.rotate_.y;
+
 	SetChargingEffect("PaticleAssets\\circle_B.png");
 
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))

@@ -12,8 +12,8 @@ private:
 	//プレイヤーモデル
 	int hPlayer_;
 
-	//影のモデル
-	int hShadow_;
+	//進行方向モデル
+	int hArrow_;
 
 	//----------プレイヤーステート----------
 	enum State
@@ -46,6 +46,8 @@ private:
 	Transform cameraTransform_;//カメラのTransform 回転だけ使う
 	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
 
+	//----------攻撃関係----------
+	Transform AttackArrowTransform_;//攻撃方向のTransform
 
 public:
 
