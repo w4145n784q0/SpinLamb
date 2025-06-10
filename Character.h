@@ -44,6 +44,9 @@ protected:
         XMVECTOR ForwardVector_ = { 0,0,0 };//キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算 正規化した値を入れる
         XMVECTOR MoveDirection_ = { 0,0,0 };//移動方向 この値に速さの要素をかけて移動ベクトル化する
         XMVECTOR NewPositon_ = { 0,0,0 };//移動後の位置ベクトル
+		Transform ArrowTransform_;//チャージ/攻撃準備中の矢印のトランスフォーム
+        XMFLOAT3 ArrowScale_;//矢印の大きさ
+		float AddArrowDepth_ = 0.0f;//矢印の奥行き(前方向)の調整値
     };
     MoveParam MoveParam_;
 
@@ -77,7 +80,6 @@ protected:
 		float ConvertedRangeMax_ = 0.0f; //変換後のノックバック量の最大値
         XMFLOAT3 KnockBack_Direction_ = { 0,0,0 };//ノックバックする方向
         XMFLOAT3 KnockBack_Velocity_ = {0,0,0};//ノックバックする速度
-        //float KnockBackPower_ = 0.0f; //ノックバックする強さ（変化なし）
         float DecelerationRate_ = 0.0f;//ノックバック時の1fごとの減速率
         float KnockBackEnd_ = 0.0f;//ノックバックを終了する値
     };
@@ -153,6 +155,12 @@ public:
     /// </summary>
     void SetStartPosition() { this->transform_.position_ = InitParam_.StartPosition_; }
 
+    void InitArrow() {
+        MoveParam_.ArrowTransform_.position_ = { 0.0f,0.0f, 0.0f };
+        MoveParam_.ArrowTransform_.rotate_ = { 0.0f,0.0f, 0.0f };
+        MoveParam_.ArrowTransform_.scale_ = MoveParam_.ArrowScale_;
+    }
+
     /// <summary>
     /// キャラクターモデル描画
     /// </summary>
@@ -168,7 +176,7 @@ public:
     /// <summary>
     /// 影モデルの初期化
     /// </summary>
-    void ShadowInit();
+    void InitShadow();
 
     /// <summary>
     /// 影付け（毎フレーム更新）
@@ -285,6 +293,11 @@ public:
     /// 加速度の加算
     /// </summary>
     void Charging();
+
+    /// <summary>
+    /// チャージ中の矢印位置をセット
+    /// </summary>
+    void SetArrow();
 
     /// <summary>
     /// 減速処理(加速時の増加量使用)

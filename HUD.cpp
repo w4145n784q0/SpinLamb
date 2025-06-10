@@ -2,9 +2,6 @@
 #include"Engine/Image.h"
 #include"BattleScene.h"
 
-#include "imgui/imgui.h"
-#include "imgui/imgui_impl_dx11.h"
-#include "imgui/imgui_impl_win32.h"
 
 
 //•`‰æ‘€ì‚Ì‚İˆµ‚¤ƒNƒ‰ƒX
@@ -52,7 +49,7 @@ namespace
 }
 
 HUD::HUD(GameObject* parent)
-	:GameObject(parent, "HUD"), hBackTitleLogo_(-1),hPracticeNow_(-1), hStart_(-1),hTime_(-1),
+	:GameObject(parent, "HUD"), hBackTitleLogo_(-1),hPracticeNow_(-1), hStart_(-1),
 	hNumber0_(-1), hNumber1_(-1),hNumber2_(-1),hNumber3_(-1),hNumber4_(-1),
 	hNumber5_(-1),hNumber6_(-1),hNumber7_(-1),hNumber8_(-1),hNumber9_(-1),
 	hFinish_(-1),GameModeHUD_(Max),TimeNumber_(0),Timeten_(0),Timeone_(0)

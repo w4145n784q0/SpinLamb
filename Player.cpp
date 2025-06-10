@@ -71,8 +71,7 @@ void Player::Initialize()
 	hArrow_ = Model::Load("Model\\AttackArrow2.fbx");
 	assert(hArrow_ >= 0);
 
-	ShadowInit();
-
+	InitArrow();
 	SetStartPosition();
 	
 	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),HitParam_. ColliderSize_);
@@ -141,11 +140,11 @@ void Player::Draw()
 
 	ShadowDraw();
 
-	/*if (PlayerState_ == S_CHARGE)
+	if (PlayerState_ == S_CHARGE)
 	{
-		Model::SetTransform(hArrow_, AttackArrowTransform_);
+		Model::SetTransform(hArrow_, this->MoveParam_.ArrowTransform_);
 		Model::Draw(hArrow_);
-	}*/
+	}
 
 #ifdef _DEBUG
 	if (ImGui::TreeNode("PlayerStatus"))
@@ -159,9 +158,9 @@ void Player::Draw()
 
 		if (ImGui::TreeNode("Transform.Rotate"))
 		{
-			ImGui::Text("RotateX:%.3f", &this->transform_.position_.x);
-			ImGui::Text("RotateY:%.3f", &this->transform_.position_.y);
-			ImGui::Text("RotateZ:%.3f", &this->transform_.position_.z);
+			ImGui::Text("RotateX:%.3f", &this->transform_.rotate_.x);
+			ImGui::Text("RotateY:%.3f", &this->transform_.rotate_.y);
+			ImGui::Text("RotateZ:%.3f", &this->transform_.rotate_.z);
 			ImGui::TreePop();
 		}
 
@@ -369,12 +368,13 @@ void Player::UpdateIdle()
 
 void Player::UpdateCharge()
 {
-	/*XMVECTOR frontArrow = XMVectorScale(MoveParam_.ForwardVector_, 2.0);
+	/*XMVECTOR frontArrow = XMVectorScale(MoveParam_.ForwardVector_, 3.0);
 	XMVECTOR pPosition = XMLoadFloat3(&this->transform_.position_);
 	XMVECTOR arrowPosVec = XMVectorAdd(pPosition, frontArrow);
 	XMStoreFloat3(&AttackArrowTransform_.position_, arrowPosVec);
 	AttackArrowTransform_.rotate_.y = this->transform_.rotate_.y;*/
 
+	SetArrow();
 	SetChargingEffect("PaticleAssets\\circle_B.png");
 
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))

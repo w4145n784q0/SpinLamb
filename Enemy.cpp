@@ -56,7 +56,10 @@ void Enemy::Initialize()
 	hEnemy_ = Model::Load("Model\\chara2.fbx");
 	assert(hEnemy_ >= 0);
 
-	ShadowInit();
+	hArrow_ = Model::Load("Model\\AttackArrow2.fbx");
+	assert(hArrow_ >= 0);
+
+	InitArrow();
 	SetStartPosition();
 
 	pPlayer_ = (Player*)FindObject("Player");
@@ -130,14 +133,27 @@ void Enemy::Draw()
 
 	ShadowDraw();
 
+	if (EnemyState_ == S_AIM)
+	{
+		Model::SetTransform(hArrow_, this->MoveParam_.ArrowTransform_);
+		Model::Draw(hArrow_);
+	}
+
 #ifdef _DEBUG
 	if (ImGui::TreeNode("EnemyStatus"))
 	{
-		if (ImGui::TreeNode("Position"))
+		if (ImGui::TreeNode("Transform.Position"))
 		{
-			ImGui::InputFloat("PositionX:%.3f", &this->transform_.position_.x);
-			ImGui::InputFloat("PositionY:%.3f", &this->transform_.position_.y);
-			ImGui::InputFloat("PositionZ:%.3f", &this->transform_.position_.z);
+			ImGui::SliderFloat("PositionX:%.3f", &this->transform_.position_.x, WestEnd_, EastEnd_);
+			ImGui::SliderFloat("PositionZ:%.3f", &this->transform_.position_.z, SouthEnd_, NorthEnd_);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Transform.Rotate"))
+		{
+			ImGui::Text("RotateX:%.3f", &this->transform_.rotate_.x);
+			ImGui::Text("RotateY:%.3f", &this->transform_.rotate_.y);
+			ImGui::Text("RotateZ:%.3f", &this->transform_.rotate_.z);
 			ImGui::TreePop();
 		}
 
@@ -251,6 +267,9 @@ void Enemy::UpdateAim()
 	SetChargingEffect("PaticleAssets\\circle_R.png");
 	FastRotate();
 	Charging();
+	SetArrow();
+	float f = fmod(this->transform_.rotate_.y + XM_PI, XM_2PI);
+	this->MoveParam_.ArrowTransform_.rotate_.y = f;
 
 	//時間経過で攻撃状態へ（配列中のランダムな時間）
 	if (++AimTimer_ > EnemyAttackTimeArray[RandomAim_])

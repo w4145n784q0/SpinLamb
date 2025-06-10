@@ -165,6 +165,7 @@
     <ClCompile Include="Engine\Transform.cpp" />
     <ClCompile Include="Fence.cpp" />
     <ClCompile Include="GameModeScene.cpp" />
+    <ClCompile Include="GameTimer.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="HowToPlayScene.cpp" />
     <ClCompile Include="HUD.cpp" />
@@ -216,6 +217,7 @@
     <ClInclude Include="Engine\Transform.h" />
     <ClInclude Include="Fence.h" />
     <ClInclude Include="GameModeScene.h" />
+    <ClInclude Include="GameTimer.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="HowToPlayScene.h" />
     <ClInclude Include="HUD.h" />

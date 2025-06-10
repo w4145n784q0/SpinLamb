@@ -47,7 +47,7 @@ private:
 	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
 
 	//----------攻撃関係----------
-	Transform AttackArrowTransform_;//攻撃方向のTransform
+	//Transform AttackArrowTransform_;//攻撃方向のTransform
 
 public:
 

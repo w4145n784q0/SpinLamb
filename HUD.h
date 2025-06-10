@@ -18,9 +18,6 @@ private:
 	//ゲーム開始ロゴ(バトルシーン用)
 	int hStart_;
 
-	//制限時間(バトルシーン用)
-	int hTime_;
-
 	//ナンバー
 	int hNumber0_;
 	int hNumber1_;

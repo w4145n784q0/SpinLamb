@@ -13,7 +13,11 @@ namespace {
 		i_vel = 0,
 		i_accele_value,
 		i_accele_max,
-		i_friction
+		i_friction,
+		i_arrowscaleX,
+		i_arrowscaleY,
+		i_arrowscaleZ,
+		i_addarrowdepth
 	};
 
 	enum RotateIndex
@@ -86,10 +90,11 @@ Character::Character(GameObject* parent, const std::string& name)
 	assert(hSoundcharge_ >= 0);
 	hSoundattack_ = Audio::Load("Sound\\SE\\attack.wav", false, i_MaxChara);
 	assert(hSoundattack_ >= 0);
-	hSoundCollision_ = Audio::Load("Sound\\SE\\collision.wav",false,1);
+	hSoundCollision_ = Audio::Load("Sound\\SE\\collision.wav",false);
 	assert(hSoundCollision_ >= 0);
 
 	GetWireNormal();
+	InitShadow();
 }
 
 Character::~Character()
@@ -119,6 +124,8 @@ void Character::SetcsvStatus(std::string _path)
 		MoveParam_.AcceleValue_ = v[i_accele_value];
 		MoveParam_.FullAccelerate_ = v[i_accele_max];
 		MoveParam_.Friction_ = v[i_friction];
+		MoveParam_.ArrowScale_ = { v[i_arrowscaleX],v[i_arrowscaleY],v[i_arrowscaleZ] };
+		MoveParam_.AddArrowDepth_ = v[i_addarrowdepth];
 	}
 
 	std::string p_rotate = "RotateParam";
@@ -149,8 +156,6 @@ void Character::SetcsvStatus(std::string _path)
 		HitParam_.OriginaRangeMax_ = v[i_originalrangemax];
 		HitParam_.ConvertedRangeMin_ = v[i_convertedrangemin];
 		HitParam_.ConvertedRangeMax_ = v[i_convertedrangemax];
-
-		//HitParam_.KnockBackPower_ = v[i_knockbackpower];
 		HitParam_.DecelerationRate_ = v[i_deceleration];
 		HitParam_.KnockBackEnd_ = v[i_knockbackend];
 	}
@@ -204,7 +209,7 @@ void Character::CharacterGravity()
 	}
 }
 
-void Character::ShadowInit()
+void Character::InitShadow()
 {
 	ShadowParam_.pGround_ = (Ground*)FindObject("Ground");
 	ShadowParam_.hShadow_ = Model::Load("Model\\ShadowPoint.fbx");
@@ -474,6 +479,15 @@ void Character::Charging()
 	{
 		MoveParam_.Acceleration_ = MoveParam_.FullAccelerate_;
 	}
+}
+
+void Character::SetArrow()
+{
+	XMVECTOR frontArrow = XMVectorScale(this->MoveParam_.ForwardVector_, this->MoveParam_.AddArrowDepth_);
+	XMVECTOR PosVec = XMLoadFloat3(&this->transform_.position_);
+	XMVECTOR arrowPosVec = XMVectorAdd(PosVec, frontArrow);
+	XMStoreFloat3(&this->MoveParam_.ArrowTransform_.position_, arrowPosVec);
+	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
 }
 
 XMVECTOR Character::RotateVecFront(float rotY, XMVECTOR front)

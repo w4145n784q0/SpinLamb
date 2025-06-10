@@ -12,6 +12,9 @@ private:
 	//敵モデル
     int hEnemy_;
 
+	//進行方向モデル
+	int hArrow_;
+
 	//インスタンス関係
 	Player* pPlayer_;
 
