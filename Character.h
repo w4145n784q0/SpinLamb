@@ -217,6 +217,13 @@ public:
     }
 
     /// <summary>
+    /// 受け取ったベクトルからキャラクターの回転量を計算
+    /// </summary>
+    /// <param name="_MoveVector">進行したい方向ベクトル</param>
+    /// <returns>回転する角度(Y軸回転)</returns>
+    float RotateDirectionVector(XMVECTOR _MoveVector);
+
+    /// <summary>
     /// 反射処理
     /// </summary>
     /// <param name="myVector">自身の位置ベクトル</param>

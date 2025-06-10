@@ -42,4 +42,6 @@ namespace Camera
 	//U“®ŠJn
 	//_shaketime U“®‚³‚¹‚éŠÔ
 	void CameraShakeStart(float _shaketime);
+
+	void SetCSVCamera();
 };

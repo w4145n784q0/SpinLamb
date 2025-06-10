@@ -1,5 +1,6 @@
 #include "camera.h"
 #include "Direct3D.h"
+#include"../Engine/CsvReader.h"
 
 XMFLOAT3 _position;
 XMFLOAT3 _target;
@@ -7,17 +8,37 @@ XMMATRIX _view;
 XMMATRIX _proj;
 XMMATRIX _billBoard;
 
-bool IsCameraShake;//カメラが振動してるか
-float ShakeTimer;//カメラの振動カウント
-const float ShakeSpeed = 300.0f;//振動スピード
-const float ShakeWidth = 0.5f;//振動幅
-const float frame = 0.016f;//1フレーム
+namespace
+{
+	enum CameraIndex
+	{
+		i_shakeSpeed = 0,	//振動スピード
+		i_shakeWidth,		//振動幅
+		i_frame,			//1フレーム
+		i_initPositionX,	//初期位置X
+		i_initPositionY,	//初期位置Y
+		i_initPositionZ,	//初期位置Z
+		i_initTargetX,		//初期焦点X
+		i_initTargetY,		//初期焦点Y
+		i_initTargetZ,		//初期焦点Z
+	};
+
+	bool IsCameraShake;//カメラが振動してるか
+	float ShakeTimer;//カメラの振動カウント
+	float ShakeSpeed = 0.0f;//振動スピード
+	float ShakeWidth = 0.0f;//振動幅
+	float frame = 0.0f;//1フレーム
+	XMFLOAT3 InitPosition = { 0,0,0 };//初期位置
+	XMFLOAT3 InitTarget = { 0,0,0 };//初期焦点
+}
 
 //初期化（プロジェクション行列作成）
 void Camera::Initialize()
 {
-	_position = XMFLOAT3(0, 3, -10);	//カメラの位置
-	_target = XMFLOAT3( 0, 0, 0);	//カメラの焦点
+	SetCSVCamera();
+
+	_position = InitPosition;	//カメラの位置
+	_target = InitTarget;	//カメラの焦点
 
 	//プロジェクション行列
 	_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_, 0.1f, 1000.0f);
@@ -107,4 +128,22 @@ void Camera::CameraShakeStart(float _shaketime)
 	IsCameraShake = true;
 	ShakeTimer = _shaketime;
 
+}
+
+void Camera::SetCSVCamera()
+{
+	CsvReader csv;
+	csv.Load("CSVdata\\CameraData.csv");
+
+	std::string camera = "Camera";
+	if (csv.IsGetParamName(camera))
+	{
+		std::vector<float> v = csv.GetParam(camera);
+
+		ShakeSpeed = v[i_shakeSpeed];
+		float ShakeWidth = v[i_shakeWidth];
+		float frame = v[i_frame];
+		InitPosition = { v[i_initPositionX],  v[i_initPositionY],  v[i_initPositionZ] };
+		InitTarget = { v[i_initTargetX],  v[i_initTargetY],  v[i_initTargetZ] };
+	}
 }
