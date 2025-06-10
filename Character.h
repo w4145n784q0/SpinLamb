@@ -45,6 +45,7 @@ protected:
         XMVECTOR MoveDirection_ = { 0,0,0 };//移動方向 この値に速さの要素をかけて移動ベクトル化する
         XMVECTOR NewPositon_ = { 0,0,0 };//移動後の位置ベクトル
 		Transform ArrowTransform_;//チャージ/攻撃準備中の矢印のトランスフォーム
+        XMFLOAT3 ArrowRotate_;//矢印の初期回転
         XMFLOAT3 ArrowScale_;//矢印の大きさ
 		float AddArrowDepth_ = 0.0f;//矢印の奥行き(前方向)の調整値
     };
@@ -157,7 +158,7 @@ public:
 
     void InitArrow() {
         MoveParam_.ArrowTransform_.position_ = { 0.0f,0.0f, 0.0f };
-        MoveParam_.ArrowTransform_.rotate_ = { 0.0f,0.0f, 0.0f };
+        MoveParam_.ArrowTransform_.rotate_ = MoveParam_.ArrowRotate_;
         MoveParam_.ArrowTransform_.scale_ = MoveParam_.ArrowScale_;
     }
 

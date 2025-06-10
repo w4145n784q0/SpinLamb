@@ -14,6 +14,9 @@ namespace {
 		i_accele_value,
 		i_accele_max,
 		i_friction,
+		i_arrowrotateX,
+		i_arrowrotateY,
+		i_arrowrotateZ,
 		i_arrowscaleX,
 		i_arrowscaleY,
 		i_arrowscaleZ,
@@ -124,6 +127,7 @@ void Character::SetcsvStatus(std::string _path)
 		MoveParam_.AcceleValue_ = v[i_accele_value];
 		MoveParam_.FullAccelerate_ = v[i_accele_max];
 		MoveParam_.Friction_ = v[i_friction];
+		MoveParam_.ArrowRotate_ = { v[i_arrowrotateX],v[i_arrowrotateY],v[i_arrowrotateZ] };
 		MoveParam_.ArrowScale_ = { v[i_arrowscaleX],v[i_arrowscaleY],v[i_arrowscaleZ] };
 		MoveParam_.AddArrowDepth_ = v[i_addarrowdepth];
 	}

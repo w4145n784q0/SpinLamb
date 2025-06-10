@@ -34,7 +34,7 @@ namespace
 }
 
 Enemy::Enemy(GameObject* parent)
-	:Character(parent,"Enemy"), hEnemy_(-1), pPlayer_(nullptr),
+	:Character(parent,"Enemy"), hEnemy_(-1),hArrow_(-1), pPlayer_(nullptr),
 	EnemyState_(S_STOP),AimTimer_(0), 
 	pPositionVec_({0,0,0}),PlayerPosition_({0,0,0}),PlayerAcceleration_(0.0f),
 	RandomAim_(0), HitStopTimer_(0)
@@ -267,9 +267,16 @@ void Enemy::UpdateAim()
 	SetChargingEffect("PaticleAssets\\circle_R.png");
 	FastRotate();
 	Charging();
-	SetArrow();
-	float f = fmod(this->transform_.rotate_.y + XM_PI, XM_2PI);
-	this->MoveParam_.ArrowTransform_.rotate_.y = f;
+	//SetArrow();
+
+	XMVECTOR frontArrow = XMVectorScale(this->MoveParam_.ForwardVector_, this->MoveParam_.AddArrowDepth_);
+	XMVECTOR PosVec = XMLoadFloat3(&this->transform_.position_);
+	XMVECTOR arrowPosVec = XMVectorAdd(PosVec, frontArrow);
+	XMStoreFloat3(&this->MoveParam_.ArrowTransform_.position_, arrowPosVec);
+
+	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
+
+
 
 	//時間経過で攻撃状態へ（配列中のランダムな時間）
 	if (++AimTimer_ > EnemyAttackTimeArray[RandomAim_])
