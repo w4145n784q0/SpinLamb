@@ -65,7 +65,7 @@ void Player::Initialize()
 	SetcsvStatus(path);
 	SetCSVPlayer();
 
-	hPlayer_ = Model::Load("Model\\chara2.fbx");
+	hPlayer_ = Model::Load("Model\\chara.fbx");
 	assert(hPlayer_ >= 0);
 
 	hArrow_ = Model::Load("Model\\AttackArrow2.fbx");

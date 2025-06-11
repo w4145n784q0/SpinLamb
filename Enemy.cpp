@@ -55,7 +55,7 @@ void Enemy::Initialize()
 	SetcsvStatus(path);
 	SetCSVEnemy();
 
-	hEnemy_ = Model::Load("Model\\chara2.fbx");
+	hEnemy_ = Model::Load("Model\\chara.fbx");
 	assert(hEnemy_ >= 0);
 
 	hArrow_ = Model::Load("Model\\AttackArrow2.fbx");
