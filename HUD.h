@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"array"
+#include"GameTimer.h"
 
 //時間表示・ロゴ・モード表示クラスを表示
 class HUD :
@@ -44,16 +45,9 @@ private:
 	};
 	GameMode GameModeHUD_;
 
-	//----------時間描画----------
+	//----------時間クラスのインスタンス----------
 
-	//時間記録
-	int TimeNumber_;
-
-	//時間カウント(10の位)
-	int Timeten_;
-
-	//時間カウント(10の位)
-	int Timeone_;
+	GameTimer* pGameTimer_;
 
 public:
 	//コンストラクタ
@@ -74,6 +68,7 @@ public:
 	//開放
 	void Release() override;
 
+	void timerstart() { pGameTimer_->StartTimer(); }
 
 	void UpdateBattlePreStart();
 	void UpdateBattleInProgress();
@@ -89,8 +84,6 @@ public:
 	void SetStateBattleInProgress() { GameModeHUD_ = BattleInProgress; }
 	void SetStateBattleEnd(){ GameModeHUD_ = BattleEnd; }
 	void SetStatePractice() { GameModeHUD_ = Practice; }
-
-	void SetTime(int _time) { TimeNumber_ = _time; }
 
 	void SetCSV();
 };

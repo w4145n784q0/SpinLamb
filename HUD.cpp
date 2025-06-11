@@ -3,7 +3,6 @@
 #include"BattleScene.h"
 
 
-
 //描画操作のみ扱うクラス
 namespace
 {
@@ -45,6 +44,9 @@ namespace
 	//ナンバーハンドルの配列
 	std::array<int, MaxNumberIndex> ArrayHandle;
 
+	//ナンバーハンドルの添え字
+	int HandleIndexTen = 0;
+	int HandleIndexOne = 0;
 
 }
 
@@ -52,7 +54,7 @@ HUD::HUD(GameObject* parent)
 	:GameObject(parent, "HUD"), hBackTitleLogo_(-1),hPracticeNow_(-1), hStart_(-1),
 	hNumber0_(-1), hNumber1_(-1),hNumber2_(-1),hNumber3_(-1),hNumber4_(-1),
 	hNumber5_(-1),hNumber6_(-1),hNumber7_(-1),hNumber8_(-1),hNumber9_(-1),
-	hFinish_(-1),GameModeHUD_(Max),TimeNumber_(0),Timeten_(0),Timeone_(0)
+	hFinish_(-1),GameModeHUD_(Max),pGameTimer_(nullptr)
 
 {
 }
@@ -109,6 +111,9 @@ void HUD::Initialize()
 
 	ArrayHandle = { hNumber0_,hNumber1_,hNumber2_,hNumber3_,hNumber4_,
 	hNumber5_,hNumber6_,hNumber7_,hNumber8_,hNumber9_ };
+
+	Instantiate<GameTimer>(this);
+	pGameTimer_ = (GameTimer*)FindObject("GameTimer");
 }
 
 void HUD::Update()
@@ -174,8 +179,8 @@ void HUD::UpdateBattlePreStart()
 
 void HUD::UpdateBattleInProgress()
 {
-	Timeten_ = TimeNumber_ / TimeDivision;
-	Timeone_ = TimeNumber_ % TimeDivision;
+	HandleIndexTen = pGameTimer_->GetTimeTen();
+	HandleIndexOne = pGameTimer_->GetTimeOne();
 }
 
 void HUD::UpdateBattleEnd()
@@ -194,10 +199,10 @@ void HUD::DrawBattlePreStart()
 
 void HUD::DrawBattleInProgress()
 {
-	Image::SetTransform(ArrayHandle[Timeten_], TenTime);
-	Image::Draw(ArrayHandle[Timeten_]);
-	Image::SetTransform(ArrayHandle[Timeone_], OneTime);
-	Image::Draw(ArrayHandle[Timeone_]);
+	Image::SetTransform(ArrayHandle[HandleIndexTen], TenTime);
+	Image::Draw(ArrayHandle[HandleIndexTen]);
+	Image::SetTransform(ArrayHandle[HandleIndexOne], OneTime);
+	Image::Draw(ArrayHandle[HandleIndexOne]);
 
 }
 

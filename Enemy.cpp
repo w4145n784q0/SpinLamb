@@ -19,6 +19,7 @@ namespace
 		i_chaseLength,
 		i_lookRotateAngle,
 		i_lookRotateValue,
+		i_arrowrotatecorrection,
 		i_EnemyAttackTime_1,
 		i_EnemyAttackTime_2,
 		i_EnemyAttackTime_3,
@@ -29,6 +30,7 @@ namespace
 	float ChaseLength = 0.0f;//追跡状態から攻撃準備に移る距離
 	float LookRotaeAngle = 0;//敵がプレイヤーの方向を向く際のトリガー　この値を超えたら回転
 	float LookRotateValue = 0.0f;//プレイヤー方向を向く際の1fごとの回転量
+	float ArrowRotateCorrection = 0.0f;//矢印モデルの回転補正
 	
 	std::vector<int> EnemyAttackTimeArray = {0,0,0,0};//敵が攻撃するまでの時間の配列　ランダムに選ばれる
 }
@@ -267,14 +269,9 @@ void Enemy::UpdateAim()
 	SetChargingEffect("PaticleAssets\\circle_R.png");
 	FastRotate();
 	Charging();
-	//SetArrow();
+	SetArrow();
 
-	XMVECTOR frontArrow = XMVectorScale(this->MoveParam_.ForwardVector_, this->MoveParam_.AddArrowDepth_);
-	XMVECTOR PosVec = XMLoadFloat3(&this->transform_.position_);
-	XMVECTOR arrowPosVec = XMVectorAdd(PosVec, frontArrow);
-	XMStoreFloat3(&this->MoveParam_.ArrowTransform_.position_, arrowPosVec);
-
-	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
+	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y + ArrowRotateCorrection;
 
 
 
@@ -473,6 +470,7 @@ void Enemy::SetCSVEnemy()
 		ChaseLength = v[i_chaseLength];
 		LookRotaeAngle = v[i_lookRotateAngle];
 		LookRotateValue = v[i_lookRotateValue];
+		ArrowRotateCorrection = v[i_arrowrotatecorrection];
 
 		int arr[] = { static_cast<int>(v[i_EnemyAttackTime_1]), static_cast<int>(v[i_EnemyAttackTime_2]),
 			static_cast<int>(v[i_EnemyAttackTime_3]), static_cast<int>(v[i_EnemyAttackTime_4]) };

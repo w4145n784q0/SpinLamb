@@ -375,6 +375,7 @@ void Player::UpdateCharge()
 	AttackArrowTransform_.rotate_.y = this->transform_.rotate_.y;*/
 
 	SetArrow();
+	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
 	SetChargingEffect("PaticleAssets\\circle_B.png");
 
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))

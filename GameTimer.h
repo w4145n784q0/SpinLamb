@@ -1,33 +1,21 @@
 #pragma once
 #include "Engine/GameObject.h"
+
+//時間の計算を行うクラス
 class GameTimer :
     public GameObject
 {
 private:
 
-	//----------画像ハンドル----------
-
-	//時間の数字画像ハンドル
-	int hNumber0_;
-	int hNumber1_;
-	int hNumber2_;
-	int hNumber3_;
-	int hNumber4_;
-	int hNumber5_;
-	int hNumber6_;
-	int hNumber7_;
-	int hNumber8_;
-	int hNumber9_;
-
 	//----------時間描画----------
 
-	//時間記録
-	int TimeNumber_;
+	//現在の時間
+	int CurrentGameTime_;
 
-	//時間カウント(10の位)
+	//10の位の値
 	int Timeten_;
 
-	//時間カウント(1の位)
+	//1の位の値
 	int Timeone_;
 
 	//時間の状態
@@ -37,7 +25,6 @@ private:
 		MAXTIME 
 	};
 	TimeState TimeState_;
-
 
 public:
 	//コンストラクタ
@@ -60,5 +47,12 @@ public:
 
 	void UpdateTimeStop();
 	void UpdateTimeCount();
-};
 
+	void StartTimer() { TimeState_ = COUNTING; }
+	void StopTimer() { TimeState_ = STOP; }
+
+	int GetTimeTen() { return Timeten_; }
+	int GetTimeOne() { return Timeone_; }
+	int GetCurrentGameTime() { return CurrentGameTime_; }
+	void SetCurrentGameTime(int _time) { CurrentGameTime_ = _time; }
+};

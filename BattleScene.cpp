@@ -62,7 +62,7 @@ void BattleScene::Initialize()
 
 	HUD* pHUD = (HUD*)FindObject("HUD");
 	pHUD->SetStateBattle();
-	pHUD->SetTime(GameTime_);
+	//pHUD->SetTime(GameTime_);
 
 	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");
 	assert(hBackScreen_ >= 0);
@@ -159,7 +159,7 @@ void BattleScene::UpdateBattle()
 		{
 			GameTime_--;
 			HUD* pHUD = (HUD*)FindObject("HUD");
-			pHUD->SetTime(GameTime_);
+			///pHUD->SetTime(GameTime_);
 		}
 	}
 }

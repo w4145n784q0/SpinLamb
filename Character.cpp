@@ -491,7 +491,6 @@ void Character::SetArrow()
 	XMVECTOR PosVec = XMLoadFloat3(&this->transform_.position_);
 	XMVECTOR arrowPosVec = XMVectorAdd(PosVec, frontArrow);
 	XMStoreFloat3(&this->MoveParam_.ArrowTransform_.position_, arrowPosVec);
-	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
 }
 
 XMVECTOR Character::RotateVecFront(float rotY, XMVECTOR front)
