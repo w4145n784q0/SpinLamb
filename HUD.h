@@ -3,7 +3,9 @@
 #include"array"
 #include"GameTimer.h"
 
-//時間表示・ロゴ・モード表示クラスを表示
+//時間表示・ロゴ・モード表示などのUIを描画するクラス
+//座標などを初期化時に読みこみ、指示されたら表示する
+
 class HUD :
     public GameObject
 {
@@ -75,16 +77,15 @@ public:
 	void UpdateBattleEnd();
 	void UpdatePractice();
 
-	void DrawBattlePreStart();
-	void DrawBattleInProgress();
-	void DrawBattleEnd();
-	void DrawPractice();
-
-	void SetStateBattle() { GameModeHUD_ = BattlePreStart; }
-	void SetStateBattleInProgress() { GameModeHUD_ = BattleInProgress; }
-	void SetStateBattleEnd(){ GameModeHUD_ = BattleEnd; }
-	void SetStatePractice() { GameModeHUD_ = Practice; }
-
 	void SetCSV();
+
+	void DrawPracticeLogo();
+	void DrawTimer();
+	void DrawStartLogo();
+	void DrawFinishLogo();
+
+	//GameTimerポインタを設定
+	void SetTimerPointer(GameTimer* _gametimer) { pGameTimer_ = _gametimer; }
+
 };
 

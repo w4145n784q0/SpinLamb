@@ -112,15 +112,6 @@ void Enemy::Update()
 		break;
 	}
 
-	//if (!WallHitParam_.IsInvincibility_ && !(EnemyState_ == S_WALLHIT))//壁ダメージ判定
-	//{
-	//	if (IsOutsideStage(this->transform_.position_))
-	//	{
-	//		WallHit();
-	//		EnemyState_ = S_WALLHIT;
-	//	}
-	//}
-
 	if (!(EnemyState_ == S_WALLHIT))//壁ダメージ判定
 	{
 		InvincibilityTimeCalclation();

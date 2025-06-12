@@ -4,10 +4,7 @@
 #include"Engine/SceneManager.h"
 #include"Engine/Audio.h"
 
-#include"Player.h"
-#include"Enemy.h"
 #include"MiniMap.h"
-#include"HUD.h"
 #include"StageManager.h"
 
 namespace
@@ -29,9 +26,10 @@ namespace
 }
 
 BattleScene::BattleScene(GameObject* parent)
-	:GameObject(parent,"BattleScene") ,BattleState(BEFORE),
+	:GameObject(parent,"BattleScene") ,BattleState_(BEFORE),
 	 hBackScreen_(-1),hSoundBattle_(-1), hSoundWhistle_(-1),
-	PlayerScore_(0),EnemyScore_(0),GameTime_(GameTimeLimit),pPlayerScore_(0),pEnemyScore_(0)
+	PlayerScore_(0),EnemyScore_(0),GameTime_(GameTimeLimit),pPlayerScore_(0),pEnemyScore_(0),
+	pHUD_(nullptr),pGameTimer_(nullptr)
 {
 }
 
@@ -46,6 +44,7 @@ void BattleScene::Initialize()
 	Instantiate<Enemy>(this);
 	Instantiate<MiniMap>(this);
 	Instantiate<HUD>(this);
+	Instantiate<GameTimer>(this);
 
 	StageManager* pS = (StageManager*)FindObject("StageManager");
 	float north = pS->GetNorthEnd();
@@ -60,8 +59,13 @@ void BattleScene::Initialize()
 	pEnemy->SetEnd(north, south, west, east);
 
 
-	HUD* pHUD = (HUD*)FindObject("HUD");
-	pHUD->SetStateBattle();
+	pGameTimer_ = (GameTimer*)FindObject("GameTimer");
+	pHUD_ = (HUD*)FindObject("HUD");
+	pHUD_->SetTimerPointer(pGameTimer_);
+	pGameTimer_->SetCurrentGameTime(GameTimeLimit);
+
+
+	//pHUD->SetStateBattle();
 	//pHUD->SetTime(GameTime_);
 
 	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");
@@ -85,7 +89,7 @@ void BattleScene::Initialize()
 
 void BattleScene::Update()
 {
-	switch (BattleState)
+	switch (BattleState_)
 	{
 	case BattleScene::BEFORE:
 		UpdateBattleBefore();
@@ -110,6 +114,29 @@ void BattleScene::Draw()
 
 	pPlayerScore_->Draw(PlayerScorePosX, PlayerScorePosY, PlayerScore_);
 	pEnemyScore_->Draw(EnemyScorePosX, EnemyScorePosY, EnemyScore_);
+
+	switch (BattleState_)
+	{
+	case BattleScene::BEFORE:
+	{
+		pHUD_->DrawStartLogo();
+	}
+		break;
+	case BattleScene::NOW:
+	{
+		pHUD_->DrawTimer();
+	}
+		break;
+	case BattleScene::AFTER:
+	{
+		pHUD_->DrawFinishLogo();
+	}
+		break;
+	case BattleScene::MAX:
+		break;
+	default:
+		break;
+	}
 }
 
 void BattleScene::Release()
@@ -122,46 +149,56 @@ void BattleScene::UpdateBattleBefore()
 	{
 		Timecounter = 0;
 
-		BattleState = NOW;
+		BattleState_ = NOW;
 		Player* pPlayer_ = (Player*)FindObject("Player");
 		pPlayer_->PlayerStart();
 
 		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
 		pEnemy->EnemyStart();
 
-		HUD* pHUD = (HUD*)FindObject("HUD");
-		pHUD->SetStateBattleInProgress();
+		//HUD* pHUD = (HUD*)FindObject("HUD");
+		//pHUD->SetStateBattleInProgress();
+
+		
+
+		pGameTimer_->StartTimer();
 	}
 }
 
 void BattleScene::UpdateBattle()
 {
-	if (GameTime_ <= 0)
+	//GameTimer‚©‚çŽžŠÔØ‚ê‚É‚È‚Á‚½‚±‚Æ‚ðŽó‚¯Žæ‚Á‚½‚çI—¹ó‘Ô‚Ö
+	if (pGameTimer_->GetCurrentGameTime() <= 0)
 	{
-		BattleState = AFTER;
+		BattleState_ = AFTER;
+		pGameTimer_->StopTimer();
+
 		Player* pPlayer_ = (Player*)FindObject("Player");
 		pPlayer_->PlayerStop();
 
 		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
 		pEnemy->EnemyStop();
 
-		HUD* pHUD = (HUD*)FindObject("HUD");
+		/*HUD* pHUD = (HUD*)FindObject("HUD");
 		pHUD->SetStateBattleEnd();
+		pHUD_->SetStateBattleEnd();*/
 
 		Audio::Play(hSoundWhistle_);
 	}
 
 	Audio::Play(hSoundBattle_);
-	if (++Timecounter > oneSecond)
-	{
-		Timecounter = 0;
-		if(GameTime_ > 0)
-		{
-			GameTime_--;
-			HUD* pHUD = (HUD*)FindObject("HUD");
-			///pHUD->SetTime(GameTime_);
-		}
-	}
+	//pHUD_->DrawTimer();
+
+	//if (++Timecounter > oneSecond)
+	//{
+	//	Timecounter = 0;
+	//	if(GameTime_ > 0)
+	//	{
+	//		GameTime_--;
+	//		HUD* pHUD = (HUD*)FindObject("HUD");
+	//		///pHUD->SetTime(GameTime_);
+	//	}
+	//}
 }
 
 void BattleScene::UpdateBattleAfter()

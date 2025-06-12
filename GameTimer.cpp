@@ -78,7 +78,7 @@ void GameTimer::UpdateTimeCount()
 
 	if (++Timecounter > oneSecond)
 	{
-		if(CurrentGameTime_ < 0)
+		if (CurrentGameTime_ > 0)
 		{
 			CurrentGameTime_--;
 		}

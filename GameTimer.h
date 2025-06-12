@@ -2,6 +2,7 @@
 #include "Engine/GameObject.h"
 
 //時間の計算を行うクラス
+//制限時間は別クラスから受け取る
 class GameTimer :
     public GameObject
 {

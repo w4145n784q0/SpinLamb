@@ -3,6 +3,8 @@
 #include "Engine/GameObject.h"
 #include"Player.h"
 #include"Enemy.h"
+#include"GameTimer.h"
+#include"HUD.h"
 
 //"バトル"から始まるモードシーン
 class BattleScene :
@@ -14,6 +16,10 @@ private:
 	Text* pPlayerScore_;
 	Text* pEnemyScore_;
 
+	HUD* pHUD_;
+	GameTimer* pGameTimer_;
+
+
 	//----------バトルシーンステート----------
 	enum Battle
 	{
@@ -22,7 +28,7 @@ private:
 		AFTER,//終了後
 		MAX
 	};
-	Battle BattleState;
+	Battle BattleState_;
 
 	//タイトル画像
 	int hBackScreen_;

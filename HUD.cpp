@@ -1,6 +1,8 @@
 #include "HUD.h"
 #include"Engine/Image.h"
 #include"BattleScene.h"
+#include <unordered_map>
+#include<functional>
 
 
 //描画操作のみ扱うクラス
@@ -44,9 +46,8 @@ namespace
 	//ナンバーハンドルの配列
 	std::array<int, MaxNumberIndex> ArrayHandle;
 
-	//ナンバーハンドルの添え字
-	int HandleIndexTen = 0;
-	int HandleIndexOne = 0;
+	int HandleIndexTen = 0;//ナンバーハンドルの添え字(10の位)
+	int HandleIndexOne = 0; //ナンバーハンドルの添え字(1の位)
 
 }
 
@@ -112,7 +113,6 @@ void HUD::Initialize()
 	ArrayHandle = { hNumber0_,hNumber1_,hNumber2_,hNumber3_,hNumber4_,
 	hNumber5_,hNumber6_,hNumber7_,hNumber8_,hNumber9_ };
 
-	Instantiate<GameTimer>(this);
 	pGameTimer_ = (GameTimer*)FindObject("GameTimer");
 }
 
@@ -141,31 +141,7 @@ void HUD::Update()
 
 void HUD::Draw()
 {
-	switch (GameModeHUD_)
-	{
-	case HUD::BattlePreStart:
-		DrawBattlePreStart();
-		break;
-	case HUD::BattleInProgress:
-		DrawBattleInProgress();
-		break;
-	case HUD::BattleEnd:
-		DrawBattleEnd();
-		break;
-	case HUD::Practice:
-		DrawPractice();
-		break;
-	case HUD::Max:
-		break;
-	default:
-		break;
-	}
 
-
-
-#ifdef _DEBUG
-
-#endif
 }
 
 void HUD::Release()
@@ -174,13 +150,10 @@ void HUD::Release()
 
 void HUD::UpdateBattlePreStart()
 {
-
 }
 
 void HUD::UpdateBattleInProgress()
 {
-	HandleIndexTen = pGameTimer_->GetTimeTen();
-	HandleIndexOne = pGameTimer_->GetTimeOne();
 }
 
 void HUD::UpdateBattleEnd()
@@ -189,47 +162,6 @@ void HUD::UpdateBattleEnd()
 
 void HUD::UpdatePractice()
 {
-}
-
-void HUD::DrawBattlePreStart()
-{	
-	Image::SetTransform(hFinish_, logo_start);
-	Image::Draw(hStart_);
-}
-
-void HUD::DrawBattleInProgress()
-{
-	Image::SetTransform(ArrayHandle[HandleIndexTen], TenTime);
-	Image::Draw(ArrayHandle[HandleIndexTen]);
-	Image::SetTransform(ArrayHandle[HandleIndexOne], OneTime);
-	Image::Draw(ArrayHandle[HandleIndexOne]);
-
-}
-
-void HUD::DrawBattleEnd()
-{
-	Image::SetTransform(hFinish_, logo_Finish);
-	Image::Draw(hFinish_);
-}
-
-void HUD::DrawPractice()
-{
-#ifdef _DEBUG
-	if (ImGui::TreeNode("PracticeLogo"))
-	{
-		ImGui::SliderFloat("positionX", &logo_backtitle.position_.x, -1.0f, 1.0f);
-		ImGui::SliderFloat("positionY", &logo_backtitle.position_.y, -1.0f, 1.0f);
-
-		ImGui::SliderFloat("positionX", &logo_practice.position_.x, -1.0f, 1.0f);
-		ImGui::SliderFloat("positionY", &logo_practice.position_.y, -1.0f, 1.0f);
-		ImGui::TreePop();
-	}
-#endif
-	Image::SetTransform(hBackTitleLogo_, logo_backtitle);
-	Image::Draw(hBackTitleLogo_);
-
-	Image::SetTransform(hPracticeNow_, logo_practice);
-	Image::Draw(hPracticeNow_);
 }
 
 void HUD::SetCSV()
@@ -277,4 +209,52 @@ void HUD::SetCSV()
 		std::vector<float> v = csv.GetParam(one);
 		SetTransformPRS(OneTime, v);
 	}
+}
+
+void HUD::DrawPracticeLogo()
+{
+#ifdef _DEBUG
+	if (ImGui::TreeNode("PracticeLogo"))
+	{
+		ImGui::SliderFloat("positionX", &logo_backtitle.position_.x, -1.0f, 1.0f);
+		ImGui::SliderFloat("positionY", &logo_backtitle.position_.y, -1.0f, 1.0f);
+
+		ImGui::SliderFloat("positionX", &logo_practice.position_.x, -1.0f, 1.0f);
+		ImGui::SliderFloat("positionY", &logo_practice.position_.y, -1.0f, 1.0f);
+		ImGui::TreePop();
+	}
+#endif
+
+
+	Image::SetTransform(hBackTitleLogo_, logo_backtitle);
+	Image::Draw(hBackTitleLogo_);
+
+	Image::SetTransform(hPracticeNow_, logo_practice);
+	Image::Draw(hPracticeNow_);
+}
+
+void HUD::DrawTimer()
+{
+	if(pGameTimer_ != nullptr)
+	{
+		HandleIndexTen = pGameTimer_->GetTimeTen();
+		HandleIndexOne = pGameTimer_->GetTimeOne();
+
+		Image::SetTransform(ArrayHandle[HandleIndexTen], TenTime);
+		Image::Draw(ArrayHandle[HandleIndexTen]);
+		Image::SetTransform(ArrayHandle[HandleIndexOne], OneTime);
+		Image::Draw(ArrayHandle[HandleIndexOne]);
+	}
+}
+
+void HUD::DrawStartLogo()
+{
+	Image::SetTransform(hStart_, logo_start);
+	Image::Draw(hStart_);
+}
+
+void HUD::DrawFinishLogo()
+{
+	Image::SetTransform(hFinish_, logo_Finish);
+	Image::Draw(hFinish_);
 }
