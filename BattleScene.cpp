@@ -43,8 +43,8 @@ void BattleScene::Initialize()
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
 	Instantiate<MiniMap>(this);
-	Instantiate<HUD>(this);
 	Instantiate<GameTimer>(this);
+	Instantiate<HUD>(this);
 
 	StageManager* pSceneManager = (StageManager*)FindObject("StageManager");
 	float north = pSceneManager->GetNorthEnd();
@@ -105,13 +105,16 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
+	//常に表示するもの
 	Image::SetTransform(hBackScreen_, this->transform_);
 	Image::Draw(hBackScreen_);
 
 	pPlayerScore_->Draw(PlayerScorePosX, PlayerScorePosY, PlayerScore_);
 	pEnemyScore_->Draw(EnemyScorePosX, EnemyScorePosY, EnemyScore_);
 
-	//HUDクラスの描画するものを指示
+	//pHUD_->SetDrawMode(S_MiniMap);
+
+	//今のBattleSceneの状態から、HUDクラスに描画するものを指示
 	switch (BattleState_)
 	{
 	case BattleScene::BEFORE:

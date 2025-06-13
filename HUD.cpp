@@ -24,7 +24,7 @@ namespace
 		MaxNumberIndex,
 	};
 
-	//画像描画用トランスフォーム
+	//----------画像描画用トランスフォーム----------
 	//"タイトルに戻ります"
 	Transform logo_backtitle;
 
@@ -43,6 +43,15 @@ namespace
 	//時間表記一の位
 	Transform OneTime;
 
+	//マップのトランスフォーム
+	Transform Mapicon;
+
+	//プレイヤーアイコンのトランスフォーム
+	Transform Playericon;
+
+	//敵アイコンのトランスフォーム
+	Transform Enemyicon;
+
 	//ナンバーハンドルの配列
 	std::array<int, MaxNumberIndex> ArrayHandle;
 
@@ -52,10 +61,11 @@ namespace
 }
 
 HUD::HUD(GameObject* parent)
-	:GameObject(parent, "HUD"), hBackTitleLogo_(-1),hPracticeNow_(-1), hStart_(-1),
-	hNumber0_(-1), hNumber1_(-1),hNumber2_(-1),hNumber3_(-1),hNumber4_(-1),
-	hNumber5_(-1),hNumber6_(-1),hNumber7_(-1),hNumber8_(-1),hNumber9_(-1),
-	hFinish_(-1),GameModeHUD_(Max),pGameTimer_(nullptr),DrawMode_(S_None)
+	:GameObject(parent, "HUD"), hBackTitleLogo_(-1), hPracticeNow_(-1), hStart_(-1),
+	hNumber0_(-1), hNumber1_(-1), hNumber2_(-1), hNumber3_(-1), hNumber4_(-1),
+	hNumber5_(-1), hNumber6_(-1), hNumber7_(-1), hNumber8_(-1), hNumber9_(-1),
+	hFinish_(-1), hMap_(-1), hPlayerIcon_(-1), hEnemyIcon_(-1),
+	GameModeHUD_(Max), pGameTimer_(nullptr), pMiniMap_(nullptr), DrawMode_(S_None)
 
 {
 }
@@ -110,10 +120,22 @@ void HUD::Initialize()
 	hNumber9_ = Image::Load("Image\\number\\number_9.png");
 	assert(hNumber9_ >= 0);
 
+	hMap_ = Image::Load("Image\\MiniMap\\minimap2.png");
+	assert(hMap_ >= 0);
+
+	hPlayerIcon_ = Image::Load("Image\\MiniMap\\blue_circle.png");
+	assert(hPlayerIcon_ >= 0);
+
+	hEnemyIcon_ = Image::Load("Image\\MiniMap\\red_circle.png");
+	assert(hEnemyIcon_ >= 0);
+
+
+	//数字画像ハンドル配列を初期化
 	ArrayHandle = { hNumber0_,hNumber1_,hNumber2_,hNumber3_,hNumber4_,
 	hNumber5_,hNumber6_,hNumber7_,hNumber8_,hNumber9_ };
 
-	pGameTimer_ = (GameTimer*)FindObject("GameTimer");
+	//pGameTimer_ = (GameTimer*)FindObject("GameTimer");
+	pMiniMap_ = (MiniMap*)FindObject("MiniMap");
 }
 
 void HUD::Update()
@@ -123,6 +145,10 @@ void HUD::Update()
 
 void HUD::Draw()
 {
+	//各オブジェクトに被さることを防ぐため、この関数から呼ぶ
+	//HUDクラスのDraw()は最後に呼ぶように設計
+	//状況に応じて切り替えたいもの(スタート/プレイ/終了時のロゴなど)はこのswitch文で切り替える
+	
 	//シーンクラスからの指示によって呼ぶ描画関数を変える
 	switch (DrawMode_)
 	{
@@ -144,6 +170,7 @@ void HUD::Draw()
 	default:
 		break;
 	}
+	DrawMiniMap();
 }
 
 void HUD::Release()
@@ -195,6 +222,27 @@ void HUD::SetCSV()
 		std::vector<float> v = csv.GetParam(one);
 		SetTransformPRS(OneTime, v);
 	}
+
+	std::string map = "minimap";
+	if (csv.IsGetParamName(map))
+	{
+		std::vector<float> v = csv.GetParam(map);
+		SetTransformPRS(Mapicon, v);
+	}
+
+	std::string picon = "playericon";
+	if (csv.IsGetParamName(picon))
+	{
+		std::vector<float> v = csv.GetParam(picon);
+		SetTransformPRS(Playericon, v);
+	}
+
+	std::string eicon = "enemyicon";
+	if (csv.IsGetParamName(eicon))
+	{
+		std::vector<float> v = csv.GetParam(eicon);
+		SetTransformPRS(Enemyicon, v);
+	}
 }
 
 void HUD::DrawPracticeLogo()
@@ -243,4 +291,32 @@ void HUD::DrawFinishLogo()
 {
 	Image::SetTransform(hFinish_, logo_Finish);
 	Image::Draw(hFinish_);
+}
+
+void HUD::DrawMiniMap()
+{
+#ifdef _DEBUG
+	if (ImGui::TreeNode("MiniMap"))
+	{
+		ImGui::SliderFloat("positionX", &Mapicon.position_.x, -1.0f, 1.0f);
+		ImGui::SliderFloat("positionY", &Mapicon.position_.y, -1.0f, 1.0f);
+		ImGui::TreePop();
+	}
+#endif
+
+	if (pMiniMap_ != nullptr) 
+	{
+		Playericon.position_ = pMiniMap_->GetPlayerPos();
+		Enemyicon.position_ = pMiniMap_->GetEnemyPos();
+	}
+
+	Image::SetTransform(hMap_, Mapicon);
+	Image::Draw(hMap_);
+	//Image::SetAlpha(hMap_, MapAlpha);
+
+	Image::SetTransform(hPlayerIcon_, Playericon);
+	Image::Draw(hPlayerIcon_);
+
+	Image::SetTransform(hEnemyIcon_, Enemyicon);
+	Image::Draw(hEnemyIcon_);
 }

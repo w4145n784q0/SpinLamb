@@ -1,2 +1,2 @@
-﻿Data,reductionX,reductionY,MapPosition.x,MapPosition.y,MapPosition.z,CorrectionValueX,CorrectionValueY,MapAlpha
-MIniMapInit,0.00122,0.0022,0.891,-0.809,0,0.895,0.81,128
+﻿Data,reductionX,reductionY,CorrectionValueX,CorrectionValueY,MapAlpha
+MIniMapInit,0.00122,0.0022,0.895,0.81,128

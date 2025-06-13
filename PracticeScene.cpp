@@ -10,7 +10,8 @@
 #include"StageManager.h"
 
 PracticeScene::PracticeScene(GameObject* parent)
-	:GameObject(parent,"PracticeScene"), hBackScreen_(-1),hSoundPractice_(-1), Press_(0)
+	:GameObject(parent,"PracticeScene"), hBackScreen_(-1),hSoundPractice_(-1), Press_(0),
+	pHUD_(nullptr)
 {
 }
 
@@ -74,6 +75,7 @@ void PracticeScene::Draw()
 	Image::SetTransform(hBackScreen_, this->transform_);
 	Image::Draw(hBackScreen_);
 	pHUD_->SetDrawMode(S_Practice);
+	//pHUD_->SetDrawMode(S_MiniMap);
 }
 
 void PracticeScene::Release()

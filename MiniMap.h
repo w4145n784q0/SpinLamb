@@ -10,29 +10,22 @@ class MiniMap :
 private:
 	//----------画像ハンドル----------
 
-	//マップ全体
-	int hMap_;
+	////マップ全体
+	//int hMap_;
 
-	//プレイヤーのアイコン
-	int hPlayerIcon_;
+	////プレイヤーのアイコン
+	//int hPlayerIcon_;
 
-	//敵のアイコン
-	int hEnemyIcon_;
-
-	//----------各画像のトランスフォーム----------
-
-	//マップのトランスフォーム
-	Transform Trans_Map;
-
-	//プレイヤーアイコンのトランスフォーム
-	Transform Trans_Player;
-
-	//敵アイコンのトランスフォーム
-	Transform Trans_Enemy;
+	////敵のアイコン
+	//int hEnemyIcon_;
 
 	//----------インスタンス----------
 	Player* pPlayer_;
 	Enemy* pEnemy_;
+
+	//----------マップ上の位置----------
+	XMFLOAT3 playerPos_;
+	XMFLOAT3 enemyPos_;
 
 public:
 	MiniMap(GameObject* parent);
@@ -44,5 +37,8 @@ public:
 	void Release() override;
 
 	void SetCSV();
+
+	XMFLOAT3 GetPlayerPos() { return playerPos_; }
+	XMFLOAT3 GetEnemyPos() { return enemyPos_; }
 };
 

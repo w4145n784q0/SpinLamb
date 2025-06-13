@@ -17,7 +17,7 @@ private:
 	Text* pEnemyScore_;
 
 	HUD* pHUD_;
-	GameTimer* pGameTimer_;
+	GameTimer* pGameTimer_;//hud側から操作する場合のタイマークラスポインタ
 
 
 	//----------バトルシーンステート----------

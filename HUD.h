@@ -2,26 +2,29 @@
 #include "Engine/GameObject.h"
 #include"array"
 #include"GameTimer.h"
+#include"MiniMap.h"
 
 //時間表示・ロゴ・モード表示などのUIを描画するクラス
 //座標などを初期化時に読みこみ、指示されたら表示する
 
 namespace
 {
-	
+
+	//描画モード（状況に応じて表示/非表示を切り替えたいもの）を指定
 	enum DrawMode
 	{
 		S_StartLogo,
 		S_Timer,
 		S_FinishLogo,
 		S_Practice,
+		S_MiniMap,
 		S_None,
 	};
 
 }
 
 class HUD :
-    public GameObject
+	public GameObject
 {
 private:
 	//----------画像ハンドル----------
@@ -50,6 +53,15 @@ private:
 	//フィニッシュのロゴ(バトルシーン用)
 	int hFinish_;
 
+	//マップ全体
+	int hMap_;
+
+	//プレイヤーのアイコン
+	int hPlayerIcon_;
+
+	//敵のアイコン
+	int hEnemyIcon_;
+
 	//----------ゲームシーンステート(状態により描画内容を変更)----------
 	enum GameMode
 	{
@@ -61,11 +73,13 @@ private:
 	};
 	GameMode GameModeHUD_;
 
-	//時間クラスのインスタンス
-	GameTimer* pGameTimer_;
+	//----------インスタンス----------
+	GameTimer* pGameTimer_;//hud側から操作する場合のタイマークラスポインタ
+	MiniMap* pMiniMap_;
 
 	//描画モードを格納する変数
 	DrawMode DrawMode_;
+
 public:
 	//コンストラクタ
 	//引数：parent  親オブジェクト（SceneManager）
@@ -90,14 +104,26 @@ public:
 	//GameTimerポインタを設定
 	void SetTimerPointer(GameTimer* _gametimer) { pGameTimer_ = _gametimer; }
 
-	//描画モードを変更
+	//描画モードを変更 ここで指定したdrawmodeがDraw()にて呼ばれる
 	void SetDrawMode(DrawMode _drawmode) { DrawMode_ = _drawmode; }
 
 	//----------描画関数----------
+	//これらは直接呼ばず、SetDrawModeを介して描画
 
+	//練習モード中
 	void DrawPracticeLogo();
+
+	//タイマー
 	void DrawTimer();
+
+	//開始時のロゴ
 	void DrawStartLogo();
+
+	//終了ロゴ
 	void DrawFinishLogo();
+
+	//ミニマップ
+	void DrawMiniMap();
+
 };
 
