@@ -134,8 +134,7 @@ void HUD::Initialize()
 	ArrayHandle = { hNumber0_,hNumber1_,hNumber2_,hNumber3_,hNumber4_,
 	hNumber5_,hNumber6_,hNumber7_,hNumber8_,hNumber9_ };
 
-	//pGameTimer_ = (GameTimer*)FindObject("GameTimer");
-	pMiniMap_ = (MiniMap*)FindObject("MiniMap");
+	//pMiniMap_ = (MiniMap*)FindObject("MiniMap");
 }
 
 void HUD::Update()
@@ -170,6 +169,7 @@ void HUD::Draw()
 	default:
 		break;
 	}
+
 	DrawMiniMap();
 }
 

@@ -4,6 +4,7 @@
 #include"Player.h"
 #include"Enemy.h"
 #include"GameTimer.h"
+#include"MiniMap.h"
 #include"HUD.h"
 
 //"バトル"から始まるモードシーン
@@ -17,7 +18,10 @@ private:
 	Text* pEnemyScore_;
 
 	HUD* pHUD_;
-	GameTimer* pGameTimer_;//hud側から操作する場合のタイマークラスポインタ
+
+	//HUDクラスに渡すポインタ
+	GameTimer* pGameTimer_;//BattleScene側から操作する場合のタイマークラスポインタ
+	MiniMap* pMiniMap_;//HUDクラスに渡すポインタ
 
 
 	//----------バトルシーンステート----------

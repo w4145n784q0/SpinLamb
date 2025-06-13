@@ -8,17 +8,6 @@ class MiniMap :
     public GameObject
 {
 private:
-	//----------画像ハンドル----------
-
-	////マップ全体
-	//int hMap_;
-
-	////プレイヤーのアイコン
-	//int hPlayerIcon_;
-
-	////敵のアイコン
-	//int hEnemyIcon_;
-
 	//----------インスタンス----------
 	Player* pPlayer_;
 	Enemy* pEnemy_;

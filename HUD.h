@@ -101,14 +101,15 @@ public:
 
 	void SetCSV();
 
-	//GameTimerポインタを設定
+	//各ポインタを設定
 	void SetTimerPointer(GameTimer* _gametimer) { pGameTimer_ = _gametimer; }
+	void SetMiniMapPointer(MiniMap* _minimap) { pMiniMap_ = _minimap; }
 
 	//描画モードを変更 ここで指定したdrawmodeがDraw()にて呼ばれる
 	void SetDrawMode(DrawMode _drawmode) { DrawMode_ = _drawmode; }
 
 	//----------描画関数----------
-	//これらは直接呼ばず、SetDrawModeを介して描画
+	//これらは直接呼ばず、SetDrawModeを介して描画(常に表示するものは例外)
 
 	//練習モード中
 	void DrawPracticeLogo();

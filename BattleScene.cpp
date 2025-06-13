@@ -4,7 +4,7 @@
 #include"Engine/SceneManager.h"
 #include"Engine/Audio.h"
 
-#include"MiniMap.h"
+
 #include"StageManager.h"
 
 namespace
@@ -58,10 +58,16 @@ void BattleScene::Initialize()
 	Enemy* pEnemy = (Enemy*)FindObject("Enemy");
 	pEnemy->SetEnd(north, south, west, east);
 
-
+	//ƒCƒ“ƒXƒ^ƒ“ƒX‚ð‰Šú‰»‚µAHUD‚É“n‚·
 	pGameTimer_ = (GameTimer*)FindObject("GameTimer");
+	pMiniMap_ = (MiniMap*)FindObject("MiniMap");
 	pHUD_ = (HUD*)FindObject("HUD");
+
+
 	pHUD_->SetTimerPointer(pGameTimer_);
+	pHUD_->SetMiniMapPointer(pMiniMap_);
+
+	//ƒQ[ƒ€§ŒÀŽžŠÔ‚ð“n‚·
 	pGameTimer_->SetCurrentGameTime(GameTimeLimit);
 
 	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");

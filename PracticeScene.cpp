@@ -6,7 +6,6 @@
 
 #include"Player.h"
 #include"Enemy.h"
-#include"MiniMap.h"
 #include"StageManager.h"
 
 PracticeScene::PracticeScene(GameObject* parent)
@@ -47,7 +46,10 @@ void PracticeScene::Initialize()
 	pEnemy->EnemyStop();
 	pEnemy->SetEnd(north, south, west, east);
 
+	//インスタンスを初期化し、HUDに渡す
+	pMiniMap_ = (MiniMap*)FindObject("MiniMap");
 	pHUD_ = (HUD*)FindObject("HUD");
+	pHUD_->SetMiniMapPointer(pMiniMap_);
 }
 
 void PracticeScene::Update()

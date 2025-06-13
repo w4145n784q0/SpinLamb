@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"HUD.h"
+#include"MiniMap.h"
 
 //"フリープレイ"から始まる練習モードシーン
 class PracticeScene :
@@ -19,7 +20,9 @@ private:
 	//----------サウンドハンドル----------
 	int hSoundPractice_; 
 
+	//インスタンス
 	HUD* pHUD_;
+	MiniMap* pMiniMap_;
 
 public:
 	//コンストラクタ
