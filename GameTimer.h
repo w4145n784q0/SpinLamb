@@ -56,4 +56,9 @@ public:
 	int GetTimeOne() { return Timeone_; }
 	int GetCurrentGameTime() { return CurrentGameTime_; }
 	void SetCurrentGameTime(int _time) { CurrentGameTime_ = _time; }
+
+	/// <summary>
+	/// ƒQ[ƒ€ŠÔ‚ÌŒvZ
+	/// </summary>
+	void TimeCalclation();
 };

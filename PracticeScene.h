@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"HUD.h"
 
 //"フリープレイ"から始まる練習モードシーン
 class PracticeScene :
@@ -17,6 +18,8 @@ private:
 
 	//----------サウンドハンドル----------
 	int hSoundPractice_; 
+
+	HUD* pHUD_;
 
 public:
 	//コンストラクタ

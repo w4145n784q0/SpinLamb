@@ -7,7 +7,6 @@
 #include"Player.h"
 #include"Enemy.h"
 #include"MiniMap.h"
-#include"HUD.h"
 #include"StageManager.h"
 
 PracticeScene::PracticeScene(GameObject* parent)
@@ -47,8 +46,7 @@ void PracticeScene::Initialize()
 	pEnemy->EnemyStop();
 	pEnemy->SetEnd(north, south, west, east);
 
-	HUD* pHUD = (HUD*)FindObject("HUD");
-	pHUD->SetStatePractice();
+	pHUD_ = (HUD*)FindObject("HUD");
 }
 
 void PracticeScene::Update()
@@ -75,6 +73,7 @@ void PracticeScene::Draw()
 {
 	Image::SetTransform(hBackScreen_, this->transform_);
 	Image::Draw(hBackScreen_);
+	pHUD_->SetDrawMode(S_Practice);
 }
 
 void PracticeScene::Release()

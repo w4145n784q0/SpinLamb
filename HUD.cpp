@@ -55,7 +55,7 @@ HUD::HUD(GameObject* parent)
 	:GameObject(parent, "HUD"), hBackTitleLogo_(-1),hPracticeNow_(-1), hStart_(-1),
 	hNumber0_(-1), hNumber1_(-1),hNumber2_(-1),hNumber3_(-1),hNumber4_(-1),
 	hNumber5_(-1),hNumber6_(-1),hNumber7_(-1),hNumber8_(-1),hNumber9_(-1),
-	hFinish_(-1),GameModeHUD_(Max),pGameTimer_(nullptr)
+	hFinish_(-1),GameModeHUD_(Max),pGameTimer_(nullptr),DrawMode_(S_None)
 
 {
 }
@@ -118,49 +118,35 @@ void HUD::Initialize()
 
 void HUD::Update()
 {
-	switch (GameModeHUD_)
+	
+}
+
+void HUD::Draw()
+{
+	//シーンクラスからの指示によって呼ぶ描画関数を変える
+	switch (DrawMode_)
 	{
-	case HUD::BattlePreStart:
-		UpdateBattlePreStart();
+	case S_StartLogo:
+		DrawStartLogo();
 		break;
-	case HUD::BattleInProgress:
-		UpdateBattleInProgress();
+	case S_Timer:
+		DrawTimer();
 		break;
-	case HUD::BattleEnd:
-		UpdateBattleEnd();
+	case S_FinishLogo:
+		DrawTimer();
+		DrawFinishLogo();
 		break;
-	case HUD::Practice:
-		UpdatePractice();
+	case S_Practice:
+		DrawPracticeLogo();
 		break;
-	case HUD::Max:
+	case S_None:
 		break;
 	default:
 		break;
 	}
 }
 
-void HUD::Draw()
-{
-
-}
-
 void HUD::Release()
-{
-}
-
-void HUD::UpdateBattlePreStart()
-{
-}
-
-void HUD::UpdateBattleInProgress()
-{
-}
-
-void HUD::UpdateBattleEnd()
-{
-}
-
-void HUD::UpdatePractice()
 {
 }
 

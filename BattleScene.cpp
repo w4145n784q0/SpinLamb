@@ -46,11 +46,11 @@ void BattleScene::Initialize()
 	Instantiate<HUD>(this);
 	Instantiate<GameTimer>(this);
 
-	StageManager* pS = (StageManager*)FindObject("StageManager");
-	float north = pS->GetNorthEnd();
-	float south = pS->GetSouthEnd();
-	float west = pS->GetWestEnd();
-	float east = pS->GetEastEnd();
+	StageManager* pSceneManager = (StageManager*)FindObject("StageManager");
+	float north = pSceneManager->GetNorthEnd();
+	float south = pSceneManager->GetSouthEnd();
+	float west = pSceneManager->GetWestEnd();
+	float east = pSceneManager->GetEastEnd();
 
 	Player* pPlayer_ = (Player*)FindObject("Player");
 	pPlayer_->SetEnd(north, south, west, east);
@@ -63,10 +63,6 @@ void BattleScene::Initialize()
 	pHUD_ = (HUD*)FindObject("HUD");
 	pHUD_->SetTimerPointer(pGameTimer_);
 	pGameTimer_->SetCurrentGameTime(GameTimeLimit);
-
-
-	//pHUD->SetStateBattle();
-	//pHUD->SetTime(GameTime_);
 
 	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");
 	assert(hBackScreen_ >= 0);
@@ -115,21 +111,19 @@ void BattleScene::Draw()
 	pPlayerScore_->Draw(PlayerScorePosX, PlayerScorePosY, PlayerScore_);
 	pEnemyScore_->Draw(EnemyScorePosX, EnemyScorePosY, EnemyScore_);
 
+	//HUDƒNƒ‰ƒX‚Ì•`‰æ‚·‚é‚à‚Ì‚ðŽwŽ¦
 	switch (BattleState_)
 	{
 	case BattleScene::BEFORE:
-	{
-		pHUD_->DrawStartLogo();
-	}
+		pHUD_->SetDrawMode(S_StartLogo);
 		break;
 	case BattleScene::NOW:
-	{
-		pHUD_->DrawTimer();
-	}
+		pHUD_->SetDrawMode(S_Timer);
 		break;
 	case BattleScene::AFTER:
 	{
-		pHUD_->DrawFinishLogo();
+		pHUD_->SetDrawMode(S_Timer);
+		pHUD_->SetDrawMode(S_FinishLogo);
 	}
 		break;
 	case BattleScene::MAX:
@@ -156,11 +150,6 @@ void BattleScene::UpdateBattleBefore()
 		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
 		pEnemy->EnemyStart();
 
-		//HUD* pHUD = (HUD*)FindObject("HUD");
-		//pHUD->SetStateBattleInProgress();
-
-		
-
 		pGameTimer_->StartTimer();
 	}
 }
@@ -179,26 +168,10 @@ void BattleScene::UpdateBattle()
 		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
 		pEnemy->EnemyStop();
 
-		/*HUD* pHUD = (HUD*)FindObject("HUD");
-		pHUD->SetStateBattleEnd();
-		pHUD_->SetStateBattleEnd();*/
-
 		Audio::Play(hSoundWhistle_);
 	}
 
 	Audio::Play(hSoundBattle_);
-	//pHUD_->DrawTimer();
-
-	//if (++Timecounter > oneSecond)
-	//{
-	//	Timecounter = 0;
-	//	if(GameTime_ > 0)
-	//	{
-	//		GameTime_--;
-	//		HUD* pHUD = (HUD*)FindObject("HUD");
-	//		///pHUD->SetTime(GameTime_);
-	//	}
-	//}
 }
 
 void BattleScene::UpdateBattleAfter()

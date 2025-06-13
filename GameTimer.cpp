@@ -4,25 +4,6 @@
 
 namespace
 {
-	////時間の数字表記のインデックス
-	//enum NumberIndex
-	//{
-	//	i_Number0 = 0,
-	//	i_Number1,
-	//	i_Number2,
-	//	i_Number3,
-	//	i_Number4,
-	//	i_Number5,
-	//	i_Number6,
-	//	i_Number7,
-	//	i_Number8,
-	//	i_Number9,
-	//	MaxNumberIndex,
-	//};
-
-	////ナンバーハンドルの配列
-	//std::array<int, MaxNumberIndex> ArrayHandle;
-
 	//時間計測用の整数 毎フレーム加算
 	int Timecounter = 0;
 }
@@ -39,6 +20,8 @@ GameTimer::~GameTimer()
 
 void GameTimer::Initialize()
 {
+	Timeten_ = CurrentGameTime_ / TimeDivision;
+	Timeone_ = CurrentGameTime_ % TimeDivision;
 }
 
 void GameTimer::Update()
@@ -58,10 +41,6 @@ void GameTimer::Update()
 
 void GameTimer::Draw()
 {
-	/*Image::SetTransform(ArrayHandle[Timeten_], TenTime_);
-	Image::Draw(ArrayHandle[Timeten_]);
-	Image::SetTransform(ArrayHandle[Timeone_], OneTime_);
-	Image::Draw(ArrayHandle[Timeone_]);*/
 }
 
 void GameTimer::Release()
@@ -70,6 +49,7 @@ void GameTimer::Release()
 
 void GameTimer::UpdateTimeStop()
 {
+	TimeCalclation();
 }
 
 void GameTimer::UpdateTimeCount()
@@ -82,8 +62,13 @@ void GameTimer::UpdateTimeCount()
 		{
 			CurrentGameTime_--;
 		}
-		Timeten_ = CurrentGameTime_ / TimeDivision;
-		Timeone_ = CurrentGameTime_ % TimeDivision;
+		TimeCalclation();
 		Timecounter = 0;
 	}
+}
+
+void GameTimer::TimeCalclation()
+{
+	Timeten_ = CurrentGameTime_ / TimeDivision;
+	Timeone_ = CurrentGameTime_ % TimeDivision;
 }
