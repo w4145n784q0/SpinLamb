@@ -190,15 +190,19 @@ void Character::DrawCharacterModel(int _handle, Transform _transform)
 		if (++WallHitParam_.blinkTimer_ > WallHitParam_.blinkValue_) {
 
 			WallHitParam_.blinkTimer_ = 0;
-			Model::SetTransform(_handle, _transform);
-			Model::Draw(_handle);
+			DrawModel(_handle, _transform);
 		}
 	}
 	else
 	{
-		Model::SetTransform(_handle, _transform);
-		Model::Draw(_handle);
+		DrawModel(_handle, _transform);
 	}
+}
+
+void Character::DrawModel(int _handle, Transform _transform)
+{
+	Model::SetTransform(_handle, _transform);
+	Model::Draw(_handle);
 }
 
 void Character::CharacterGravity()
@@ -474,14 +478,15 @@ void Character::Charging()
 {
 	Audio::Play(hSoundcharge_);
 
-	//チャージ中一定の加速量を加算し続ける
-	if (MoveParam_.Acceleration_ < MoveParam_.FullAccelerate_)
+	//チャージ中,仮の値に一定の加速量を加算し続ける
+	//チャージ解放時に実際にAcceleration_に代入する
+	if (MoveParam_.TmpAccele_ < MoveParam_.FullAccelerate_)
 	{
-		MoveParam_.Acceleration_ += MoveParam_.AcceleValue_;
+		MoveParam_.TmpAccele_ += MoveParam_.AcceleValue_;
 	}
 	else
 	{
-		MoveParam_.Acceleration_ = MoveParam_.FullAccelerate_;
+		MoveParam_.TmpAccele_ = MoveParam_.FullAccelerate_;
 	}
 }
 

@@ -128,8 +128,7 @@ void Enemy::Draw()
 
 	if (EnemyState_ == S_AIM)
 	{
-		Model::SetTransform(hArrow_, this->MoveParam_.ArrowTransform_);
-		Model::Draw(hArrow_);
+		DrawModel(hArrow_, this->MoveParam_.ArrowTransform_);
 	}
 
 #ifdef _DEBUG
@@ -270,6 +269,7 @@ void Enemy::UpdateAim()
 	if (++AimTimer_ > EnemyAttackTimeArray[RandomAim_])
 	{
 		AimTimer_ = 0;
+		EmitCharge();
 		EnemyState_ = S_ATTACK;
 	}
 

@@ -38,6 +38,7 @@ protected:
     {   
         float Velocity_ = 0.0f;//初速度 この速度に加速度が加算される
         float Acceleration_ = 0.0f;//加速度
+        float TmpAccele_ = 0.0f;//加速度上昇時に使う仮の値
         float AcceleValue_ = 0.0f;//Acceleration_上昇時、1fあたりの増加量
         float FullAccelerate_ = 0.0f;//加速度の最大
 		float Friction_ = 0.0f;//摩擦係数(減速率) 1fあたりの減速量
@@ -163,11 +164,16 @@ public:
     }
 
     /// <summary>
-    /// キャラクターモデル描画
+    /// キャラクターモデル描画(ダメージ時の点滅表現等行う)
     /// </summary>
     /// <param name="_handle">モデルハンドル</param>
     /// <param name="_transform">描画位置のトランスフォーム</param>
     void DrawCharacterModel(int _handle, Transform _transform);
+
+    /// <summary>
+    /// モデル描画(描画のみ)
+    /// </summary>
+    void DrawModel(int _handle, Transform _transform);
 
     /// <summary>
     /// 重力処理
@@ -251,7 +257,9 @@ public:
     /// </summary>
     void WallHit();
 
-
+    /// <summary>
+    /// 壁に接触した際の計算処理　壁の法線で計算
+    /// </summary>
     void WallReflect(XMVECTOR pos);
 
     /// <summary>
@@ -294,6 +302,11 @@ public:
     /// 加速度の加算
     /// </summary>
     void Charging();
+
+    /// <summary>
+    /// 蓄積したTmpAccele_を実際に加速度に代入
+    /// </summary>
+    void EmitCharge() { MoveParam_.Acceleration_ = MoveParam_.TmpAccele_; }
 
     /// <summary>
     /// チャージ中の矢印位置をセット

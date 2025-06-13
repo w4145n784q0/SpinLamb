@@ -142,8 +142,7 @@ void Player::Draw()
 
 	if (PlayerState_ == S_CHARGE)
 	{
-		Model::SetTransform(hArrow_, this->MoveParam_.ArrowTransform_);
-		Model::Draw(hArrow_);
+		DrawModel(hArrow_, this->MoveParam_.ArrowTransform_);
 	}
 
 #ifdef _DEBUG
@@ -368,12 +367,6 @@ void Player::UpdateIdle()
 
 void Player::UpdateCharge()
 {
-	/*XMVECTOR frontArrow = XMVectorScale(MoveParam_.ForwardVector_, 3.0);
-	XMVECTOR pPosition = XMLoadFloat3(&this->transform_.position_);
-	XMVECTOR arrowPosVec = XMVectorAdd(pPosition, frontArrow);
-	XMStoreFloat3(&AttackArrowTransform_.position_, arrowPosVec);
-	AttackArrowTransform_.rotate_.y = this->transform_.rotate_.y;*/
-
 	SetArrow();
 	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
 	SetChargingEffect("PaticleAssets\\circle_B.png");
@@ -399,6 +392,7 @@ void Player::UpdateCharge()
 
 	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
 	{
+		EmitCharge();
 		PlayerState_ = S_ATTACK;
 	}
 
