@@ -1,2 +1,2 @@
-﻿Data,DeltaTime,oneSecond,TimeDivision,SceneTransition,GameTimeLimit,sticktilt,stickMicrotilt
-CommonData,0.016,60,10,90,11,0.5,0.01
+﻿Data,DeltaTime,oneSecond,TimeDivision,SceneTransition,sticktilt,stickMicrotilt
+CommonData,0.016,60,10,90,0.5,0.01

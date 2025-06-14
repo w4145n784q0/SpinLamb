@@ -3,6 +3,7 @@
 #include"array"
 #include"GameTimer.h"
 #include"MiniMap.h"
+#include"Engine/Text.h"
 
 //時間表示・ロゴ・モード表示などのUIを描画するクラス
 //座標などを初期化時に読みこみ、指示されたら表示する
@@ -77,8 +78,14 @@ private:
 	GameTimer* pGameTimer_;//hud側から操作する場合のタイマークラスポインタ
 	MiniMap* pMiniMap_;
 
+	///Text* pPlayerScore_;
+	//Text* pEnemyScore_;
+
 	//描画モードを格納する変数
 	DrawMode DrawMode_;
+
+	int PlayerScore_;
+	int EnemyScore_;
 
 public:
 	//コンストラクタ
@@ -126,5 +133,10 @@ public:
 	//ミニマップ
 	void DrawMiniMap();
 
+	//スコア表示(BattleSceneで使用)
+	void DrawScore();
+
+	void SetPlayerScore(int score) { PlayerScore_ = score; }
+	void SetEnemyScore(int score) { EnemyScore_ = score; }
 };
 

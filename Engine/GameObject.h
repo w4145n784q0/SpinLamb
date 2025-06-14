@@ -32,9 +32,8 @@ namespace
 	{
 		i_deltatime = 0,	
 		i_onesecond,		
-		i_timedivision,
+		i_tendivision,
 		i_scenetransition,
-		i_gametimeLimit,
 		i_sticktilt,
 		i_stickMicrotilt,
 	};
@@ -107,19 +106,14 @@ protected:
 	int oneSecond = 0;
 
 	/// <summary>
-	/// //時間に除算する値
+	/// 時間表記等に除算する値
 	/// </summary>
-	int  TimeDivision = 0;
+	int  TenDivision = 0;
 
 	/// <summary>
 	/// 次のシーン遷移までの時間
 	/// </summary>
 	int SceneTransition = 0;
-
-	/// <summary>
-	/// バトルモードの制限時間
-	/// </summary>
-	int GameTimeLimit = 0;
 
 	/// <summary>
 	/// スティックを傾けた値(0.0~1.0)がこの値を上回ったか
@@ -305,9 +299,8 @@ public:
             std::vector<float> v = csv.GetParam(common);  
             DeltaTime = v[i_deltatime];  
             oneSecond = static_cast<int>(v[i_onesecond]);  
-            TimeDivision = static_cast<int>(v[i_timedivision]);  
+            TenDivision = static_cast<int>(v[i_tendivision]);  
             SceneTransition = static_cast<int>(v[i_scenetransition]);  
-            GameTimeLimit = static_cast<int>(v[i_gametimeLimit]);  
             StickTilt = v[i_sticktilt];  
             StickMicroTilt = v[i_stickMicrotilt];  
         }  

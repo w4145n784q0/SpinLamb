@@ -52,11 +52,23 @@ namespace
 	//敵アイコンのトランスフォーム
 	Transform Enemyicon;
 
+	//スコア表示位置のトランスフォーム
+	Transform pScore_ten;
+	Transform pScore_one;
+	Transform eScore_ten;
+	Transform eScore_one;
+
 	//ナンバーハンドルの配列
 	std::array<int, MaxNumberIndex> ArrayHandle;
 
-	int HandleIndexTen = 0;//ナンバーハンドルの添え字(10の位)
-	int HandleIndexOne = 0; //ナンバーハンドルの添え字(1の位)
+	int TimeIndexTen = 0;//時間表記のナンバーハンドルの添え字(10の位)
+	int TimeIndexOne = 0; //時間表記のナンバーハンドルの添え字(1の位)
+	
+	int pScoreIndexTen = 0;
+	int pScoreIndexOne = 0;
+	int eScoreIndexTen = 0;
+	int eScoreIndexOne = 0;
+
 
 }
 
@@ -135,6 +147,12 @@ void HUD::Initialize()
 	hNumber5_,hNumber6_,hNumber7_,hNumber8_,hNumber9_ };
 
 	//pMiniMap_ = (MiniMap*)FindObject("MiniMap");
+
+	/*pPlayerScore_ = new Text;
+	pPlayerScore_->Initialize();
+
+	pEnemyScore_ = new Text;
+	pEnemyScore_->Initialize();*/
 }
 
 void HUD::Update()
@@ -158,8 +176,10 @@ void HUD::Draw()
 		DrawTimer();
 		break;
 	case S_FinishLogo:
+	{
 		DrawTimer();
 		DrawFinishLogo();
+	}
 		break;
 	case S_Practice:
 		DrawPracticeLogo();
@@ -170,6 +190,8 @@ void HUD::Draw()
 		break;
 	}
 
+	//常に表示するもの
+	DrawScore();
 	DrawMiniMap();
 }
 
@@ -243,6 +265,34 @@ void HUD::SetCSV()
 		std::vector<float> v = csv.GetParam(eicon);
 		SetTransformPRS(Enemyicon, v);
 	}
+
+	std::string pscoreten = "playerscoreten";
+	if (csv.IsGetParamName(pscoreten))
+	{
+		std::vector<float> v = csv.GetParam(pscoreten);
+		SetTransformPRS(pScore_ten, v);
+	}
+
+	std::string pscoreone = "playerscoreone";
+	if (csv.IsGetParamName(pscoreone))
+	{
+		std::vector<float> v = csv.GetParam(pscoreone);
+		SetTransformPRS(pScore_one, v);
+	}
+
+	std::string escoreten = "enemyscoreten";
+	if (csv.IsGetParamName(escoreten))
+	{
+		std::vector<float> v = csv.GetParam(escoreten);
+		SetTransformPRS(eScore_ten, v);
+	}
+
+	std::string escoreone = "enemyscoreone";
+	if (csv.IsGetParamName(escoreone))
+	{
+		std::vector<float> v = csv.GetParam(escoreone);
+		SetTransformPRS(eScore_one, v);
+	}
 }
 
 void HUD::DrawPracticeLogo()
@@ -271,13 +321,13 @@ void HUD::DrawTimer()
 {
 	if(pGameTimer_ != nullptr)
 	{
-		HandleIndexTen = pGameTimer_->GetTimeTen();
-		HandleIndexOne = pGameTimer_->GetTimeOne();
+		TimeIndexTen = pGameTimer_->GetTimeTen();
+		TimeIndexOne = pGameTimer_->GetTimeOne();
 
-		Image::SetTransform(ArrayHandle[HandleIndexTen], TenTime);
-		Image::Draw(ArrayHandle[HandleIndexTen]);
-		Image::SetTransform(ArrayHandle[HandleIndexOne], OneTime);
-		Image::Draw(ArrayHandle[HandleIndexOne]);
+		Image::SetTransform(ArrayHandle[TimeIndexTen], TenTime);
+		Image::Draw(ArrayHandle[TimeIndexTen]);
+		Image::SetTransform(ArrayHandle[TimeIndexOne], OneTime);
+		Image::Draw(ArrayHandle[TimeIndexOne]);
 	}
 }
 
@@ -312,11 +362,31 @@ void HUD::DrawMiniMap()
 
 	Image::SetTransform(hMap_, Mapicon);
 	Image::Draw(hMap_);
-	//Image::SetAlpha(hMap_, MapAlpha);
 
 	Image::SetTransform(hPlayerIcon_, Playericon);
 	Image::Draw(hPlayerIcon_);
 
 	Image::SetTransform(hEnemyIcon_, Enemyicon);
 	Image::Draw(hEnemyIcon_);
+}
+
+void HUD::DrawScore()
+{
+	//pPlayerScore_->Draw(PlayerScorePos.position_.x, PlayerScorePos.position_.y, PlayerScore_);
+	//pEnemyScore_->Draw(EnemyScorePos.position_.x, EnemyScorePos.position_.y, EnemyScore_);
+
+	pScoreIndexTen = PlayerScore_ / TenDivision;
+	pScoreIndexOne = PlayerScore_ % TenDivision;
+	eScoreIndexTen = EnemyScore_ / TenDivision;
+	eScoreIndexOne = EnemyScore_ % TenDivision;
+
+	Image::SetTransform(ArrayHandle[pScoreIndexTen], pScore_ten);
+	Image::Draw(ArrayHandle[pScoreIndexTen]);
+	Image::SetTransform(ArrayHandle[pScoreIndexOne], pScore_one);
+	Image::Draw(ArrayHandle[pScoreIndexOne]);
+
+	Image::SetTransform(ArrayHandle[eScoreIndexTen], eScore_ten);
+	Image::Draw(ArrayHandle[eScoreIndexTen]);
+	Image::SetTransform(ArrayHandle[eScoreIndexOne], eScore_one);
+	Image::Draw(ArrayHandle[eScoreIndexOne]);
 }

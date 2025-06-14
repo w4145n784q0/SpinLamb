@@ -1,5 +1,5 @@
 #pragma once
-#include"Engine/Text.h"
+//#include"Engine/Text.h"
 #include "Engine/GameObject.h"
 #include"Player.h"
 #include"Enemy.h"
@@ -14,8 +14,8 @@ class BattleScene :
 private:
 
 	//インスタンス
-	Text* pPlayerScore_;
-	Text* pEnemyScore_;
+	//Text* pPlayerScore_;
+	//Text* pEnemyScore_;
 
 	HUD* pHUD_;
 
@@ -45,9 +45,6 @@ private:
 	//終了ホイッスルサウンド
 	int hSoundWhistle_;
 
-	//現在の時間(1秒ごとに減少)
-	int GameTime_;
-
 	//プレイヤーのスコア
 	int PlayerScore_;
 
@@ -76,8 +73,6 @@ public:
 
 	void PlusPlayerScore() { PlayerScore_++; }
 	void PlusEnemyScore() { EnemyScore_++; }
-	int GetGameTime() { return GameTime_; }
-	void SetGameTime(int time) { GameTime_ = time; }
 
 	void SetCSVBattle();
 };

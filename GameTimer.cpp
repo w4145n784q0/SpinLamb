@@ -20,8 +20,7 @@ GameTimer::~GameTimer()
 
 void GameTimer::Initialize()
 {
-	Timeten_ = CurrentGameTime_ / TimeDivision;
-	Timeone_ = CurrentGameTime_ % TimeDivision;
+	TimeCalclation();
 }
 
 void GameTimer::Update()
@@ -69,6 +68,6 @@ void GameTimer::UpdateTimeCount()
 
 void GameTimer::TimeCalclation()
 {
-	Timeten_ = CurrentGameTime_ / TimeDivision;
-	Timeone_ = CurrentGameTime_ % TimeDivision;
+	Timeten_ = CurrentGameTime_ / TenDivision;
+	Timeone_ = CurrentGameTime_ % TenDivision;
 }

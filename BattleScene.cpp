@@ -11,6 +11,10 @@ namespace
 {
 	//時間計測
 	int Timecounter = 0;
+
+	//バトルモードの制限時間
+	int GameTimeLimit = 0;
+
 	int PlayerScorePosX = 0;
 	int PlayerScorePosY = 0;
 	int EnemyScorePosX = 0;
@@ -18,7 +22,8 @@ namespace
 
 	enum ScorePosIndex
 	{
-		i_PlayerScorePosX = 0,
+		i_gametimelimit = 0,
+		i_PlayerScorePosX,
 		i_PlayerScorePosY,
 		i_EnemyScorePosX,
 		i_EnemyScorePosY,
@@ -28,8 +33,8 @@ namespace
 BattleScene::BattleScene(GameObject* parent)
 	:GameObject(parent,"BattleScene") ,BattleState_(BEFORE),
 	 hBackScreen_(-1),hSoundBattle_(-1), hSoundWhistle_(-1),
-	PlayerScore_(0),EnemyScore_(0),GameTime_(GameTimeLimit),pPlayerScore_(0),pEnemyScore_(0),
-	pHUD_(nullptr),pGameTimer_(nullptr)
+	PlayerScore_(0),EnemyScore_(0),/*pPlayerScore_(0),pEnemyScore_(0),*/
+	pHUD_(nullptr),pMiniMap_(nullptr),pGameTimer_(nullptr)
 {
 }
 
@@ -39,6 +44,8 @@ BattleScene::~BattleScene()
 
 void BattleScene::Initialize()
 {
+	SetCSVBattle();
+
 	Instantiate<StageManager>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
@@ -79,13 +86,14 @@ void BattleScene::Initialize()
 	hSoundWhistle_ = Audio::Load("Sound\\SE\\Whistle.wav");
 	assert(hSoundWhistle_ >= 0);
 
-	pPlayerScore_ = new Text;
-	pPlayerScore_->Initialize();
+	pHUD_->SetPlayerScore(PlayerScore_);
+	pHUD_->SetEnemyScore(EnemyScore_);
 
-	pEnemyScore_ = new Text;
-	pEnemyScore_->Initialize();
+	//pPlayerScore_ = new Text;
+	//pPlayerScore_->Initialize();
 
-	SetCSVBattle();
+	//pEnemyScore_ = new Text;
+	//pEnemyScore_->Initialize();
 
 }
 
@@ -115,10 +123,8 @@ void BattleScene::Draw()
 	Image::SetTransform(hBackScreen_, this->transform_);
 	Image::Draw(hBackScreen_);
 
-	pPlayerScore_->Draw(PlayerScorePosX, PlayerScorePosY, PlayerScore_);
-	pEnemyScore_->Draw(EnemyScorePosX, EnemyScorePosY, EnemyScore_);
-
-	//pHUD_->SetDrawMode(S_MiniMap);
+	//pPlayerScore_->Draw(PlayerScorePosX, PlayerScorePosY, PlayerScore_);
+	//pEnemyScore_->Draw(EnemyScorePosX, EnemyScorePosY, EnemyScore_);
 
 	//今のBattleSceneの状態から、HUDクラスに描画するものを指示
 	switch (BattleState_)
@@ -130,10 +136,7 @@ void BattleScene::Draw()
 		pHUD_->SetDrawMode(S_Timer);
 		break;
 	case BattleScene::AFTER:
-	{
-		pHUD_->SetDrawMode(S_Timer);
 		pHUD_->SetDrawMode(S_FinishLogo);
-	}
 		break;
 	case BattleScene::MAX:
 		break;
@@ -181,6 +184,8 @@ void BattleScene::UpdateBattle()
 	}
 
 	Audio::Play(hSoundBattle_);
+	pHUD_->SetPlayerScore(PlayerScore_);
+	pHUD_->SetEnemyScore(EnemyScore_);
 }
 
 void BattleScene::UpdateBattleAfter()
@@ -206,6 +211,7 @@ void BattleScene::SetCSVBattle()
 	if (csv.IsGetParamName(pos))
 	{
 		std::vector<float> v = csv.GetParam(pos);
+		GameTimeLimit = static_cast<int>(v[i_gametimelimit]);
 		PlayerScorePosX = static_cast<int>(v[i_PlayerScorePosX]);
 		PlayerScorePosY = static_cast<int>(v[i_PlayerScorePosY]);
 		EnemyScorePosX = static_cast<int>(v[i_EnemyScorePosX]);
