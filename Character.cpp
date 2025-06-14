@@ -490,6 +490,12 @@ void Character::Charging()
 	}
 }
 
+void Character::EmitCharge()
+{
+	MoveParam_.Acceleration_ = MoveParam_.TmpAccele_;
+	MoveParam_.TmpAccele_ = 0.0f;
+}
+
 void Character::SetArrow()
 {
 	XMVECTOR frontArrow = XMVectorScale(this->MoveParam_.ForwardVector_, this->MoveParam_.AddArrowDepth_);

@@ -306,7 +306,7 @@ public:
     /// <summary>
     /// 蓄積したTmpAccele_を実際に加速度に代入
     /// </summary>
-    void EmitCharge() { MoveParam_.Acceleration_ = MoveParam_.TmpAccele_; }
+    void EmitCharge();
 
     /// <summary>
     /// チャージ中の矢印位置をセット
