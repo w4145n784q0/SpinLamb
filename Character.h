@@ -94,6 +94,8 @@ protected:
         XMVECTOR LowerNormal_ = { 0,0,0 };//ステージ南端(後方)の法線ベクトル
         XMVECTOR RightNormal_ = { 0,0,0 };//ステージ東端(右側)の法線ベクトル
         XMVECTOR LeftNormal_ = { 0,0,0 };//ステージ西端(左側)の法線ベクトル
+        std::vector<XMVECTOR> NormalArray_ = {};//各法線ベクトルを格納した配列
+        std::vector<std::string> WireArray_ = { "UpperWire", "LowerWire", "RightWire" ,"LeftWire"};//各鉄線の名前の配列
 
         float KnockBackPower_ = 0.0f; //壁ヒットでノックバックする強さ（変化なし）
         int InvincibilityTime_ = 0;//ダメージ後の無敵時間 1fごとに上昇
@@ -136,18 +138,21 @@ public:
     /// <param name="_path">csvファイルのパス</param>
     void SetcsvStatus(std::string _path);
 
-    void GetWireNormal() {
-        UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");
-        WallHitParam_.UpperNormal_ = pUpperWire->GetNormal();
+    void GetWireNormal() {  
+        UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");  
+        WallHitParam_.UpperNormal_ = pUpperWire->GetNormal();  
 
-        LowerWire* pLowerWire = (LowerWire*)FindObject("LowerWire");
-		WallHitParam_.LowerNormal_ = pLowerWire->GetNormal();
-
-        LeftWire* pLeftWire = (LeftWire*)FindObject("LeftWire");
-		WallHitParam_.LeftNormal_ = pLeftWire->GetNormal();
+        LowerWire* pLowerWire = (LowerWire*)FindObject("LowerWire");  
+        WallHitParam_.LowerNormal_ = pLowerWire->GetNormal();  
 
         RightWire* pRightWire = (RightWire*)FindObject("RightWire");
-		WallHitParam_.RightNormal_ = pRightWire->GetNormal();
+        WallHitParam_.RightNormal_ = pRightWire->GetNormal();
+
+        LeftWire* pLeftWire = (LeftWire*)FindObject("LeftWire");  
+        WallHitParam_.LeftNormal_ = pLeftWire->GetNormal();  
+
+        WallHitParam_.NormalArray_ = {  WallHitParam_.UpperNormal_,  WallHitParam_.LowerNormal_,  
+             WallHitParam_.RightNormal_, WallHitParam_.LeftNormal_, };  
     }
 
     //----------基本処理----------
@@ -251,6 +256,13 @@ public:
     /// ノックバック移動処理
     /// </summary>
     void KnockBack();
+
+    /// <summary>
+    /// 指定された鉄線の名前に応じた各法線ベクトルを取得する
+    /// </summary>
+    /// <param name="_normal">キャラクターが接触した鉄線の名前</param>
+    /// <returns>鉄線の名前に対応した法線ベクトル</returns>
+    XMVECTOR HitNormal(std::string _normal);
 
     /// <summary>
     /// 壁に接触した際の計算処理

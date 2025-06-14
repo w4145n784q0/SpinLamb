@@ -259,39 +259,20 @@ void Player::OnCollision(GameObject* pTarget)
 		Audio::Play(hSoundCollision_);
 	}
 
-	if (pTarget->GetObjectName() == "UpperWire")
+	if (pTarget->GetObjectName() == "UpperWire" || pTarget->GetObjectName() == "LowerWire" ||
+		pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
 	{
 		if (!WallHitParam_.IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
 		{
-			WallReflect(WallHitParam_.UpperNormal_);
-			PlayerState_ = S_WALLHIT;
-		}
-	}
-
-	if (pTarget->GetObjectName() == "LowerWire")
-	{
-		if (!WallHitParam_.IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
-		{
-			WallReflect(WallHitParam_.LowerNormal_);
-			PlayerState_ = S_WALLHIT;
-		}
-	}
-
-	if (pTarget->GetObjectName() == "RightWire")
-	{
-		if (!WallHitParam_.IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
-		{
-			WallReflect(WallHitParam_.RightNormal_);
-			PlayerState_ = S_WALLHIT;
-		}
-	}
-
-	if (pTarget->GetObjectName() == "LeftWire")
-	{
-		if (!WallHitParam_.IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
-		{
-			WallReflect(WallHitParam_.LeftNormal_);
-			PlayerState_ = S_WALLHIT;
+            for (const std::string& arr : WallHitParam_.WireArray_)
+			{
+				if (pTarget->GetObjectName() == arr)
+				{
+					XMVECTOR normal = HitNormal(arr);
+					WallReflect(normal);
+					PlayerState_ = S_WALLHIT;
+				}
+			}
 		}
 	}
 

@@ -349,39 +349,20 @@ void Enemy::OnCollision(GameObject* pTarget)
 		EnemyState_ = S_HIT;
 	}
 
-	if (pTarget->GetObjectName() == "UpperWire")
+	if (pTarget->GetObjectName() == "UpperWire" || pTarget->GetObjectName() == "LowerWire" ||
+		pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
 	{
 		if (!WallHitParam_.IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
 		{
-			WallReflect(WallHitParam_.UpperNormal_);
-			EnemyState_ = S_WALLHIT;
-		}
-	}
-
-	if (pTarget->GetObjectName() == "LowerWire")
-	{
-		if (!WallHitParam_.IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
-		{
-			WallReflect(WallHitParam_.LowerNormal_);
-			EnemyState_ = S_WALLHIT;
-		}
-	}
-
-	if (pTarget->GetObjectName() == "RightWire")
-	{
-		if (!WallHitParam_.IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
-		{
-			WallReflect(WallHitParam_.RightNormal_);
-			EnemyState_ = S_WALLHIT;
-		}
-	}
-
-	if (pTarget->GetObjectName() == "LeftWire")
-	{
-		if (!WallHitParam_.IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
-		{
-			WallReflect(WallHitParam_.LeftNormal_);
-			EnemyState_ = S_WALLHIT;
+			for (const std::string& arr : WallHitParam_.WireArray_)
+			{
+				if (pTarget->GetObjectName() == arr)
+				{
+					XMVECTOR normal = HitNormal(arr);
+					WallReflect(normal);
+					EnemyState_ = S_WALLHIT;
+				}
+			}
 		}
 	}
 }

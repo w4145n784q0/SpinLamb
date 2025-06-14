@@ -170,15 +170,22 @@ void HUD::Draw()
 	switch (DrawMode_)
 	{
 	case S_StartLogo:
+	{
+		DrawScore();
 		DrawStartLogo();
+	}
 		break;
 	case S_Timer:
+	{
+		DrawScore();
 		DrawTimer();
+	}
 		break;
 	case S_FinishLogo:
 	{
 		DrawTimer();
 		DrawFinishLogo();
+		DrawScore();
 	}
 		break;
 	case S_Practice:
@@ -191,7 +198,6 @@ void HUD::Draw()
 	}
 
 	//èÌÇ…ï\é¶Ç∑ÇÈÇ‡ÇÃ
-	DrawScore();
 	DrawMiniMap();
 }
 

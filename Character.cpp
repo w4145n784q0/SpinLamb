@@ -410,6 +410,22 @@ void Character::KnockBack()
 	}
 }
 
+XMVECTOR Character::HitNormal(std::string _normal)
+{
+	//wallArray[] = { "UpperWire", "LowerWire", "RightWire" ,"LeftWire" };
+	
+	//w’è‚µ‚½–¼‘O‚Ì“Sü‚ªWallArray‚©‚çŒ©‚Â‚©‚Á‚½‚ç‘Î‰‚µ‚½–@ü‚ğ•Ô‚·
+	for (int i = 0; i < WallHitParam_.WireArray_.size(); i++)
+	{
+		if (_normal == WallHitParam_.WireArray_[i])
+		{
+			return WallHitParam_.NormalArray_[i];
+		}
+	}
+
+	return { 0,0,0 };
+}
+
 void Character::WallHit()
 {
 	SetWallHitEffect();
