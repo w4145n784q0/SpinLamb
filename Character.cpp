@@ -61,13 +61,6 @@ namespace {
 		i_shadowcorrection = 0,
 	};
 
-	//ゲームに登場するキャラクターの数
-	enum GameCharaIndex
-	{
-		i_player = 0,
-		i_enemy,
-		i_MaxChara
-	};
 
 	//エフェクト初期化時のインデックス
 	enum EffectParamIndex
@@ -76,6 +69,12 @@ namespace {
 		i_Locus,
 		i_Hit,
 		i_WallHit,
+	};
+
+	enum SoundParamIndex
+	{
+		i_chargecount = 0,
+		i_attackcount,
 	};
 }
 
@@ -89,9 +88,9 @@ Character::Character(GameObject* parent, const std::string& name)
 	:GameObject(parent, name)
 {
 	InitCSVEffect();
-	hSoundcharge_ = Audio::Load("Sound\\SE\\charge.wav",false, i_MaxChara);
+	hSoundcharge_ = Audio::Load("Sound\\SE\\charge.wav",false, ChargeSoundCount_);
 	assert(hSoundcharge_ >= 0);
-	hSoundattack_ = Audio::Load("Sound\\SE\\attack.wav", false, i_MaxChara);
+	hSoundattack_ = Audio::Load("Sound\\SE\\attack.wav", false, AttackSoundCount_);
 	assert(hSoundattack_ >= 0);
 	hSoundCollision_ = Audio::Load("Sound\\SE\\collision.wav",false);
 	assert(hSoundCollision_ >= 0);
@@ -178,6 +177,15 @@ void Character::SetcsvStatus(std::string _path)
 	{
 		std::vector<float> v = csv.GetParam(p_shadow);
 		ShadowParam_.ShadowCorrection_ = v[i_shadowcorrection];
+	}
+
+	//
+	std::string p_sound = "SoundParam";
+	if (csv.IsGetParamName(p_sound))
+	{
+		std::vector<float> v = csv.GetParam(p_sound);
+		ChargeSoundCount_ = v[i_chargecount];
+		AttackSoundCount_ = v[i_attackcount];
 	}
 }
 

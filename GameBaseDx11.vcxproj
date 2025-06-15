@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Character.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -189,6 +190,7 @@
     <ClCompile Include="UpperWire.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="BaseScene.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Character.h" />
     <ClInclude Include="Enemy.h" />

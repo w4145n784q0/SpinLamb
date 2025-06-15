@@ -191,6 +191,7 @@
     <ClCompile Include="GameTimer.cpp">
       <Filter>06UI</Filter>
     </ClCompile>
+    <ClCompile Include="BaseScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -347,6 +348,7 @@
     <ClInclude Include="GameTimer.h">
       <Filter>06UI</Filter>
     </ClInclude>
+    <ClInclude Include="BaseScene.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

@@ -125,6 +125,10 @@ protected:
 	std::vector<float> WallHitEffectParam_ = {};//壁に接触時の衝撃エフェクトのパラメータ
 	std::vector<std::vector<float>> EffectArray_ = {};//エフェクトパラメータをまとめる配列
 
+    //----------サウンド関連----------
+    int ChargeSoundCount_ = 0;//チャージ音を鳴らす回数
+    int AttackSoundCount_ = 0;//突撃音を鳴らす回数
+
 public:
     Character(GameObject* parent);
     Character(GameObject* parent, const std::string& name);
