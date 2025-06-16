@@ -88,6 +88,8 @@ Character::Character(GameObject* parent, const std::string& name)
 	:GameObject(parent, name)
 {
 	InitCSVEffect();
+	InitCSVSound();
+
 	hSoundcharge_ = Audio::Load("Sound\\SE\\charge.wav",false, ChargeSoundCount_);
 	assert(hSoundcharge_ >= 0);
 	hSoundattack_ = Audio::Load("Sound\\SE\\attack.wav", false, AttackSoundCount_);
@@ -179,14 +181,6 @@ void Character::SetcsvStatus(std::string _path)
 		ShadowParam_.ShadowCorrection_ = v[i_shadowcorrection];
 	}
 
-	//
-	std::string p_sound = "SoundParam";
-	if (csv.IsGetParamName(p_sound))
-	{
-		std::vector<float> v = csv.GetParam(p_sound);
-		ChargeSoundCount_ = v[i_chargecount];
-		AttackSoundCount_ = v[i_attackcount];
-	}
 }
 
 
@@ -597,4 +591,18 @@ void Character::SetWallHitEffect()
 	wallhit.textureFileName = "PaticleAssets\\flashB_W.png";
 	wallhit.position = this->transform_.position_;
 	VFX::Start(wallhit);
+}
+
+void Character::InitCSVSound()
+{
+	CsvReader csv;
+	csv.Load("CSVData\\SoundData.csv");
+
+	std::string p_sound = "SoundParam";
+	if (csv.IsGetParamName(p_sound))
+	{
+		std::vector<float> v = csv.GetParam(p_sound);
+		ChargeSoundCount_ = v[i_chargecount];
+		AttackSoundCount_ = v[i_attackcount];
+	}
 }

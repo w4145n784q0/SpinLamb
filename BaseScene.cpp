@@ -28,3 +28,11 @@ void BaseScene::Update()
 		break;
 	}
 }
+
+void BaseScene::Select()
+{
+}
+
+void BaseScene::Decide()
+{
+}

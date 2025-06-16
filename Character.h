@@ -387,6 +387,9 @@ public:
     /// </summary>
     void SetWallHitEffect();
 
+    //ÉTÉEÉìÉhä÷åW
+    void InitCSVSound();
+
     //setter,getterä÷êî
 
     void SetAcceleration(float _acceleration) { MoveParam_.Acceleration_ = _acceleration; }
