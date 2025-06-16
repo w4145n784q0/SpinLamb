@@ -148,81 +148,7 @@ void Player::Draw()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("PlayerStatus"))
 	{
-		if (ImGui::TreeNode("Transform.Position"))
-		{
-			ImGui::SliderFloat("PositionX:%.3f", &this->transform_.position_.x, WestEnd_, EastEnd_);
-			ImGui::SliderFloat("PositionZ:%.3f", &this->transform_.position_.z, SouthEnd_, NorthEnd_);
-			ImGui::TreePop();
-		}
-
-		if (ImGui::TreeNode("Transform.Rotate"))
-		{
-			ImGui::Text("RotateX:%.3f", &this->transform_.rotate_.x);
-			ImGui::Text("RotateY:%.3f", &this->transform_.rotate_.y);
-			ImGui::Text("RotateZ:%.3f", &this->transform_.rotate_.z);
-			ImGui::TreePop();
-		}
-
-		if (ImGui::TreeNode("Forward"))
-		{
-			XMFLOAT3 tmp;
-			XMStoreFloat3(&tmp, MoveParam_.ForwardVector_);
-			ImGui::Text("ForwardX:%.3f", tmp.x);
-			ImGui::Text("ForwardY:%.3f", tmp.y);
-			ImGui::Text("ForwardZ:%.3f", tmp.z);
-			ImGui::TreePop();
-		}
-
-		if (ImGui::TreeNode("Move"))
-		{
-			ImGui::InputFloat("velocity", &this->MoveParam_.Velocity_);
-			ImGui::InputFloat("AcceleValue", &this->MoveParam_.AcceleValue_);
-			ImGui::InputFloat("FullAccelerate", &this->MoveParam_.FullAccelerate_);
-			ImGui::TreePop();
-		}
-
-		if (ImGui::TreeNode("Rotate"))
-		{
-			ImGui::InputFloat("normalRotate", &this->RotateParam_.MoveRotateX);
-			ImGui::InputFloat("fastRotate", &this->RotateParam_.FastRotateX);
-			ImGui::TreePop();
-		}
-
-		if (ImGui::TreeNode("Jump"))
-		{
-			ImGui::InputFloat("Gravity", &this->JumpParam_.Gravity_);
-			ImGui::InputFloat("HeightLowerLimit", &this->JumpParam_.HeightLowerLimit_);
-			ImGui::InputFloat("HeightUpperLimit", &this->JumpParam_.HeightUpperLimit_);
-			ImGui::TreePop();
-		}
-
-		if (ImGui::TreeNode("Hit"))
-		{
-			ImGui::InputFloat("Collider", &this->HitParam_.ColliderSize_);
-			ImGui::InputFloat("OriginaRangeMin", &this->HitParam_.OriginaRangeMin_);
-			ImGui::InputFloat("OriginaRangeMax", &this->HitParam_.OriginaRangeMax_);
-			ImGui::InputFloat("ConvertedRangeMin", &this->HitParam_.ConvertedRangeMin_);
-			ImGui::InputFloat("ConvertedRangeMax", &this->HitParam_.ConvertedRangeMax_);
-			ImGui::InputFloat("DecelerationRate", &this->HitParam_.DecelerationRate_);
-			ImGui::InputFloat("KnockBackEnd", &this->HitParam_.KnockBackEnd_);
-			ImGui::TreePop();
-		}
-
-		if (ImGui::TreeNode("WallHit"))
-		{
-			ImGui::InputFloat("Collider", &this->WallHitParam_.KnockBackPower_);
-			ImGui::InputInt("InvincibilityTime", &this->WallHitParam_.InvincibilityValue_);
-			ImGui::InputInt("blinkValue", &this->WallHitParam_.blinkValue_);
-			ImGui::TreePop();
-		}
-
-		if (ImGui::TreeNode("Shadow"))
-		{
-			ImGui::InputFloat("Collider", &this->ShadowParam_.ShadowCorrection_);
-			ImGui::TreePop();
-		}
-
-		ImGui::TreePop();
+		DrawCharacterImGui();
 	}
 	
 #endif
@@ -348,6 +274,7 @@ void Player::UpdateIdle()
 
 void Player::UpdateCharge()
 {
+	Charging();
 	SetArrow();
 	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
 	SetChargingEffect("PaticleAssets\\circle_B.png");
@@ -356,7 +283,7 @@ void Player::UpdateCharge()
 	{
 		if (JumpParam_. IsOnGround_)
 		{
-			AccelerationStop();
+			ChargeReset();
 			SetJump();
 			PlayerState_ = S_IDLE;
 		}
@@ -378,7 +305,6 @@ void Player::UpdateCharge()
 	}
 
 	FrontVectorConfirm();
-	Charging();
 	FastRotate();
 	CameraControl();
 }

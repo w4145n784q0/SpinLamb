@@ -135,6 +135,8 @@ public:
 
     virtual ~Character();
 
+    //----------初期化----------
+
     /// <summary>
     /// CSVから各ステータスを読み込みする
     /// Characterクラス限定
@@ -159,8 +161,6 @@ public:
              WallHitParam_.RightNormal_, WallHitParam_.LeftNormal_, };  
     }
 
-    //----------基本処理----------
-
     /// <summary>
     /// 初期位置の設定
     /// </summary>
@@ -171,6 +171,8 @@ public:
         MoveParam_.ArrowTransform_.rotate_ = MoveParam_.ArrowRotate_;
         MoveParam_.ArrowTransform_.scale_ = MoveParam_.ArrowScale_;
     }
+  
+    //----------描画----------
 
     /// <summary>
     /// キャラクターモデル描画(ダメージ時の点滅表現等行う)
@@ -185,30 +187,11 @@ public:
     void DrawModel(int _handle, Transform _transform);
 
     /// <summary>
-    /// 重力処理
+    /// キャラクター共通のImGuiを描画 個別要素は派生先で記述
     /// </summary>
-    void CharacterGravity();
+    void DrawCharacterImGui();
 
-    /// <summary>
-    /// 影モデルの初期化
-    /// </summary>
-    void InitShadow();
-
-    /// <summary>
-    /// 影付け（毎フレーム更新）
-    /// </summary>
-    void ShadowSet();
-
-    /// <summary>
-    /// 影モデル描画
-    /// </summary>
-    void ShadowDraw();
-
-    /// <summary>
-    /// キャラクターの移動処理(回転も行う)
-    /// </summary>
-    /// <param name="_direction">動かす方向ベクトル</param>
-    void CharacterMoveRotate(XMVECTOR _direction, float rotateY);
+    //----------移動----------
 
     /// <summary>
     /// キャラクターの移動処理
@@ -234,9 +217,17 @@ public:
     void MoveConfirm();
 
     /// <summary>
+    /// Y軸の回転行列をベクトルに変換
+    /// </summary>
+    /// <param name="rotY">Y軸に回転したい角度（Degree）</param>
+    /// <param name="front">正面ベクトル(ローカル空間)</param>
+    /// <returns>変形したベクトル（ワールド空間）</returns>
+    XMVECTOR RotateVecFront(float rotY, XMVECTOR front);
+
+    /// <summary>
     /// 正面ベクトルを更新
     /// </summary>
-    void FrontVectorConfirm(){ 
+    void FrontVectorConfirm(){
         MoveParam_.ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, InitParam_.FrontDirection_);
     }
 
@@ -246,6 +237,89 @@ public:
     /// <param name="_MoveVector">進行したい方向ベクトル</param>
     /// <returns>回転する角度(Y軸回転)</returns>
     float RotateDirectionVector(XMVECTOR _MoveVector);
+
+    //----------チャージ----------
+
+    /// <summary>
+    /// 加速度の加算
+    /// </summary>
+    void Charging();
+
+    /// <summary>
+    /// 蓄積したTmpAccele_を実際に加速度に代入
+    /// </summary>
+    void EmitCharge();
+
+    /// <summary>
+    /// TmpAccele_を0にする
+    /// </summary>
+    void ChargeReset();
+
+    /// <summary>
+    /// チャージ中の矢印位置をセット
+    /// </summary>
+    void SetArrow();
+
+    //----------攻撃----------
+
+    /// <summary>
+    /// 減速処理(加速時の増加量使用)
+    /// </summary>
+    void Deceleration() { MoveParam_.Acceleration_ -= MoveParam_.AcceleValue_; }
+
+    /// <summary>
+    /// 摩擦による減速処理
+    /// </summary>
+    void FrictionDeceleration() { MoveParam_.Acceleration_ -= MoveParam_.Friction_; }
+
+    /// <summary>
+    /// 加速度リセット
+    /// </summary>
+    void AccelerationStop() { MoveParam_.Acceleration_ = 0.0f; }
+
+    /// <summary>
+    /// 停止判定
+    /// </summary>
+    /// <returns>加速量が0.0以下かどうか</returns>
+    bool IsDashStop() { if (MoveParam_.Acceleration_ <= 0.0f) return true; else return false; }
+
+
+    //----------空中----------
+
+    /// <summary>
+    /// 重力処理
+    /// </summary>
+    void CharacterGravity();
+
+    //----------回転----------
+
+    /// <summary>
+    /// 通常X軸回転
+    /// </summary>
+    void MoveRotate() { this->transform_.rotate_.x += RotateParam_.MoveRotateX; }
+
+    /// <summary>
+    /// 通常X軸回転(-x回転)
+    /// </summary>
+    void MoveRotateReverse() { this->transform_.rotate_.x -= RotateParam_.MoveRotateX; }
+
+    /// <summary>
+    /// 高速X軸回転
+    /// </summary>
+    void FastRotate() { this->transform_.rotate_.x += RotateParam_.FastRotateX; }
+
+    /// <summary>
+    /// 高速X軸回転(-x回転)
+    /// </summary>
+    void FastRotateReverse() { this->transform_.rotate_.x -= RotateParam_.FastRotateX; }
+
+    /// <summary>
+    /// X回転を止める
+    /// </summary>
+    void RotateStop() { this->transform_.rotate_.x = 0.0f; }
+
+
+    //----------被弾----------
 
     /// <summary>
     /// 反射処理
@@ -289,74 +363,22 @@ public:
     /// </summary>
     void InvincibilityTimeCalclation();
 
-    /// <summary>
-    /// 通常X軸回転
-    /// </summary>
-    void MoveRotate(){ this->transform_.rotate_.x += RotateParam_.MoveRotateX; }
+    //----------影付け----------
 
     /// <summary>
-    /// 通常X軸回転(-x回転)
+    /// 影モデルの初期化
     /// </summary>
-    void MoveRotateReverse(){ this->transform_.rotate_.x -= RotateParam_.MoveRotateX; }
+    void InitShadow();
 
     /// <summary>
-    /// 高速X軸回転
+    /// 影付け（毎フレーム更新）
     /// </summary>
-    void FastRotate(){ this->transform_.rotate_.x += RotateParam_.FastRotateX; }
+    void ShadowSet();
 
     /// <summary>
-    /// 高速X軸回転(-x回転)
+    /// 影モデル描画
     /// </summary>
-    void FastRotateReverse() { this->transform_.rotate_.x -= RotateParam_.FastRotateX; }
-
-    /// <summary>
-    /// X回転を止める
-    /// </summary>
-    void RotateStop(){ this->transform_.rotate_.x = 0.0f; }
-
-    /// <summary>
-    /// 加速度の加算
-    /// </summary>
-    void Charging();
-
-    /// <summary>
-    /// 蓄積したTmpAccele_を実際に加速度に代入
-    /// </summary>
-    void EmitCharge();
-
-    /// <summary>
-    /// チャージ中の矢印位置をセット
-    /// </summary>
-    void SetArrow();
-
-    /// <summary>
-    /// 減速処理(加速時の増加量使用)
-    /// </summary>
-    void Deceleration() { MoveParam_.Acceleration_ -= MoveParam_.AcceleValue_; }
-
-	/// <summary>
-	/// 摩擦による減速処理
-	/// </summary>
-	void FrictionDeceleration() { MoveParam_.Acceleration_ -= MoveParam_.Friction_; }
-
-    /// <summary>
-    /// 加速度リセット
-    /// </summary>
-    void AccelerationStop(){ MoveParam_.Acceleration_ = 0.0f; }
-
-    /// <summary>
-    /// 停止判定
-    /// </summary>
-    /// <returns>加速量が0.0以下かどうか</returns>
-    bool IsDashStop() { if (MoveParam_.Acceleration_ <= 0.0f) return true; else return false; }
-
-    /// <summary>
-    /// Y軸の回転行列をベクトルに変換
-    /// </summary>
-    /// <param name="rotY">Y軸に回転したい角度（Degree）</param>
-    /// <param name="front">正面ベクトル(ローカル空間)</param>
-    /// <returns>変形したベクトル（ワールド空間）</returns>
-    XMVECTOR RotateVecFront(float rotY, XMVECTOR front);
+    void ShadowDraw();
 
 
     //----------エフェクト処理----------
@@ -387,7 +409,7 @@ public:
     /// </summary>
     void SetWallHitEffect();
 
-    //サウンド関係
+    //----------サウンド関係----------
     void InitCSVSound();
 
     //setter,getter関数

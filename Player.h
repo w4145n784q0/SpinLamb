@@ -74,11 +74,6 @@ public:
 			return false;
 	}
 
-	void PlayerReflect(XMVECTOR reflect) {
-		WallReflect(reflect);
-		PlayerState_ = S_WALLHIT;
-	}
-
 	//ƒvƒŒƒCƒ„[‚ÉˆÚ“®‚ğ‹–‰Â
 	void PlayerStart() { PlayerState_ = S_IDLE; }
 

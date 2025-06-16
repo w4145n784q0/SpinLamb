@@ -71,6 +71,7 @@ namespace {
 		i_WallHit,
 	};
 
+	//サウンド初期化時のインデックス
 	enum SoundParamIndex
 	{
 		i_chargecount = 0,
@@ -183,8 +184,6 @@ void Character::SetcsvStatus(std::string _path)
 
 }
 
-
-
 void Character::DrawCharacterModel(int _handle, Transform _transform)
 {
 	if (WallHitParam_.IsInvincibility_)
@@ -205,6 +204,85 @@ void Character::DrawModel(int _handle, Transform _transform)
 {
 	Model::SetTransform(_handle, _transform);
 	Model::Draw(_handle);
+}
+
+void Character::DrawCharacterImGui()
+{
+	if (ImGui::TreeNode("Transform.Position"))
+	{
+		ImGui::SliderFloat("PositionX:%.3f", &this->transform_.position_.x, WestEnd_, EastEnd_);
+		ImGui::SliderFloat("PositionZ:%.3f", &this->transform_.position_.z, SouthEnd_, NorthEnd_);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Transform.Rotate"))
+	{
+		ImGui::Text("RotateX:%.3f", &this->transform_.rotate_.x);
+		ImGui::Text("RotateY:%.3f", &this->transform_.rotate_.y);
+		ImGui::Text("RotateZ:%.3f", &this->transform_.rotate_.z);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Forward"))
+	{
+		XMFLOAT3 tmp;
+		XMStoreFloat3(&tmp, MoveParam_.ForwardVector_);
+		ImGui::Text("ForwardX:%.3f", tmp.x);
+		ImGui::Text("ForwardY:%.3f", tmp.y);
+		ImGui::Text("ForwardZ:%.3f", tmp.z);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Move"))
+	{
+		ImGui::InputFloat("velocity", &this->MoveParam_.Velocity_);
+		ImGui::InputFloat("AcceleValue", &this->MoveParam_.AcceleValue_);
+		ImGui::InputFloat("FullAccelerate", &this->MoveParam_.FullAccelerate_);
+		ImGui::InputFloat("TmpAccele", &this->MoveParam_.TmpAccele_);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Rotate"))
+	{
+		ImGui::InputFloat("normalRotate", &this->RotateParam_.MoveRotateX);
+		ImGui::InputFloat("fastRotate", &this->RotateParam_.FastRotateX);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Jump"))
+	{
+		ImGui::InputFloat("Gravity", &this->JumpParam_.Gravity_);
+		ImGui::InputFloat("HeightLowerLimit", &this->JumpParam_.HeightLowerLimit_);
+		ImGui::InputFloat("HeightUpperLimit", &this->JumpParam_.HeightUpperLimit_);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Hit"))
+	{
+		ImGui::InputFloat("OriginaRangeMin", &this->HitParam_.OriginaRangeMin_);
+		ImGui::InputFloat("OriginaRangeMax", &this->HitParam_.OriginaRangeMax_);
+		ImGui::InputFloat("ConvertedRangeMin", &this->HitParam_.ConvertedRangeMin_);
+		ImGui::InputFloat("ConvertedRangeMax", &this->HitParam_.ConvertedRangeMax_);
+		ImGui::InputFloat("DecelerationRate", &this->HitParam_.DecelerationRate_);
+		ImGui::InputFloat("KnockBackEnd", &this->HitParam_.KnockBackEnd_);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("WallHit"))
+	{
+		ImGui::InputFloat("Collider", &this->WallHitParam_.KnockBackPower_);
+		ImGui::InputInt("InvincibilityTime", &this->WallHitParam_.InvincibilityValue_);
+		ImGui::InputInt("blinkValue", &this->WallHitParam_.blinkValue_);
+		ImGui::TreePop();
+	}
+
+	if (ImGui::TreeNode("Shadow"))
+	{
+		ImGui::InputFloat("Collider", &this->ShadowParam_.ShadowCorrection_);
+		ImGui::TreePop();
+	}
+
+	ImGui::TreePop();
 }
 
 void Character::CharacterGravity()
@@ -248,25 +326,6 @@ void Character::ShadowDraw()
 {
 	Model::SetTransform(ShadowParam_.hShadow_, this->ShadowParam_.ShadowTrans_);
 	Model::Draw(ShadowParam_.hShadow_);
-}
-
-void Character::CharacterMoveRotate(XMVECTOR _direction,float rotateY)
-{
-	//向いているローカルの方向ベクトルをＹ軸回転する
-	XMVECTOR prev = RotateVecFront(rotateY, _direction);
-
-	//単位ベクトル化し、移動方向を確定
-	MoveParam_.MoveDirection_ = XMVector3Normalize(prev);
-
-	CreateMoveVector();
-
-	//場外でなければ位置更新 
-	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, MoveParam_.NewPositon_);
-	if (!IsOutsideStage(tmp))
-	{
-		MoveConfirm();
-	}
 }
 
 void Character::CharacterMove(XMVECTOR _direction)
@@ -385,6 +444,10 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 	HitParam_.KnockBack_Velocity_.x = KnockBackValue;
 	HitParam_.KnockBack_Velocity_.z = KnockBackValue;
 
+	//溜めている速度をリセット
+	ChargeReset();
+
+	//ダッシュ中の速度リセット
 	AccelerationStop();
 }
 
@@ -464,6 +527,8 @@ void Character::WallReflect(XMVECTOR pos)
 	HitParam_.KnockBack_Velocity_.z = WallHitParam_.KnockBackPower_;
 
 	WallHitParam_.IsInvincibility_ = true;
+
+	ChargeReset();
 }
 
 bool Character::IsKnockBackEnd()
@@ -511,6 +576,11 @@ void Character::Charging()
 void Character::EmitCharge()
 {
 	MoveParam_.Acceleration_ = MoveParam_.TmpAccele_;
+	ChargeReset();
+}
+
+void Character::ChargeReset()
+{
 	MoveParam_.TmpAccele_ = 0.0f;
 }
 
