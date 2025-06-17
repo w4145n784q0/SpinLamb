@@ -16,6 +16,12 @@ using namespace DirectX;
 //-----------------------------------------------------------
 namespace Input
 {
+	/// スティックを傾けた値(0.0~1.0)がこの値を上回ったか
+	extern float StickTilt;
+
+	/// スティックをわずかに傾けた値(0.0~1.0)がこの値を上回ったか
+	extern float StickMicroTilt;
+
 	//初期化
 	//引数：hWnd	ウィンドウハンドル
 	void Initialize(HWND hWnd);
@@ -106,8 +112,8 @@ namespace Input
 	//振動させる
 	void SetPadVibration(int l, int r, int padID = 0);
 
-
-
+	//SCV読み込み
+	void SetInputCSV();
 
 	//開放
 	void Release();

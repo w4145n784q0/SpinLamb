@@ -1,8 +1,18 @@
 #include "Input.h"
 #include "Global.h"
+#include"CsvReader.h"
 
 namespace Input
 {
+	enum CommonIndex
+	{
+		i_sticktilt = 0,
+		i_stickMicrotilt,
+	};
+
+	float StickTilt = 0.0f;
+	float StickMicroTilt = 0.0f;
+
 	//ウィンドウハンドル
 	HWND	hWnd_;
 
@@ -47,6 +57,9 @@ namespace Input
 		pDInput_->CreateDevice(GUID_SysMouse, &pMouseDevice_, nullptr);
 		pMouseDevice_->SetDataFormat(&c_dfDIMouse);
 		pMouseDevice_->SetCooperativeLevel(hWnd_, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
+
+		//scv読み込み行う
+		SetInputCSV();
 	}
 
 
@@ -285,6 +298,20 @@ namespace Input
 		vibration.wLeftMotorSpeed = l; // 左モーターの強さ
 		vibration.wRightMotorSpeed = r;// 右モーターの強さ
 		XInputSetState(padID, &vibration);
+	}
+
+	void SetInputCSV()
+	{
+		CsvReader csv;
+		csv.Load("CSVdata\\InputData.csv");
+
+		std::string inputdata = "Input";
+		if (csv.IsGetParamName(inputdata))
+		{
+			std::vector<float> v = csv.GetParam(inputdata);
+			StickTilt = v[i_sticktilt];
+			StickMicroTilt = v[i_stickMicrotilt];
+		}
 	}
 
 }

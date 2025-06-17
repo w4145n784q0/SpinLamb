@@ -34,8 +34,7 @@ namespace
 		i_onesecond,		
 		i_tendivision,
 		i_scenetransition,
-		i_sticktilt,
-		i_stickMicrotilt,
+
 	};
 
 }
@@ -114,16 +113,6 @@ protected:
 	/// 次のシーン遷移までの時間
 	/// </summary>
 	int SceneTransition = 0;
-
-	/// <summary>
-	/// スティックを傾けた値(0.0~1.0)がこの値を上回ったか
-	/// </summary>
-	float StickTilt = 0.0f;
-
-	/// <summary>
-	/// スティックをわずかに傾けた値(0.0~1.0)がこの値を上回ったか
-	/// </summary>
-	float StickMicroTilt = 0.0f;
 
 public:
 	//コンストラクタ
@@ -301,8 +290,7 @@ public:
             oneSecond = static_cast<int>(v[i_onesecond]);  
             TenDivision = static_cast<int>(v[i_tendivision]);  
             SceneTransition = static_cast<int>(v[i_scenetransition]);  
-            StickTilt = v[i_sticktilt];  
-            StickMicroTilt = v[i_stickMicrotilt];  
+
         }  
     }
 

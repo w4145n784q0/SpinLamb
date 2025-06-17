@@ -38,7 +38,7 @@ void HowToPlayScene::Initialize()
 
 void HowToPlayScene::Update()
 {
-	if (Input::IsKeyDown(DIK_RIGHT) || Input::GetPadStickL().y >= StickTilt
+	if (Input::IsKeyDown(DIK_RIGHT) || Input::GetPadStickL().y >= Input::StickTilt
 		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT))
 	{
 		if (itr == ImageList_.begin())
@@ -51,7 +51,7 @@ void HowToPlayScene::Update()
 		}
 		ImageState_ = *itr;
 	}
-	if (Input::IsKeyDown(DIK_LEFT) || Input::GetPadStickL().y <= -StickTilt
+	if (Input::IsKeyDown(DIK_LEFT) || Input::GetPadStickL().y <= -Input::StickTilt
 		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT))
 	{
 		if (itr == --ImageList_.end())

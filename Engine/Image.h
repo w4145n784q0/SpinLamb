@@ -36,6 +36,7 @@ namespace Image
 			fileName = "";
 			alpha = 1.0f;
 			pSprite = nullptr;
+			rect = {};
 		}
 	};
 

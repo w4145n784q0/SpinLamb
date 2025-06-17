@@ -190,7 +190,7 @@ void GameModeScene::SetSCV()
 
 void GameModeScene::UpdateSelect()
 {
-	if (Input::IsKeyDown(DIK_UP) || Input::GetPadStickL().y >= StickTilt
+	if (Input::IsKeyDown(DIK_UP) || Input::GetPadStickL().y >= Input::StickTilt
 		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP))
 	{
 		if (itr == ModeList_.begin())
@@ -204,7 +204,7 @@ void GameModeScene::UpdateSelect()
 		SelectMode_ = *itr;
 		Audio::Play(hSoundSelect_);
 	}
-	if (Input::IsKeyDown(DIK_DOWN) || Input::GetPadStickL().y <= -StickTilt
+	if (Input::IsKeyDown(DIK_DOWN) || Input::GetPadStickL().y <= -Input::StickTilt
 		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN))
 	{
 		if (itr == --ModeList_.end())
