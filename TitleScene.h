@@ -1,9 +1,10 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"BaseScene.h"
 
 //タイトルシーン
 class TitleScene :
-    public GameObject
+    public BaseScene
 {
 private:
 	//----------画像ハンドル----------
@@ -15,6 +16,10 @@ private:
 
 	//タイトル用サウンド
 	int hSoundTitle_;
+
+	//タイトル時の決定音
+	int hSoundStart_;
+
 public:
 	TitleScene(GameObject* parent);
 	~TitleScene();
@@ -30,5 +35,7 @@ public:
 
 	//開放
 	void Release() override;
-};
 
+	void UpdateSelect() override;
+	void UpdateDecide() override;
+};

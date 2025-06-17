@@ -1,12 +1,12 @@
 #include "BaseScene.h"
 
 BaseScene::BaseScene(GameObject* parent)
-	:GameObject(parent,"BaseScene")
+	:GameObject(parent,"BaseScene"),ModeDecide_(Selected),SceneTransitionTimer_(0)
 {
 }
 
 BaseScene::BaseScene(GameObject* parent, const std::string& name)
-	:GameObject(parent, name)
+	:GameObject(parent, name), ModeDecide_(Selected), SceneTransitionTimer_(0)
 {
 }
 
@@ -19,20 +19,12 @@ void BaseScene::Update()
 	switch (ModeDecide_)
 	{
 	case BaseScene::Selected:
-		Select();
+		UpdateSelect();
 		break;
 	case BaseScene::Decided:
-		Decide();
+		UpdateDecide();
 		break;
 	default:
 		break;
 	}
-}
-
-void BaseScene::Select()
-{
-}
-
-void BaseScene::Decide()
-{
 }

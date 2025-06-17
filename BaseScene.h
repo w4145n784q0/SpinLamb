@@ -6,6 +6,7 @@ class BaseScene :
 {
 protected:
 
+	//選択中か選択後か
 	enum Decide
 	{
 		Selected,
@@ -13,14 +14,20 @@ protected:
 		MaxSelect
 	};
 	Decide ModeDecide_;
+
+	//シーン遷移までの時間を計る
+	int SceneTransitionTimer_;
 public:
 	BaseScene(GameObject* parent);
 	BaseScene(GameObject* parent, const std::string& name);
 	virtual ~BaseScene();
 
-	virtual void Update() override;
+	void Update() override;
 
-	virtual void Select();
-	virtual void Decide();
+	//選択中の処理
+	virtual void UpdateSelect() = 0;
+
+	//選択後の処理(主にシーン遷移までに時間を持たせる)
+	virtual void UpdateDecide() = 0;
 };
 

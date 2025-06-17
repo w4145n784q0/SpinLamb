@@ -5,7 +5,7 @@
 #include"Engine/Audio.h"
 
 TitleScene::TitleScene(GameObject* parent)
-	:GameObject(parent,"TitleScene"), hBackScreen_(-1),hSoundTitle_(-1)
+	:BaseScene(parent,"TitleScene"), hBackScreen_(-1),hSoundTitle_(-1),hSoundStart_(-1)
 {
 }
 
@@ -19,18 +19,15 @@ void TitleScene::Initialize()
 	assert(hBackScreen_ >= 0);
 	hSoundTitle_ = Audio::Load("Sound\\BGM\\title.wav",true); 
 	assert(hSoundTitle_ >= 0);
+	hSoundStart_ = Audio::Load("Sound\\SE\\start.wav",false);
+	assert(hSoundStart_ >= 0);
+
+	Audio::Play(hSoundTitle_);
 }
 
 void TitleScene::Update()
 {
-	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
-	{
-		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
-		Audio::Stop(hSoundTitle_);
-	}
-
-	Audio::Play(hSoundTitle_);
+	BaseScene::Update();
 }
 
 void TitleScene::Draw()
@@ -41,4 +38,25 @@ void TitleScene::Draw()
 
 void TitleScene::Release()
 {
+}
+
+void TitleScene::UpdateSelect()
+{
+	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	{
+		ModeDecide_ = Decided;
+		Audio::Play(hSoundStart_);
+	}
+}
+
+void TitleScene::UpdateDecide()
+{
+	if (++SceneTransitionTimer_ > SceneTransition)
+	{
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
+		SceneTransitionTimer_ = 0;
+		Audio::Stop(hSoundTitle_);
+		ModeDecide_ = Selected;
+	}
 }
