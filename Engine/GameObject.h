@@ -97,22 +97,22 @@ protected:
 	/// 60fpsにおける1フレームの時間
 	/// 使用端末によるフレームレート依存防止
 	/// </summary>
-	float DeltaTime = 0.0f;
+	static float DeltaTime;
 
 	/// <summary>
 	/// 1秒を表す定数
 	/// </summary>
-	int oneSecond = 0;
+	static int oneSecond;
 
 	/// <summary>
 	/// 時間表記等に除算する値
 	/// </summary>
-	int  TenDivision = 0;
+	static int  TenDivision;
 
 	/// <summary>
 	/// 次のシーン遷移までの時間
 	/// </summary>
-	int SceneTransition = 0;
+	static int SceneTransition;
 
 public:
 	//コンストラクタ
@@ -278,7 +278,12 @@ public:
 	/// <summary>
 	/// GameObjectの共通データ初期化
 	/// </summary>
-    void SCVCommonDataInitialize() {  
+    static void SCVCommonDataInitialize() {  
+
+		//static bool initialized = false;
+		//if (initialized) return;
+		//initialized = true;
+
         CsvReader csv;  
         csv.Load("CSVdata\\CommonData.csv");  
 

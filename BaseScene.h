@@ -25,10 +25,12 @@ public:
 
 	void Update() override;
 
-	//選択中の処理
+	//以下の処理は純粋仮想関数のため、継承先で必ずオーバーライド
+
+	//選択中の処理（プレイ中以外に使用）
 	virtual void UpdateSelect() = 0;
 
-	//選択後の処理(主にシーン遷移までに時間を持たせる)
+	//選択後の処理（プレイ中以外に使用）主にシーン遷移までに時間を持たせる
 	virtual void UpdateDecide() = 0;
 };
 

@@ -2,6 +2,12 @@
 #include <assert.h>
 #include "global.h"
 
+//複数定義防止のためグローバルスコープで初期化
+float GameObject::DeltaTime = 0.0f;
+int GameObject::oneSecond = 0;
+int GameObject::TenDivision = 0;
+int GameObject::SceneTransition = 0;
+
 //コンストラクタ（親も名前もなし）
 GameObject::GameObject(void) :
 	GameObject(nullptr, "")
@@ -25,7 +31,7 @@ GameObject::GameObject(GameObject * parent, const std::string& name)
 	if(parent)
 		transform_.pParent_ = &parent->transform_;
 
-	SCVCommonDataInitialize();
+	//SCVCommonDataInitialize();
 }
 
 //デストラクタ

@@ -76,6 +76,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	RootObject* pRootObject = new RootObject;
 	pRootObject->Initialize();
 
+	//最初に共通データを初期化
+	GameObject::SCVCommonDataInitialize();
+
 
 	//メッセージループ（何か起きるのを待つ）
 	MSG msg;
