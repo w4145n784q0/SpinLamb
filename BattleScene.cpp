@@ -15,25 +15,16 @@ namespace
 	//バトルモードの制限時間
 	int GameTimeLimit = 0;
 
-	int PlayerScorePosX = 0;
-	int PlayerScorePosY = 0;
-	int EnemyScorePosX = 0;
-	int EnemyScorePosY = 0;
-
 	enum ScorePosIndex
 	{
 		i_gametimelimit = 0,
-		i_PlayerScorePosX,
-		i_PlayerScorePosY,
-		i_EnemyScorePosX,
-		i_EnemyScorePosY,
 	};
 }
 
 BattleScene::BattleScene(GameObject* parent)
 	:GameObject(parent,"BattleScene") ,BattleState_(BEFORE),
 	 hBackScreen_(-1),hSoundBattle_(-1), hSoundWhistle_(-1),
-	PlayerScore_(0),EnemyScore_(0),/*pPlayerScore_(0),pEnemyScore_(0),*/
+	PlayerScore_(0),EnemyScore_(0),
 	pHUD_(nullptr),pMiniMap_(nullptr),pGameTimer_(nullptr)
 {
 }
@@ -89,12 +80,6 @@ void BattleScene::Initialize()
 	pHUD_->SetPlayerScore(PlayerScore_);
 	pHUD_->SetEnemyScore(EnemyScore_);
 
-	//pPlayerScore_ = new Text;
-	//pPlayerScore_->Initialize();
-
-	//pEnemyScore_ = new Text;
-	//pEnemyScore_->Initialize();
-
 }
 
 void BattleScene::Update()
@@ -122,9 +107,6 @@ void BattleScene::Draw()
 	//常に表示するもの
 	Image::SetTransform(hBackScreen_, this->transform_);
 	Image::Draw(hBackScreen_);
-
-	//pPlayerScore_->Draw(PlayerScorePosX, PlayerScorePosY, PlayerScore_);
-	//pEnemyScore_->Draw(EnemyScorePosX, EnemyScorePosY, EnemyScore_);
 
 	//今のBattleSceneの状態から、HUDクラスに描画するものを指示
 	switch (BattleState_)
@@ -212,9 +194,5 @@ void BattleScene::SetCSVBattle()
 	{
 		std::vector<float> v = csv.GetParam(pos);
 		GameTimeLimit = static_cast<int>(v[i_gametimelimit]);
-		PlayerScorePosX = static_cast<int>(v[i_PlayerScorePosX]);
-		PlayerScorePosY = static_cast<int>(v[i_PlayerScorePosY]);
-		EnemyScorePosX = static_cast<int>(v[i_EnemyScorePosX]);
-		EnemyScorePosY = static_cast<int>(v[i_EnemyScorePosY]);
 	}
 }

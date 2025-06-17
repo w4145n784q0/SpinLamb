@@ -5,6 +5,12 @@
 #include"Engine/Audio.h"
 #include"Engine/CsvReader.h"
 
+namespace
+{
+	//プレイボタン,フリープレイボタン,遊び方ボタン,タイトルボタン
+	std::string ParamArray[] = { "Battle", "Practice", "HowToPlay", "BackTitle" };
+}
+
 GameModeScene::GameModeScene(GameObject* parent)
 	:BaseScene(parent, "GameModeScene"), 
 	hBackScreen_(-1), hBackChara_(-1),
@@ -21,7 +27,7 @@ GameModeScene::~GameModeScene()
 
 void GameModeScene::Initialize()
 {
-	SetSCV();
+	SetGameModeSCV();
 	std::string path = "Image\\GameMode\\";
 
 	hBackScreen_ = Image::Load(path + "back_mode.jpg");
@@ -129,7 +135,7 @@ void GameModeScene::Release()
 {
 }
 
-void GameModeScene::SetSCV()
+void GameModeScene::SetGameModeSCV()
 {
 	CsvReader csv;
 	csv.Load("CSVdata\\GameModeData.csv");
@@ -142,8 +148,6 @@ void GameModeScene::SetSCV()
 		SetTransformPRS(Trans_Frame_, v);
 	}
 
-	//プレイボタン,フリープレイボタン,遊び方ボタン,タイトルボタン
-	std::string ParamArray[] = {"Battle", "Practice", "HowToPlay", "BackTitle"};
 
     for (int i = 0; i < sizeof(ParamArray) / sizeof(ParamArray[0]); i++)
     {

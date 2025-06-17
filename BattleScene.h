@@ -13,10 +13,7 @@ class BattleScene :
 {
 private:
 
-	//インスタンス
-	//Text* pPlayerScore_;
-	//Text* pEnemyScore_;
-
+	//----------インスタンス----------
 	HUD* pHUD_;
 
 	//HUDクラスに渡すポインタ

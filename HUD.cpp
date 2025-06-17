@@ -88,7 +88,7 @@ HUD::~HUD()
 
 void HUD::Initialize()
 {
-	SetCSV();
+	SetHUDCSV();
 
 	hBackTitleLogo_ = Image::Load("Image\\Practice\\BackTitleLogo.png");
 	assert(hBackTitleLogo_ >= 0);
@@ -205,7 +205,7 @@ void HUD::Release()
 {
 }
 
-void HUD::SetCSV()
+void HUD::SetHUDCSV()
 {
 	CsvReader csv;
 	csv.Load("CSVdata\\HUDData.csv");

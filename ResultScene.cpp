@@ -26,7 +26,7 @@ ResultScene::~ResultScene()
 
 void ResultScene::Initialize()
 {
-	SetCSVScene();
+	SetCSVResult();
 
 	hBackScreen_ = Image::Load("Image\\GameMode\\back_mode.jpg");
 	assert(hBackScreen_ >= 0);
@@ -106,7 +106,7 @@ void ResultScene::Release()
 {
 }
 
-void ResultScene::SetCSVScene()
+void ResultScene::SetCSVResult()
 {
 	CsvReader csv;
 	csv.Load("CSVdata\\SceneData.csv");

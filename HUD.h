@@ -106,7 +106,7 @@ public:
 	//開放
 	void Release() override;
 
-	void SetCSV();
+	void SetHUDCSV();
 
 	//各ポインタを設定
 	void SetTimerPointer(GameTimer* _gametimer) { pGameTimer_ = _gametimer; }

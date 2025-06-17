@@ -68,7 +68,7 @@ public:
 	void Release() override;
 
 	//csvì«Ç›çûÇ›
-	void SetCSVScene();
+	void SetCSVResult();
 
 	void UpdateSelect() override;
 	void UpdateDecide() override;
