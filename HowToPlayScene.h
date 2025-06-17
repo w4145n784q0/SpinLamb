@@ -1,9 +1,10 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"BaseScene.h"
 
 //あそびかた説明シーン
 class HowToPlayScene :
-    public GameObject
+    public BaseScene
 {
 private:
 	//----------画像ハンドル----------
@@ -47,5 +48,8 @@ public:
 
 	//開放
 	void Release() override;
+
+	void UpdateSelect() override;
+	void UpdateDecide() override;
 };
 

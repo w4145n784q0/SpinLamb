@@ -1,10 +1,11 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"BaseScene.h"
 #include<array>
 
 //ゲーム終了後のリザルトシーン
 class ResultScene :
-    public GameObject
+	public BaseScene
 {
 private:
 	//----------画像ハンドル----------
@@ -29,6 +30,9 @@ private:
 	//リザルト画面サウンド
 	int hSoundResult_;
 
+	//タイトルに戻るサウンド
+	int hSoundBackTitle_;
+
 	//----------トランスフォーム----------
 
 	//結果画面のロゴの位置
@@ -45,6 +49,7 @@ private:
 	};
 	WinnerState winner_;
 
+	//各結果ロゴの画像ハンドル配列
 	std::array<int, RESULTMAX> ResultArray_;
 public:
 	ResultScene(GameObject* parent);
@@ -64,5 +69,8 @@ public:
 
 	//csv読み込み
 	void SetCSVScene();
+
+	void UpdateSelect() override;
+	void UpdateDecide() override;
 };
 

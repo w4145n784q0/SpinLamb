@@ -6,7 +6,7 @@
 #include"Engine/CsvReader.h"
 
 HowToPlayScene::HowToPlayScene(GameObject* parent)
-	:GameObject(parent, "GameModeScene"),
+	:BaseScene(parent, "GameModeScene"),
 	hExplanation_(-1), hOperateKeyboard_(-1), hOperateController_(-1),
 	hSoundHowtoPlay_(-1), ImageState_(Explanation)
 {
@@ -38,40 +38,7 @@ void HowToPlayScene::Initialize()
 
 void HowToPlayScene::Update()
 {
-	if (Input::IsKeyDown(DIK_RIGHT) || Input::GetPadStickL().y >= Input::StickTilt
-		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT))
-	{
-		if (itr == ImageList_.begin())
-		{
-			itr = --ImageList_.end();
-		}
-		else
-		{
-			--itr;
-		}
-		ImageState_ = *itr;
-	}
-	if (Input::IsKeyDown(DIK_LEFT) || Input::GetPadStickL().y <= -Input::StickTilt
-		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT))
-	{
-		if (itr == --ImageList_.end())
-		{
-			itr = ImageList_.begin();
-		}
-		else
-		{
-			++itr;
-		}
-		ImageState_ = *itr;
-	}
-
-	if (Input::IsKeyUp(DIK_A) || Input::IsPadButtonUp(XINPUT_GAMEPAD_A) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
-	{
-		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
-		Audio::Stop(hSoundHowtoPlay_);
-	}
-
+	BaseScene::Update();
 	Audio::Play(hSoundHowtoPlay_);
 }
 
@@ -104,4 +71,51 @@ void HowToPlayScene::Draw()
 
 void HowToPlayScene::Release()
 {
+}
+
+void HowToPlayScene::UpdateSelect()
+{
+	if (Input::IsKeyDown(DIK_RIGHT) || Input::GetPadStickL().y >= Input::StickTilt
+		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT))
+	{
+		if (itr == ImageList_.begin())
+		{
+			itr = --ImageList_.end();
+		}
+		else
+		{
+			--itr;
+		}
+		ImageState_ = *itr;
+	}
+	if (Input::IsKeyDown(DIK_LEFT) || Input::GetPadStickL().y <= -Input::StickTilt
+		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT))
+	{
+		if (itr == --ImageList_.end())
+		{
+			itr = ImageList_.begin();
+		}
+		else
+		{
+			++itr;
+		}
+		ImageState_ = *itr;
+	}
+
+	if (Input::IsKeyUp(DIK_A) || Input::IsPadButtonUp(XINPUT_GAMEPAD_A) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	{
+		ModeDecide_ = Decided;
+	}
+}
+
+void HowToPlayScene::UpdateDecide()
+{
+	if (++SceneTransitionTimer_ > SceneTransition)
+	{
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
+		SceneTransitionTimer_ = 0;
+		Audio::Stop(hSoundHowtoPlay_);
+		ModeDecide_ = Selected;
+	}
 }

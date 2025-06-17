@@ -5,18 +5,13 @@
 #include"Engine/Audio.h"
 #include"Engine/CsvReader.h"
 
-namespace
-{
-	int SceneTransitionTimer = 0; //シーン遷移のフラグ
-}
-
 GameModeScene::GameModeScene(GameObject* parent)
-	:GameObject(parent, "GameModeScene"), 
+	:BaseScene(parent, "GameModeScene"), 
 	hBackScreen_(-1), hBackChara_(-1),
 	hBattle_(-1),hPractice_(-1), hHowtoPlay_(-1),hBackTitle_(-1), hFrameLine_(-1),
 	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),
 	TextArray_({}),ButtonArray_({}),
-	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), SelectMode_(Battle), ModeDecide_(Selected)
+	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), SelectMode_(Battle)
 {
 }
 
@@ -87,18 +82,7 @@ void GameModeScene::Initialize()
 
 void GameModeScene::Update()
 {
-	switch (ModeDecide_)
-	{
-	case GameModeScene::Selected:
-		UpdateSelect();
-		break;
-	case GameModeScene::Decided:
-		UpdateDecide();
-		break;
-	default:
-		break;
-	}
-
+	BaseScene::Update();
 	Audio::Play(hSoundGameMode_);
 }
 
@@ -240,7 +224,7 @@ void GameModeScene::UpdateSelect()
 
 void GameModeScene::UpdateDecide()
 {
-	if(++SceneTransitionTimer > SceneTransition)
+	if(++SceneTransitionTimer_ > SceneTransition)
 	{
 		
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
@@ -261,7 +245,9 @@ void GameModeScene::UpdateDecide()
 		default:
 			break;
 		}
+
+		SceneTransitionTimer_ = 0;
 		Audio::Stop(hSoundGameMode_);
-		SceneTransitionTimer = 0;
+		ModeDecide_ = Selected;
 	}
 }

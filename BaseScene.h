@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 
+//Title,GameMode,ResultScene‚Ì‹¤’Êˆ—‚ğ‚Ü‚Æ‚ß‚½ƒNƒ‰ƒX
 class BaseScene :
     public GameObject
 {

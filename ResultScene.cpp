@@ -14,9 +14,9 @@ namespace
 }
 
 ResultScene::ResultScene(GameObject* parent)
-	:GameObject(parent, "ResultScene"), hBackScreen_(-1), hYouWin_(-1),hCpuWin_(-1),
+	:BaseScene(parent, "ResultScene"), hBackScreen_(-1), hYouWin_(-1),hCpuWin_(-1),
 	hDraw_(-1), hlogoTitle_(-1),
-	hSoundResult_(-1),winner_(RESULTMAX),ResultArray_({})
+	hSoundResult_(-1), hSoundBackTitle_(-1), winner_(RESULTMAX), ResultArray_({})
 {
 }
 
@@ -46,6 +46,9 @@ void ResultScene::Initialize()
 	hSoundResult_ = Audio::Load("Sound\\BGM\\end.wav", true);
 	assert(hSoundResult_ >= 0);
 
+	hSoundBackTitle_ = Audio::Load("Sound\\SE\\backtitle.wav", false);
+	assert(hSoundBackTitle_ >= 0);
+
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 	playerscore =  pSceneManager->GetPlayerScore();
 	enemyscore = pSceneManager->GetEnemyScore();
@@ -68,20 +71,14 @@ void ResultScene::Initialize()
 
 void ResultScene::Update()
 {
+	BaseScene::Update();
 	Audio::Play(hSoundResult_);
-	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
-	{
-		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_TITLE);
-	}
 }
 
 void ResultScene::Draw()
 {
 	Image::SetTransform(hBackScreen_, this->transform_);
 	Image::Draw(hBackScreen_);
-
-	
 
 	Image::SetTransform(hlogoTitle_, PushTitle_);
 	Image::Draw(hlogoTitle_);
@@ -126,5 +123,26 @@ void ResultScene::SetCSVScene()
 	{
 		std::vector<float> v = csv.GetParam(push);
 		SetTransformPRS(PushTitle_, v);
+	}
+}
+
+void ResultScene::UpdateSelect()
+{
+	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	{
+		ModeDecide_ = Decided;
+		Audio::Play(hSoundBackTitle_);
+	}
+}
+
+void ResultScene::UpdateDecide()
+{
+	if (++SceneTransitionTimer_ > SceneTransition)
+	{
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_TITLE);
+		SceneTransitionTimer_ = 0;
+		Audio::Stop(hSoundResult_);
+		ModeDecide_ = Selected;
 	}
 }

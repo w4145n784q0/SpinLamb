@@ -1,21 +1,14 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"BaseScene.h"
 #include<array>
 #include<list>
 
 //ゲームモードを選択するシーン
 class GameModeScene :
-    public GameObject
+    public BaseScene
 {
 private:
-
-	enum Decide
-	{
-		Selected,
-		Decided,
-		MaxSelect
-	};
-	Decide ModeDecide_;
 
 	enum Mode
 	{
@@ -84,7 +77,7 @@ public:
 	//csvファイルの読み込み
 	void SetSCV();
 
-	void UpdateSelect();
-	void UpdateDecide();
+	void UpdateSelect() override;
+	void UpdateDecide() override;
 };
 
