@@ -112,13 +112,13 @@ void BattleScene::Draw()
 	switch (BattleState_)
 	{
 	case BattleScene::BEFORE:
-		pHUD_->SetDrawMode(S_StartLogo);
+		pHUD_->SetDrawMode(S_Start);
 		break;
 	case BattleScene::NOW:
-		pHUD_->SetDrawMode(S_Timer);
+		pHUD_->SetDrawMode(S_Playing);
 		break;
 	case BattleScene::AFTER:
-		pHUD_->SetDrawMode(S_FinishLogo);
+		pHUD_->SetDrawMode(S_Finish);
 		break;
 	case BattleScene::MAX:
 		break;
@@ -133,7 +133,7 @@ void BattleScene::Release()
 
 void BattleScene::UpdateBattleBefore()
 {
-	if (++Timecounter > SceneTransition)
+	if (++Timecounter > SceneLongTransition)
 	{
 		Timecounter = 0;
 

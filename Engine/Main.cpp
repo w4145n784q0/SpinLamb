@@ -18,9 +18,17 @@
 
 #pragma comment(lib,"Winmm.lib")
 
-//定数宣言
-const char* WIN_CLASS_NAME = "Run,Rabbit!";	//ウィンドウクラス名
 
+namespace
+{
+	const int SCREEN_WIDTH = 800;
+	const int SCREEN_HEIGHT = 600;
+	const int FPS = 60;
+	const int MIRI_SEC = 1000;
+}
+
+//定数宣言
+const char* WIN_CLASS_NAME = "SpinLamb!";	//ウィンドウクラス名
 
 //プロトタイプ宣言
 HWND InitApp(HINSTANCE hInstance, int screenWidth, int screenHeight, int nCmdShow);
@@ -38,9 +46,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetCurrentDirectory("Assets");
 
 	//初期化ファイル（setup.ini）から必要な情報を取得
-	int screenWidth = GetPrivateProfileInt("SCREEN", "Width", 800, ".\\setup.ini");		//スクリーンの幅
-	int screenHeight = GetPrivateProfileInt("SCREEN", "Height", 600, ".\\setup.ini");	//スクリーンの高さ
-	int fpsLimit = GetPrivateProfileInt("GAME", "Fps", 60, ".\\setup.ini");				//FPS（画面更新速度）
+	int screenWidth = GetPrivateProfileInt("SCREEN", "Width", SCREEN_WIDTH, ".\\setup.ini");		//スクリーンの幅
+	int screenHeight = GetPrivateProfileInt("SCREEN", "Height", SCREEN_HEIGHT, ".\\setup.ini");	//スクリーンの高さ
+	int fpsLimit = GetPrivateProfileInt("GAME", "Fps", FPS, ".\\setup.ini");				//FPS（画面更新速度）
 	int isDrawFps = GetPrivateProfileInt("DEBUG", "ViewFps", 0, ".\\setup.ini");		//キャプションに現在のFPSを表示するかどうか
 
 
@@ -106,7 +114,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			if (isDrawFps)
 			{
 				//1秒（1000ミリ秒）経ったら
-				if (nowTime - lastFpsResetTime > 1000)
+				if (nowTime - lastFpsResetTime > MIRI_SEC)
 				{
 					//FPSの値を表示
 					char string[16];

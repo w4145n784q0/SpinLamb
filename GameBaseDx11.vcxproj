@@ -140,6 +140,7 @@
     <ClCompile Include="BaseScene.cpp" />
     <ClCompile Include="BattleScene.cpp" />
     <ClCompile Include="Character.cpp" />
+    <ClCompile Include="Easing.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
     <ClCompile Include="Engine\BillBoard.cpp" />
@@ -193,6 +194,7 @@
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="BattleScene.h" />
     <ClInclude Include="Character.h" />
+    <ClInclude Include="Easing.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Engine\Audio.h" />
     <ClInclude Include="Engine\BillBoard.h" />

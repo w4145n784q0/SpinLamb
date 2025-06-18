@@ -3,7 +3,7 @@
 #include"array"
 #include"GameTimer.h"
 #include"MiniMap.h"
-#include"Engine/Text.h"
+#include"Easing.h"
 
 //時間表示・ロゴ・モード表示などのUIを描画するクラス
 //座標などを初期化時に読みこみ、指示されたら表示する
@@ -14,9 +14,9 @@ namespace
 	//描画モード（状況に応じて表示/非表示を切り替えたいもの）を指定
 	enum DrawMode
 	{
-		S_StartLogo,
-		S_Timer,
-		S_FinishLogo,
+		S_Start,
+		S_Playing,
+		S_Finish,
 		S_Practice,
 		S_MiniMap,
 		S_None,
@@ -36,8 +36,14 @@ private:
 	//練習中(練習シーン用)
 	int hPracticeNow_;
 
-	//ゲーム開始ロゴ(バトルシーン用)
+	//ゲーム開始"start!"ロゴ(バトルシーン用)
 	int hStart_;
+
+	//ゲーム開始"ready?"ロゴ(バトルシーン用)
+	int hReady_;
+
+	//ゲーム開始"go!"ロゴ(バトルシーン用)
+	int hGo_;
 
 	//ナンバー
 	int hNumber0_;

@@ -672,7 +672,7 @@ void Character::InitCSVSound()
 	if (csv.IsGetParamName(p_sound))
 	{
 		std::vector<float> v = csv.GetParam(p_sound);
-		ChargeSoundCount_ = v[i_chargecount];
-		AttackSoundCount_ = v[i_attackcount];
+		ChargeSoundCount_ = static_cast<int>(v[i_chargecount]);
+		AttackSoundCount_ = static_cast<int>(v[i_attackcount]);
 	}
 }

@@ -24,6 +24,12 @@ namespace
 		MaxNumberIndex,
 	};
 
+	enum EasingIndex
+	{
+		i_logochange = 0,
+		i_maxscale
+	};
+
 	//----------画像描画用トランスフォーム----------
 	//"タイトルに戻ります"
 	Transform logo_backtitle;
@@ -69,15 +75,21 @@ namespace
 	int eScoreIndexTen = 0;
 	int eScoreIndexOne = 0;
 
+	float EasingCount = 0;//イージング使用時のカウンター
+	float LogoChangeCount = 0;//ロゴ変更までのカウンター
 
+	float LogoChange = 0.0f;//startlogo変更の際、どのタイミングで切り替えるか
+	float MaxScale = 0.0f;//Go! のロゴの最大拡大率
 }
 
 HUD::HUD(GameObject* parent)
-	:GameObject(parent, "HUD"), hBackTitleLogo_(-1), hPracticeNow_(-1), hStart_(-1),
+	:GameObject(parent, "HUD"), hBackTitleLogo_(-1), hPracticeNow_(-1), 
+	hStart_(-1),hReady_(-1),hGo_(-1),
 	hNumber0_(-1), hNumber1_(-1), hNumber2_(-1), hNumber3_(-1), hNumber4_(-1),
 	hNumber5_(-1), hNumber6_(-1), hNumber7_(-1), hNumber8_(-1), hNumber9_(-1),
 	hFinish_(-1), hMap_(-1), hPlayerIcon_(-1), hEnemyIcon_(-1),
-	GameModeHUD_(Max), pGameTimer_(nullptr), pMiniMap_(nullptr), DrawMode_(S_None)
+	GameModeHUD_(Max), pGameTimer_(nullptr), pMiniMap_(nullptr), DrawMode_(S_None),
+	PlayerScore_(0),EnemyScore_(0)
 
 {
 }
@@ -98,6 +110,12 @@ void HUD::Initialize()
 
 	hStart_ = Image::Load("Image\\Battle\\start_logo.png");
 	assert(hStart_ >= 0);
+
+	hReady_ = Image::Load("Image\\Battle\\ready_logo.png");
+	assert(hReady_ >= 0);
+
+	hGo_ = Image::Load("Image\\Battle\\go_logo.png");
+	assert(hGo_ >= 0);
 
 	hFinish_ = Image::Load("Image\\Battle\\finish_logo.png");
 	assert(hFinish_ >= 0);
@@ -145,19 +163,25 @@ void HUD::Initialize()
 	//数字画像ハンドル配列を初期化
 	ArrayHandle = { hNumber0_,hNumber1_,hNumber2_,hNumber3_,hNumber4_,
 	hNumber5_,hNumber6_,hNumber7_,hNumber8_,hNumber9_ };
-
-	//pMiniMap_ = (MiniMap*)FindObject("MiniMap");
-
-	/*pPlayerScore_ = new Text;
-	pPlayerScore_->Initialize();
-
-	pEnemyScore_ = new Text;
-	pEnemyScore_->Initialize();*/
 }
 
 void HUD::Update()
 {
-	
+	switch (DrawMode_)
+	{
+	case S_Start:
+		break;
+	case S_Playing:
+		break;
+	case S_Finish:
+		break;
+	case S_Practice:
+		break;
+	case S_None:
+		break;
+	default:
+		break;
+	}
 }
 
 void HUD::Draw()
@@ -169,19 +193,19 @@ void HUD::Draw()
 	//シーンクラスからの指示によって呼ぶ描画関数を変える
 	switch (DrawMode_)
 	{
-	case S_StartLogo:
+	case S_Start:
 	{
 		DrawScore();
 		DrawStartLogo();
 	}
 		break;
-	case S_Timer:
+	case S_Playing:
 	{
 		DrawScore();
 		DrawTimer();
 	}
 		break;
-	case S_FinishLogo:
+	case S_Finish:
 	{
 		DrawTimer();
 		DrawFinishLogo();
@@ -197,7 +221,7 @@ void HUD::Draw()
 		break;
 	}
 
-	//常に表示するもの
+	//常に表示するものはswitch文の外で記述
 	DrawMiniMap();
 }
 
@@ -299,6 +323,17 @@ void HUD::SetHUDCSV()
 		std::vector<float> v = csv.GetParam(escoreone);
 		SetTransformPRS(eScore_one, v);
 	}
+
+	CsvReader csveasing;
+	csveasing.Load("CSVdata\\HUDEasingData.csv");
+	std::string easing = "Easing";
+
+	if (csveasing.IsGetParamName(easing))
+	{
+		std::vector<float> v = csveasing.GetParam(easing);
+		LogoChange = v[i_logochange];
+		MaxScale = v[i_maxscale];
+	}
 }
 
 void HUD::DrawPracticeLogo()
@@ -339,8 +374,24 @@ void HUD::DrawTimer()
 
 void HUD::DrawStartLogo()
 {
-	Image::SetTransform(hStart_, logo_start);
-	Image::Draw(hStart_);
+	if (LogoChangeCount <= LogoChange)
+	{
+		LogoChangeCount += DeltaTime;
+		Image::SetTransform(hReady_, logo_start);
+		Image::Draw(hReady_);
+	}
+	else
+	{
+		EasingCount += DeltaTime;
+
+		//double scale = 1.0f + (3.0f/*maxScale*/ - 1.0f) * Easing::easeOutBack(EasingCount);
+		float scale = static_cast<float>(Easing::calculateScale(MaxScale, EasingCount));
+		logo_start.scale_.x = scale;
+		logo_start.scale_.y = scale;
+
+		Image::SetTransform(hGo_, logo_start);
+		Image::Draw(hGo_);
+	}
 }
 
 void HUD::DrawFinishLogo()

@@ -33,8 +33,9 @@ namespace
 		i_deltatime = 0,	
 		i_onesecond,		
 		i_tendivision,
+		i_sceneshorttransition,
 		i_scenetransition,
-
+		i_scenelongtransition,
 	};
 
 }
@@ -110,9 +111,19 @@ protected:
 	static int  TenDivision;
 
 	/// <summary>
-	/// 次のシーン遷移までの時間
+	/// 次のシーン遷移までの時間(1.0秒程)
+	/// </summary>
+	static int SceneShortTransition;
+
+	/// <summary>
+	/// 次のシーン遷移までの時間(1.5秒程)
 	/// </summary>
 	static int SceneTransition;
+
+	/// <summary>
+	/// 次のシーン遷移までの時間(2秒程)
+	/// </summary>
+	static int SceneLongTransition;
 
 public:
 	//コンストラクタ
@@ -294,8 +305,9 @@ public:
             DeltaTime = v[i_deltatime];  
             oneSecond = static_cast<int>(v[i_onesecond]);  
             TenDivision = static_cast<int>(v[i_tendivision]);  
+			SceneShortTransition = static_cast<int>(v[i_sceneshorttransition]);
             SceneTransition = static_cast<int>(v[i_scenetransition]);  
-
+			SceneLongTransition = static_cast<int>(v[i_scenelongtransition]);
         }  
     }
 

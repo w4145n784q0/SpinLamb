@@ -6,7 +6,9 @@
 float GameObject::DeltaTime = 0.0f;
 int GameObject::oneSecond = 0;
 int GameObject::TenDivision = 0;
+int GameObject::SceneShortTransition;
 int GameObject::SceneTransition = 0;
+int GameObject::SceneLongTransition = 0;
 
 //コンストラクタ（親も名前もなし）
 GameObject::GameObject(void) :
