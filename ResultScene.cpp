@@ -137,7 +137,7 @@ void ResultScene::UpdateSelect()
 
 void ResultScene::UpdateDecide()
 {
-	if (++SceneTransitionTimer_ > SceneTransition)
+	if (++SceneTransitionTimer_ > SceneShortTransition)
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_TITLE);

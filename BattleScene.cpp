@@ -145,6 +145,8 @@ void BattleScene::UpdateBattleBefore()
 		pEnemy->EnemyStart();
 
 		pGameTimer_->StartTimer();
+
+		Audio::Play(hSoundWhistle_);
 	}
 }
 

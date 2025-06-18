@@ -394,7 +394,13 @@ namespace Direct3D
 		if (NULL == pSwapChain_) return;
 
 		//”wŒi‚ÌF
-		float clearColor[4] = { 0.52f, 0.8f, 0.92f, 1.0f };//R,G,B,A
+		float red = GetPrivateProfileInt("SCREEN_COLOR", "SCREEN_RED", 0, ".\\setup.ini");
+		float green = GetPrivateProfileInt("SCREEN_COLOR", "SCREEN_GREEN", 0, ".\\setup.ini");
+		float blue = GetPrivateProfileInt("SCREEN_COLOR", "SCREEN_BLUE", 0, ".\\setup.ini");
+		float alpha = GetPrivateProfileInt("SCREEN_COLOR", "SCREEN_ALPHA", 0, ".\\setup.ini");
+		float division = GetPrivateProfileInt("SCREEN_COLOR", "SCREEN_DIVISION", 1, ".\\setup.ini");
+
+		float clearColor[4] = { red / division ,green / division ,blue / division ,alpha };//R,G,B,A
 
 		//‰æ–Ê‚ðƒNƒŠƒA
 		pContext_->ClearRenderTargetView(pRenderTargetView_, clearColor);
