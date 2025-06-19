@@ -120,10 +120,11 @@ protected:
     //----------エフェクト関連----------
 
     std::vector<float> ChargeParam_ = {};//チャージ状態エフェクトのパラメータ
+    std::vector<float> FullChargeParam = {};
 	std::vector<float> AttackLocusParam_ = {};//突撃エフェクトのパラメータ
 	std::vector<float> HitEffectParam_ = {};//接触時の衝撃エフェクトのパラメータ
 	std::vector<float> WallHitEffectParam_ = {};//壁に接触時の衝撃エフェクトのパラメータ
-	std::vector<std::vector<float>> EffectArray_ = {};//エフェクトパラメータをまとめる配列
+	//std::vector<std::vector<float>> EffectArray_ = {};//エフェクトパラメータをまとめる配列
 
     //----------サウンド関連----------
     int ChargeSoundCount_ = 0;//チャージ音を鳴らす回数
@@ -248,7 +249,7 @@ public:
     /// <summary>
     /// 蓄積したTmpAccele_を実際に加速度に代入
     /// </summary>
-    void EmitCharge();
+    void ChargeRelease();
 
     /// <summary>
     /// TmpAccele_を0にする
@@ -393,6 +394,11 @@ public:
     /// </summary>
     /// <param name="_path">csvを読み込むパス</param>
     void SetChargingEffect(std::string _path);
+
+    /// <summary>
+    /// 最大チャージ状態エフェクト(光の拡散)をつける
+    /// </summary>
+    void SetFullChargeEffect();
 
     /// <summary>
     /// 突撃エフェクトつける(プレイヤーの背後に光の粒子)

@@ -300,7 +300,7 @@ void Player::UpdateCharge()
 
 	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
 	{
-		EmitCharge();
+		ChargeRelease();
 		PlayerState_ = S_ATTACK;
 	}
 

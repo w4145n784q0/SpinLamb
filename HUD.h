@@ -112,7 +112,11 @@ public:
 	//開放
 	void Release() override;
 
+	//CSV設定
 	void SetHUDCSV();
+
+	void SetPlayerScore(int score) { PlayerScore_ = score; }
+	void SetEnemyScore(int score) { EnemyScore_ = score; }
 
 	//各ポインタを設定
 	void SetTimerPointer(GameTimer* _gametimer) { pGameTimer_ = _gametimer; }
@@ -122,7 +126,7 @@ public:
 	void SetDrawMode(DrawMode _drawmode) { DrawMode_ = _drawmode; }
 
 	//----------描画関数----------
-	//これらは直接呼ばず、SetDrawModeを介して描画(常に表示するものは例外)
+	//これらは直接呼ばず、SetDrawModeを介して,HUDクラスのDrawから描画(常に表示するものは例外)
 
 	//練習モード中
 	void DrawPracticeLogo();
@@ -142,7 +146,11 @@ public:
 	//スコア表示(BattleSceneで使用)
 	void DrawScore();
 
-	void SetPlayerScore(int score) { PlayerScore_ = score; }
-	void SetEnemyScore(int score) { EnemyScore_ = score; }
+private:
+	//以下の描画関数は他クラスから呼ばず、上記の描画関数から呼ぶ
+	//Draw -> DrawStart -> DrawReady DrawGo
+
+	void DrawReady();
+	void DrawGo();
 };
 

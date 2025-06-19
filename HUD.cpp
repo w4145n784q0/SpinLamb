@@ -24,11 +24,21 @@ namespace
 		MaxNumberIndex,
 	};
 
+	//csv読み込み時のインデックス
 	enum EasingIndex
 	{
 		i_logochange = 0,
 		i_maxscale
 	};
+
+	//この状態は他クラスから操作できないようにcppファイルに記述
+	enum DrawStartMode
+	{
+		start_ready = 0,
+		start_go,
+		start_max
+	};
+	DrawStartMode DrawStart;
 
 	//----------画像描画用トランスフォーム----------
 	//"タイトルに戻ります"
@@ -100,6 +110,8 @@ HUD::~HUD()
 
 void HUD::Initialize()
 {
+	DrawStart = start_ready;
+
 	SetHUDCSV();
 
 	hBackTitleLogo_ = Image::Load("Image\\Practice\\BackTitleLogo.png");
@@ -374,7 +386,20 @@ void HUD::DrawTimer()
 
 void HUD::DrawStartLogo()
 {
-	if (LogoChangeCount <= LogoChange)
+	switch (DrawStart)
+	{
+	case start_ready:
+		DrawReady();
+		break;
+	case start_go:
+		DrawGo();
+		break;
+	default:
+		break;
+	}
+
+
+	/*if (LogoChangeCount <= LogoChange)
 	{
 		LogoChangeCount += DeltaTime;
 		Image::SetTransform(hReady_, logo_start);
@@ -383,15 +408,13 @@ void HUD::DrawStartLogo()
 	else
 	{
 		EasingCount += DeltaTime;
-
-		//double scale = 1.0f + (3.0f/*maxScale*/ - 1.0f) * Easing::easeOutBack(EasingCount);
 		float scale = static_cast<float>(Easing::calculateScale(MaxScale, EasingCount));
 		logo_start.scale_.x = scale;
 		logo_start.scale_.y = scale;
 
 		Image::SetTransform(hGo_, logo_start);
 		Image::Draw(hGo_);
-	}
+	}*/
 }
 
 void HUD::DrawFinishLogo()
@@ -446,4 +469,29 @@ void HUD::DrawScore()
 	Image::Draw(ArrayHandle[eScoreIndexTen]);
 	Image::SetTransform(ArrayHandle[eScoreIndexOne], eScore_one);
 	Image::Draw(ArrayHandle[eScoreIndexOne]);
+}
+
+void HUD::DrawReady()
+{
+	if (LogoChangeCount <= LogoChange)
+	{
+		LogoChangeCount += DeltaTime;
+		Image::SetTransform(hReady_, logo_start);
+		Image::Draw(hReady_);
+	}
+	else
+	{
+		DrawStart = start_go;
+	}
+}
+
+void HUD::DrawGo()
+{
+	EasingCount += DeltaTime;
+	float scale = static_cast<float>(Easing::calculateScale(MaxScale, EasingCount));
+	logo_start.scale_.x = scale;
+	logo_start.scale_.y = scale;
+
+	Image::SetTransform(hGo_, logo_start);
+	Image::Draw(hGo_);
 }

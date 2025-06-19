@@ -228,7 +228,7 @@ void GameModeScene::UpdateSelect()
 
 void GameModeScene::UpdateDecide()
 {
-	if(++SceneTransitionTimer_ > SceneTransition)
+	if(++SceneTransitionTimer_ > SceneShortTransition)
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		switch (SelectMode_)

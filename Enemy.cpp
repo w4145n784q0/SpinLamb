@@ -196,7 +196,7 @@ void Enemy::UpdateAim()
 	if (++AimTimer_ > EnemyAttackTimeArray[RandomAim_])
 	{
 		AimTimer_ = 0;
-		EmitCharge();
+		ChargeRelease();
 		EnemyState_ = S_ATTACK;
 	}
 

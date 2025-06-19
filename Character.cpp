@@ -494,6 +494,7 @@ XMVECTOR Character::HitNormal(std::string _normal)
 void Character::WallHit()
 {
 	SetWallHitEffect();
+	ChargeReset();
 	AccelerationStop();
 
 	//正面ベクトルの逆ベクトルを計算
@@ -514,6 +515,7 @@ void Character::WallHit()
 void Character::WallReflect(XMVECTOR pos)
 {
 	SetWallHitEffect();
+	ChargeReset();
 	AccelerationStop();
 
 	XMFLOAT3 tmp;
@@ -528,7 +530,6 @@ void Character::WallReflect(XMVECTOR pos)
 
 	WallHitParam_.IsInvincibility_ = true;
 
-	ChargeReset();
 }
 
 bool Character::IsKnockBackEnd()
@@ -569,11 +570,12 @@ void Character::Charging()
 	}
 	else
 	{
+		//SetFullChargeEffect();
 		MoveParam_.TmpAccele_ = MoveParam_.FullAccelerate_;
 	}
 }
 
-void Character::EmitCharge()
+void Character::ChargeRelease()
 {
 	MoveParam_.Acceleration_ = MoveParam_.TmpAccele_;
 	ChargeReset();
@@ -613,8 +615,9 @@ void Character::InitCSVEffect()
 	csv.Load("CSVData\\VFXData.csv");
 
 	//ChargeParam_...はvector<float>型のパラメータ
-	std::string effects[] = { "Charge","Locus" , "Hit" , "WallHit" };
-    std::vector<float>* param[] = { &ChargeParam_, &AttackLocusParam_, &HitEffectParam_, &WallHitEffectParam_ };  
+	std::string effects[] = { "Charge","FullCharge" ,"Locus" , "Hit" , "WallHit" };
+    std::vector<float>* param[] = { &ChargeParam_,&FullChargeParam,
+		&AttackLocusParam_, &HitEffectParam_, &WallHitEffectParam_ };  
     for (int i = 0; i < sizeof(effects) / sizeof(effects[0]); i++)  
     {  
 		if (csv.IsGetParamName(effects[i]))  
@@ -633,6 +636,15 @@ void Character::SetChargingEffect(std::string _path)
 	charge.textureFileName = _path;
 	charge.position = this->transform_.position_;
 	VFX::Start(charge);
+}
+
+void Character::SetFullChargeEffect()
+{
+	EmitterData fullcharge;
+	VFX::SetEmitter(fullcharge, FullChargeParam);
+	fullcharge.textureFileName = "PaticleAssets\\flashA_W.png";
+	fullcharge.position = this->transform_.position_;
+	VFX::Start(fullcharge);
 }
 
 void Character::SetAttackLocusEffect()
