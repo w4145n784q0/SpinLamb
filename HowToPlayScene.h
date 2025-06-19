@@ -49,7 +49,8 @@ public:
 	//ŠJ•ú
 	void Release() override;
 
-	void UpdateSelect() override;
-	void UpdateDecide() override;
+	void UpdateActive() override;
+	void UpdatePassive() override {};
+	void UpdateTransition() override;
 };
 

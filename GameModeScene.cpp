@@ -176,7 +176,7 @@ void GameModeScene::SetGameModeSCV()
 	}
 }
 
-void GameModeScene::UpdateSelect()
+void GameModeScene::UpdateActive()
 {
 	if (Input::IsKeyDown(DIK_UP) /*|| Input::GetPadStickL().y >= Input::StickTilt*/
 		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP))
@@ -209,26 +209,26 @@ void GameModeScene::UpdateSelect()
 
 	switch (SelectMode_)
 	{
-		case GameModeScene::Battle:
-		case GameModeScene::Practice:
-		case GameModeScene::HowToPlay:
-		case GameModeScene::Title:
-			Trans_Frame_.position_.y = ModeArray_[SelectMode_].position_.y;
-			break;
-		default:
-			break;
+	case GameModeScene::Battle:
+	case GameModeScene::Practice:
+	case GameModeScene::HowToPlay:
+	case GameModeScene::Title:
+		Trans_Frame_.position_.y = ModeArray_[SelectMode_].position_.y;
+		break;
+	default:
+		break;
 	}
 
 	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		Audio::Play(hSoundDecide_);
-		ModeDecide_ = Decided;
+		SceneState_ = S_Transition;
 	}
 }
 
-void GameModeScene::UpdateDecide()
+void GameModeScene::UpdateTransition()
 {
-	if(++SceneTransitionTimer_ > SceneShortTransition)
+	if (++SceneTransitionTimer_ > SceneShortTransition)
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		switch (SelectMode_)
@@ -251,6 +251,6 @@ void GameModeScene::UpdateDecide()
 
 		SceneTransitionTimer_ = 0;
 		Audio::Stop(hSoundGameMode_);
-		ModeDecide_ = Selected;
+		SceneState_ = S_Active;
 	}
 }

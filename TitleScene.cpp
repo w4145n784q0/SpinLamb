@@ -40,16 +40,16 @@ void TitleScene::Release()
 {
 }
 
-void TitleScene::UpdateSelect()
+void TitleScene::UpdateActive()
 {
 	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
-		ModeDecide_ = Decided;
+		SceneState_ = S_Transition;
 		Audio::Play(hSoundStart_);
 	}
 }
 
-void TitleScene::UpdateDecide()
+void TitleScene::UpdateTransition()
 {
 	if (++SceneTransitionTimer_ > SceneTransition)
 	{
@@ -57,6 +57,6 @@ void TitleScene::UpdateDecide()
 		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
 		SceneTransitionTimer_ = 0;
 		Audio::Stop(hSoundTitle_);
-		ModeDecide_ = Selected;
+		SceneState_ = S_Active;
 	}
 }

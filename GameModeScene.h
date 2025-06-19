@@ -77,7 +77,8 @@ public:
 	//csvƒtƒ@ƒCƒ‹‚Ì“Ç‚İ‚İ
 	void SetGameModeSCV();
 
-	void UpdateSelect() override;
-	void UpdateDecide() override;
+	void UpdateActive() override;
+	void UpdatePassive() override {};
+	void UpdateTransition() override;
 };
 

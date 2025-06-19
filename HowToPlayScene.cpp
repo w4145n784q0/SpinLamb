@@ -73,7 +73,7 @@ void HowToPlayScene::Release()
 {
 }
 
-void HowToPlayScene::UpdateSelect()
+void HowToPlayScene::UpdateActive()
 {
 	if (Input::IsKeyDown(DIK_RIGHT) || Input::GetPadStickL().y >= Input::StickTilt
 		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT))
@@ -104,11 +104,11 @@ void HowToPlayScene::UpdateSelect()
 
 	if (Input::IsKeyUp(DIK_A) || Input::IsPadButtonUp(XINPUT_GAMEPAD_A) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
-		ModeDecide_ = Decided;
+		SceneState_ = S_Transition;
 	}
 }
 
-void HowToPlayScene::UpdateDecide()
+void HowToPlayScene::UpdateTransition()
 {
 	if (++SceneTransitionTimer_ > SceneTransition)
 	{
@@ -116,6 +116,6 @@ void HowToPlayScene::UpdateDecide()
 		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
 		SceneTransitionTimer_ = 0;
 		Audio::Stop(hSoundHowtoPlay_);
-		ModeDecide_ = Selected;
+		SceneState_ = S_Active;
 	}
 }

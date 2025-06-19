@@ -70,7 +70,8 @@ public:
 	//csvì«Ç›çûÇ›
 	void SetCSVResult();
 
-	void UpdateSelect() override;
-	void UpdateDecide() override;
+	void UpdateActive() override;
+	void UpdatePassive() override {};
+	void UpdateTransition() override;
 };
 

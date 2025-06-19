@@ -7,14 +7,15 @@ class BaseScene :
 {
 protected:
 
-	//選択中か選択後か
-	enum Decide
+	//ゲームシーン全般の状態
+	enum SceneState
 	{
-		Selected,
-		Decided,
-		MaxSelect
+		S_Active = 0,
+		S_Passive,
+		S_Transition,
+		MaxDecide
 	};
-	Decide ModeDecide_;
+	SceneState SceneState_;
 
 	//シーン遷移までの時間を計る
 	int SceneTransitionTimer_;
@@ -27,10 +28,13 @@ public:
 
 	//以下の処理は純粋仮想関数のため、継承先で必ずオーバーライド
 
-	//選択中の処理（プレイ中以外に使用）
-	virtual void UpdateSelect() = 0;
+	//通常の処理
+	virtual void UpdateActive() = 0;
 
-	//選択後の処理（プレイ中以外に使用）主にシーン遷移までに時間を持たせる
-	virtual void UpdateDecide() = 0;
+	//停止中の処理
+	virtual void UpdatePassive() = 0;
+
+	//シーン遷移中の処理
+	virtual void UpdateTransition() = 0;
 };
 
