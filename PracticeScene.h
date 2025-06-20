@@ -15,8 +15,8 @@ private:
 	//タイトル画像
 	int hBackScreen_;
 
-	//長押しでタイトルに遷移するカウント
-	int Press_;
+	//アイリスアウト演出用画像
+	int hBackIrisIn_;
 
 	//----------サウンドハンドル----------
 	int hSoundPractice_; 
@@ -27,6 +27,9 @@ private:
 
 	HUD* pHUD_;
 	MiniMap* pMiniMap_;
+
+	//長押しでタイトルに遷移するカウント
+	int Press_;
 
 public:
 	//コンストラクタ
@@ -49,5 +52,7 @@ public:
 
 	void UpdateActive() override;
 	void UpdateTransition() override;
+
+	void SetSCVTitle();
 };
 

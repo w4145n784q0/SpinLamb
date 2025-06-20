@@ -291,10 +291,6 @@ public:
 	/// </summary>
     static void SCVCommonDataInitialize() {  
 
-		//static bool initialized = false;
-		//if (initialized) return;
-		//initialized = true;
-
         CsvReader csv;  
         csv.Load("CSVdata\\CommonData.csv");  
 

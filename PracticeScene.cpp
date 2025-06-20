@@ -3,14 +3,21 @@
 #include"Engine/Input.h"
 #include"Engine/Audio.h"
 #include"Engine/SceneManager.h"
+#include"Engine/CsvReader.h"
 
 #include"Player.h"
 #include"Enemy.h"
 #include"StageManager.h"
 
+namespace
+{
+	//アイリスアウト表現用のトランスフォーム
+	Transform IrisIn;
+}
+
 PracticeScene::PracticeScene(GameObject* parent)
-	:BaseScene(parent,"PracticeScene"), hBackScreen_(-1),hSoundPractice_(-1), Press_(0),
-	pHUD_(nullptr),pMiniMap_(nullptr)
+	:BaseScene(parent,"PracticeScene"), hBackScreen_(-1),hBackIrisIn_(-1),hSoundPractice_(-1),
+	pPlayer_(nullptr),pEnemy_(nullptr), pHUD_(nullptr),pMiniMap_(nullptr), Press_(0)
 {
 }
 
@@ -20,8 +27,13 @@ PracticeScene::~PracticeScene()
 
 void PracticeScene::Initialize()
 {
+	SetSCVTitle();
+
 	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");
 	assert(hBackScreen_ >= 0);
+
+	hBackIrisIn_ = Image::Load("Image\\Battle\\IrisIn.png");
+	assert(hBackIrisIn_ >= 0);
 
 	hSoundPractice_ = Audio::Load("Sound\\BGM\\practice.wav",true);
 	assert(hSoundPractice_ >= 0);
@@ -38,7 +50,6 @@ void PracticeScene::Initialize()
 	float west = pS->GetWestEnd();
 	float east = pS->GetEastEnd();
 
-	//Player* pPlayer_ = (Player*)FindObject("Player");
 	pPlayer_ = (Player*)FindObject("Player");
 	if(pPlayer_ != nullptr)
 	{
@@ -46,7 +57,6 @@ void PracticeScene::Initialize()
 		pPlayer_->SetEnd(north, south, west, east);
 	}
 
-	//Enemy* pEnemy = (Enemy*)FindObject("Enemy");
 	pEnemy_ = (Enemy*)FindObject("Enemy");
 	if(pEnemy_ != nullptr)
 	{
@@ -68,9 +78,15 @@ void PracticeScene::Update()
 
 void PracticeScene::Draw()
 {
+	ImGui::SliderFloat("irisin", &IrisIn.scale_.x, 1.0, 20.0);
+	ImGui::SliderFloat("irisin", &IrisIn.scale_.y, 1.0, 20.0);
+
 	Image::SetTransform(hBackScreen_, this->transform_);
 	Image::Draw(hBackScreen_);
 	pHUD_->SetDrawMode(S_Practice);
+
+	Image::SetTransform(hBackIrisIn_, IrisIn);
+	Image::Draw(hBackIrisIn_);
 }
 
 void PracticeScene::Release()
@@ -103,5 +119,18 @@ void PracticeScene::UpdateTransition()
 		SceneTransitionTimer_ = 0;
 		Audio::Stop(hSoundPractice_);
 		SceneState_ = S_Active;
+	}
+}
+
+void PracticeScene::SetSCVTitle()
+{
+	CsvReader csv;
+	csv.Load("CSVdata\\PracticeData.csv");
+
+	std::string irisin = "IrisIn";
+	if (csv.IsGetParamName(irisin))
+	{
+		std::vector<float> v = csv.GetParam(irisin);
+		SetTransformPRS(IrisIn, v);
 	}
 }
