@@ -1,6 +1,8 @@
 #pragma once
 //#include"Engine/Text.h"
 #include "Engine/GameObject.h"
+#include"BaseScene.h"
+
 #include"Player.h"
 #include"Enemy.h"
 #include"GameTimer.h"
@@ -9,11 +11,14 @@
 
 //"バトル"から始まるモードシーン
 class BattleScene :
-    public GameObject
+	public BaseScene
 {
 private:
 
 	//----------インスタンス----------
+	Player* pPlayer_;
+	Enemy* pEnemy_;
+
 	HUD* pHUD_;
 
 	//HUDクラスに渡すポインタ
@@ -63,6 +68,9 @@ public:
 
 	//開放
 	void Release() override;
+
+	void UpdateActive() override;
+	void UpdateTransition() override;
 
 	void UpdateBattleBefore();
 	void UpdateBattle();

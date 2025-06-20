@@ -9,7 +9,7 @@
 #include"StageManager.h"
 
 PracticeScene::PracticeScene(GameObject* parent)
-	:GameObject(parent,"PracticeScene"), hBackScreen_(-1),hSoundPractice_(-1), Press_(0),
+	:BaseScene(parent,"PracticeScene"), hBackScreen_(-1),hSoundPractice_(-1), Press_(0),
 	pHUD_(nullptr),pMiniMap_(nullptr)
 {
 }
@@ -38,13 +38,21 @@ void PracticeScene::Initialize()
 	float west = pS->GetWestEnd();
 	float east = pS->GetEastEnd();
 
-	Player* pPlayer_ = (Player*)FindObject("Player");
-	pPlayer_->PlayerStart();
-	pPlayer_->SetEnd(north, south, west, east);
+	//Player* pPlayer_ = (Player*)FindObject("Player");
+	pPlayer_ = (Player*)FindObject("Player");
+	if(pPlayer_ != nullptr)
+	{
+		pPlayer_->PlayerStart();
+		pPlayer_->SetEnd(north, south, west, east);
+	}
 
-	Enemy* pEnemy = (Enemy*)FindObject("Enemy");
-	pEnemy->EnemyStop();
-	pEnemy->SetEnd(north, south, west, east);
+	//Enemy* pEnemy = (Enemy*)FindObject("Enemy");
+	pEnemy_ = (Enemy*)FindObject("Enemy");
+	if(pEnemy_ != nullptr)
+	{
+		pEnemy_->EnemyStop();
+		pEnemy_->SetEnd(north, south, west, east);
+	}
 
 	//インスタンスを初期化し、HUDに渡す
 	pMiniMap_ = (MiniMap*)FindObject("MiniMap");
@@ -54,22 +62,8 @@ void PracticeScene::Initialize()
 
 void PracticeScene::Update()
 {
+	BaseScene::Update();
 	Audio::Play(hSoundPractice_);
-
-	if (Input::IsKey(DIK_P) || Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsPadButton(XINPUT_GAMEPAD_LEFT_SHOULDER))//ボタン長押しでタイトルに戻る
-	{
-		Press_++;
-	}
-	else
-	{
-		Press_ = 0;
-	}
-
-	if (Press_ >= SceneTransition)//長押しでタイトルに戻る
-	{
-		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_TITLE);
-	}
 }
 
 void PracticeScene::Draw()
@@ -81,4 +75,33 @@ void PracticeScene::Draw()
 
 void PracticeScene::Release()
 {
+}
+
+void PracticeScene::UpdateActive()
+{
+	if (Input::IsKey(DIK_P) || Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsPadButton(XINPUT_GAMEPAD_LEFT_SHOULDER))//ボタン長押しでタイトルに戻る
+	{
+		Press_++;
+	}
+	else
+	{
+		Press_ = 0;
+	}
+
+	if (Press_ >= SceneTransition)//長押しでタイトルに戻る
+	{
+		SceneState_ = S_Transition;
+	}
+}
+
+void PracticeScene::UpdateTransition()
+{
+	if (++SceneTransitionTimer_ > SceneShortTransition)
+	{
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_TITLE);
+		SceneTransitionTimer_ = 0;
+		Audio::Stop(hSoundPractice_);
+		SceneState_ = S_Active;
+	}
 }

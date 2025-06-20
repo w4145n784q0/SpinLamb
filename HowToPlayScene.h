@@ -50,7 +50,6 @@ public:
 	void Release() override;
 
 	void UpdateActive() override;
-	void UpdatePassive() override {};
 	void UpdateTransition() override;
 };
 

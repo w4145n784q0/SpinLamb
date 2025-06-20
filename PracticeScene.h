@@ -1,11 +1,12 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"BaseScene.h"
 #include"HUD.h"
 #include"MiniMap.h"
 
 //"フリープレイ"から始まる練習モードシーン
 class PracticeScene :
-    public GameObject
+    public BaseScene
 {
 private:
 
@@ -21,6 +22,9 @@ private:
 	int hSoundPractice_; 
 
 	//インスタンス
+	Player* pPlayer_;
+	Enemy* pEnemy_;
+
 	HUD* pHUD_;
 	MiniMap* pMiniMap_;
 
@@ -42,5 +46,8 @@ public:
 
 	//開放
 	void Release() override;
+
+	void UpdateActive() override;
+	void UpdateTransition() override;
 };
 

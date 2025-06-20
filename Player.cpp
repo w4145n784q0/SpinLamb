@@ -126,7 +126,7 @@ void Player::Update()
 	CameraUpdate();
 
 #ifdef _DEBUG
-	if (Input::IsKeyDown(DIK_ESCAPE))
+	if (Input::IsKeyDown(DIK_RETURN))
 	{
 		SetStartPosition();
 	}

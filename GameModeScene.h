@@ -78,7 +78,6 @@ public:
 	void SetGameModeSCV();
 
 	void UpdateActive() override;
-	void UpdatePassive() override {};
 	void UpdateTransition() override;
 };
 

@@ -23,9 +23,6 @@ void BaseScene::Update()
 	case BaseScene::S_Active:
 		UpdateActive();
 		break;
-	case BaseScene::S_Passive:
-		UpdatePassive();
-		break;
 	case BaseScene::S_Transition:
 		UpdateTransition();
 		break;
@@ -35,16 +32,4 @@ void BaseScene::Update()
 		break;
 	}
 
-
-	/*switch (ModeDecide_)
-	{
-	case BaseScene::Selected:
-		UpdateSelect();
-		break;
-	case BaseScene::Decided:
-		UpdateDecide();
-		break;
-	default:
-		break;
-	}*/
 }

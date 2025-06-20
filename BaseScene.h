@@ -1,7 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
 
-//Title,GameMode,ResultSceneの共通処理をまとめたクラス
+//各シーンの基底クラス
+//シーンごとの共通処理をまとめる
 class BaseScene :
     public GameObject
 {
@@ -31,10 +32,7 @@ public:
 	//通常の処理
 	virtual void UpdateActive() = 0;
 
-	//停止中の処理
-	virtual void UpdatePassive() = 0;
-
-	//シーン遷移中の処理
+	//シーン遷移中の処理(シーン遷移中の演出などに使用)
 	virtual void UpdateTransition() = 0;
 };
 
