@@ -113,6 +113,7 @@ void HUD::Initialize()
 	DrawStart = start_ready;
 
 	SetHUDCSV();
+	Easing::SetSCVEasing();
 
 	hBackTitleLogo_ = Image::Load("Image\\Practice\\BackTitleLogo.png");
 	assert(hBackTitleLogo_ >= 0);
@@ -337,7 +338,7 @@ void HUD::SetHUDCSV()
 	}
 
 	CsvReader csveasing;
-	csveasing.Load("CSVdata\\HUDEasingData.csv");
+	csveasing.Load("CSVdata\\HUDSomeData.csv");
 	std::string easing = "Easing";
 
 	if (csveasing.IsGetParamName(easing))
