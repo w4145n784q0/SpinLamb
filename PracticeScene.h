@@ -3,6 +3,7 @@
 #include"BaseScene.h"
 #include"HUD.h"
 #include"MiniMap.h"
+#include"TransitionEffect.h"
 
 //"フリープレイ"から始まる練習モードシーン
 class PracticeScene :
@@ -15,18 +16,17 @@ private:
 	//タイトル画像
 	int hBackScreen_;
 
-	//アイリスアウト演出用画像
-	int hBackIrisIn_;
 
 	//----------サウンドハンドル----------
 	int hSoundPractice_; 
 
-	//インスタンス
+	//----------インスタンス----------
 	Player* pPlayer_;
 	Enemy* pEnemy_;
 
 	HUD* pHUD_;
 	MiniMap* pMiniMap_;
+	TransitionEffect* pTransitionEffect_;
 
 	//長押しでタイトルに遷移するカウント
 	int Press_;
@@ -53,6 +53,5 @@ public:
 	void UpdateActive() override;
 	void UpdateTransition() override;
 
-	void SetSCVTitle();
 };
 

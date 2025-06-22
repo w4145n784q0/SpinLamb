@@ -1,0 +1,3 @@
+﻿初期化する値,pos.x,pos.y,pos.z,rot.x,rot.y,rot.z,sca.x,sca.y,sca.z
+Fade,0,0,0,0,0,0,1,1,1
+Slide,-1,0,0,0,0,0,1,1,1

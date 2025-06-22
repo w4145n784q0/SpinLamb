@@ -40,6 +40,21 @@ namespace Image
 		}
 	};
 
+	/// <summary>
+	/// 画像に透過度を設定する際の最小透過度(最も透明度が低い状態)
+	/// </summary>
+	extern int AlphaMin;
+
+	/// <summary>
+	/// 左右上下の画像の端(x:-1.0~1.0 y:1.0~-1.0)
+	/// </summary>
+
+	extern float LeftEdge;
+	extern float RightEdge;
+	extern float UpEdge;
+	extern float DownEdge;
+	extern float Center;
+
 
 	//初期化
 	void Initialize();
@@ -89,4 +104,7 @@ namespace Image
 	//引数：handle	知りたい画像の番号
 	//戻値：ワールド行列
 	XMMATRIX GetMatrix(int handle);
+
+	//scv読み込み行う
+	void SetSCVImage();
 }

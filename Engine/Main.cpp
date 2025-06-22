@@ -86,6 +86,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//最初に共通データを初期化
 	GameObject::SCVCommonDataInitialize();
+	Image::SetSCVImage();
 
 
 	//メッセージループ（何か起きるのを待つ）

@@ -4,7 +4,7 @@
 
 namespace Input
 {
-	enum CommonIndex
+	enum InputIndex
 	{
 		i_sticktilt = 0,
 		i_stickMicrotilt,

@@ -188,6 +188,7 @@
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="TitleScene.cpp" />
+    <ClCompile Include="TransitionEffect.cpp" />
     <ClCompile Include="UpperWire.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -244,6 +245,7 @@
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="TestScene.h" />
     <ClInclude Include="TitleScene.h" />
+    <ClInclude Include="TransitionEffect.h" />
     <ClInclude Include="UpperWire.h" />
   </ItemGroup>
   <ItemGroup>

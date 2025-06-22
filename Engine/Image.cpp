@@ -1,9 +1,27 @@
 #include "Global.h"
 #include "Image.h"
+#include"../Engine/CsvReader.h"
 
 //3D画像を管理する
 namespace Image
 {
+	enum ImageIndex
+	{
+		i_leftedge = 0,
+		i_rightedge,
+		i_upedge,
+		i_downedge,
+		i_center,
+		i_alphamin,
+	};
+
+	float LeftEdge = 0.0f;
+	float RightEdge = 0.0f;
+	float UpEdge = 0.0f;
+	float DownEdge = 0.0f;
+	float Center = 0.0f;
+	int AlphaMin = 0;
+
 	//ロード済みの画像データ一覧
 	std::vector<ImageData*>	_datas;
 
@@ -190,6 +208,24 @@ namespace Image
 			return XMMatrixIdentity();
 		}
 		return _datas[handle]->transform.GetWorldMatrix();
+	}
+
+	void SetSCVImage()
+	{
+		CsvReader csv;
+		csv.Load("CSVdata\\ImageData.csv");
+
+		std::string imagedata = "Image";
+		if (csv.IsGetParamName(imagedata))
+		{
+			std::vector<float> v = csv.GetParam(imagedata);
+			LeftEdge = v[i_leftedge];
+			RightEdge = v[i_rightedge];
+			UpEdge = v[i_upedge];
+			DownEdge = v[i_downedge];
+			Center = v[i_center];
+			AlphaMin = static_cast<int>(v[i_alphamin]);
+		}
 	}
 }
 
