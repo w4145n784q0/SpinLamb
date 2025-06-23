@@ -1,5 +1,4 @@
 #pragma once
-//#include"Engine/Text.h"
 #include "Engine/GameObject.h"
 #include"BaseScene.h"
 
@@ -29,10 +28,11 @@ private:
 	//----------バトルシーンステート----------
 	enum Battle
 	{
-		BEFORE,//開始前
-		NOW,//バトル中
-		AFTER,//終了後
-		MAX
+		S_BEFORE = 0,//開始前説明
+		S_READY,//開始直前
+		S_NOW,//バトル中
+		S_AFTER,//終了後
+		MAXMODE
 	};
 	Battle BattleState_;
 
@@ -73,6 +73,7 @@ public:
 	void UpdateTransition() override;
 
 	void UpdateBattleBefore();
+	void UpdateBattleReady();
 	void UpdateBattle();
 	void UpdateBattleAfter();
 

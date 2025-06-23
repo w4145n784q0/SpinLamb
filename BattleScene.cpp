@@ -3,13 +3,11 @@
 #include"Engine/Input.h"
 #include"Engine/SceneManager.h"
 #include"Engine/Audio.h"
-
-
 #include"StageManager.h"
 
 namespace
 {
-	//時間計測
+	//次のバトルの状態に遷移するまでの時間計測
 	int StateCounter = 0;
 
 	//バトルモードの制限時間
@@ -22,10 +20,10 @@ namespace
 }
 
 BattleScene::BattleScene(GameObject* parent)
-	:BaseScene(parent,"BattleScene") ,BattleState_(BEFORE),
+	:BaseScene(parent,"BattleScene") ,BattleState_(S_BEFORE),
 	 hBackScreen_(-1),hSoundBattle_(-1), hSoundWhistle_(-1),
 	PlayerScore_(0),EnemyScore_(0),
-	pHUD_(nullptr),pMiniMap_(nullptr),pGameTimer_(nullptr)
+	pPlayer_(nullptr),pEnemy_(nullptr),pHUD_(nullptr),pMiniMap_(nullptr),pGameTimer_(nullptr)
 {
 }
 
@@ -102,16 +100,17 @@ void BattleScene::Draw()
 	//今のBattleSceneの状態から、HUDクラスに描画するものを指示
 	switch (BattleState_)
 	{
-	case BattleScene::BEFORE:
-		pHUD_->SetDrawMode(S_Start);
+	case BattleScene::S_BEFORE:
+		pHUD_->SetDrawMode(S_BeforeStart);
 		break;
-	case BattleScene::NOW:
+	case BattleScene::S_READY:
+		pHUD_->SetDrawMode(S_Ready);
+		break;
+	case BattleScene::S_NOW:
 		pHUD_->SetDrawMode(S_Playing);
 		break;
-	case BattleScene::AFTER:
+	case BattleScene::S_AFTER:
 		pHUD_->SetDrawMode(S_Finish);
-		break;
-	case BattleScene::MAX:
 		break;
 	default:
 		break;
@@ -126,17 +125,19 @@ void BattleScene::UpdateActive()
 {
 	switch (BattleState_)
 	{
-	case BattleScene::BEFORE:
+	case BattleScene::S_BEFORE:
 		UpdateBattleBefore();
 		break;
-	case BattleScene::NOW:
+	case BattleScene::S_READY:
+		UpdateBattleReady();
+		break;
+	case BattleScene::S_NOW:
 		UpdateBattle();
 		break;
-	case BattleScene::AFTER:
+	case BattleScene::S_AFTER:
 		UpdateBattleAfter();
 		break;
-	case BattleScene::MAX:
-		break;
+
 	default:
 		break;
 	}
@@ -154,14 +155,22 @@ void BattleScene::UpdateTransition()
 
 void BattleScene::UpdateBattleBefore()
 {
+	if (++StateCounter > SceneTransition ||
+		Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
+	{
+		StateCounter = 0;
+		BattleState_ = S_READY;
+	}
+}
+
+void BattleScene::UpdateBattleReady()
+{
 	if (++StateCounter > SceneLongTransition)
 	{
 		StateCounter = 0;
-
-		BattleState_ = NOW;
+		BattleState_ = S_NOW;
 		pPlayer_->PlayerStart();
 		pEnemy_->EnemyStart();
-
 		pGameTimer_->StartTimer();
 
 		Audio::Play(hSoundWhistle_);
@@ -173,7 +182,7 @@ void BattleScene::UpdateBattle()
 	//GameTimerから時間切れになったことを受け取ったら終了状態へ
 	if (pGameTimer_->GetCurrentGameTime() <= 0)
 	{
-		BattleState_ = AFTER;
+		BattleState_ = S_AFTER;
 
 		pGameTimer_->StopTimer();
 		pPlayer_->PlayerStop();

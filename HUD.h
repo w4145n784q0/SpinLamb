@@ -14,7 +14,8 @@ namespace
 	//描画モード（状況に応じて表示/非表示を切り替えたいもの）を指定
 	enum DrawMode
 	{
-		S_Start,
+		S_BeforeStart = 0,
+		S_Ready,
 		S_Playing,
 		S_Finish,
 		S_Practice,
@@ -35,6 +36,9 @@ private:
 
 	//練習中(練習シーン用)
 	int hPracticeNow_;
+
+	//ゲーム開始前の簡易説明
+	int hGameExplanation_;
 
 	//ゲーム開始"start!"ロゴ(バトルシーン用)
 	int hStart_;
@@ -134,7 +138,10 @@ public:
 	//タイマー
 	void DrawTimer();
 
-	//開始時のロゴ
+	//ゲームの簡易説明
+	void DrawExplanation();
+
+	//開始時(Ready)のロゴ
 	void DrawStartLogo();
 
 	//終了ロゴ

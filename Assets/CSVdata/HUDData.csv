@@ -1,5 +1,6 @@
 ﻿Data,pos.x,pos.y,pos.z,rot.x,rot.y,rot.z,sca.x,sca.y,sca.z
 backtitle,-0.55,-0.9,0,0,0,0,1,1,1
+explanation,0,0,0,0,0,0,1,1,1
 practice,-0.8,0.9,0,0,0,0,1,1,1
 start,0,0,0,0,0,0,1,1,1
 finish,0,0,0,0,0,0,1,1,1

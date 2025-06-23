@@ -47,7 +47,10 @@ namespace
 	//"ó˚èKÉÇÅ[Éh"
 	Transform logo_practice;
 
-	//Start!ÉçÉS
+	//ÉQÅ[ÉÄä»à’ê‡ñæ
+	Transform logo_explanation;
+
+	//Ready,Go!ÉçÉS
 	Transform logo_start;
 
 	//Finish!ÉçÉS
@@ -93,7 +96,7 @@ namespace
 }
 
 HUD::HUD(GameObject* parent)
-	:GameObject(parent, "HUD"), hBackTitleLogo_(-1), hPracticeNow_(-1), 
+	:GameObject(parent, "HUD"), hBackTitleLogo_(-1), hPracticeNow_(-1), hGameExplanation_(-1),
 	hStart_(-1),hReady_(-1),hGo_(-1),
 	hNumber0_(-1), hNumber1_(-1), hNumber2_(-1), hNumber3_(-1), hNumber4_(-1),
 	hNumber5_(-1), hNumber6_(-1), hNumber7_(-1), hNumber8_(-1), hNumber9_(-1),
@@ -120,6 +123,8 @@ void HUD::Initialize()
 
 	hPracticeNow_ = Image::Load("Image\\Practice\\PracticeLogo.png");
 	assert(hPracticeNow_ >= 0);
+
+
 
 	hStart_ = Image::Load("Image\\Battle\\start_logo.png");
 	assert(hStart_ >= 0);
@@ -182,7 +187,9 @@ void HUD::Update()
 {
 	switch (DrawMode_)
 	{
-	case S_Start:
+	case S_BeforeStart:
+		break;
+	case S_Ready:
 		break;
 	case S_Playing:
 		break;
@@ -206,7 +213,12 @@ void HUD::Draw()
 	//ÉVÅ[ÉìÉNÉâÉXÇ©ÇÁÇÃéwé¶Ç…ÇÊÇ¡ÇƒåƒÇ‘ï`âÊä÷êîÇïœÇ¶ÇÈ
 	switch (DrawMode_)
 	{
-	case S_Start:
+	case S_BeforeStart:
+	{
+		DrawExplanation();
+	}
+		break;
+	case S_Ready:
 	{
 		DrawScore();
 		DrawStartLogo();
@@ -258,6 +270,12 @@ void HUD::SetHUDCSV()
 	if (csv.IsGetParamName(practice)) {
 		std::vector<float> v = csv.GetParam(practice);
 		SetTransformPRS(logo_practice, v);
+	}
+
+	std::string explan = "explanation";
+	if (csv.IsGetParamName(explan)) {
+		std::vector<float> v = csv.GetParam(explan);
+		SetTransformPRS(logo_explanation, v);
 	}
 
 	std::string start = "start";
@@ -385,6 +403,12 @@ void HUD::DrawTimer()
 	}
 }
 
+void HUD::DrawExplanation()
+{
+	//Image::SetTransform(, logo_explanation);
+	//Image::Draw();
+}
+
 void HUD::DrawStartLogo()
 {
 	switch (DrawStart)
@@ -399,23 +423,6 @@ void HUD::DrawStartLogo()
 		break;
 	}
 
-
-	/*if (LogoChangeCount <= LogoChange)
-	{
-		LogoChangeCount += DeltaTime;
-		Image::SetTransform(hReady_, logo_start);
-		Image::Draw(hReady_);
-	}
-	else
-	{
-		EasingCount += DeltaTime;
-		float scale = static_cast<float>(Easing::calculateScale(MaxScale, EasingCount));
-		logo_start.scale_.x = scale;
-		logo_start.scale_.y = scale;
-
-		Image::SetTransform(hGo_, logo_start);
-		Image::Draw(hGo_);
-	}*/
 }
 
 void HUD::DrawFinishLogo()
