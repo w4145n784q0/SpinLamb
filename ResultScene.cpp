@@ -16,7 +16,8 @@ namespace
 ResultScene::ResultScene(GameObject* parent)
 	:BaseScene(parent, "ResultScene"), hBackScreen_(-1), hYouWin_(-1),hCpuWin_(-1),
 	hDraw_(-1), hlogoTitle_(-1),
-	hSoundResult_(-1), hSoundBackTitle_(-1), winner_(RESULTMAX), ResultArray_({})
+	hSoundResult_(-1), hSoundBackTitle_(-1), winner_(RESULTMAX), ResultArray_({}),
+	pTransitionEffect_(nullptr)
 {
 }
 
@@ -26,6 +27,7 @@ ResultScene::~ResultScene()
 
 void ResultScene::Initialize()
 {
+	Instantiate<TransitionEffect>(this);
 	SetCSVResult();
 
 	hBackScreen_ = Image::Load("Image\\GameMode\\back_mode.jpg");
@@ -67,6 +69,8 @@ void ResultScene::Initialize()
 	}
 
 	ResultArray_ = { hYouWin_, hCpuWin_, hDraw_ };
+
+	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
 }
 
 void ResultScene::Update()
@@ -131,6 +135,8 @@ void ResultScene::UpdateActive()
 	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		SceneState_ = S_Transition;
+		pTransitionEffect_->FadeOutStart();
+		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
 		Audio::Play(hSoundBackTitle_);
 	}
 }

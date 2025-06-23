@@ -197,6 +197,9 @@
     <ClCompile Include="Easing.cpp">
       <Filter>06UI</Filter>
     </ClCompile>
+    <ClCompile Include="TransitionEffect.cpp">
+      <Filter>06UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -357,6 +360,9 @@
       <Filter>03Scene</Filter>
     </ClInclude>
     <ClInclude Include="Easing.h">
+      <Filter>06UI</Filter>
+    </ClInclude>
+    <ClInclude Include="TransitionEffect.h">
       <Filter>06UI</Filter>
     </ClInclude>
   </ItemGroup>

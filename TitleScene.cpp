@@ -5,7 +5,8 @@
 #include"Engine/Audio.h"
 
 TitleScene::TitleScene(GameObject* parent)
-	:BaseScene(parent,"TitleScene"), hBackScreen_(-1),hSoundTitle_(-1),hSoundStart_(-1)
+	:BaseScene(parent,"TitleScene"), hBackScreen_(-1),hSoundTitle_(-1),hSoundStart_(-1),
+	pTransitionEffect_(nullptr)
 {
 }
 
@@ -15,6 +16,8 @@ TitleScene::~TitleScene()
 
 void TitleScene::Initialize()
 {
+	Instantiate<TransitionEffect>(this);
+
 	hBackScreen_ = Image::Load("Image\\Title\\TitleScreen.jpg");
 	assert(hBackScreen_ >= 0);
 	hSoundTitle_ = Audio::Load("Sound\\BGM\\title.wav",true); 
@@ -23,6 +26,8 @@ void TitleScene::Initialize()
 	assert(hSoundStart_ >= 0);
 
 	Audio::Play(hSoundTitle_);
+
+	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
 }
 
 void TitleScene::Update()
@@ -45,6 +50,8 @@ void TitleScene::UpdateActive()
 	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		SceneState_ = S_Transition;
+		pTransitionEffect_->FadeOutStart();
+		pTransitionEffect_->SetTransitionTime(SceneTransition);
 		Audio::Play(hSoundStart_);
 	}
 }

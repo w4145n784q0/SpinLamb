@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"BaseScene.h"
+#include"TransitionEffect.h"
 #include<array>
 
 //ゲーム終了後のリザルトシーン
@@ -51,6 +52,9 @@ private:
 
 	//各結果ロゴの画像ハンドル配列
 	std::array<int, RESULTMAX> ResultArray_;
+
+	//----------インスタンス----------
+	TransitionEffect* pTransitionEffect_;
 public:
 	ResultScene(GameObject* parent);
 	~ResultScene();

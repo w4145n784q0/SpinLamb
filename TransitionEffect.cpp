@@ -31,6 +31,7 @@ TransitionEffect::TransitionEffect(GameObject* parent)
 
 TransitionEffect::~TransitionEffect()
 {
+	TransitionTime_ = 0;
 }
 
 void TransitionEffect::Initialize()

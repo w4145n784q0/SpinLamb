@@ -124,7 +124,8 @@ void HUD::Initialize()
 	hPracticeNow_ = Image::Load("Image\\Practice\\PracticeLogo.png");
 	assert(hPracticeNow_ >= 0);
 
-
+	hGameExplanation_ = Image::Load("Image\\Battle\\rule2.png");
+	assert(hGameExplanation_ >= 0);
 
 	hStart_ = Image::Load("Image\\Battle\\start_logo.png");
 	assert(hStart_ >= 0);
@@ -405,8 +406,8 @@ void HUD::DrawTimer()
 
 void HUD::DrawExplanation()
 {
-	//Image::SetTransform(, logo_explanation);
-	//Image::Draw();
+	Image::SetTransform(hGameExplanation_, logo_explanation);
+	Image::Draw(hGameExplanation_);
 }
 
 void HUD::DrawStartLogo()

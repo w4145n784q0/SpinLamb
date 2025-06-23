@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"BaseScene.h"
+#include"TransitionEffect.h"
 
 //タイトルシーン
 class TitleScene :
@@ -19,6 +20,9 @@ private:
 
 	//タイトル時の決定音
 	int hSoundStart_;
+
+	//----------インスタンス----------
+	TransitionEffect* pTransitionEffect_;
 
 public:
 	TitleScene(GameObject* parent);
