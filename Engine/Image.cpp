@@ -15,12 +15,12 @@ namespace Image
 		i_alphamin,
 	};
 
-	float LeftEdge = 0.0f;
-	float RightEdge = 0.0f;
-	float UpEdge = 0.0f;
-	float DownEdge = 0.0f;
-	float Center = 0.0f;
-	int AlphaMin = 0;
+	float LeftEdge = 0.0f;//画像の左端
+	float RightEdge = 0.0f;//画像の右端
+	float UpEdge = 0.0f;//画像の上端
+	float DownEdge = 0.0f;//画像の下端
+	float Center = 0.0f;//画像の中央
+	int AlphaMin = 0;//透過度の最低値
 
 	//ロード済みの画像データ一覧
 	std::vector<ImageData*>	_datas;

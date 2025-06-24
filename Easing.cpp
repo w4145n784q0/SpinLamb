@@ -37,7 +37,7 @@ double Easing::easeOutBack(double x)
 
 double Easing::easeOutCubic(double x)
 {
-   return 1.0 - pow(Adjust - x, Cubed);
+   return Adjust - pow(Adjust - x, Cubed);
 }
 
 double Easing::calculateScale(float _MaxScale, float _EasingCount)

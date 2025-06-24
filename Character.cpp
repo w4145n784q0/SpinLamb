@@ -7,7 +7,6 @@
 namespace {
 	
 	//キャラクタークラスの共通変数を初期化するインデックス
-
 	enum moveIndex
 	{
 		i_vel = 0,

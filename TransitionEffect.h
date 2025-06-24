@@ -53,5 +53,10 @@ public:
     /// フェードイン/アウト用の画像の透明度を最低値に設定(フェードイン時に使用)
     /// </summary>
     void SetTransitionAlpha();
+
+    /// <summary>
+    /// フェードイン/アウト用の画像の透明度をリセット
+    /// </summary>
+    void ResetTransitionAlpha();
 };
 

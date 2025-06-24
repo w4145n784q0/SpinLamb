@@ -150,5 +150,6 @@ void ResultScene::UpdateTransition()
 		SceneTransitionTimer_ = 0;
 		Audio::Stop(hSoundResult_);
 		SceneState_ = S_Active;
+		pTransitionEffect_->ResetTransitionAlpha();
 	}
 }

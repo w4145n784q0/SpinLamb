@@ -88,14 +88,17 @@ private:
 	GameTimer* pGameTimer_;//hud側から操作する場合のタイマークラスポインタ
 	MiniMap* pMiniMap_;
 
-	///Text* pPlayerScore_;
-	//Text* pEnemyScore_;
-
 	//描画モードを格納する変数
 	DrawMode DrawMode_;
 
+	//プレイヤーのスコア
 	int PlayerScore_;
+
+	//CPUのスコア
 	int EnemyScore_;
+
+	//	DrawReady()からDrawGo()に遷る際のタイマー
+	int ReadyTimer_;
 
 public:
 	//コンストラクタ
@@ -119,6 +122,7 @@ public:
 	//CSV設定
 	void SetHUDCSV();
 
+	//描画するスコア設定
 	void SetPlayerScore(int score) { PlayerScore_ = score; }
 	void SetEnemyScore(int score) { EnemyScore_ = score; }
 
@@ -128,6 +132,10 @@ public:
 
 	//描画モードを変更 ここで指定したdrawmodeがDraw()にて呼ばれる
 	void SetDrawMode(DrawMode _drawmode) { DrawMode_ = _drawmode; }
+
+	//DrawReady()からDrawGo()に遷る時間設定
+	//バラバラに持つことを防ぐため,BattleSceneから指示して設定
+	void SetReadyTimer(int _timer) { ReadyTimer_ = _timer; }
 
 	//----------描画関数----------
 	//これらは直接呼ばず、SetDrawModeを介して,HUDクラスのDrawから描画(常に表示するものは例外)

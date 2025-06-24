@@ -102,7 +102,7 @@ HUD::HUD(GameObject* parent)
 	hNumber5_(-1), hNumber6_(-1), hNumber7_(-1), hNumber8_(-1), hNumber9_(-1),
 	hFinish_(-1), hMap_(-1), hPlayerIcon_(-1), hEnemyIcon_(-1),
 	GameModeHUD_(Max), pGameTimer_(nullptr), pMiniMap_(nullptr), DrawMode_(S_None),
-	PlayerScore_(0),EnemyScore_(0)
+	PlayerScore_(0),EnemyScore_(0),ReadyTimer_(0)
 
 {
 }
@@ -186,7 +186,7 @@ void HUD::Initialize()
 
 void HUD::Update()
 {
-	switch (DrawMode_)
+	/*switch (DrawMode_)
 	{
 	case S_BeforeStart:
 		break;
@@ -202,7 +202,7 @@ void HUD::Update()
 		break;
 	default:
 		break;
-	}
+	}*/
 }
 
 void HUD::Draw()
@@ -461,9 +461,6 @@ void HUD::DrawMiniMap()
 
 void HUD::DrawScore()
 {
-	//pPlayerScore_->Draw(PlayerScorePos.position_.x, PlayerScorePos.position_.y, PlayerScore_);
-	//pEnemyScore_->Draw(EnemyScorePos.position_.x, EnemyScorePos.position_.y, EnemyScore_);
-
 	pScoreIndexTen = PlayerScore_ / TenDivision;
 	pScoreIndexOne = PlayerScore_ % TenDivision;
 	eScoreIndexTen = EnemyScore_ / TenDivision;
@@ -482,9 +479,8 @@ void HUD::DrawScore()
 
 void HUD::DrawReady()
 {
-	if (LogoChangeCount <= LogoChange)
+	if (++LogoChangeCount < ReadyTimer_)
 	{
-		LogoChangeCount += DeltaTime;
 		Image::SetTransform(hReady_, logo_start);
 		Image::Draw(hReady_);
 	}

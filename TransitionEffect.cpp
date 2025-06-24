@@ -31,7 +31,6 @@ TransitionEffect::TransitionEffect(GameObject* parent)
 
 TransitionEffect::~TransitionEffect()
 {
-	TransitionTime_ = 0;
 }
 
 void TransitionEffect::Initialize()
@@ -154,4 +153,9 @@ void TransitionEffect::SetSCVTransitionEffect()
 void TransitionEffect::SetTransitionAlpha()
 {
 	FadeEffect.AlphaValue = Image::AlphaMin;
+}
+
+void TransitionEffect::ResetTransitionAlpha()
+{
+	FadeEffect.AlphaValue = 0;
 }

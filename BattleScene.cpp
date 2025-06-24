@@ -13,6 +13,7 @@ namespace
 	//バトルモードの制限時間
 	int GameTimeLimit = 0;
 
+	//エフェクト初期化時のインデックス
 	enum ScorePosIndex
 	{
 		i_gametimelimit = 0,
@@ -160,6 +161,7 @@ void BattleScene::UpdateBattleBefore()
 	{
 		StateCounter = 0;
 		BattleState_ = S_READY;
+		pHUD_->SetReadyTimer(SceneTransition);
 	}
 }
 

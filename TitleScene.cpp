@@ -65,5 +65,6 @@ void TitleScene::UpdateTransition()
 		SceneTransitionTimer_ = 0;
 		Audio::Stop(hSoundTitle_);
 		SceneState_ = S_Active;
+		pTransitionEffect_->ResetTransitionAlpha();
 	}
 }
