@@ -7,14 +7,17 @@ class TransitionEffect :
 {
 private:
     //フェードイン/アウト演出用画像
-    int hFade_;
+    int hFadeBlack_;
+    int hFadeWhite_;
 
     //画面遷移エフェクトの種類
     enum EffectType {
 
         NoneEffect = 0,
-        S_FadeOut,
-        S_FadeIn,
+        S_FadeOutBlack,
+        S_FadeInBlack,
+        S_FadeOutWhite,
+        S_FadeInWhite,
         S_SlideInLTR,
     };
     EffectType EffectType_;
@@ -31,8 +34,10 @@ public:
     void Draw() override;
     void Release() override;
 
-    void FadeOutStart() { EffectType_ = S_FadeOut; }
-    void FadeInStart(){ EffectType_ = S_FadeIn; }
+    void FadeOutStartBlack() { EffectType_ = S_FadeOutBlack; }
+    void FadeInStartBlack(){ EffectType_ = S_FadeInBlack; }
+    void FadeOutStartWhite(){ EffectType_ = S_FadeOutWhite; }
+    void FadeInStartWhite() { EffectType_ = S_FadeInWhite; }
     void SlideInLTRStart() { EffectType_ = S_SlideInLTR; }
 
     void UpdateFadeOut();

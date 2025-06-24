@@ -17,7 +17,6 @@ private:
 	//----------インスタンス----------
 	Player* pPlayer_;
 	Enemy* pEnemy_;
-
 	HUD* pHUD_;
 
 	//HUDクラスに渡すポインタ
@@ -26,6 +25,7 @@ private:
 
 
 	//----------バトルシーンステート----------
+	//これらの値に応じて各Update関数を呼び出す
 	enum Battle
 	{
 		S_BEFORE = 0,//開始前説明
@@ -35,6 +35,8 @@ private:
 		MAXMODE
 	};
 	Battle BattleState_;
+
+	//----------画像ハンドル----------
 
 	//タイトル画像
 	int hBackScreen_;
@@ -69,17 +71,36 @@ public:
 	//開放
 	void Release() override;
 
+	//----------BaseSceneの継承関数----------
+	//通常の処理
 	void UpdateActive() override;
+
+	//シーン遷移中の処理
 	void UpdateTransition() override;
+	//--------------------
 
+	//----------BattleState_に応じて内容が変わるUpdate関数----------
+	//バトル開始前
 	void UpdateBattleBefore();
-	void UpdateBattleReady();
-	void UpdateBattle();
-	void UpdateBattleAfter();
 
+	//バトル開始直前
+	void UpdateBattleReady();
+
+	//バトル中
+	void UpdateBattle();
+
+	//バトル終了後
+	void UpdateBattleAfter();
+	//--------------------
+
+	//CSVから必要パラメータを読み込みする
+	void SetCSVBattle();
+
+	//Playerのスコア上昇
 	void PlusPlayerScore() { PlayerScore_++; }
+
+	//CPUのスコア上昇
 	void PlusEnemyScore() { EnemyScore_++; }
 
-	void SetCSVBattle();
 };
 

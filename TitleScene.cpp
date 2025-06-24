@@ -50,7 +50,7 @@ void TitleScene::UpdateActive()
 	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		SceneState_ = S_Transition;
-		pTransitionEffect_->FadeOutStart();
+		pTransitionEffect_->FadeOutStartBlack();
 		pTransitionEffect_->SetTransitionTime(SceneTransition);
 		Audio::Play(hSoundStart_);
 	}

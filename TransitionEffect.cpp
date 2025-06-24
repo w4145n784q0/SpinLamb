@@ -24,8 +24,8 @@ namespace
 }
 
 TransitionEffect::TransitionEffect(GameObject* parent)
-	: GameObject(parent, "TransitionEffect"),hFade_(-1),EffectType_(NoneEffect),
-	TransitionTime_(0)
+	: GameObject(parent, "TransitionEffect"),hFadeBlack_(-1),hFadeWhite_(-1),
+	EffectType_(NoneEffect),TransitionTime_(0)
 {
 }
 
@@ -37,18 +37,22 @@ void TransitionEffect::Initialize()
 {
 	SetSCVTransitionEffect();
 
-	hFade_ = Image::Load("Image\\Battle\\fade.png");
-	assert(hFade_ >= 0);
+	hFadeBlack_ = Image::Load("Image\\Transition\\fade_black.png");
+	assert(hFadeBlack_ >= 0);
+	hFadeWhite_ = Image::Load("Image\\Transition\\fade_white.png");
+	assert(hFadeWhite_ >= 0);
 }
 
 void TransitionEffect::Update()
 {
 	switch (EffectType_)
 	{
-	case TransitionEffect::S_FadeOut:
+	case TransitionEffect::S_FadeOutBlack:
+	case TransitionEffect::S_FadeOutWhite:
 		UpdateFadeOut();
 		break;
-	case TransitionEffect::S_FadeIn:
+	case TransitionEffect::S_FadeInBlack:
+	case TransitionEffect::S_FadeInWhite:
 		UpdateFadeIn();
 		break;
 	case TransitionEffect::S_SlideInLTR:
@@ -64,18 +68,26 @@ void TransitionEffect::Draw()
 {
 	switch (EffectType_)
 	{
-	case TransitionEffect::S_FadeOut:
-	case TransitionEffect::S_FadeIn:
+	case TransitionEffect::S_FadeOutBlack:
+	case TransitionEffect::S_FadeInBlack:
 	{
-		Image::SetTransform(hFade_, FadeEffect.FadeTransform);
-		Image::SetAlpha(hFade_, FadeEffect.AlphaValue);
-		Image::Draw(hFade_);
+		Image::SetTransform(hFadeBlack_, FadeEffect.FadeTransform);
+		Image::SetAlpha(hFadeBlack_, FadeEffect.AlphaValue);
+		Image::Draw(hFadeBlack_);
+	}
+		break;
+	case TransitionEffect::S_FadeOutWhite:
+	case TransitionEffect::S_FadeInWhite:
+	{
+		Image::SetTransform(hFadeWhite_, FadeEffect.FadeTransform);
+		Image::SetAlpha(hFadeWhite_, FadeEffect.AlphaValue);
+		Image::Draw(hFadeWhite_);
 	}
 		break;
 	case TransitionEffect::S_SlideInLTR:
 	{
-		Image::SetTransform(hFade_, SlideEffect.SlideTransform);
-		Image::Draw(hFade_);
+		Image::SetTransform(hFadeBlack_, SlideEffect.SlideTransform);
+		Image::Draw(hFadeBlack_);
 	}
 		break;
 	default:
@@ -87,7 +99,6 @@ void TransitionEffect::Draw()
 void TransitionEffect::Release()
 {
 }
-
 
 void TransitionEffect::UpdateFadeOut()
 {

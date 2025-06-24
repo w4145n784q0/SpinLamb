@@ -99,7 +99,7 @@ void PracticeScene::UpdateActive()
 	if (Press_ >= SceneTransition)//’·‰Ÿ‚µ‚Åƒ^ƒCƒgƒ‹‚É–ß‚é
 	{
 		SceneState_ = S_Transition;
-		pTransitionEffect_->FadeOutStart();
+		pTransitionEffect_->FadeOutStartBlack();
 		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
 	}
 }

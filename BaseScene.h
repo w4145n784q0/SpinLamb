@@ -11,9 +11,8 @@ protected:
 	//ゲームシーン全般の状態
 	enum SceneState
 	{
-		S_Active = 0,
-		S_Passive,
-		S_Transition,
+		S_Active = 0,//通常
+		S_Transition,//シーン遷移中
 		MaxDecide
 	};
 	SceneState SceneState_;
