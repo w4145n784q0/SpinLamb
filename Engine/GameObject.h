@@ -307,6 +307,34 @@ public:
 	}
 
 	/// <summary>
+	/// Transformをまとめて初期化する際の共通処理
+	/// </summary>
+	/// <param name="_csv">読み込んだCSVインスタンス</param>
+	/// <param name="_names">読み込みたいパラメータの名前配列</param>
+	/// <param name="_Transforms">代入するトランスフォーム配列</param>
+	void InitCSVTransformArray(CsvReader& _csv, const std::vector<std::string>& _names,
+		std::vector<std::reference_wrapper<Transform>>& _Transforms)
+	{
+		//名前配列とトランスフォーム配列数が一致しているなら続ける
+		if (_names.size() != _Transforms.size())
+		{
+			return;
+		}
+
+		for (size_t i = 0; i < _names.size(); i++)
+		{
+			InitCSVTransform(_csv, _names[i], _Transforms[i]);
+		}
+	}
+
+
+	void InitCSVParameter()
+	{
+
+	}
+
+
+	/// <summary>
 	/// GameObjectの共通データ初期化
 	/// </summary>
     static void SCVCommonDataInitialize() {  

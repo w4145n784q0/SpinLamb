@@ -63,19 +63,27 @@ namespace
 	Transform OneTime;
 
 	//マップのトランスフォーム
-	Transform Mapicon;
+	Transform MapIcon;
 
 	//プレイヤーアイコンのトランスフォーム
-	Transform Playericon;
+	Transform PlayerIcon;
 
 	//敵アイコンのトランスフォーム
-	Transform Enemyicon;
+	Transform EnemyIcon;
 
 	//スコア表示位置のトランスフォーム
 	Transform pScore_ten;
 	Transform pScore_one;
 	Transform eScore_ten;
 	Transform eScore_one;
+
+	//画像用トランスフォームを配列に入れる
+	//初期化の際に使用する
+	std::vector<std::reference_wrapper<Transform>> ImageArray = {
+	logo_backtitle,logo_practice,logo_explanation,logo_start,
+	logo_Finish ,TenTime ,OneTime, MapIcon,PlayerIcon,EnemyIcon,
+	pScore_ten,pScore_one,eScore_ten, eScore_one 
+	};
 
 	//ナンバーハンドルの配列
 	std::array<int, MaxNumberIndex> ArrayHandle;
@@ -257,104 +265,17 @@ void HUD::Release()
 
 void HUD::SetHUDCSV()
 {
-	CsvReader csv;
-	csv.Load("CSVdata\\HUDData.csv");
+	CsvReader csvTransform;
+	csvTransform.Load("CSVdata\\HUDData.csv");
 
-	std::string title = "backtitle";
-	if (csv.IsGetParamName(title))
-	{
-		std::vector<float> v = csv.GetParam(title);
-		SetTransformPRS(logo_backtitle, v);
-	}
+	std::vector<std::string> ParamNames = {
+		"backtitle","practice","explanation","start","finish",
+		"tentime","onetime","minimap","playericon", "enemyicon",
+		"playerscoreten","playerscoreone","enemyscoreten","enemyscoreone",
+	};
 
-	std::string practice = "practice";
-	if (csv.IsGetParamName(practice)) {
-		std::vector<float> v = csv.GetParam(practice);
-		SetTransformPRS(logo_practice, v);
-	}
+	InitCSVTransformArray(csvTransform, ParamNames, ImageArray);
 
-	std::string explan = "explanation";
-	if (csv.IsGetParamName(explan)) {
-		std::vector<float> v = csv.GetParam(explan);
-		SetTransformPRS(logo_explanation, v);
-	}
-
-	std::string start = "start";
-	if (csv.IsGetParamName(start))
-	{
-		std::vector<float> v = csv.GetParam(start);
-		SetTransformPRS(logo_start, v);
-	}
-
-	std::string finish = "finish";
-	if (csv.IsGetParamName(finish))
-	{
-		std::vector<float> v = csv.GetParam(finish);
-		SetTransformPRS(logo_Finish, v);
-	}
-
-	std::string ten = "tentime";
-	if (csv.IsGetParamName(ten))
-	{
-		std::vector<float> v = csv.GetParam(ten);
-		SetTransformPRS(TenTime, v);
-	}
-
-	std::string one = "onetime";
-	if (csv.IsGetParamName(one))
-	{
-		std::vector<float> v = csv.GetParam(one);
-		SetTransformPRS(OneTime, v);
-	}
-
-	std::string map = "minimap";
-	if (csv.IsGetParamName(map))
-	{
-		std::vector<float> v = csv.GetParam(map);
-		SetTransformPRS(Mapicon, v);
-	}
-
-	std::string picon = "playericon";
-	if (csv.IsGetParamName(picon))
-	{
-		std::vector<float> v = csv.GetParam(picon);
-		SetTransformPRS(Playericon, v);
-	}
-
-	std::string eicon = "enemyicon";
-	if (csv.IsGetParamName(eicon))
-	{
-		std::vector<float> v = csv.GetParam(eicon);
-		SetTransformPRS(Enemyicon, v);
-	}
-
-	std::string pscoreten = "playerscoreten";
-	if (csv.IsGetParamName(pscoreten))
-	{
-		std::vector<float> v = csv.GetParam(pscoreten);
-		SetTransformPRS(pScore_ten, v);
-	}
-
-	std::string pscoreone = "playerscoreone";
-	if (csv.IsGetParamName(pscoreone))
-	{
-		std::vector<float> v = csv.GetParam(pscoreone);
-		SetTransformPRS(pScore_one, v);
-	}
-
-	std::string escoreten = "enemyscoreten";
-	if (csv.IsGetParamName(escoreten))
-	{
-		std::vector<float> v = csv.GetParam(escoreten);
-		SetTransformPRS(eScore_ten, v);
-	}
-
-	std::string escoreone = "enemyscoreone";
-	if (csv.IsGetParamName(escoreone))
-	{
-		std::vector<float> v = csv.GetParam(escoreone);
-		SetTransformPRS(eScore_one, v);
-	}
 
 	CsvReader csveasing;
 	csveasing.Load("CSVdata\\HUDSomeData.csv");
@@ -437,25 +358,25 @@ void HUD::DrawMiniMap()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("MiniMap"))
 	{
-		ImGui::SliderFloat("positionX", &Mapicon.position_.x, -1.0f, 1.0f);
-		ImGui::SliderFloat("positionY", &Mapicon.position_.y, -1.0f, 1.0f);
+		ImGui::SliderFloat("positionX", &MapIcon.position_.x, -1.0f, 1.0f);
+		ImGui::SliderFloat("positionY", &MapIcon.position_.y, -1.0f, 1.0f);
 		ImGui::TreePop();
 	}
 #endif
 
 	if (pMiniMap_ != nullptr) 
 	{
-		Playericon.position_ = pMiniMap_->GetPlayerPos();
-		Enemyicon.position_ = pMiniMap_->GetEnemyPos();
+		PlayerIcon.position_ = pMiniMap_->GetPlayerPos();
+		EnemyIcon.position_ = pMiniMap_->GetEnemyPos();
 	}
 
-	Image::SetTransform(hMap_, Mapicon);
+	Image::SetTransform(hMap_, MapIcon);
 	Image::Draw(hMap_);
 
-	Image::SetTransform(hPlayerIcon_, Playericon);
+	Image::SetTransform(hPlayerIcon_, PlayerIcon);
 	Image::Draw(hPlayerIcon_);
 
-	Image::SetTransform(hEnemyIcon_, Enemyicon);
+	Image::SetTransform(hEnemyIcon_, EnemyIcon);
 	Image::Draw(hEnemyIcon_);
 }
 
