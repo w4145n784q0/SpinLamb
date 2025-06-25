@@ -327,10 +327,44 @@ public:
 		}
 	}
 
-
-	void InitCSVParameter()
+	/// <summary>
+	/// CSVで各パラメータを読み込む際の共通処理
+	/// </summary>
+	/// <typeparam name="...Args"></typeparam>
+	/// <param name="csv"></param>
+	/// <param name="paramName"></param>
+	/// <param name="...args"></param>
+	template<typename... Args>
+	void InitCSVParameter(CsvReader& csv, const std::string& paramName, Args&&... args)
 	{
+		if (!csv.IsGetParamName(paramName))
+		{
+			return;
+		}
+		
+		std::vector<float> v = csv.GetParam(paramName);
 
+		size_t i = 0;
+		auto assign = [&](auto&& ref)
+			{
+			using T = typename std::decay<decltype(ref.get())>::type;
+			if (i < v.size())
+			{
+				if (std::is_same<T, float>::value) {
+					ref.get() = v[i];
+				}
+				else if (std::is_same<T, int>::value) {
+					ref.get() = static_cast<int>(v[i]);
+				}
+				else if (std::is_same<T, double>::value) {
+					ref.get() = static_cast<double>(v[i]);
+				}
+			}
+			++i;
+			};
+
+
+		(assign(args), ...);
 	}
 
 

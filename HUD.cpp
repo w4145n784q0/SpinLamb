@@ -28,7 +28,8 @@ namespace
 	enum EasingIndex
 	{
 		i_logochange = 0,
-		i_maxscale
+		i_maxscale,
+		i_max
 	};
 
 	//この状態は他クラスから操作できないようにcppファイルに記述
@@ -279,14 +280,8 @@ void HUD::SetHUDCSV()
 
 	CsvReader csveasing;
 	csveasing.Load("CSVdata\\HUDSomeData.csv");
-	std::string easing = "Easing";
 
-	if (csveasing.IsGetParamName(easing))
-	{
-		std::vector<float> v = csveasing.GetParam(easing);
-		LogoChange = v[i_logochange];
-		MaxScale = v[i_maxscale];
-	}
+	InitCSVParameter(csveasing, "Easing", std::ref(LogoChange), std::ref(MaxScale) );
 }
 
 void HUD::DrawPracticeLogo()

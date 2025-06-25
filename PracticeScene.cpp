@@ -113,6 +113,7 @@ void PracticeScene::UpdateTransition()
 		SceneTransitionTimer_ = 0;
 		Audio::Stop(hSoundPractice_);
 		SceneState_ = S_Active;
+		pTransitionEffect_->ResetTransitionAlpha();
 		
 	}
 }
