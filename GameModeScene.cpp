@@ -17,7 +17,7 @@ GameModeScene::GameModeScene(GameObject* parent)
 	hBattle_(-1),hPractice_(-1), hHowtoPlay_(-1),hBackTitle_(-1), hFrameLine_(-1),
 	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),
 	TextArray_({}),ButtonArray_({}),
-	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), SelectMode_(Battle)
+	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), SelectMode_(S_Battle)
 {
 }
 
@@ -82,7 +82,7 @@ void GameModeScene::Initialize()
 	TextArray_ = {hBattleText_, hFreePlayText_, hHowtoPlayText_, hTitleText_};
 	
 	//各モードをリストに入れる
-	ModeList_ = { Battle,Practice,HowToPlay,Title };
+	ModeList_ = { S_Battle,S_Practice,S_HowToPlay,S_Title };
 	itr = ModeList_.begin();
 }
 
@@ -111,10 +111,10 @@ void GameModeScene::Draw()
 
 	switch (SelectMode_)
 	{
-	case GameModeScene::Battle:
-	case GameModeScene::Practice:
-	case GameModeScene::HowToPlay:
-	case GameModeScene::Title:
+	case GameModeScene::S_Battle:
+	case GameModeScene::S_Practice:
+	case GameModeScene::S_HowToPlay:
+	case GameModeScene::S_Title:
 	{
 		Image::SetTransform(TextArray_[SelectMode_], TransText_);
 		Image::Draw(TextArray_[SelectMode_]);
@@ -137,50 +137,37 @@ void GameModeScene::Release()
 
 void GameModeScene::SetGameModeSCV()
 {
+	//各画像を表示する際のトランスフォーム初期化
 	CsvReader csv;
 	csv.Load("CSVdata\\GameModeData.csv");
 
 	//選択枠
-	std::string frame = "FrameLine";
-	if (csv.IsGetParamName(frame))
-	{
-		std::vector<float> v = csv.GetParam(frame);
-		SetTransformPRS(TransFrame_, v);
-	}
+	InitCSVTransform(csv, "FrameLine", TransFrame_);
 
-
+	//各ボタン
     for (int i = 0; i < sizeof(ParamArray) / sizeof(ParamArray[0]); i++)
     {
-		if (csv.IsGetParamName(ParamArray[i]))
-		{
-			std::vector<float> v = csv.GetParam(ParamArray[i]);
-			SetTransformPRS(ModeArray_[i], v);
-		}
+		InitCSVTransform(csv, ParamArray[i], ModeArray_[i]);
     }
 
-
 	//"モードセレクト"
-	std::string modeselect = "ModeSelect";
-	if (csv.IsGetParamName(modeselect))
-	{
-		std::vector<float> v = csv.GetParam(modeselect);
-		SetTransformPRS(TransSelect_, v);
-	}
+	InitCSVTransform(csv, "ModeSelect", TransSelect_);
 
 	//画面下部のテキスト
-	std::string text = "Text";
-	if (csv.IsGetParamName(text))
-	{
-		std::vector<float> v = csv.GetParam(text);
-		SetTransformPRS(TransText_, v);
-	}
+	InitCSVTransform(csv, "Text", TransText_);
 }
 
 void GameModeScene::UpdateActive()
 {
+
+	//ボタンの選択枠の移動
+	//インデックスが先頭/末尾なら末尾/先頭へ戻る
+	//前置デクリメントで配列オーバー防ぐ
+
 	if (Input::IsKeyDown(DIK_UP) /*|| Input::GetPadStickL().y >= Input::StickTilt*/
 		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP))
 	{
+
 		if (itr == ModeList_.begin())
 		{
 			itr = --ModeList_.end();
@@ -207,18 +194,20 @@ void GameModeScene::UpdateActive()
 		Audio::Play(hSoundSelect_);
 	}
 
+	//選択枠の位置を選択中のモードに合わせる
 	switch (SelectMode_)
 	{
-	case GameModeScene::Battle:
-	case GameModeScene::Practice:
-	case GameModeScene::HowToPlay:
-	case GameModeScene::Title:
+	case GameModeScene::S_Battle:
+	case GameModeScene::S_Practice:
+	case GameModeScene::S_HowToPlay:
+	case GameModeScene::S_Title:
 		TransFrame_.position_.y = ModeArray_[SelectMode_].position_.y;
 		break;
 	default:
 		break;
 	}
 
+	//決定したらシーン遷移中状態へ
 	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		Audio::Play(hSoundDecide_);
@@ -228,21 +217,22 @@ void GameModeScene::UpdateActive()
 
 void GameModeScene::UpdateTransition()
 {
+	//時間経過後、選択しているシーンへ遷移
 	if (++SceneTransitionTimer_ > SceneShortTransition)
 	{
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		switch (SelectMode_)
 		{
-		case GameModeScene::Battle:
+		case GameModeScene::S_Battle:
 			pSceneManager->ChangeScene(SCENE_ID_BATTLE);
 			break;
-		case GameModeScene::Practice:
+		case GameModeScene::S_Practice:
 			pSceneManager->ChangeScene(SCENE_ID_PRACTICE);
 			break;
-		case GameModeScene::HowToPlay:
+		case GameModeScene::S_HowToPlay:
 			pSceneManager->ChangeScene(SCENE_ID_HOWTOPLAY);
 			break;
-		case GameModeScene::Title:
+		case GameModeScene::S_Title:
 			pSceneManager->ChangeScene(SCENE_ID_TITLE);
 			break;
 		default:

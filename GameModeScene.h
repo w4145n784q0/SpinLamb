@@ -13,10 +13,10 @@ private:
 	//現在選択しているモード
 	enum Mode
 	{
-		Battle = 0,
-		Practice,
-		HowToPlay,
-		Title,
+		S_Battle = 0,
+		S_Practice,
+		S_HowToPlay,
+		S_Title,
 		MaxCount //モードの最大値
 	};
 	Mode SelectMode_;

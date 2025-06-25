@@ -279,11 +279,31 @@ public:
 	/// </summary>
 	/// <param name="tr">代入するトランスフォーム変数</param>
 	/// <param name="v">受け取った一行分のTransformデータ配列</param>
-	void SetTransformPRS(Transform &tr, std::vector<float> v)
+	void SetTransformPRS(Transform &_tr, std::vector<float> _v)
 	{
-		tr.position_ = { v[pos_x],v[pos_y],v[pos_z] };
-		tr.rotate_ = { v[rot_x], v[rot_y],v[rot_z] };
-		tr.scale_ = { v[sca_x] ,v[sca_y],v[sca_z] };
+		//pos_xは0から始まる整数で、Transformデータ配列の添え字となる
+		//Transformの各要素のx,y,zに_vの値を順番に入れていく
+
+		_tr.position_ = { _v[pos_x],_v[pos_y],_v[pos_z] };
+		_tr.rotate_ = { _v[rot_x], _v[rot_y],_v[rot_z] };
+		_tr.scale_ = { _v[sca_x] ,_v[sca_y],_v[sca_z] };
+	}
+
+	/// <summary>
+	/// Transformを初期化する際の共通処理
+	/// </summary>
+	/// <param name="_csv">読み込んだCSVインスタンス</param>
+	/// <param name="_name">読み込みたいパラメータの名前</param>
+	/// <param name="_tr">代入するトランスフォーム変数</param>
+	void InitCSVTransform(CsvReader& _csv, const std::string& _name, Transform& _tr)
+	{
+		//読み込み前にパラメータ名の存在確認をする
+		if (_csv.IsGetParamName(_name))
+		{
+			//確認したらcsvからデータを配列に入れ各トランスフォームに代入
+			std::vector<float> v = _csv.GetParam(_name);
+			SetTransformPRS(_tr, v);
+		}
 	}
 
 	/// <summary>
