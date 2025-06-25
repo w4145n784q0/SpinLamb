@@ -4,12 +4,13 @@
 #include<array>
 #include<list>
 
-//ゲームモードを選択するシーン
+//ゲームモードを選択するメニュー画面シーン
 class GameModeScene :
     public BaseScene
 {
 private:
 
+	//現在選択しているモード
 	enum Mode
 	{
 		Battle = 0,
@@ -21,41 +22,85 @@ private:
 	Mode SelectMode_;
 
 	//----------背景----------
-	int hBackScreen_;//背景色
-	int hBackChara_;//背景キャラ
+	// 
+	//背景画像
+	int hBackScreen_;
+
+	//背景キャラ画像
+	int hBackChara_;
+
+	//背景のキャラクターのトランスフォーム
 	Transform BackChara_;
 
 	//----------ボタン----------
-	int hBattle_;//バトルスタートボタン
-	int hPractice_;//練習モードボタン
-	int hHowtoPlay_;//あそびかた説明ボタン
-	int hBackTitle_;//タイトルのボタン
-	int hFrameLine_;//選択枠の枠線
-	std::array<Transform, MaxCount> ModeArray_;//各ボタンのトランスフォーム管理配列
-	std::array<int, MaxCount> ButtonArray_;//各ボタンのハンドル配列
+	//バトルスタートボタン画像
+	int hBattle_;
+
+	//練習モードボタン画像
+	int hPractice_;
+
+	//あそびかた説明ボタン画像
+	int hHowtoPlay_;
+
+	//タイトルボタン画像
+	int hBackTitle_;
+
+	//選択枠の枠線画像
+	int hFrameLine_;
+
+	//各ボタンのトランスフォーム管理配列
+	std::array<Transform, MaxCount> ModeArray_;
+
+	//各ボタンの画像ハンドル配列
+	std::array<int, MaxCount> ButtonArray_;
 	
 
 	//----------ロゴ・テキスト----------
-	int hModeSelect_;//モードセレクト
-	int hBattleText_;//画面下部のテキスト(バトル用)
-	int hFreePlayText_;//画面下部のテキスト(フリープレイ用)
-	int hHowtoPlayText_;//画面下部のテキスト(あそびかた用)
-	int hTitleText_;//画面下部のテキスト(タイトル用)
-	std::array<int, MaxCount> TextArray_;//各テキストのハンドル配列
+
+	//モードセレクト画像
+	int hModeSelect_;
+
+	//画面下部のゲーム説明テキスト画像(バトル用)
+	int hBattleText_;
+
+	//画面下部のゲーム説明テキスト画像(フリープレイ用)
+	int hFreePlayText_;
+
+	//画面下部のゲーム説明テキスト画像(あそびかた用)
+	int hHowtoPlayText_;
+
+	//画面下部のゲーム説明テキスト画像(タイトル用)
+	int hTitleText_;
+
+	//各テキストの画像ハンドル配列
+	std::array<int, MaxCount> TextArray_;
 
 	//----------サウンドハンドル----------
-	int hSoundGameMode_;//ゲームモードシーンのBGM
-	int hSoundSelect_;//モード選択時のSE
-	int hSoundDecide_;//モード決定時のSE
+
+	//ゲームモードシーンのBGM
+	int hSoundGameMode_;
+
+	//モード選択時のSE
+	int hSoundSelect_;
+
+	//モード決定時のSE
+	int hSoundDecide_;
 
 
+	//各モードのリスト
+	std::list<Mode> ModeList_;
 
-	std::list<Mode> ModeList_;//各モードのリスト
-	std::list<Mode>::iterator itr;//ModeList_のインデックスを指す値
+	//ModeList_のインデックスを指す値
+	std::list<Mode>::iterator itr;
 	
-	Transform Trans_Frame_;//選択枠のトランスフォーム
-	Transform Trans_Select_;//ゲームモードロゴのトランスフォーム
-	Transform Trans_Text_;//テキストの固定位置
+	//選択枠のトランスフォーム
+	Transform TransFrame_;
+
+	//モードセレクト画像のトランスフォーム
+	Transform TransSelect_;
+
+	//ゲーム説明テキストの固定位置
+	Transform TransText_;
 
 	
 public:
@@ -74,10 +119,14 @@ public:
 	//開放
 	void Release() override;
 
-	//csvファイルの読み込み
+	//CSVファイルから必要パラメータを読み込みする
 	void SetGameModeSCV();
 
+	//----------BaseSceneの継承関数----------
+	//通常の処理
 	void UpdateActive() override;
+
+	//シーン遷移中の処理
 	void UpdateTransition() override;
 };
 

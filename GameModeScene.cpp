@@ -100,7 +100,7 @@ void GameModeScene::Draw()
 	Image::SetTransform(hBackChara_, BackChara_);
 	Image::Draw(hBackChara_);
 
-	Image::SetTransform(hModeSelect_, Trans_Select_);
+	Image::SetTransform(hModeSelect_, TransSelect_);
 	Image::Draw(hModeSelect_);
 
 	for(int i = 0; i < ModeArray_.size(); i++)
@@ -116,7 +116,7 @@ void GameModeScene::Draw()
 	case GameModeScene::HowToPlay:
 	case GameModeScene::Title:
 	{
-		Image::SetTransform(TextArray_[SelectMode_], Trans_Text_);
+		Image::SetTransform(TextArray_[SelectMode_], TransText_);
 		Image::Draw(TextArray_[SelectMode_]);
 	}
 		break;
@@ -124,7 +124,7 @@ void GameModeScene::Draw()
 		break;
 	}
 
-	Image::SetTransform(hFrameLine_, Trans_Frame_);
+	Image::SetTransform(hFrameLine_, TransFrame_);
 	Image::Draw(hFrameLine_);
 
 #ifdef _DEBUG
@@ -145,7 +145,7 @@ void GameModeScene::SetGameModeSCV()
 	if (csv.IsGetParamName(frame))
 	{
 		std::vector<float> v = csv.GetParam(frame);
-		SetTransformPRS(Trans_Frame_, v);
+		SetTransformPRS(TransFrame_, v);
 	}
 
 
@@ -164,7 +164,7 @@ void GameModeScene::SetGameModeSCV()
 	if (csv.IsGetParamName(modeselect))
 	{
 		std::vector<float> v = csv.GetParam(modeselect);
-		SetTransformPRS(Trans_Select_, v);
+		SetTransformPRS(TransSelect_, v);
 	}
 
 	//画面下部のテキスト
@@ -172,7 +172,7 @@ void GameModeScene::SetGameModeSCV()
 	if (csv.IsGetParamName(text))
 	{
 		std::vector<float> v = csv.GetParam(text);
-		SetTransformPRS(Trans_Text_, v);
+		SetTransformPRS(TransText_, v);
 	}
 }
 
@@ -213,7 +213,7 @@ void GameModeScene::UpdateActive()
 	case GameModeScene::Practice:
 	case GameModeScene::HowToPlay:
 	case GameModeScene::Title:
-		Trans_Frame_.position_.y = ModeArray_[SelectMode_].position_.y;
+		TransFrame_.position_.y = ModeArray_[SelectMode_].position_.y;
 		break;
 	default:
 		break;

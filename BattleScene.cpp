@@ -46,21 +46,21 @@ void BattleScene::Initialize()
 	//StageManagerからPlayer,Enemyのインスタンスに
 	// 移動制限(各ステージの端)を渡す
 	StageManager* pSceneManager = (StageManager*)FindObject("StageManager");
-	float north = pSceneManager->GetNorthEnd();
-	float south = pSceneManager->GetSouthEnd();
-	float west = pSceneManager->GetWestEnd();
-	float east = pSceneManager->GetEastEnd();
+	float North = pSceneManager->GetNorthEnd();
+	float South = pSceneManager->GetSouthEnd();
+	float West = pSceneManager->GetWestEnd();
+	float East = pSceneManager->GetEastEnd();
 
 	pPlayer_ = (Player*)FindObject("Player");
 	if(pPlayer_ != nullptr)
 	{
-		pPlayer_->SetEnd(north, south, west, east);
+		pPlayer_->SetEnd(North, South, West, East);
 	}
 
 	pEnemy_ = (Enemy*)FindObject("Enemy");
 	if (pEnemy_ != nullptr)
 	{
-		pEnemy_->SetEnd(north, south, west, east);
+		pEnemy_->SetEnd(North, South, West, East);
 	}
 
 	//インスタンスを初期化
