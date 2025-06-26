@@ -51,6 +51,7 @@ void TitleScene::UpdateActive()
 	{
 		SceneState_ = S_Transition;
 		pTransitionEffect_->FadeOutStartBlack();
+		//pTransitionEffect_->ZoomInStart();
 		pTransitionEffect_->SetTransitionTime(SceneTransition);
 		Audio::Play(hSoundStart_);
 	}

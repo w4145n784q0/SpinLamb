@@ -12,15 +12,20 @@ private:
     int hFadeBlack_;
     int hFadeWhite_;
 
+    //ズームイン/アウト用画像
+    int hZoomSheep_;
+
     //----------画面遷移エフェクトの種類----------
     enum EffectType {
 
         NoneEffect = 0,
-        S_FadeOutBlack,//フェードアウト
-        S_FadeInBlack,
+        S_FadeOutBlack,//黒くフェードアウト
+        S_FadeInBlack,//白くフェードイン
         S_FadeOutWhite,//フェードイン
-        S_FadeInWhite,
+        S_FadeInWhite,//白くフェードイン
         S_SlideInLTR,//スライドイン
+        S_ZoomIn,//ズームイン
+        S_ZoomOut,//ズームアウト
     };
     EffectType EffectType_;
 
@@ -43,11 +48,15 @@ public:
     //開放
     void Release() override;
 
+    //画面遷移エフェクトの種類を指示
+
     void FadeOutStartBlack() { EffectType_ = S_FadeOutBlack; }
     void FadeInStartBlack(){ EffectType_ = S_FadeInBlack; }
     void FadeOutStartWhite(){ EffectType_ = S_FadeOutWhite; }
     void FadeInStartWhite() { EffectType_ = S_FadeInWhite; }
     void SlideInLTRStart() { EffectType_ = S_SlideInLTR; }
+    void ZoomInStart() { EffectType_ = S_ZoomIn; }
+    void ZoomOutStart(){ EffectType_ = S_ZoomOut; }
 
     //----------EffectType_に応じて内容が変わるUpdate関数----------
     //フェードアウト処理
@@ -58,6 +67,12 @@ public:
 
     //スライドイン処理
     void UpdateSlideInLTR();
+
+    //ズームイン処理
+    void UpdateZoomIn();
+
+    //ズームアウト処理
+    void UpdateZoomOut();
 
     //CSVファイルから必要パラメータを読み込みする
     void SetSCVTransitionEffect();

@@ -21,11 +21,20 @@ namespace
 	};
 	SlideInOut SlideEffect;
 
+	//ズームイン/アウト処理
+	struct ZoomInOut
+	{
+		Transform ZoomTransform;//ズームイン/アウト用トランスフォーム
+		float MaxZoomValue = 3.0f;//ズーム最大値
+		float ZoomValue = 0.0f;//ズーム量
+	};
+	ZoomInOut ZoomEffect;
+
 }
 
 TransitionEffect::TransitionEffect(GameObject* parent)
 	: GameObject(parent, "TransitionEffect"),hFadeBlack_(-1),hFadeWhite_(-1),
-	EffectType_(NoneEffect),TransitionTime_(0)
+	hZoomSheep_(-1), EffectType_(NoneEffect),TransitionTime_(0)
 {
 }
 
@@ -41,8 +50,12 @@ void TransitionEffect::Initialize()
 	//各画像の読み込み
 	hFadeBlack_ = Image::Load("Image\\Transition\\fade_black.png");
 	assert(hFadeBlack_ >= 0);
+
 	hFadeWhite_ = Image::Load("Image\\Transition\\fade_white.png");
 	assert(hFadeWhite_ >= 0);
+
+	hZoomSheep_ = Image::Load("Image\\Transition\\SheepBlack.png");
+	assert(hZoomSheep_ >= 0);
 }
 
 void TransitionEffect::Update()
@@ -60,6 +73,9 @@ void TransitionEffect::Update()
 		break;
 	case TransitionEffect::S_SlideInLTR:
 		UpdateSlideInLTR();
+		break;
+	case TransitionEffect::S_ZoomIn:
+		UpdateZoomIn();
 		break;
 	default:
 		break;
@@ -121,7 +137,6 @@ void TransitionEffect::UpdateFadeOut()
 void TransitionEffect::UpdateFadeIn()
 {
 	//だんだん明るくなるエフェクト
-
 	if (FadeEffect.AlphaValue <= 0)
 	{
 		FadeEffect.AlphaValue = 0;
@@ -143,6 +158,26 @@ void TransitionEffect::UpdateSlideInLTR()
 	{
 		SlideEffect.SlideTransform.position_.x += (Image::RightEdge - Image::LeftEdge) / TransitionTime_;
 	}
+}
+
+void TransitionEffect::UpdateZoomIn()
+{
+	//だんだん大きくなるエフェクト
+	if (ZoomEffect.ZoomValue >= ZoomEffect.MaxZoomValue)
+	{
+		ZoomEffect.ZoomTransform.scale_.x = ZoomEffect.MaxZoomValue;
+		ZoomEffect.ZoomTransform.scale_.y = ZoomEffect.MaxZoomValue;
+	}
+	else
+	{
+		ZoomEffect.ZoomValue += ZoomEffect.MaxZoomValue / TransitionTime_;
+		ZoomEffect.ZoomTransform.scale_.x += ZoomEffect.MaxZoomValue / TransitionTime_;
+		ZoomEffect.ZoomTransform.scale_.y += ZoomEffect.MaxZoomValue / TransitionTime_;
+	}
+}
+
+void TransitionEffect::UpdateZoomOut()
+{
 }
 
 void TransitionEffect::SetSCVTransitionEffect()

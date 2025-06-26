@@ -130,7 +130,7 @@ void HUD::Initialize()
 	//csvからパラメータ読み込み
 	Easing::SetSCVEasing();
 
-	//各画像・サウンドの読み込み
+	//各画像の読み込み
 	hBackTitleLogo_ = Image::Load("Image\\Practice\\BackTitleLogo.png");
 	assert(hBackTitleLogo_ >= 0);
 
