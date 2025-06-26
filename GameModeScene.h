@@ -13,16 +13,16 @@ private:
 	//現在選択しているモード
 	enum Mode
 	{
-		S_Battle = 0,
-		S_Practice,
-		S_HowToPlay,
-		S_Title,
+		S_Battle = 0,//"バトル"を選択中
+		S_Practice,//"フリープレイ"を選択中
+		S_HowToPlay,//"あそびかた"を選択中
+		S_Title,//"タイトル"を選択中
 		MaxCount //モードの最大値
 	};
 	Mode SelectMode_;
 
 	//----------背景----------
-	// 
+
 	//背景画像
 	int hBackScreen_;
 

@@ -20,13 +20,22 @@ public:
 	MiniMap(GameObject* parent);
 	~MiniMap();
 
+	//初期化
 	void Initialize() override;
+
+	//更新
 	void Update() override;
+
+	//描画
 	void Draw() override;
+
+	//開放
 	void Release() override;
 
-	void SetCSV();
+	//CSVファイルから必要パラメータを読み込みする
+	void SetMiniMapCSV();
 
+	//セッター・ゲッター関数
 	XMFLOAT3 GetPlayerPos() { return playerPos_; }
 	XMFLOAT3 GetEnemyPos() { return enemyPos_; }
 };

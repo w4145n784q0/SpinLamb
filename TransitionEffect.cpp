@@ -9,15 +9,15 @@ namespace
 	//フェードイン/アウト用
 	struct FadeInOut
 	{
-		Transform FadeTransform;
-		int AlphaValue = 0;
+		Transform FadeTransform;//フェードイン/アウト用トランスフォーム
+		int AlphaValue = 0;//画像の透明度
 	};
 	FadeInOut FadeEffect;
 
 	//スライドイン/アウト用
 	struct SlideInOut
 	{
-		Transform SlideTransform;
+		Transform SlideTransform;//スライドイン/アウト用トランスフォーム
 	};
 	SlideInOut SlideEffect;
 
@@ -35,8 +35,10 @@ TransitionEffect::~TransitionEffect()
 
 void TransitionEffect::Initialize()
 {
+	//csvからパラメータ読み込み
 	SetSCVTransitionEffect();
 
+	//各画像の読み込み
 	hFadeBlack_ = Image::Load("Image\\Transition\\fade_black.png");
 	assert(hFadeBlack_ >= 0);
 	hFadeWhite_ = Image::Load("Image\\Transition\\fade_white.png");
@@ -45,6 +47,7 @@ void TransitionEffect::Initialize()
 
 void TransitionEffect::Update()
 {
+	//EffectType_から行う画面遷移処理を指示
 	switch (EffectType_)
 	{
 	case TransitionEffect::S_FadeOutBlack:
@@ -66,6 +69,7 @@ void TransitionEffect::Update()
 
 void TransitionEffect::Draw()
 {
+	//EffectType_から行う描画を指示
 	switch (EffectType_)
 	{
 	case TransitionEffect::S_FadeOutBlack:
@@ -146,19 +150,13 @@ void TransitionEffect::SetSCVTransitionEffect()
 	CsvReader csv;
 	csv.Load("CSVdata\\TransitionData.csv");
 
-	std::string fade = "Fade";
-	if (csv.IsGetParamName(fade))
-	{
-		std::vector<float> v = csv.GetParam(fade);
-		SetTransformPRS(FadeEffect.FadeTransform, v);
-	}
+	std::vector<std::string> ParamNames = { "Fade" ,"Slide" };
+	std::vector<std::reference_wrapper<Transform>> EffectArray = {
+		FadeEffect.FadeTransform,SlideEffect.SlideTransform
+	};
 
-	std::string slide = "Slide";
-	if (csv.IsGetParamName(slide))
-	{
-		std::vector<float> v = csv.GetParam(slide);
-		SetTransformPRS(SlideEffect.SlideTransform, v);
-	}
+	InitCSVTransformArray(csv, ParamNames, EffectArray);
+
 }
 
 void TransitionEffect::SetTransitionAlpha()

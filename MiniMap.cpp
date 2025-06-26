@@ -3,6 +3,7 @@
 
 namespace
 {
+	//補正値のインデックス
 	enum MiniMapIndex
 	{
 		i_reductionXParam = 0,
@@ -10,11 +11,17 @@ namespace
 		i_CorrectionValueXParam,
 		i_CorrectionValueYParam,
 	};
+	//キャラクターのX座標を縮小する値
+	float reductionX = 0.0f;
 
-	float reductionX = 0.0f;//キャラクターのX座標を縮小する値
-	float reductionY = 0.0f;//キャラクターのZ座標を縮小する値
-	float CorrectionValueX = 0.0f;//マップのX座標を補正する値
-	float CorrectionValueY = 0.0f;//マップのY座標を補正する値
+	//キャラクターのZ座標を縮小する値
+	float reductionY = 0.0f;
+
+	//マップのX座標を補正する値
+	float CorrectionValueX = 0.0f;
+
+	//マップのY座標を補正する値
+	float CorrectionValueY = 0.0f;
 }
 
 MiniMap::MiniMap(GameObject* parent)
@@ -29,8 +36,10 @@ MiniMap::~MiniMap()
 
 void MiniMap::Initialize()
 {
-	SetCSV();
+	//csvからパラメータ読み込み
+	SetMiniMapCSV();
 
+	//インスタンスを初期化
 	pPlayer_ = (Player*)FindObject("Player");
 	pEnemy_ = (Enemy*)FindObject("Enemy");
 
@@ -38,6 +47,9 @@ void MiniMap::Initialize()
 
 void MiniMap::Update()
 {
+	//プレイヤー・CPUの位置をとり続ける
+	//キャラクターのワールド座標を縮小,補正値を足してマップ内に表示
+
 	playerPos_.x = (pPlayer_->GetPosition().x * reductionX) + CorrectionValueX;
 	playerPos_.y = (pPlayer_->GetPosition().z * reductionY) - CorrectionValueY;
 
@@ -54,7 +66,7 @@ void MiniMap::Release()
 {
 }
 
-void MiniMap::SetCSV()
+void MiniMap::SetMiniMapCSV()
 {
 	CsvReader csv;
 	csv.Load("CSVdata\\MiniMapData.csv");

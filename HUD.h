@@ -73,7 +73,7 @@ private:
 	//敵のアイコン
 	int hEnemyIcon_;
 
-	//----------ゲームシーンステート(状態により描画内容を変更)----------
+	//----------ゲームシーン状態遷移(状態により描画内容を変更)----------
 	enum GameMode
 	{
 		BattlePreStart,//バトルシーン開始前
@@ -119,7 +119,7 @@ public:
 	//開放
 	void Release() override;
 
-	//CSV設定
+	//CSVファイルから必要パラメータを読み込みする
 	void SetHUDCSV();
 
 	//描画するスコア設定

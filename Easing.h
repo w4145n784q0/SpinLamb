@@ -21,6 +21,7 @@ namespace Easing
 	/// <returns>拡大割合</returns>
 	double calculateScale(float _MaxScale,float _EasingCount);
 
+	//CSVファイルから必要パラメータを読み込みする
 	void SetSCVEasing();
 }
 

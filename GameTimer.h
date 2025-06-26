@@ -28,10 +28,7 @@ private:
 	TimeState TimeState_;
 
 public:
-	//コンストラクタ
-	//引数：parent  親オブジェクト（SceneManager）
 	GameTimer(GameObject* parent);
-
 	~GameTimer();
 
 	//初期化
@@ -46,19 +43,25 @@ public:
 	//開放
 	void Release() override;
 
+	//----------TimeState_に応じて内容が変わるUpdate関数----------
+	//時間計測ストップ
 	void UpdateTimeStop();
+
+	//時間計測中
 	void UpdateTimeCount();
 
-	void StartTimer() { TimeState_ = COUNTING; }
-	void StopTimer() { TimeState_ = STOP; }
+	//ゲーム時間の計算
+	void TimeCalclation();
 
+	//セッター・ゲッター関数
 	int GetTimeTen() { return Timeten_; }
 	int GetTimeOne() { return Timeone_; }
 	int GetCurrentGameTime() { return CurrentGameTime_; }
 	void SetCurrentGameTime(int _time) { CurrentGameTime_ = _time; }
 
-	/// <summary>
-	/// ゲーム時間の計算
-	/// </summary>
-	void TimeCalclation();
+	//時間停止を指示
+	void StartTimer() { TimeState_ = COUNTING; }
+
+	//時間計測を指示
+	void StopTimer() { TimeState_ = STOP; }
 };

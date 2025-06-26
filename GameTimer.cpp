@@ -54,7 +54,6 @@ void GameTimer::UpdateTimeStop()
 void GameTimer::UpdateTimeCount()
 {
 	//時間の更新処理
-
 	if (++Timecounter > oneSecond)
 	{
 		if (CurrentGameTime_ > 0)
@@ -68,6 +67,9 @@ void GameTimer::UpdateTimeCount()
 
 void GameTimer::TimeCalclation()
 {
+	//現在の時間をそれぞれ計算
+	//Timeten,TimeoneはHUDクラスから取得され描画される
+
 	Timeten_ = CurrentGameTime_ / TenDivision;
 	Timeone_ = CurrentGameTime_ % TenDivision;
 }

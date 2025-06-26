@@ -124,9 +124,13 @@ void HUD::Initialize()
 {
 	DrawStart = start_ready;
 
+	//csvからパラメータ読み込み
 	SetHUDCSV();
+
+	//csvからパラメータ読み込み
 	Easing::SetSCVEasing();
 
+	//各画像・サウンドの読み込み
 	hBackTitleLogo_ = Image::Load("Image\\Practice\\BackTitleLogo.png");
 	assert(hBackTitleLogo_ >= 0);
 
@@ -281,7 +285,15 @@ void HUD::SetHUDCSV()
 	CsvReader csveasing;
 	csveasing.Load("CSVdata\\HUDSomeData.csv");
 
-	InitCSVParameter(csveasing, "Easing", std::ref(LogoChange), std::ref(MaxScale) );
+	//InitCSVParameter(csveasing, "Easing", std::ref(LogoChange), std::ref(MaxScale) );
+
+	std::string easing = "Easing";
+	if (csveasing.IsGetParamName(easing))
+	{
+		std::vector<float> v = csveasing.GetParam(easing);
+		LogoChange = v[i_logochange];
+		MaxScale = v[i_maxscale];
+	}
 }
 
 void HUD::DrawPracticeLogo()
