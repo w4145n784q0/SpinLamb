@@ -29,7 +29,7 @@ private:
     };
     EffectType EffectType_;
 
-    //遷移時間
+    //遷移時間 他クラスから代入される
     int TransitionTime_;
 
 public:
@@ -94,6 +94,9 @@ public:
     /// </summary>
     void ResetTransitionAlpha();
 
+    /// <summary>
+    /// ズームイン/アウト用画像のズーム拡大量をリセット
+    /// </summary>
     void ResetTransitionZoom();
 };
 

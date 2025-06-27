@@ -16,7 +16,7 @@ GameModeScene::GameModeScene(GameObject* parent)
 	hBackScreen_(-1), hBackChara_(-1),
 	hBattle_(-1),hPractice_(-1), hHowtoPlay_(-1),hBackTitle_(-1), hFrameLine_(-1),
 	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),
-	TextArray_({}),ButtonArray_({}),
+	TextArray_({}),ButtonImageArray_({}), ModeTransArray_({}),
 	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), SelectMode_(S_Battle),
 	pTransitionEffect_(nullptr)
 {
@@ -85,14 +85,16 @@ void GameModeScene::Initialize()
 	hSoundSelect_ = Audio::Load("Sound\\SE\\Select.wav");
 	assert(hSoundSelect_ >= 0);
 
-	//各モードのハンドルを配列に入れる
-	ButtonArray_ = { hBattle_, hPractice_, hHowtoPlay_, hBackTitle_ };
+	//各モードの画像ハンドルを配列に入れる
+	ButtonImageArray_ = { hBattle_, hPractice_, hHowtoPlay_, hBackTitle_ };
 
-	//各テキストハンドルを配列に入れる
+	//各テキスト画像ハンドルを配列に入れる
 	TextArray_ = {hBattleText_, hFreePlayText_, hHowtoPlayText_, hTitleText_};
 	
 	//各モードをリストに入れる
 	ModeList_ = { S_Battle,S_Practice,S_HowToPlay,S_Title };
+
+	//インデックスの初期位置を指定
 	itr = ModeList_.begin();
 
 	//インスタンス生成
@@ -120,10 +122,10 @@ void GameModeScene::Draw()
 	Image::SetTransform(hModeSelect_, TransSelect_);
 	Image::Draw(hModeSelect_);
 
-	for(int i = 0; i < ModeArray_.size(); i++)
+	for(int i = 0; i < ModeTransArray_.size(); i++)
 	{
-		Image::SetTransform(ButtonArray_[i], ModeArray_[i]);
-		Image::Draw(ButtonArray_[i]);
+		Image::SetTransform(ButtonImageArray_[i], ModeTransArray_[i]);
+		Image::Draw(ButtonImageArray_[i]);
 	}
 
 	switch (SelectMode_)
@@ -164,7 +166,7 @@ void GameModeScene::SetGameModeSCV()
 	//各ボタン
     for (int i = 0; i < sizeof(ParamArray) / sizeof(ParamArray[0]); i++)
     {
-		InitCSVTransform(csv, ParamArray[i], ModeArray_[i]);
+		InitCSVTransform(csv, ParamArray[i], ModeTransArray_[i]);
     }
 
 	//"モードセレクト"
@@ -181,8 +183,7 @@ void GameModeScene::UpdateActive()
 	//インデックスが先頭/末尾なら末尾/先頭へ戻る
 	//前置デクリメントで配列オーバー防ぐ
 
-	if (Input::IsKeyDown(DIK_UP) /*|| Input::GetPadStickL().y >= Input::StickTilt*/
-		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP))
+	if (Input::IsKeyDown(DIK_UP) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP))
 	{
 
 		if (itr == ModeList_.begin())
@@ -196,8 +197,7 @@ void GameModeScene::UpdateActive()
 		SelectMode_ = *itr;
 		Audio::Play(hSoundSelect_);
 	}
-	if (Input::IsKeyDown(DIK_DOWN) /*|| Input::GetPadStickL().y <= -Input::StickTilt*/
-		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN))
+	if (Input::IsKeyDown(DIK_DOWN) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN))
 	{
 		if (itr == --ModeList_.end())
 		{
@@ -218,7 +218,7 @@ void GameModeScene::UpdateActive()
 	case GameModeScene::S_Practice:
 	case GameModeScene::S_HowToPlay:
 	case GameModeScene::S_Title:
-		TransFrame_.position_.y = ModeArray_[SelectMode_].position_.y;
+		TransFrame_.position_.y = ModeTransArray_[SelectMode_].position_.y;
 		break;
 	default:
 		break;
@@ -267,6 +267,7 @@ void GameModeScene::UpdateTransition()
 		//ゲームシーン状態を通常に戻しておく
 		SceneState_ = S_Active;
 
+		//ズーム拡大量を戻す
 		pTransitionEffect_->ResetTransitionZoom();
 	}
 }

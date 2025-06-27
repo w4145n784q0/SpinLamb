@@ -50,11 +50,15 @@ private:
 	//選択枠の枠線画像
 	int hFrameLine_;
 
+	//選択枠のトランスフォーム
+	Transform TransFrame_;
+
 	//各ボタンのトランスフォーム管理配列
-	std::array<Transform, MaxCount> ModeArray_;
+	//csv読み込み時に初期化
+	std::array<Transform, MaxCount> ModeTransArray_;
 
 	//各ボタンの画像ハンドル配列
-	std::array<int, MaxCount> ButtonArray_;
+	std::array<int, MaxCount> ButtonImageArray_;
 	
 
 	//----------ロゴ・テキスト----------
@@ -73,6 +77,12 @@ private:
 
 	//画面下部のゲーム説明テキスト画像(タイトル用)
 	int hTitleText_;
+
+	//"モードセレクト"画像のトランスフォーム
+	Transform TransSelect_;
+
+	//ゲーム説明テキストの固定位置
+	Transform TransText_;
 
 	//各テキストの画像ハンドル配列
 	std::array<int, MaxCount> TextArray_;
@@ -95,14 +105,9 @@ private:
 	//ModeList_のインデックスを指す値
 	std::list<Mode>::iterator itr;
 	
-	//選択枠のトランスフォーム
-	Transform TransFrame_;
 
-	//モードセレクト画像のトランスフォーム
-	Transform TransSelect_;
 
-	//ゲーム説明テキストの固定位置
-	Transform TransText_;
+
 
 	//----------インスタンス----------
 	TransitionEffect* pTransitionEffect_;

@@ -43,6 +43,7 @@ void TitleScene::Update()
 
 void TitleScene::Draw()
 {
+	//背景描画
 	Image::SetTransform(hBackScreen_, this->transform_);
 	Image::Draw(hBackScreen_);
 }
@@ -53,12 +54,16 @@ void TitleScene::Release()
 
 void TitleScene::UpdateActive()
 {
+	//決定ボタン(Pキー・B/Startボタン)を押したらシーン遷移状態へ
 	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		SceneState_ = S_Transition;
+
+		//シーン遷移エフェクトを設定
 		pTransitionEffect_->FadeOutStartBlack();
-		//pTransitionEffect_->ZoomInStart();
 		pTransitionEffect_->SetTransitionTime(SceneTransition);
+
+		//決定音を再生
 		Audio::Play(hSoundStart_);
 	}
 }
@@ -67,11 +72,20 @@ void TitleScene::UpdateTransition()
 {
 	if (++SceneTransitionTimer_ > SceneTransition)
 	{
+		//SceneManagerのインスタンスからゲーム選択シーンへ
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
+
+		//シーン遷移用タイマーを戻す
 		SceneTransitionTimer_ = 0;
+
+		//タイトル用サウンド停止
 		Audio::Stop(hSoundTitle_);
+
+		//ゲームシーン状態を通常に戻しておく
 		SceneState_ = S_Active;
+
+		//画像の透明度を戻す
 		pTransitionEffect_->ResetTransitionAlpha();
 	}
 }
