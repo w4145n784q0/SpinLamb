@@ -17,7 +17,8 @@ GameModeScene::GameModeScene(GameObject* parent)
 	hBattle_(-1),hPractice_(-1), hHowtoPlay_(-1),hBackTitle_(-1), hFrameLine_(-1),
 	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),
 	TextArray_({}),ButtonArray_({}),
-	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), SelectMode_(S_Battle)
+	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), SelectMode_(S_Battle),
+	pTransitionEffect_(nullptr)
 {
 }
 
@@ -27,7 +28,16 @@ GameModeScene::~GameModeScene()
 
 void GameModeScene::Initialize()
 {
+	//各クラス生成
+	Instantiate<TransitionEffect>(this);
+
+	//csvからパラメータ読み込み
 	SetGameModeSCV();
+
+	//各画像・サウンドの読み込み
+
+	//同じディレクトリ内からのパスは省略
+	//パスの一部を文字列にし、結合させる
 	std::string path = "Image\\GameMode\\";
 
 	hBackScreen_ = Image::Load(path + "back_mode.jpg");
@@ -84,12 +94,19 @@ void GameModeScene::Initialize()
 	//各モードをリストに入れる
 	ModeList_ = { S_Battle,S_Practice,S_HowToPlay,S_Title };
 	itr = ModeList_.begin();
+
+	//インスタンス生成
+	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
+
+	//モード選択用サウンド再生
+	Audio::Play(hSoundGameMode_);
 }
 
 void GameModeScene::Update()
 {
+	//BaseSceneの更新処理を呼ぶ
+	//UpdateActive,UpdateTranslationは継承先の関数が呼ばれる
 	BaseScene::Update();
-	Audio::Play(hSoundGameMode_);
 }
 
 void GameModeScene::Draw()
@@ -212,6 +229,8 @@ void GameModeScene::UpdateActive()
 	{
 		Audio::Play(hSoundDecide_);
 		SceneState_ = S_Transition;
+		pTransitionEffect_->ZoomInStart();
+		pTransitionEffect_->SetTransitionTime(SceneTransition);
 	}
 }
 
@@ -239,8 +258,15 @@ void GameModeScene::UpdateTransition()
 			break;
 		}
 
+		//シーン遷移用タイマーを戻す
 		SceneTransitionTimer_ = 0;
+
+		//モード選択用サウンド停止
 		Audio::Stop(hSoundGameMode_);
+
+		//ゲームシーン状態を通常に戻しておく
 		SceneState_ = S_Active;
+
+		pTransitionEffect_->ResetTransitionZoom();
 	}
 }

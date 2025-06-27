@@ -16,8 +16,10 @@ TitleScene::~TitleScene()
 
 void TitleScene::Initialize()
 {
+	//各クラス生成
 	Instantiate<TransitionEffect>(this);
 
+	//各画像・サウンドの読み込み
 	hBackScreen_ = Image::Load("Image\\Title\\TitleScreen.jpg");
 	assert(hBackScreen_ >= 0);
 	hSoundTitle_ = Audio::Load("Sound\\BGM\\title.wav",true); 
@@ -25,13 +27,17 @@ void TitleScene::Initialize()
 	hSoundStart_ = Audio::Load("Sound\\SE\\start.wav",false);
 	assert(hSoundStart_ >= 0);
 
+	//タイトル用サウンド再生
 	Audio::Play(hSoundTitle_);
 
+	//インスタンス生成
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
 }
 
 void TitleScene::Update()
 {
+	//BaseSceneの更新処理を呼ぶ
+	//UpdateActive,UpdateTranslationは継承先の関数が呼ばれる
 	BaseScene::Update();
 }
 

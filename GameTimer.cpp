@@ -68,6 +68,8 @@ void GameTimer::UpdateTimeCount()
 void GameTimer::TimeCalclation()
 {
 	//現在の時間をそれぞれ計算
+	//十の位:現在の時間を10で除算
+	//一の位:現在の時間を10で除算した余り
 	//Timeten,TimeoneはHUDクラスから取得され描画される
 
 	Timeten_ = CurrentGameTime_ / TenDivision;

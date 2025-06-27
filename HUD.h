@@ -101,10 +101,7 @@ private:
 	int ReadyTimer_;
 
 public:
-	//コンストラクタ
-	//引数：parent  親オブジェクト（SceneManager）
 	HUD(GameObject* parent);
-
 	~HUD();
 
 	//初期化

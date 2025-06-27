@@ -46,7 +46,7 @@ private:
 	//バトル中サウンド
 	int hSoundBattle_;
 
-	//終了ホイッスルサウンド
+	//開始・終了ホイッスルサウンド
 	int hSoundWhistle_;
 
 	//プレイヤーのスコア
@@ -77,7 +77,6 @@ public:
 
 	//シーン遷移中の処理
 	void UpdateTransition() override;
-	//--------------------
 
 	//----------BattleState_に応じて内容が変わるUpdate関数----------
 	//バトル開始前

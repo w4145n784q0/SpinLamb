@@ -93,5 +93,7 @@ public:
     /// フェードイン/アウト用の画像の透明度をリセット(透明度を最大にする)
     /// </summary>
     void ResetTransitionAlpha();
+
+    void ResetTransitionZoom();
 };
 

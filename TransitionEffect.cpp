@@ -4,6 +4,13 @@
 
 namespace
 {
+	//csv読み込み時のインデックス
+	enum ZoomIndex
+	{
+		i_maxzoomvalue = 0,
+		i_max
+	};
+
 	//各画面遷移の演出用の構造体
 
 	//フェードイン/アウト用
@@ -25,7 +32,7 @@ namespace
 	struct ZoomInOut
 	{
 		Transform ZoomTransform;//ズームイン/アウト用トランスフォーム
-		float MaxZoomValue = 3.0f;//ズーム最大値
+		float MaxZoomValue = 0.0f;//ズーム最大値
 		float ZoomValue = 0.0f;//ズーム量
 	};
 	ZoomInOut ZoomEffect;
@@ -110,6 +117,12 @@ void TransitionEffect::Draw()
 		Image::Draw(hFadeBlack_);
 	}
 		break;
+	case TransitionEffect::S_ZoomIn:
+	{
+		Image::SetTransform(hZoomSheep_, ZoomEffect.ZoomTransform);
+		Image::Draw(hZoomSheep_);
+	}
+		break;
 	default:
 		break;
 	}
@@ -182,15 +195,26 @@ void TransitionEffect::UpdateZoomOut()
 
 void TransitionEffect::SetSCVTransitionEffect()
 {
-	CsvReader csv;
-	csv.Load("CSVdata\\TransitionData.csv");
+	CsvReader csvTransform;
+	csvTransform.Load("CSVdata\\TransitionData.csv");
 
 	std::vector<std::string> ParamNames = { "Fade" ,"Slide" };
 	std::vector<std::reference_wrapper<Transform>> EffectArray = {
 		FadeEffect.FadeTransform,SlideEffect.SlideTransform
 	};
 
-	InitCSVTransformArray(csv, ParamNames, EffectArray);
+	InitCSVTransformArray(csvTransform, ParamNames, EffectArray);
+
+	CsvReader csvParam;
+	csvParam.Load("CSVdata\\TransitionSomeData.csv");
+
+	std::string Params = "ZoomParam";
+	if (csvParam.IsGetParamName(Params))
+	{
+		std::vector<float> v = csvParam.GetParam(Params);
+		ZoomEffect.MaxZoomValue = v[i_maxzoomvalue];
+	}
+
 
 }
 
@@ -202,4 +226,10 @@ void TransitionEffect::SetTransitionAlpha()
 void TransitionEffect::ResetTransitionAlpha()
 {
 	FadeEffect.AlphaValue = 0;
+}
+
+void TransitionEffect::ResetTransitionZoom()
+{
+	//値が変わるものを破棄
+	ZoomEffect.ZoomValue = 0.0f;
 }

@@ -73,35 +73,45 @@ namespace
 	Transform EnemyIcon;
 
 	//スコア表示位置のトランスフォーム
-	Transform pScore_ten;
-	Transform pScore_one;
-	Transform eScore_ten;
-	Transform eScore_one;
+	Transform PlayerScoreTen;
+	Transform PlayerScoreOne;
+	Transform EnemyScoreTen;
+	Transform EnemyScoreOne;
 
 	//画像用トランスフォームを配列に入れる
 	//初期化の際に使用する
 	std::vector<std::reference_wrapper<Transform>> ImageArray = {
 	logo_backtitle,logo_practice,logo_explanation,logo_start,
 	logo_Finish ,TenTime ,OneTime, MapIcon,PlayerIcon,EnemyIcon,
-	pScore_ten,pScore_one,eScore_ten, eScore_one 
+	PlayerScoreTen,PlayerScoreOne,EnemyScoreTen, EnemyScoreOne
 	};
 
 	//ナンバーハンドルの配列
 	std::array<int, MaxNumberIndex> ArrayHandle;
 
-	int TimeIndexTen = 0;//時間表記のナンバーハンドルの添え字(10の位)
-	int TimeIndexOne = 0; //時間表記のナンバーハンドルの添え字(1の位)
+	//時間表記のナンバーハンドルの添え字(10の位)
+	int TimeIndexTen = 0;
+
+	//時間表記のナンバーハンドルの添え字(1の位)
+	int TimeIndexOne = 0; 
 	
+	//ナンバーハンドルの添え字 Player,Enemyそれぞれの十の位、一の位
 	int pScoreIndexTen = 0;
 	int pScoreIndexOne = 0;
 	int eScoreIndexTen = 0;
 	int eScoreIndexOne = 0;
 
-	float EasingCount = 0;//イージング使用時のカウンター
-	float LogoChangeCount = 0;//ロゴ変更までのカウンター
+	//イージング使用時のカウンター
+	float EasingCount = 0;
 
-	float LogoChange = 0.0f;//startlogo変更の際、どのタイミングで切り替えるか
-	float MaxScale = 0.0f;//Go! のロゴの最大拡大率
+	//ロゴ変更までのカウンター
+	float LogoChangeCount = 0;
+
+	//startlogo変更の際、どのタイミングで切り替えるか
+	float LogoChange = 0.0f;
+
+	//Go! のロゴの最大拡大率
+	float MaxScale = 0.0f;
 }
 
 HUD::HUD(GameObject* parent)
@@ -199,23 +209,6 @@ void HUD::Initialize()
 
 void HUD::Update()
 {
-	/*switch (DrawMode_)
-	{
-	case S_BeforeStart:
-		break;
-	case S_Ready:
-		break;
-	case S_Playing:
-		break;
-	case S_Finish:
-		break;
-	case S_Practice:
-		break;
-	case S_None:
-		break;
-	default:
-		break;
-	}*/
 }
 
 void HUD::Draw()
@@ -270,24 +263,30 @@ void HUD::Release()
 
 void HUD::SetHUDCSV()
 {
+	//csvファイルを読み込む
 	CsvReader csvTransform;
 	csvTransform.Load("CSVdata\\HUDData.csv");
 
+	//csvファイルの各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {
 		"backtitle","practice","explanation","start","finish",
 		"tentime","onetime","minimap","playericon", "enemyicon",
 		"playerscoreten","playerscoreone","enemyscoreten","enemyscoreone",
 	};
 
+	//まとめて初期化
 	InitCSVTransformArray(csvTransform, ParamNames, ImageArray);
 
-
+	//csvファイルを読み込む
 	CsvReader csveasing;
 	csveasing.Load("CSVdata\\HUDSomeData.csv");
 
 	//InitCSVParameter(csveasing, "Easing", std::ref(LogoChange), std::ref(MaxScale) );
 
+	//csvファイルの各0列目の文字列を取得
 	std::string easing = "Easing";
+
+	
 	if (csveasing.IsGetParamName(easing))
 	{
 		std::vector<float> v = csveasing.GetParam(easing);
@@ -301,11 +300,11 @@ void HUD::DrawPracticeLogo()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("PracticeLogo"))
 	{
-		ImGui::SliderFloat("positionX", &logo_backtitle.position_.x, -1.0f, 1.0f);
-		ImGui::SliderFloat("positionY", &logo_backtitle.position_.y, -1.0f, 1.0f);
+		ImGui::SliderFloat("positionX", &logo_backtitle.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("positionY", &logo_backtitle.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("positionX", &logo_practice.position_.x, -1.0f, 1.0f);
-		ImGui::SliderFloat("positionY", &logo_practice.position_.y, -1.0f, 1.0f);
+		ImGui::SliderFloat("positionX", &logo_practice.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("positionY", &logo_practice.position_.y, Image::UpEdge, Image::DownEdge);
 		ImGui::TreePop();
 	}
 #endif
@@ -320,6 +319,19 @@ void HUD::DrawPracticeLogo()
 
 void HUD::DrawTimer()
 {
+#ifdef _DEBUG
+	if (ImGui::TreeNode("Timer"))
+	{
+		ImGui::SliderFloat("positionX", &TenTime.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("positionY", &TenTime.position_.y, Image::UpEdge, Image::DownEdge);
+
+		ImGui::SliderFloat("positionX", &OneTime.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("positionY", &OneTime.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::TreePop();
+	}
+#endif
+
+
 	if(pGameTimer_ != nullptr)
 	{
 		TimeIndexTen = pGameTimer_->GetTimeTen();
@@ -334,12 +346,30 @@ void HUD::DrawTimer()
 
 void HUD::DrawExplanation()
 {
+#ifdef _DEBUG
+	if (ImGui::TreeNode("Explanation"))
+	{
+		ImGui::SliderFloat("positionX", &logo_explanation.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("positionY", &logo_explanation.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::TreePop();
+	}
+#endif
+
 	Image::SetTransform(hGameExplanation_, logo_explanation);
 	Image::Draw(hGameExplanation_);
 }
 
 void HUD::DrawStartLogo()
 {
+#ifdef _DEBUG
+	if (ImGui::TreeNode("Start"))
+	{
+		ImGui::SliderFloat("positionX", &logo_start.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("positionY", &logo_start.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::TreePop();
+	}
+#endif
+
 	switch (DrawStart)
 	{
 	case start_ready:
@@ -356,6 +386,15 @@ void HUD::DrawStartLogo()
 
 void HUD::DrawFinishLogo()
 {
+#ifdef _DEBUG
+	if (ImGui::TreeNode("Timer"))
+	{
+		ImGui::SliderFloat("positionX", &logo_Finish.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("positionY", &logo_Finish.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::TreePop();
+	}
+#endif
+
 	Image::SetTransform(hFinish_, logo_Finish);
 	Image::Draw(hFinish_);
 }
@@ -365,8 +404,15 @@ void HUD::DrawMiniMap()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("MiniMap"))
 	{
-		ImGui::SliderFloat("positionX", &MapIcon.position_.x, -1.0f, 1.0f);
-		ImGui::SliderFloat("positionY", &MapIcon.position_.y, -1.0f, 1.0f);
+		ImGui::SliderFloat("positionX", &MapIcon.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("positionY", &MapIcon.position_.y, Image::UpEdge, Image::DownEdge);
+
+		ImGui::Text("positionX", PlayerIcon.position_.x);
+		ImGui::Text("positionX", PlayerIcon.position_.y);
+
+		ImGui::Text("positionX", EnemyIcon.position_.x);
+		ImGui::Text("positionX", EnemyIcon.position_.y);
+
 		ImGui::TreePop();
 	}
 #endif
@@ -389,19 +435,41 @@ void HUD::DrawMiniMap()
 
 void HUD::DrawScore()
 {
+#ifdef _DEBUG
+	if (ImGui::TreeNode("Score"))
+	{
+		ImGui::SliderFloat("positionX", &PlayerScoreTen.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("positionY", &PlayerScoreTen.position_.y, Image::UpEdge, Image::DownEdge);
+
+		ImGui::SliderFloat("positionX", &PlayerScoreOne.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("positionY", &PlayerScoreOne.position_.y, Image::UpEdge, Image::DownEdge);
+
+		ImGui::SliderFloat("positionX", &EnemyScoreTen.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("positionY", &EnemyScoreTen.position_.y, Image::UpEdge, Image::DownEdge);
+
+		ImGui::SliderFloat("positionX", &EnemyScoreOne.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("positionY", &EnemyScoreOne.position_.y, Image::UpEdge, Image::DownEdge);
+
+		ImGui::TreePop();
+	}
+#endif
+
+	//現在のスコアをそれぞれ計算
+	//十の位:現在のスコアを10で除算
+	//一の位:現在のスコアを10で除算した余り
 	pScoreIndexTen = PlayerScore_ / TenDivision;
 	pScoreIndexOne = PlayerScore_ % TenDivision;
 	eScoreIndexTen = EnemyScore_ / TenDivision;
 	eScoreIndexOne = EnemyScore_ % TenDivision;
 
-	Image::SetTransform(ArrayHandle[pScoreIndexTen], pScore_ten);
+	Image::SetTransform(ArrayHandle[pScoreIndexTen], PlayerScoreTen);
 	Image::Draw(ArrayHandle[pScoreIndexTen]);
-	Image::SetTransform(ArrayHandle[pScoreIndexOne], pScore_one);
+	Image::SetTransform(ArrayHandle[pScoreIndexOne], PlayerScoreOne);
 	Image::Draw(ArrayHandle[pScoreIndexOne]);
 
-	Image::SetTransform(ArrayHandle[eScoreIndexTen], eScore_ten);
+	Image::SetTransform(ArrayHandle[eScoreIndexTen], EnemyScoreTen);
 	Image::Draw(ArrayHandle[eScoreIndexTen]);
-	Image::SetTransform(ArrayHandle[eScoreIndexOne], eScore_one);
+	Image::SetTransform(ArrayHandle[eScoreIndexOne], EnemyScoreOne);
 	Image::Draw(ArrayHandle[eScoreIndexOne]);
 }
 

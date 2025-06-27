@@ -34,8 +34,10 @@ BattleScene::~BattleScene()
 
 void BattleScene::Initialize()
 {
+	//csvからパラメータ読み込み
 	SetCSVBattle();
 
+	//各クラス生成
 	Instantiate<StageManager>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);

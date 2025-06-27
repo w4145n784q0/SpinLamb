@@ -40,6 +40,10 @@ public:
 	//ŠJ•ú
 	void Release() override;
 
+	//----------BaseScene‚ÌŒp³ŠÖ”----------
+	//’Êí‚Ìˆ—
 	void UpdateActive() override;
+
+	//ƒV[ƒ“‘JˆÚ’†‚Ìˆ—
 	void UpdateTransition() override;
 };

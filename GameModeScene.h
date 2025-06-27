@@ -1,6 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"BaseScene.h"
+#include"TransitionEffect.h"
+
 #include<array>
 #include<list>
 
@@ -102,6 +104,8 @@ private:
 	//ゲーム説明テキストの固定位置
 	Transform TransText_;
 
+	//----------インスタンス----------
+	TransitionEffect* pTransitionEffect_;
 	
 public:
 	GameModeScene(GameObject* parent);
