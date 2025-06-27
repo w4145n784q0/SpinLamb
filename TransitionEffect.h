@@ -113,12 +113,15 @@ public:
     /// <summary>
     /// フェードイン/アウト用の画像の透明度を最低値に設定(フェードイン時に使用)
     /// </summary>
-    void SetTransitionAlpha();
+    void SetTransitionAlpha() { FadeEffect_.AlphaValue_ = Image::AlphaMin; }
 
     /// <summary>
     /// ズームイン/アウト用の画像の拡大量を最大に設定(ズームアウト時に使用)
     /// </summary>
-    void SetTransitionZoom();
+    void SetTransitionZoom() {
+        ZoomEffect_.ZoomTransform_.scale_.x = ZoomEffect_.MaxZoomValue_;
+        ZoomEffect_.ZoomTransform_.scale_.y = ZoomEffect_.MaxZoomValue_;
+    }
 
     /// <summary>
     /// フェードイン/アウト用の画像の透明度をリセット(透明度を最大にする)

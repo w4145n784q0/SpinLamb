@@ -186,34 +186,34 @@ void TransitionEffect::UpdateZoomOut()
 
 void TransitionEffect::SetSCVTransitionEffect()
 {
+	//csvファイルを読み込む
 	CsvReader csvTransform;
 	csvTransform.Load("CSVdata\\TransitionData.csv");
 
+	//csvファイルの各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = { "Fade" ,"Slide","Zoom"};
+
+	//各トランスフォームを配列に入れる
 	std::vector<std::reference_wrapper<Transform>> EffectArray = {
 		FadeEffect_.FadeTransform_, SlideEffect_.SlideTransform_, ZoomEffect_.ZoomTransform_
 	};
 
+	//まとめて初期化
 	InitCSVTransformArray(csvTransform, ParamNames, EffectArray);
 
+	//csvファイルを読み込む
 	CsvReader csvParam;
 	csvParam.Load("CSVdata\\TransitionSomeData.csv");
 
+	//csvファイルの各0列目の文字列を取得
 	std::string Params = "ZoomParam";
+
+	//指定した文字列が0列目に存在したら
 	if (csvParam.IsGetParamName(Params))
 	{
+		//初期化の順番はcsvの各行の順番に合わせる
+		//vの添え字はnamespaceで宣言した列挙型を使用
 		std::vector<float> v = csvParam.GetParam(Params);
 		ZoomEffect_.MaxZoomValue_ = v[i_maxzoomvalue];
 	}
-}
-
-void TransitionEffect::SetTransitionAlpha()
-{
-	FadeEffect_.AlphaValue_ = Image::AlphaMin;
-}
-
-void TransitionEffect::SetTransitionZoom()
-{
-	ZoomEffect_.ZoomTransform_.scale_.x = ZoomEffect_.MaxZoomValue_;
-	ZoomEffect_.ZoomTransform_.scale_.y = ZoomEffect_.MaxZoomValue_;
 }

@@ -61,7 +61,6 @@ void TitleScene::UpdateActive()
 
 		//シーン遷移エフェクトを設定
 		pTransitionEffect_->FadeOutStartBlack();
-		//pTransitionEffect_->ZoomOutStart();
 		pTransitionEffect_->SetTransitionTime(SceneTransition);
 
 		//決定音を再生
