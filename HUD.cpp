@@ -281,14 +281,13 @@ void HUD::SetHUDCSV()
 	CsvReader csveasing;
 	csveasing.Load("CSVdata\\HUDSomeData.csv");
 
-	//InitCSVParameter(csveasing, "Easing", std::ref(LogoChange), std::ref(MaxScale) );
-
-	//csvファイルの各0列目の文字列を取得
+	//csvファイルの0列目の文字列を取得
 	std::string easing = "Easing";
 
-	//指定した文字列が0列目に存在したら
+	//指定した文字列がいずれかの0列目に存在したら
 	if (csveasing.IsGetParamName(easing))
 	{
+		//その行を配列として全取得
 		std::vector<float> v = csveasing.GetParam(easing);
 
 		//初期化の順番はcsvの各行の順番に合わせる

@@ -42,6 +42,7 @@ private:
 	//結果画面の下のロゴの位置
 	Transform PushTitle_;
 
+	//勝敗状態(状態に応じて処理を変化させる)
 	enum WinnerState {
 		YOU_WIN = 0,
 		CPU_WIN,
@@ -71,10 +72,14 @@ public:
 	//開放
 	void Release() override;
 
-	//csv読み込み
+	//CSVから必要パラメータを読み込みする
 	void SetCSVResult();
 
+	//----------BaseSceneの継承関数----------
+	//通常の処理
 	void UpdateActive() override;
+
+	//シーン遷移中の処理
 	void UpdateTransition() override;
 };
 

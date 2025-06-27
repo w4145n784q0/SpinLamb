@@ -224,11 +224,14 @@ void GameModeScene::UpdateActive()
 		break;
 	}
 
-	//決定したらシーン遷移中状態へ
+	////決定ボタン(Pキー・B/Startボタン)を押したらシーン遷移状態へ
 	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
+		//決定音を再生
 		Audio::Play(hSoundDecide_);
 		SceneState_ = S_Transition;
+
+		//シーン遷移エフェクト(ズームイン)を設定
 		pTransitionEffect_->ZoomInStart();
 		pTransitionEffect_->SetTransitionTime(SceneTransition);
 	}
@@ -236,9 +239,13 @@ void GameModeScene::UpdateActive()
 
 void GameModeScene::UpdateTransition()
 {
-	//時間経過後、選択しているシーンへ遷移
+	//時間経過で次のシーンに遷移
+	//カウント中はシーン遷移エフェクト行う
+
 	if (++SceneTransitionTimer_ > SceneShortTransition)
 	{
+		//SceneManagerインスタンスから選択しているシーンへ遷移する
+
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		switch (SelectMode_)
 		{
@@ -266,8 +273,5 @@ void GameModeScene::UpdateTransition()
 
 		//ゲームシーン状態を通常に戻しておく
 		SceneState_ = S_Active;
-
-		//ズーム拡大量を戻す
-		//pTransitionEffect_->ResetTransitionZoom();
 	}
 }

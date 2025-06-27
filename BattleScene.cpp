@@ -45,14 +45,14 @@ void BattleScene::Initialize()
 	Instantiate<GameTimer>(this);
 	Instantiate<HUD>(this);
 
-	//StageManagerからPlayer,Enemyのインスタンスに
-	// 移動制限(各ステージの端)を渡す
+	//StageManagerからPlayer,Enemyのインスタンスを生成
 	StageManager* pSceneManager = (StageManager*)FindObject("StageManager");
 	float North = pSceneManager->GetNorthEnd();
 	float South = pSceneManager->GetSouthEnd();
 	float West = pSceneManager->GetWestEnd();
 	float East = pSceneManager->GetEastEnd();
 
+	// 移動制限(各ステージの端)を渡す
 	pPlayer_ = (Player*)FindObject("Player");
 	if(pPlayer_ != nullptr)
 	{
@@ -103,7 +103,7 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
-	//背景は常に表示
+	//背景描画
 	Image::SetTransform(hBackScreen_, this->transform_);
 	Image::Draw(hBackScreen_);
 
@@ -148,7 +148,6 @@ void BattleScene::UpdateActive()
 	case BattleScene::S_AFTER:
 		UpdateBattleAfter();
 		break;
-
 	default:
 		break;
 	}
@@ -158,11 +157,18 @@ void BattleScene::UpdateTransition()
 {
 	//UpdateBattleAfterが終了したらすぐにシーン遷移
 
+	//SceneManagerのインスタンスからタイトルシーンへ
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 	pSceneManager->ChangeScene(SCENE_ID_RESULT);
-	pSceneManager->SetPlayerScore(PlayerScore_);//Player,Enemyのスコアを渡す
+
+	//Player,Enemyのスコアを渡す
+	pSceneManager->SetPlayerScore(PlayerScore_);
 	pSceneManager->SetEnemyScore(EnemyScore_);
+
+	//バトル用サウンド停止
 	Audio::Stop(hSoundBattle_);
+
+	//ゲームシーン状態を通常に戻しておく
 	SceneState_ = S_Active;
 }
 
@@ -170,7 +176,6 @@ void BattleScene::UpdateBattleBefore()
 {
 	//説明文を出している状態
 	//BボタンかPキーでスキップ
-
 	if (++StateCounter > SceneTransition ||
 		Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
 	{
@@ -188,12 +193,20 @@ void BattleScene::UpdateBattleReady()
 	
 	if (++StateCounter > SceneLongTransition)
 	{
+		//シーン遷移タイマーをリセット
 		StateCounter = 0;
-		BattleState_ = S_NOW;
-		pPlayer_->PlayerStart();//時間経過でPlayer,Enemyに移動許可を出す
-		pEnemy_->EnemyStart();
-		pGameTimer_->StartTimer();//タイマーを起動
 
+		//時間経過したらバトル中状態へ以降
+		BattleState_ = S_NOW;
+
+		//時間経過でPlayer,Enemyに移動許可を出す
+		pPlayer_->PlayerStart();
+		pEnemy_->EnemyStart();
+
+		//タイマーを起動
+		pGameTimer_->StartTimer();
+
+		//ホイッスルSE再生
 		Audio::Play(hSoundWhistle_);
 	}
 }
@@ -204,15 +217,21 @@ void BattleScene::UpdateBattle()
 	//GameTimerから時間切れになったことを受け取ったら終了状態へ
 	if (pGameTimer_->GetCurrentGameTime() <= 0)
 	{
+		//終了状態へ以降
 		BattleState_ = S_AFTER;
 
+		//タイマーを止める
 		pGameTimer_->StopTimer();
+
+		//player,Enemyの動きを止める
 		pPlayer_->PlayerStop();
 		pEnemy_->EnemyStop();
 
+		//ホイッスルSE再生
 		Audio::Play(hSoundWhistle_);
 	}
 
+	//バトル中サウンド再生
 	Audio::Play(hSoundBattle_);
 
 	//スコアは毎フレーム渡し続ける
@@ -223,10 +242,12 @@ void BattleScene::UpdateBattle()
 void BattleScene::UpdateBattleAfter()
 {
 	//Finish!を表示している状態
-	//時間経過でUpdateTransitionへ
 	if (++StateCounter > SceneTransition)
 	{
+		//時間経過でUpdateTransitionへ
 		SceneState_ = S_Transition;
+
+		//シーン遷移タイマーをリセット
 		StateCounter = 0;
 	}
 }

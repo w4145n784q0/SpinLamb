@@ -1,5 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include"Engine/Image.h"
 
 //画面遷移時のエフェクト用クラス
 class TransitionEffect :
@@ -127,10 +128,5 @@ public:
     /// フェードイン/アウト用の画像の透明度をリセット(透明度を最大にする)
     /// </summary>
     void ResetTransitionAlpha() { FadeEffect_.AlphaValue_ = 0; }
-
-    /// <summary>
-    /// ズームイン/アウト用画像のズーム拡大量をリセット
-    /// </summary>
-    void ResetTransitionZoom() { ZoomEffect_.ZoomValue_ = 0.0f; }
 };
 

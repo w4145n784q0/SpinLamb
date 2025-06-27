@@ -75,8 +75,7 @@ void HowToPlayScene::Release()
 
 void HowToPlayScene::UpdateActive()
 {
-	if (Input::IsKeyDown(DIK_RIGHT) || Input::GetPadStickL().y >= Input::StickTilt
-		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT))
+	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT))
 	{
 		if (itr == ImageList_.begin())
 		{
@@ -88,8 +87,7 @@ void HowToPlayScene::UpdateActive()
 		}
 		ImageState_ = *itr;
 	}
-	if (Input::IsKeyDown(DIK_LEFT) || Input::GetPadStickL().y <= -Input::StickTilt
-		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT))
+	if (Input::IsKeyDown(DIK_LEFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT))
 	{
 		if (itr == --ImageList_.end())
 		{
@@ -102,6 +100,7 @@ void HowToPlayScene::UpdateActive()
 		ImageState_ = *itr;
 	}
 
+	//決定ボタン(Aキー・A/Startボタン)を押したらシーン遷移状態へ
 	if (Input::IsKeyUp(DIK_A) || Input::IsPadButtonUp(XINPUT_GAMEPAD_A) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		SceneState_ = S_Transition;
@@ -110,12 +109,22 @@ void HowToPlayScene::UpdateActive()
 
 void HowToPlayScene::UpdateTransition()
 {
+	//時間経過で次のシーンに遷移
+	//カウント中はシーン遷移エフェクト行う
+
 	if (++SceneTransitionTimer_ > SceneTransition)
 	{
+		//SceneManagerのインスタンスからタイトルシーンへ
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
+
+		//シーン遷移用タイマーを戻す
 		SceneTransitionTimer_ = 0;
+
+		//あそびかた用サウンド停止
 		Audio::Stop(hSoundHowtoPlay_);
+
+		//ゲームシーン状態を通常に戻しておく
 		SceneState_ = S_Active;
 	}
 }

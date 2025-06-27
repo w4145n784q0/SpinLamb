@@ -32,10 +32,7 @@ private:
 	int Press_;
 
 public:
-	//コンストラクタ
-	//引数：parent  親オブジェクト（SceneManager）
 	PracticeScene(GameObject* parent);
-
 	~PracticeScene();
 
 	//初期化
@@ -50,8 +47,11 @@ public:
 	//開放
 	void Release() override;
 
+	//----------BaseSceneの継承関数----------
+	//通常の処理
 	void UpdateActive() override;
-	void UpdateTransition() override;
 
+	//シーン遷移中の処理
+	void UpdateTransition() override;
 };
 

@@ -30,8 +30,11 @@ private:
 	};
 	HowtoImage ImageState_;
 
-	std::list<HowtoImage> ImageList_;//各画像のリスト
-	std::list<HowtoImage>::iterator itr;//ModeList_のインデックスを指す値
+	//各画像のリスト
+	std::list<HowtoImage> ImageList_;
+
+	//ModeList_のインデックスを指す値
+	std::list<HowtoImage>::iterator itr;
 
 public:
 	HowToPlayScene(GameObject* parent);
@@ -49,7 +52,11 @@ public:
 	//開放
 	void Release() override;
 
+	//----------BaseSceneの継承関数----------
+	//通常の処理
 	void UpdateActive() override;
+
+	//シーン遷移中の処理
 	void UpdateTransition() override;
 };
 

@@ -23,14 +23,7 @@ PracticeScene::~PracticeScene()
 
 void PracticeScene::Initialize()
 {
-
-	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");
-	assert(hBackScreen_ >= 0);
-
-
-	hSoundPractice_ = Audio::Load("Sound\\BGM\\practice.wav",true);
-	assert(hSoundPractice_ >= 0);
-
+	//各クラス生成
 	Instantiate<StageManager>(this);
 	Instantiate<Player>(this);
 	Instantiate<Enemy>(this);
@@ -38,12 +31,21 @@ void PracticeScene::Initialize()
 	Instantiate<HUD>(this);
 	Instantiate<TransitionEffect>(this);
 
+	//各画像・サウンドの読み込み
+	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");
+	assert(hBackScreen_ >= 0);
+
+	hSoundPractice_ = Audio::Load("Sound\\BGM\\practice.wav", true);
+	assert(hSoundPractice_ >= 0);
+
+	//StageManagerからPlayer,Enemyのインスタンスを生成し
 	StageManager* pS = (StageManager*)FindObject("StageManager");
 	float north = pS->GetNorthEnd();
 	float south = pS->GetSouthEnd();
 	float west = pS->GetWestEnd();
 	float east = pS->GetEastEnd();
 
+	// 移動制限(各ステージの端)を渡す
 	pPlayer_ = (Player*)FindObject("Player");
 	if(pPlayer_ != nullptr)
 	{
@@ -58,25 +60,32 @@ void PracticeScene::Initialize()
 		pEnemy_->SetEnd(north, south, west, east);
 	}
 
-	//各インスタンスを初期化
+	//インスタンスを初期化
 	pMiniMap_ = (MiniMap*)FindObject("MiniMap");
 	pHUD_ = (HUD*)FindObject("HUD");
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
 
-	//HUDに渡す
+	//HUDにポインタを渡す
 	pHUD_->SetMiniMapPointer(pMiniMap_);
+
+	//フリープレイ用サウンド再生
+	Audio::Play(hSoundPractice_);
 }
 
 void PracticeScene::Update()
 {
+	//BaseSceneの更新処理を呼ぶ
+	//UpdateActive,UpdateTranslationは継承先の関数が呼ばれる
 	BaseScene::Update();
-	Audio::Play(hSoundPractice_);
 }
 
 void PracticeScene::Draw()
 {
+	//背景描画
 	Image::SetTransform(hBackScreen_, this->transform_);
 	Image::Draw(hBackScreen_);
+
+	//HUDクラスに練習モード中であることを描画指示
 	pHUD_->SetDrawMode(S_Practice);
 
 }
@@ -87,6 +96,7 @@ void PracticeScene::Release()
 
 void PracticeScene::UpdateActive()
 {
+	//決定ボタン(Pキー・B/Startボタン)を長押しでシーン遷移状態へ
 	if (Input::IsKey(DIK_P) || Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsPadButton(XINPUT_GAMEPAD_LEFT_SHOULDER))//ボタン長押しでタイトルに戻る
 	{
 		Press_++;
@@ -96,9 +106,13 @@ void PracticeScene::UpdateActive()
 		Press_ = 0;
 	}
 
-	if (Press_ >= SceneTransition)//長押しでタイトルに戻る
+	
+	if (Press_ >= SceneTransition)
 	{
+		//シーン遷移状態へ
 		SceneState_ = S_Transition;
+
+		//シーン遷移エフェクト(フェードアウト)を設定
 		pTransitionEffect_->FadeOutStartBlack();
 		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
 	}
@@ -108,12 +122,18 @@ void PracticeScene::UpdateTransition()
 {
 	if (++SceneTransitionTimer_ > SceneShortTransition)
 	{
+		//SceneManagerのインスタンスからタイトルシーンへ
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_TITLE);
+
+		//シーン遷移用タイマーを戻す
 		SceneTransitionTimer_ = 0;
+
+		//練習用サウンド停止
 		Audio::Stop(hSoundPractice_);
+
+		//ゲームシーン状態を通常に戻しておく
 		SceneState_ = S_Active;
-		pTransitionEffect_->ResetTransitionAlpha();
 		
 	}
 }

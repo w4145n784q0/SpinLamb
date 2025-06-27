@@ -59,7 +59,7 @@ void TitleScene::UpdateActive()
 	{
 		SceneState_ = S_Transition;
 
-		//シーン遷移エフェクトを設定
+		//シーン遷移エフェクト(フェードアウト)を設定
 		pTransitionEffect_->FadeOutStartBlack();
 		pTransitionEffect_->SetTransitionTime(SceneTransition);
 
@@ -70,6 +70,9 @@ void TitleScene::UpdateActive()
 
 void TitleScene::UpdateTransition()
 {
+	//時間経過で次のシーンに遷移
+	//カウント中はシーン遷移エフェクト行う
+
 	if (++SceneTransitionTimer_ > SceneTransition)
 	{
 		//SceneManagerのインスタンスからゲーム選択シーンへ
@@ -84,8 +87,5 @@ void TitleScene::UpdateTransition()
 
 		//ゲームシーン状態を通常に戻しておく
 		SceneState_ = S_Active;
-
-		//画像の透明度を戻す
-		//pTransitionEffect_->ResetTransitionAlpha();
 	}
 }

@@ -90,7 +90,8 @@ public:
 
 	//バトル終了後
 	void UpdateBattleAfter();
-	//--------------------
+
+	//------------------------------
 
 	//CSVから必要パラメータを読み込みする
 	void SetCSVBattle();
