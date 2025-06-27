@@ -61,6 +61,7 @@ void TitleScene::UpdateActive()
 
 		//シーン遷移エフェクトを設定
 		pTransitionEffect_->FadeOutStartBlack();
+		//pTransitionEffect_->ZoomOutStart();
 		pTransitionEffect_->SetTransitionTime(SceneTransition);
 
 		//決定音を再生
@@ -86,6 +87,6 @@ void TitleScene::UpdateTransition()
 		SceneState_ = S_Active;
 
 		//画像の透明度を戻す
-		pTransitionEffect_->ResetTransitionAlpha();
+		//pTransitionEffect_->ResetTransitionAlpha();
 	}
 }

@@ -10,39 +10,14 @@ namespace
 		i_maxzoomvalue = 0,
 		i_max
 	};
-
-	//----------各画面遷移の演出用の構造体----------
-
-	//フェードイン/アウト用
-	struct FadeInOut
-	{
-		Transform FadeTransform;//フェードイン/アウト用トランスフォーム
-		int AlphaValue = 0;//画像の透明度
-	};
-	FadeInOut FadeEffect;
-
-	//スライドイン/アウト用
-	struct SlideInOut
-	{
-		Transform SlideTransform;//スライドイン/アウト用トランスフォーム
-	};
-	SlideInOut SlideEffect;
-
-	//ズームイン/アウト処理
-	struct ZoomInOut
-	{
-		Transform ZoomTransform;//ズームイン/アウト用トランスフォーム
-		float MaxZoomValue = 0.0f;//ズーム拡大最大値
-		float ZoomValue = 0.0f;//ズーム拡大/縮小量
-	};
-	ZoomInOut ZoomEffect;
-
 }
 
 TransitionEffect::TransitionEffect(GameObject* parent)
 	: GameObject(parent, "TransitionEffect"),hFadeBlack_(-1),hFadeWhite_(-1),
 	hZoomSheep_(-1), EffectType_(NoneEffect),TransitionTime_(0)
 {
+	FadeEffect_.AlphaValue_ = 0;
+	ZoomEffect_.MaxZoomValue_ = 0;
 }
 
 TransitionEffect::~TransitionEffect()
@@ -84,6 +59,9 @@ void TransitionEffect::Update()
 	case TransitionEffect::S_ZoomIn:
 		UpdateZoomIn();
 		break;
+	case TransitionEffect::S_ZoomOut:
+		UpdateZoomOut();
+		break;
 	default:
 		break;
 	}
@@ -98,28 +76,29 @@ void TransitionEffect::Draw()
 	case TransitionEffect::S_FadeOutBlack:
 	case TransitionEffect::S_FadeInBlack:
 	{
-		Image::SetTransform(hFadeBlack_, FadeEffect.FadeTransform);
-		Image::SetAlpha(hFadeBlack_, FadeEffect.AlphaValue);
+		Image::SetTransform(hFadeBlack_, FadeEffect_.FadeTransform_);
+		Image::SetAlpha(hFadeBlack_, FadeEffect_.AlphaValue_);
 		Image::Draw(hFadeBlack_);
 	}
 		break;
 	case TransitionEffect::S_FadeOutWhite:
 	case TransitionEffect::S_FadeInWhite:
 	{
-		Image::SetTransform(hFadeWhite_, FadeEffect.FadeTransform);
-		Image::SetAlpha(hFadeWhite_, FadeEffect.AlphaValue);
+		Image::SetTransform(hFadeWhite_, FadeEffect_.FadeTransform_);
+		Image::SetAlpha(hFadeWhite_, FadeEffect_.AlphaValue_);
 		Image::Draw(hFadeWhite_);
 	}
 		break;
 	case TransitionEffect::S_SlideInLTR:
 	{
-		Image::SetTransform(hFadeBlack_, SlideEffect.SlideTransform);
+		Image::SetTransform(hFadeBlack_, SlideEffect_.SlideTransform_);
 		Image::Draw(hFadeBlack_);
 	}
 		break;
 	case TransitionEffect::S_ZoomIn:
+	case TransitionEffect::S_ZoomOut:
 	{
-		Image::SetTransform(hZoomSheep_, ZoomEffect.ZoomTransform);
+		Image::SetTransform(hZoomSheep_, ZoomEffect_.ZoomTransform_);
 		Image::Draw(hZoomSheep_);
 	}
 		break;
@@ -136,13 +115,13 @@ void TransitionEffect::Release()
 void TransitionEffect::UpdateFadeOut()
 {
 	//だんだん暗くなるエフェクト
-	if (FadeEffect.AlphaValue >= Image::AlphaMin)
+	if (FadeEffect_.AlphaValue_ >= Image::AlphaMin)
 	{
-		FadeEffect.AlphaValue = Image::AlphaMin;
+		FadeEffect_.AlphaValue_ = Image::AlphaMin;
 	}
 	else
 	{
-		FadeEffect.AlphaValue += Image::AlphaMin / TransitionTime_;
+		FadeEffect_.AlphaValue_ += Image::AlphaMin / TransitionTime_;
 	}
 
 }
@@ -150,47 +129,59 @@ void TransitionEffect::UpdateFadeOut()
 void TransitionEffect::UpdateFadeIn()
 {
 	//だんだん明るくなるエフェクト
-	if (FadeEffect.AlphaValue <= 0)
+	if (FadeEffect_.AlphaValue_ <= 0)
 	{
-		FadeEffect.AlphaValue = 0;
+		FadeEffect_.AlphaValue_ = 0;
 	}
 	else
 	{
-		FadeEffect.AlphaValue -= Image::AlphaMin / TransitionTime_;
+		FadeEffect_.AlphaValue_ -= Image::AlphaMin / TransitionTime_;
 	}
 }
 
 void TransitionEffect::UpdateSlideInLTR()
 {
 	//画像を左→右にスライド
-	if (SlideEffect.SlideTransform.position_.x >= Image::Center)
+	if (SlideEffect_.SlideTransform_.position_.x >= Image::Center)
 	{
-		SlideEffect.SlideTransform.position_.x = Image::Center;
+		SlideEffect_.SlideTransform_.position_.x = Image::Center;
 	}
 	else
 	{
-		SlideEffect.SlideTransform.position_.x += (Image::RightEdge - Image::LeftEdge) / TransitionTime_;
+		SlideEffect_.SlideTransform_.position_.x += (Image::RightEdge - Image::LeftEdge) / TransitionTime_;
 	}
 }
 
 void TransitionEffect::UpdateZoomIn()
 {
 	//だんだん大きくなるエフェクト
-	if (ZoomEffect.ZoomValue >= ZoomEffect.MaxZoomValue)
+	if (ZoomEffect_.ZoomTransform_.scale_.x >= ZoomEffect_.MaxZoomValue_ ||
+		ZoomEffect_.ZoomTransform_.scale_.y >= ZoomEffect_.MaxZoomValue_)
 	{
-		ZoomEffect.ZoomTransform.scale_.x = ZoomEffect.MaxZoomValue;
-		ZoomEffect.ZoomTransform.scale_.y = ZoomEffect.MaxZoomValue;
+		ZoomEffect_.ZoomTransform_.scale_.x = ZoomEffect_.MaxZoomValue_;
+		ZoomEffect_.ZoomTransform_.scale_.y = ZoomEffect_.MaxZoomValue_;
 	}
 	else
 	{
-		ZoomEffect.ZoomValue += ZoomEffect.MaxZoomValue / TransitionTime_;
-		ZoomEffect.ZoomTransform.scale_.x += ZoomEffect.MaxZoomValue / TransitionTime_;
-		ZoomEffect.ZoomTransform.scale_.y += ZoomEffect.MaxZoomValue / TransitionTime_;
+		ZoomEffect_.ZoomTransform_.scale_.x += ZoomEffect_.MaxZoomValue_ / TransitionTime_;
+		ZoomEffect_.ZoomTransform_.scale_.y += ZoomEffect_.MaxZoomValue_ / TransitionTime_;
 	}
 }
 
 void TransitionEffect::UpdateZoomOut()
 {
+	//だんだん小さくなるエフェクト
+	if (ZoomEffect_.ZoomTransform_.scale_.x <= 0.0f || 
+		ZoomEffect_.ZoomTransform_.scale_.y <= 0.0f)
+	{
+		ZoomEffect_.ZoomTransform_.scale_.x = 0.0f;
+		ZoomEffect_.ZoomTransform_.scale_.y = 0.0f;
+	}
+	else
+	{
+		ZoomEffect_.ZoomTransform_.scale_.x -= ZoomEffect_.MaxZoomValue_ / TransitionTime_;
+		ZoomEffect_.ZoomTransform_.scale_.y -= ZoomEffect_.MaxZoomValue_ / TransitionTime_;
+	}
 }
 
 void TransitionEffect::SetSCVTransitionEffect()
@@ -200,7 +191,7 @@ void TransitionEffect::SetSCVTransitionEffect()
 
 	std::vector<std::string> ParamNames = { "Fade" ,"Slide","Zoom"};
 	std::vector<std::reference_wrapper<Transform>> EffectArray = {
-		FadeEffect.FadeTransform,SlideEffect.SlideTransform,ZoomEffect.ZoomTransform
+		FadeEffect_.FadeTransform_, SlideEffect_.SlideTransform_, ZoomEffect_.ZoomTransform_
 	};
 
 	InitCSVTransformArray(csvTransform, ParamNames, EffectArray);
@@ -212,21 +203,17 @@ void TransitionEffect::SetSCVTransitionEffect()
 	if (csvParam.IsGetParamName(Params))
 	{
 		std::vector<float> v = csvParam.GetParam(Params);
-		ZoomEffect.MaxZoomValue = v[i_maxzoomvalue];
+		ZoomEffect_.MaxZoomValue_ = v[i_maxzoomvalue];
 	}
 }
 
 void TransitionEffect::SetTransitionAlpha()
 {
-	FadeEffect.AlphaValue = Image::AlphaMin;
+	FadeEffect_.AlphaValue_ = Image::AlphaMin;
 }
 
-void TransitionEffect::ResetTransitionAlpha()
+void TransitionEffect::SetTransitionZoom()
 {
-	FadeEffect.AlphaValue = 0;
-}
-
-void TransitionEffect::ResetTransitionZoom()
-{
-	ZoomEffect.ZoomValue = 0.0f;
+	ZoomEffect_.ZoomTransform_.scale_.x = ZoomEffect_.MaxZoomValue_;
+	ZoomEffect_.ZoomTransform_.scale_.y = ZoomEffect_.MaxZoomValue_;
 }

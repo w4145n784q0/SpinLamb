@@ -268,6 +268,6 @@ void GameModeScene::UpdateTransition()
 		SceneState_ = S_Active;
 
 		//ƒY[ƒ€Šg‘å—Ê‚ð–ß‚·
-		pTransitionEffect_->ResetTransitionZoom();
+		//pTransitionEffect_->ResetTransitionZoom();
 	}
 }

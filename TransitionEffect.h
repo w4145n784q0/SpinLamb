@@ -32,6 +32,32 @@ private:
     //遷移時間 他クラスから代入される
     int TransitionTime_;
 
+    //----------各画面遷移の演出用の構造体----------
+
+    //フェードイン/アウト用
+    struct FadeInOut
+    {
+        Transform FadeTransform_;//フェードイン/アウト用トランスフォーム
+        int AlphaValue_;//画像の透明度
+    };
+    FadeInOut FadeEffect_;
+
+    //スライドイン/アウト用
+    struct SlideInOut
+    {
+        Transform SlideTransform_;//スライドイン/アウト用トランスフォーム
+    };
+    SlideInOut SlideEffect_;
+
+    //ズームイン/アウト処理
+    struct ZoomInOut
+    {
+        Transform ZoomTransform_;//ズームイン/アウト用トランスフォーム
+        float MaxZoomValue_;//ズーム拡大最大値
+    };
+    ZoomInOut ZoomEffect_;
+
+
 public:
     TransitionEffect(GameObject* parent);
     ~TransitionEffect();
@@ -51,12 +77,12 @@ public:
     //画面遷移エフェクトの種類を指示
 
     void FadeOutStartBlack() { EffectType_ = S_FadeOutBlack; }
-    void FadeInStartBlack(){ EffectType_ = S_FadeInBlack; }
+    void FadeInStartBlack(){ EffectType_ = S_FadeInBlack; SetTransitionAlpha(); }
     void FadeOutStartWhite(){ EffectType_ = S_FadeOutWhite; }
-    void FadeInStartWhite() { EffectType_ = S_FadeInWhite; }
+    void FadeInStartWhite() { EffectType_ = S_FadeInWhite; SetTransitionAlpha(); }
     void SlideInLTRStart() { EffectType_ = S_SlideInLTR; }
     void ZoomInStart() { EffectType_ = S_ZoomIn; }
-    void ZoomOutStart(){ EffectType_ = S_ZoomOut; }
+    void ZoomOutStart(){ EffectType_ = S_ZoomOut; SetTransitionZoom();}
 
     //----------EffectType_に応じて内容が変わるUpdate関数----------
     //フェードアウト処理
@@ -90,13 +116,18 @@ public:
     void SetTransitionAlpha();
 
     /// <summary>
+    /// ズームイン/アウト用の画像の拡大量を最大に設定(ズームアウト時に使用)
+    /// </summary>
+    void SetTransitionZoom();
+
+    /// <summary>
     /// フェードイン/アウト用の画像の透明度をリセット(透明度を最大にする)
     /// </summary>
-    void ResetTransitionAlpha();
+    void ResetTransitionAlpha() { FadeEffect_.AlphaValue_ = 0; }
 
     /// <summary>
     /// ズームイン/アウト用画像のズーム拡大量をリセット
     /// </summary>
-    void ResetTransitionZoom();
+    void ResetTransitionZoom() { ZoomEffect_.ZoomValue_ = 0.0f; }
 };
 
