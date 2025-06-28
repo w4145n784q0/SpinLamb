@@ -86,7 +86,7 @@ namespace Model
 
 	//ワールド行列を設定
 	//引数：handle	設定したいモデルの番号
-	//引数：matrix	ワールド行列
+	//引数：transform	ワールド行列
 	void SetTransform(int handle, Transform& transform);
 
 	//ワールド行列の取得
@@ -100,4 +100,8 @@ namespace Model
 	//引数：data	必要なものをまとめたデータ
 	void RayCast(int handle, RayCastData *data);
 
+	//ワールド行列設定と描画を同時に行う
+	//引数：handle	設定したいモデルの番号
+	//引数：transfrom	ワールド行列
+	void SetAndDraw(int handle, Transform transform);
 };

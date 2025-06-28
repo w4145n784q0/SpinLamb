@@ -192,4 +192,11 @@ namespace Model
 
 			_datas[handle]->pFbx->RayCast(data); 
 	}
+
+	//ワールド行列設定と描画を同時に行う
+	void SetAndDraw(int handle, Transform transform)
+	{
+		SetTransform(handle, transform);
+		Draw(handle);
+	}
 }

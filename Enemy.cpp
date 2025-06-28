@@ -128,7 +128,7 @@ void Enemy::Draw()
 
 	if (EnemyState_ == S_AIM)
 	{
-		DrawModel(hArrow_, this->MoveParam_.ArrowTransform_);
+		Model::SetAndDraw(hArrow_, this->MoveParam_.ArrowTransform_);
 	}
 
 #ifdef _DEBUG

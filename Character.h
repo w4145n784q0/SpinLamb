@@ -183,11 +183,6 @@ public:
     void DrawCharacterModel(int _handle, Transform _transform);
 
     /// <summary>
-    /// モデル描画(描画のみ)
-    /// </summary>
-    void DrawModel(int _handle, Transform _transform);
-
-    /// <summary>
     /// キャラクター共通のImGuiを描画 個別要素は派生先で記述
     /// </summary>
     void DrawCharacterImGui();

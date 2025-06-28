@@ -114,10 +114,9 @@ void Character::SetcsvStatus(std::string _path)
 	if (csv.IsGetParamName(p_init))
 	{
 		std::vector<float> v = csv.GetParam(p_init);
+		SetTransformPRS(this->transform_,v);
 
-		InitParam_.StartPosition_ = { v[pos_x], v[pos_y],v[pos_z] };
-		this->transform_.rotate_ = { v[rot_x], v[rot_y],v[rot_z] };
-		this->transform_.scale_ = { v[sca_x] , v[sca_y] ,v[sca_z] };
+		InitParam_.StartPosition_ = this->transform_.position_;
 	}
 
 	std::string p_move = "MoveParam";
@@ -190,19 +189,13 @@ void Character::DrawCharacterModel(int _handle, Transform _transform)
 		if (++WallHitParam_.blinkTimer_ > WallHitParam_.blinkValue_) {
 
 			WallHitParam_.blinkTimer_ = 0;
-			DrawModel(_handle, _transform);
+			Model::SetAndDraw(_handle, _transform);
 		}
 	}
 	else
 	{
-		DrawModel(_handle, _transform);
+		Model::SetAndDraw(_handle, _transform);
 	}
-}
-
-void Character::DrawModel(int _handle, Transform _transform)
-{
-	Model::SetTransform(_handle, _transform);
-	Model::Draw(_handle);
 }
 
 void Character::DrawCharacterImGui()

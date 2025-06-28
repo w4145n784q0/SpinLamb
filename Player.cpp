@@ -142,7 +142,7 @@ void Player::Draw()
 
 	if (PlayerState_ == S_CHARGE)
 	{
-		DrawModel(hArrow_, this->MoveParam_.ArrowTransform_);
+		Model::SetAndDraw(hArrow_, this->MoveParam_.ArrowTransform_);
 	}
 
 #ifdef _DEBUG
