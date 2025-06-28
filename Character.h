@@ -46,8 +46,8 @@ protected:
         XMVECTOR MoveDirection_ = { 0,0,0 };//移動方向 この値に速さの要素をかけて移動ベクトル化する
         XMVECTOR NewPositon_ = { 0,0,0 };//移動後の位置ベクトル
 		Transform ArrowTransform_;//チャージ/攻撃準備中の矢印のトランスフォーム
-        XMFLOAT3 ArrowRotate_;//矢印の初期回転
-        XMFLOAT3 ArrowScale_;//矢印の大きさ
+        XMFLOAT3 ArrowRotate_ = { 0,0,0 };//矢印の初期回転
+        XMFLOAT3 ArrowScale_ = { 0,0,0 };//矢印の大きさ
 		float AddArrowDepth_ = 0.0f;//矢印の奥行き(前方向)の調整値
     };
     MoveParam MoveParam_;
@@ -63,7 +63,7 @@ protected:
     //----------空中----------
     struct JumpParam
     {
-        float Gravity_ = 0.0f; //重力 キャラクターの下方向にかかる力
+        float Gravity_ = 0.0f; //重力 キャラクターの下方向にかかる力 9.8/60(1秒)より軽くしている
         bool IsOnGround_ = false;//地面にいるか
         float JumpSpeed_ = 0.0f; //プレイヤーの上方向に向く力 +ならジャンプしている状態 -なら下降～地面にいる状態
         float HeightLowerLimit_ = 0.0f;//高さの下限
@@ -145,22 +145,10 @@ public:
     /// <param name="_path">csvファイルのパス</param>
     void SetcsvStatus(std::string _path);
 
-    void GetWireNormal() {  
-        UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");  
-        WallHitParam_.UpperNormal_ = pUpperWire->GetNormal();  
-
-        LowerWire* pLowerWire = (LowerWire*)FindObject("LowerWire");  
-        WallHitParam_.LowerNormal_ = pLowerWire->GetNormal();  
-
-        RightWire* pRightWire = (RightWire*)FindObject("RightWire");
-        WallHitParam_.RightNormal_ = pRightWire->GetNormal();
-
-        LeftWire* pLeftWire = (LeftWire*)FindObject("LeftWire");  
-        WallHitParam_.LeftNormal_ = pLeftWire->GetNormal();  
-
-        WallHitParam_.NormalArray_ = {  WallHitParam_.UpperNormal_,  WallHitParam_.LowerNormal_,  
-             WallHitParam_.RightNormal_, WallHitParam_.LeftNormal_, };  
-    }
+    /// <summary>
+    /// 各方向の柵から法線ベクトルを取得しNormalArrayを初期化
+    /// </summary>
+    void GetWireNormal();
 
     /// <summary>
     /// 初期位置の設定
@@ -224,6 +212,9 @@ public:
     /// 正面ベクトルを更新
     /// </summary>
     void FrontVectorConfirm(){
+
+        //ローカル正面ベクトルを現在のy軸回転量で変形すると、正面からどれだけ回転したかが計算される
+        //その値がワールド正面ベクトルとなる
         MoveParam_.ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, InitParam_.FrontDirection_);
     }
 
@@ -339,14 +330,10 @@ public:
     XMVECTOR HitNormal(std::string _normal);
 
     /// <summary>
-    /// 壁に接触した際の計算処理
-    /// </summary>
-    void WallHit();
-
-    /// <summary>
     /// 壁に接触した際の計算処理　壁の法線で計算
     /// </summary>
-    void WallReflect(XMVECTOR pos);
+    /// <param name="normal">反射される方向(接触した柵の法線ベクトル)</param>
+    void WallReflect(XMVECTOR normal);
 
     /// <summary>
     /// ノックバック終了判定
@@ -413,8 +400,7 @@ public:
     //----------サウンド関係----------
     void InitCSVSound();
 
-    //setter,getter関数
-
+    //----------セッター・ゲッター関数----------
     void SetAcceleration(float _acceleration) { MoveParam_.Acceleration_ = _acceleration; }
     float GetAcceleration() { return MoveParam_.Acceleration_; }
 

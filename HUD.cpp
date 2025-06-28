@@ -136,8 +136,6 @@ void HUD::Initialize()
 
 	//csvからパラメータ読み込み
 	SetHUDCSV();
-
-	//csvからパラメータ読み込み
 	Easing::SetSCVEasing();
 
 	//各画像の読み込み

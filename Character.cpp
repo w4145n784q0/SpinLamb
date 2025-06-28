@@ -13,6 +13,9 @@ namespace {
 		i_accele_value,
 		i_accele_max,
 		i_friction,
+		/*i_arrowpositionX,
+		i_arrowpositionY,
+		i_arrowpositionZ,*/
 		i_arrowrotateX,
 		i_arrowrotateY,
 		i_arrowrotateZ,
@@ -87,9 +90,11 @@ Character::Character(GameObject* parent)
 Character::Character(GameObject* parent, const std::string& name)
 	:GameObject(parent, name)
 {
+	//csvからパラメータ読み込み
 	InitCSVEffect();
 	InitCSVSound();
 
+	//各画像・サウンドの読み込み
 	hSoundcharge_ = Audio::Load("Sound\\SE\\charge.wav",false, ChargeSoundCount_);
 	assert(hSoundcharge_ >= 0);
 	hSoundattack_ = Audio::Load("Sound\\SE\\attack.wav", false, AttackSoundCount_);
@@ -97,7 +102,10 @@ Character::Character(GameObject* parent, const std::string& name)
 	hSoundCollision_ = Audio::Load("Sound\\SE\\collision.wav",false);
 	assert(hSoundCollision_ >= 0);
 
+	//それぞれの柵の法線を取得
 	GetWireNormal();
+
+	//影モデルを初期化
 	InitShadow();
 }
 
@@ -107,22 +115,42 @@ Character::~Character()
 
 void Character::SetcsvStatus(std::string _path)
 {
+	//csvファイルを読み込む
 	CsvReader csv;
 	csv.Load(_path);
 
+
+	//--------------------初期化関係のパラメータ(自身のtransform_)--------------------
+
+	//csvファイルの0列目の文字列を取得
 	std::string p_init = "InitializeParam";
+
+	//指定した文字列がいずれかの0列目に存在したら
 	if (csv.IsGetParamName(p_init))
 	{
+		//その行を配列として全取得
 		std::vector<float> v = csv.GetParam(p_init);
+
+		//自身のトランスフォームを初期化
 		SetTransformPRS(this->transform_,v);
 
+		//初期位置を保管する
 		InitParam_.StartPosition_ = this->transform_.position_;
 	}
 
+	//--------------------移動関係のパラメータ--------------------
+
+	//csvファイルの0列目の文字列を取得
 	std::string p_move = "MoveParam";
+
+	//指定した文字列がいずれかの0列目に存在したら
 	if (csv.IsGetParamName(p_move))
 	{
+		//その行を配列として全取得
 		std::vector<float> v = csv.GetParam(p_move);
+
+		//初期化の順番はcsvの各行の順番に合わせる
+		//vの添え字はnamespaceで宣言した列挙型を使用
 		MoveParam_.Velocity_ = v[i_vel];
 		MoveParam_.AcceleValue_ = v[i_accele_value];
 		MoveParam_.FullAccelerate_ = v[i_accele_max];
@@ -132,30 +160,56 @@ void Character::SetcsvStatus(std::string _path)
 		MoveParam_.AddArrowDepth_ = v[i_addarrowdepth];
 	}
 
+	//--------------------回転関係のパラメータ--------------------
+
+	//csvファイルの0列目の文字列を取得
 	std::string p_rotate = "RotateParam";
+
+	//指定した文字列がいずれかの0列目に存在したら
 	if (csv.IsGetParamName(p_rotate))
 	{
+		//その行を配列として全取得
 		std::vector<float> v = csv.GetParam(p_rotate);
+
+		//初期化の順番はcsvの各行の順番に合わせる
+		//vの添え字はnamespaceで宣言した列挙型を使用
 		RotateParam_.MoveRotateX = v[i_moverot];
 		RotateParam_.FastRotateX = v[i_fastrot];
 
 	}
 
+	//--------------------空中関係のパラメータ--------------------
+
+	//csvファイルの0列目の文字列を取得	
 	std::string p_jump = "JumpParam";
+
+	//指定した文字列がいずれかの0列目に存在したら
 	if (csv.IsGetParamName(p_jump))
 	{
+		//その行を配列として全取得
 		std::vector<float> v = csv.GetParam(p_jump);
+
+		//初期化の順番はcsvの各行の順番に合わせる
+		//vの添え字はnamespaceで宣言した列挙型を使用
 		JumpParam_.Gravity_ = v[i_gravity];
 		JumpParam_.HeightLowerLimit_ = v[i_upperlimit];
 		JumpParam_.HeightUpperLimit_ = v[i_lowerlimit];
 	}
 
+	//--------------------被弾関係のパラメータ--------------------
+
+	//csvファイルの0列目の文字列を取得	
 	std::string p_hit = "HitParam";
+
+	//指定した文字列がいずれかの0列目に存在したら
 	if (csv.IsGetParamName(p_hit))
 	{
+		//その行を配列として全取得
 		std::vector<float> v = csv.GetParam(p_hit);
-		HitParam_.ColliderSize_ =v[i_collider];
 
+		//初期化の順番はcsvの各行の順番に合わせる
+		//vの添え字はnamespaceで宣言した列挙型を使用
+		HitParam_.ColliderSize_ =v[i_collider];
 		HitParam_.OriginaRangeMin_ = v[i_originalrangemin];
 		HitParam_.OriginaRangeMax_ = v[i_originalrangemax];
 		HitParam_.ConvertedRangeMin_ = v[i_convertedrangemin];
@@ -164,28 +218,70 @@ void Character::SetcsvStatus(std::string _path)
 		HitParam_.KnockBackEnd_ = v[i_knockbackend];
 	}
 
+	//--------------------柵に接触関係のパラメータ--------------------
+
+	//csvファイルの0列目の文字列を取得	
 	std::string p_wallhit = "WallHitParam";
+
+	//指定した文字列がいずれかの0列目に存在したら
 	if (csv.IsGetParamName(p_wallhit))
 	{
+		//その行を配列として全取得
 		std::vector<float> v = csv.GetParam(p_wallhit);
+
+		//初期化の順番はcsvの各行の順番に合わせる
+		//vの添え字はnamespaceで宣言した列挙型を使用
 		WallHitParam_.KnockBackPower_ = v[i_knockbackpower];
 		WallHitParam_.InvincibilityValue_ = static_cast<int>(v[i_invincibilityvalue]);
 		WallHitParam_.blinkValue_ = static_cast<int>(v[i_blinkvalue]);
 	}
 
+
+	//--------------------影関係のパラメータ--------------------
+
+	//csvファイルの0列目の文字列を取得	
 	std::string p_shadow = "ShadowParam";
+
+	//指定した文字列がいずれかの0列目に存在したら
 	if(csv.IsGetParamName(p_shadow))
 	{
+		//その行を配列として全取得
 		std::vector<float> v = csv.GetParam(p_shadow);
+
+		//初期化の順番はcsvの各行の順番に合わせる
+		//vの添え字はnamespaceで宣言した列挙型を使用
 		ShadowParam_.ShadowCorrection_ = v[i_shadowcorrection];
 	}
+}
 
+void Character::GetWireNormal()
+{
+	//各インスタンスから柵の法線を取得
+	UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");
+	WallHitParam_.UpperNormal_ = pUpperWire->GetNormal();
+
+	LowerWire* pLowerWire = (LowerWire*)FindObject("LowerWire");
+	WallHitParam_.LowerNormal_ = pLowerWire->GetNormal();
+
+	RightWire* pRightWire = (RightWire*)FindObject("RightWire");
+	WallHitParam_.RightNormal_ = pRightWire->GetNormal();
+
+	LeftWire* pLeftWire = (LeftWire*)FindObject("LeftWire");
+	WallHitParam_.LeftNormal_ = pLeftWire->GetNormal();
+
+	//取得した法線を配列に格納
+	//これらが柵に接触した際の跳ね返る方向になる
+	WallHitParam_.NormalArray_ = { WallHitParam_.UpperNormal_,  WallHitParam_.LowerNormal_,
+		 WallHitParam_.RightNormal_, WallHitParam_.LeftNormal_, };
 }
 
 void Character::DrawCharacterModel(int _handle, Transform _transform)
 {
+	//無敵時間中かどうかでモデルの点滅表現を行う
+
 	if (WallHitParam_.IsInvincibility_)
 	{
+		//無敵時間中ならタイマーを使い、一定フレームおきにモデルを描画
 		if (++WallHitParam_.blinkTimer_ > WallHitParam_.blinkValue_) {
 
 			WallHitParam_.blinkTimer_ = 0;
@@ -194,12 +290,19 @@ void Character::DrawCharacterModel(int _handle, Transform _transform)
 	}
 	else
 	{
+		//無敵時間でないなら通常の描画
 		Model::SetAndDraw(_handle, _transform);
 	}
 }
 
 void Character::DrawCharacterImGui()
 {
+	//ImGuiの描画
+	//Slider:スライダーを使って値を調整可能
+	//Input:値を直接入力
+	//Text:記述のみ
+
+	//キャラクターの位置(position_.x,y,z)
 	if (ImGui::TreeNode("Transform.Position"))
 	{
 		ImGui::SliderFloat("PositionX:%.3f", &this->transform_.position_.x, WestEnd_, EastEnd_);
@@ -207,6 +310,7 @@ void Character::DrawCharacterImGui()
 		ImGui::TreePop();
 	}
 
+	//キャラクターの回転量(rotate_.x,y,z)
 	if (ImGui::TreeNode("Transform.Rotate"))
 	{
 		ImGui::Text("RotateX:%.3f", &this->transform_.rotate_.x);
@@ -215,6 +319,7 @@ void Character::DrawCharacterImGui()
 		ImGui::TreePop();
 	}
 
+	//ワールド正面ベクトル
 	if (ImGui::TreeNode("Forward"))
 	{
 		XMFLOAT3 tmp;
@@ -225,6 +330,7 @@ void Character::DrawCharacterImGui()
 		ImGui::TreePop();
 	}
 
+	//初速度,加速量,最大加速,チャージの際に使う仮の加速度
 	if (ImGui::TreeNode("Move"))
 	{
 		ImGui::InputFloat("velocity", &this->MoveParam_.Velocity_);
@@ -234,6 +340,7 @@ void Character::DrawCharacterImGui()
 		ImGui::TreePop();
 	}
 
+	//キャラクター移動時の通常の回転量、チャージ中の回転量
 	if (ImGui::TreeNode("Rotate"))
 	{
 		ImGui::InputFloat("normalRotate", &this->RotateParam_.MoveRotateX);
@@ -241,6 +348,7 @@ void Character::DrawCharacterImGui()
 		ImGui::TreePop();
 	}
 
+	//キャラクターにかかる重力,高さの上限,下限
 	if (ImGui::TreeNode("Jump"))
 	{
 		ImGui::InputFloat("Gravity", &this->JumpParam_.Gravity_);
@@ -249,6 +357,7 @@ void Character::DrawCharacterImGui()
 		ImGui::TreePop();
 	}
 
+	//ノックバック量計算時の変換前の範囲,変換後の範囲,減速率,ノックバックを終了する値
 	if (ImGui::TreeNode("Hit"))
 	{
 		ImGui::InputFloat("OriginaRangeMin", &this->HitParam_.OriginaRangeMin_);
@@ -260,6 +369,7 @@ void Character::DrawCharacterImGui()
 		ImGui::TreePop();
 	}
 
+	//柵ヒット時のノックバック量,無敵時間,無敵時間中の描画間隔
 	if (ImGui::TreeNode("WallHit"))
 	{
 		ImGui::InputFloat("Collider", &this->WallHitParam_.KnockBackPower_);
@@ -268,6 +378,7 @@ void Character::DrawCharacterImGui()
 		ImGui::TreePop();
 	}
 
+	//影の位置の補正
 	if (ImGui::TreeNode("Shadow"))
 	{
 		ImGui::InputFloat("Collider", &this->ShadowParam_.ShadowCorrection_);
@@ -279,45 +390,70 @@ void Character::DrawCharacterImGui()
 
 void Character::CharacterGravity()
 {
-	JumpParam_. JumpSpeed_ -= JumpParam_.Gravity_;//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
-	this->transform_.position_.y += JumpParam_.JumpSpeed_;//フィールドに乗っているかは関係なく重力はかかり続ける
+	//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
+	JumpParam_. JumpSpeed_ -= JumpParam_.Gravity_;
 
-	if (this->transform_.position_.y <= JumpParam_.HeightLowerLimit_)//プレイヤーめりこみ防止に一定以下のy座標で値を固定
+	//フィールドに乗っているかは関係なく重力はかかり続ける
+	this->transform_.position_.y += JumpParam_.JumpSpeed_;
+
+	//プレイヤーめりこみ防止に一定以下のy座標になったら値を固定する
+	if (this->transform_.position_.y <= JumpParam_.HeightLowerLimit_)
 	{
 		this->transform_.position_.y = JumpParam_.HeightLowerLimit_;
+
+		//一定以下のy座標になった場合,着地している判定にする
 		JumpParam_.IsOnGround_ = true;
 	}
 }
 
 void Character::InitShadow()
 {
+	//初期化の時点でステージクラスのインスタンスを取得
 	ShadowParam_.pGround_ = (Ground*)FindObject("Ground");
+
+	//影モデル読み込み
 	ShadowParam_.hShadow_ = Model::Load("Model\\ShadowPoint.fbx");
 	assert(ShadowParam_.hShadow_ >= 0);
 }
 
 void Character::ShadowSet()
 {
-	int hGroundModel = ShadowParam_.pGround_->GetModelHandle();//ステージのモデル番号を取得
+	//ステージのモデル番号を取得
+	int hGroundModel = ShadowParam_.pGround_->GetModelHandle();
+
+	//ステージに向かってレイを飛ばす設定をする
 	RayCastData data;
-	data.start = this->transform_.position_;//レイの発射位置を設定
-	data.dir = XMFLOAT3(0, -1, 0);//レイの方向を設定
-	Model::RayCast(hGroundModel, &data);//レイを発射
+	
+	//レイの発射位置を設定
+	data.start = this->transform_.position_;
+
+	//レイの方向を設定
+	data.dir = XMFLOAT3(0, -1, 0);
+
+	//レイを発射
+	Model::RayCast(hGroundModel, &data);
 
 	//レイが当たったら
 	if (data.hit)
 	{
+		//現在位置-衝突点までの距離 + 補正値で影の高さを設定
 		ShadowParam_.ShadowHeight_ = (this->transform_.position_.y - data.dist) + ShadowParam_.ShadowCorrection_;
 	}
+
+	//y座標以外はキャラクターと同じ位置に設定
 	this->ShadowParam_.ShadowTrans_.position_.x = this->transform_.position_.x;
 	this->ShadowParam_.ShadowTrans_.position_.z = this->transform_.position_.z;
+
+	//影の高さをトランスフォームに設定する
 	this->ShadowParam_.ShadowTrans_.position_.y = ShadowParam_.ShadowHeight_;
 }
 
 void Character::ShadowDraw()
 {
-	Model::SetTransform(ShadowParam_.hShadow_, this->ShadowParam_.ShadowTrans_);
-	Model::Draw(ShadowParam_.hShadow_);
+	//ShadowSetで位置を設定した影を描画
+	Model::SetAndDraw(ShadowParam_.hShadow_, this->ShadowParam_.ShadowTrans_);
+	//Model::SetTransform(ShadowParam_.hShadow_, this->ShadowParam_.ShadowTrans_);
+	//Model::Draw(ShadowParam_.hShadow_);
 }
 
 void Character::CharacterMove(XMVECTOR _direction)
@@ -325,6 +461,7 @@ void Character::CharacterMove(XMVECTOR _direction)
 	//単位ベクトル化し、移動方向を確定
 	MoveParam_.MoveDirection_ = XMVector3Normalize(_direction);
 
+	//移動ベクトルを作成
 	CreateMoveVector();
 
 	//場外でなければ位置更新 
@@ -342,13 +479,17 @@ void Character::CreateMoveVector()
 	//移動ベクトル化する
 	XMVECTOR MoveVector = XMVectorScale(MoveParam_.MoveDirection_, (MoveParam_.Velocity_ + MoveParam_.Acceleration_) * DeltaTime);
 
-	//現在位置と移動ベクトルを加算
+	//現在位置と移動ベクトルを加算し
+	//移動後のベクトルを作成(この時点では移動確定していない)
 	XMVECTOR PrevPos = XMLoadFloat3(&this->transform_.position_);
 	MoveParam_.NewPositon_ = PrevPos + MoveVector;
 }
 
 bool Character::IsOutsideStage(XMFLOAT3 _position)
 {
+	//指定位置が一つでもステージ端を超えるかどうか判定し、真偽を返す
+	//ステージ外判定をする際に使用
+
 	if (_position.x > EastEnd_ || _position.x < WestEnd_ || _position.z > NorthEnd_ || _position.z < SouthEnd_){
 			return true;
 	}
@@ -359,12 +500,14 @@ bool Character::IsOutsideStage(XMFLOAT3 _position)
 
 void Character::MoveConfirm()
 {
+	//移動後のベクトルをtransform_.positionに代入し、移動を確定する
 	XMStoreFloat3(&this->transform_.position_, MoveParam_.NewPositon_);
 }
 
 float Character::RotateDirectionVector(XMVECTOR _MoveVector)
 {
-	//コントローラー方向と前向きベクトルの外積求める
+	//主にコントローラー・キーボードの入力に使う
+	//受け取った方向ベクトルと前向きベクトルの外積求める
 	XMVECTOR cross = XMVector3Cross(_MoveVector, InitParam_.FrontDirection_);
 
 	//Y外積をとり+か-かで倒し回転方向を求める
@@ -422,6 +565,7 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 	}
 	else 
 	{
+		//値がマイナスならプラスに変更
 		if (signbit(subVelocity)) 
 		{
 			subVelocity = -subVelocity;
@@ -433,6 +577,7 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 			HitParam_.ConvertedRangeMin_, HitParam_.ConvertedRangeMax_);
 	}
 
+	//変換したノックバック量をノックバック時の速度x,zに代入
 	HitParam_.KnockBack_Velocity_.x = KnockBackValue;
 	HitParam_.KnockBack_Velocity_.z = KnockBackValue;
 
@@ -451,11 +596,13 @@ void Character::KnockBack()
 	HitParam_.KnockBack_Velocity_.x *= HitParam_.DecelerationRate_;
 	HitParam_.KnockBack_Velocity_.z *= HitParam_.DecelerationRate_;
 
+	//ノックバック後の位置を計算
 	//位置 = 位置 + 方向 * 速度
 	XMFLOAT3 TmpPos = this->transform_.position_;
 	TmpPos.x += HitParam_.KnockBack_Direction_.x * HitParam_.KnockBack_Velocity_.x;
 	TmpPos.z += HitParam_.KnockBack_Direction_.z * HitParam_.KnockBack_Velocity_.z;
 
+	//この時点では変更せず、移動後の仮の位置に保管
 	MoveParam_.NewPositon_ = XMLoadFloat3(&TmpPos);
 
 	//場外でなければ位置更新 
@@ -472,6 +619,8 @@ XMVECTOR Character::HitNormal(std::string _normal)
 	//wallArray[] = { "UpperWire", "LowerWire", "RightWire" ,"LeftWire" };
 	
 	//指定した名前の鉄線がWallArrayから見つかったら対応した法線を返す
+	//返した方向が柵に接触した際のノックバック方向となる
+	//見つからない場合は0を返す
 	for (int i = 0; i < WallHitParam_.WireArray_.size(); i++)
 	{
 		if (_normal == WallHitParam_.WireArray_[i])
@@ -483,35 +632,19 @@ XMVECTOR Character::HitNormal(std::string _normal)
 	return { 0,0,0 };
 }
 
-void Character::WallHit()
+void Character::WallReflect(XMVECTOR normal)
 {
+	//接触エフェクトを指定
 	SetWallHitEffect();
+
+	//溜めている速度をリセット
 	ChargeReset();
-	AccelerationStop();
 
-	//正面ベクトルの逆ベクトルを計算
-	XMVECTOR negate = XMVectorNegate(MoveParam_.ForwardVector_);
-	XMFLOAT3 inverse;
-	XMStoreFloat3(&inverse, negate);
-
-	//ノックバック方向に代入
-	HitParam_.KnockBack_Direction_ = { inverse.x, inverse.y, inverse.z };
-
-	//ノックバック量を速度に代入(一定値)
-	HitParam_.KnockBack_Velocity_.x = WallHitParam_.KnockBackPower_;
-	HitParam_.KnockBack_Velocity_.z = WallHitParam_.KnockBackPower_;
-
-	WallHitParam_.IsInvincibility_ = true;
-}
-
-void Character::WallReflect(XMVECTOR pos)
-{
-	SetWallHitEffect();
-	ChargeReset();
+	//ダッシュ中の速度リセット
 	AccelerationStop();
 
 	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, pos);
+	XMStoreFloat3(&tmp, normal);
 
 	//受け取った法線をノックバック方向に代入
 	HitParam_.KnockBack_Direction_ = { tmp };
@@ -520,12 +653,15 @@ void Character::WallReflect(XMVECTOR pos)
 	HitParam_.KnockBack_Velocity_.x = WallHitParam_.KnockBackPower_;
 	HitParam_.KnockBack_Velocity_.z = WallHitParam_.KnockBackPower_;
 
+	//無敵状態を設定
 	WallHitParam_.IsInvincibility_ = true;
 
 }
 
 bool Character::IsKnockBackEnd()
 {
+	//ノックバック速度が終了値に到達したか判定し、真偽を返す
+
 	if (HitParam_.KnockBack_Velocity_.x <= HitParam_.KnockBackEnd_ ||
 		HitParam_.KnockBack_Velocity_.z <= HitParam_.KnockBackEnd_)
 	{
@@ -540,8 +676,11 @@ bool Character::IsKnockBackEnd()
 void Character::InvincibilityTimeCalclation()
 {
 	//無敵時間の計算
+
+	//無敵時間かどうか判定(この関数は毎フレーム呼ばれるため)
 	if (WallHitParam_.IsInvincibility_)
 	{
+		//タイマーが終了値を超えたら無敵時間を終わる
 		if (++WallHitParam_.InvincibilityTime_ > WallHitParam_.InvincibilityValue_)
 		{
 			WallHitParam_.InvincibilityTime_ = 0;
@@ -552,6 +691,7 @@ void Character::InvincibilityTimeCalclation()
 
 void Character::Charging()
 {
+	//チャージ中のSE再生
 	Audio::Play(hSoundcharge_);
 
 	//チャージ中,仮の値に一定の加速量を加算し続ける
@@ -569,7 +709,10 @@ void Character::Charging()
 
 void Character::ChargeRelease()
 {
+	//実際の加速度に溜めた仮の値を代入
 	MoveParam_.Acceleration_ = MoveParam_.TmpAccele_;
+
+	//溜めている速度をリセット
 	ChargeReset();
 }
 
@@ -580,9 +723,16 @@ void Character::ChargeReset()
 
 void Character::SetArrow()
 {
+	//正面ベクトルに前方向の調整値を乗算し、矢印の正面位置を計算
 	XMVECTOR frontArrow = XMVectorScale(this->MoveParam_.ForwardVector_, this->MoveParam_.AddArrowDepth_);
+	
+	//現在位置を取得
 	XMVECTOR PosVec = XMLoadFloat3(&this->transform_.position_);
+
+	//矢印の正面位置と現在位置を加算
 	XMVECTOR arrowPosVec = XMVectorAdd(PosVec, frontArrow);
+
+	//矢印のトランスフォームに代入
 	XMStoreFloat3(&this->MoveParam_.ArrowTransform_.position_, arrowPosVec);
 }
 
@@ -603,79 +753,133 @@ XMVECTOR Character::RotateVecFront(float rotY, XMVECTOR front)
 
 void Character::InitCSVEffect()
 {
+	//csvファイルを読み込む
 	CsvReader csv;
 	csv.Load("CSVData\\VFXData.csv");
 
-	//ChargeParam_...はvector<float>型のパラメータ
+	//csvファイルの各0列目の文字列の配列を取得
+
 	std::string effects[] = { "Charge","FullCharge" ,"Locus" , "Hit" , "WallHit" };
-    std::vector<float>* param[] = { &ChargeParam_,&FullChargeParam,
+  
+	//ChargeParam_から始まるVFXのパラメータ(vector<float>型の配列)の参照を
+	//ポインタ配列に格納
+	std::vector<float>* param[] = { &ChargeParam_,&FullChargeParam,
 		&AttackLocusParam_, &HitEffectParam_, &WallHitEffectParam_ };  
+
+
     for (int i = 0; i < sizeof(effects) / sizeof(effects[0]); i++)  
     {  
-		if (csv.IsGetParamName(effects[i]))  
+		//指定した文字列がいずれかの0列目に存在したら
+		if (csv.IsGetParamName(effects[i]))
         {  
+			//その行を配列として全取得
 			std::vector<float> v = csv.GetParam(effects[i]);  
+
+			//この時点では代入のみ行われる
+			// SetEmitterで実際にVFXのパラメータにセットされる 
 			*param[i] = v;  
-            // SetEmitterで実際にVFXのパラメータにセットされる  
+            
         }  
     }
 }
 
 void Character::SetChargingEffect(std::string _path)
 {
+	//csvから読み込んだ,チャージ中エフェクトのパラメータを実際にセットする
 	EmitterData charge;
 	VFX::SetEmitter(charge, ChargeParam_);
+
+	//使用する画像のパスをセットする
 	charge.textureFileName = _path;
+
+	//発射位置をセット
 	charge.position = this->transform_.position_;
+
+	//エフェクトを開始
 	VFX::Start(charge);
 }
 
 void Character::SetFullChargeEffect()
 {
+	//csvから読み込んだ,最大チャージエフェクトのパラメータを実際にセットする
 	EmitterData fullcharge;
 	VFX::SetEmitter(fullcharge, FullChargeParam);
+
+	//使用する画像のパスをセットする
 	fullcharge.textureFileName = "PaticleAssets\\flashA_W.png";
+
+	//発射位置をセット
 	fullcharge.position = this->transform_.position_;
+
+	//エフェクトを開始
 	VFX::Start(fullcharge);
 }
 
 void Character::SetAttackLocusEffect()
 {
+	//csvから読み込んだ,攻撃中の軌跡エフェクトのパラメータを実際にセットする
 	EmitterData locus;
 	VFX::SetEmitter(locus, AttackLocusParam_);
+
+	//使用する画像のパスをセットする
 	locus.textureFileName = "PaticleAssets\\flashB_Y.png";
+
+	//発射位置をセット
 	locus.position = this->transform_.position_;
+
+	//エフェクトを開始
 	VFX::Start(locus);
 }
 
 void Character::SetHitEffect()
 {
+	//csvから読み込んだ,被弾エフェクトのパラメータを実際にセットする
 	EmitterData hit;
-
 	VFX::SetEmitter(hit, HitEffectParam_);
+
+	//使用する画像のパスをセットする
 	hit.textureFileName = "PaticleAssets\\flashB_W.png";
+
+	//発射位置をセット
 	hit.position = this->transform_.position_;
+
+	//エフェクトを開始
 	VFX::Start(hit);
 }
 
 void Character::SetWallHitEffect()
 {
+	//csvから読み込んだ,柵に接触時エフェクトのパラメータを実際にセットする
 	EmitterData  wallhit;
 	VFX::SetEmitter(wallhit, WallHitEffectParam_);
+
+	//使用する画像のパスをセットする
 	wallhit.textureFileName = "PaticleAssets\\flashB_W.png";
+
+	//発射位置をセット
 	wallhit.position = this->transform_.position_;
+
+	//エフェクトを開始
 	VFX::Start(wallhit);
 }
 
 void Character::InitCSVSound()
 {
+	//csvファイルを読み込む
 	CsvReader csv;
 	csv.Load("CSVData\\SoundData.csv");
 
+	//csvファイルの0列目の文字列を取得
 	std::string p_sound = "SoundParam";
+	
+	//指定した文字列がいずれかの0列目に存在したら
 	if (csv.IsGetParamName(p_sound))
 	{
+		//その行を配列として全取得
 		std::vector<float> v = csv.GetParam(p_sound);
+		
+		//初期化の順番はcsvの各行の順番に合わせる
+		//vの添え字はnamespaceで宣言した列挙型を使用
 		ChargeSoundCount_ = static_cast<int>(v[i_chargecount]);
 		AttackSoundCount_ = static_cast<int>(v[i_attackcount]);
 	}

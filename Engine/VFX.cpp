@@ -6,7 +6,7 @@ namespace VFX
     std::list<Emitter*>		emitterList_;	//エミッター達
     std::list<Particle*>	particleList_;	//パーティクル達
 
-    
+    //EmitterDataに順番に値を入れる際のインデックス
     enum VFXIndex
     {
         i_position_x = 0,
