@@ -200,6 +200,7 @@
     <ClCompile Include="TransitionEffect.cpp">
       <Filter>06UI</Filter>
     </ClCompile>
+    <ClCompile Include="Wire.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -365,6 +366,7 @@
     <ClInclude Include="TransitionEffect.h">
       <Filter>06UI</Filter>
     </ClInclude>
+    <ClInclude Include="Wire.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

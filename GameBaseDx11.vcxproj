@@ -190,6 +190,7 @@
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="TransitionEffect.cpp" />
     <ClCompile Include="UpperWire.cpp" />
+    <ClCompile Include="Wire.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BaseScene.h" />
@@ -247,6 +248,7 @@
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="TransitionEffect.h" />
     <ClInclude Include="UpperWire.h" />
+    <ClInclude Include="Wire.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\BillBoard.hlsl">
