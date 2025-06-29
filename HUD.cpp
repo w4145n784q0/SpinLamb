@@ -300,11 +300,11 @@ void HUD::DrawPracticeLogo()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("PracticeLogo"))
 	{
-		ImGui::SliderFloat("positionX", &logo_backtitle.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("positionY", &logo_backtitle.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("backtitleX", &logo_backtitle.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("backtitleY", &logo_backtitle.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("positionX", &logo_practice.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("positionY", &logo_practice.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("practiceX", &logo_practice.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("practiceY", &logo_practice.position_.y, Image::UpEdge, Image::DownEdge);
 		ImGui::TreePop();
 	}
 #endif
@@ -322,11 +322,11 @@ void HUD::DrawTimer()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Timer"))
 	{
-		ImGui::SliderFloat("positionX", &TenTime.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("positionY", &TenTime.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("TenTimeX", &TenTime.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("TenTimeY", &TenTime.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("positionX", &OneTime.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("positionY", &OneTime.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("OneTimeX", &OneTime.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("OneTimeY", &OneTime.position_.y, Image::UpEdge, Image::DownEdge);
 		ImGui::TreePop();
 	}
 #endif
@@ -349,8 +349,8 @@ void HUD::DrawExplanation()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Explanation"))
 	{
-		ImGui::SliderFloat("positionX", &logo_explanation.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("positionY", &logo_explanation.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("ExplanationX", &logo_explanation.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("ExplanationY", &logo_explanation.position_.y, Image::UpEdge, Image::DownEdge);
 		ImGui::TreePop();
 	}
 #endif
@@ -364,8 +364,8 @@ void HUD::DrawStartLogo()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Start"))
 	{
-		ImGui::SliderFloat("positionX", &logo_start.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("positionY", &logo_start.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("StartX", &logo_start.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("StartY", &logo_start.position_.y, Image::UpEdge, Image::DownEdge);
 		ImGui::TreePop();
 	}
 #endif
@@ -387,10 +387,10 @@ void HUD::DrawStartLogo()
 void HUD::DrawFinishLogo()
 {
 #ifdef _DEBUG
-	if (ImGui::TreeNode("Timer"))
+	if (ImGui::TreeNode("Finish"))
 	{
-		ImGui::SliderFloat("positionX", &logo_Finish.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("positionY", &logo_Finish.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("FinishX", &logo_Finish.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("FinishY", &logo_Finish.position_.y, Image::UpEdge, Image::DownEdge);
 		ImGui::TreePop();
 	}
 #endif
@@ -404,14 +404,14 @@ void HUD::DrawMiniMap()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("MiniMap"))
 	{
-		ImGui::SliderFloat("positionX", &MapIcon.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("positionY", &MapIcon.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("MiniMapX", &MapIcon.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("MiniMapY", &MapIcon.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::Text("positionX", PlayerIcon.position_.x);
-		ImGui::Text("positionX", PlayerIcon.position_.y);
+		ImGui::Text("playerIconX:%.3f", PlayerIcon.position_.x);
+		ImGui::Text("playerIconY:%.3f", PlayerIcon.position_.y);
 
-		ImGui::Text("positionX", EnemyIcon.position_.x);
-		ImGui::Text("positionX", EnemyIcon.position_.y);
+		ImGui::Text("EnemyIconX:%.3f", EnemyIcon.position_.x);
+		ImGui::Text("EnemyIconY:%.3f", EnemyIcon.position_.y);
 
 		ImGui::TreePop();
 	}
@@ -438,17 +438,17 @@ void HUD::DrawScore()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Score"))
 	{
-		ImGui::SliderFloat("positionX", &PlayerScoreTen.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("positionY", &PlayerScoreTen.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("PlayerScoreTenX", &PlayerScoreTen.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("PlayerScoreTenY", &PlayerScoreTen.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("positionX", &PlayerScoreOne.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("positionY", &PlayerScoreOne.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("PlayerScoreOneX", &PlayerScoreOne.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("PlayerScoreOneY", &PlayerScoreOne.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("positionX", &EnemyScoreTen.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("positionY", &EnemyScoreTen.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("EnemyScoreTenX", &EnemyScoreTen.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("EnemyScoreTenY", &EnemyScoreTen.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("positionX", &EnemyScoreOne.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("positionY", &EnemyScoreOne.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("EnemyScoreOneX", &EnemyScoreOne.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("EnemyScoreOneY", &EnemyScoreOne.position_.y, Image::UpEdge, Image::DownEdge);
 
 		ImGui::TreePop();
 	}
@@ -488,8 +488,15 @@ void HUD::DrawReady()
 
 void HUD::DrawGo()
 {
+	//徐々にロゴが拡大する動き
+
+	//カウンターに毎フレーム加算
 	EasingCount += DeltaTime;
+
+	//拡大率をイージング処理で計算
 	float scale = static_cast<float>(Easing::calculateScale(MaxScale, EasingCount));
+
+	//トランスフォームの拡大量に代入
 	logo_start.scale_.x = scale;
 	logo_start.scale_.y = scale;
 

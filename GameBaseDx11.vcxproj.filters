@@ -200,7 +200,9 @@
     <ClCompile Include="TransitionEffect.cpp">
       <Filter>06UI</Filter>
     </ClCompile>
-    <ClCompile Include="Wire.cpp" />
+    <ClCompile Include="Wire.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -366,7 +368,9 @@
     <ClInclude Include="TransitionEffect.h">
       <Filter>06UI</Filter>
     </ClInclude>
-    <ClInclude Include="Wire.h" />
+    <ClInclude Include="Wire.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

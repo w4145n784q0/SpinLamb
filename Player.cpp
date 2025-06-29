@@ -197,7 +197,7 @@ void Player::OnCollision(GameObject* pTarget)
 	//敵クラスと接触した時の処理
 	if (pTarget->GetObjectName() == "Enemy")
 	{
-		//敵のインスタンスをとる
+		//敵のインスタンスを取得
 		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
 
 		//敵の位置を取りXMVECTOR型にする
