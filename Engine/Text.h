@@ -8,6 +8,7 @@ class Text
 	unsigned int width_, height_;	//1•¶š•ª‚Ì•‚Æ‚‚³
 	char fileName_[MAX_PATH];
 	unsigned int rowLength_;
+	float twoDevide_;
 
 public:
 	Text();

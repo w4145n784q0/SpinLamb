@@ -400,6 +400,8 @@ public:
     void SetWallHitEffect();
 
     //----------サウンド関係----------
+
+    //CSVからパラメータを読み込みする
     void InitCSVSound();
 
     //----------セッター・ゲッター関数----------

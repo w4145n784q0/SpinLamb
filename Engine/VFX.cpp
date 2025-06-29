@@ -346,6 +346,10 @@ void VFX::End(int handle)
 
 void VFX::SetEmitter(EmitterData &data, std::vector<float> v)
 {
+    //CSVで読み取った値を入れた配列を受け取り、EmitterDataに入れていく
+    //表示画像のパスはこの処理の後に個別にセットする
+    //csvで読み取れる値以外を入れたい場合もこの処理の後に個別にセットする
+
     data.position = {v[i_position_x],v[i_position_y],v[i_position_z]};
     data.positionRnd = { v[i_positionRnd_x],v[i_positionRnd_y],v[i_positionRnd_z] };
 	data.direction = { v[i_direction_x],v[i_direction_y],v[i_direction_z] };

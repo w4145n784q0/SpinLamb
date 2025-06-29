@@ -400,7 +400,7 @@ namespace Direct3D
 		float alpha = GetPrivateProfileInt("SCREEN_COLOR", "SCREEN_ALPHA", 0, ".\\setup.ini");
 		float division = GetPrivateProfileInt("SCREEN_COLOR", "SCREEN_DIVISION", 1, ".\\setup.ini");
 
-		float clearColor[4] = { red / division ,green / division ,blue / division ,alpha };//R,G,B,A
+		float clearColor[] = { red / division ,green / division ,blue / division ,alpha };//R,G,B,A
 
 		//‰æ–Ê‚ðƒNƒŠƒA
 		pContext_->ClearRenderTargetView(pRenderTargetView_, clearColor);

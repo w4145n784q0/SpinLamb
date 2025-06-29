@@ -43,5 +43,11 @@ namespace Camera
 	//_shaketime 振動させる時間
 	void CameraShakeStart(float _shaketime);
 
+	//CSVから各ステータスを読み込みする
 	void SetCSVCamera();
+
+	//----------セッター・ゲッター関数----------
+	void SetShakeWidth(float _width);
+
+	void SetShakeSpeed(float _speed);
 };

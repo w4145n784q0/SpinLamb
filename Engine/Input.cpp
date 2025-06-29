@@ -300,15 +300,24 @@ namespace Input
 		XInputSetState(padID, &vibration);
 	}
 
+	//csv読み込み
 	void SetInputCSV()
 	{
+		//csvファイルを読み込む
 		CsvReader csv;
 		csv.Load("CSVdata\\InputData.csv");
 
+		//csvファイルの0列目の文字列を取得
 		std::string inputdata = "Input";
+
+		//指定した文字列がいずれかの0列目に存在したら
 		if (csv.IsGetParamName(inputdata))
 		{
+			//その行を配列として全取得
 			std::vector<float> v = csv.GetParam(inputdata);
+
+			//初期化の順番はcsvの各行の順番に合わせる
+			//vの添え字はnamespaceで宣言した列挙型を使用
 			StickTilt = v[i_sticktilt];
 			StickMicroTilt = v[i_stickMicrotilt];
 		}

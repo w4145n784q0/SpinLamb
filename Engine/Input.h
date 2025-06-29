@@ -112,7 +112,7 @@ namespace Input
 	//振動させる
 	void SetPadVibration(int l, int r, int padID = 0);
 
-	//SCV読み込み
+	//CSVからパラメータを読み込みする
 	void SetInputCSV();
 
 	//開放

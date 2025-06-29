@@ -2,8 +2,12 @@
 #include "Direct3D.h"
 #include "Text.h"
 
-Text::Text() : hPict_(-1), width_(16), height_(32), fileName_("char.png"), rowLength_(16)
+Text::Text() : hPict_(-1), width_(0), height_(0), fileName_("char.png"), rowLength_(0),twoDevide_(0.0f)
 {
+	width_ = GetPrivateProfileInt("TEXT", "Width", 0, ".\\TextInit.ini");
+	height_ = GetPrivateProfileInt("TEXT", "Height", 0, ".\\TextInit.ini");
+	rowLength_ = GetPrivateProfileInt("TEXT", "rowLength", 0, ".\\TextInit.ini");
+	twoDevide_ = GetPrivateProfileInt("TEXT", "twoDevide", 0, ".\\TextInit.ini");
 }
 
 Text::~Text()
@@ -41,12 +45,12 @@ void Text::Draw(int x, int y, const char* str)
 	float px, py;
 
 	//引数は左上原点だが、スプライトは画面中央が原点なので、画面サイズの半分ずらす
-	px = (float)(x - Direct3D::screenWidth_ / 2);
-	py = (float)(-y + Direct3D::screenHeight_ / 2);	//Y軸は+-反転
+	px = (float)(x - Direct3D::screenWidth_ / (int)twoDevide_);
+	py = (float)(-y + Direct3D::screenHeight_ / (int)twoDevide_);	//Y軸は+-反転
 
 	//スプライトはPositionを1ずらすと画面サイズの半分ずれるので、ピクセル単位に変換
-	px /= (float)(Direct3D::screenWidth_ / 2.0f);
-	py /= (float)(Direct3D::screenHeight_ / 2.0f);
+	px /= (float)(Direct3D::screenWidth_ / twoDevide_);
+	py /= (float)(Direct3D::screenHeight_ / twoDevide_);
 
 
 	//１文字ずつ表示する
@@ -72,7 +76,7 @@ void Text::Draw(int x, int y, const char* str)
 		Image::Draw(hPict_);
 
 		//次の位置にずらす
-		px += width_ / (float)(Direct3D::screenWidth_ / 2.0f);
+		px += width_ / (float)(Direct3D::screenWidth_ / twoDevide_);
 	}
 }
 

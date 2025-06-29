@@ -107,4 +107,9 @@ namespace Image
 
 	//scv読み込み行う
 	void SetSCVImage();
+
+	//ワールド行列設定と描画を同時に行う
+	//引数：handle	設定したいモデルの番号
+	//引数：transfrom	ワールド行列
+	void SetAndDraw(int handle, Transform transform);
 }

@@ -136,13 +136,18 @@ size_t CsvReader::GetHeight()
 	return data_.size();
 }
 
+//csvの0列目に引数の文字列があれば、その値を配列にして返す
 std::vector<float> CsvReader::GetParam(std::string ParamName)
 {
+	//受け取った文字列に\0を付けておく
 	ParamName.push_back('\0');
+
 	for (const auto& arr: data_)
 	{
+		//読み込んだデータ内の0列目に受け取った文字列があれば
 		if (!arr.empty() && arr[0] == ParamName)
 		{
+			//float型配列にその行のデータを全て入れて返す
 			std::vector<float> result;
 			for (size_t i = 1; i < arr.size(); ++i) {
 				result.push_back(std::stof(arr[i]));
@@ -150,12 +155,18 @@ std::vector<float> CsvReader::GetParam(std::string ParamName)
 			return result;
 		}
 	}
+
+	//見つからなかったら空の配列を返す
 	return {};
 }
 
+//csvの0列目に引数の文字列があるかを判定
 bool CsvReader::IsGetParamName(std::string ParamName)
 {
+	//受け取った文字列に\0を付けておく
 	ParamName.push_back('\0');
+
+	//読み込んだデータ内の0列目に受け取った文字列があるかどうかを返す
 	for (const auto& arr : data_)
 	{
 		if (!arr.empty() && arr[0] == ParamName)

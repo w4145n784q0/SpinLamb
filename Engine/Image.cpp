@@ -212,13 +212,21 @@ namespace Image
 
 	void SetSCVImage()
 	{
+		//csvファイルを読み込む
 		CsvReader csv;
 		csv.Load("CSVdata\\ImageData.csv");
 
+		//csvファイルの各0列目の文字列を取得
 		std::string imagedata = "Image";
+		
+		//指定した文字列がいずれかの0列目に存在したら
 		if (csv.IsGetParamName(imagedata))
 		{
+			//その行を配列として全取得
 			std::vector<float> v = csv.GetParam(imagedata);
+			
+			//初期化の順番はcsvの各行の順番に合わせる
+			//vの添え字はnamespaceで宣言した列挙型を使用
 			LeftEdge = v[i_leftedge];
 			RightEdge = v[i_rightedge];
 			UpEdge = v[i_upedge];
@@ -226,6 +234,13 @@ namespace Image
 			Center = v[i_center];
 			AlphaMin = static_cast<int>(v[i_alphamin]);
 		}
+	}
+
+	//ワールド行列設定と描画を同時に行う
+	void SetAndDraw(int handle, Transform transform)
+	{
+		SetTransform(handle, transform);
+		Draw(handle);
 	}
 }
 

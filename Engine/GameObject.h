@@ -94,6 +94,8 @@ protected:
 	//衝突判定リスト
 	std::list<Collider*>	colliderList_;	
 
+	//以下はGameObject継承先で汎用的に使う定数
+
 	/// <summary>
 	/// 60fpsにおける1フレームの時間
 	/// 使用端末によるフレームレート依存防止
@@ -328,59 +330,26 @@ public:
 	}
 
 	/// <summary>
-	/// CSVで各パラメータを読み込む際の共通処理
-	/// </summary>
-	/// <typeparam name="...Args"></typeparam>
-	/// <param name="csv"></param>
-	/// <param name="paramName"></param>
-	/// <param name="...args"></param>
-	template<typename... Args>
-	void InitCSVParameter(CsvReader& csv, const std::string& paramName, Args&&... args)
-	{
-		if (!csv.IsGetParamName(paramName))
-		{
-			return;
-		}
-		
-		std::vector<float> v = csv.GetParam(paramName);
-
-		size_t i = 0;
-		auto assign = [&](auto&& ref)
-			{
-			using T = typename std::decay<decltype(ref.get())>::type;
-			if (i < v.size())
-			{
-				if (std::is_same<T, float>::value) {
-					ref.get() = v[i];
-				}
-				else if (std::is_same<T, int>::value) {
-					ref.get() = static_cast<int>(v[i]);
-				}
-				else if (std::is_same<T, double>::value) {
-					ref.get() = static_cast<double>(v[i]);
-				}
-			}
-			++i;
-			};
-
-
-		(assign(args), ...);
-	}
-
-
-	/// <summary>
 	/// GameObjectの共通データ初期化
 	/// </summary>
     static void SCVCommonDataInitialize() {  
 
+		//csvファイルを読み込む
         CsvReader csv;  
         csv.Load("CSVdata\\CommonData.csv");  
 
-        std::string common = "CommonData";  
+		//csvファイルの各0列目の文字列を取得
+		std::string common = "CommonData";
+
+		//指定した文字列がいずれかの0列目に存在したら
         if (csv.IsGetParamName(common))  
         {  
+			//その行を配列として全取得
             std::vector<float> v = csv.GetParam(common);  
-            DeltaTime = v[i_deltatime];  
+            
+			//初期化の順番はcsvの各行の順番に合わせる
+			//vの添え字はnamespaceで宣言した列挙型を使用
+			DeltaTime = v[i_deltatime];
             oneSecond = static_cast<int>(v[i_onesecond]);  
             TenDivision = static_cast<int>(v[i_tendivision]);  
 			SceneShortTransition = static_cast<int>(v[i_sceneshorttransition]);
