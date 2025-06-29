@@ -88,7 +88,7 @@ public:
 	//UŒ‚ó‘Ô
 	void UpdateAttack();
 
-	//ƒqƒbƒgó‘Ô
+	//’e‚©‚ê‚½ó‘Ô
 	void UpdateHit();
 
 	//•Ç‚ÉÚGó‘Ô

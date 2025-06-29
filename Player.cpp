@@ -143,7 +143,7 @@ void Player::Update()
 		break;
 	}
 
-	//柵に接触してないなら値を更新
+	//柵に接触状態でなければ無敵時間を更新
 	if(!(PlayerState_ == S_WALLHIT))
 	{
 		InvincibilityTimeCalclation();
@@ -197,7 +197,7 @@ void Player::OnCollision(GameObject* pTarget)
 	//敵クラスと接触した時の処理
 	if (pTarget->GetObjectName() == "Enemy")
 	{
-		//敵のノックバック
+		//敵のインスタンスをとる
 		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
 
 		//敵の位置を取りXMVECTOR型にする
@@ -425,7 +425,7 @@ void Player::UpdateAttack()
 
 void Player::UpdateHit()
 {
-	//相手と接触している状態 操作不可
+	//相手と接触した状態 操作不可
 
 	//ノックバックする
 	KnockBack();
@@ -433,13 +433,16 @@ void Player::UpdateHit()
 	//ノックバックする速度が一定以下なら通常状態へ戻る
 	if (IsKnockBackEnd())
 	{
+		//ノックバック速度を0に戻しておく
+		HitParam_.KnockBack_Velocity_ = { 0,0,0 };
+
 		PlayerState_ = S_IDLE;
 	}
 }
 
 void Player::UpdateWallHit()
 {	
-	//ダメージを受ける柵と接触している状態 操作不可
+	//ダメージを受ける柵と接触した状態 操作不可
 
 	//ノックバックする
 	KnockBack();
@@ -447,6 +450,7 @@ void Player::UpdateWallHit()
 	//ノックバックする速度が一定以下なら通常状態へ戻る
 	if (IsKnockBackEnd())
 	{
+		//通常状態へ戻る
 		PlayerState_ = S_IDLE;
 
 		//バトルシーンなら相手にスコア加算
