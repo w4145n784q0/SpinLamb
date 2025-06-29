@@ -2,6 +2,7 @@
 
 UpperWire::UpperWire(GameObject* parent)
 	:GameObject(parent, "UpperWire"), Normal_({ 0,0,0 })
+	,CollisionPos_({0,0,0}), CollisionSize_({0,0,0})
 {
 }
 

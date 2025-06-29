@@ -7,15 +7,28 @@
 namespace {
 	
 	//キャラクタークラスの共通変数を初期化するインデックス
+	enum InitializeIndex
+	{
+		i_posX = 0,
+		i_posY,
+		i_posZ,
+		i_rotateX,
+		i_rotateY,
+		i_rotateZ,
+		i_scaleX,
+		i_scaleY,
+		i_scaleZ,
+		i_frontX,
+		i_frontY,
+		i_frontZ,
+	};
+
 	enum moveIndex
 	{
 		i_vel = 0,
 		i_accele_value,
 		i_accele_max,
 		i_friction,
-		/*i_arrowpositionX,
-		i_arrowpositionY,
-		i_arrowpositionZ,*/
 		i_arrowrotateX,
 		i_arrowrotateY,
 		i_arrowrotateZ,
@@ -153,6 +166,7 @@ void Character::SetcsvStatus(std::string _path)
 
 		//自身のトランスフォームを初期化
 		SetTransformPRS(this->transform_,v);
+		InitParam_.FrontDirection_ = {v[i_frontX],v[i_frontY],v[i_frontZ]};
 
 		//初期位置を保管する
 		InitParam_.StartPosition_ = this->transform_.position_;

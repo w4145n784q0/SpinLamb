@@ -341,7 +341,7 @@ void Player::UpdateCharge()
 	//加速度を溜める
 	Charging();
 
-	//矢印モデルを描画
+	//矢印モデルをセット
 	SetArrow();
 
 	//矢印モデルの位置を自身の回転と合わせる

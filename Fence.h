@@ -33,9 +33,16 @@ public:
 	Fence(GameObject* parent);
 	~Fence();
 
+	//‰Šú‰»
 	void Initialize() override;
+
+	//XV
 	void Update() override;
+
+	//•`‰æ
 	void Draw() override;
+
+	//ŠJ•ú
 	void Release() override;
 
 	/// <summary>

@@ -12,17 +12,17 @@
 
 namespace
 {
-	//柱の数
+	//柱の数 setpillerの初期化に用いる
 	int pillerNum = 0;
 
 	//鉄線のトランスフォーム
-	Transform wire;
+	Transform wireTransform;
 
 	//柱のトランスフォーム(回転・拡大率のみ 位置は別に扱う)
-	Transform piller;
+	Transform pillerTransform;
 
 	//柱の位置を格納するTransform配列
-	std::vector<Transform> pillersTransform = {};
+	std::vector<Transform> pillersTransformArray = {};
 
 	//柱の位置(XMFLOAT3)の配列
 	std::vector<XMFLOAT3> PillerPosArray = {};
@@ -60,15 +60,27 @@ void Fence::Update()
 void Fence::Draw()
 {
 #ifdef _DEBUG
-	
+	if (ImGui::TreeNode("Fence"))
+	{
+		if (ImGui::TreeNode("wire"))
+		{
+			ImGui::InputFloat("PositionX", &wireTransform.position_.x);
+			ImGui::InputFloat("PositionY", &wireTransform.position_.y);
+			ImGui::InputFloat("PositionZ", &wireTransform.position_.z);
+			ImGui::TreePop();
+		}
+
+		ImGui::TreePop();
+	}
 #endif
 
-	Model::SetTransform(hFence_, wire);
-	Model::Draw(hFence_);
+	//柵モデルの描画
+	Model::SetAndDraw(hFence_, wireTransform);
 
-	for (int i = 0; i < pillersTransform.size(); i++)
+	//柱モデルの描画
+	for (int i = 0; i < pillersTransformArray.size(); i++)
 	{
-		Model::SetTransform(hPiller_, pillersTransform[i]);
+		Model::SetTransform(hPiller_, pillersTransformArray[i]);
 		Model::Draw(hPiller_);
 	}
 }
@@ -79,22 +91,26 @@ void Fence::Release()
 
 void Fence::SetPiller(float upper, float lower, float left, float right, float height)
 {
-
+	//柱の位置(左上,右上,左下,右下)を設定
 	piller_UpperLeft_ = { left,height,upper };
 	piller_UpperRight_ = { right,height,upper };
 	piller_LowerLeft_ = { left, height,lower };
 	piller_LowerRight_ = { right, height,lower };
-
-	//この時点でPillerPosArrayの値を入れる
+	
+	//この時点でPillerPosArrayの値を初期化
 	PillerPosArray = { piller_UpperLeft_ ,piller_UpperRight_ , piller_LowerLeft_,piller_LowerRight_ };
 
-	pillersTransform.resize(pillerNum);
+	//pillersTransformのサイズを柱の数分に変更
+	pillersTransformArray.resize(pillerNum);
 
+	//柱の位置,回転,拡大率を配列にセット
+	//位置はPillerPosArrayの値を用いる
+	//回転,拡大率はpillerTransformで統一
 	for (int i = 0; i < pillerNum; i++)
 	{
-		pillersTransform[i].position_ = PillerPosArray[i];
-		pillersTransform[i].rotate_ = piller.rotate_;
-		pillersTransform[i].scale_ = piller.scale_;
+		pillersTransformArray[i].position_ = PillerPosArray[i];
+		pillersTransformArray[i].rotate_ = pillerTransform.rotate_;
+		pillersTransformArray[i].scale_ = pillerTransform.scale_;
 	}
 }
 
@@ -105,38 +121,58 @@ void Fence::SetPillerNum(int num)
 
 void Fence::InitWireTransform(Transform _t)
 {
-	wire = _t; 
+	wireTransform = _t;
 }
 
 void Fence::InitPillerTransform(Transform _t)
 {
-	piller = _t;
+	pillerTransform = _t;
 }
 
 void Fence::SetWireCollisionUpper(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal)
 {
+	//前方の柵の初期化
 	UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");
+
+	//当たり判定をセット
 	pUpperWire->InitCollision(pos,size);
+
+	//法線をセット
 	pUpperWire->SetNormal(XMVECTOR({ normal.x,normal.y,normal.z }));
 }
 
 void Fence::SetWireCollisionLower(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal)
 {
+	//後方の柵の初期化
 	LowerWire* pLowerWire = (LowerWire*)FindObject("LowerWire");
+
+	//当たり判定をセット
 	pLowerWire->InitCollision(pos, size);
+
+	//法線をセット
 	pLowerWire->SetNormal(XMVECTOR({ normal.x,normal.y,normal.z }));
 }
 
 void Fence::SetWireCollisionRight(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal)
 {
+	//右側の柵の初期化
 	RightWire* pRightWire = (RightWire*)FindObject("RightWire");
+
+	//当たり判定をセット
 	pRightWire->InitCollision(pos, size);
+
+	//法線をセット
 	pRightWire->SetNormal(XMVECTOR({ normal.x,normal.y,normal.z }));
 }
 
 void Fence::SetWireCollisionLeft(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal)
 {
+	//左側の柵の初期化
 	LeftWire* pLeftWire = (LeftWire*)FindObject("LeftWire");
+
+	//当たり判定をセット
 	pLeftWire->InitCollision(pos, size);
+
+	//法線をセット
 	pLeftWire->SetNormal(XMVECTOR({ normal.x,normal.y,normal.z }));
 }
