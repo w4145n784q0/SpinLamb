@@ -16,6 +16,7 @@ private:
 	int hArrow_;
 
 	//----------プレイヤーステート----------
+	//これらの値に応じて各Update関数を呼び出す
 	enum State
 	{
 		S_IDLE,//通常
@@ -29,6 +30,7 @@ private:
 	State PlayerState_;
 
 	//----------カメラステート----------
+	//これらの値に応じてカメラの位置・回転量を変化させる
 	enum CameraState
 	{
 		S_NORMALCAMERA,//通常カメラ
@@ -38,41 +40,64 @@ private:
 	CameraState CameraState_;
 	
 	//----------移動関係----------
-	XMFLOAT3 Direction_;//キーボード使用時、プレイヤーの操作方向(xzどこに進むか)
+
+	//キーボード使用時、プレイヤーの操作方向(xzどこに進むか)
+	XMFLOAT3 Direction_;
 	
 	//----------カメラ関係----------
-	XMFLOAT3 CameraPosition_;//カメラ位置
-	XMFLOAT3 CameraTarget_;//カメラ注視点
-	Transform cameraTransform_;//カメラのTransform 回転だけ使う
-	XMVECTOR BackCamera_;//プレイヤーの後ろに置くカメラの位置
 
-	//----------攻撃関係----------
-	//Transform AttackArrowTransform_;//攻撃方向のTransform
+	//カメラ位置
+	XMFLOAT3 CameraPosition_;
+
+	//カメラ注視点
+	XMFLOAT3 CameraTarget_;
+
+	//カメラのTransform 回転だけ使う
+	Transform cameraTransform_;
+
+	//プレイヤーの後ろに置くカメラの位置
+	XMVECTOR BackCamera_;
 
 public:
-
 	Player(GameObject* parent);
 	~Player();
 
+	//初期化
 	void Initialize() override;
+
+	//更新
 	void Update() override;
+
+	//描画
 	void Draw() override;
+
+	//開放
 	void Release() override;
+
+	//当たり判定処理
 	void OnCollision(GameObject* pTarget) override;
 
-	void UpdateIdle();//通常状態
-	void UpdateCharge();//チャージ状態
-	void UpdateAttack();//攻撃状態
-	void UpdateHit();//ヒット状態
-	void UpdateWallHit();//壁に接触状態
-	void UpdateStop();//プレイヤーを止める状態
+	//----------PlayerState_に応じて内容が変わるUpdate関数----------
 
-	bool IsCanWallReflect(){
-		if (!WallHitParam_.IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
-			return true;
-		else
-			return false;
-	}
+	//通常状態
+	void UpdateIdle();
+
+	//チャージ状態
+	void UpdateCharge();
+
+	//攻撃状態
+	void UpdateAttack();
+
+	//ヒット状態
+	void UpdateHit();
+
+	//壁に接触状態
+	void UpdateWallHit();
+
+	//プレイヤーを止める状態
+	void UpdateStop();
+
+
 
 	//プレイヤーに移動を許可
 	void PlayerStart() { PlayerState_ = S_IDLE; }

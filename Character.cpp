@@ -140,7 +140,6 @@ void Character::SetcsvStatus(std::string _path)
 	CsvReader csv;
 	csv.Load(_path);
 
-
 	//--------------------初期化関係のパラメータ(自身のtransform_)--------------------
 
 	//csvファイルの0列目の文字列を取得

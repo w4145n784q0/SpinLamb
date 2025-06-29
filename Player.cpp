@@ -89,7 +89,10 @@ void Player::Initialize()
 	hArrow_ = Model::Load("Model\\AttackArrow2.fbx");
 	assert(hArrow_ >= 0);
 
+	//矢印のトランスフォームの初期化
 	InitArrow();
+
+	//初期位置にキャラクターをセット
 	SetStartPosition();
 	
 	//当たり判定付ける
@@ -112,11 +115,10 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	//カメラの位置を更新
-	//cameraTransform_.position_ = this->transform_.position_;
-
+	//Characterクラスの共通処理
 	Character::Update();
 
+	//現在の状態によって更新を分ける
 	switch (PlayerState_)
 	{
 	case Player::S_IDLE:
@@ -147,16 +149,12 @@ void Player::Update()
 		InvincibilityTimeCalclation();
 	}
 
-	//毎フレーム影の位置を更新
-//	ShadowSet();
-
-	//毎フレーム重力をかけ続ける
-//	CharacterGravity();
-
 	//毎フレームカメラの更新
 	CameraUpdate();
 
 #ifdef _DEBUG
+
+	//デバッグ中のみescキーで初期位置に戻る
 	if (Input::IsKeyDown(DIK_RETURN))
 	{
 		SetStartPosition();
@@ -167,17 +165,19 @@ void Player::Update()
 
 void Player::Draw()
 {
+	//Characterクラスの共通描画
 	Character::Draw();
 
+	//動かすキャラクターの描画
 	DrawCharacterModel(hPlayer_, this->transform_);
 
-	//ShadowDraw();
-
+	//チャージ中のみ矢印モデル描画
 	if (PlayerState_ == S_CHARGE)
 	{
 		Model::SetAndDraw(hArrow_, this->MoveParam_.ArrowTransform_);
 	}
 
+	//Debug中はImGuiを設定
 #ifdef _DEBUG
 	if (ImGui::TreeNode("PlayerStatus"))
 	{
@@ -194,21 +194,29 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
 {
+	//敵クラスと接触した時の処理
 	if (pTarget->GetObjectName() == "Enemy")
 	{
 		//敵のノックバック
 		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
 
-		//敵-自分のベクトル（相手の反射）,自分-敵のベクトル（自分の反射）をとる
-		//相手のスピードと自分のスピードをとる
+		//敵の位置を取りXMVECTOR型にする
 		XMFLOAT3 getposition =  pEnemy->GetPosition();
 		XMVECTOR enemyvector = XMLoadFloat3(&getposition);
+
+		//自身の位置をXMVECTOR型にする
 		XMVECTOR playervector = XMLoadFloat3(&this->transform_.position_);
+
+		//相手のスピードを取得
 		float enemyaccele = pEnemy->GetAcceleration();
 
+		//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度)
 		Reflect(playervector, enemyvector, this->MoveParam_.Acceleration_, enemyaccele);
 
+		//被弾状態になる
 		PlayerState_ = S_HIT;
+
+		//接触エフェクト
 		SetHitEffect();
 
 		//カメラ振動
@@ -218,17 +226,25 @@ void Player::OnCollision(GameObject* pTarget)
 		Audio::Play(hSoundCollision_);
 	}
 
+	//各柵に接触した時の処理
 	if (pTarget->GetObjectName() == "UpperWire" || pTarget->GetObjectName() == "LowerWire" ||
 		pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
 	{
+		//自身が柵に接触状態ではない and 無敵状態でないなら続ける
 		if (!WallHitParam_.IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
 		{
+			//柵の名前のいずれかに接触しているなら
             for (const std::string& arr : WallHitParam_.WireArray_)
 			{
 				if (pTarget->GetObjectName() == arr)
 				{
+					//接触している柵の法線(反射される方向)を取得
 					XMVECTOR normal = HitNormal(arr);
+
+					//反射開始
 					WallReflect(normal);
+
+					//プレイヤーの状態を柵に接触状態にする
 					PlayerState_ = S_WALLHIT;
 				}
 			}
@@ -239,7 +255,11 @@ void Player::OnCollision(GameObject* pTarget)
 
 void Player::UpdateIdle()
 {
+	//通常状態 移動・ジャンプなどをしている状態
+
 	//------------------キーボード入力の移動------------------//
+
+	//上下左右キーが押されたら
 	if (Input::IsKey(DIK_UP))
 	{
 		Direction_.z += 1.0f;
@@ -257,6 +277,7 @@ void Player::UpdateIdle()
 		Direction_.x += 1.0f;
 	}
 
+	//キーボードの入力した分を実際に移動
 	KeyBoradMove();
 
 	//------------------ゲームパッドスティックの移動------------------//
@@ -272,56 +293,80 @@ void Player::UpdateIdle()
 	//ベクトルの長さを取得して、倒したかどうかを判別
 	float length = XMVectorGetX(XMVector3Length(controller));
 
+	//少しでもスティックを傾けたら
 	if (length > Input::StickMicroTilt)
 	{
+		//コントローラー入力ベクトルからy軸回転量を計算
 		this->transform_.rotate_.y = RotateDirectionVector(SetController);
-		MoveRotate();
+		
+		//コントローラー入力ベクトルを渡し、実際に移動する
 		CharacterMove(SetController);
+
+		//キャラクターをX回転
+		MoveRotate();
 	}
 
-	//自分の前方ベクトル(回転した分も含む)を更新
-	//FrontVectorConfirm();
+	//------------------チャージ状態へ移行------------------//
 
-
-	//------------------攻撃状態へ移行------------------//
-
+	//SHIFTキー/Bボタンが押されたら
 	if (Input::IsKeyDown(DIK_LSHIFT) || Input::IsKeyDown(DIK_RSHIFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
 	{
-		if (JumpParam_. IsOnGround_)
+		if (JumpParam_.IsOnGround_)
 		{
+			//地上にいるならチャージ状態へ移行
 			PlayerState_ = S_CHARGE;
 		}
 	}
 
 	//------------------ジャンプ------------------
+
+	//SPACEキー/Aボタンが押されたら
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
 	{
-		if (JumpParam_. IsOnGround_)
+		if (JumpParam_.IsOnGround_)
 		{
+			//地上にいるならジャンプ開始
 			SetJump();
 		}
 	}
 
+	//カメラ操作可能
 	CameraControl();
 }
 
 void Player::UpdateCharge()
 {
+	//チャージ中(TmpAcceleを溜めている状態) その場で回転できるが動けない
+
+	//加速度を溜める
 	Charging();
+
+	//矢印モデルを描画
 	SetArrow();
+
+	//矢印モデルの位置を自身の回転と合わせる
 	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
+	
+	//チャージ中のエフェクトを出す
 	SetChargingEffect("PaticleAssets\\circle_B.png");
 
+	//SPACEキー/Aボタンが押され,地上にいるなら
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
 	{
 		if (JumpParam_. IsOnGround_)
 		{
+			//溜めたチャージを0にする
 			ChargeReset();
+
+			//ジャンプ開始
 			SetJump();
+
+			//通常状態へ戻る
 			PlayerState_ = S_IDLE;
 		}
 	}
 
+	//左右キー/スティックが倒されたら回転
 	if (Input::IsKey(DIK_LEFT) || Input::GetPadStickL().x < -Input::StickTilt)
 	{
 		this->transform_.rotate_.y -= KeyBoardRotateY;
@@ -331,34 +376,61 @@ void Player::UpdateCharge()
 		this->transform_.rotate_.y += KeyBoardRotateY;
 	}
 
+	//SHIFTキー/Bボタンを離したら
 	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
 	{
+		//チャージ解放
 		ChargeRelease();
+
+		//攻撃状態へ移行
 		PlayerState_ = S_ATTACK;
 	}
 
-	//FrontVectorConfirm();
+	//高速X回転
 	FastRotate();
+
+	//カメラ操作可能
 	CameraControl();
 }
 
 void Player::UpdateAttack()
 {
-	Audio::Play(hSoundattack_);
+	//攻撃状態 正面の方向に移動し操作不可
+
+	//攻撃中のエフェクトを出す
 	SetAttackLocusEffect();
+
+	//正面ベクトルの方向に移動
 	CharacterMove(MoveParam_.ForwardVector_);
+
+	//摩擦量分速度を減少
 	FrictionDeceleration();
+
+	//高速X回転
 	FastRotate();
+
+	//加速量が0になったら
 	if (IsDashStop())
 	{
+		//明示的に加速量を0にする
 		AccelerationStop();
+
+		//通常状態へ戻る
 		PlayerState_ = S_IDLE;
 	}
+
+	//攻撃SE再生
+	Audio::Play(hSoundattack_);
 }
 
 void Player::UpdateHit()
 {
+	//相手と接触している状態 操作不可
+
+	//ノックバックする
 	KnockBack();
+
+	//ノックバックする速度が一定以下なら通常状態へ戻る
 	if (IsKnockBackEnd())
 	{
 		PlayerState_ = S_IDLE;
@@ -367,15 +439,22 @@ void Player::UpdateHit()
 
 void Player::UpdateWallHit()
 {	
+	//ダメージを受ける柵と接触している状態 操作不可
+
+	//ノックバックする
 	KnockBack();
 
+	//ノックバックする速度が一定以下なら通常状態へ戻る
 	if (IsKnockBackEnd())
 	{
 		PlayerState_ = S_IDLE;
 
+		//バトルシーンなら相手にスコア加算
+		//SceneManagerのインスタンスからバトルシーンかどうか判定
 		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
 		if (pSM->IsBattleScene())
 		{
+			//BattleSceneのインスタンスからスコア加算
 			BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
 			pBattleScene->PlusEnemyScore();
 		}
@@ -384,19 +463,28 @@ void Player::UpdateWallHit()
 
 void Player::UpdateStop()
 {
-	//動かない
+	//何も処理をしない
 }
 
 void Player::SetJump()
 {
+	//ジャンプを開始する処理
+
+	//地上判定をfalseにする
 	JumpParam_.IsOnGround_ = false;
-	JumpParam_.JumpSpeed_ = Jumpheight;//一時的にy方向にマイナスされている値を大きくする
+
+	//一時的にy方向にマイナスされている値を大きくすることで、キャラクターが飛び上がる
+	JumpParam_.JumpSpeed_ = Jumpheight;
 }
 
 void Player::CameraControl()
 {
+	//カメラを操作する
+
 #ifdef _DEBUG
 	//カメラを上部に移動
+
+	//Qキーを押したらデバッグカメラに移行(Debugの時のみ)
 	if (Input::IsKeyDown(DIK_Q))
 	{
 		if (CameraState_ == S_NORMALCAMERA)
@@ -411,9 +499,10 @@ void Player::CameraControl()
 	}
 #endif 
 
+	//通常カメラ
 	if(CameraState_ == S_NORMALCAMERA)
 	{
-
+		//A・Dキー/右スティックでカメラ回転
 		if (Input::IsKey(DIK_A) || Input::GetPadStickR().x <= -Input::StickTilt)	//カメラ左右移動
 		{
 			cameraTransform_.rotate_.y -= cameraRotate;
@@ -423,8 +512,10 @@ void Player::CameraControl()
 			cameraTransform_.rotate_.y += cameraRotate;
 		}
 
+		//W・Sキーでカメラ上下移動
 		if (Input::IsKey(DIK_W) || Input::GetPadStickR().y <= -Input::StickTilt)	//カメラ上下移動
 		{
+			//カメラの上下移動の上限になったら位置固定
 			if (cameraTransform_.rotate_.x >= cameraUpperLimit)
 			{
 				cameraTransform_.rotate_.x = cameraUpperLimit;
@@ -436,6 +527,7 @@ void Player::CameraControl()
 		}
 		if (Input::IsKey(DIK_S) || Input::GetPadStickR().y >= Input::StickTilt)
 		{
+			//カメラの上下移動の下限になったら位置固定
 			if (cameraTransform_.rotate_.x <= cameraLowerLimit)
 			{
 				cameraTransform_.rotate_.x = cameraLowerLimit;
@@ -446,6 +538,7 @@ void Player::CameraControl()
 			}
 		}
 
+		//Zキー/Yボタンでカメラの回転・プレイヤーの回転リセット
 		if (Input::IsKey(DIK_Z) || Input::IsPadButton(XINPUT_GAMEPAD_Y))//カメラを正面に戻す（方向に変化なし）
 		{
 			cameraTransform_.rotate_.y = 0;
@@ -456,66 +549,102 @@ void Player::CameraControl()
 	}
 	else if (CameraState_ == S_DEBUGCAMERA)
 	{
-
+		//デバッグカメラ中はカメラの回転位置を固定
 		cameraTransform_.rotate_.x = cameraDebugPos;
 	}
 }
 
 void Player::CameraUpdate()
 {
+	//カメラの位置・回転量の更新
+
 	//--------------カメラ追従--------------
-	CameraTarget_ = { this->transform_.position_ };//カメラの焦点は自機の位置
-	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform_.rotate_.y));//カメラの回転行列作成(Y軸)
-	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(cameraTransform_.rotate_.x));//カメラの回転行列作成(X軸)
+
+	//カメラの焦点は自機の位置
+	CameraTarget_ = { this->transform_.position_ };
+
+	//カメラの回転行列作成(X軸・Y軸)
+	//CameraControllで動かしたcameraTransform_をラジアン化し、回転行列にする
+	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform_.rotate_.y));
+	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(cameraTransform_.rotate_.x));
+	
+	//両方の回転行列を乗算
 	XMMATRIX rotCamera = XMMatrixMultiply(rotX, rotY);
-	BackCamera_ = XMVector3TransformCoord(BackCamera_, rotCamera);//バックカメラのベクトルにかける
-	XMVECTOR PlayerPosVec = XMLoadFloat3(&this->transform_.position_);//プレイヤーの位置を取得
-	XMStoreFloat3(&CameraPosition_, PlayerPosVec + BackCamera_);//プレイヤーの移動ベクトルとバックカメラを加算
+
+	//作成した両方の回転行列をバックカメラのベクトルに乗算
+	BackCamera_ = XMVector3TransformCoord(BackCamera_, rotCamera);
+
+	//プレイヤーの位置を取得
+	XMVECTOR PlayerPosVec = XMLoadFloat3(&this->transform_.position_);	
+
+	//プレイヤーの移動ベクトルとバックカメラを加算
+	XMStoreFloat3(&CameraPosition_, PlayerPosVec + BackCamera_);
 
 	//--------------カメラ振動--------------
 	// 全ステート共有
+
+	//カメラの振動量をカメラ位置に加算(0でも行う)
 	CameraPosition_.x += Camera::CameraShakeFloat3().x;
 	CameraPosition_.y += Camera::CameraShakeFloat3().y;
 	CameraPosition_.z += Camera::CameraShakeFloat3().z;
 
-	Camera::SetPosition(CameraPosition_);//カメラの位置をセット 
-	Camera::SetTarget(CameraTarget_);//カメラの焦点をセット
+	//カメラの位置をセット 
+	Camera::SetPosition(CameraPosition_);
 
-	//if (!(PlayerState_ == Player::S_STOP))
-	//{
-		BackCamera_ = { BackCameraPos };//バックカメラベクトルをリセット
-	//}
-	//else
-	//{
-	//	cameraTransform_.rotate_.y = 0;//開始前・終了後はカメラのY回転固定
-	//}
+	//カメラの焦点をセット
+	Camera::SetTarget(CameraTarget_);
+
+	//バックカメラベクトルをリセット
+	BackCamera_ = { BackCameraPos };
+	
 }
 
 void Player::KeyBoradMove()
 {
+	//キーボード入力時の移動・回転計算
+
+	//キーボードを押した量を1つの仮の移動ベクトルに変換
 	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
 
+	//キーを押した(押してない状態は0ベクトルなので処理しない)
+	//0ベクトルを正規化はできない
 	if (!XMVector3Equal(move, XMVectorZero()))
 	{
+		//仮の移動ベクトルを正規化
 		move = XMVector3Normalize(move);
+
+		//仮の移動ベクトルからy軸回転量を計算
 		this->transform_.rotate_.y = RotateDirectionVector(move);
-		MoveRotate();
+
+		//仮の移動ベクトルを渡し、実際に移動する
 		CharacterMove(move);
+
+		//キャラクターをX回転
+		MoveRotate();
+
 	}
 
-	//CharacterMoveRotate(move, this->transform_.rotate_.y);
-	Direction_ = { 0,0,0 };//最後に進行方向のリセット毎フレーム行う
+	//最後に進行方向のリセット毎フレーム行う
+	Direction_ = { 0,0,0 };
 }
 
 void Player::SetCSVPlayer()
 {
+	//csvファイルを読み込む
 	CsvReader csv;
 	csv.Load("CSVdata\\PlayerData.csv");
 
+	//csvファイルの各0列目の文字列を取得
 	std::string only = "PlayerOnlyParam";
+
+	//指定した文字列がいずれかの0列目に存在したら
 	if (csv.IsGetParamName(only))
 	{
+		//その行を配列として全取得
 		std::vector<float> v = csv.GetParam(only);
+		
+		//初期化の順番はcsvの各行の順番に合わせる
+		//vの添え字はnamespaceで宣言した列挙型を使用
 		BackCameraPos = { v[i_backcameraX], v[i_backcameraY], v[i_backcameraZ] };
 		KeyBoardRotateY = v[i_keyboardrotateY];
 		cameraShakeTime = v[i_camerashaketime];
