@@ -113,6 +113,27 @@ Character::~Character()
 {
 }
 
+void Character::Update()
+{
+	//Characterクラスを継承するクラスで呼ぶ共通更新
+
+	//毎フレーム影の位置を更新
+	ShadowSet();
+
+	//毎フレーム重力をかけ続ける
+	CharacterGravity();
+
+	//自分の前方ベクトル(回転した分も含む)を更新
+	FrontVectorConfirm();
+}
+
+void Character::Draw()
+{
+	//Characterクラスを継承するクラスで呼ぶ共通描画
+
+	ShadowDraw();
+}
+
 void Character::SetcsvStatus(std::string _path)
 {
 	//csvファイルを読み込む

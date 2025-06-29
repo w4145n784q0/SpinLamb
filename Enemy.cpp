@@ -78,9 +78,11 @@ void Enemy::Update()
 	PlayerAcceleration_ = pPlayer_->GetAcceleration();
 	
 	//正面ベクトルからどれだけ回転したかを計算し、前向きベクトルを計算
-	FrontVectorConfirm();
+	//FrontVectorConfirm();
 
-	ShadowSet();
+	//ShadowSet();
+
+	Character::Update();
 
 	switch (EnemyState_)
 	{
@@ -117,14 +119,16 @@ void Enemy::Update()
 		InvincibilityTimeCalclation();
 	}
 
-	CharacterGravity();
+	//CharacterGravity();
 }
 
 void Enemy::Draw()
 {
 	DrawCharacterModel(hEnemy_, this->transform_);
 
-	ShadowDraw();
+	//ShadowDraw();
+
+	Character::Draw();
 
 	if (EnemyState_ == S_AIM)
 	{

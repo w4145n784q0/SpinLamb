@@ -115,6 +115,8 @@ void Player::Update()
 	//カメラの位置を更新
 	//cameraTransform_.position_ = this->transform_.position_;
 
+	Character::Update();
+
 	switch (PlayerState_)
 	{
 	case Player::S_IDLE:
@@ -146,10 +148,10 @@ void Player::Update()
 	}
 
 	//毎フレーム影の位置を更新
-	ShadowSet();
+//	ShadowSet();
 
 	//毎フレーム重力をかけ続ける
-	CharacterGravity();
+//	CharacterGravity();
 
 	//毎フレームカメラの更新
 	CameraUpdate();
@@ -165,9 +167,11 @@ void Player::Update()
 
 void Player::Draw()
 {
+	Character::Draw();
+
 	DrawCharacterModel(hPlayer_, this->transform_);
 
-	ShadowDraw();
+	//ShadowDraw();
 
 	if (PlayerState_ == S_CHARGE)
 	{
@@ -276,7 +280,7 @@ void Player::UpdateIdle()
 	}
 
 	//自分の前方ベクトル(回転した分も含む)を更新
-	FrontVectorConfirm();
+	//FrontVectorConfirm();
 
 
 	//------------------攻撃状態へ移行------------------//
@@ -333,7 +337,7 @@ void Player::UpdateCharge()
 		PlayerState_ = S_ATTACK;
 	}
 
-	FrontVectorConfirm();
+	//FrontVectorConfirm();
 	FastRotate();
 	CameraControl();
 }

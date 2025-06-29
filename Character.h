@@ -135,6 +135,8 @@ public:
     Character(GameObject* parent, const std::string& name);
 
     virtual ~Character();
+    void Update() override;
+    void Draw() override;
 
     //----------‰Šú‰»----------
 
