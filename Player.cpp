@@ -12,6 +12,7 @@
 
 namespace {
 
+	//csv読み込み時のインデックス
 	enum playeronlyIndex
 	{
 		i_backcameraX = 0,
@@ -29,19 +30,32 @@ namespace {
 		i_cameradebugPos,
 	};
 
-	XMVECTOR BackCameraPos = { 0.0f,0.0f,0.0f };//BackCameraの値は変わるが毎フレームこの値にする（値が変わり続けるのを防ぐ）
+	//カメラの固定位置
+	//BackCameraの値を毎フレームこの値にする（値が変わり続けるのを防ぐ）
+	XMVECTOR BackCameraPos = { 0.0f,0.0f,0.0f };
+
+	//チャージ中の左右入力時の回転量
 	float KeyBoardRotateY = 0.0f;
 	
+	//カメラの振動時間
 	float cameraShakeTime = 0.0f;
+
+	//ジャンプ時の一時的に代入する値
 	float Jumpheight = 0.0f;
 
-	float cameraInitX = 0.0f;
-	float cameraInitY = 0.0f;
-	float cameraInitZ = 0.0f;
+	//カメラの初期化位置
+	XMFLOAT3 CameraInit = { 0,0,0 };
 
+	//左右入力時のカメラの回転量
 	float cameraRotate = 0.0f;
+
+	//上下入力時のカメラの高さの最高値
 	float cameraUpperLimit = 0.0f;
+
+	//上下入力時のカメラの高さの最低値
 	float cameraLowerLimit = 0.0f;
+
+	//デバッグカメラ状態時のカメラの固定位置
 	float cameraDebugPos = 0.0f;
 }
 
@@ -61,10 +75,14 @@ Player::~Player()
 
 void Player::Initialize()
 {
+	//csvからパラメータ読み込み
 	std::string path = "CSVdata\\PlayerData.csv";
 	SetcsvStatus(path);
+
+	//csvからパラメータ読み込み(Playerのみ使う情報)
 	SetCSVPlayer();
 
+	//各モデルの読み込み
 	hPlayer_ = Model::Load("Model\\chara.fbx");
 	assert(hPlayer_ >= 0);
 
@@ -74,22 +92,28 @@ void Player::Initialize()
 	InitArrow();
 	SetStartPosition();
 	
+	//当たり判定付ける
 	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),HitParam_. ColliderSize_);
 	this->AddCollider(collider);
 
+	//バックカメラの初期値をセット 自分の位置に固定値を足す
 	XMVECTOR cameraAdd = XMLoadFloat3(&this->transform_.position_);
-	BackCamera_ = { BackCameraPos + cameraAdd };//バックカメラの初期値をセット
+	BackCamera_ = { BackCameraPos + cameraAdd };
+
+	//カメラのトランスフォームを設定
 	cameraTransform_ = this->transform_;
-	CameraPosition_ = { this->transform_.position_.x + cameraInitX
-	,this->transform_.position_.y + cameraInitY, this->transform_.position_.z + cameraInitZ };
+
+	//カメラの位置を設定 自分の位置に固定値を足す
+	CameraPosition_ = { this->transform_.position_ + CameraInit };
+
+	//カメラの焦点を設定
 	CameraTarget_ = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 }
 
 void Player::Update()
 {
-	cameraTransform_.position_ = this->transform_.position_;
-
-	ShadowSet();
+	//カメラの位置を更新
+	//cameraTransform_.position_ = this->transform_.position_;
 
 	switch (PlayerState_)
 	{
@@ -115,14 +139,19 @@ void Player::Update()
 		break;
 	}
 
+	//柵に接触してないなら値を更新
 	if(!(PlayerState_ == S_WALLHIT))
 	{
 		InvincibilityTimeCalclation();
 	}
 
+	//毎フレーム影の位置を更新
+	ShadowSet();
+
+	//毎フレーム重力をかけ続ける
 	CharacterGravity();
 
-	//カメラの更新
+	//毎フレームカメラの更新
 	CameraUpdate();
 
 #ifdef _DEBUG
@@ -356,8 +385,8 @@ void Player::UpdateStop()
 
 void Player::SetJump()
 {
-	JumpParam_. IsOnGround_ = false;
-	JumpParam_. JumpSpeed_ = Jumpheight;//一時的にy方向にマイナスされている値を大きくする
+	JumpParam_.IsOnGround_ = false;
+	JumpParam_.JumpSpeed_ = Jumpheight;//一時的にy方向にマイナスされている値を大きくする
 }
 
 void Player::CameraControl()
@@ -487,9 +516,7 @@ void Player::SetCSVPlayer()
 		KeyBoardRotateY = v[i_keyboardrotateY];
 		cameraShakeTime = v[i_camerashaketime];
 		Jumpheight = v[i_jumpheight];
-		cameraInitX = v[i_camerainitx];
-		cameraInitY = v[i_camerainity];
-		cameraInitZ = v[i_camerainitz];
+		CameraInit = { v[i_camerainitx] ,v[i_camerainity] , v[i_camerainitz] };
 		cameraRotate = v[i_camerarotate];
 		cameraUpperLimit = v[i_cameraupperlimit];
 		cameraLowerLimit = v[i_cameralowerlimit];

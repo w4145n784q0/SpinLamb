@@ -139,10 +139,10 @@ void Camera::SetCSVCamera()
 	if (csv.IsGetParamName(camera))
 	{
 		std::vector<float> v = csv.GetParam(camera);
-
+		
 		ShakeSpeed = v[i_shakeSpeed];
-		float ShakeWidth = v[i_shakeWidth];
-		float frame = v[i_frame];
+		ShakeWidth = v[i_shakeWidth];
+		frame = v[i_frame];
 		InitPosition = { v[i_initPositionX],  v[i_initPositionY],  v[i_initPositionZ] };
 		InitTarget = { v[i_initTargetX],  v[i_initTargetY],  v[i_initTargetZ] };
 	}
