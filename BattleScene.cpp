@@ -24,7 +24,8 @@ BattleScene::BattleScene(GameObject* parent)
 	:BaseScene(parent,"BattleScene") ,BattleState_(S_BEFORE),
 	 hBackScreen_(-1),hSoundBattle_(-1), hSoundWhistle_(-1),
 	PlayerScore_(0),EnemyScore_(0),
-	pPlayer_(nullptr),pEnemy_(nullptr),pHUD_(nullptr),pMiniMap_(nullptr),pGameTimer_(nullptr)
+	pPlayer_(nullptr),pEnemy_(nullptr),pHUD_(nullptr),pMiniMap_(nullptr),
+	pGameTimer_(nullptr),pTransitionEffect_(nullptr)
 {
 }
 
@@ -44,6 +45,7 @@ void BattleScene::Initialize()
 	Instantiate<MiniMap>(this);
 	Instantiate<GameTimer>(this);
 	Instantiate<HUD>(this);
+	Instantiate<TransitionEffect>(this);
 
 	//StageManagerからPlayer,Enemyのインスタンスを生成
 	StageManager* pSceneManager = (StageManager*)FindObject("StageManager");
@@ -69,6 +71,7 @@ void BattleScene::Initialize()
 	pGameTimer_ = (GameTimer*)FindObject("GameTimer");
 	pMiniMap_ = (MiniMap*)FindObject("MiniMap");
 	pHUD_ = (HUD*)FindObject("HUD");
+	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
 
 	//GameTimer,MiniMapのポインタを渡す
 	//HUDクラスと同じポインタを渡すことで値の相違を防ぐ
@@ -155,21 +158,29 @@ void BattleScene::UpdateActive()
 
 void BattleScene::UpdateTransition()
 {
-	//UpdateBattleAfterが終了したらすぐにシーン遷移
 
-	//SceneManagerのインスタンスからタイトルシーンへ
-	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-	pSceneManager->ChangeScene(SCENE_ID_RESULT);
+	//時間経過で次のシーンに遷移
+	//カウント中はシーン遷移エフェクト行う
+	if (++SceneTransitionTimer_ > SceneShortTransition)
+	{
 
-	//Player,Enemyのスコアを渡す
-	pSceneManager->SetPlayerScore(PlayerScore_);
-	pSceneManager->SetEnemyScore(EnemyScore_);
+		//SceneManagerのインスタンスからタイトルシーンへ
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		pSceneManager->ChangeScene(SCENE_ID_RESULT);
 
-	//バトル用サウンド停止
-	Audio::Stop(hSoundBattle_);
+		//Player,Enemyのスコアを渡す
+		pSceneManager->SetPlayerScore(PlayerScore_);
+		pSceneManager->SetEnemyScore(EnemyScore_);
 
-	//ゲームシーン状態を通常に戻しておく
-	SceneState_ = S_Active;
+		//シーン遷移用タイマーを戻す
+		SceneTransitionTimer_ = 0;
+
+		//バトル用サウンド停止
+		Audio::Stop(hSoundBattle_);
+
+		//ゲームシーン状態を通常に戻しておく
+		SceneState_ = S_Active;
+	}
 }
 
 void BattleScene::UpdateBattleBefore()
@@ -249,19 +260,31 @@ void BattleScene::UpdateBattleAfter()
 
 		//シーン遷移タイマーをリセット
 		StateCounter = 0;
+
+		//シーン遷移エフェクト(ズームイン)を設定
+		pTransitionEffect_->FadeOutStartWhite();
+		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
+
 	}
 }
 
 void BattleScene::SetCSVBattle()
 {
-
+	//各画像を表示する際のトランスフォーム初期化
 	CsvReader csv;
 	csv.Load("CSVdata\\BattleData.csv");
 
+	//csvファイルの各0列目の文字列を取得
 	std::string pos = "Position";
+
+	//指定した文字列がいずれかの0列目に存在したら
 	if (csv.IsGetParamName(pos))
 	{
+		//その行を配列として全取得
 		std::vector<float> v = csv.GetParam(pos);
+
+		//初期化の順番はcsvの各行の順番に合わせる
+		//vの添え字はnamespaceで宣言した列挙型を使用
 		GameTimeLimit = static_cast<int>(v[i_gametimelimit]);
 	}
 }

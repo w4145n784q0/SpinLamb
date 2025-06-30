@@ -214,6 +214,8 @@ void GameModeScene::UpdateActive()
 			--itr;
 		}
 		SelectMode_ = *itr;
+
+		//選択SE再生
 		Audio::Play(hSoundSelect_);
 	}
 	if (Input::IsKeyDown(DIK_DOWN) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN))
@@ -227,6 +229,8 @@ void GameModeScene::UpdateActive()
 			++itr;
 		}
 		SelectMode_ = *itr;
+
+		//選択SE再生
 		Audio::Play(hSoundSelect_);
 	}
 
@@ -248,6 +252,8 @@ void GameModeScene::UpdateActive()
 	{
 		//決定音を再生
 		Audio::Play(hSoundDecide_);
+
+		//UpdateTransitionへ遷移
 		SceneState_ = S_Transition;
 
 		//シーン遷移エフェクト(ズームイン)を設定

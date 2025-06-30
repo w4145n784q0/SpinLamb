@@ -18,6 +18,9 @@ HowToPlayScene::~HowToPlayScene()
 
 void HowToPlayScene::Initialize()
 {
+	//各クラス生成
+	Instantiate<TransitionEffect>(this);
+
 	//各画像・サウンドの読み込み
 
 	//同じディレクトリ内からのパスは省略
@@ -127,7 +130,7 @@ void HowToPlayScene::UpdateTransition()
 	//時間経過で次のシーンに遷移
 	//カウント中はシーン遷移エフェクト行う
 
-	if (++SceneTransitionTimer_ > SceneTransition)
+	if (++SceneTransitionTimer_ > SceneShortTransition)
 	{
 		//SceneManagerのインスタンスからタイトルシーンへ
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");

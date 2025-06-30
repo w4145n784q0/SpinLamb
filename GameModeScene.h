@@ -106,9 +106,6 @@ private:
 	std::list<Mode>::iterator itr;
 	
 
-
-
-
 	//----------インスタンス----------
 	TransitionEffect* pTransitionEffect_;
 	

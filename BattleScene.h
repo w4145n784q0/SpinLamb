@@ -8,6 +8,8 @@
 #include"MiniMap.h"
 #include"HUD.h"
 
+#include"TransitionEffect.h"
+
 //"バトル"から始まるモードシーン
 class BattleScene :
 	public BaseScene
@@ -54,6 +56,10 @@ private:
 
 	//敵のスコア
 	int EnemyScore_;
+
+	//----------インスタンス----------
+	TransitionEffect* pTransitionEffect_;
+
 
 public:
 	BattleScene(GameObject* parent);
