@@ -367,7 +367,7 @@ void Enemy::UpdateHit()
 	if (IsKnockBackEnd())
 	{
 		//ノックバック速度を0に戻しておく
-		HitParam_. KnockBack_Velocity_ = { 0,0,0 };
+		HitParam_.KnockBack_Velocity_ = { 0,0,0 };
 
 		//ルートへ戻る
 		EnemyState_ = S_ROOT;

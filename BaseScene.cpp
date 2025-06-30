@@ -17,6 +17,7 @@ BaseScene::~BaseScene()
 
 void BaseScene::Update()
 {
+	//現在のシーンの状態(通常・遷移中)によって更新を分ける
 	//この処理は継承先のUpdateで必ず呼ぶ
 	switch (SceneState_)
 	{

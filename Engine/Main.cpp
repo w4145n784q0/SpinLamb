@@ -155,6 +155,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				Direct3D::BeginDraw();
 
 #ifdef _DEBUG
+				//ImGuiをセット
+				//以降全シーンでImGuiを記述することで使用可能となる
 				ImGui::Begin("config");
 #endif
 				//全オブジェクトを描画
@@ -166,6 +168,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 				//描画終了
 #ifdef _DEBUG
+
+				//ImGuiを終了する
 				ImGui::End();
 #endif
 				Direct3D::EndDraw();

@@ -20,6 +20,7 @@ namespace {
 		i_backcameraZ,
 		i_keyboardrotateY,
 		i_camerashaketime,
+		i_movevalue,
 		i_jumpheight,
 		i_camerainitx,
 		i_camerainity,
@@ -39,6 +40,9 @@ namespace {
 	
 	//カメラの振動時間
 	float cameraShakeTime = 0.0f;
+
+	//キーボード入力時、Direction_に加算される値
+	float MoveValue = 0.0f;
 
 	//ジャンプ時の一時的に代入する値
 	float Jumpheight = 0.0f;
@@ -262,19 +266,19 @@ void Player::UpdateIdle()
 	//上下左右キーが押されたら
 	if (Input::IsKey(DIK_UP))
 	{
-		Direction_.z += 1.0f;
+		Direction_.z += MoveValue;
 	}
 	if (Input::IsKey(DIK_DOWN))
 	{
-		Direction_.z -= 1.0f;
+		Direction_.z -= MoveValue;
 	}
 	if (Input::IsKey(DIK_LEFT))
 	{
-		Direction_.x -= 1.0f;
+		Direction_.x -= MoveValue;
 	}
 	if (Input::IsKey(DIK_RIGHT))
 	{
-		Direction_.x += 1.0f;
+		Direction_.x += MoveValue;
 	}
 
 	//キーボードの入力した分を実際に移動
@@ -652,6 +656,7 @@ void Player::SetCSVPlayer()
 		BackCameraPos = { v[i_backcameraX], v[i_backcameraY], v[i_backcameraZ] };
 		KeyBoardRotateY = v[i_keyboardrotateY];
 		cameraShakeTime = v[i_camerashaketime];
+		MoveValue = v[i_movevalue];
 		Jumpheight = v[i_jumpheight];
 		CameraInit = { v[i_camerainitx] ,v[i_camerainity] , v[i_camerainitz] };
 		cameraRotate = v[i_camerarotate];

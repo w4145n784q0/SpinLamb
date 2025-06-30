@@ -44,9 +44,9 @@ private:
 
 	//Ÿ”só‘Ô(ó‘Ô‚É‰‚¶‚Äˆ—‚ğ•Ï‰»‚³‚¹‚é)
 	enum WinnerState {
-		YOU_WIN = 0,
-		CPU_WIN,
-		DRAW,
+		YOU_WIN = 0,//Player‚ÌŸ—˜
+		CPU_WIN,//Enemy‚ÌŸ—˜
+		DRAW,//ˆø‚«•ª‚¯
 		RESULTMAX
 	};
 	WinnerState winner_;

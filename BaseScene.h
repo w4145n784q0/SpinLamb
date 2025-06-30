@@ -9,6 +9,7 @@ class BaseScene :
 protected:
 
 	//ゲームシーン全般の状態
+	//これらの値に応じて各Update関数を呼び出す
 	enum SceneState
 	{
 		S_Active = 0,//通常

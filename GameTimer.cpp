@@ -25,6 +25,7 @@ void GameTimer::Initialize()
 
 void GameTimer::Update()
 {
+	//Œ»İ‚ÌŠÔ‚Ìó‘Ô‚É‚æ‚Á‚ÄXV‚ğ•ª‚¯‚é
 	switch (TimeState_)
 	{
 	case GameTimer::STOP:

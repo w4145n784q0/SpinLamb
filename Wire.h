@@ -2,6 +2,7 @@
 #include "Engine/GameObject.h"
 
 //柵の当たり判定・法線を扱う基底クラス
+//前後左右の柵クラスはこのクラスを継承し、各自で当たり判定と法線を持つ
 class Wire :
     public GameObject
 {

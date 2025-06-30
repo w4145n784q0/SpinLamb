@@ -20,7 +20,9 @@ private:
 	int Timeone_;
 
 	//時間の状態
-	enum TimeState {
+	//これらの値に応じて各Update関数を呼び出す
+	enum TimeState
+	{
 		STOP = 0,  //待機中
 		COUNTING, //カウント中
 		MAXTIME 

@@ -7,6 +7,7 @@
 namespace {
 	
 	//ƒLƒƒƒ‰ƒNƒ^[ƒNƒ‰ƒX‚Ì‹¤’Ê•Ï”‚ð‰Šú‰»‚·‚éƒCƒ“ƒfƒbƒNƒX
+	//‰Šú‰»ŠÖŒW
 	enum InitializeIndex
 	{
 		i_posX = 0,
@@ -23,6 +24,7 @@ namespace {
 		i_frontZ,
 	};
 
+	//ˆÚ“®ŠÖŒW
 	enum moveIndex
 	{
 		i_vel = 0,
@@ -38,12 +40,14 @@ namespace {
 		i_addarrowdepth
 	};
 
+	//‰ñ“]ŠÖŒW
 	enum RotateIndex
 	{
 		i_moverot = 0,
 		i_fastrot ,
 	};
 
+	//‹ó’†ŠÖŒW
 	enum JumpIndex
 	{
 		i_gravity = 0,
@@ -51,6 +55,7 @@ namespace {
 		i_lowerlimit,
 	};
 
+	//”í’eŠÖŒW
 	enum HitIndex
 	{
 		i_collider = 0,
@@ -63,6 +68,7 @@ namespace {
 		i_knockbackend,
 	};
 
+	//ò‚ÉÚGŠÖŒW
 	enum WallHitIndex
 	{
 		i_knockbackpower = 0,
@@ -71,6 +77,7 @@ namespace {
 
 	};
 
+	//‰e•t‚¯ŠÖŒW
 	enum ShadowIndex
 	{
 		i_shadowcorrection = 0,
@@ -309,6 +316,13 @@ void Character::GetWireNormal()
 		 WallHitParam_.RightNormal_, WallHitParam_.LeftNormal_, };
 }
 
+void Character::InitArrow()
+{
+	MoveParam_.ArrowTransform_.position_ = { 0.0f,0.0f, 0.0f };
+	MoveParam_.ArrowTransform_.rotate_ = MoveParam_.ArrowRotate_;
+	MoveParam_.ArrowTransform_.scale_ = MoveParam_.ArrowScale_;
+}
+
 void Character::DrawCharacterModel(int _handle, Transform _transform)
 {
 	//–³“GŽžŠÔ’†‚©‚Ç‚¤‚©‚Åƒ‚ƒfƒ‹‚Ì“_–Å•\Œ»‚ðs‚¤
@@ -486,8 +500,6 @@ void Character::ShadowDraw()
 {
 	//ShadowSet‚ÅˆÊ’u‚ðÝ’è‚µ‚½‰e‚ð•`‰æ
 	Model::SetAndDraw(ShadowParam_.hShadow_, this->ShadowParam_.ShadowTrans_);
-	//Model::SetTransform(ShadowParam_.hShadow_, this->ShadowParam_.ShadowTrans_);
-	//Model::Draw(ShadowParam_.hShadow_);
 }
 
 void Character::CharacterMove(XMVECTOR _direction)

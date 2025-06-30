@@ -124,7 +124,6 @@ protected:
 	std::vector<float> AttackLocusParam_ = {};//突撃エフェクトのパラメータ
 	std::vector<float> HitEffectParam_ = {};//接触時の衝撃エフェクトのパラメータ
 	std::vector<float> WallHitEffectParam_ = {};//壁に接触時の衝撃エフェクトのパラメータ
-	//std::vector<std::vector<float>> EffectArray_ = {};//エフェクトパラメータをまとめる配列
 
     //----------サウンド関連----------
     int ChargeSoundCount_ = 0;//チャージ音を鳴らす回数
@@ -135,7 +134,11 @@ public:
     Character(GameObject* parent, const std::string& name);
 
     virtual ~Character();
+
+    //更新(継承先の共通処理のみ行う)
     void Update() override;
+
+    //描画(継承先の共通描画のみ行う)
     void Draw() override;
 
     //----------初期化----------
@@ -157,11 +160,10 @@ public:
     /// </summary>
     void SetStartPosition() { this->transform_.position_ = InitParam_.StartPosition_; }
 
-    void InitArrow() {
-        MoveParam_.ArrowTransform_.position_ = { 0.0f,0.0f, 0.0f };
-        MoveParam_.ArrowTransform_.rotate_ = MoveParam_.ArrowRotate_;
-        MoveParam_.ArrowTransform_.scale_ = MoveParam_.ArrowScale_;
-    }
+    /// <summary>
+    /// 矢印トランスフォームの初期化
+    /// </summary>
+    void InitArrow();
   
     //----------描画----------
 

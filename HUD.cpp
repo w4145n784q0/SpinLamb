@@ -324,6 +324,7 @@ void HUD::DrawTimer()
 
 	if(pGameTimer_ != nullptr)
 	{
+		//Œ»Ý‚ÌŽžŠÔ(\‚ÌˆÊ,ˆê‚ÌˆÊ)‚ðŽæ“¾
 		TimeIndexTen = pGameTimer_->GetTimeTen();
 		TimeIndexOne = pGameTimer_->GetTimeOne();
 
