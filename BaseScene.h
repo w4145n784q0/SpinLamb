@@ -24,6 +24,7 @@ public:
 	BaseScene(GameObject* parent, const std::string& name);
 	virtual ~BaseScene();
 
+	//更新
 	void Update() override;
 
 	//以下の処理は純粋仮想関数のため、継承先で必ずオーバーライド

@@ -5,12 +5,12 @@
 //ゲームに登場するシーン
 enum SCENE_ID
 {
-	SCENE_ID_TITLE = 0,
-	SCENE_ID_GAMEMODE,
-	SCENE_ID_BATTLE,
-	SCENE_ID_PRACTICE,
-	SCENE_ID_HOWTOPLAY,
-	SCENE_ID_RESULT,
+	SCENE_ID_TITLE = 0,//タイトル
+	SCENE_ID_GAMEMODE,//ゲームモード選択
+	SCENE_ID_BATTLE,//バトル
+	SCENE_ID_PRACTICE,//フリープレイ(練習)
+	SCENE_ID_HOWTOPLAY,//あそびかた
+	SCENE_ID_RESULT,//リザルト
 };
 
 //-----------------------------------------------------------

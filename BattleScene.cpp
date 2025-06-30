@@ -218,8 +218,6 @@ void BattleScene::UpdateBattleReady()
 
 		//ホイッスルSE再生
 		Audio::Play(hSoundWhistle_);
-
-		//pHUD_->SetStartReady();
 	}
 }
 
