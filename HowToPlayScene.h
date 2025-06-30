@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"BaseScene.h"
+#include"TransitionEffect.h"
 
 //あそびかた説明シーン
 class HowToPlayScene :
@@ -22,11 +23,12 @@ private:
 	int hSoundHowtoPlay_;
 	
 	//表示画像ステート
+	//これらの値に応じてDrawで描画する画像を変える
 	enum HowtoImage 
 	{
-		Explanation = 0,
-		OperateKeyBoard,
-		OperateController,
+		Explanation = 0,//ゲーム説明
+		OperateKeyBoard,//操作方法(キーボード)
+		OperateController,//操作方法(コントローラ)
 	};
 	HowtoImage ImageState_;
 
@@ -35,6 +37,9 @@ private:
 
 	//ModeList_のインデックスを指す値
 	std::list<HowtoImage>::iterator itr;
+
+	//----------インスタンス----------
+	TransitionEffect* pTransitionEffect_;
 
 public:
 	HowToPlayScene(GameObject* parent);

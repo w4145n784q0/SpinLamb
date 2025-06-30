@@ -113,21 +113,23 @@ void GameModeScene::Update()
 
 void GameModeScene::Draw()
 {
-	Image::SetTransform(hBackScreen_, this->transform_);
-	Image::Draw(hBackScreen_);
+	//背景描画
+	Image::SetAndDraw(hBackScreen_, this->transform_);
 
-	Image::SetTransform(hBackChara_, BackChara_);
-	Image::Draw(hBackChara_);
+	//背景のキャラクターの影描画
+	Image::SetAndDraw(hBackChara_, BackChara_);
 
-	Image::SetTransform(hModeSelect_, TransSelect_);
-	Image::Draw(hModeSelect_);
+	//モードセレクトのテキスト画像描画
+	Image::SetAndDraw(hModeSelect_, TransSelect_);
 
+	//各モードのボタン画像描画
 	for(int i = 0; i < ModeTransArray_.size(); i++)
 	{
-		Image::SetTransform(ButtonImageArray_[i], ModeTransArray_[i]);
-		Image::Draw(ButtonImageArray_[i]);
+		Image::SetAndDraw(ButtonImageArray_[i], ModeTransArray_[i]);
+		//Image::Draw(ButtonImageArray_[i]);
 	}
 
+	//選択中のテキストの描画(現在選択しているモードによって変化)
 	switch (SelectMode_)
 	{
 	case GameModeScene::S_Battle:
@@ -135,18 +137,35 @@ void GameModeScene::Draw()
 	case GameModeScene::S_HowToPlay:
 	case GameModeScene::S_Title:
 	{
-		Image::SetTransform(TextArray_[SelectMode_], TransText_);
-		Image::Draw(TextArray_[SelectMode_]);
+		Image::SetAndDraw(TextArray_[SelectMode_], TransText_);
+		//Image::Draw(TextArray_[SelectMode_]);
 	}
 		break;
 	default:
 		break;
 	}
 
-	Image::SetTransform(hFrameLine_, TransFrame_);
-	Image::Draw(hFrameLine_);
+	//選択枠の描画
+	Image::SetAndDraw(hFrameLine_, TransFrame_);
 
 #ifdef _DEBUG
+	//各画像トランスフォームの位置変更
+
+	ImGui::SliderFloat("BackCharaX", &BackChara_.position_.x, Image::LeftEdge, Image::RightEdge);
+	ImGui::SliderFloat("BackCharaY", &BackChara_.position_.y, Image::UpEdge, Image::DownEdge);
+
+	ImGui::SliderFloat("TransSelectX", &TransSelect_.position_.x, Image::LeftEdge, Image::RightEdge);
+	ImGui::SliderFloat("TransSelectY", &TransSelect_.position_.y, Image::UpEdge, Image::DownEdge);
+
+	ImGui::SliderFloat("TransTextX", &TransText_.position_.x, Image::LeftEdge, Image::RightEdge);
+	ImGui::SliderFloat("TransTextY", &TransText_.position_.y, Image::UpEdge, Image::DownEdge);
+
+	for (int i = 0; i < ModeTransArray_.size(); i++)
+	{
+		ImGui::SliderFloat((ParamArray[i] + "X").c_str(), &ModeTransArray_[i].position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat((ParamArray[i] + "Y").c_str(), &ModeTransArray_[i].position_.y, Image::UpEdge, Image::DownEdge);
+	}
+
 #endif
 }
 
@@ -233,7 +252,7 @@ void GameModeScene::UpdateActive()
 
 		//シーン遷移エフェクト(ズームイン)を設定
 		pTransitionEffect_->ZoomInStart();
-		pTransitionEffect_->SetTransitionTime(SceneTransition);
+		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
 	}
 }
 

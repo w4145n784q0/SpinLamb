@@ -44,8 +44,7 @@ void TitleScene::Update()
 void TitleScene::Draw()
 {
 	//”wŒi•`‰æ
-	Image::SetTransform(hBackScreen_, this->transform_);
-	Image::Draw(hBackScreen_);
+	Image::SetAndDraw(hBackScreen_, this->transform_);
 }
 
 void TitleScene::Release()
