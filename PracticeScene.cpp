@@ -82,8 +82,7 @@ void PracticeScene::Update()
 void PracticeScene::Draw()
 {
 	//”wŒi•`‰æ
-	Image::SetTransform(hBackScreen_, this->transform_);
-	Image::Draw(hBackScreen_);
+	Image::SetAndDraw(hBackScreen_, this->transform_);
 
 	//HUDƒNƒ‰ƒX‚É—ûKƒ‚[ƒh’†‚Å‚ ‚é‚±‚Æ‚ð•`‰æŽwŽ¦
 	pHUD_->SetDrawMode(S_Practice);

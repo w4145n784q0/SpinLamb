@@ -150,22 +150,25 @@ void GameModeScene::Draw()
 
 #ifdef _DEBUG
 	//各画像トランスフォームの位置変更
-
-	ImGui::SliderFloat("BackCharaX", &BackChara_.position_.x, Image::LeftEdge, Image::RightEdge);
-	ImGui::SliderFloat("BackCharaY", &BackChara_.position_.y, Image::UpEdge, Image::DownEdge);
-
-	ImGui::SliderFloat("TransSelectX", &TransSelect_.position_.x, Image::LeftEdge, Image::RightEdge);
-	ImGui::SliderFloat("TransSelectY", &TransSelect_.position_.y, Image::UpEdge, Image::DownEdge);
-
-	ImGui::SliderFloat("TransTextX", &TransText_.position_.x, Image::LeftEdge, Image::RightEdge);
-	ImGui::SliderFloat("TransTextY", &TransText_.position_.y, Image::UpEdge, Image::DownEdge);
-
-	for (int i = 0; i < ModeTransArray_.size(); i++)
+	if (ImGui::TreeNode("GameModeSelect"))
 	{
-		ImGui::SliderFloat((ParamArray[i] + "X").c_str(), &ModeTransArray_[i].position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat((ParamArray[i] + "Y").c_str(), &ModeTransArray_[i].position_.y, Image::UpEdge, Image::DownEdge);
-	}
+		ImGui::SliderFloat("BackCharaX", &BackChara_.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("BackCharaY", &BackChara_.position_.y, Image::UpEdge, Image::DownEdge);
 
+		ImGui::SliderFloat("TransSelectX", &TransSelect_.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("TransSelectY", &TransSelect_.position_.y, Image::UpEdge, Image::DownEdge);
+
+		ImGui::SliderFloat("TransTextX", &TransText_.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("TransTextY", &TransText_.position_.y, Image::UpEdge, Image::DownEdge);
+
+		for (int i = 0; i < ModeTransArray_.size(); i++)
+		{
+			ImGui::SliderFloat((ParamArray[i] + "X").c_str(), &ModeTransArray_[i].position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat((ParamArray[i] + "Y").c_str(), &ModeTransArray_[i].position_.y, Image::UpEdge, Image::DownEdge);
+		}
+
+		ImGui::TreePop();
+	}
 #endif
 }
 
@@ -179,19 +182,19 @@ void GameModeScene::SetGameModeSCV()
 	CsvReader csv;
 	csv.Load("CSVdata\\GameModeData.csv");
 
-	//選択枠
+	//選択枠のトランスフォーム初期化
 	InitCSVTransform(csv, "FrameLine", TransFrame_);
 
-	//各ボタン
+	//各ボタンのトランスフォーム初期化
     for (int i = 0; i < sizeof(ParamArray) / sizeof(ParamArray[0]); i++)
     {
 		InitCSVTransform(csv, ParamArray[i], ModeTransArray_[i]);
     }
 
-	//"モードセレクト"
+	//"モードセレクト"のトランスフォーム初期化
 	InitCSVTransform(csv, "ModeSelect", TransSelect_);
 
-	//画面下部のテキスト
+	//画面下部のテキストのトランスフォーム初期化
 	InitCSVTransform(csv, "Text", TransText_);
 }
 

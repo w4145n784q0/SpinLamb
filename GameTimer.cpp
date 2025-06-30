@@ -48,6 +48,7 @@ void GameTimer::Release()
 
 void GameTimer::UpdateTimeStop()
 {
+	//’â~’†‚àŒvZ‚Ís‚¤
 	TimeCalclation();
 }
 
@@ -60,6 +61,8 @@ void GameTimer::UpdateTimeCount()
 		{
 			CurrentGameTime_--;
 		}
+
+		//ˆê•bŒo‰ß‚Ì“x‚ÉŒvZ
 		TimeCalclation();
 		Timecounter = 0;
 	}

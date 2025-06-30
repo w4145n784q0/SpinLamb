@@ -76,30 +76,28 @@ void TransitionEffect::Draw()
 	case TransitionEffect::S_FadeOutBlack:
 	case TransitionEffect::S_FadeInBlack:
 	{
-		Image::SetTransform(hFadeBlack_, FadeEffect_.FadeTransform_);
-		Image::SetAlpha(hFadeBlack_, FadeEffect_.AlphaValue_);
-		Image::Draw(hFadeBlack_);
+		//黒いフェードイン/アウト描画
+		Image::SetAlphaAndDraw(hFadeBlack_, FadeEffect_.AlphaValue_, FadeEffect_.FadeTransform_);
 	}
 		break;
 	case TransitionEffect::S_FadeOutWhite:
 	case TransitionEffect::S_FadeInWhite:
 	{
-		Image::SetTransform(hFadeWhite_, FadeEffect_.FadeTransform_);
-		Image::SetAlpha(hFadeWhite_, FadeEffect_.AlphaValue_);
-		Image::Draw(hFadeWhite_);
+		//白いフェードイン/アウト描画
+		Image::SetAlphaAndDraw(hFadeWhite_, FadeEffect_.AlphaValue_, FadeEffect_.FadeTransform_);
 	}
 		break;
 	case TransitionEffect::S_SlideInLTR:
 	{
-		Image::SetTransform(hFadeBlack_, SlideEffect_.SlideTransform_);
-		Image::Draw(hFadeBlack_);
+		//左から右にスライドインする描画
+		Image::SetAndDraw(hFadeBlack_, SlideEffect_.SlideTransform_);
 	}
 		break;
 	case TransitionEffect::S_ZoomIn:
 	case TransitionEffect::S_ZoomOut:
 	{
-		Image::SetTransform(hZoomSheep_, ZoomEffect_.ZoomTransform_);
-		Image::Draw(hZoomSheep_);
+		//ズームイン/アウトする描画
+		Image::SetAndDraw(hZoomSheep_, ZoomEffect_.ZoomTransform_);
 	}
 		break;
 	default:

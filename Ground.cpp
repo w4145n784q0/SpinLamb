@@ -30,9 +30,29 @@ void Ground::Draw()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Ground"))
 	{
-		ImGui::InputFloat("PositionX", &this->transform_.position_.x);
-		ImGui::InputFloat("PositionY", &this->transform_.position_.y);
-		ImGui::InputFloat("PositionZ", &this->transform_.position_.z);
+		if (ImGui::TreeNode("GroundPosition"))
+		{
+			ImGui::InputFloat("PositionX", &this->transform_.position_.x);
+			ImGui::InputFloat("PositionY", &this->transform_.position_.y);
+			ImGui::InputFloat("PositionZ", &this->transform_.position_.z);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("GroundRotate"))
+		{
+			ImGui::InputFloat("PositionX", &this->transform_.rotate_.x);
+			ImGui::InputFloat("PositionY", &this->transform_.rotate_.y);
+			ImGui::InputFloat("PositionZ", &this->transform_.rotate_.z);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("GroundScale"))
+		{
+			ImGui::InputFloat("PositionX", &this->transform_.scale_.x);
+			ImGui::InputFloat("PositionY", &this->transform_.scale_.y);
+			ImGui::InputFloat("PositionZ", &this->transform_.scale_.z);
+			ImGui::TreePop();
+		}
 
 		ImGui::TreePop();
 	}

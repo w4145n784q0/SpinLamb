@@ -84,12 +84,12 @@ private:
 	};
 	GameMode GameModeHUD_;
 
+	//描画モードを格納する変数
+	DrawMode DrawMode_;
+
 	//----------インスタンス----------
 	GameTimer* pGameTimer_;//hud側から操作する場合のタイマークラスポインタ
 	MiniMap* pMiniMap_;
-
-	//描画モードを格納する変数
-	DrawMode DrawMode_;
 
 	//プレイヤーのスコア
 	int PlayerScore_;
@@ -97,8 +97,20 @@ private:
 	//CPUのスコア
 	int EnemyScore_;
 
+	//----------DrawStartで呼ぶ状態遷移----------
+	enum DrawStartMode
+	{
+		start_ready = 0,
+		start_go,
+		start_max
+	};
+	DrawStartMode DrawStart_;
+
 	//	DrawReady()からDrawGo()に遷る際のタイマー
 	int ReadyTimer_;
+
+	//イージング使用時のカウンター
+	float EasingCount_ = 0;
 
 public:
 	HUD(GameObject* parent);

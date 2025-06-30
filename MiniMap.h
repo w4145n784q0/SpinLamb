@@ -13,7 +13,11 @@ private:
 	Enemy* pEnemy_;
 
 	//----------マップ上の位置----------
+
+	//Playerの位置
 	XMFLOAT3 playerPos_;
+
+	//Enemyの位置
 	XMFLOAT3 enemyPos_;
 
 public:

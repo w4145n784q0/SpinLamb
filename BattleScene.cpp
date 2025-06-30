@@ -107,8 +107,7 @@ void BattleScene::Update()
 void BattleScene::Draw()
 {
 	//背景描画
-	Image::SetTransform(hBackScreen_, this->transform_);
-	Image::Draw(hBackScreen_);
+	Image::SetAndDraw(hBackScreen_, this->transform_);
 
 	//今のBattleSceneの状態から、HUDクラスに描画するものを指示
 	switch (BattleState_)
@@ -219,6 +218,8 @@ void BattleScene::UpdateBattleReady()
 
 		//ホイッスルSE再生
 		Audio::Play(hSoundWhistle_);
+
+		//pHUD_->SetStartReady();
 	}
 }
 
@@ -270,7 +271,7 @@ void BattleScene::UpdateBattleAfter()
 
 void BattleScene::SetCSVBattle()
 {
-	//各画像を表示する際のトランスフォーム初期化
+	//csvファイル読み込む
 	CsvReader csv;
 	csv.Load("CSVdata\\BattleData.csv");
 

@@ -72,29 +72,10 @@ void StageManager::Release()
 
 void StageManager::SetStageInitSCV()
 {
+	//csvファイルを読み込む
+	//地面,鉄線,柱の各トランスフォーム初期化
 	CsvReader csv;
 	csv.Load("CSVdata\\StageData.csv");
-
-	//std::string ground = "Ground";
-	//if (csv.IsGetParamName(ground))
-	//{
-	//	std::vector<float> v = csv.GetParam(ground);
-	//	SetTransformPRS(GroundData_, v);
-	//}
-	//
-	//std::string wire = "wire";
-	//if (csv.IsGetParamName(wire))
-	//{
-	//	std::vector<float> v = csv.GetParam(wire);
-	//	SetTransformPRS(WireData_, v);
-	//}
-
-	//std::string piller = "piller";
-	//if (csv.IsGetParamName(piller))
-	//{
-	//	std::vector<float> v = csv.GetParam(piller);
-	//	SetTransformPRS(PillerData_, v);
-	//}
 
 	//csvファイルの各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {

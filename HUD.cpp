@@ -32,15 +32,6 @@ namespace
 		i_max
 	};
 
-	//この状態は他クラスから操作できないようにcppファイルに記述
-	enum DrawStartMode
-	{
-		start_ready = 0,
-		start_go,
-		start_max
-	};
-	DrawStartMode DrawStart;
-
 	//----------画像描画用トランスフォーム----------
 	//"タイトルに戻ります"
 	Transform logo_backtitle;
@@ -102,15 +93,15 @@ namespace
 	int eScoreIndexOne = 0;
 
 	//イージング使用時のカウンター
-	float EasingCount = 0;
+	//float EasingCount = 0;
 
 	//ロゴ変更までのカウンター
 	float LogoChangeCount = 0;
 
-	//startlogo変更の際、どのタイミングで切り替えるか
+	//startlogo変更の際、どのタイミングで切り替えるか(定数)
 	float LogoChange = 0.0f;
 
-	//Go! のロゴの最大拡大率
+	//Go! のロゴの最大拡大率(定数)
 	float MaxScale = 0.0f;
 }
 
@@ -121,7 +112,7 @@ HUD::HUD(GameObject* parent)
 	hNumber5_(-1), hNumber6_(-1), hNumber7_(-1), hNumber8_(-1), hNumber9_(-1),
 	hFinish_(-1), hMap_(-1), hPlayerIcon_(-1), hEnemyIcon_(-1),
 	GameModeHUD_(Max), pGameTimer_(nullptr), pMiniMap_(nullptr), DrawMode_(S_None),
-	PlayerScore_(0),EnemyScore_(0),ReadyTimer_(0)
+	PlayerScore_(0),EnemyScore_(0),ReadyTimer_(0),DrawStart_(start_max)
 
 {
 }
@@ -132,7 +123,7 @@ HUD::~HUD()
 
 void HUD::Initialize()
 {
-	DrawStart = start_ready;
+	DrawStart_ = start_ready;
 
 	//csvからパラメータ読み込み
 	SetHUDCSV();
@@ -309,12 +300,11 @@ void HUD::DrawPracticeLogo()
 	}
 #endif
 
+	//"タイトルに戻ります"ロゴ描画
+	Image::SetAndDraw(hBackTitleLogo_, logo_backtitle);
 
-	Image::SetTransform(hBackTitleLogo_, logo_backtitle);
-	Image::Draw(hBackTitleLogo_);
-
-	Image::SetTransform(hPracticeNow_, logo_practice);
-	Image::Draw(hPracticeNow_);
+	//"練習モード"ロゴ描画
+	Image::SetAndDraw(hPracticeNow_, logo_practice);
 }
 
 void HUD::DrawTimer()
@@ -337,10 +327,9 @@ void HUD::DrawTimer()
 		TimeIndexTen = pGameTimer_->GetTimeTen();
 		TimeIndexOne = pGameTimer_->GetTimeOne();
 
-		Image::SetTransform(ArrayHandle[TimeIndexTen], TenTime);
-		Image::Draw(ArrayHandle[TimeIndexTen]);
-		Image::SetTransform(ArrayHandle[TimeIndexOne], OneTime);
-		Image::Draw(ArrayHandle[TimeIndexOne]);
+		//制限時間の十の位,一の位を描画
+		Image::SetAndDraw(ArrayHandle[TimeIndexTen], TenTime);
+		Image::SetAndDraw(ArrayHandle[TimeIndexOne], OneTime);
 	}
 }
 
@@ -355,8 +344,8 @@ void HUD::DrawExplanation()
 	}
 #endif
 
-	Image::SetTransform(hGameExplanation_, logo_explanation);
-	Image::Draw(hGameExplanation_);
+	//ゲーム説明ロゴ描画
+	Image::SetAndDraw(hGameExplanation_, logo_explanation);
 }
 
 void HUD::DrawStartLogo()
@@ -370,7 +359,10 @@ void HUD::DrawStartLogo()
 	}
 #endif
 
-	switch (DrawStart)
+	//DrawStartの状態によって描画するロゴを切り替える
+	//DrawStart_の状態はstart_ready->start_goの順に変化するが
+	//start_readyに戻る処理はBattleSceneから指示
+	switch (DrawStart_)
 	{
 	case start_ready:
 		DrawReady();
@@ -395,8 +387,8 @@ void HUD::DrawFinishLogo()
 	}
 #endif
 
-	Image::SetTransform(hFinish_, logo_Finish);
-	Image::Draw(hFinish_);
+	//"Finish!"ロゴ描画
+	Image::SetAndDraw(hFinish_, logo_Finish);
 }
 
 void HUD::DrawMiniMap()
@@ -423,14 +415,10 @@ void HUD::DrawMiniMap()
 		EnemyIcon.position_ = pMiniMap_->GetEnemyPos();
 	}
 
-	Image::SetTransform(hMap_, MapIcon);
-	Image::Draw(hMap_);
-
-	Image::SetTransform(hPlayerIcon_, PlayerIcon);
-	Image::Draw(hPlayerIcon_);
-
-	Image::SetTransform(hEnemyIcon_, EnemyIcon);
-	Image::Draw(hEnemyIcon_);
+	//マップ画像,Player,Enemyのアイコン描画
+	Image::SetAndDraw(hMap_, MapIcon);
+	Image::SetAndDraw(hPlayerIcon_, PlayerIcon);
+	Image::SetAndDraw(hEnemyIcon_, EnemyIcon);
 }
 
 void HUD::DrawScore()
@@ -462,27 +450,26 @@ void HUD::DrawScore()
 	eScoreIndexTen = EnemyScore_ / TenDivision;
 	eScoreIndexOne = EnemyScore_ % TenDivision;
 
-	Image::SetTransform(ArrayHandle[pScoreIndexTen], PlayerScoreTen);
-	Image::Draw(ArrayHandle[pScoreIndexTen]);
-	Image::SetTransform(ArrayHandle[pScoreIndexOne], PlayerScoreOne);
-	Image::Draw(ArrayHandle[pScoreIndexOne]);
+	//Playerのスコアの十の位,一の位を描画
+	Image::SetAndDraw(ArrayHandle[pScoreIndexTen], PlayerScoreTen);
+	Image::SetAndDraw(ArrayHandle[pScoreIndexOne], PlayerScoreOne);
 
-	Image::SetTransform(ArrayHandle[eScoreIndexTen], EnemyScoreTen);
-	Image::Draw(ArrayHandle[eScoreIndexTen]);
-	Image::SetTransform(ArrayHandle[eScoreIndexOne], EnemyScoreOne);
-	Image::Draw(ArrayHandle[eScoreIndexOne]);
+	//Enemyのスコアの十の位,一の位を描画
+	Image::SetAndDraw(ArrayHandle[eScoreIndexTen], EnemyScoreTen);
+	Image::SetAndDraw(ArrayHandle[eScoreIndexOne], EnemyScoreOne);
 }
 
 void HUD::DrawReady()
 {
 	if (++LogoChangeCount < ReadyTimer_)
 	{
-		Image::SetTransform(hReady_, logo_start);
-		Image::Draw(hReady_);
+		//"Ready?"のロゴ描画
+		Image::SetAndDraw(hReady_, logo_start);
 	}
 	else
 	{
-		DrawStart = start_go;
+		LogoChangeCount = 0;
+		DrawStart_ = start_go;
 	}
 }
 
@@ -491,15 +478,15 @@ void HUD::DrawGo()
 	//徐々にロゴが拡大する動き
 
 	//カウンターに毎フレーム加算
-	EasingCount += DeltaTime;
+	EasingCount_ += DeltaTime;
 
 	//拡大率をイージング処理で計算
-	float scale = static_cast<float>(Easing::calculateScale(MaxScale, EasingCount));
+	float scale = static_cast<float>(Easing::calculateScale(MaxScale, EasingCount_));
 
 	//トランスフォームの拡大量に代入
 	logo_start.scale_.x = scale;
 	logo_start.scale_.y = scale;
 
-	Image::SetTransform(hGo_, logo_start);
-	Image::Draw(hGo_);
+	//"Go!"のロゴ描画
+	Image::SetAndDraw(hGo_, logo_start);
 }

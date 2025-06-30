@@ -242,5 +242,13 @@ namespace Image
 		SetTransform(handle, transform);
 		Draw(handle);
 	}
+
+	//ワールド行列設定,アルファ値設定,描画を同時に行う
+	void SetAlphaAndDraw(int handle, int alpha, Transform transform)
+	{
+		SetTransform(handle, transform);
+		SetAlpha(handle, alpha);
+		Draw(handle);
+	}
 }
 

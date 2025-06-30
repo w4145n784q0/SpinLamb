@@ -112,4 +112,10 @@ namespace Image
 	//引数：handle	設定したいモデルの番号
 	//引数：transfrom	ワールド行列
 	void SetAndDraw(int handle, Transform transform);
+
+	//ワールド行列設定・透明度設定・描画を同時に行う
+	//引数：handle	設定したいモデルの番号
+	//引数：alpha	透明度(0~255)
+	//引数：transfrom	ワールド行列
+	void SetAlphaAndDraw(int handle, int alpha, Transform transform);
 }

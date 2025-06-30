@@ -26,6 +26,9 @@ namespace
 
 	//柱の位置(XMFLOAT3)の配列
 	std::vector<XMFLOAT3> PillerPosArray = {};
+
+	//Imgui表示用の文字列配列
+	std::string PillerNameArray[] = { "UpperPiller", "LowerPiller", "RightPiller", "LeftPiller" };
 }
 
 Fence::Fence(GameObject* parent)
@@ -40,12 +43,14 @@ Fence::~Fence()
 
 void Fence::Initialize()
 {
+	//各モデル読み込み
 	hPiller_ = Model::Load("Model\\piller.fbx");
 	assert(hPiller_ >= 0);
 
 	hFence_ = Model::Load("Model\\wire.fbx");
 	assert(hFence_ >= 0);
 
+	//前後左右の鉄線クラス生成
 	Instantiate<UpperWire>(this);
 	Instantiate<LowerWire>(this);
 	Instantiate<RightWire>(this);
@@ -64,12 +69,39 @@ void Fence::Draw()
 	{
 		if (ImGui::TreeNode("wire"))
 		{
-			ImGui::InputFloat("PositionX", &wireTransform.position_.x);
-			ImGui::InputFloat("PositionY", &wireTransform.position_.y);
-			ImGui::InputFloat("PositionZ", &wireTransform.position_.z);
+			ImGui::InputFloat("FencePositionX", &wireTransform.position_.x);
+			ImGui::InputFloat("FencePositionY", &wireTransform.position_.y);
+			ImGui::InputFloat("FencePositionZ", &wireTransform.position_.z);
+
+			ImGui::InputFloat("FenceRotateX", &wireTransform.rotate_.x);
+			ImGui::InputFloat("FenceRotateY", &wireTransform.rotate_.y);
+			ImGui::InputFloat("FenceRotateZ", &wireTransform.rotate_.z);
+
+			ImGui::InputFloat("FenceScaleX", &wireTransform.scale_.x);
+			ImGui::InputFloat("FenceScaleY", &wireTransform.scale_.y);
+			ImGui::InputFloat("FenceScaleZ", &wireTransform.scale_.z);
 			ImGui::TreePop();
 		}
 
+		if (ImGui::TreeNode("Piller"))
+		{
+			for (int i = 0; i < pillersTransformArray.size(); i++)
+			{
+				ImGui::InputFloat((PillerNameArray[i] + " PotisionX").c_str(), &pillersTransformArray[i].position_.x);
+				ImGui::InputFloat((PillerNameArray[i] + " PotisionY").c_str(), &pillersTransformArray[i].position_.y);
+				ImGui::InputFloat((PillerNameArray[i] + " PotisionZ").c_str(), &pillersTransformArray[i].position_.z);
+			
+				ImGui::InputFloat((PillerNameArray[i] + " RotateX").c_str(), &pillersTransformArray[i].rotate_.x);
+				ImGui::InputFloat((PillerNameArray[i] + " RotateY").c_str(), &pillersTransformArray[i].rotate_.y);
+				ImGui::InputFloat((PillerNameArray[i] + " RotateZ").c_str(), &pillersTransformArray[i].rotate_.z);
+
+				ImGui::InputFloat((PillerNameArray[i] + " ScaleX").c_str(), &pillersTransformArray[i].scale_.x);
+				ImGui::InputFloat((PillerNameArray[i] + " ScaleY").c_str(), &pillersTransformArray[i].scale_.y);
+				ImGui::InputFloat((PillerNameArray[i] + " ScaleZ").c_str(), &pillersTransformArray[i].scale_.z);
+
+			}
+			ImGui::TreePop();
+		}
 		ImGui::TreePop();
 	}
 #endif
@@ -80,8 +112,7 @@ void Fence::Draw()
 	//柱モデルの描画
 	for (int i = 0; i < pillersTransformArray.size(); i++)
 	{
-		Model::SetTransform(hPiller_, pillersTransformArray[i]);
-		Model::Draw(hPiller_);
+		Model::SetAndDraw(hPiller_, pillersTransformArray[i]);
 	}
 }
 

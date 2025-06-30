@@ -76,6 +76,7 @@ public:
     void Release() override;
 
     //画面遷移エフェクトの種類を指示
+    //フェードイン時は初めに画像の透明度を最低値にする
 
     void FadeOutStartBlack() { EffectType_ = S_FadeOutBlack; }
     void FadeInStartBlack(){ EffectType_ = S_FadeInBlack; SetTransitionAlpha(); }

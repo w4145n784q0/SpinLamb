@@ -59,22 +59,37 @@ double Easing::calculateScale(float _MaxScale, float _EasingCount)
 
 void Easing::SetSCVEasing()
 {
+    //csvファイル読み込む
     CsvReader csveasing;
     csveasing.Load("CSVdata\\EasingData.csv");
 
+    //csvファイルの各0列目の文字列を取得
     std::string ease = "CommonEasing";
+
+    //指定した文字列がいずれかの0列目に存在したら
     if (csveasing.IsGetParamName(ease))
     {
+        //その行を配列として全取得
         std::vector<float> v = csveasing.GetParam(ease);
+
+        //初期化の順番はcsvの各行の順番に合わせる
+        //vの添え字はnamespaceで宣言した列挙型を使用
         Adjust = static_cast<int>(v[i_adjust]);
         Squared = static_cast<int>(v[i_squared]);
         Cubed = static_cast<int>(v[i_cubed]);
     }
 
+    //csvファイルの各0列目の文字列を取得
     std::string easeout = "EaseOutBackParam";
+
+    //指定した文字列がいずれかの0列目に存在したら
     if (csveasing.IsGetParamName(easeout))
     {
+        //その行を配列として全取得
         std::vector<float> v = csveasing.GetParam(easeout);
+
+        //初期化の順番はcsvの各行の順番に合わせる
+        //vの添え字はnamespaceで宣言した列挙型を使用
         EaseOutBackParam.OverShoot = v[i_overshoot];
     }
 }

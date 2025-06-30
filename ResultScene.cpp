@@ -97,12 +97,10 @@ void ResultScene::Update()
 void ResultScene::Draw()
 {
 	//背景描画
-	Image::SetTransform(hBackScreen_, this->transform_);
-	Image::Draw(hBackScreen_);
+	Image::SetAndDraw(hBackScreen_, this->transform_);
 
 	//"Push Title"描画
-	Image::SetTransform(hlogoTitle_, PushTitle_);
-	Image::Draw(hlogoTitle_);
+	Image::SetAndDraw(hlogoTitle_, PushTitle_);
 
 	//結果のテキスト画像を表示
 	//ResultArray_の添え字に勝敗状態を使う
@@ -112,8 +110,7 @@ void ResultScene::Draw()
 	case ResultScene::CPU_WIN:
 	case ResultScene::DRAW:
 	{
-		Image::SetTransform(ResultArray_[winner_], Result_);
-		Image::Draw(ResultArray_[winner_]);
+		Image::SetAndDraw(ResultArray_[winner_], Result_);
 	}
 		break;
 	default:
@@ -122,6 +119,23 @@ void ResultScene::Draw()
 	
 
 #ifdef _DEBUG
+	if (ImGui::TreeNode("GameModeSelect"))
+	{
+		if (ImGui::TreeNode("Result"))
+		{
+			ImGui::SliderFloat("ResultPositionX", &Result_.position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat("ResultPositionY", &Result_.position_.y, Image::UpEdge, Image::DownEdge);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("PushTitle"))
+		{
+			ImGui::SliderFloat("PushTitlePositionX", &PushTitle_.position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat("PushTitlePositionY", &PushTitle_.position_.y, Image::UpEdge, Image::DownEdge);
+			ImGui::TreePop();
+		}
+		ImGui::TreePop();
+	}
 #endif
 }
 
@@ -135,9 +149,6 @@ void ResultScene::SetCSVResult()
 	CsvReader csv;
 	csv.Load("CSVdata\\SceneData.csv");
 
-	//csvファイルの0列目の文字列を取得
-	//std::string result = "Result";
-
 	//csvファイルの各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {
 		"Result","PushTitle"
@@ -150,19 +161,6 @@ void ResultScene::SetCSVResult()
 
 	//まとめて初期化
 	InitCSVTransformArray(csv, ParamNames, ImageArray);
-
-	/*if (csv.IsGetParamName(result))
-	{
-		std::vector<float> v = csv.GetParam(result);
-		SetTransformPRS(Result_, v);
-	}
-
-	std::string push = "PushTitle";
-	if (csv.IsGetParamName(push))
-	{
-		std::vector<float> v = csv.GetParam(push);
-		SetTransformPRS(PushTitle_, v);
-	}*/
 }
 
 void ResultScene::UpdateActive()
