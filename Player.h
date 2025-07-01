@@ -114,10 +114,17 @@ public:
 	//カメラの設定(毎フレーム呼び出す)
 	void CameraUpdate();
 
-	/// キーボード移動操作
+	//キーボード移動操作
 	void KeyBoradMove();
 
-	/// Player限定のデータをCSV読み込み
+	/// <summary>
+	/// プレイヤー専用移動処理
+	/// </summary>
+	/// <param name="_move">移動する方向</param>
+	void PlayerMove(XMVECTOR _move);
+
+
+	//Player限定のデータをCSV読み込み
 	void SetCSVPlayer();
 };
 

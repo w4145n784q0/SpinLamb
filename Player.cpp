@@ -263,7 +263,7 @@ void Player::UpdateIdle()
 
 	//------------------キーボード入力の移動------------------//
 
-	//上下左右キーが押されたら
+	//上下左右キーが押されたら各方向に移動量を加算
 	if (Input::IsKey(DIK_UP))
 	{
 		Direction_.z += MoveValue;
@@ -300,14 +300,7 @@ void Player::UpdateIdle()
 	//少しでもスティックを傾けたら
 	if (length > Input::StickMicroTilt)
 	{
-		//コントローラー入力ベクトルからy軸回転量を計算
-		this->transform_.rotate_.y = RotateDirectionVector(SetController);
-		
-		//コントローラー入力ベクトルを渡し、実際に移動する
-		CharacterMove(SetController);
-
-		//キャラクターをX回転
-		MoveRotate();
+		PlayerMove(SetController);
 	}
 
 	//------------------チャージ状態へ移行------------------//
@@ -340,7 +333,7 @@ void Player::UpdateIdle()
 
 void Player::UpdateCharge()
 {
-	//チャージ中(TmpAcceleを溜めている状態) その場で回転できるが動けない
+	//チャージ中(TmpAcceleを溜めている状態) その場で左右回転できるが動けない
 
 	//加速度を溜める
 	Charging();
@@ -546,13 +539,15 @@ void Player::CameraControl()
 			}
 		}
 
-		//Zキー/Yボタンでカメラの回転・プレイヤーの回転リセット
+		//Zキー/Yボタンでカメラの回転リセット
 		if (Input::IsKey(DIK_Z) || Input::IsPadButton(XINPUT_GAMEPAD_Y))//カメラを正面に戻す（方向に変化なし）
 		{
-			cameraTransform_.rotate_.y = 0;
-			cameraTransform_.rotate_.x = 0;
-			this->transform_.rotate_.x = 0;
-			this->transform_.rotate_.y = 0;
+			// カメラの回転をリセット
+			cameraTransform_.rotate_.x = 0.0f;
+			this->transform_.rotate_.x = 0.0f;
+			
+			// キャラクターのY回転をカメラのY回転に合わせる
+			this->transform_.rotate_.y = cameraTransform_.rotate_.y;
 		}
 	}
 	else if (CameraState_ == S_DEBUGCAMERA)
@@ -615,25 +610,45 @@ void Player::KeyBoradMove()
 	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
 
 	//キーを押した(押してない状態は0ベクトルなので処理しない)
-	//0ベクトルを正規化はできない
 	if (!XMVector3Equal(move, XMVectorZero()))
 	{
-		//仮の移動ベクトルを正規化
-		move = XMVector3Normalize(move);
-
-		//仮の移動ベクトルからy軸回転量を計算
-		this->transform_.rotate_.y = RotateDirectionVector(move);
-
-		//仮の移動ベクトルを渡し、実際に移動する
-		CharacterMove(move);
-
-		//キャラクターをX回転
-		MoveRotate();
-
+		//入力された分移動する
+		PlayerMove(move);
 	}
 
 	//最後に進行方向のリセット毎フレーム行う
 	Direction_ = { 0,0,0 };
+}
+
+void Player::PlayerMove(XMVECTOR _move)
+{
+	//キーボード・コントローラー入力時の移動・回転計算
+
+	//移動方向ベクトルが0なら何もしない(0ベクトルを正規化はできない)
+	if (XMVector3Equal(_move, XMVectorZero()))
+	{
+		return;
+	}
+
+	//移動方向ベクトルを正規化
+	_move = XMVector3Normalize(_move);
+
+	//カメラのY回転分だけ移動ベクトルを回転 
+	//カメラのY軸回転量を行列にする
+	float cameraY = cameraTransform_.rotate_.y;
+	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraY));
+
+	//仮の移動ベクトルをカメラのY軸回転量で変形
+	_move = XMVector3TransformCoord(_move, rotY);
+
+	//コントローラー入力ベクトルからy軸回転量を計算
+	this->transform_.rotate_.y = RotateDirectionVector(_move);
+
+	//コントローラー入力ベクトルを渡し、実際に移動する
+	CharacterMove(_move);
+
+	//キャラクターをX回転
+	MoveRotate();
 }
 
 void Player::SetCSVPlayer()
