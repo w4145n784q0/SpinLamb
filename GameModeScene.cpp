@@ -76,13 +76,13 @@ void GameModeScene::Initialize()
 	hTitleText_ = Image::Load(path + "TitleText.png");
 	assert(hTitleText_ >= 0);
 
-	hSoundGameMode_ = Audio::Load("Sound\\BGM\\GameMode.wav",true);
+	hSoundGameMode_ = Audio::Load("Sound\\BGM\\gameMode.wav",true);
 	assert(hSoundGameMode_ >= 0);
 
 	hSoundDecide_ = Audio::Load("Sound\\SE\\decide.wav");
 	assert(hSoundDecide_ >= 0);
 
-	hSoundSelect_ = Audio::Load("Sound\\SE\\Select.wav");
+	hSoundSelect_ = Audio::Load("Sound\\SE\\select.wav");
 	assert(hSoundSelect_ >= 0);
 
 	//各モードの画像ハンドルを配列に入れる
@@ -126,7 +126,6 @@ void GameModeScene::Draw()
 	for(int i = 0; i < ModeTransArray_.size(); i++)
 	{
 		Image::SetAndDraw(ButtonImageArray_[i], ModeTransArray_[i]);
-		//Image::Draw(ButtonImageArray_[i]);
 	}
 
 	//選択中のテキストの描画(現在選択しているモードによって変化)
@@ -138,7 +137,6 @@ void GameModeScene::Draw()
 	case GameModeScene::S_Title:
 	{
 		Image::SetAndDraw(TextArray_[SelectMode_], TransText_);
-		//Image::Draw(TextArray_[SelectMode_]);
 	}
 		break;
 	default:

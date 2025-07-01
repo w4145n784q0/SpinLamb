@@ -88,7 +88,7 @@ void BattleScene::Initialize()
 	hSoundBattle_ = Audio::Load("Sound\\BGM\\battle.wav",true);
 	assert(hSoundBattle_>= 0);
 
-	hSoundWhistle_ = Audio::Load("Sound\\SE\\Whistle.wav");
+	hSoundWhistle_ = Audio::Load("Sound\\SE\\whistle.wav");
 	assert(hSoundWhistle_ >= 0);
 
 	//Player,Enemy‚ÌƒXƒRƒA‚ğ‰Šú‰»

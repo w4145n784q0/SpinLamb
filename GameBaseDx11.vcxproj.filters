@@ -110,9 +110,6 @@
     <ClCompile Include="Engine\VFX.cpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="TestScene.cpp">
-      <Filter>03Scene</Filter>
-    </ClCompile>
     <ClCompile Include="TitleScene.cpp">
       <Filter>03Scene</Filter>
     </ClCompile>
@@ -275,9 +272,6 @@
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="TestScene.h">
-      <Filter>03Scene</Filter>
-    </ClInclude>
     <ClInclude Include="TitleScene.h">
       <Filter>03Scene</Filter>
     </ClInclude>

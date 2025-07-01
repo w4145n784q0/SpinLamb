@@ -36,7 +36,7 @@ void HowToPlayScene::Initialize()
 	hOperateController_ = Image::Load(path + "Howto_controller.jpg");
 	assert(hOperateController_ >= 0);
 
-	hSoundHowtoPlay_ = Audio::Load("Sound\\BGM\\HowToPlay.wav", true);
+	hSoundHowtoPlay_ = Audio::Load("Sound\\BGM\\howtoPlay.wav", true);
 	assert(hSoundHowtoPlay_ >= 0);
 
 	//ƒŠƒXƒg‚ÉŠeó‘Ô‚ð’Ç‰Á
