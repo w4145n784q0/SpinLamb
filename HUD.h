@@ -14,12 +14,11 @@ namespace
 	//描画モード（状況に応じて表示/非表示を切り替えたいもの）を指定
 	enum DrawMode
 	{
-		S_BeforeStart = 0,
-		S_Ready,
-		S_Playing,
-		S_Finish,
-		S_Practice,
-		S_MiniMap,
+		S_BeforeStart = 0,//スタート前
+		S_Ready,//"Ready?","Go!"を出す
+		S_Playing,//ゲーム中
+		S_Finish,//"Finish"を出す
+		S_Practice,//フリープレイ時
 		S_None,
 	};
 

@@ -189,7 +189,10 @@ void BattleScene::UpdateBattleBefore()
 	if (++StateCounter > SceneTransition ||
 		Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
 	{
+		//シーン遷移タイマーをリセット
 		StateCounter = 0;
+
+		//時間経過したら開始直前状態へ以降
 		BattleState_ = S_READY;
 
 		//Ready?を表示する時間を渡す
