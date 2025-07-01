@@ -8,7 +8,8 @@
 HowToPlayScene::HowToPlayScene(GameObject* parent)
 	:BaseScene(parent, "GameModeScene"),
 	hExplanation_(-1), hOperateKeyboard_(-1), hOperateController_(-1),
-	hSoundHowtoPlay_(-1), ImageState_(Explanation),pTransitionEffect_(nullptr)
+	hSoundHowtoPlay_(-1), hBackGameMode_(-1),
+	ImageState_(Explanation),pTransitionEffect_(nullptr)
 {
 }
 
@@ -38,6 +39,9 @@ void HowToPlayScene::Initialize()
 
 	hSoundHowtoPlay_ = Audio::Load("Sound\\BGM\\howtoPlay.wav", true);
 	assert(hSoundHowtoPlay_ >= 0);
+
+	hBackGameMode_ = Audio::Load("Sound\\SE\\backgamemode.wav");
+	assert(hBackGameMode_ >= 0);
 
 	//リストに各状態を追加
 	ImageList_ = { Explanation ,OperateKeyBoard,OperateController};
@@ -122,6 +126,9 @@ void HowToPlayScene::UpdateActive()
 		//シーン遷移エフェクト(フェードアウト)を設定
 		pTransitionEffect_->FadeOutStartBlack();
 		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
+
+		//決定(ゲームモードシーンに戻る)SE再生
+		Audio::Play(hBackGameMode_);
 	}
 }
 

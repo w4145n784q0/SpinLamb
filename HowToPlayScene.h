@@ -20,8 +20,13 @@ private:
 	int hOperateController_;
 
 	//----------サウンドハンドル----------
+
+	//あそびかたシーンBGM
 	int hSoundHowtoPlay_;
 	
+	//ゲームモードに戻るSE
+	int hBackGameMode_;
+
 	//表示画像ステート
 	//これらの値に応じてDrawで描画する画像を変える
 	enum HowtoImage 
