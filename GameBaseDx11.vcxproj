@@ -181,6 +181,7 @@
     <ClCompile Include="LeftWire.cpp" />
     <ClCompile Include="LowerWire.cpp" />
     <ClCompile Include="MiniMap.cpp" />
+    <ClCompile Include="OutStageThing.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PracticeScene.cpp" />
     <ClCompile Include="ResultScene.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="LeftWire.h" />
     <ClInclude Include="LowerWire.h" />
     <ClInclude Include="MiniMap.h" />
+    <ClInclude Include="OutStageThing.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PracticeScene.h" />
     <ClInclude Include="resource.h" />

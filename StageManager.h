@@ -2,6 +2,7 @@
 #include "Engine/GameObject.h"
 #include"Ground.h"
 #include"Fence.h"
+#include"OutStageThing.h"
 
 //ステージ全体管理クラス
 class StageManager :
@@ -18,6 +19,16 @@ private:
 
 	//柵クラス(柱)に渡すデータ
 	Transform PillerData_;
+
+	//ステージ外オブジェクトに渡すデータ(小屋)
+	Transform CabinData_;
+
+	//ステージ外オブジェクトに渡すデータ(木)
+	Transform TreeData_;
+
+	//ステージ外オブジェクトに渡すデータ(丸太)
+	Transform LogsData_;
+
 
 	//ステージ北端
 	float UpperEnd_;
@@ -110,6 +121,11 @@ public:
 	/// 柵クラスの柱の本数・位置・鉄線クラスの当たり判定を設定
 	/// </summary>
 	void InitEndData();
+
+	/// <summary>
+	/// ステージ外のオブジェクトの初期化
+	/// </summary>
+	void InitOutStageThingData();
 
 	//----------セッター・ゲッター関数----------
 

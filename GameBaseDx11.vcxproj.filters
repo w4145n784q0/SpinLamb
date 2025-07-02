@@ -200,6 +200,9 @@
     <ClCompile Include="Wire.cpp">
       <Filter>05Stage</Filter>
     </ClCompile>
+    <ClCompile Include="OutStageThing.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -363,6 +366,9 @@
       <Filter>06UI</Filter>
     </ClInclude>
     <ClInclude Include="Wire.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="OutStageThing.h">
       <Filter>05Stage</Filter>
     </ClInclude>
   </ItemGroup>

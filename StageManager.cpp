@@ -56,6 +56,10 @@ void StageManager::Initialize()
 	//Fenceのデータ初期化
 	InitFenceData();
 	InitEndData();
+
+	//ステージ外オブジェクト生成
+	Instantiate<OutStageThing>(this); 
+	InitOutStageThingData();
 }
 
 void StageManager::Update()
@@ -72,8 +76,10 @@ void StageManager::Release()
 
 void StageManager::SetStageInitSCV()
 {
+
+	//----------地面,鉄線,柱の各トランスフォーム初期化----------
+
 	//csvファイルを読み込む
-	//地面,鉄線,柱の各トランスフォーム初期化
 	CsvReader csv;
 	csv.Load("CSVdata\\StageData.csv");
 
@@ -90,8 +96,10 @@ void StageManager::SetStageInitSCV()
 	//まとめて初期化
 	InitCSVTransformArray(csv, ParamNames, TransformArray);
 
+
+	//----------ステージの各端の位置、柱の本数----------
+
 	//csvファイルを読み込む
-	//ステージの各端の位置、柱の本数
 	CsvReader csv_end;
 	csv_end.Load("CSVdata\\StageEndData.csv");
 
@@ -113,8 +121,10 @@ void StageManager::SetStageInitSCV()
 		PillerNum_ = static_cast<int>(v[i_pillernum]);
 	}
 
+
+	//----------当たり判定の位置、サイズ,法線の初期化----------
+
 	//csvファイルを読み込む
-	//当たり判定の位置、サイズ,法線
 	CsvReader csv_wire;
 	csv_wire.Load("CSVdata\\StageWireData.csv");
 
@@ -143,6 +153,50 @@ void StageManager::SetStageInitSCV()
 			CollisionData[i]->z = v[i_collisionZ];
 		}
 	}
+
+	//----------ステージ外オブジェクトの各トランスフォーム初期化----------
+	//csvファイルを読み込む
+	CsvReader csv_out;
+	csv_out.Load("CSVdata\\OutStageData.csv");
+
+	//csvファイルの各0列目の文字列の配列を取得
+	std::vector<std::string> OutParamNames = {
+		"Cabin","Tree","Logs"
+	};
+
+	//各トランスフォームを配列に入れる
+	std::vector<std::reference_wrapper<Transform>> OutTransformArray = {
+		CabinData_,TreeData_,LogsData_
+	};
+
+	//まとめて初期化
+	InitCSVTransformArray(csv_out, OutParamNames, OutTransformArray);
+}
+
+void StageManager::InitGroundData()
+{
+	//Groundクラスの初期化行う
+
+	//地面クラスのインスタンスを取得
+	Ground* pGround = (Ground*)FindObject("Ground");
+
+	//CSVから読み込んだ拡大率,回転,位置を渡す
+	pGround->SetScale(GroundData_.scale_);
+	pGround->SetRotate(GroundData_.rotate_);
+	pGround->SetPosition(GroundData_.position_);
+}
+
+void StageManager::InitFenceData()
+{
+	//Fenceクラスのトランスフォーム関係の初期化行う
+
+	//柵クラスのインスタンスを取得
+	Fence* pFence = (Fence*)FindObject("Fence");
+
+	//CSVから読み込んだ柵,鉄線のトランスフォームを渡す
+	pFence->InitWireTransform(WireData_);
+	pFence->InitPillerTransform(PillerData_);
+
 }
 
 void StageManager::InitEndData()
@@ -164,28 +218,15 @@ void StageManager::InitEndData()
 
 }
 
-void StageManager::InitGroundData()
+void StageManager::InitOutStageThingData()
 {
-	//Groundクラスの初期化行う
+	//ステージ外オブジェクトを初期化
 
-	//地面クラスのインスタンスを取得
-	Ground* pGround = (Ground*)FindObject("Ground");
+	//OutStageThingのインスタンスを取得
+	OutStageThing* pOutStageThing = (OutStageThing*)FindObject("OutStageThing");
 
-	//CSVから読み込んだ拡大率,回転,位置を渡す
-	pGround->SetScale(GroundData_.scale_);
-	pGround->SetRotate(GroundData_.rotate_);
-	pGround->SetPosition(GroundData_.position_);
-}
-
-void StageManager::InitFenceData()
-{
-	//Fenceクラスのトランスフォーム関係の初期化行う
-	
-	//柵クラスのインスタンスを取得
-	Fence* pFence = (Fence*)FindObject("Fence");
-
-	//CSVから読み込んだ柵,鉄線のトランスフォームを渡す
-	pFence->InitWireTransform(WireData_);
-	pFence->InitPillerTransform(PillerData_);
-	
+	//CSVから読み込んだ小屋、木、丸太のトランスフォームを渡す
+	pOutStageThing->SetCabinTransform(CabinData_);
+	pOutStageThing->SetTreeTransform(TreeData_);
+	pOutStageThing->SetLogsTransform(LogsData_);
 }
