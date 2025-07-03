@@ -21,13 +21,16 @@ private:
 	Transform PillerData_;
 
 	//ステージ外オブジェクトに渡すデータ(小屋)
-	Transform CabinData_;
+	std::vector<Transform>  CabinData_;
 
 	//ステージ外オブジェクトに渡すデータ(木)
-	Transform TreeData_;
+	std::vector<Transform>  TreeData_;
 
 	//ステージ外オブジェクトに渡すデータ(丸太)
-	Transform LogsData_;
+	std::vector<Transform>  LogsData_;
+
+	//ステージ外オブジェクトに渡すデータ(藁束)
+	std::vector<Transform> StrawData_;
 
 
 	//ステージ北端

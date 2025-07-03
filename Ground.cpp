@@ -21,10 +21,10 @@ void Ground::Initialize()
 	hGrass_ = Model::Load("Model\\GrassField.fbx");
 	assert(hGrass_ >= 0);
 
-	hhouse_ = Model::Load("Model\\Logs.fbx");
+	hhouse_ = Model::Load("Model\\Straw.fbx");
 	assert(hGrass_ >= 0);
 
-	t.position_ = { 0,0,-100 };
+	t.position_ = { -60,1,0 };
 	t.rotate_ = { 0,0,0 };
 	t.scale_ = { 1,1,1 };
 }

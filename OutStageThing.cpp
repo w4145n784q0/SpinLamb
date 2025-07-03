@@ -31,9 +31,22 @@ void OutStageThing::Draw()
 {
 	//Šeƒ‚ƒfƒ‹•`‰æ
 
-	Model::SetAndDraw(hCabin_, CabinTransform);
-	Model::SetAndDraw(hTree_, TreeTransform);
-	Model::SetAndDraw(hLogs_, LogsTransform);
+	for (int i = 0; i < CabinData_.size(); i++)
+	{
+		Model::SetAndDraw(hCabin_, CabinData_[i]);
+	}
+
+	for (int i = 0; i < TreeData_.size(); i++)
+	{
+		Model::SetAndDraw(hTree_, TreeData_[i]);
+	}
+
+	for (int i = 0; i < LogsData_.size(); i++)
+	{
+		Model::SetAndDraw(hLogs_, LogsData_[i]);
+	}
+
+
 }
 
 void OutStageThing::Release()

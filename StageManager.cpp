@@ -160,17 +160,37 @@ void StageManager::SetStageInitSCV()
 	csv_out.Load("CSVdata\\OutStageData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
-	std::vector<std::string> OutParamNames = {
-		"Cabin","Tree","Logs"
+
+	std::vector<std::string> Cabins = { "Cabin1" };
+	std::vector<std::string> Trees = { "Tree1","Tree2" };
+	std::vector<std::string> Logs = { "Logs1" };
+	std::vector<std::string> Straws = { "Straw1","Straw2"};
+
+	std::vector<std::vector<std::string>> OutStageNames = {
+		Cabins, Trees,Logs,Straws
 	};
 
-	//各トランスフォームを配列に入れる
-	std::vector<std::reference_wrapper<Transform>> OutTransformArray = {
-		CabinData_,TreeData_,LogsData_
+	// 各Transform配列への参照
+	std::vector<std::vector<Transform>*> OutStageTrans = {
+		&CabinData_,
+		&TreeData_,
+		&LogsData_,
+		&StrawData_
 	};
 
-	//まとめて初期化
-	InitCSVTransformArray(csv_out, OutParamNames, OutTransformArray);
+	// すべての種類・個数を一括で初期化
+	for (size_t type = 0; type < OutStageNames.size(); ++type) 
+	{
+		// 必要な数だけTransformを確保
+		OutStageTrans[type]->resize(OutStageNames[type].size());
+
+		//各トランスフォーム[トランスフォームの種類][その種類のi番目]
+		for (size_t i = 0; i < OutStageNames[type].size(); ++i)
+		{
+			InitCSVTransform(csv_out, OutStageNames[type][i], (*OutStageTrans[type])[i]);
+		}
+	}
+
 }
 
 void StageManager::InitGroundData()

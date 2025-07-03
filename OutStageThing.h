@@ -1,5 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
+#include<vector>
+
 class OutStageThing :
     public GameObject
 {
@@ -16,11 +18,13 @@ private:
 	int hLogs_;
 
 	//----------モデル用トランスフォーム----------
-	Transform CabinTransform;
+	std::vector<Transform> CabinData_;
 
-	Transform TreeTransform;
+	std::vector<Transform> TreeData_;
 
-	Transform LogsTransform;
+	std::vector<Transform> LogsData_;
+
+	std::vector<Transform> StrawData_;
 public:
 	OutStageThing(GameObject* parent);
 	~OutStageThing();
@@ -38,10 +42,12 @@ public:
 	void Release() override;
 
 	//----------セッター・ゲッター関数----------
-	void SetCabinTransform(Transform _transform) { CabinTransform = _transform; }
+	void SetCabinTransform(std::vector<Transform> _data) { CabinData_  =  _data; }
 
-	void SetTreeTransform(Transform _transform) { TreeTransform = _transform; }
+	void SetTreeTransform(std::vector<Transform> _data) { TreeData_  = _data; }
 
-	void SetLogsTransform(Transform _transform) { LogsTransform = _transform; }
+	void SetLogsTransform(std::vector<Transform> _data) { LogsData_ = _data; }
+
+	void SetStrawTransform(std::vector<Transform> _data) { StrawData_ = _data; }
 };
 
