@@ -540,7 +540,8 @@ void Player::CameraControl()
 		}
 
 		//Zキー/Yボタンでカメラの回転リセット
-		if (Input::IsKey(DIK_Z) || Input::IsPadButton(XINPUT_GAMEPAD_Y))//カメラを正面に戻す（方向に変化なし）
+		if (Input::IsKey(DIK_Z) ||
+			Input::IsPadButton(XINPUT_GAMEPAD_Y) || Input::IsPadButton(XINPUT_GAMEPAD_X))
 		{
 			// カメラの回転をリセット
 			cameraTransform_.rotate_.x = 0.0f;
