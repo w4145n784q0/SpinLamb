@@ -2,6 +2,8 @@
 #include "Engine/GameObject.h"
 #include<vector>
 
+//ステージ外オブジェクトを管理するクラス
+
 class OutStageThing :
     public GameObject
 {
@@ -17,14 +19,28 @@ private:
 	//丸太モデル
 	int hLogs_;
 
+	//藁束モデル
+	int hStraw_;
+
+	//各モデルハンドル配列
+	std::vector<int> ModelHandleArray_;
+
 	//----------モデル用トランスフォーム----------
+
+	//小屋のトランスフォーム配列
 	std::vector<Transform> CabinData_;
 
+	//木のトランスフォーム配列
 	std::vector<Transform> TreeData_;
 
+	//丸太のトランスフォーム配列
 	std::vector<Transform> LogsData_;
 
+	//藁束のトランスフォーム配列
 	std::vector<Transform> StrawData_;
+
+	//各モデル用トランスフォーム配列
+	std::vector<std::vector<Transform>*> StageTransArray_;
 public:
 	OutStageThing(GameObject* parent);
 	~OutStageThing();

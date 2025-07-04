@@ -178,10 +178,10 @@ void StageManager::SetStageInitSCV()
 		&StrawData_
 	};
 
-	// すべての種類・個数を一括で初期化
+	//すべての種類・個数を一括で初期化
 	for (size_t type = 0; type < OutStageNames.size(); ++type) 
 	{
-		// 必要な数だけTransformを確保
+		//必要な数だけTransformを確保
 		OutStageTrans[type]->resize(OutStageNames[type].size());
 
 		//各トランスフォーム[トランスフォームの種類][その種類のi番目]
@@ -249,4 +249,5 @@ void StageManager::InitOutStageThingData()
 	pOutStageThing->SetCabinTransform(CabinData_);
 	pOutStageThing->SetTreeTransform(TreeData_);
 	pOutStageThing->SetLogsTransform(LogsData_);
+	pOutStageThing->SetStrawTransform(StrawData_);
 }

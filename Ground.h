@@ -11,8 +11,6 @@ private:
 
 	//’n–Êƒ‚ƒfƒ‹
 	int hGrass_;
-
-	int hhouse_;
 public:
 	Ground(GameObject* parent);
 	~Ground();
