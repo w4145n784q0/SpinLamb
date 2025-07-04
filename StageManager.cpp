@@ -164,7 +164,7 @@ void StageManager::SetStageInitSCV()
 	std::vector<std::string> Cabins = { "Cabin1" };
 	std::vector<std::string> Trees = { "Tree1","Tree2" };
 	std::vector<std::string> Logs = { "Logs1" };
-	std::vector<std::string> Straws = { "Straw1","Straw2"};
+	std::vector<std::string> Straws = { "Straw1","Straw2","Straw3"};
 
 	std::vector<std::vector<std::string>> OutStageNames = {
 		Cabins, Trees,Logs,Straws
