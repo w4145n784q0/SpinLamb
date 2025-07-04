@@ -50,4 +50,10 @@ namespace Camera
 	void SetShakeWidth(float _width);
 
 	void SetShakeSpeed(float _speed);
+
+	float GetShakeTimeShort(); 
+
+	float GetShakeTimeMiddle();
+
+	float GetShakeTimeLong();
 };

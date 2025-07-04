@@ -22,6 +22,9 @@ namespace
 		i_initTargetX,		//初期焦点X
 		i_initTargetY,		//初期焦点Y
 		i_initTargetZ,		//初期焦点Z
+		i_shakeTimeShort,	//振動時間(短)
+		i_shakeTimeMiddle,	//振動時間(中)
+		i_shakeTimeLong,	//振動時間(長)
 	};
 
 	bool IsCameraShake;//カメラが振動してるか
@@ -31,6 +34,9 @@ namespace
 	float frame = 0.0f;//1フレーム
 	XMFLOAT3 InitPosition = { 0,0,0 };//初期位置
 	XMFLOAT3 InitTarget = { 0,0,0 };//初期焦点
+	float ShakeTimeShort = 0.0f;//振動時間(短)
+	float ShakeTimeMiddle = 0.0f;//振動時間(短)
+	float ShakeTimeLong = 0.0f;//振動時間(短)
 }
 
 //初期化（プロジェクション行列作成）
@@ -162,17 +168,35 @@ void Camera::SetCSVCamera()
 		frame = v[i_frame];
 		InitPosition = { v[i_initPositionX],  v[i_initPositionY],  v[i_initPositionZ] };
 		InitTarget = { v[i_initTargetX],  v[i_initTargetY],  v[i_initTargetZ] };
+		ShakeTimeShort = v[i_shakeTimeShort];
+		ShakeTimeMiddle = v[i_shakeTimeMiddle]; 
+		ShakeTimeLong = v[i_shakeTimeLong];
 	}
 }
 
-//カメラの振動幅をセット
+//カメラの振動幅をセット(必要に応じてセット)
 void Camera::SetShakeWidth(float _width)
 {
 	ShakeWidth = _width;
 }
 
-//カメラの振動速度をセット
+//カメラの振動速度をセット(必要に応じてセット)
 void Camera::SetShakeSpeed(float _speed)
 {
 	ShakeSpeed = _speed;
+}
+
+float Camera::GetShakeTimeShort()
+{
+	return ShakeTimeShort;
+}
+
+float Camera::GetShakeTimeMiddle()
+{
+	return ShakeTimeMiddle;
+}
+
+float Camera::GetShakeTimeLong()
+{
+	return ShakeTimeLong;
 }

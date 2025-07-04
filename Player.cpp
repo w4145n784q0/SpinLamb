@@ -19,7 +19,6 @@ namespace {
 		i_backcameraY,
 		i_backcameraZ,
 		i_keyboardrotateY,
-		i_camerashaketime,
 		i_movevalue,
 		i_jumpheight,
 		i_camerainitx,
@@ -37,9 +36,6 @@ namespace {
 
 	//チャージ中の左右入力時の回転量
 	float KeyBoardRotateY = 0.0f;
-	
-	//カメラの振動時間
-	float cameraShakeTime = 0.0f;
 
 	//キーボード入力時、Direction_に加算される値
 	float MoveValue = 0.0f;
@@ -224,7 +220,7 @@ void Player::OnCollision(GameObject* pTarget)
 		SetHitEffect();
 
 		//カメラ振動
-		Camera::CameraShakeStart(cameraShakeTime);
+		Camera::CameraShakeStart(Camera::GetShakeTimeShort());
 
 		//衝撃音
 		Audio::Play(hSoundCollision_);
@@ -250,6 +246,9 @@ void Player::OnCollision(GameObject* pTarget)
 
 					//プレイヤーの状態を柵に接触状態にする
 					PlayerState_ = S_WALLHIT;
+
+					//カメラ振動
+					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
 				}
 			}
 		}
@@ -671,7 +670,6 @@ void Player::SetCSVPlayer()
 		//vの添え字はnamespaceで宣言した列挙型を使用
 		BackCameraPos = { v[i_backcameraX], v[i_backcameraY], v[i_backcameraZ] };
 		KeyBoardRotateY = v[i_keyboardrotateY];
-		cameraShakeTime = v[i_camerashaketime];
 		MoveValue = v[i_movevalue];
 		Jumpheight = v[i_jumpheight];
 		CameraInit = { v[i_camerainitx] ,v[i_camerainity] , v[i_camerainitz] };
