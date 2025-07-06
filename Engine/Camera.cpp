@@ -2,6 +2,8 @@
 #include "Direct3D.h"
 #include"../Engine/CsvReader.h"
 
+#include"GameObject.h"
+
 XMFLOAT3 _position;
 XMFLOAT3 _target;
 XMMATRIX _view;
@@ -35,8 +37,8 @@ namespace
 	XMFLOAT3 InitPosition = { 0,0,0 };//初期位置
 	XMFLOAT3 InitTarget = { 0,0,0 };//初期焦点
 	float ShakeTimeShort = 0.0f;//振動時間(短)
-	float ShakeTimeMiddle = 0.0f;//振動時間(短)
-	float ShakeTimeLong = 0.0f;//振動時間(短)
+	float ShakeTimeMiddle = 0.0f;//振動時間(中)
+	float ShakeTimeLong = 0.0f;//振動時間(長)
 }
 
 //初期化（プロジェクション行列作成）
@@ -153,25 +155,21 @@ void Camera::SetCSVCamera()
 	csv.Load("CSVdata\\EngineData\\CameraData.csv");
 
 	//csvファイルの各0列目の文字列を取得
-	std::string camera = "Camera";
+	std::string cameraName = "Camera";
 
-	//指定した文字列がいずれかの0列目に存在したら
-	if (csv.IsGetParamName(camera))
-	{
-		//その行を配列として全取得
-		std::vector<float> v = csv.GetParam(camera);
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> cameraData = GameObject::GetCSVReadData(csv, cameraName);
 		
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		ShakeSpeed = v[i_shakeSpeed];
-		ShakeWidth = v[i_shakeWidth];
-		frame = v[i_frame];
-		InitPosition = { v[i_initPositionX],  v[i_initPositionY],  v[i_initPositionZ] };
-		InitTarget = { v[i_initTargetX],  v[i_initTargetY],  v[i_initTargetZ] };
-		ShakeTimeShort = v[i_shakeTimeShort];
-		ShakeTimeMiddle = v[i_shakeTimeMiddle]; 
-		ShakeTimeLong = v[i_shakeTimeLong];
-	}
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	ShakeSpeed = cameraData[i_shakeSpeed];
+	ShakeWidth = cameraData[i_shakeWidth];
+	frame = cameraData[i_frame];
+	InitPosition = { cameraData[i_initPositionX],  cameraData[i_initPositionY],  cameraData[i_initPositionZ] };
+	InitTarget = { cameraData[i_initTargetX],  cameraData[i_initTargetY],  cameraData[i_initTargetZ] };
+	ShakeTimeShort = cameraData[i_shakeTimeShort];
+	ShakeTimeMiddle = cameraData[i_shakeTimeMiddle]; 
+	ShakeTimeLong = cameraData[i_shakeTimeLong];
 }
 
 //カメラの振動幅をセット(必要に応じてセット)

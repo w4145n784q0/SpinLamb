@@ -481,25 +481,21 @@ void Enemy::SetCSVEnemy()
 	//csvファイルの各0列目の文字列を取得
 	std::string only = "EnemyOnlyParam";
 
-	//指定した文字列がいずれかの0列目に存在したら
-	if (csv.IsGetParamName(only))
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> OnlyData = GetCSVReadData(csv, only);
+
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	HitStop = static_cast<int>(OnlyData[i_hitstop]);
+	ChaseLength = OnlyData[i_chaseLength];
+	LookRotaeAngle = OnlyData[i_lookRotateAngle];
+	LookRotateValue = OnlyData[i_lookRotateValue];
+	ArrowRotateCorrection = OnlyData[i_arrowrotatecorrection];
+
+	int arr[] = { static_cast<int>(OnlyData[i_EnemyAttackTime_1]), static_cast<int>(OnlyData[i_EnemyAttackTime_2]),
+			static_cast<int>(OnlyData[i_EnemyAttackTime_3]), static_cast<int>(OnlyData[i_EnemyAttackTime_4]) };
+	for (int i = 0; i < EnemyAttackTimeArray.size(); i++)
 	{
-		//その行を配列として全取得
-		std::vector<float> v = csv.GetParam(only);
-
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		HitStop = static_cast<int>(v[i_hitstop]);
-		ChaseLength = v[i_chaseLength];
-		LookRotaeAngle = v[i_lookRotateAngle];
-		LookRotateValue = v[i_lookRotateValue];
-		ArrowRotateCorrection = v[i_arrowrotatecorrection];
-
-		int arr[] = { static_cast<int>(v[i_EnemyAttackTime_1]), static_cast<int>(v[i_EnemyAttackTime_2]),
-			static_cast<int>(v[i_EnemyAttackTime_3]), static_cast<int>(v[i_EnemyAttackTime_4]) };
-		for (int i = 0; i < EnemyAttackTimeArray.size(); i++)
-		{
-			EnemyAttackTimeArray[i] = arr[i];
-		}
+		EnemyAttackTimeArray[i] = arr[i];
 	}
 }

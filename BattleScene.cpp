@@ -277,16 +277,12 @@ void BattleScene::SetCSVBattle()
 	csv.Load("CSVdata\\SceneData\\BattleData.csv");
 
 	//csvファイルの各0列目の文字列を取得
-	std::string battle = "Battle";
+	std::string battleName = "Battle";
 
-	//指定した文字列がいずれかの0列目に存在したら
-	if (csv.IsGetParamName(battle))
-	{
-		//その行を配列として全取得
-		std::vector<float> v = csv.GetParam(battle);
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> battleData = GetCSVReadData(csv, battleName);
 
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		GameTimeLimit = static_cast<int>(v[i_gametimelimit]);
-	}
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	GameTimeLimit = static_cast<int>(battleData[i_gametimelimit]);
 }

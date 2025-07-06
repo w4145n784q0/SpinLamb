@@ -64,32 +64,24 @@ void Easing::SetSCVEasing()
     csveasing.Load("CSVdata\\EffectData\\EasingData.csv");
 
     //csvファイルの各0列目の文字列を取得
-    std::string ease = "CommonEasing";
+    std::string easeInit= "CommonEasing";
 
-    //指定した文字列がいずれかの0列目に存在したら
-    if (csveasing.IsGetParamName(ease))
-    {
-        //その行を配列として全取得
-        std::vector<float> v = csveasing.GetParam(ease);
+    //0列目の文字列を渡し、その行のパラメータを取得
+    std::vector<float> easeInitData = csveasing.GetParam(easeInit);
 
-        //初期化の順番はcsvの各行の順番に合わせる
-        //vの添え字はnamespaceで宣言した列挙型を使用
-        Adjust = static_cast<int>(v[i_adjust]);
-        Squared = static_cast<int>(v[i_squared]);
-        Cubed = static_cast<int>(v[i_cubed]);
-    }
+    //初期化の順番はcsvの各行の順番に合わせる
+    //vの添え字はnamespaceで宣言した列挙型を使用
+    Adjust = static_cast<int>(easeInitData[i_adjust]);
+    Squared = static_cast<int>(easeInitData[i_squared]);
+    Cubed = static_cast<int>(easeInitData[i_cubed]);
 
     //csvファイルの各0列目の文字列を取得
     std::string easeout = "EaseOutBackParam";
 
-    //指定した文字列がいずれかの0列目に存在したら
-    if (csveasing.IsGetParamName(easeout))
-    {
-        //その行を配列として全取得
-        std::vector<float> v = csveasing.GetParam(easeout);
+    //0列目の文字列を渡し、その行のパラメータを取得
+    std::vector<float> easeoutData = csveasing.GetParam(easeout);
 
-        //初期化の順番はcsvの各行の順番に合わせる
-        //vの添え字はnamespaceで宣言した列挙型を使用
-        EaseOutBackParam.OverShoot = v[i_overshoot];
-    }
+    //初期化の順番はcsvの各行の順番に合わせる
+    //vの添え字はnamespaceで宣言した列挙型を使用
+    EaseOutBackParam.OverShoot = easeoutData[i_overshoot];
 }

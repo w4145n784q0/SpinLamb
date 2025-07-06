@@ -165,117 +165,96 @@ void Character::SetcsvStatus(std::string _path)
 	//csvファイルの0列目の文字列を取得
 	std::string p_init = "InitializeParam";
 
-	//指定した文字列がいずれかの0列目に存在したら
-	if (csv.IsGetParamName(p_init))
-	{
-		//その行を配列として全取得
-		std::vector<float> v = csv.GetParam(p_init);
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> initData = GetCSVReadData(csv, p_init);
 
-		//自身のトランスフォームを初期化
-		SetTransformPRS(this->transform_,v);
-		InitParam_.FrontDirection_ = {v[i_frontX],v[i_frontY],v[i_frontZ]};
+	//自身のトランスフォームを初期化
+	SetTransformPRS(this->transform_,initData);
 
-		//初期位置を保管する
-		InitParam_.StartPosition_ = this->transform_.position_;
-	}
+	InitParam_.FrontDirection_ = { initData[i_frontX],initData[i_frontY],initData[i_frontZ]};
+
+	//初期位置を保管する
+	InitParam_.StartPosition_ = this->transform_.position_;
+
 
 	//--------------------移動関係のパラメータ--------------------
 
 	//csvファイルの0列目の文字列を取得
 	std::string p_move = "MoveParam";
 
-	//指定した文字列がいずれかの0列目に存在したら
-	if (csv.IsGetParamName(p_move))
-	{
-		//その行を配列として全取得
-		std::vector<float> v = csv.GetParam(p_move);
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> MoveData = GetCSVReadData(csv, p_move);
 
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		MoveParam_.Velocity_ = v[i_vel];
-		MoveParam_.AcceleValue_ = v[i_accele_value];
-		MoveParam_.FullAccelerate_ = v[i_accele_max];
-		MoveParam_.Friction_ = v[i_friction];
-		MoveParam_.ArrowRotate_ = { v[i_arrowrotateX],v[i_arrowrotateY],v[i_arrowrotateZ] };
-		MoveParam_.ArrowScale_ = { v[i_arrowscaleX],v[i_arrowscaleY],v[i_arrowscaleZ] };
-		MoveParam_.AddArrowDepth_ = v[i_addarrowdepth];
-	}
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	MoveParam_.Velocity_ = MoveData[i_vel];
+	MoveParam_.AcceleValue_ = MoveData[i_accele_value];
+	MoveParam_.FullAccelerate_ = MoveData[i_accele_max];
+	MoveParam_.Friction_ = MoveData[i_friction];
+	MoveParam_.ArrowRotate_ = { MoveData[i_arrowrotateX],MoveData[i_arrowrotateY],MoveData[i_arrowrotateZ] };
+	MoveParam_.ArrowScale_ = { MoveData[i_arrowscaleX],MoveData[i_arrowscaleY],MoveData[i_arrowscaleZ] };
+	MoveParam_.AddArrowDepth_ = MoveData[i_addarrowdepth];
 
 	//--------------------回転関係のパラメータ--------------------
 
 	//csvファイルの0列目の文字列を取得
 	std::string p_rotate = "RotateParam";
 
-	//指定した文字列がいずれかの0列目に存在したら
-	if (csv.IsGetParamName(p_rotate))
-	{
-		//その行を配列として全取得
-		std::vector<float> v = csv.GetParam(p_rotate);
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> RotData = GetCSVReadData(csv, p_rotate);
 
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		RotateParam_.MoveRotateX = v[i_moverot];
-		RotateParam_.FastRotateX = v[i_fastrot];
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	RotateParam_.MoveRotateX = RotData[i_moverot];
+	RotateParam_.FastRotateX = RotData[i_fastrot];
 
-	}
 
 	//--------------------空中関係のパラメータ--------------------
 
 	//csvファイルの0列目の文字列を取得	
 	std::string p_jump = "JumpParam";
 
-	//指定した文字列がいずれかの0列目に存在したら
-	if (csv.IsGetParamName(p_jump))
-	{
-		//その行を配列として全取得
-		std::vector<float> v = csv.GetParam(p_jump);
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> JumpData = GetCSVReadData(csv, p_jump);
 
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		JumpParam_.Gravity_ = v[i_gravity];
-		JumpParam_.HeightLowerLimit_ = v[i_upperlimit];
-		JumpParam_.HeightUpperLimit_ = v[i_lowerlimit];
-	}
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	JumpParam_.Gravity_ = JumpData[i_gravity];
+	JumpParam_.HeightLowerLimit_ = JumpData[i_upperlimit];
+	JumpParam_.HeightUpperLimit_ = JumpData[i_lowerlimit];
 
 	//--------------------被弾関係のパラメータ--------------------
 
 	//csvファイルの0列目の文字列を取得	
 	std::string p_hit = "HitParam";
 
-	//指定した文字列がいずれかの0列目に存在したら
-	if (csv.IsGetParamName(p_hit))
-	{
-		//その行を配列として全取得
-		std::vector<float> v = csv.GetParam(p_hit);
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> HitData = GetCSVReadData(csv, p_hit);
 
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		HitParam_.ColliderSize_ =v[i_collider];
-		HitParam_.OriginaRangeMin_ = v[i_originalrangemin];
-		HitParam_.OriginaRangeMax_ = v[i_originalrangemax];
-		HitParam_.ConvertedRangeMin_ = v[i_convertedrangemin];
-		HitParam_.ConvertedRangeMax_ = v[i_convertedrangemax];
-		HitParam_.DecelerationRate_ = v[i_deceleration];
-		HitParam_.KnockBackEnd_ = v[i_knockbackend];
-	}
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	HitParam_.ColliderSize_ = HitData[i_collider];
+	HitParam_.OriginaRangeMin_ = HitData[i_originalrangemin];
+	HitParam_.OriginaRangeMax_ = HitData[i_originalrangemax];
+	HitParam_.ConvertedRangeMin_ = HitData[i_convertedrangemin];
+	HitParam_.ConvertedRangeMax_ = HitData[i_convertedrangemax];
+	HitParam_.DecelerationRate_ = HitData[i_deceleration];
+	HitParam_.KnockBackEnd_ = HitData[i_knockbackend];
 
 	//--------------------柵に接触関係のパラメータ--------------------
 
 	//csvファイルの0列目の文字列を取得	
 	std::string p_wallhit = "WallHitParam";
 
-	//指定した文字列がいずれかの0列目に存在したら
-	if (csv.IsGetParamName(p_wallhit))
-	{
-		//その行を配列として全取得
-		std::vector<float> v = csv.GetParam(p_wallhit);
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> WallHitData = GetCSVReadData(csv, p_wallhit);
 
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		WallHitParam_.KnockBackPower_ = v[i_knockbackpower];
-		WallHitParam_.InvincibilityValue_ = static_cast<int>(v[i_invincibilityvalue]);
-		WallHitParam_.blinkValue_ = static_cast<int>(v[i_blinkvalue]);
-	}
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	WallHitParam_.KnockBackPower_ = WallHitData[i_knockbackpower];
+	WallHitParam_.InvincibilityValue_ = static_cast<int>(WallHitData[i_invincibilityvalue]);
+	WallHitParam_.blinkValue_ = static_cast<int>(WallHitData[i_blinkvalue]);
+	
 
 
 	//--------------------影関係のパラメータ--------------------
@@ -283,16 +262,12 @@ void Character::SetcsvStatus(std::string _path)
 	//csvファイルの0列目の文字列を取得	
 	std::string p_shadow = "ShadowParam";
 
-	//指定した文字列がいずれかの0列目に存在したら
-	if(csv.IsGetParamName(p_shadow))
-	{
-		//その行を配列として全取得
-		std::vector<float> v = csv.GetParam(p_shadow);
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> ShadowData = GetCSVReadData(csv, p_shadow);
 
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		ShadowParam_.ShadowCorrection_ = v[i_shadowcorrection];
-	}
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	ShadowParam_.ShadowCorrection_ = ShadowData[i_shadowcorrection];
 }
 
 void Character::GetWireNormal()
@@ -804,7 +779,6 @@ void Character::InitCSVEffect()
 	csv.Load("CSVData\\EffectData\\VFXData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
-
 	std::string effects[] = { "Charge","FullCharge" ,"Locus" , "Hit" , "WallHit" };
   
 	//ChargeParam_から始まるVFXのパラメータ(vector<float>型の配列)の参照を
@@ -815,17 +789,13 @@ void Character::InitCSVEffect()
 
     for (int i = 0; i < sizeof(effects) / sizeof(effects[0]); i++)  
     {  
-		//指定した文字列がいずれかの0列目に存在したら
-		if (csv.IsGetParamName(effects[i]))
-        {  
-			//その行を配列として全取得
-			std::vector<float> v = csv.GetParam(effects[i]);  
+		//0列目の文字列を渡し、その行のパラメータを取得
+		std::vector<float> v = GetCSVReadData(csv, effects[i]);
 
-			//この時点では代入のみ行われる
-			// SetEmitterで実際にVFXのパラメータにセットされる 
-			*param[i] = v;  
+		//この時点では代入のみ行われる
+		// SetEmitterで実際にVFXのパラメータにセットされる 
+		*param[i] = v;  
             
-        }  
     }
 }
 
@@ -916,17 +886,13 @@ void Character::InitCSVSound()
 	csv.Load("CSVData\\EngineData\\SoundData.csv");
 
 	//csvファイルの0列目の文字列を取得
-	std::string p_sound = "SoundParam";
+	std::string soundName = "SoundParam";
 	
-	//指定した文字列がいずれかの0列目に存在したら
-	if (csv.IsGetParamName(p_sound))
-	{
-		//その行を配列として全取得
-		std::vector<float> v = csv.GetParam(p_sound);
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> soundData = GetCSVReadData(csv, soundName);
 		
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		ChargeSoundCount_ = static_cast<int>(v[i_chargecount]);
-		AttackSoundCount_ = static_cast<int>(v[i_attackcount]);
-	}
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	ChargeSoundCount_ = static_cast<int>(soundData[i_chargecount]);
+	AttackSoundCount_ = static_cast<int>(soundData[i_attackcount]);
 }

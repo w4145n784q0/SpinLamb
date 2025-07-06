@@ -272,19 +272,15 @@ void HUD::SetHUDCSV()
 	csveasing.Load("CSVdata\\HUDData\\HUDSomeData.csv");
 
 	//csvファイルの0列目の文字列を取得
-	std::string easing = "Easing";
+	std::string easingLogoName = "Easing";
 
-	//指定した文字列がいずれかの0列目に存在したら
-	if (csveasing.IsGetParamName(easing))
-	{
-		//その行を配列として全取得
-		std::vector<float> v = csveasing.GetParam(easing);
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> easingData = GetCSVReadData(csveasing, easingLogoName);
 
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		LogoChange = v[i_logochange];
-		MaxScale = v[i_maxscale];
-	}
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	LogoChange = easingData[i_logochange];
+	MaxScale = easingData[i_maxscale];
 }
 
 void HUD::DrawPracticeLogo()

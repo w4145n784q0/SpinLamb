@@ -206,12 +206,11 @@ void TransitionEffect::SetSCVTransitionEffect()
 	//csvファイルの各0列目の文字列を取得
 	std::string Params = "ZoomParam";
 
-	//指定した文字列が0列目に存在したら
-	if (csvParam.IsGetParamName(Params))
-	{
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		std::vector<float> v = csvParam.GetParam(Params);
-		ZoomEffect_.MaxZoomValue_ = v[i_maxzoomvalue];
-	}
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> Transitiondata = GetCSVReadData(csvParam, Params);
+
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	ZoomEffect_.MaxZoomValue_ = Transitiondata[i_maxzoomvalue];
+	
 }

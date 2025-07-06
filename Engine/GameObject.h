@@ -292,6 +292,47 @@ public:
 	}
 
 	/// <summary>
+	/// csvから読み込んだデータを配列として取得
+	/// </summary>
+	/// <param name="_csv">読み込むcsvファイル</param>
+	/// <param name="_name">読み込むcsvファイルの0列目の文字列</param>
+	/// <returns>読み込んだデータの配列</returns>
+	static std::vector<float> GetCSVReadData(CsvReader& _csv, const std::string& _name)
+	{
+		//指定した文字列がいずれかの0列目に存在したら
+		if (_csv.IsGetParamName(_name))
+		{
+			//その行を配列として全取得
+			std::vector<float> v = _csv.GetParam(_name);
+			if (!v.empty())
+			{
+				//配列が空でなければ読み込んだデータ(配列)を返す
+				return v;
+			}
+			else
+			{
+				//配列が空だった場合はエラーメッセージを出す
+				std::string message = "指定された文字列" + _name + "のデータが見つかりません。";
+				MessageBox(NULL, message.c_str(), "BaseProjDx9エラー", MB_OK);
+
+				//空の配列を返す
+				return {};
+			}
+
+		}
+		else
+		{
+			//存在しなかった場合はエラーメッセージを出す
+			std::string message = "指定された文字列" + _name + "が見つかりませんでした。";
+			MessageBox(NULL, message.c_str(), "BaseProjDx9エラー", MB_OK);
+
+			//空の配列を返す
+			return {};
+		}
+
+	}
+
+	/// <summary>
 	/// Transformを初期化する際の共通処理
 	/// </summary>
 	/// <param name="_csv">読み込んだCSVインスタンス</param>
@@ -299,13 +340,9 @@ public:
 	/// <param name="_tr">代入するトランスフォーム変数</param>
 	void InitCSVTransform(CsvReader& _csv, const std::string& _name, Transform& _tr)
 	{
-		//読み込み前にパラメータ名の存在確認をする
-		if (_csv.IsGetParamName(_name))
-		{
-			//確認したらcsvからデータを配列に入れ各トランスフォームに代入
-			std::vector<float> v = _csv.GetParam(_name);
-			SetTransformPRS(_tr, v);
-		}
+		//csvからデータを取得
+		std::vector<float> v = GetCSVReadData(_csv, _name);
+		SetTransformPRS(_tr, v);
 	}
 
 	/// <summary>
@@ -341,21 +378,17 @@ public:
 		//csvファイルの各0列目の文字列を取得
 		std::string common = "CommonData";
 
-		//指定した文字列がいずれかの0列目に存在したら
-        if (csv.IsGetParamName(common))  
-        {  
-			//その行を配列として全取得
-            std::vector<float> v = csv.GetParam(common);  
+		//0列目の文字列を渡し、その行のパラメータを取得
+		std::vector<float> commondata = GetCSVReadData(csv,common);
             
-			//初期化の順番はcsvの各行の順番に合わせる
-			//vの添え字はnamespaceで宣言した列挙型を使用
-			DeltaTime = v[i_deltatime];
-            oneSecond = static_cast<int>(v[i_onesecond]);  
-            TenDivision = static_cast<int>(v[i_tendivision]);  
-			SceneShortTransition = static_cast<int>(v[i_sceneshorttransition]);
-            SceneTransition = static_cast<int>(v[i_scenetransition]);  
-			SceneLongTransition = static_cast<int>(v[i_scenelongtransition]);
-        }  
+		//初期化の順番はcsvの各行の順番に合わせる
+		//vの添え字はnamespaceで宣言した列挙型を使用
+		DeltaTime = commondata[i_deltatime];
+        oneSecond = static_cast<int>(commondata[i_onesecond]);
+        TenDivision = static_cast<int>(commondata[i_tendivision]);
+		SceneShortTransition = static_cast<int>(commondata[i_sceneshorttransition]);
+        SceneTransition = static_cast<int>(commondata[i_scenetransition]);
+		SceneLongTransition = static_cast<int>(commondata[i_scenelongtransition]);
     }
 
 private:

@@ -2,6 +2,8 @@
 #include "Global.h"
 #include"CsvReader.h"
 
+#include"GameObject.h"
+
 namespace Input
 {
 	enum InputIndex
@@ -308,19 +310,15 @@ namespace Input
 		csv.Load("CSVdata\\EngineData\\InputData.csv");
 
 		//csvファイルの0列目の文字列を取得
-		std::string inputdata = "Input";
+		std::string inputname = "Input";
 
-		//指定した文字列がいずれかの0列目に存在したら
-		if (csv.IsGetParamName(inputdata))
-		{
-			//その行を配列として全取得
-			std::vector<float> v = csv.GetParam(inputdata);
+		//0列目の文字列を渡し、その行のパラメータを取得
+		std::vector<float> inputdata = GameObject::GetCSVReadData(csv,inputname);
 
-			//初期化の順番はcsvの各行の順番に合わせる
-			//vの添え字はnamespaceで宣言した列挙型を使用
-			StickTilt = v[i_sticktilt];
-			StickMicroTilt = v[i_stickMicrotilt];
-		}
+		//初期化の順番はcsvの各行の順番に合わせる
+		//vの添え字はnamespaceで宣言した列挙型を使用
+		StickTilt = inputdata[i_sticktilt];
+		StickMicroTilt = inputdata[i_stickMicrotilt];
 	}
 
 }

@@ -660,22 +660,18 @@ void Player::SetCSVPlayer()
 	//csvファイルの各0列目の文字列を取得
 	std::string only = "PlayerOnlyParam";
 
-	//指定した文字列がいずれかの0列目に存在したら
-	if (csv.IsGetParamName(only))
-	{
-		//その行を配列として全取得
-		std::vector<float> v = csv.GetParam(only);
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> OnlyData = GetCSVReadData(csv, only);
 		
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		BackCameraPos = { v[i_backcameraX], v[i_backcameraY], v[i_backcameraZ] };
-		KeyBoardRotateY = v[i_keyboardrotateY];
-		MoveValue = v[i_movevalue];
-		Jumpheight = v[i_jumpheight];
-		CameraInit = { v[i_camerainitx] ,v[i_camerainity] , v[i_camerainitz] };
-		cameraRotate = v[i_camerarotate];
-		cameraUpperLimit = v[i_cameraupperlimit];
-		cameraLowerLimit = v[i_cameralowerlimit];
-		cameraDebugPos = v[i_cameradebugPos];
-	}
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	BackCameraPos = { OnlyData[i_backcameraX], OnlyData[i_backcameraY], OnlyData[i_backcameraZ] };
+	KeyBoardRotateY = OnlyData[i_keyboardrotateY];
+	MoveValue = OnlyData[i_movevalue];
+	Jumpheight = OnlyData[i_jumpheight];
+	CameraInit = { OnlyData[i_camerainitx] ,OnlyData[i_camerainity] , OnlyData[i_camerainitz] };
+	cameraRotate = OnlyData[i_camerarotate];
+	cameraUpperLimit = OnlyData[i_cameraupperlimit];
+	cameraLowerLimit = OnlyData[i_cameralowerlimit];
+	cameraDebugPos = OnlyData[i_cameradebugPos];
 }

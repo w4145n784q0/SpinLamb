@@ -75,17 +75,14 @@ void MiniMap::SetMiniMapCSV()
 	//csvファイルの各0列目の文字列を取得
 	std::string init = "MIniMapInit";
 
-	//指定した文字列がいずれかの0列目に存在したら
-	if (csv.IsGetParamName(init))
-	{
-		//その行を配列として全取得
-		std::vector<float> v = csv.GetParam(init);
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> MapData = GetCSVReadData(csv, init);
 
-		//初期化の順番はcsvの各行の順番に合わせる
-	    //vの添え字はnamespaceで宣言した列挙型を使用
-		reductionX = v[i_reductionXParam];
-		reductionY = v[i_reductionZParam];
-		CorrectionValueX = v[i_CorrectionValueXParam];
-		CorrectionValueY = v[i_CorrectionValueYParam];
-	}
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	reductionX = MapData[i_reductionXParam];
+	reductionY = MapData[i_reductionZParam];
+	CorrectionValueX = MapData[i_CorrectionValueXParam];
+	CorrectionValueY = MapData[i_CorrectionValueYParam];
+	
 }

@@ -2,6 +2,8 @@
 #include "Image.h"
 #include"../Engine/CsvReader.h"
 
+#include"GameObject.h"
+
 //3D画像を管理する
 namespace Image
 {
@@ -217,23 +219,19 @@ namespace Image
 		csv.Load("CSVdata\\EngineData\\ImageData.csv");
 
 		//csvファイルの各0列目の文字列を取得
-		std::string imagedata = "Image";
+		std::string imagename = "Image";
 		
-		//指定した文字列がいずれかの0列目に存在したら
-		if (csv.IsGetParamName(imagedata))
-		{
-			//その行を配列として全取得
-			std::vector<float> v = csv.GetParam(imagedata);
+		//0列目の文字列を渡し、その行のパラメータを取得
+		std::vector<float> imagedata = GameObject::GetCSVReadData(csv, imagename);
 			
-			//初期化の順番はcsvの各行の順番に合わせる
-			//vの添え字はnamespaceで宣言した列挙型を使用
-			LeftEdge = v[i_leftedge];
-			RightEdge = v[i_rightedge];
-			UpEdge = v[i_upedge];
-			DownEdge = v[i_downedge];
-			Center = v[i_center];
-			AlphaMin = static_cast<int>(v[i_alphamin]);
-		}
+		//初期化の順番はcsvの各行の順番に合わせる
+		//vの添え字はnamespaceで宣言した列挙型を使用
+		LeftEdge = imagedata[i_leftedge];
+		RightEdge = imagedata[i_rightedge];
+		UpEdge = imagedata[i_upedge];
+		DownEdge = imagedata[i_downedge];
+		Center = imagedata[i_center];
+		AlphaMin = static_cast<int>(imagedata[i_alphamin]);
 	}
 
 	//ワールド行列設定と描画を同時に行う

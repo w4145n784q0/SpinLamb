@@ -106,20 +106,16 @@ void StageManager::SetStageInitSCV()
 	//csvファイルの0列目の文字列を取得
 	std::string end = "end";
 
-	//指定した文字列がいずれかの0列目に存在したら
-	if (csv_end.IsGetParamName(end))
-	{
-		//その行を配列として全取得
-		std::vector<float> v = csv_end.GetParam(end);
-		
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		UpperEnd_ = v[i_up];
-		LowerEnd_ = v[i_down];
-		RightEnd_ = v[i_right];
-		LeftEnd_ = v[i_left];
-		PillerNum_ = static_cast<int>(v[i_pillernum]);
-	}
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> enddata = GetCSVReadData(csv_end, end);
+
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	UpperEnd_ = enddata[i_up];
+	LowerEnd_ = enddata[i_down];
+	RightEnd_ = enddata[i_right];
+	LeftEnd_ = enddata[i_left];
+	PillerNum_ = static_cast<int>(enddata[i_pillernum]);
 
 
 	//----------当たり判定の位置、サイズ,法線の初期化----------
@@ -129,29 +125,25 @@ void StageManager::SetStageInitSCV()
 	csv_wire.Load("CSVdata\\StageData\\StageWireData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
-	std::string collision[] = { "UpperPos","LowerPos","RightPos","LeftPos",
+	std::string collisionName[] = { "UpperPos","LowerPos","RightPos","LeftPos",
 	"UpperSize","LowerSize","RightSize","LeftSize",
 	"UpperNormal","LowerNormal","RightNormal","LeftNormal"};
 
 	//各当たり判定用のXMFLOAT3変数の参照をポインタ配列に格納
-	XMFLOAT3* CollisionData[] = { &WirePosUpper_ ,&WirePosLower_,&WirePosRight_,&WirePosLeft_,
+	XMFLOAT3* CollisionFloat[] = { &WirePosUpper_ ,&WirePosLower_,&WirePosRight_,&WirePosLeft_,
 	&WireSizeUpper_,&WireSizeLower_,&WireSizeRight_,&WireSizeLeft_,
 	&UpperNormal_,&LowerNormal_,&RightNormal_,&LeftNormal_ };
 
-	for (int i = 0; i < sizeof(collision) / sizeof(collision[0]); i++)
+	for (int i = 0; i < sizeof(collisionName) / sizeof(collisionName[0]); i++)
 	{
-		//指定した文字列がいずれかの0列目に存在したら
-		if (csv_wire.IsGetParamName(collision[i]))
-		{
-			//その行を配列として全取得
-			std::vector<float> v = csv_wire.GetParam(collision[i]);
+		//0列目の文字列を渡し、その行のパラメータを取得
+		std::vector<float> Collisiondata = GetCSVReadData(csv_wire, collisionName[i]);
 
-			//初期化の順番はcsvの各行の順番に合わせる
-			//vの添え字はnamespaceで宣言した列挙型を使用
-	        CollisionData[i]->x = v[i_collisionX];
-			CollisionData[i]->y = v[i_collisionY];
-			CollisionData[i]->z = v[i_collisionZ];
-		}
+		//初期化の順番はcsvの各行の順番に合わせる
+		//vの添え字はnamespaceで宣言した列挙型を使用
+	    CollisionFloat[i]->x = Collisiondata[i_collisionX];
+		CollisionFloat[i]->y = Collisiondata[i_collisionY];
+		CollisionFloat[i]->z = Collisiondata[i_collisionZ];
 	}
 
 	//----------ステージ外オブジェクトの各トランスフォーム初期化----------
