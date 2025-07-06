@@ -114,7 +114,7 @@ Character::Character(GameObject* parent, const std::string& name)
 	InitCSVEffect();
 	InitCSVSound();
 
-	//各画像・サウンドの読み込み
+	//サウンドの読み込み
 	hSoundcharge_ = Audio::Load("Sound\\SE\\charge.wav",false, ChargeSoundCount_);
 	assert(hSoundcharge_ >= 0);
 	hSoundattack_ = Audio::Load("Sound\\SE\\attack.wav", false, AttackSoundCount_);
@@ -160,7 +160,7 @@ void Character::SetcsvStatus(std::string _path)
 	CsvReader csv;
 	csv.Load(_path);
 
-	//--------------------初期化関係のパラメータ(自身のtransform_)--------------------
+	//--------------------初期化関係のパラメータ(自身のtransform_,正面ベクトル)--------------------
 
 	//csvファイルの0列目の文字列を取得
 	std::string p_init = "InitializeParam";
@@ -171,6 +171,7 @@ void Character::SetcsvStatus(std::string _path)
 	//自身のトランスフォームを初期化
 	SetTransformPRS(this->transform_,initData);
 
+	//正面ベクトル初期化
 	InitParam_.FrontDirection_ = { initData[i_frontX],initData[i_frontY],initData[i_frontZ]};
 
 	//初期位置を保管する

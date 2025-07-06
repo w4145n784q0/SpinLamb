@@ -173,6 +173,7 @@ void StageManager::SetStageInitSCV()
 	//‚·‚×‚Ä‚Ìí—ŞEŒÂ”‚ğˆêŠ‡‚Å‰Šú‰»
 	for (size_t type = 0; type < OutStageNames.size(); ++type) 
 	{
+		//–¼‘O‚Ì”‚ÆTransform”z—ñ”‚ªˆê’v‚µ‚Ä‚¢‚é‚È‚ç‘±‚¯‚é
 		if (OutStageNames.size() != OutStageTrans.size())
 		{
 			break;
