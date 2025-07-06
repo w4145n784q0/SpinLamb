@@ -181,6 +181,11 @@ void StageManager::SetStageInitSCV()
 	//すべての種類・個数を一括で初期化
 	for (size_t type = 0; type < OutStageNames.size(); ++type) 
 	{
+		if (OutStageNames.size() != OutStageTrans.size())
+		{
+			break;
+		}
+
 		//必要な数だけTransformを確保
 		OutStageTrans[type]->resize(OutStageNames[type].size());
 
