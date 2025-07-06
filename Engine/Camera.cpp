@@ -150,7 +150,7 @@ void Camera::SetCSVCamera()
 {
 	//csvファイルを読み込む
 	CsvReader csv;
-	csv.Load("CSVdata\\CameraData.csv");
+	csv.Load("CSVdata\\EngineData\\CameraData.csv");
 
 	//csvファイルの各0列目の文字列を取得
 	std::string camera = "Camera";

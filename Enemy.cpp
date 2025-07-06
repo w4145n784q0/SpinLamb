@@ -61,7 +61,7 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 	//csvからパラメータ読み込み
-	std::string path = "CSVdata\\EnemyData.csv";
+	std::string path = "CSVdata\\CharacterData\\EnemyData.csv";
 	SetcsvStatus(path);
 
 	//csvからパラメータ読み込み(Enemyのみ使う情報)
@@ -476,7 +476,7 @@ void Enemy::SetCSVEnemy()
 {
 	//csvファイルを読み込む
 	CsvReader csv;
-	csv.Load("CSVdata\\EnemyData.csv");
+	csv.Load("CSVdata\\CharacterData\\EnemyData.csv");
 
 	//csvファイルの各0列目の文字列を取得
 	std::string only = "EnemyOnlyParam";

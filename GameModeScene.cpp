@@ -178,7 +178,7 @@ void GameModeScene::SetGameModeSCV()
 {
 	//各画像を表示する際のトランスフォーム初期化
 	CsvReader csv;
-	csv.Load("CSVdata\\GameModeData.csv");
+	csv.Load("CSVdata\\SceneData\\GameModeData.csv");
 
 	//選択枠のトランスフォーム初期化
 	InitCSVTransform(csv, "FrameLine", TransFrame_);

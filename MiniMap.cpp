@@ -70,7 +70,7 @@ void MiniMap::SetMiniMapCSV()
 {
 	//csvファイル読み込む
 	CsvReader csv;
-	csv.Load("CSVdata\\MiniMapData.csv");
+	csv.Load("CSVdata\\HUDData\\MiniMapData.csv");
 
 	//csvファイルの各0列目の文字列を取得
 	std::string init = "MIniMapInit";

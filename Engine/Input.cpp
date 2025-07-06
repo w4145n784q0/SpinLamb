@@ -305,7 +305,7 @@ namespace Input
 	{
 		//csvファイルを読み込む
 		CsvReader csv;
-		csv.Load("CSVdata\\InputData.csv");
+		csv.Load("CSVdata\\EngineData\\InputData.csv");
 
 		//csvファイルの0列目の文字列を取得
 		std::string inputdata = "Input";

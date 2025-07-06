@@ -274,7 +274,7 @@ void BattleScene::SetCSVBattle()
 {
 	//csvファイル読み込む
 	CsvReader csv;
-	csv.Load("CSVdata\\BattleData.csv");
+	csv.Load("CSVdata\\SceneData\\BattleData.csv");
 
 	//csvファイルの各0列目の文字列を取得
 	std::string pos = "Position";

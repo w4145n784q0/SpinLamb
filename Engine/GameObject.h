@@ -336,7 +336,7 @@ public:
 
 		//csvファイルを読み込む
         CsvReader csv;  
-        csv.Load("CSVdata\\CommonData.csv");  
+        csv.Load("CSVdata\\EngineData\\CommonData.csv");  
 
 		//csvファイルの各0列目の文字列を取得
 		std::string common = "CommonData";

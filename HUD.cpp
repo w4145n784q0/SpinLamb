@@ -255,7 +255,7 @@ void HUD::SetHUDCSV()
 {
 	//csvファイルを読み込む
 	CsvReader csvTransform;
-	csvTransform.Load("CSVdata\\HUDData.csv");
+	csvTransform.Load("CSVdata\\HUDData\\HUDData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {
@@ -269,7 +269,7 @@ void HUD::SetHUDCSV()
 
 	//csvファイルを読み込む
 	CsvReader csveasing;
-	csveasing.Load("CSVdata\\HUDSomeData.csv");
+	csveasing.Load("CSVdata\\HUDData\\HUDSomeData.csv");
 
 	//csvファイルの0列目の文字列を取得
 	std::string easing = "Easing";

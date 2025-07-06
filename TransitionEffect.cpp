@@ -186,7 +186,7 @@ void TransitionEffect::SetSCVTransitionEffect()
 {
 	//csvファイルを読み込む
 	CsvReader csvTransform;
-	csvTransform.Load("CSVdata\\TransitionData.csv");
+	csvTransform.Load("CSVdata\\EffectData\\TransitionData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = { "Fade" ,"Slide","Zoom"};
@@ -201,7 +201,7 @@ void TransitionEffect::SetSCVTransitionEffect()
 
 	//csvファイルを読み込む
 	CsvReader csvParam;
-	csvParam.Load("CSVdata\\TransitionSomeData.csv");
+	csvParam.Load("CSVdata\\EffectData\\TransitionSomeData.csv");
 
 	//csvファイルの各0列目の文字列を取得
 	std::string Params = "ZoomParam";

@@ -147,7 +147,7 @@ void ResultScene::SetCSVResult()
 {
 	//csvファイルを読み込む
 	CsvReader csv;
-	csv.Load("CSVdata\\SceneData.csv");
+	csv.Load("CSVdata\\SceneData\\SceneData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {

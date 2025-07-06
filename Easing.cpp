@@ -61,7 +61,7 @@ void Easing::SetSCVEasing()
 {
     //csvファイル読み込む
     CsvReader csveasing;
-    csveasing.Load("CSVdata\\EasingData.csv");
+    csveasing.Load("CSVdata\\EffectData\\EasingData.csv");
 
     //csvファイルの各0列目の文字列を取得
     std::string ease = "CommonEasing";

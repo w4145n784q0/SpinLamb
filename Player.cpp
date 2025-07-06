@@ -76,7 +76,7 @@ Player::~Player()
 void Player::Initialize()
 {
 	//csvからパラメータ読み込み
-	std::string path = "CSVdata\\PlayerData.csv";
+	std::string path = "CSVdata\\CharacterData\\PlayerData.csv";
 	SetcsvStatus(path);
 
 	//csvからパラメータ読み込み(Playerのみ使う情報)
@@ -655,7 +655,7 @@ void Player::SetCSVPlayer()
 {
 	//csvファイルを読み込む
 	CsvReader csv;
-	csv.Load("CSVdata\\PlayerData.csv");
+	csv.Load("CSVdata\\CharacterData\\PlayerData.csv");
 
 	//csvファイルの各0列目の文字列を取得
 	std::string only = "PlayerOnlyParam";

@@ -801,7 +801,7 @@ void Character::InitCSVEffect()
 {
 	//csvファイルを読み込む
 	CsvReader csv;
-	csv.Load("CSVData\\VFXData.csv");
+	csv.Load("CSVData\\EffectData\\VFXData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
 
@@ -913,7 +913,7 @@ void Character::InitCSVSound()
 {
 	//csvファイルを読み込む
 	CsvReader csv;
-	csv.Load("CSVData\\SoundData.csv");
+	csv.Load("CSVData\\EngineData\\SoundData.csv");
 
 	//csvファイルの0列目の文字列を取得
 	std::string p_sound = "SoundParam";

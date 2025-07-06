@@ -214,7 +214,7 @@ namespace Image
 	{
 		//csvファイルを読み込む
 		CsvReader csv;
-		csv.Load("CSVdata\\ImageData.csv");
+		csv.Load("CSVdata\\EngineData\\ImageData.csv");
 
 		//csvファイルの各0列目の文字列を取得
 		std::string imagedata = "Image";

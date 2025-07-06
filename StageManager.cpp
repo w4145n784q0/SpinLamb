@@ -81,7 +81,7 @@ void StageManager::SetStageInitSCV()
 
 	//csvファイルを読み込む
 	CsvReader csv;
-	csv.Load("CSVdata\\StageData.csv");
+	csv.Load("CSVdata\\StageData\\StageData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {
@@ -101,7 +101,7 @@ void StageManager::SetStageInitSCV()
 
 	//csvファイルを読み込む
 	CsvReader csv_end;
-	csv_end.Load("CSVdata\\StageEndData.csv");
+	csv_end.Load("CSVdata\\StageData\\StageEndData.csv");
 
 	//csvファイルの0列目の文字列を取得
 	std::string end = "end";
@@ -126,7 +126,7 @@ void StageManager::SetStageInitSCV()
 
 	//csvファイルを読み込む
 	CsvReader csv_wire;
-	csv_wire.Load("CSVdata\\StageWireData.csv");
+	csv_wire.Load("CSVdata\\StageData\\StageWireData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
 	std::string collision[] = { "UpperPos","LowerPos","RightPos","LeftPos",
@@ -157,7 +157,7 @@ void StageManager::SetStageInitSCV()
 	//----------ステージ外オブジェクトの各トランスフォーム初期化----------
 	//csvファイルを読み込む
 	CsvReader csv_out;
-	csv_out.Load("CSVdata\\OutStageData.csv");
+	csv_out.Load("CSVdata\\StageData\\OutStageData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
 
