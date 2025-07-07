@@ -8,19 +8,3 @@ LeftWire::LeftWire(GameObject* parent)
 LeftWire::~LeftWire()
 {
 }
-
-void LeftWire::Initialize()
-{
-}
-
-void LeftWire::Update()
-{
-}
-
-void LeftWire::Draw()
-{
-}
-
-void LeftWire::Release()
-{
-}

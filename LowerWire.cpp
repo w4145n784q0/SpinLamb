@@ -8,19 +8,3 @@ LowerWire::LowerWire(GameObject* parent)
 LowerWire::~LowerWire()
 {
 }
-
-void LowerWire::Initialize()
-{
-}
-
-void LowerWire::Update()
-{
-}
-
-void LowerWire::Draw()
-{
-}
-
-void LowerWire::Release()
-{
-}

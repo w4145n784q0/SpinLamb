@@ -8,19 +8,3 @@ UpperWire::UpperWire(GameObject* parent)
 UpperWire::~UpperWire()
 {
 }
-
-void UpperWire::Initialize()
-{
-}
-
-void UpperWire::Update()
-{
-}
-
-void UpperWire::Draw()
-{
-}
-
-void UpperWire::Release()
-{
-}

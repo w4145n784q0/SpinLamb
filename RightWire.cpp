@@ -8,19 +8,3 @@ RightWire::RightWire(GameObject* parent)
 RightWire::~RightWire()
 {
 }
-
-void RightWire::Initialize()
-{
-}
-
-void RightWire::Update()
-{
-}
-
-void RightWire::Draw()
-{
-}
-
-void RightWire::Release()
-{
-}

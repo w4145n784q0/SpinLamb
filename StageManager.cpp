@@ -154,7 +154,7 @@ void StageManager::SetStageInitSCV()
 	//csvファイルの各0列目の文字列の配列を取得
 
 	std::vector<std::string> Cabins = { "Cabin1" };
-	std::vector<std::string> Trees = { "Tree1","Tree2" };
+	std::vector<std::string> Trees = { "Tree1" , "Tree2" , "Tree3" };
 	std::vector<std::string> Logs = { "Logs1" };
 	std::vector<std::string> Straws = { "Straw1","Straw2","Straw3"};
 

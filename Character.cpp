@@ -724,7 +724,7 @@ void Character::Charging()
 	}
 	else
 	{
-		//SetFullChargeEffect();
+		SetFullChargeEffect();
 		MoveParam_.TmpAccele_ = MoveParam_.FullAccelerate_;
 	}
 }
@@ -823,7 +823,7 @@ void Character::SetFullChargeEffect()
 	VFX::SetEmitter(fullcharge, FullChargeParam);
 
 	//使用する画像のパスをセットする
-	fullcharge.textureFileName = "PaticleAssets\\flashA_W.png";
+	fullcharge.textureFileName = "PaticleAssets\\circle_W.png";
 
 	//発射位置をセット
 	fullcharge.position = this->transform_.position_;
