@@ -203,6 +203,7 @@
     <ClCompile Include="OutStageThing.cpp">
       <Filter>05Stage</Filter>
     </ClCompile>
+    <ClCompile Include="Score.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -371,6 +372,7 @@
     <ClInclude Include="OutStageThing.h">
       <Filter>05Stage</Filter>
     </ClInclude>
+    <ClInclude Include="Score.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

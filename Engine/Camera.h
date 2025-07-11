@@ -46,6 +46,8 @@ namespace Camera
 	//CSVから各ステータスを読み込みする
 	void SetCSVCamera();
 
+	void SetScreen(int split);
+
 	//----------セッター・ゲッター関数----------
 	void SetShakeWidth(float _width);
 

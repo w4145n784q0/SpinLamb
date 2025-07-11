@@ -186,6 +186,7 @@
     <ClCompile Include="PracticeScene.cpp" />
     <ClCompile Include="ResultScene.cpp" />
     <ClCompile Include="RightWire.cpp" />
+    <ClCompile Include="Score.cpp" />
     <ClCompile Include="StageManager.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="TransitionEffect.cpp" />
@@ -244,6 +245,7 @@
     <ClInclude Include="resource.h" />
     <ClInclude Include="ResultScene.h" />
     <ClInclude Include="RightWire.h" />
+    <ClInclude Include="Score.h" />
     <ClInclude Include="StageManager.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="TransitionEffect.h" />

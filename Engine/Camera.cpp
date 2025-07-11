@@ -172,6 +172,18 @@ void Camera::SetCSVCamera()
 	ShakeTimeLong = cameraData[i_shakeTimeLong];
 }
 
+void Camera::SetScreen(int split)
+{
+	if (split == 2)
+	{
+		_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_ / 2.0f, 0.1f, 1000.0f);
+	}
+	else
+	{
+		_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_, 0.1f, 1000.0f);
+	}
+}
+
 //カメラの振動幅をセット(必要に応じてセット)
 void Camera::SetShakeWidth(float _width)
 {
