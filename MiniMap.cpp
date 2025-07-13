@@ -26,7 +26,8 @@ namespace
 
 MiniMap::MiniMap(GameObject* parent)
 	:GameObject(parent,"MiniMap"),
-	pPlayer_(nullptr), pEnemy_(nullptr),playerPos_({0,0,0}),enemyPos_({0,0,0})
+	FirstPos_({ 0,0,0 }), SecondPos_({ 0,0,0 }),
+	OriginalFirstPos_({ 0,0,0 }), OriginalSecondPos_({ 0,0,0 })
 {
 }
 
@@ -40,8 +41,8 @@ void MiniMap::Initialize()
 	SetMiniMapCSV();
 
 	//インスタンスを初期化
-	pPlayer_ = (Player*)FindObject("Player");
-	pEnemy_ = (Enemy*)FindObject("Enemy");
+	//pPlayer_ = (Player*)FindObject("Player");
+	//pEnemy_ = (Enemy*)FindObject("Enemy");
 
 }
 
@@ -50,11 +51,11 @@ void MiniMap::Update()
 	//プレイヤー・CPUの位置をとり続ける
 	//キャラクターのワールド座標を縮小,補正値を足してマップ内に表示
 
-	playerPos_.x = (pPlayer_->GetPosition().x * reductionX) + CorrectionValueX;
-	playerPos_.y = (pPlayer_->GetPosition().z * reductionY) - CorrectionValueY;
+	FirstPos_.x = (OriginalFirstPos_.x * reductionX) + CorrectionValueX;
+	FirstPos_.y = (OriginalFirstPos_.z * reductionY) - CorrectionValueY;
 
-	enemyPos_.x = (pEnemy_->GetPosition().x * reductionX) + CorrectionValueX;
-	enemyPos_.y = (pEnemy_->GetPosition().z * reductionY) - CorrectionValueY;
+	SecondPos_.x = (OriginalSecondPos_.x * reductionX) + CorrectionValueX;
+	SecondPos_.y = (OriginalSecondPos_.z * reductionY) - CorrectionValueY;
 }
 
 void MiniMap::Draw()

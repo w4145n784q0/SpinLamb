@@ -67,10 +67,10 @@ private:
 	int hMap_;
 
 	//プレイヤーのアイコン
-	int hPlayerIcon_;
+	int hFirstIcon_;
 
 	//敵のアイコン
-	int hEnemyIcon_;
+	int hSecondIcon_;
 
 	//----------ゲームシーン状態遷移(状態により描画内容を変更)----------
 	enum GameMode
@@ -91,10 +91,10 @@ private:
 	MiniMap* pMiniMap_;
 
 	//プレイヤーのスコア
-	int PlayerScore_;
+	int FirstScore_;
 
 	//CPUのスコア
-	int EnemyScore_;
+	int SecondScore_;
 
 	//----------DrawStartで呼ぶ状態遷移----------
 	enum DrawStartMode
@@ -131,8 +131,8 @@ public:
 	void SetHUDCSV();
 
 	//描画するスコア設定
-	void SetPlayerScore(int score) { PlayerScore_ = score; }
-	void SetEnemyScore(int score) { EnemyScore_ = score; }
+	void SetFirstScore(int score) { FirstScore_ = score; }
+	void SetSecondScore(int score) { SecondScore_ = score; }
 
 	//各ポインタを設定
 	void SetTimerPointer(GameTimer* _gametimer) { pGameTimer_ = _gametimer; }

@@ -92,9 +92,6 @@ namespace
 	int eScoreIndexTen = 0;
 	int eScoreIndexOne = 0;
 
-	//イージング使用時のカウンター
-	//float EasingCount = 0;
-
 	//ロゴ変更までのカウンター
 	float LogoChangeCount = 0;
 
@@ -110,9 +107,9 @@ HUD::HUD(GameObject* parent)
 	hStart_(-1),hReady_(-1),hGo_(-1),
 	hNumber0_(-1), hNumber1_(-1), hNumber2_(-1), hNumber3_(-1), hNumber4_(-1),
 	hNumber5_(-1), hNumber6_(-1), hNumber7_(-1), hNumber8_(-1), hNumber9_(-1),
-	hFinish_(-1), hMap_(-1), hPlayerIcon_(-1), hEnemyIcon_(-1),
+	hFinish_(-1), hMap_(-1), hFirstIcon_(-1), hSecondIcon_(-1),
 	GameModeHUD_(Max), pGameTimer_(nullptr), pMiniMap_(nullptr), DrawMode_(S_None),
-	PlayerScore_(0),EnemyScore_(0),ReadyTimer_(0),DrawStart_(start_max)
+	FirstScore_(0),SecondScore_(0),ReadyTimer_(0),DrawStart_(start_max)
 
 {
 }
@@ -184,11 +181,11 @@ void HUD::Initialize()
 	hMap_ = Image::Load("Image\\MiniMap\\minimap2.png");
 	assert(hMap_ >= 0);
 
-	hPlayerIcon_ = Image::Load("Image\\MiniMap\\blue_circle.png");
-	assert(hPlayerIcon_ >= 0);
+	hFirstIcon_ = Image::Load("Image\\MiniMap\\blue_circle.png");
+	assert(hFirstIcon_ >= 0);
 
-	hEnemyIcon_ = Image::Load("Image\\MiniMap\\red_circle.png");
-	assert(hEnemyIcon_ >= 0);
+	hSecondIcon_ = Image::Load("Image\\MiniMap\\red_circle.png");
+	assert(hSecondIcon_ >= 0);
 
 
 	//数字画像ハンドル配列を初期化
@@ -409,14 +406,14 @@ void HUD::DrawMiniMap()
 
 	if (pMiniMap_ != nullptr) 
 	{
-		PlayerIcon.position_ = pMiniMap_->GetPlayerPos();
-		EnemyIcon.position_ = pMiniMap_->GetEnemyPos();
+		PlayerIcon.position_ = pMiniMap_->GetFirstPos();
+		EnemyIcon.position_ = pMiniMap_->GetSecondPos();
 	}
 
 	//マップ画像,Player,Enemyのアイコン描画
 	Image::SetAndDraw(hMap_, MapIcon);
-	Image::SetAndDraw(hPlayerIcon_, PlayerIcon);
-	Image::SetAndDraw(hEnemyIcon_, EnemyIcon);
+	Image::SetAndDraw(hFirstIcon_, PlayerIcon);
+	Image::SetAndDraw(hSecondIcon_, EnemyIcon);
 }
 
 void HUD::DrawScore()
@@ -443,10 +440,10 @@ void HUD::DrawScore()
 	//現在のスコアをそれぞれ計算
 	//十の位:現在のスコアを10で除算
 	//一の位:現在のスコアを10で除算した余り
-	pScoreIndexTen = PlayerScore_ / TenDivision;
-	pScoreIndexOne = PlayerScore_ % TenDivision;
-	eScoreIndexTen = EnemyScore_ / TenDivision;
-	eScoreIndexOne = EnemyScore_ % TenDivision;
+	pScoreIndexTen = FirstScore_ / TenDivision;
+	pScoreIndexOne = FirstScore_ % TenDivision;
+	eScoreIndexTen = SecondScore_ / TenDivision;
+	eScoreIndexOne = SecondScore_ % TenDivision;
 
 	//Playerのスコアの十の位,一の位を描画
 	Image::SetAndDraw(ArrayHandle[pScoreIndexTen], PlayerScoreTen);

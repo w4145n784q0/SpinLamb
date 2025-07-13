@@ -5,20 +5,26 @@
 
 //画面右下のミニマップを表示するクラス
 class MiniMap :
-    public GameObject
+	public GameObject
 {
 private:
 	//----------インスタンス----------
-	Player* pPlayer_;
-	Enemy* pEnemy_;
+	//Player* pPlayer_;
+	//Enemy* pEnemy_;
 
 	//----------マップ上の位置----------
 
-	//Playerの位置
-	XMFLOAT3 playerPos_;
+	//Player1の位置
+	XMFLOAT3 FirstPos_;
 
-	//Enemyの位置
-	XMFLOAT3 enemyPos_;
+	//Player2,Enemyの位置
+	XMFLOAT3 SecondPos_;
+
+	//Player1の本来の位置 各プレイシーンから渡される
+	XMFLOAT3 OriginalFirstPos_;
+
+	//Player2,Enemyの本来の位置 各プレイシーンから渡される
+	XMFLOAT3 OriginalSecondPos_;
 
 public:
 	MiniMap(GameObject* parent);
@@ -40,7 +46,15 @@ public:
 	void SetMiniMapCSV();
 
 	//セッター・ゲッター関数
-	XMFLOAT3 GetPlayerPos() { return playerPos_; }
-	XMFLOAT3 GetEnemyPos() { return enemyPos_; }
-};
 
+	void SetFirstPos(XMFLOAT3 _pos) { FirstPos_ = _pos; }
+	void SetSecondPos(XMFLOAT3 _pos) { SecondPos_ = _pos; }
+	XMFLOAT3 GetFirstPos() const { return FirstPos_; }
+	XMFLOAT3 GetSecondPos() const { return SecondPos_; }
+
+	void SetOriginalFirstPos(XMFLOAT3 _pos) { OriginalFirstPos_ = _pos; }
+	void SetOriginalSecondPos(XMFLOAT3 _pos) { OriginalSecondPos_ = _pos; }
+	XMFLOAT3 GetOriginalFirstPos() const { return OriginalFirstPos_; }
+	XMFLOAT3 GetOriginalSecondPos() const { return OriginalSecondPos_; }
+
+};

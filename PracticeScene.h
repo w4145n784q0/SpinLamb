@@ -21,12 +21,14 @@ private:
 	int hSoundPractice_; 
 
 	//----------インスタンス----------
-	Player* pPlayer_;
+	Player* pPlayer1_;
+	Player* pPlayer2_;
 	Enemy* pEnemy_;
-
 	HUD* pHUD_;
-	MiniMap* pMiniMap_;
 	TransitionEffect* pTransitionEffect_;
+
+	//HUDクラスに渡すポインタ
+	MiniMap* pMiniMap_;
 
 	//長押しでタイトルに遷移するカウント
 	int Press_;

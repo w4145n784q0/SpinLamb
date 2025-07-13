@@ -11,11 +11,11 @@ namespace
 {
 	//結果の判別
 
-	//プレイヤーのスコア
-	int playerscore = 0;
+	//キャラクター1のスコア
+	int FirstCharaScore = 0;
 
-	//CPUのスコア
-	int enemyscore = 0;
+	//キャラクター2(CPU)のスコア
+	int SecondCharaScore = 0;
 }
 
 ResultScene::ResultScene(GameObject* parent)
@@ -62,19 +62,19 @@ void ResultScene::Initialize()
 
 	//SceneManagerインスタンスからBattleSceneから各スコアを取得
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-	playerscore =  pSceneManager->GetPlayerScore();
-	enemyscore = pSceneManager->GetEnemyScore();
+	FirstCharaScore =  pSceneManager->GetFirstCharaScore();
+	SecondCharaScore = pSceneManager->GetSecondCharaScore();
 
 	//スコアによって勝敗状態を変化
-	if (playerscore > enemyscore)
+	if (FirstCharaScore > SecondCharaScore)
 	{
 		winner_ = YOU_WIN;
 	}
-	else if (playerscore < enemyscore)
+	else if (FirstCharaScore < SecondCharaScore)
 	{
 		winner_ = CPU_WIN;
 	}
-	else if (playerscore == enemyscore)
+	else if (FirstCharaScore == SecondCharaScore)
 	{
 		winner_ = DRAW;
 	}

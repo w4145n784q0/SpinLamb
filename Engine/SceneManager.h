@@ -18,6 +18,19 @@ enum SCENE_ID
 //-----------------------------------------------------------
 class SceneManager : public GameObject
 {
+private:
+	SCENE_ID currentSceneID_;	//現在のシーン
+	SCENE_ID nextSceneID_;		//次のシーン
+
+	int FirstCharaScore_;		//プレイヤー1のスコア
+	int SecondCharaScore_;		//プレイヤー2or敵のスコア
+
+	enum PlayMode {
+		PlayerVSEnemy,//一人プレイの時(PvE)
+		PlayerVSPlayer,//二人プレイの時(PvP)
+		MaxPlay
+	};
+	PlayMode PlayMode_;
 public:
 
 	//コンストラクタ
@@ -33,20 +46,15 @@ public:
 	//引数：next	次のシーンのID
 	void ChangeScene(SCENE_ID next);
 
-	bool IsBattleScene() { if (currentSceneID_ == SCENE_ID_BATTLE) return true; else return false; }
-	bool IsPracticeScene() { if (currentSceneID_ == SCENE_ID_PRACTICE) return true; else return false; }
+	void SetFirstCharaScore(int score) { FirstCharaScore_ = score; }
+	void SetSecondCharaScore(int score) { SecondCharaScore_ = score; }
 
-	void SetPlayerScore(int score) { PlayerScore_ = score; }
-	void SetEnemyScore(int score) { EnemyScore_ = score; }
+	int GetFirstCharaScore() const { return FirstCharaScore_; }
+	int GetSecondCharaScore() const { return SecondCharaScore_; }
 
-	int GetPlayerScore() const { return PlayerScore_; }
-	int GetEnemyScore() const { return EnemyScore_; }
+	PlayMode GetPlayMode() const { return PlayMode_; }
+	void SetPlayMode(PlayMode _mode) { PlayMode_ = _mode; }
 
-private:
-	SCENE_ID currentSceneID_;	//現在のシーン
-	SCENE_ID nextSceneID_;		//次のシーン
-
-	int PlayerScore_;		//プレイヤーのスコア
-	int EnemyScore_;		//敵のスコア
-
+	bool IsPlayerVSEnemy() const { return PlayMode_ == PlayerVSEnemy; }
+	bool IsPlayerVSPlayer() const { return PlayMode_ == PlayerVSPlayer; }
 };

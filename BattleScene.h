@@ -17,9 +17,11 @@ class BattleScene :
 private:
 
 	//----------インスタンス----------
-	Player* pPlayer_;
+	Player* pPlayer1_;
+	Player* pPlayer2_;
 	Enemy* pEnemy_;
 	HUD* pHUD_;
+	TransitionEffect* pTransitionEffect_;
 
 	//HUDクラスに渡すポインタ
 	GameTimer* pGameTimer_;//BattleScene側から操作する場合のタイマークラスポインタ
@@ -51,15 +53,14 @@ private:
 	//開始・終了ホイッスルサウンド
 	int hSoundWhistle_;
 
+	//----------インスタンス----------
+
+
 	//プレイヤーのスコア
-	int PlayerScore_;
+	int FirstScore_;
 
 	//敵のスコア
-	int EnemyScore_;
-
-	//----------インスタンス----------
-	TransitionEffect* pTransitionEffect_;
-
+	int SecondScore_;
 
 public:
 	BattleScene(GameObject* parent);
@@ -103,10 +104,10 @@ public:
 	void SetCSVBattle();
 
 	//Playerのスコア上昇
-	void PlusPlayerScore() { PlayerScore_++; }
+	void PlusFirstScore() { FirstScore_++; }
 
 	//CPUのスコア上昇
-	void PlusEnemyScore() { EnemyScore_++; }
+	void PlusSecondScore() { SecondScore_++; }
 
 	/// <summary>
 	/// 柵にヒットした際の処理

@@ -12,7 +12,7 @@
 
 PracticeScene::PracticeScene(GameObject* parent)
 	:BaseScene(parent,"PracticeScene"), hBackScreen_(-1),hSoundPractice_(-1),
-	pPlayer_(nullptr),pEnemy_(nullptr), pHUD_(nullptr),pMiniMap_(nullptr),
+	pPlayer1_(nullptr), pPlayer2_(nullptr), pEnemy_(nullptr), pHUD_(nullptr),pMiniMap_(nullptr),
 	pTransitionEffect_(nullptr),Press_(0)
 {
 }
@@ -23,42 +23,70 @@ PracticeScene::~PracticeScene()
 
 void PracticeScene::Initialize()
 {
-	//各クラス生成
+	//StageManagerクラス生成
 	Instantiate<StageManager>(this);
+
+	//StageManagerから各移動制限の値を取得
+	StageManager* pStageManager = (StageManager*)FindObject("StageManager");
+	float North = pStageManager->GetNorthEnd();
+	float South = pStageManager->GetSouthEnd();
+	float West = pStageManager->GetWestEnd();
+	float East = pStageManager->GetEastEnd();
+
+	//プレイヤークラス(Player1)を生成
 	Instantiate<Player>(this);
-	Instantiate<Enemy>(this);
+
+	//Player1に移動制限(各ステージの端)を渡す
+	pPlayer1_ = (Player*)FindObject("Player");
+	assert(pPlayer1_ != nullptr);
+	pPlayer1_->SetEnd(North, South, West, East);
+
+	//Player1にIDを割り振る
+	pPlayer1_->SetID(1);
+
+	//Player1に移動許可を出す
+	pPlayer1_->PlayerStart();
+
+	//現在のモード(PvE or PvP)に合わせたキャラクターを生成
+	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+	if (pSceneManager->IsPlayerVSEnemy())
+	{
+		//CPU(Enemyクラス)を生成
+		Instantiate<Enemy>(this);
+
+		//Enemyに移動制限(各ステージの端)を渡す
+		pEnemy_ = (Enemy*)FindObject("Enemy");
+		assert(pEnemy_ != nullptr);
+		pEnemy_->SetEnd(North, South, West, East);
+
+		//EnemyにIDを割り振る
+		pEnemy_->SetID(2);
+
+		//Enemyは始め停止させる
+		pEnemy_->EnemyStop();
+	}
+	else if (pSceneManager->IsPlayerVSPlayer())
+	{
+		//Player2を生成
+		Instantiate<Player>(this);
+
+		//Player2に移動制限(各ステージの端)を渡す
+		pPlayer2_ = (Player*)FindObject("Player");
+		assert(pPlayer2_ != nullptr);
+		pPlayer2_->SetEnd(North, South, West, East);
+
+		//Player2にIDを割り振る
+		pPlayer2_->SetID(2);
+
+		//Player2に移動許可を出す
+		pPlayer2_->PlayerStart();
+
+	}
+
+	//各クラス生成
 	Instantiate<MiniMap>(this);
 	Instantiate<HUD>(this);
 	Instantiate<TransitionEffect>(this);
-
-	//各画像・サウンドの読み込み
-	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");
-	assert(hBackScreen_ >= 0);
-
-	hSoundPractice_ = Audio::Load("Sound\\BGM\\practice.wav", true);
-	assert(hSoundPractice_ >= 0);
-
-	//StageManagerからPlayer,Enemyのインスタンスを生成し
-	StageManager* pS = (StageManager*)FindObject("StageManager");
-	float north = pS->GetNorthEnd();
-	float south = pS->GetSouthEnd();
-	float west = pS->GetWestEnd();
-	float east = pS->GetEastEnd();
-
-	// 移動制限(各ステージの端)を渡す
-	pPlayer_ = (Player*)FindObject("Player");
-	if(pPlayer_ != nullptr)
-	{
-		pPlayer_->PlayerStart();
-		pPlayer_->SetEnd(north, south, west, east);
-	}
-
-	pEnemy_ = (Enemy*)FindObject("Enemy");
-	if(pEnemy_ != nullptr)
-	{
-		pEnemy_->EnemyStop();
-		pEnemy_->SetEnd(north, south, west, east);
-	}
 
 	//インスタンスを初期化
 	pMiniMap_ = (MiniMap*)FindObject("MiniMap");
@@ -67,6 +95,13 @@ void PracticeScene::Initialize()
 
 	//HUDにポインタを渡す
 	pHUD_->SetMiniMapPointer(pMiniMap_);
+
+	//各画像・サウンドの読み込み
+	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");
+	assert(hBackScreen_ >= 0);
+
+	hSoundPractice_ = Audio::Load("Sound\\BGM\\practice.wav", true);
+	assert(hSoundPractice_ >= 0);
 
 	//フリープレイ用サウンド再生
 	Audio::Play(hSoundPractice_);
@@ -77,6 +112,16 @@ void PracticeScene::Update()
 	//BaseSceneの更新処理を呼ぶ
 	//UpdateActive,UpdateTranslationは継承先の関数が呼ばれる
 	BaseScene::Update();
+
+	pMiniMap_->SetOriginalFirstPos(pPlayer1_->GetPosition());
+	if (pPlayer2_ != nullptr)
+	{
+		pMiniMap_->SetOriginalSecondPos(pPlayer2_->GetPosition());
+	}
+	else if (pEnemy_ != nullptr)
+	{
+		pMiniMap_->SetOriginalSecondPos(pEnemy_->GetPosition());
+	}
 }
 
 void PracticeScene::Draw()

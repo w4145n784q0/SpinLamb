@@ -23,8 +23,9 @@ namespace
 BattleScene::BattleScene(GameObject* parent)
 	:BaseScene(parent,"BattleScene") ,BattleState_(S_BEFORE),
 	 hBackScreen_(-1),hSoundBattle_(-1), hSoundWhistle_(-1),
-	PlayerScore_(0),EnemyScore_(0),
-	pPlayer_(nullptr),pEnemy_(nullptr),pHUD_(nullptr),pMiniMap_(nullptr),
+	FirstScore_(0),SecondScore_(0),
+	pPlayer1_(nullptr), pPlayer2_(nullptr), pEnemy_(nullptr),
+	pHUD_(nullptr),pMiniMap_(nullptr),
 	pGameTimer_(nullptr),pTransitionEffect_(nullptr)
 {
 }
@@ -38,37 +39,71 @@ void BattleScene::Initialize()
 	//csvからパラメータ読み込み
 	SetCSVBattle();
 
-	//各クラス生成
+	//StageManagerクラス生成
 	Instantiate<StageManager>(this);
+
+	//StageManagerから各移動制限の値を取得
+	StageManager* pStageManager = (StageManager*)FindObject("StageManager");
+	float North = pStageManager->GetNorthEnd();
+	float South = pStageManager->GetSouthEnd();
+	float West = pStageManager->GetWestEnd();
+	float East = pStageManager->GetEastEnd();
+
+	//プレイヤークラス(Player1)を生成
 	Instantiate<Player>(this);
-	Instantiate<Enemy>(this);
+
+	//Player1に移動制限(各ステージの端)を渡す
+	pPlayer1_ = (Player*)FindObject("Player");
+	assert(pPlayer1_ != nullptr);
+	pPlayer1_->SetEnd(North, South, West, East);
+
+	//Player1にIDを割り振る
+	pPlayer1_->SetID(1);
+
+	//player1を監視対象に追加
+	pPlayer1_->AddObserver(this);
+
+
+	//現在のモード(PvE or PvP)に合わせたキャラクターを生成
+	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+	if (pSceneManager->IsPlayerVSEnemy())
+	{
+		//CPU(Enemyクラス)を生成
+		Instantiate<Enemy>(this);
+
+		//Enemyに移動制限(各ステージの端)を渡す
+		pEnemy_ = (Enemy*)FindObject("Enemy");
+		assert(pEnemy_ != nullptr);
+		pEnemy_->SetEnd(North, South, West, East);
+
+		//EnemyにIDを割り振る
+		pEnemy_->SetID(2);
+
+		//Enemyを監視対象に追加
+		pEnemy_->AddObserver(this);
+	}
+	else if (pSceneManager->IsPlayerVSPlayer())
+	{
+		//Player2を生成
+		Instantiate<Player>(this);
+
+		//Player2に移動制限(各ステージの端)を渡す
+		pPlayer2_ = (Player*)FindObject("Player");
+		assert(pPlayer2_ != nullptr);
+		pPlayer2_->SetEnd(North, South, West, East);
+
+		//Player2にIDを割り振る
+		pPlayer2_->SetID(2);
+
+		//player2を監視対象に追加
+		pPlayer2_->AddObserver(this);
+	}
+
+	//各クラス生成
 	Instantiate<MiniMap>(this);
 	Instantiate<GameTimer>(this);
 	Instantiate<HUD>(this);
 	Instantiate<TransitionEffect>(this);
-
-	//StageManagerからPlayer,Enemyのインスタンスを生成
-	StageManager* pSceneManager = (StageManager*)FindObject("StageManager");
-	float North = pSceneManager->GetNorthEnd();
-	float South = pSceneManager->GetSouthEnd();
-	float West = pSceneManager->GetWestEnd();
-	float East = pSceneManager->GetEastEnd();
-
-	// 移動制限(各ステージの端)を渡す
-	pPlayer_ = (Player*)FindObject("Player");
-	assert(pPlayer_ != nullptr);
-	pEnemy_ = (Enemy*)FindObject("Enemy");
-	assert(pEnemy_ != nullptr);
-
-
-	pPlayer_->SetEnd(North, South, West, East);
-	pEnemy_->SetEnd(North, South, West, East);
-
-	pPlayer_->SetID(1);
-	pEnemy_->SetID(2);
-
-	pPlayer_->AddObserver(this);
-	pEnemy_->AddObserver(this);
 
 	//インスタンスを初期化
 	pGameTimer_ = (GameTimer*)FindObject("GameTimer");
@@ -95,8 +130,8 @@ void BattleScene::Initialize()
 	assert(hSoundWhistle_ >= 0);
 
 	//Player,Enemyのスコアを初期化
-	pHUD_->SetPlayerScore(PlayerScore_);
-	pHUD_->SetEnemyScore(EnemyScore_);
+	pHUD_->SetFirstScore(FirstScore_);
+	pHUD_->SetSecondScore(SecondScore_);
 
 }
 
@@ -105,6 +140,16 @@ void BattleScene::Update()
 	//BaseSceneの更新処理を呼ぶ
 	//UpdateActive,UpdateTranslationは継承先の関数が呼ばれる
 	BaseScene::Update();
+
+	pMiniMap_->SetOriginalFirstPos(pPlayer1_->GetPosition());
+	if (pPlayer2_ != nullptr)
+	{
+		pMiniMap_->SetOriginalSecondPos(pPlayer2_->GetPosition());
+	}
+	else if (pEnemy_ != nullptr)
+	{
+		pMiniMap_->SetOriginalSecondPos(pEnemy_->GetPosition());
+	}
 }
 
 void BattleScene::Draw()
@@ -171,8 +216,8 @@ void BattleScene::UpdateTransition()
 		pSceneManager->ChangeScene(SCENE_ID_RESULT);
 
 		//Player,Enemyのスコアを渡す
-		pSceneManager->SetPlayerScore(PlayerScore_);
-		pSceneManager->SetEnemyScore(EnemyScore_);
+		pSceneManager->SetFirstCharaScore(FirstScore_);
+		pSceneManager->SetSecondCharaScore(SecondScore_);
 
 		//シーン遷移用タイマーを戻す
 		SceneTransitionTimer_ = 0;
@@ -216,8 +261,17 @@ void BattleScene::UpdateBattleReady()
 		BattleState_ = S_NOW;
 
 		//時間経過でPlayer,Enemyに移動許可を出す
-		pPlayer_->PlayerStart();
-		pEnemy_->EnemyStart();
+		pPlayer1_->PlayerStart();
+		//pEnemy_->EnemyStart();
+
+		if (pPlayer2_ != nullptr)
+		{
+			pPlayer2_->PlayerStart();
+		}
+		else if (pEnemy_ != nullptr)
+		{
+			pEnemy_->EnemyStart();
+		}
 
 		//タイマーを起動
 		pGameTimer_->StartTimer();
@@ -240,8 +294,16 @@ void BattleScene::UpdateBattle()
 		pGameTimer_->StopTimer();
 
 		//player,Enemyの動きを止める
-		pPlayer_->PlayerStop();
-		pEnemy_->EnemyStop();
+		pPlayer1_->PlayerStop();
+
+		if (pPlayer2_ != nullptr)
+		{
+			pPlayer2_->PlayerStop();
+		}
+		else if (pEnemy_ != nullptr)
+		{
+			pEnemy_->EnemyStop();
+		}
 
 		//ホイッスルSE再生
 		Audio::Play(hSoundWhistle_);
@@ -251,8 +313,8 @@ void BattleScene::UpdateBattle()
 	Audio::Play(hSoundBattle_);
 
 	//スコアは毎フレーム渡し続ける
-	pHUD_->SetPlayerScore(PlayerScore_);
-	pHUD_->SetEnemyScore(EnemyScore_);
+	pHUD_->SetFirstScore(FirstScore_);
+	pHUD_->SetSecondScore(SecondScore_);
 }
 
 void BattleScene::UpdateBattleAfter()
@@ -292,12 +354,22 @@ void BattleScene::SetCSVBattle()
 
 void BattleScene::OnCharacterFenceHit(int HitCharaID)
 {
-	if (pPlayer_->GetID() == HitCharaID)
+	if (pPlayer1_->GetID() == HitCharaID)
 	{
-		PlusEnemyScore();
+		PlusSecondScore();
 	}
-	else if (pEnemy_->GetID() == HitCharaID)
+	else if (pEnemy_ != nullptr)
 	{
-		PlusPlayerScore();
+		if (pEnemy_->GetID() == HitCharaID)
+		{
+			PlusFirstScore();
+		}
+	}
+	else if (pPlayer2_ != nullptr)
+	{
+		if (pPlayer2_->GetID() == HitCharaID)
+		{
+			PlusFirstScore();
+		}
 	}
 }

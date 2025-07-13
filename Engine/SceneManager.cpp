@@ -15,7 +15,7 @@
 //コンストラクタ
 SceneManager::SceneManager(GameObject * parent)
 	: GameObject(parent, "SceneManager"), currentSceneID_(SCENE_ID_TITLE), nextSceneID_(SCENE_ID_TITLE),
-	PlayerScore_(0), EnemyScore_(0)
+	FirstCharaScore_(0), SecondCharaScore_(0),PlayMode_(PlayerVSEnemy)
 {
 }
 
