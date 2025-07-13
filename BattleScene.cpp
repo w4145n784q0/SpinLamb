@@ -56,16 +56,19 @@ void BattleScene::Initialize()
 
 	// 移動制限(各ステージの端)を渡す
 	pPlayer_ = (Player*)FindObject("Player");
-	if(pPlayer_ != nullptr)
-	{
-		pPlayer_->SetEnd(North, South, West, East);
-	}
-
+	assert(pPlayer_ != nullptr);
 	pEnemy_ = (Enemy*)FindObject("Enemy");
-	if (pEnemy_ != nullptr)
-	{
-		pEnemy_->SetEnd(North, South, West, East);
-	}
+	assert(pEnemy_ != nullptr);
+
+
+	pPlayer_->SetEnd(North, South, West, East);
+	pEnemy_->SetEnd(North, South, West, East);
+
+	pPlayer_->SetID(1);
+	pEnemy_->SetID(2);
+
+	pPlayer_->AddObserver(this);
+	pEnemy_->AddObserver(this);
 
 	//インスタンスを初期化
 	pGameTimer_ = (GameTimer*)FindObject("GameTimer");
@@ -285,4 +288,16 @@ void BattleScene::SetCSVBattle()
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
 	GameTimeLimit = static_cast<int>(battleData[i_gametimelimit]);
+}
+
+void BattleScene::OnCharacterFenceHit(int HitCharaID)
+{
+	if (pPlayer_->GetID() == HitCharaID)
+	{
+		PlusEnemyScore();
+	}
+	else if (pEnemy_->GetID() == HitCharaID)
+	{
+		PlusPlayerScore();
+	}
 }

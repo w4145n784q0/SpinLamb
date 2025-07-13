@@ -8,6 +8,8 @@
 #include"LeftWire.h"
 #include"RightWire.h"
 
+#include"IGameObserver.h"
+
 //プレイヤー,敵クラスの共通事項クラス
 class Character :
     public GameObject
@@ -15,40 +17,42 @@ class Character :
 protected:
 
     //----------ステージの端----------
-	float NorthEnd_ = 0.0f;//ステージ北端(前方)の位置
-	float SouthEnd_ = 0.0f;//ステージ南端(後方)の位置
-	float EastEnd_ = 0.0f;//ステージ東端(右側)の位置
-	float WestEnd_ = 0.0f;//ステージ西端(左側)の位置
+    float NorthEnd_ = 0.0f;//ステージ北端(前方)の位置
+    float SouthEnd_ = 0.0f;//ステージ南端(後方)の位置
+    float EastEnd_ = 0.0f;//ステージ東端(右側)の位置
+    float WestEnd_ = 0.0f;//ステージ西端(左側)の位置
 
-	//----------サウンドハンドル----------
-	int hSoundcharge_ = -1; //チャージ音のハンドル
-	int hSoundattack_ = -1; //突撃音のハンドル
+    //----------サウンドハンドル----------
+    int hSoundcharge_ = -1; //チャージ音のハンドル
+    int hSoundattack_ = -1; //突撃音のハンドル
     int hSoundCollision_ = -1;//接触音
 
     //----------初期状態----------
     struct InitializeParam
     {
-        XMFLOAT3 StartPosition_ = {0,0,0};//初期位置
-        XMVECTOR FrontDirection_ = {0,0,1};//正面の初期値(ローカル座標系) ここからどれだけ回転したか
+        int CharacterID = 0;//ゲームに参加するキャラクターのid
+        XMFLOAT3 StartPosition_ = { 0,0,0 };//初期位置
+        XMVECTOR FrontDirection_ = { 0,0,1 };//正面の初期値(ローカル座標系) ここからどれだけ回転したか
+        std::vector<IGameObserver*> observers;//監視する対象の配列
     };
     InitializeParam InitParam_;
 
     //----------移動----------
-    struct MoveParam   
-    {   
+    struct MoveParam
+    {
         float Velocity_ = 0.0f;//初速度 この速度に加速度が加算される
         float Acceleration_ = 0.0f;//加速度
         float TmpAccele_ = 0.0f;//加速度上昇時に使う仮の値
         float AcceleValue_ = 0.0f;//Acceleration_上昇時、1fあたりの増加量
         float FullAccelerate_ = 0.0f;//加速度の最大
-		float Friction_ = 0.0f;//摩擦係数(減速率) 1fあたりの減速量
+        float Friction_ = 0.0f;//摩擦係数(減速率) 1fあたりの減速量
         XMVECTOR ForwardVector_ = { 0,0,0 };//キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算 正規化した値を入れる
         XMVECTOR MoveDirection_ = { 0,0,0 };//移動方向 この値に速さの要素をかけて移動ベクトル化する
         XMVECTOR NewPositon_ = { 0,0,0 };//移動後の位置ベクトル
-		Transform ArrowTransform_;//チャージ/攻撃準備中の矢印のトランスフォーム
+        Transform ArrowTransform_;//チャージ/攻撃準備中の矢印のトランスフォーム
         XMFLOAT3 ArrowRotate_ = { 0,0,0 };//矢印の初期回転
         XMFLOAT3 ArrowScale_ = { 0,0,0 };//矢印の大きさ
-		float AddArrowDepth_ = 0.0f;//矢印の奥行き(前方向)の調整値
+        float AddArrowDepth_ = 0.0f;//矢印の奥行き(前方向)の調整値
     };
     MoveParam MoveParam_;
 
@@ -76,12 +80,12 @@ protected:
     struct HitParam
     {
         float ColliderSize_ = 0.0f; //当たり判定(球体)のサイズ
-		float OriginaRangeMin_ = 0.0f; //変換元のノックバック量の最小値
-		float OriginaRangeMax_ = 0.0f;  //変換元のノックバック量の最大値
-		float ConvertedRangeMin_ = 0.0f; //変換後のノックバック量の最小値
-		float ConvertedRangeMax_ = 0.0f; //変換後のノックバック量の最大値
+        float OriginaRangeMin_ = 0.0f; //変換元のノックバック量の最小値
+        float OriginaRangeMax_ = 0.0f;  //変換元のノックバック量の最大値
+        float ConvertedRangeMin_ = 0.0f; //変換後のノックバック量の最小値
+        float ConvertedRangeMax_ = 0.0f; //変換後のノックバック量の最大値
         XMFLOAT3 KnockBack_Direction_ = { 0,0,0 };//ノックバックする方向
-        XMFLOAT3 KnockBack_Velocity_ = {0,0,0};//ノックバックする速度
+        XMFLOAT3 KnockBack_Velocity_ = { 0,0,0 };//ノックバックする速度
         float DecelerationRate_ = 0.0f;//ノックバック時の1fごとの減速率
         float KnockBackEnd_ = 0.0f;//ノックバックを終了する値
     };
@@ -90,12 +94,12 @@ protected:
     //----------壁の接触ダメージ----------
     struct WallHitParam
     {
-        XMVECTOR UpperNormal_ = {0,0,0};//ステージ北端(前方)の法線ベクトル
+        XMVECTOR UpperNormal_ = { 0,0,0 };//ステージ北端(前方)の法線ベクトル
         XMVECTOR LowerNormal_ = { 0,0,0 };//ステージ南端(後方)の法線ベクトル
         XMVECTOR RightNormal_ = { 0,0,0 };//ステージ東端(右側)の法線ベクトル
         XMVECTOR LeftNormal_ = { 0,0,0 };//ステージ西端(左側)の法線ベクトル
         std::vector<XMVECTOR> NormalArray_ = {};//各法線ベクトルを格納した配列
-        std::vector<std::string> WireArray_ = { "UpperWire", "LowerWire", "RightWire" ,"LeftWire"};//各鉄線の名前の配列
+        std::vector<std::string> WireArray_ = { "UpperWire", "LowerWire", "RightWire" ,"LeftWire" };//各鉄線の名前の配列
 
         float KnockBackPower_ = 0.0f; //壁ヒットでノックバックする強さ（変化なし）
         int InvincibilityTime_ = 0;//ダメージ後の無敵時間 1fごとに上昇
@@ -105,7 +109,7 @@ protected:
         int blinkValue_ = 0;//この値にblinkTimerが到達すると描画する
     };
     WallHitParam WallHitParam_;
-    
+
     //----------影付け----------
     struct ShadowParam
     {
@@ -121,9 +125,9 @@ protected:
 
     std::vector<float> ChargeParam_ = {};//チャージ状態エフェクトのパラメータ
     std::vector<float> FullChargeParam = {};
-	std::vector<float> AttackLocusParam_ = {};//突撃エフェクトのパラメータ
-	std::vector<float> HitEffectParam_ = {};//接触時の衝撃エフェクトのパラメータ
-	std::vector<float> WallHitEffectParam_ = {};//壁に接触時の衝撃エフェクトのパラメータ
+    std::vector<float> AttackLocusParam_ = {};//突撃エフェクトのパラメータ
+    std::vector<float> HitEffectParam_ = {};//接触時の衝撃エフェクトのパラメータ
+    std::vector<float> WallHitEffectParam_ = {};//壁に接触時の衝撃エフェクトのパラメータ
 
     //----------サウンド関連----------
     int ChargeSoundCount_ = 0;//チャージ音を鳴らす回数
@@ -164,7 +168,16 @@ public:
     /// 矢印トランスフォームの初期化
     /// </summary>
     void InitArrow();
-  
+
+    /// <summary>
+    /// 自身を監視する対象を追加
+    /// BattleSceneでのみ行われる
+    /// </summary>
+    /// <param name="_observer"></param>
+    void AddObserver(IGameObserver* _observer) {
+        InitParam_.observers.push_back(_observer);
+    }
+
     //----------描画----------
 
     /// <summary>
@@ -215,7 +228,7 @@ public:
     /// <summary>
     /// 正面ベクトルを更新
     /// </summary>
-    void FrontVectorConfirm(){
+    void FrontVectorConfirm() {
 
         //ローカル正面ベクトルを現在のy軸回転量で変形すると、正面からどれだけ回転したかが計算される
         //その値がワールド正面ベクトルとなる
@@ -350,6 +363,21 @@ public:
     /// </summary>
     void InvincibilityTimeCalclation();
 
+    /// <summary>
+    /// 監視する対象(配列)に柵にヒットしたことを通知
+    /// </summary>
+    void NotifyFenceHit()
+    {   
+        //通知を受け取る側がoverrideしていなかった場合は何も起こらない
+        //BattleSceneでのみ有効(監視対象がない=AddObserverを呼ばない場合、
+        //InitParam_.observers自体が空なのでfor文がスルーされる)
+        for (IGameObserver* observer : InitParam_.observers) {
+
+            //監視者へ壁にヒットしたこと（当たったCharacterのID）を通知
+            observer->OnCharacterFenceHit(this->InitParam_.CharacterID);
+        }
+    }
+
     //----------影付け----------
 
     /// <summary>
@@ -369,7 +397,7 @@ public:
 
 
     //----------エフェクト処理----------
-    
+
     /// <summary>
     /// CSV用データの初期化
     /// </summary>
@@ -407,6 +435,8 @@ public:
     void InitCSVSound();
 
     //----------セッター・ゲッター関数----------
+    void SetID(int _id) { InitParam_.CharacterID = _id; }
+    int GetID() { return InitParam_.CharacterID; }
     void SetAcceleration(float _acceleration) { MoveParam_.Acceleration_ = _acceleration; }
     float GetAcceleration() { return MoveParam_.Acceleration_; }
 

@@ -12,7 +12,7 @@
 
 //"バトル"から始まるモードシーン
 class BattleScene :
-	public BaseScene
+	public BaseScene,public IGameObserver
 {
 private:
 
@@ -107,6 +107,12 @@ public:
 
 	//CPUのスコア上昇
 	void PlusEnemyScore() { EnemyScore_++; }
+
+	/// <summary>
+	/// 柵にヒットした際の処理
+	/// </summary>
+	/// <param name="HitCharaID">ヒットしたキャラクターのID</param>
+	void OnCharacterFenceHit(int HitCharaID) override;
 
 };
 

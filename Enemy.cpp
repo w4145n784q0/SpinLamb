@@ -224,6 +224,10 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 					//CPUの状態を柵に接触状態にする
 					EnemyState_ = S_WALLHIT;
+
+					//カメラ振動
+					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
+
 				}
 			}
 		}
@@ -386,15 +390,6 @@ void Enemy::UpdateWallHit()
 	{
 		EnemyState_ = S_ROOT;
 
-		//バトルシーンなら相手にスコア加算
-		//SceneManagerのインスタンスからバトルシーンかどうか判定
-		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
-		if (pSM->IsBattleScene())
-		{
-			//BattleSceneのインスタンスからスコア加算
-			BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
-			pBattleScene->PlusPlayerScore();
-		}
 	}
 }
 

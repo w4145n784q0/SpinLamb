@@ -449,15 +449,6 @@ void Player::UpdateWallHit()
 		//通常状態へ戻る
 		PlayerState_ = S_IDLE;
 
-		//バトルシーンなら相手にスコア加算
-		//SceneManagerのインスタンスからバトルシーンかどうか判定
-		SceneManager* pSM = (SceneManager*)FindObject("SceneManager");
-		if (pSM->IsBattleScene())
-		{
-			//BattleSceneのインスタンスからスコア加算
-			BattleScene* pBattleScene = (BattleScene*)FindObject("BattleScene");
-			pBattleScene->PlusEnemyScore();
-		}
 	}
 }
 

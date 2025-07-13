@@ -678,6 +678,8 @@ void Character::WallReflect(XMVECTOR normal)
 	//–³“Gó‘Ô‚ğİ’è
 	WallHitParam_.IsInvincibility_ = true;
 
+	//ÚG’Ê’m
+	NotifyFenceHit();
 }
 
 bool Character::IsKnockBackEnd()
