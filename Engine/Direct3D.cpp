@@ -36,7 +36,13 @@ namespace Direct3D
 	bool		isDrawCollision_ = true;	//コリジョンを表示するか
 	bool		_isLighting = false;		//ライティングするか
 
-
+	//【ビューポート】
+	//レンダリング結果を表示する範囲（ゲーム画面）
+	D3D11_VIEWPORT vp;//一画面
+	D3D11_VIEWPORT vp_up;//二画面の上部
+	D3D11_VIEWPORT vp_down;//二画面の下部
+	D3D11_VIEWPORT vp_left;//二画面の左
+	D3D11_VIEWPORT vp_right;//二画面の右
 
 	//extern宣言した変数の初期化
 	ID3D11Device*           pDevice_ = nullptr;
@@ -44,7 +50,6 @@ namespace Direct3D
 	SHADER_BUNDLE			shaderBundle[SHADER_MAX] = { 0 };
 	int						screenWidth_ = 0;
 	int						screenHeight_ = 0;
-
 
 
 	//初期化処理
@@ -121,14 +126,46 @@ namespace Direct3D
 
 
 		// ビューポートの設定
-		//レンダリング結果を表示する範囲
-		D3D11_VIEWPORT vp;
-		vp.Width = (float)screenWidth;			//幅
-		vp.Height = (float)screenHeight;		//高さ
-		vp.MinDepth = 0.0f;		//手前
-		vp.MaxDepth = 1.0f;		//奥
-		vp.TopLeftX = 0;		//左
-		vp.TopLeftY = 0;		//上
+
+		//一画面状態
+		vp.Width = (float)screenWidth;				//幅
+		vp.Height = (float)screenHeight;			//高さ
+		vp.MinDepth = 0.0f;							//手前
+		vp.MaxDepth = 1.0f;							//奥
+		vp.TopLeftX = 0;							//左
+		vp.TopLeftY = 0;							//上
+
+		//二画面の上部
+		vp_up.Width = (float)screenWidth;			//幅
+		vp_up.Height = (float)screenHeight / 2;		//高さ
+		vp_up.MinDepth = 0.0f;						//手前
+		vp_up.MaxDepth = 1.0f;						//奥
+		vp_up.TopLeftX = 0;							//左
+		vp_up.TopLeftY = 0;							//上
+
+		//二画面の下部
+		vp_down.Width = (float)screenWidth;			//幅
+		vp_down.Height = (float)screenHeight / 2;	//高さ
+		vp_down.MinDepth = 0.0f;					//手前
+		vp_down.MaxDepth = 1.0f;					//奥
+		vp_down.TopLeftX = 0;						//左
+		vp_down.TopLeftY = (float)screenHeight / 2;	//上
+
+		//二画面の左
+		vp_left.Width = (float)screenWidth / 2;		//幅
+		vp_left.Height = (float)screenHeight;		//高さ
+		vp_left.MinDepth = 0.0f;					//手前
+		vp_left.MaxDepth = 1.0f;					//奥
+		vp_left.TopLeftX = 0;						//左
+		vp_left.TopLeftY = 0;						//上
+
+		//二画面の左
+		vp_right.Width = (float)screenWidth / 2;	//幅
+		vp_right.Height = (float)screenHeight;		//高さ
+		vp_right.MinDepth = 0.0f;					//手前
+		vp_right.MaxDepth = 1.0f;					//奥
+		vp_right.TopLeftX = (float)screenWidth / 2;	//左
+		vp_right.TopLeftY = 0;						//上
 
 
 		//各パターンのシェーダーセット準備
@@ -202,7 +239,7 @@ namespace Direct3D
 		pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);  // データの入力種類を指定
 		pContext_->OMSetRenderTargets(1, &pRenderTargetView_, pDepthStencilView);            // 描画先を設定（今後はレンダーターゲットビューを介して描画してね）
 		pContext_->RSSetViewports(1, &vp);                                      // ビューポートのセット
-
+		
 
 
 
@@ -417,7 +454,6 @@ namespace Direct3D
 	//描画終了
 	void EndDraw()
 	{
-		//ImGui::Button("Button");
 		//ImGui::End();
 		//ImGui::EndFrame();
 		ImGui::Render();
@@ -534,6 +570,36 @@ namespace Direct3D
 		{
 			pContext_->OMSetRenderTargets(1, &pRenderTargetView_, nullptr);
 		}
+	}
+
+	void viewScreenNormal()
+	{
+		//一画面描画
+		pContext_->RSSetViewports(1, &vp);
+	}
+
+	void viewScreenUp()
+	{
+		//上半分描画
+		pContext_->RSSetViewports(1, &vp_up);
+	}
+
+	void viewScreenDown()
+	{
+		//下半分描画
+		pContext_->RSSetViewports(1, &vp_down);
+	}
+
+	void viewScreenLeft()
+	{
+		//左半分描画
+		pContext_->RSSetViewports(1, &vp_left);
+	}
+
+	void viewScreenRight()
+	{
+		//右半分描画
+		pContext_->RSSetViewports(1, &vp_right);
 	}
 
 }

@@ -154,6 +154,9 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
+	//Direct3D::viewScreenLeft(); ‚¢‚¸‚ê‚àƒJƒƒ‰ƒZƒbƒgŒã‚É’u‚­
+	//Direct3D::viewScreenRight();
+
 	//”wŒi•`‰æ
 	Image::SetAndDraw(hBackScreen_, this->transform_);
 
