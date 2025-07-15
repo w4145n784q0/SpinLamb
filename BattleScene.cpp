@@ -5,6 +5,8 @@
 #include"Engine/Audio.h"
 #include"StageManager.h"
 
+#include"Engine/Camera.h"
+
 namespace
 {
 	//次のバトルの状態に遷移するまでの時間計測
@@ -157,8 +159,12 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
-	//Direct3D::viewScreenLeft(); いずれもカメラセット後に置く
-	//Direct3D::viewScreenRight();
+	Direct3D::viewScreenLeft(); //いずれもカメラセット後に置く
+
+	//背景描画
+	Image::SetAndDraw(hBackScreen_, this->transform_);
+
+	Direct3D::viewScreenRight();
 
 	//背景描画
 	Image::SetAndDraw(hBackScreen_, this->transform_);
@@ -207,6 +213,12 @@ void BattleScene::UpdateActive()
 	default:
 		break;
 	}
+
+	//カメラの位置をセット 
+	Camera::SetPosition(pPlayer1_->GetCameraPosition());
+
+	//カメラの焦点をセット
+	Camera::SetTarget(pPlayer1_->GetCameraTarget());
 }
 
 void BattleScene::UpdateTransition()

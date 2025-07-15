@@ -194,6 +194,7 @@ public:
 	const std::string& GetObjectName(void) const;
 
 	//オブジェクト名を設定
+	//引数：name　設定する名前
 	void SetObjectName(std::string name) { objectName_ = name; }
 
 	//子オブジェクトを追加（リストの最後へ）

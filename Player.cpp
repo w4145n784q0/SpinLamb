@@ -349,7 +349,7 @@ void Player::UpdateCharge()
 	//SPACEキー/Aボタンが押され,地上にいるなら
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
 	{
-		if (JumpParam_. IsOnGround_)
+		if (JumpParam_.IsOnGround_)
 		{
 			//溜めたチャージを0にする
 			ChargeReset();
@@ -583,10 +583,10 @@ void Player::CameraUpdate()
 	CameraPosition_.z += Camera::CameraShakeFloat3().z;
 
 	//カメラの位置をセット 
-	Camera::SetPosition(CameraPosition_);
+	//Camera::SetPosition(CameraPosition_);
 
 	//カメラの焦点をセット
-	Camera::SetTarget(CameraTarget_);
+	//Camera::SetTarget(CameraTarget_);
 
 	//バックカメラベクトルをリセット
 	BackCamera_ = { BackCameraPos };

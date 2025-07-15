@@ -126,5 +126,10 @@ public:
 
 	//Player限定のデータをCSV読み込み
 	void SetCSVPlayer();
+
+	//セッター・ゲッター関数
+	XMFLOAT3 GetCameraPosition() { return CameraPosition_; }
+
+	XMFLOAT3 GetCameraTarget() { return CameraTarget_; }
 };
 
