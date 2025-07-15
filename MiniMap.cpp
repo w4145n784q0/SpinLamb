@@ -39,11 +39,6 @@ void MiniMap::Initialize()
 {
 	//csvからパラメータ読み込み
 	SetMiniMapCSV();
-
-	//インスタンスを初期化
-	//pPlayer_ = (Player*)FindObject("Player");
-	//pEnemy_ = (Enemy*)FindObject("Enemy");
-
 }
 
 void MiniMap::Update()

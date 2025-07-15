@@ -263,11 +263,11 @@ void Player::UpdateIdle()
 	//------------------キーボード入力の移動------------------//
 
 	//上下左右キーが押されたら各方向に移動量を加算
-	if (Input::IsKey(DIK_UP))
+	if (Input::IsKey(DIK_UP) /*&& InitParam_.CharacterID == 1*/)
 	{
 		Direction_.z += MoveValue;
 	}
-	if (Input::IsKey(DIK_DOWN))
+	if (Input::IsKey(DIK_DOWN)/* && InitParam_.CharacterID == 1*/)
 	{
 		Direction_.z -= MoveValue;
 	}

@@ -50,11 +50,13 @@ void BattleScene::Initialize()
 	float East = pStageManager->GetEastEnd();
 
 	//プレイヤークラス(Player1)を生成
-	Instantiate<Player>(this);
+	pPlayer1_ = Instantiate<Player>(this);
+	assert(pPlayer1_ != nullptr);
+
+	//Player1の名前を設定
+	pPlayer1_->SetObjectName("Player1");
 
 	//Player1に移動制限(各ステージの端)を渡す
-	pPlayer1_ = (Player*)FindObject("Player");
-	assert(pPlayer1_ != nullptr);
 	pPlayer1_->SetEnd(North, South, West, East);
 
 	//Player1にIDを割り振る
@@ -69,11 +71,10 @@ void BattleScene::Initialize()
 	if (pSceneManager->IsPlayerVSEnemy())
 	{
 		//CPU(Enemyクラス)を生成
-		Instantiate<Enemy>(this);
+		pEnemy_ = Instantiate<Enemy>(this);
+		assert(pEnemy_ != nullptr);
 
 		//Enemyに移動制限(各ステージの端)を渡す
-		pEnemy_ = (Enemy*)FindObject("Enemy");
-		assert(pEnemy_ != nullptr);
 		pEnemy_->SetEnd(North, South, West, East);
 
 		//EnemyにIDを割り振る
@@ -85,11 +86,13 @@ void BattleScene::Initialize()
 	else if (pSceneManager->IsPlayerVSPlayer())
 	{
 		//Player2を生成
-		Instantiate<Player>(this);
-
-		//Player2に移動制限(各ステージの端)を渡す
-		pPlayer2_ = (Player*)FindObject("Player");
+		pPlayer2_ = Instantiate<Player>(this);
 		assert(pPlayer2_ != nullptr);
+
+		//Player2の名前を設定
+		pPlayer2_->SetObjectName("Player2");
+		
+		//Player2に移動制限(各ステージの端)を渡す
 		pPlayer2_->SetEnd(North, South, West, East);
 
 		//Player2にIDを割り振る
