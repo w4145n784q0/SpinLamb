@@ -46,12 +46,18 @@ namespace Camera
 	//CSVから各ステータスを読み込みする
 	void SetCSVCamera();
 
-	void SetScreen(int split);
+	//void SetScreen(int split);
+
+	void HalfScreen();
 
 	//----------セッター・ゲッター関数----------
 	void SetShakeWidth(float _width);
 
 	void SetShakeSpeed(float _speed);
+
+	XMFLOAT3 GetInitPos();
+
+	XMFLOAT3 GetInitTar();
 
 	float GetShakeTimeShort(); 
 

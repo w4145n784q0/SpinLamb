@@ -12,6 +12,8 @@
 #include "Audio.h"
 #include "VFX.h"
 
+#include"../GameView.h"
+
 #include "../imGui/imgui.h" 
 #include "../imGui/imgui_impl_dx11.h" 
 #include "../imGui/imgui_impl_win32.h"
@@ -145,7 +147,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				pRootObject->UpdateSub();
 
 				//カメラを更新
-				Camera::Update();
+				//Camera::Update();
 
 				//エフェクトの更新
 				VFX::Update();
@@ -159,9 +161,40 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//以降全シーンでImGuiを記述することで使用可能となる
 				ImGui::Begin("config");
 #endif
+
+				//二画面状態なら、画面分け→カメラを映す→描画の順で処理
+				//player1のカメラセット、その他のDrawSub行う
+				//player2のカメラセット、その他のDrawSub行う
+
+				if (GameView::IsTwoScreen())
+				{
+					GameView::ViewPlayer1();
+
+					//全オブジェクトを描画
+					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
+					pRootObject->DrawSub();
+
+					GameView::ViewPlayer2();
+
+					//全オブジェクトを描画
+					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
+					pRootObject->DrawSub();
+
+				}
+				else
+				{
+					GameView::ViewNormal();
+					Camera::Update();
+
+					//全オブジェクトを描画
+					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
+					pRootObject->DrawSub();
+				}
+
+
 				//全オブジェクトを描画
 				//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
-				pRootObject->DrawSub();
+				//pRootObject->DrawSub();
 
 				//エフェクトの描画
 				VFX::Draw();

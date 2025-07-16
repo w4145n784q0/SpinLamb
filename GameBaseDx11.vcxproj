@@ -168,6 +168,7 @@
     <ClCompile Include="Fence.cpp" />
     <ClCompile Include="GameModeScene.cpp" />
     <ClCompile Include="GameTimer.cpp" />
+    <ClCompile Include="GameView.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="HowToPlayScene.cpp" />
     <ClCompile Include="HUD.cpp" />
@@ -225,6 +226,7 @@
     <ClInclude Include="Fence.h" />
     <ClInclude Include="GameModeScene.h" />
     <ClInclude Include="GameTimer.h" />
+    <ClInclude Include="GameView.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="HowToPlayScene.h" />
     <ClInclude Include="HUD.h" />

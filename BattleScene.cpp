@@ -7,6 +7,8 @@
 
 #include"Engine/Camera.h"
 
+#include"GameView.h"
+
 namespace
 {
 	//次のバトルの状態に遷移するまでの時間計測
@@ -110,6 +112,11 @@ void BattleScene::Initialize()
 		pPlayer2_->AddObserver(this);
 	}
 
+	//画面設定
+	GameView::SetGameViewMode(GameView::S_TwoScreen);
+	GameView::SetPlayer1(pPlayer1_);
+	GameView::SetPlayer2(pPlayer2_);
+
 	//各クラス生成
 	Instantiate<MiniMap>(this);
 	Instantiate<GameTimer>(this);
@@ -144,6 +151,7 @@ void BattleScene::Initialize()
 	pHUD_->SetFirstScore(FirstScore_);
 	pHUD_->SetSecondScore(SecondScore_);
 
+	Camera::HalfScreen();
 }
 
 void BattleScene::Update()
@@ -165,14 +173,6 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
-	//画面分け→カメラを映す→描画の順
-	Direct3D::viewScreenLeft(); //いずれもカメラセット後に置く
-
-	//背景描画
-	Image::SetAndDraw(hBackScreen_, this->transform_);
-
-	Direct3D::viewScreenRight();
-
 	//背景描画
 	Image::SetAndDraw(hBackScreen_, this->transform_);
 
@@ -248,6 +248,9 @@ void BattleScene::UpdateTransition()
 
 		//ゲームシーン状態を通常に戻しておく
 		SceneState_ = S_Active;
+
+		//1画面に戻す
+		GameView::SetGameViewMode(GameView::S_OneScreen);
 	}
 }
 

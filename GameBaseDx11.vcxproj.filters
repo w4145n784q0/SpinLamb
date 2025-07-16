@@ -204,6 +204,7 @@
       <Filter>05Stage</Filter>
     </ClCompile>
     <ClCompile Include="Score.cpp" />
+    <ClCompile Include="GameView.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -373,6 +374,8 @@
       <Filter>05Stage</Filter>
     </ClInclude>
     <ClInclude Include="Score.h" />
+    <ClInclude Include="IGameObserver.h" />
+    <ClInclude Include="GameView.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">
