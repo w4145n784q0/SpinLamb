@@ -75,42 +75,12 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	//csvからパラメータ読み込み
-	std::string path = "CSVdata\\CharacterData\\PlayerData.csv";
-	SetcsvStatus(path);
-
-	//csvからパラメータ読み込み(Playerのみ使う情報)
-	SetCSVPlayer();
-
 	//各モデルの読み込み
 	hPlayer_ = Model::Load("Model\\chara.fbx");
 	assert(hPlayer_ >= 0);
 
 	hArrow_ = Model::Load("Model\\AttackArrow2.fbx");
 	assert(hArrow_ >= 0);
-
-	//矢印のトランスフォームの初期化
-	InitArrow();
-
-	//初期位置にキャラクターをセット
-	SetStartPosition();
-	
-	//当たり判定付ける
-	SphereCollider* collider = new SphereCollider(XMFLOAT3(0,0,0),HitParam_. ColliderSize_);
-	this->AddCollider(collider);
-
-	//バックカメラの初期値をセット 自分の位置に固定値を足す
-	XMVECTOR cameraAdd = XMLoadFloat3(&this->transform_.position_);
-	BackCamera_ = { BackCameraPos + cameraAdd };
-
-	//カメラのトランスフォームを設定
-	cameraTransform_ = this->transform_;
-
-	//カメラの位置を設定 自分の位置に固定値を足す
-	CameraPosition_ = { this->transform_.position_ + CameraInit };
-
-	//カメラの焦点を設定
-	CameraTarget_ = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 }
 
 void Player::Update()
@@ -457,6 +427,39 @@ void Player::UpdateStop()
 	//何も処理をしない
 }
 
+void Player::PlayerInit(std::string _path)
+{
+	//csvからパラメータ読み込み
+	SetcsvStatus(_path);
+
+	//csvからパラメータ読み込み(Playerのみ使う情報)
+	SetCSVPlayer(_path);
+
+	//矢印のトランスフォームの初期化
+	InitArrow();
+
+	//初期位置にキャラクターをセット
+	SetStartPosition();
+
+	//当たり判定付ける
+	SphereCollider* collider = new SphereCollider(XMFLOAT3(0, 0, 0), HitParam_.ColliderSize_);
+	this->AddCollider(collider);
+
+	//バックカメラの初期値をセット 自分の位置に固定値を足す
+	XMVECTOR cameraAdd = XMLoadFloat3(&this->transform_.position_);
+	BackCamera_ = { BackCameraPos + cameraAdd };
+
+	//カメラのトランスフォームを設定
+	cameraTransform_ = this->transform_;
+
+	//カメラの位置を設定 自分の位置に固定値を足す
+	CameraPosition_ = { this->transform_.position_ + CameraInit };
+
+	//カメラの焦点を設定
+	CameraTarget_ = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
+
+}
+
 void Player::SetJump()
 {
 	//ジャンプを開始する処理
@@ -642,11 +645,11 @@ void Player::PlayerMove(XMVECTOR _move)
 	MoveRotate();
 }
 
-void Player::SetCSVPlayer()
+void Player::SetCSVPlayer(std::string _path)
 {
 	//csvファイルを読み込む
 	CsvReader csv;
-	csv.Load("CSVdata\\CharacterData\\PlayerData.csv");
+	csv.Load(_path);
 
 	//csvファイルの各0列目の文字列を取得
 	std::string only = "PlayerOnlyParam";

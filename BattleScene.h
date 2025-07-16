@@ -53,9 +53,6 @@ private:
 	//開始・終了ホイッスルサウンド
 	int hSoundWhistle_;
 
-	//----------インスタンス----------
-
-
 	//プレイヤーのスコア
 	int FirstScore_;
 

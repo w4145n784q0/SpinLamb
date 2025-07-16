@@ -105,6 +105,12 @@ public:
 	//プレイヤーを止める
 	void PlayerStop() { PlayerState_ = S_STOP; }
 	
+	/// <summary>
+	/// プレイヤーの初期化(別関数から呼ぶ用)
+	/// </summary>
+	/// <param name="_path">読み込むcsvファイルのパス</param>
+	void PlayerInit(std::string _path);
+
 	//ジャンプ開始
 	void SetJump();
 
@@ -123,9 +129,11 @@ public:
 	/// <param name="_move">移動する方向</param>
 	void PlayerMove(XMVECTOR _move);
 
-
-	//Player限定のデータをCSV読み込み
-	void SetCSVPlayer();
+	/// <summary>
+	/// Player限定のデータをCSV読み込み
+	/// </summary>
+	/// <param name="_path">読み込むcsvファイルのパス</param>
+	void SetCSVPlayer(std::string _path);
 
 	//セッター・ゲッター関数
 	XMFLOAT3 GetCameraPosition() { return CameraPosition_; }

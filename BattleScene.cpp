@@ -64,6 +64,9 @@ void BattleScene::Initialize()
 	//Player1にIDを割り振る
 	pPlayer1_->SetID(1);
 
+	//Player1の初期化
+	pPlayer1_->PlayerInit("CSVdata\\CharacterData\\PlayerData1.csv");
+
 	//player1を監視対象に追加
 	pPlayer1_->AddObserver(this);
 
@@ -99,6 +102,9 @@ void BattleScene::Initialize()
 
 		//Player2にIDを割り振る
 		pPlayer2_->SetID(2);
+
+		//Player2の初期化
+		pPlayer2_->PlayerInit("CSVdata\\CharacterData\\PlayerData2.csv");
 
 		//player2を監視対象に追加
 		pPlayer2_->AddObserver(this);
@@ -159,6 +165,7 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
+	//画面分け→カメラを映す→描画の順
 	Direct3D::viewScreenLeft(); //いずれもカメラセット後に置く
 
 	//背景描画
@@ -214,11 +221,7 @@ void BattleScene::UpdateActive()
 		break;
 	}
 
-	//カメラの位置をセット 
-	Camera::SetPosition(pPlayer1_->GetCameraPosition());
 
-	//カメラの焦点をセット
-	Camera::SetTarget(pPlayer1_->GetCameraTarget());
 }
 
 void BattleScene::UpdateTransition()
