@@ -15,9 +15,10 @@ GameModeScene::GameModeScene(GameObject* parent)
 	:BaseScene(parent, "GameModeScene"), 
 	hBackScreen_(-1), hBackChara_(-1),
 	hBattle_(-1),hPractice_(-1), hHowtoPlay_(-1),hBackTitle_(-1), hFrameLine_(-1),
-	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),
+	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),hPlayerNumSelect_(-1),
 	TextArray_({}),ButtonImageArray_({}), ModeTransArray_({}),
-	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), SelectMode_(S_Battle),
+	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), 
+	SelectMode_(S_Battle),GameModeState_(S_Selecting),
 	pTransitionEffect_(nullptr)
 {
 }
@@ -75,6 +76,9 @@ void GameModeScene::Initialize()
 
 	hTitleText_ = Image::Load(path + "TitleText.png");
 	assert(hTitleText_ >= 0);
+
+	hPlayerNumSelect_ = Image::Load(path + "selectplayer.png");
+	assert(hPlayerNumSelect_ >= 0);
 
 	hSoundGameMode_ = Audio::Load("Sound\\BGM\\gameMode.wav",true);
 	assert(hSoundGameMode_ >= 0);
@@ -143,6 +147,25 @@ void GameModeScene::Draw()
 		break;
 	}
 
+	if (GameModeState_ == GameModeScene::S_Confirmation)
+	{
+		switch (SelectMode_)
+		{
+		case GameModeScene::S_Battle:
+		case GameModeScene::S_Practice:
+		{
+			Image::SetAndDraw(hPlayerNumSelect_, this->transform_);
+		}
+			break;
+		//case GameModeScene::S_HowToPlay:
+		//	break;
+		//case GameModeScene::S_Title:
+		//	break;
+		default:
+			break;
+		}
+	}
+
 	//選択枠の描画
 	Image::SetAndDraw(hFrameLine_, TransFrame_);
 
@@ -196,9 +219,8 @@ void GameModeScene::SetGameModeSCV()
 	InitCSVTransform(csv, "Text", TransText_);
 }
 
-void GameModeScene::UpdateActive()
+void GameModeScene::UpdateSelecting()
 {
-
 	//ボタンの選択枠の移動
 	//インデックスが先頭/末尾なら末尾/先頭へ戻る
 	//前置デクリメントで配列オーバー防ぐ
@@ -248,7 +270,33 @@ void GameModeScene::UpdateActive()
 		break;
 	}
 
-	////決定ボタン(Pキー・B/Startボタン)を押したらシーン遷移状態へ
+	//決定ボタン(Pキー・B/Startボタン)を押したら確認画面へ
+	//あそびかたシーン選択ならシーン遷移状態へ
+	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	{
+		//決定音を再生
+		Audio::Play(hSoundDecide_);
+
+		//確認画面へ遷移
+		GameModeState_ = S_Confirmation;
+
+		if (hModeSelect_ == S_HowToPlay)
+		{
+			//UpdateTransitionへ遷移
+			SceneState_ = S_Transition;
+
+			//シーン遷移エフェクト(ズームイン)を設定
+			pTransitionEffect_->ZoomInStart();
+			pTransitionEffect_->SetTransitionTime(SceneShortTransition);
+		}
+	}
+}
+
+void GameModeScene::UpdateConfirmation()
+{
+
+
+
 	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		//決定音を再生
@@ -260,6 +308,31 @@ void GameModeScene::UpdateActive()
 		//シーン遷移エフェクト(ズームイン)を設定
 		pTransitionEffect_->ZoomInStart();
 		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
+
+		//SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		//pSceneManager->SetPvPMode();
+		
+	}
+
+	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsKeyUp(XINPUT_GAMEPAD_A))
+	{
+		//選択画面へ遷移
+		GameModeState_ = S_Selecting;
+	}
+}
+
+void GameModeScene::UpdateActive()
+{
+	switch (GameModeState_)
+	{
+	case GameModeScene::S_Selecting:
+		UpdateSelecting();
+		break;
+	case GameModeScene::S_Confirmation:
+		UpdateConfirmation();
+		break;
+	default:
+		break;
 	}
 }
 

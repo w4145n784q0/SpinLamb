@@ -53,8 +53,8 @@ public:
 	int GetSecondCharaScore() const { return SecondCharaScore_; }
 
 	PlayMode GetPlayMode() const { return PlayMode_; }
-	void SetPlayMode(PlayMode _mode) { PlayMode_ = _mode; }
-
+	void SetPvEMode() { PlayMode_ = PlayerVSEnemy; }
+	void SetPvPMode() { PlayMode_ = PlayerVSPlayer; }
 	bool IsPlayerVSEnemy() const { return PlayMode_ == PlayerVSEnemy; }
 	bool IsPlayerVSPlayer() const { return PlayMode_ == PlayerVSPlayer; }
 };

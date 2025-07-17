@@ -113,7 +113,7 @@ void BattleScene::Initialize()
 	}
 
 	//âÊñ ê›íË
-	GameView::SetGameViewMode(GameView::S_TwoScreen);
+	GameView::SetGameViewMode(GameView::S_Dual);
 	GameView::SetPlayer1(pPlayer1_);
 	GameView::SetPlayer2(pPlayer2_);
 
@@ -250,7 +250,7 @@ void BattleScene::UpdateTransition()
 		SceneState_ = S_Active;
 
 		//1âÊñ Ç…ñﬂÇ∑
-		GameView::SetGameViewMode(GameView::S_OneScreen);
+		GameView::SetGameViewMode(GameView::S_NormalScreen);
 	}
 }
 

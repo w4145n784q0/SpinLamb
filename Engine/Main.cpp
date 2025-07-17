@@ -86,9 +86,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	RootObject* pRootObject = new RootObject;
 	pRootObject->Initialize();
 
-	//最初に共通データを初期化
+	//共通データを初期化
 	GameObject::SCVCommonDataInitialize();
 	Image::SetSCVImage();
+
+	//ゲームの映し方の準備
+	GameView::Initialize();
 
 
 	//メッセージループ（何か起きるのを待つ）
@@ -166,7 +169,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//player1のカメラセット、その他のDrawSub行う
 				//player2のカメラセット、その他のDrawSub行う
 
-				if (GameView::IsTwoScreen())
+				if (GameView::IsDual())
 				{
 					GameView::ViewPlayer1();
 
@@ -181,10 +184,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					pRootObject->DrawSub();
 
 				}
+				else if (GameView::IsSingle())
+				{
+					GameView::ViewPvE();
+
+					//全オブジェクトを描画
+					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
+					pRootObject->DrawSub();
+				}
 				else
 				{
 					GameView::ViewNormal();
-					Camera::Update();
 
 					//全オブジェクトを描画
 					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる

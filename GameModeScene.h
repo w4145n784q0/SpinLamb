@@ -13,7 +13,7 @@ class GameModeScene :
 private:
 
 	//現在選択しているモード
-	enum Mode
+	enum SelectMode
 	{
 		S_Battle = 0,//"バトル"を選択中
 		S_Practice,//"フリープレイ"を選択中
@@ -21,7 +21,16 @@ private:
 		S_Title,//"タイトル"を選択中
 		MaxCount //モードの最大値
 	};
-	Mode SelectMode_;
+	SelectMode SelectMode_;
+
+	//ゲームモードシーンの状態
+	enum GameModeState
+	{
+		S_Selecting,//モードの選択中
+		S_Confirmation,//決定後の確認画面(必要に応じて実装)
+		MaxState
+	};
+	GameModeState GameModeState_;
 
 	//----------背景----------
 
@@ -78,6 +87,9 @@ private:
 	//画面下部のゲーム説明テキスト画像(タイトル用)
 	int hTitleText_;
 
+	//一人プレイか二人プレイかを確認する画像
+	int hPlayerNumSelect_;
+
 	//"モードセレクト"画像のトランスフォーム
 	Transform TransSelect_;
 
@@ -100,10 +112,10 @@ private:
 
 
 	//各モードのリスト
-	std::list<Mode> ModeList_;
+	std::list<SelectMode> ModeList_;
 
 	//ModeList_のインデックスを指す値
-	std::list<Mode>::iterator itr;
+	std::list<SelectMode>::iterator itr;
 	
 
 	//----------インスタンス----------
@@ -127,6 +139,11 @@ public:
 
 	//CSVファイルから必要パラメータを読み込みする
 	void SetGameModeSCV();
+
+	//----------GameModeState_に応じて内容が変わるUpdate関数----------
+	void UpdateSelecting();
+
+	void UpdateConfirmation();
 
 	//----------BaseSceneの継承関数----------
 	//通常の処理
