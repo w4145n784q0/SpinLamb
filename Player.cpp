@@ -119,24 +119,15 @@ void Player::Release()
 
 void Player::OnCollision(GameObject* pTarget)
 {
-	//敵クラスと接触した時の処理
-	if (pTarget->GetObjectName() == "Enemy")
+	//敵クラス,プレイヤーと接触した時の処理
+	if (pTarget->GetObjectName() == "Enemy" || pTarget->GetObjectName() == "Player1"
+		|| pTarget->GetObjectName() == "Player2")
 	{
-		//敵のインスタンスを取得
-		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
+		//接触したキャラクターの名前を取得
+		std::string targetName = pTarget->GetObjectName();
 
-		//敵の位置を取りXMVECTOR型にする
-		XMFLOAT3 getposition =  pEnemy->GetPosition();
-		XMVECTOR enemyvector = XMLoadFloat3(&getposition);
-
-		//自身の位置をXMVECTOR型にする
-		XMVECTOR playervector = XMLoadFloat3(&this->transform_.position_);
-
-		//相手のスピードを取得
-		float enemyaccele = pEnemy->GetAcceleration();
-
-		//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度)
-		Reflect(playervector, enemyvector, this->MoveParam_.Acceleration_, enemyaccele);
+		//あたった対象に応じた反射処理
+		CollisionCharacter(targetName);
 
 		//被弾状態になる
 		PlayerState_ = S_HIT;
@@ -238,11 +229,11 @@ void Player::UpdateIdle()
 	//------------------キーボード入力の移動------------------//
 
 	//上下左右キーが押されたら各方向に移動量を加算
-	if (Input::IsKey(DIK_UP) /*&& InitParam_.CharacterID == 1*/)
+	if (Input::IsKey(DIK_UP))
 	{
 		Direction_.z += MoveValue;
 	}
-	if (Input::IsKey(DIK_DOWN)/* && InitParam_.CharacterID == 1*/)
+	if (Input::IsKey(DIK_DOWN))
 	{
 		Direction_.z -= MoveValue;
 	}
@@ -260,6 +251,7 @@ void Player::UpdateIdle()
 
 	//------------------ゲームパッドスティックの移動------------------//
 
+	//コントローラー操作
 	ControllerMove(ControllerID_);
 
 	//------------------チャージ状態へ移行------------------//
@@ -662,6 +654,50 @@ void Player::PlayerMove(XMVECTOR _move)
 
 	//キャラクターをX回転
 	MoveRotate();
+}
+
+void Player::CollisionCharacter(std::string _name)
+{
+	//自身の位置をXMVECTOR型として先に保管する
+	XMVECTOR PlayerVector = XMLoadFloat3(&this->transform_.position_);
+
+	float targetSpeed = 0.0f;
+	XMFLOAT3 targetPos = {};
+	XMVECTOR targetVector = {};
+
+	if (_name == "Enemy")
+	{
+		//敵クラスのインスタンスを取得
+		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
+		assert(pEnemy != nullptr);
+
+		//敵の位置を取りXMVECTOR型にする
+		targetPos = pEnemy->GetPosition();
+		targetVector = XMLoadFloat3(&targetPos);
+
+		//相手のスピードを取得
+		targetSpeed = pEnemy->GetAcceleration();
+	}
+	else if (_name == "Player1" || _name == "Player2")
+	{
+		//プレイヤーのインスタンスを取得
+		Player* pPlayer = (Player*)FindObject(_name);
+		assert(pPlayer != nullptr);
+
+		//プレイヤーの位置を取りXMVECTOR型にする
+		targetPos = pPlayer->GetPosition();
+		targetVector = XMLoadFloat3(&targetPos);
+
+		//相手のスピードを取得
+		targetSpeed = pPlayer->GetAcceleration();
+	}
+	else
+	{
+		return;
+	}
+
+	//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度)
+	Reflect(PlayerVector, targetVector, this->MoveParam_.Acceleration_, targetSpeed);
 }
 
 void Player::SetCSVPlayer(std::string _path)

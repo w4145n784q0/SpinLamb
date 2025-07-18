@@ -143,6 +143,8 @@ public:
 	/// <param name="_move">ˆÚ“®‚·‚é•ûŒü</param>
 	void PlayerMove(XMVECTOR _move);
 
+	void CollisionCharacter(std::string _name);
+
 	/// <summary>
 	/// PlayerŒÀ’è‚Ìƒf[ƒ^‚ğCSV“Ç‚İ‚İ
 	/// </summary>

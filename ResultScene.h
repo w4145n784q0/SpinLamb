@@ -20,6 +20,12 @@ private:
 	//"cpu win"‚ÌƒƒS
 	int hCpuWin_;
 
+	//"player1 win"
+	int hPlayer1Win_;
+
+	//"player2 win"
+	int hPlayer2Win_;
+
 	//"Draw"‚ÌƒƒS
 	int hDraw_;
 

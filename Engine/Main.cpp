@@ -177,11 +177,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 					pRootObject->DrawSub();
 
+					//エフェクトの描画
+					VFX::Draw();
+
 					GameView::ViewPlayer2();
 
 					//全オブジェクトを描画
 					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 					pRootObject->DrawSub();
+
+					//エフェクトの描画
+					VFX::Draw();
 
 				}
 				else if (GameView::IsSingle())
@@ -191,6 +197,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//全オブジェクトを描画
 					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 					pRootObject->DrawSub();
+
+					//エフェクトの描画
+					VFX::Draw();
 				}
 				else
 				{
@@ -199,6 +208,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//全オブジェクトを描画
 					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 					pRootObject->DrawSub();
+
+					//エフェクトの描画
+					VFX::Draw();
 				}
 
 
@@ -207,7 +219,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//pRootObject->DrawSub();
 
 				//エフェクトの描画
-				VFX::Draw();
+				//VFX::Draw();
 
 				//描画終了
 #ifdef _DEBUG

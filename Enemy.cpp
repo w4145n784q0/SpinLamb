@@ -182,7 +182,7 @@ void Enemy::Release()
 void Enemy::OnCollision(GameObject* pTarget)
 {
 	//プレイヤーと接触した時の処理
-	if (pTarget->GetObjectName() == "Player")
+	if (pTarget->GetObjectName() == "Player1")
 	{
 		//自身の位置をXMVECTOR型にする
 		XMVECTOR enemyvector = XMLoadFloat3(&this->transform_.position_);

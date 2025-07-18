@@ -20,6 +20,7 @@ namespace
 
 ResultScene::ResultScene(GameObject* parent)
 	:BaseScene(parent, "ResultScene"), hBackScreen_(-1), hYouWin_(-1),hCpuWin_(-1),
+	hPlayer1Win_(-1),hPlayer2Win_(-1),
 	hDraw_(-1), hlogoTitle_(-1),
 	hSoundResult_(-1), hSoundBackTitle_(-1), winner_(RESULTMAX), ResultArray_({}),
 	pTransitionEffect_(nullptr)
@@ -47,6 +48,12 @@ void ResultScene::Initialize()
 
 	hCpuWin_ = Image::Load("Image\\Result\\CPUWin.png");
 	assert(hCpuWin_ >= 0);
+
+	hPlayer1Win_ = Image::Load("Image\\Result\\Player1Win.png");
+	assert(hPlayer1Win_);
+
+	hPlayer2Win_ = Image::Load("Image\\Result\\Player2Win.png");
+	assert(hPlayer2Win_);
 
 	hDraw_ = Image::Load("Image\\Result\\Draw.png");
 	assert(hDraw_ >= 0);
@@ -79,8 +86,15 @@ void ResultScene::Initialize()
 		winner_ = DRAW;
 	}
 
-	//画像ハンドル配列を初期化
-	ResultArray_ = { hYouWin_, hCpuWin_, hDraw_ };
+	//画像ハンドル配列を初期化(プレイ人数によって分ける)
+	if (pSceneManager->IsPlayerVSEnemy())
+	{
+		ResultArray_ = { hYouWin_, hCpuWin_, hDraw_ };
+	}
+	else if (pSceneManager->IsPlayerVSPlayer())
+	{
+		ResultArray_ = { hPlayer1Win_, hPlayer2Win_, hDraw_ };
+	}
 
 	//インスタンス生成
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
