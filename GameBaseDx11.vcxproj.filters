@@ -204,7 +204,12 @@
       <Filter>05Stage</Filter>
     </ClCompile>
     <ClCompile Include="Score.cpp" />
-    <ClCompile Include="GameView.cpp" />
+    <ClCompile Include="PlayerManager.cpp">
+      <Filter>04Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="GameView.cpp">
+      <Filter>01Engine\DirectX</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -374,8 +379,15 @@
       <Filter>05Stage</Filter>
     </ClInclude>
     <ClInclude Include="Score.h" />
-    <ClInclude Include="IGameObserver.h" />
-    <ClInclude Include="GameView.h" />
+    <ClInclude Include="PlayerManager.h">
+      <Filter>04Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="GameView.h">
+      <Filter>01Engine\DirectX</Filter>
+    </ClInclude>
+    <ClInclude Include="IGameObserver.h">
+      <Filter>04Chara</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

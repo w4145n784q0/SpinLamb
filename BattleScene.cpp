@@ -66,6 +66,7 @@ void BattleScene::Initialize()
 	//Player1にIDを割り振る
 	pPlayer1_->SetID(1);
 
+	//使うコントローラーのID設定
 	pPlayer1_->SetControllerID(0);
 
 	//Player1の初期化
@@ -76,6 +77,9 @@ void BattleScene::Initialize()
 
 	//プレイヤー１のポインタを設定
 	GameView::SetPlayer1(pPlayer1_);
+
+	ActivePlayers_.push_back(pPlayer1_);
+
 
 	//現在のモード(PvE or PvP)に合わせたキャラクターを生成
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
@@ -112,6 +116,7 @@ void BattleScene::Initialize()
 		//Player2にIDを割り振る
 		pPlayer2_->SetID(2);
 
+		//使うコントローラーのID設定
 		pPlayer2_->SetControllerID(1);
 
 		//Player2の初期化
@@ -127,6 +132,8 @@ void BattleScene::Initialize()
 
 		//プレイヤー２のポインタを設定
 		GameView::SetPlayer2(pPlayer2_);
+
+		ActivePlayers_.push_back(pPlayer2_);
 	}
 
 	//各クラス生成
@@ -171,6 +178,11 @@ void BattleScene::Update()
 	//BaseSceneの更新処理を呼ぶ
 	//UpdateActive,UpdateTranslationは継承先の関数が呼ばれる
 	BaseScene::Update();
+
+	for (auto player : ActivePlayers_)
+	{
+		player->CharacterRun();
+	}
 
 	pMiniMap_->SetOriginalFirstPos(pPlayer1_->GetPosition());
 	if (pPlayer2_ != nullptr)

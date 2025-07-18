@@ -62,6 +62,7 @@ namespace {
 Player::Player(GameObject* parent) 
 	: Character(parent,"Player"),
 	hPlayer_(-1), hArrow_(-1),
+	ControllerID_(-1),
 	PlayerState_(S_STOP),CameraState_(S_NORMALCAMERA),
 	Direction_({ 0,0,0 }),BackCamera_({ 0,0,0 }), CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 })
 {
@@ -85,52 +86,6 @@ void Player::Initialize()
 
 void Player::Update()
 {
-	//Characterクラスの共通処理
-	Character::Update();
-
-	//現在の状態によって更新を分ける
-	switch (PlayerState_)
-	{
-	case Player::S_IDLE:
-		UpdateIdle();
-		break;
-	case Player::S_CHARGE:
-		UpdateCharge();
-		break;
-	case Player::S_ATTACK:
-		UpdateAttack();
-		break;
-	case Player::S_HIT:
-		UpdateHit();
-		break;
-	case Player::S_WALLHIT:
-		UpdateWallHit();
-		break;
-	case Player::S_STOP:
-		UpdateStop();
-		break;
-	default:
-		break;
-	}
-
-	//柵に接触状態でなければ無敵時間を更新
-	if(!(PlayerState_ == S_WALLHIT))
-	{
-		InvincibilityTimeCalclation();
-	}
-
-	//毎フレームカメラの更新
-	CameraUpdate();
-
-#ifdef _DEBUG
-
-	//デバッグ中のみescキーで初期位置に戻る
-	if (Input::IsKeyDown(DIK_RETURN))
-	{
-		SetStartPosition();
-	}
-#endif
-
 }
 
 void Player::Draw()
@@ -226,6 +181,56 @@ void Player::OnCollision(GameObject* pTarget)
 
 }
 
+void Player::CharacterRun()
+{
+	//Characterクラスの共通処理
+	Character::Update();
+
+	//現在の状態によって更新を分ける
+	switch (PlayerState_)
+	{
+	case Player::S_IDLE:
+		UpdateIdle();
+		break;
+	case Player::S_CHARGE:
+		UpdateCharge();
+		break;
+	case Player::S_ATTACK:
+		UpdateAttack();
+		break;
+	case Player::S_HIT:
+		UpdateHit();
+		break;
+	case Player::S_WALLHIT:
+		UpdateWallHit();
+		break;
+	case Player::S_STOP:
+		UpdateStop();
+		break;
+	default:
+		break;
+	}
+
+	//柵に接触状態でなければ無敵時間を更新
+	if (!(PlayerState_ == S_WALLHIT))
+	{
+		InvincibilityTimeCalclation();
+	}
+
+	//毎フレームカメラの更新
+	CameraUpdate();
+
+#ifdef _DEBUG
+
+	//デバッグ中のみescキーで初期位置に戻る
+	if (Input::IsKeyDown(DIK_RETURN))
+	{
+		SetStartPosition();
+	}
+#endif
+
+}
+
 void Player::UpdateIdle()
 {
 	//通常状態 移動・ジャンプなどをしている状態
@@ -261,7 +266,7 @@ void Player::UpdateIdle()
 
 	//SHIFTキー/Bボタンが押されたら
 	if (Input::IsKeyDown(DIK_LSHIFT) || Input::IsKeyDown(DIK_RSHIFT)
-		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
+		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_B, ControllerID_))
 	{
 		if (JumpParam_.IsOnGround_)
 		{
@@ -273,7 +278,7 @@ void Player::UpdateIdle()
 	//------------------ジャンプ------------------
 
 	//SPACEキー/Aボタンが押されたら
-	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
+	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A,ControllerID_))
 	{
 		if (JumpParam_.IsOnGround_)
 		{
@@ -303,7 +308,7 @@ void Player::UpdateCharge()
 	SetChargingEffect("PaticleAssets\\circle_B.png");
 
 	//SPACEキー/Aボタンが押され,地上にいるなら
-	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A))
+	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A, ControllerID_))
 	{
 		if (JumpParam_.IsOnGround_)
 		{
@@ -319,17 +324,18 @@ void Player::UpdateCharge()
 	}
 
 	//左右キー/スティックが倒されたら回転
-	if (Input::IsKey(DIK_LEFT) || Input::GetPadStickL().x < -Input::StickTilt)
+	if (Input::IsKey(DIK_LEFT) || Input::GetPadStickL(ControllerID_).x < -Input::StickTilt)
 	{
 		this->transform_.rotate_.y -= KeyBoardRotateY;
 	}
-	if (Input::IsKey(DIK_RIGHT) || Input::GetPadStickL().x > Input::StickTilt)
+	if (Input::IsKey(DIK_RIGHT) || Input::GetPadStickL(ControllerID_).x > Input::StickTilt)
 	{
 		this->transform_.rotate_.y += KeyBoardRotateY;
 	}
 
 	//SHIFTキー/Bボタンを離したら
-	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
+	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT)
+		|| Input::IsPadButtonUp(XINPUT_GAMEPAD_B, ControllerID_))
 	{
 		//チャージ解放
 		ChargeRelease();
@@ -483,17 +489,17 @@ void Player::CameraControl()
 	if(CameraState_ == S_NORMALCAMERA)
 	{
 		//A・Dキー/右スティックでカメラ回転
-		if (Input::IsKey(DIK_A) || Input::GetPadStickR().x <= -Input::StickTilt)	//カメラ左右移動
+		if (Input::IsKey(DIK_A) || Input::GetPadStickR(ControllerID_).x <= -Input::StickTilt)	//カメラ左右移動
 		{
 			cameraTransform_.rotate_.y -= cameraRotate;
 		}
-		if (Input::IsKey(DIK_D) || Input::GetPadStickR().x >= Input::StickTilt)
+		if (Input::IsKey(DIK_D) || Input::GetPadStickR(ControllerID_).x >= Input::StickTilt)
 		{
 			cameraTransform_.rotate_.y += cameraRotate;
 		}
 
 		//W・Sキーでカメラ上下移動
-		if (Input::IsKey(DIK_W) || Input::GetPadStickR().y <= -Input::StickTilt)	//カメラ上下移動
+		if (Input::IsKey(DIK_W) || Input::GetPadStickR(ControllerID_).y <= -Input::StickTilt)	//カメラ上下移動
 		{
 			//カメラの上下移動の上限になったら位置固定
 			if (cameraTransform_.rotate_.x >= cameraUpperLimit)
@@ -505,7 +511,7 @@ void Player::CameraControl()
 				cameraTransform_.rotate_.x += cameraRotate;
 			}
 		}
-		if (Input::IsKey(DIK_S) || Input::GetPadStickR().y >= Input::StickTilt)
+		if (Input::IsKey(DIK_S) || Input::GetPadStickR(ControllerID_).y >= Input::StickTilt)
 		{
 			//カメラの上下移動の下限になったら位置固定
 			if (cameraTransform_.rotate_.x <= cameraLowerLimit)
@@ -520,7 +526,7 @@ void Player::CameraControl()
 
 		//Zキー/Yボタンでカメラの回転リセット
 		if (Input::IsKey(DIK_Z) ||
-			Input::IsPadButton(XINPUT_GAMEPAD_Y) || Input::IsPadButton(XINPUT_GAMEPAD_X))
+			Input::IsPadButton(XINPUT_GAMEPAD_Y, ControllerID_) || Input::IsPadButton(XINPUT_GAMEPAD_X, ControllerID_))
 		{
 			// カメラの回転をリセット
 			cameraTransform_.rotate_.x = 0.0f;

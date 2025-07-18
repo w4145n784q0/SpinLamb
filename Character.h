@@ -145,6 +145,9 @@ public:
     //描画(継承先の共通描画のみ行う)
     void Draw() override;
 
+    //動的に呼び出す更新処理
+    //virtual void CharacterRun() {};
+
     //----------初期化----------
 
     /// <summary>

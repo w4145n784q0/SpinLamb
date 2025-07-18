@@ -82,6 +82,9 @@ public:
 	//当たり判定処理
 	void OnCollision(GameObject* pTarget) override;
 
+	//動的に呼び出す更新処理
+	void CharacterRun();
+
 	//----------PlayerState_に応じて内容が変わるUpdate関数----------
 
 	//通常状態
