@@ -39,6 +39,11 @@ private:
 	};
 	CameraState CameraState_;
 	
+	//----------初期化----------
+
+
+	int ControllerID_;
+
 	//----------移動関係----------
 
 	//キーボード使用時、プレイヤーの操作方向(xzどこに進むか)
@@ -124,6 +129,12 @@ public:
 	void KeyBoradMove();
 
 	/// <summary>
+	/// コントローラ移動操作
+	/// </summary>
+	/// <param name="_PadID">使用しているゲームパッドのID(接続順)</param>
+	void ControllerMove(int _PadID);
+
+	/// <summary>
 	/// プレイヤー専用移動処理
 	/// </summary>
 	/// <param name="_move">移動する方向</param>
@@ -139,5 +150,9 @@ public:
 	XMFLOAT3 GetCameraPosition() { return CameraPosition_; }
 
 	XMFLOAT3 GetCameraTarget() { return CameraTarget_; }
+
+	void SetControllerID(int _controllerID) { ControllerID_ = _controllerID; }
+
+	int GetControllerID() { return ControllerID_; }
 };
 

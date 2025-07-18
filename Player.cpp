@@ -255,27 +255,13 @@ void Player::UpdateIdle()
 
 	//------------------ゲームパッドスティックの移動------------------//
 
-	//コントローラーを倒した方向・角度を取得
-	XMVECTOR controller = XMVectorSet(Input::GetPadStickL().x, Input::GetPadStickL().y, Input::GetPadStickL().z, 0.0f);
-
-	//コントローラで受けとったベクトルはXYなので
-	//XZ方向のベクトルに直す
-	XMFLOAT3 controllfloat = { XMVectorGetX(controller) , 0.0f, XMVectorGetY(controller) };
-	XMVECTOR SetController = { controllfloat.x, controllfloat.y , controllfloat.z };
-
-	//ベクトルの長さを取得して、倒したかどうかを判別
-	float length = XMVectorGetX(XMVector3Length(controller));
-
-	//少しでもスティックを傾けたら
-	if (length > Input::StickMicroTilt)
-	{
-		PlayerMove(SetController);
-	}
+	ControllerMove(ControllerID_);
 
 	//------------------チャージ状態へ移行------------------//
 
 	//SHIFTキー/Bボタンが押されたら
-	if (Input::IsKeyDown(DIK_LSHIFT) || Input::IsKeyDown(DIK_RSHIFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
+	if (Input::IsKeyDown(DIK_LSHIFT) || Input::IsKeyDown(DIK_RSHIFT)
+		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_B))
 	{
 		if (JumpParam_.IsOnGround_)
 		{
@@ -612,6 +598,33 @@ void Player::KeyBoradMove()
 
 	//最後に進行方向のリセット毎フレーム行う
 	Direction_ = { 0,0,0 };
+}
+
+void Player::ControllerMove(int _PadID)
+{
+	//コントローラーIDが初期化されていないなら処理しない
+	if (_PadID < 0)
+	{
+		return;
+	}
+
+	//コントローラーを倒した方向・角度を取得
+	XMVECTOR controller = XMVectorSet(Input::GetPadStickL(_PadID).x,
+		Input::GetPadStickL(_PadID).y, Input::GetPadStickL(_PadID).z, 0.0f);
+
+	//コントローラで受けとったベクトルはXYなので
+	//XZ方向のベクトルに直す
+	XMFLOAT3 controllfloat = { XMVectorGetX(controller) , 0.0f, XMVectorGetY(controller) };
+	XMVECTOR SetController = { controllfloat.x, controllfloat.y , controllfloat.z };
+
+	//ベクトルの長さを取得して、倒したかどうかを判別
+	float length = XMVectorGetX(XMVector3Length(controller));
+
+	//少しでもスティックを傾けたら
+	if (length > Input::StickMicroTilt)
+	{
+		PlayerMove(SetController);
+	}
 }
 
 void Player::PlayerMove(XMVECTOR _move)

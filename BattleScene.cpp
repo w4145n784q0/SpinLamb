@@ -66,12 +66,16 @@ void BattleScene::Initialize()
 	//Player1にIDを割り振る
 	pPlayer1_->SetID(1);
 
+	pPlayer1_->SetControllerID(0);
+
 	//Player1の初期化
 	pPlayer1_->PlayerInit("CSVdata\\CharacterData\\PlayerData1.csv");
 
 	//player1を監視対象に追加
 	pPlayer1_->AddObserver(this);
 
+	//プレイヤー１のポインタを設定
+	GameView::SetPlayer1(pPlayer1_);
 
 	//現在のモード(PvE or PvP)に合わせたキャラクターを生成
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
@@ -89,6 +93,9 @@ void BattleScene::Initialize()
 
 		//Enemyを監視対象に追加
 		pEnemy_->AddObserver(this);
+
+		//画面状態のセット(一人プレイ用)
+		GameView::SetGameViewMode(GameView::S_Single);
 	}
 	else if (pSceneManager->IsPlayerVSPlayer())
 	{
@@ -105,17 +112,22 @@ void BattleScene::Initialize()
 		//Player2にIDを割り振る
 		pPlayer2_->SetID(2);
 
+		pPlayer2_->SetControllerID(1);
+
 		//Player2の初期化
 		pPlayer2_->PlayerInit("CSVdata\\CharacterData\\PlayerData2.csv");
 
 		//player2を監視対象に追加
 		pPlayer2_->AddObserver(this);
-	}
 
-	//画面設定
-	GameView::SetGameViewMode(GameView::S_Dual);
-	GameView::SetPlayer1(pPlayer1_);
-	GameView::SetPlayer2(pPlayer2_);
+		Camera::HalfScreen();
+		
+		//画面状態のセット(二人プレイ用、左右分割する)
+		GameView::SetGameViewMode(GameView::S_Dual);
+
+		//プレイヤー２のポインタを設定
+		GameView::SetPlayer2(pPlayer2_);
+	}
 
 	//各クラス生成
 	Instantiate<MiniMap>(this);
@@ -151,7 +163,7 @@ void BattleScene::Initialize()
 	pHUD_->SetFirstScore(FirstScore_);
 	pHUD_->SetSecondScore(SecondScore_);
 
-	Camera::HalfScreen();
+
 }
 
 void BattleScene::Update()

@@ -5,6 +5,7 @@
 #include"Engine/Audio.h"
 #include"Engine/CsvReader.h"
 
+#include"GameView.h"
 namespace
 {
 	//プレイボタン,フリープレイボタン,遊び方ボタン,タイトルボタン
@@ -297,7 +298,8 @@ void GameModeScene::UpdateSelecting()
 
 	//決定ボタン(Pキー・B/Startボタン)を押したら確認画面へ
 	//あそびかたシーン選択ならシーン遷移状態へ
-	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B)
+		|| Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		//決定音を再生
 		Audio::Play(hSoundDecide_);
@@ -323,7 +325,7 @@ void GameModeScene::UpdateConfirmation()
 	//インデックスが先頭/末尾なら末尾/先頭へ戻る
 	//前置デクリメントで配列オーバー防ぐ
 
-	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP))
+	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT))
 	{
 		if (PlayerNumitr == PlayerNumList_.begin())
 		{
@@ -338,7 +340,7 @@ void GameModeScene::UpdateConfirmation()
 		//選択SE再生
 		Audio::Play(hSoundSelect_);
 	}
-	if (Input::IsKeyDown(DIK_LEFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN))
+	if (Input::IsKeyDown(DIK_LEFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT))
 	{
 		if (PlayerNumitr == --PlayerNumList_.end())
 		{
@@ -385,10 +387,14 @@ void GameModeScene::UpdateConfirmation()
 		switch (PlayerNum_)
 		{
 		case GameModeScene::S_PvE:
+		{
 			pSceneManager->SetPvEMode();
+		}
 			break;
 		case GameModeScene::S_PvP:
-			pSceneManager->SetPvPMode();
+		{
+			pSceneManager->SetPvPMode();	
+		}
 			break;
 		default:
 			break;
@@ -396,7 +402,7 @@ void GameModeScene::UpdateConfirmation()
 
 	}
 
-	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsKeyUp(XINPUT_GAMEPAD_A))
+	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsPadButtonUp(XINPUT_GAMEPAD_A))
 	{
 		//選択画面へ遷移
 		GameModeState_ = S_Selecting;

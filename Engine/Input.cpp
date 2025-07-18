@@ -321,4 +321,9 @@ namespace Input
 		StickMicroTilt = inputdata[i_stickMicrotilt];
 	}
 
+	int GetMaxPadNum()
+	{
+		return MAX_PAD_NUM;
+	}
+
 }

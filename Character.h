@@ -30,10 +30,10 @@ protected:
     //----------初期状態----------
     struct InitializeParam
     {
-        int CharacterID = 0;//ゲームに参加するキャラクターのid
+        int CharacterID = -1;//ゲームに参加するキャラクターのid
         XMFLOAT3 StartPosition_ = { 0,0,0 };//初期位置
         XMVECTOR FrontDirection_ = { 0,0,1 };//正面の初期値(ローカル座標系) ここからどれだけ回転したか
-        std::vector<IGameObserver*> observers;//監視する対象の配列
+        std::vector<IGameObserver*> observers;//監視される対象の配列
     };
     InitializeParam InitParam_;
 

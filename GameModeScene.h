@@ -35,8 +35,8 @@ private:
 	//選択中のプレイ人数
 	enum PlayerNum
 	{
-		S_PvE = 0,
-		S_PvP,
+		S_PvE = 0,//一人プレイ
+		S_PvP,//二人プレイ
 		MaxPlayerNum
 	};
 	PlayerNum PlayerNum_;

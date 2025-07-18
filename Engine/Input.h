@@ -115,6 +115,9 @@ namespace Input
 	//CSVからパラメータを読み込みする
 	void SetInputCSV();
 
+	//コントローラーの接続最大数を返す
+	int GetMaxPadNum();
+
 	//開放
 	void Release();
 };
