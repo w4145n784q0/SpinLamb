@@ -19,7 +19,7 @@ private:
 		S_Practice,//"フリープレイ"を選択中
 		S_HowToPlay,//"あそびかた"を選択中
 		S_Title,//"タイトル"を選択中
-		MaxCount //モードの最大値
+		MaxMode //モードの最大値
 	};
 	SelectMode SelectMode_;
 
@@ -31,6 +31,15 @@ private:
 		MaxState
 	};
 	GameModeState GameModeState_;
+
+	//選択中のプレイ人数
+	enum PlayerNum
+	{
+		S_PvE = 0,
+		S_PvP,
+		MaxPlayerNum
+	};
+	PlayerNum PlayerNum_;
 
 	//----------背景----------
 
@@ -64,10 +73,10 @@ private:
 
 	//各ボタンのトランスフォーム管理配列
 	//csv読み込み時に初期化
-	std::array<Transform, MaxCount> ModeTransArray_;
+	std::array<Transform, MaxMode> ModeTransArray_;
 
 	//各ボタンの画像ハンドル配列
-	std::array<int, MaxCount> ButtonImageArray_;
+	std::array<int, MaxMode> ButtonImageArray_;
 	
 
 	//----------ロゴ・テキスト----------
@@ -87,8 +96,11 @@ private:
 	//画面下部のゲーム説明テキスト画像(タイトル用)
 	int hTitleText_;
 
-	//一人プレイか二人プレイかを確認する画像
+	//プレイ人数選択画面(あそぶ人数を選んでください~の画像)
 	int hPlayerNumSelect_;
+
+	//プレイ人数選択画面で出す、選択中のアイコン(矢印または★)
+	int hPlayerSelectIcon_;
 
 	//"モードセレクト"画像のトランスフォーム
 	Transform TransSelect_;
@@ -96,8 +108,17 @@ private:
 	//ゲーム説明テキストの固定位置
 	Transform TransText_;
 
+	//プレイ人数選択画面(あそぶ人数を選んでください~の画像全体)のトランスフォーム
+	Transform TransPlayer_;
+
+	//プレイ人数選択選択中のアイコンのトランスフォーム
+	Transform TransSelectPlayerNum_;
+
 	//各テキストの画像ハンドル配列
-	std::array<int, MaxCount> TextArray_;
+	std::array<int, MaxMode> TextArray_;
+
+	//プレイ人数選択画面のアイコンの位置配列
+	std::array<Transform, MaxPlayerNum> PlayerTransArray_;
 
 	//----------サウンドハンドル----------
 
@@ -115,8 +136,13 @@ private:
 	std::list<SelectMode> ModeList_;
 
 	//ModeList_のインデックスを指す値
-	std::list<SelectMode>::iterator itr;
+	std::list<SelectMode>::iterator Modeitr;
 	
+	//選択中のプレイ人数のリスト
+	std::list<PlayerNum> PlayerNumList_;
+
+	//StateList_のインデックスを指す値
+	std::list<PlayerNum>::iterator PlayerNumitr;
 
 	//----------インスタンス----------
 	TransitionEffect* pTransitionEffect_;

@@ -85,7 +85,7 @@ void Enemy::Initialize()
 	this->AddCollider(collision);
 
 	//playerのインスタンス取得
-	pPlayer_ = (Player*)FindObject("Player");
+	pPlayer_ = (Player*)FindObject("Player1");
 
 	//敵の攻撃時間配列の添え字をランダムに設定
 	RandomAim_ = rand() % EnemyAttackTimeArray.size();

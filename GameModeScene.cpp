@@ -8,17 +8,21 @@
 namespace
 {
 	//プレイボタン,フリープレイボタン,遊び方ボタン,タイトルボタン
-	std::string ParamArray[] = { "Battle", "Practice", "HowToPlay", "BackTitle" };
+	std::string ModeStringArray[] = { "Battle", "Practice", "HowToPlay", "BackTitle" };
+
+	//PvE(一人プレイ),PvP(二人プレイ)
+	std::string PlayerStringArray[] = { "PvE","PvP" };
 }
 
 GameModeScene::GameModeScene(GameObject* parent)
 	:BaseScene(parent, "GameModeScene"), 
 	hBackScreen_(-1), hBackChara_(-1),
 	hBattle_(-1),hPractice_(-1), hHowtoPlay_(-1),hBackTitle_(-1), hFrameLine_(-1),
-	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),hPlayerNumSelect_(-1),
-	TextArray_({}),ButtonImageArray_({}), ModeTransArray_({}),
+	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),
+	hPlayerNumSelect_(-1), hPlayerSelectIcon_(-1), 
+	TextArray_({}), PlayerTransArray_({}), ButtonImageArray_({}), ModeTransArray_({}),
 	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), 
-	SelectMode_(S_Battle),GameModeState_(S_Selecting),
+	SelectMode_(S_Battle),GameModeState_(S_Selecting),PlayerNum_(S_PvE),
 	pTransitionEffect_(nullptr)
 {
 }
@@ -80,6 +84,9 @@ void GameModeScene::Initialize()
 	hPlayerNumSelect_ = Image::Load(path + "selectplayer.png");
 	assert(hPlayerNumSelect_ >= 0);
 
+	hPlayerSelectIcon_ = Image::Load(path + "SelectIcon.png");
+	assert(hPlayerSelectIcon_ >= 0);
+
 	hSoundGameMode_ = Audio::Load("Sound\\BGM\\gameMode.wav",true);
 	assert(hSoundGameMode_ >= 0);
 
@@ -98,8 +105,14 @@ void GameModeScene::Initialize()
 	//各モードをリストに入れる
 	ModeList_ = { S_Battle,S_Practice,S_HowToPlay,S_Title };
 
-	//インデックスの初期位置を指定
-	itr = ModeList_.begin();
+	//Modeitrのインデックスの初期位置を指定
+	Modeitr = ModeList_.begin();
+
+	//PlayerNumの状態リストを初期化
+	PlayerNumList_ = { S_PvE,S_PvP };
+
+	//PlayerNumList_のインデックスの書記位置を指定
+	PlayerNumitr = PlayerNumList_.begin();
 
 	//インスタンス生成
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
@@ -132,6 +145,9 @@ void GameModeScene::Draw()
 		Image::SetAndDraw(ButtonImageArray_[i], ModeTransArray_[i]);
 	}
 
+	//モード選択枠の描画
+	Image::SetAndDraw(hFrameLine_, TransFrame_);
+
 	//選択中のテキストの描画(現在選択しているモードによって変化)
 	switch (SelectMode_)
 	{
@@ -147,6 +163,7 @@ void GameModeScene::Draw()
 		break;
 	}
 
+	//確認画面ではあそぶ人数を選択する画像描画
 	if (GameModeState_ == GameModeScene::S_Confirmation)
 	{
 		switch (SelectMode_)
@@ -154,7 +171,9 @@ void GameModeScene::Draw()
 		case GameModeScene::S_Battle:
 		case GameModeScene::S_Practice:
 		{
-			Image::SetAndDraw(hPlayerNumSelect_, this->transform_);
+			Image::SetAndDraw(hPlayerNumSelect_, TransPlayer_);
+			Image::SetAndDraw(hPlayerSelectIcon_, TransSelectPlayerNum_);
+			//選択している状態に合わせてアイコンつける
 		}
 			break;
 		//case GameModeScene::S_HowToPlay:
@@ -165,9 +184,6 @@ void GameModeScene::Draw()
 			break;
 		}
 	}
-
-	//選択枠の描画
-	Image::SetAndDraw(hFrameLine_, TransFrame_);
 
 #ifdef _DEBUG
 	//各画像トランスフォームの位置変更
@@ -184,8 +200,8 @@ void GameModeScene::Draw()
 
 		for (int i = 0; i < ModeTransArray_.size(); i++)
 		{
-			ImGui::SliderFloat((ParamArray[i] + "X").c_str(), &ModeTransArray_[i].position_.x, Image::LeftEdge, Image::RightEdge);
-			ImGui::SliderFloat((ParamArray[i] + "Y").c_str(), &ModeTransArray_[i].position_.y, Image::UpEdge, Image::DownEdge);
+			ImGui::SliderFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].position_.y, Image::UpEdge, Image::DownEdge);
 		}
 
 		ImGui::TreePop();
@@ -207,9 +223,9 @@ void GameModeScene::SetGameModeSCV()
 	InitCSVTransform(csv, "FrameLine", TransFrame_);
 
 	//各ボタンのトランスフォーム初期化
-    for (int i = 0; i < sizeof(ParamArray) / sizeof(ParamArray[0]); i++)
+    for (int i = 0; i < MaxMode; i++)
     {
-		InitCSVTransform(csv, ParamArray[i], ModeTransArray_[i]);
+		InitCSVTransform(csv, ModeStringArray[i], ModeTransArray_[i]);
     }
 
 	//"モードセレクト"のトランスフォーム初期化
@@ -217,6 +233,15 @@ void GameModeScene::SetGameModeSCV()
 
 	//画面下部のテキストのトランスフォーム初期化
 	InitCSVTransform(csv, "Text", TransText_);
+
+	//プレイ人数選択画面のトランスフォーム初期化
+	InitCSVTransform(csv, "PlayerNum", TransPlayer_);
+
+	//プレイ人数選択画面のアイコンの位置を初期化
+	for (int i = 0; i < MaxPlayerNum; i++)
+	{
+		InitCSVTransform(csv, PlayerStringArray[i], PlayerTransArray_[i]);
+	}
 }
 
 void GameModeScene::UpdateSelecting()
@@ -228,36 +253,36 @@ void GameModeScene::UpdateSelecting()
 	if (Input::IsKeyDown(DIK_UP) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP))
 	{
 
-		if (itr == ModeList_.begin())
+		if (Modeitr == ModeList_.begin())
 		{
-			itr = --ModeList_.end();
+			Modeitr = --ModeList_.end();
 		}
 		else
 		{
-			--itr;
+			--Modeitr;
 		}
-		SelectMode_ = *itr;
+		SelectMode_ = *Modeitr;
 
 		//選択SE再生
 		Audio::Play(hSoundSelect_);
 	}
 	if (Input::IsKeyDown(DIK_DOWN) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN))
 	{
-		if (itr == --ModeList_.end())
+		if (Modeitr == --ModeList_.end())
 		{
-			itr = ModeList_.begin();
+			Modeitr = ModeList_.begin();
 		}
 		else
 		{
-			++itr;
+			++Modeitr;
 		}
-		SelectMode_ = *itr;
+		SelectMode_ = *Modeitr;
 
 		//選択SE再生
 		Audio::Play(hSoundSelect_);
 	}
 
-	//選択枠の位置を選択中のモードに合わせる
+	//選択枠の位置を選択中のモードの位置に合わせる
 	switch (SelectMode_)
 	{
 	case GameModeScene::S_Battle:
@@ -294,7 +319,53 @@ void GameModeScene::UpdateSelecting()
 
 void GameModeScene::UpdateConfirmation()
 {
+	//ボタンの選択枠の移動
+	//インデックスが先頭/末尾なら末尾/先頭へ戻る
+	//前置デクリメントで配列オーバー防ぐ
 
+	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP))
+	{
+		if (PlayerNumitr == PlayerNumList_.begin())
+		{
+			PlayerNumitr = --PlayerNumList_.end();
+		}
+		else
+		{
+			--PlayerNumitr;
+		}
+		PlayerNum_ = *PlayerNumitr;
+
+		//選択SE再生
+		Audio::Play(hSoundSelect_);
+	}
+	if (Input::IsKeyDown(DIK_LEFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN))
+	{
+		if (PlayerNumitr == --PlayerNumList_.end())
+		{
+			PlayerNumitr = PlayerNumList_.begin();
+		}
+		else
+		{
+			++PlayerNumitr;
+		}
+		PlayerNum_ = *PlayerNumitr;
+
+		//選択SE再生
+		Audio::Play(hSoundSelect_);
+	}
+
+	//プレイ人数選択アイコンの位置調整
+	switch (PlayerNum_)
+	{
+	case GameModeScene::S_PvE:
+		TransSelectPlayerNum_.position_.x = PlayerTransArray_[S_PvE].position_.x;
+		break;
+	case GameModeScene::S_PvP:
+		TransSelectPlayerNum_.position_.x = PlayerTransArray_[S_PvP].position_.x;
+		break;
+	default:
+		break;
+	}
 
 
 	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
@@ -309,9 +380,20 @@ void GameModeScene::UpdateConfirmation()
 		pTransitionEffect_->ZoomInStart();
 		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
 
-		//SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		//pSceneManager->SetPvPMode();
-		
+		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+
+		switch (PlayerNum_)
+		{
+		case GameModeScene::S_PvE:
+			pSceneManager->SetPvEMode();
+			break;
+		case GameModeScene::S_PvP:
+			pSceneManager->SetPvPMode();
+			break;
+		default:
+			break;
+		}
+
 	}
 
 	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsKeyUp(XINPUT_GAMEPAD_A))

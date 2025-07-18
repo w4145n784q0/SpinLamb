@@ -1,4 +1,4 @@
-﻿初期化する値,pos.x,pos.y,pos.z,rot.x,rot.y,rot.z,sca.x,sca.y,sca.z
+﻿Data,pos.x,pos.y,pos.z,rot.x,rot.y,rot.z,sca.x,sca.y,sca.z
 FrameLine,0.5,0.6,0,0,0,0,1,1,1
 Battle,0.5,0.6,0,0,0,0,1,1,1
 Practice,0.5,0.2,0,0,0,0,1,1,1
@@ -6,3 +6,6 @@ HowToPlay,0.5,-0.2,0,0,0,0,1,1,1
 BackTitle,0.5,-0.6,0,0,0,0,1,1,1
 ModeSelect,-0.5,0.5,0,0,0,0,1,1,1
 Text,-0.17,-0.9,0,0,0,0,1,1,1
+PlayerNum,0,0,0,0,0,0,1,1,1
+PvE,-0.7,0,0,0,0,0,0,0,0
+PvP,0.1,0,0,0,0,0,0,0,0
