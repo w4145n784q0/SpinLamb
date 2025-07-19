@@ -78,6 +78,7 @@ void BattleScene::Initialize()
 	//プレイヤー１のポインタを設定
 	GameView::SetPlayer1(pPlayer1_);
 
+	//実際に動くプレイヤー(CPUではない)を登録
 	ActivePlayers_.push_back(pPlayer1_);
 
 
@@ -133,6 +134,7 @@ void BattleScene::Initialize()
 		//プレイヤー２のポインタを設定
 		GameView::SetPlayer2(pPlayer2_);
 
+		//実際に動くプレイヤー(CPUではない)を登録
 		ActivePlayers_.push_back(pPlayer2_);
 	}
 
@@ -179,11 +181,15 @@ void BattleScene::Update()
 	//UpdateActive,UpdateTranslationは継承先の関数が呼ばれる
 	BaseScene::Update();
 
+	//登録されたプレイヤーを更新
+	//プレイヤーが複数存在する場合を想定して
+	//Battle,Practiceシーンから動かす
 	for (auto player : ActivePlayers_)
 	{
 		player->CharacterRun();
 	}
 
+	//ミニマップの位置を更新
 	pMiniMap_->SetOriginalFirstPos(pPlayer1_->GetPosition());
 	if (pPlayer2_ != nullptr)
 	{

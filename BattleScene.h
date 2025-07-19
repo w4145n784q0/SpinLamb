@@ -27,6 +27,7 @@ private:
 	GameTimer* pGameTimer_;//BattleScene側から操作する場合のタイマークラスポインタ
 	MiniMap* pMiniMap_;//HUDクラスに渡すポインタ
 
+	//実際に操作するプレイヤーを登録する配列
 	std::vector<Player*> ActivePlayers_;
 
 	//----------バトルシーンステート----------

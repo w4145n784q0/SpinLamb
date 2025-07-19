@@ -30,6 +30,9 @@ private:
 	//HUDクラスに渡すポインタ
 	MiniMap* pMiniMap_;
 
+	//実際に動くプレイヤー(CPUではない)のリスト
+	std::vector<Player*> ActivePlayers_;
+
 	//長押しでタイトルに遷移するカウント
 	int Press_;
 

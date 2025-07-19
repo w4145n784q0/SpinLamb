@@ -8,10 +8,6 @@ class MiniMap :
 	public GameObject
 {
 private:
-	//----------インスタンス----------
-	//Player* pPlayer_;
-	//Enemy* pEnemy_;
-
 	//----------マップ上の位置----------
 
 	//Player1の位置

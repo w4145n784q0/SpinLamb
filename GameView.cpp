@@ -58,6 +58,7 @@ void GameView::ViewPlayer1()
 	//カメラ位置をプレイヤー1に合わせる
 	Camera::SetPosition(pPlayer1_->GetCameraPosition());
 
+	//カメラ焦点をプレイヤー1に合わせる
 	Camera::SetTarget(pPlayer1_->GetCameraTarget());
 
 	Camera::Update();
@@ -76,6 +77,7 @@ void GameView::ViewPlayer2()
 	//カメラ位置をプレイヤー2に合わせる
 	Camera::SetPosition(pPlayer2_->GetCameraPosition());
 
+	//カメラ焦点をプレイヤー2に合わせる
 	Camera::SetTarget(pPlayer2_->GetCameraTarget());
 
 	Camera::Update();

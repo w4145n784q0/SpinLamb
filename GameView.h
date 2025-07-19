@@ -18,14 +18,25 @@ namespace GameView
 		MaxScreen
 	};
 
+	//ゲーム画面の映し方の初期化
 	void Initialize();
 
+	//画面全体描画(メニューなど使用)
 	void ViewNormal();
+
+	//一人プレイ用描画(プレイヤーの背中にカメラを置く)
 	void ViewPvE();
+
+	//二人プレイ用描画(左画面分割)
 	void ViewPlayer1();
+
+	//二人プレイ用描画(右画面分割)
 	void ViewPlayer2();
 
+	///画面描画モードが一人プレイ中かどうか返す
 	bool IsSingle();
+
+	///画面描画モードが二人プレイ中かどうか返す
 	bool IsDual();
 
 	//描画モードを設定

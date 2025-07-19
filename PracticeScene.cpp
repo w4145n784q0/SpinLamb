@@ -9,6 +9,9 @@
 #include"Enemy.h"
 #include"StageManager.h"
 
+#include"Engine/Camera.h"
+
+#include"GameView.h"
 
 PracticeScene::PracticeScene(GameObject* parent)
 	:BaseScene(parent,"PracticeScene"), hBackScreen_(-1),hSoundPractice_(-1),
@@ -34,53 +37,79 @@ void PracticeScene::Initialize()
 	float East = pStageManager->GetEastEnd();
 
 	//プレイヤークラス(Player1)を生成
-	Instantiate<Player>(this);
+	pPlayer1_ = Instantiate<Player>(this);
+	assert(pPlayer1_ != nullptr);
+
+	//Player1の名前を設定
+	pPlayer1_->SetObjectName("Player1");
 
 	//Player1に移動制限(各ステージの端)を渡す
-	pPlayer1_ = (Player*)FindObject("Player");
-	assert(pPlayer1_ != nullptr);
 	pPlayer1_->SetEnd(North, South, West, East);
 
 	//Player1にIDを割り振る
 	pPlayer1_->SetID(1);
 
-	//Player1に移動許可を出す
-	pPlayer1_->PlayerStart();
+	//使うコントローラーのID設定
+	pPlayer1_->SetControllerID(0);
+
+	//Player1の初期化
+	pPlayer1_->PlayerInit("CSVdata\\CharacterData\\PlayerData1.csv");
+
+	//プレイヤー１のポインタを設定
+	GameView::SetPlayer1(pPlayer1_);
+
+	//実際に動くプレイヤー(CPUではない)を登録
+	ActivePlayers_.push_back(pPlayer1_);
+
 
 	//現在のモード(PvE or PvP)に合わせたキャラクターを生成
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 	if (pSceneManager->IsPlayerVSEnemy())
 	{
 		//CPU(Enemyクラス)を生成
-		Instantiate<Enemy>(this);
+		pEnemy_ = Instantiate<Enemy>(this);
+		assert(pEnemy_ != nullptr);
 
 		//Enemyに移動制限(各ステージの端)を渡す
-		pEnemy_ = (Enemy*)FindObject("Enemy");
-		assert(pEnemy_ != nullptr);
 		pEnemy_->SetEnd(North, South, West, East);
 
 		//EnemyにIDを割り振る
 		pEnemy_->SetID(2);
 
-		//Enemyは始め停止させる
-		pEnemy_->EnemyStop();
+		//画面状態のセット(一人プレイ用)
+		GameView::SetGameViewMode(GameView::S_Single);
 	}
 	else if (pSceneManager->IsPlayerVSPlayer())
 	{
 		//Player2を生成
-		Instantiate<Player>(this);
+		pPlayer2_ = Instantiate<Player>(this);
+		assert(pPlayer2_ != nullptr);
+
+		//Player2の名前を設定
+		pPlayer2_->SetObjectName("Player2");
 
 		//Player2に移動制限(各ステージの端)を渡す
-		pPlayer2_ = (Player*)FindObject("Player");
-		assert(pPlayer2_ != nullptr);
 		pPlayer2_->SetEnd(North, South, West, East);
 
 		//Player2にIDを割り振る
 		pPlayer2_->SetID(2);
 
-		//Player2に移動許可を出す
-		pPlayer2_->PlayerStart();
+		//使うコントローラーのID設定
+		pPlayer2_->SetControllerID(1);
 
+		//Player2の初期化
+		pPlayer2_->PlayerInit("CSVdata\\CharacterData\\PlayerData2.csv");
+
+		Camera::HalfScreen();
+
+		//画面状態のセット(二人プレイ用、左右分割する)
+		GameView::SetGameViewMode(GameView::S_Dual);
+
+		//プレイヤー２のポインタを設定
+		GameView::SetPlayer2(pPlayer2_);
+
+		//実際に動くプレイヤー(CPUではない)を登録
+		ActivePlayers_.push_back(pPlayer2_);
 	}
 
 	//各クラス生成
@@ -113,6 +142,15 @@ void PracticeScene::Update()
 	//UpdateActive,UpdateTranslationは継承先の関数が呼ばれる
 	BaseScene::Update();
 
+	//登録されたプレイヤーを更新
+	//プレイヤーが複数存在する場合を想定して
+	//Battle,Practiceシーンから動かす
+	for (auto player : ActivePlayers_)
+	{
+		player->CharacterRun();
+	}
+
+	//ミニマップの位置を更新
 	pMiniMap_->SetOriginalFirstPos(pPlayer1_->GetPosition());
 	if (pPlayer2_ != nullptr)
 	{
@@ -140,8 +178,8 @@ void PracticeScene::Release()
 
 void PracticeScene::UpdateActive()
 {
-	//決定ボタン(Pキー・B/Startボタン)を長押しでシーン遷移状態へ
-	if (Input::IsKey(DIK_P) || Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsPadButton(XINPUT_GAMEPAD_LEFT_SHOULDER))//ボタン長押しでタイトルに戻る
+	//Pキー・SL・SRボタン長押しでタイトルに戻る
+	if (Input::IsKey(DIK_P) || Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsPadButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
 	{
 		Press_++;
 	}
