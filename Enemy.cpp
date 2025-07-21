@@ -47,7 +47,7 @@ namespace
 }
 
 Enemy::Enemy(GameObject* parent)
-	:Character(parent,"Enemy"), hEnemy_(-1),hArrow_(-1), pPlayer_(nullptr),
+	:Character(parent,"Enemy"), hEnemy_(-1), pPlayer_(nullptr),
 	EnemyState_(S_STOP),AimTimer_(0), 
 	pPositionVec_({0,0,0}),PlayerPosition_({0,0,0}),PlayerAcceleration_(0.0f),
 	RandomAim_(0), HitStopTimer_(0)
@@ -68,11 +68,9 @@ void Enemy::Initialize()
 	SetCSVEnemy();
 
 	//各モデルの読み込み
-	hEnemy_ = Model::Load("Model\\chara.fbx");
+	hEnemy_ = Model::Load("Model\\chara_black.fbx");
 	assert(hEnemy_ >= 0);
 
-	hArrow_ = Model::Load("Model\\AttackArrow2.fbx");
-	assert(hArrow_ >= 0);
 
 	//矢印のトランスフォームの初期化
 	InitArrow();
@@ -154,7 +152,7 @@ void Enemy::Draw()
 	//チャージ中のみ矢印モデル描画
 	if (EnemyState_ == S_AIM)
 	{
-		Model::SetAndDraw(hArrow_, this->MoveParam_.ArrowTransform_);
+		DrawArrow();
 	}
 
 	//Debug中はImGuiを設定

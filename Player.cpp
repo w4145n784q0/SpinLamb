@@ -61,7 +61,7 @@ namespace {
 
 Player::Player(GameObject* parent) 
 	: Character(parent,"Player"),
-	hPlayer_(-1), hArrow_(-1),
+	hPlayer_(-1), 
 	ControllerID_(-1),
 	PlayerState_(S_STOP),CameraState_(S_NORMALCAMERA),
 	Direction_({ 0,0,0 }),BackCamera_({ 0,0,0 }), CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 })
@@ -76,12 +76,6 @@ Player::~Player()
 
 void Player::Initialize()
 {
-	//各モデルの読み込み
-	hPlayer_ = Model::Load("Model\\chara.fbx");
-	assert(hPlayer_ >= 0);
-
-	hArrow_ = Model::Load("Model\\AttackArrow2.fbx");
-	assert(hArrow_ >= 0);
 }
 
 void Player::Update()
@@ -99,12 +93,12 @@ void Player::Draw()
 	//チャージ中のみ矢印モデル描画
 	if (PlayerState_ == S_CHARGE)
 	{
-		Model::SetAndDraw(hArrow_, this->MoveParam_.ArrowTransform_);
+		DrawArrow();
 	}
 
 	//Debug中はImGuiを設定
 #ifdef _DEBUG
-	if (ImGui::TreeNode("PlayerStatus"))
+	if (ImGui::TreeNode((objectName_ + " Status").c_str()))
 	{
 		DrawCharacterImGui();
 	}
@@ -411,13 +405,13 @@ void Player::UpdateStop()
 	//何も処理をしない
 }
 
-void Player::PlayerInit(std::string _path)
+void Player::PlayerInit(std::string _CSVpath, std::string _Modelpath)
 {
 	//csvからパラメータ読み込み
-	SetcsvStatus(_path);
+	SetcsvStatus(_CSVpath);
 
 	//csvからパラメータ読み込み(Playerのみ使う情報)
-	SetCSVPlayer(_path);
+	SetCSVPlayer(_CSVpath);
 
 	//矢印のトランスフォームの初期化
 	InitArrow();
@@ -442,6 +436,9 @@ void Player::PlayerInit(std::string _path)
 	//カメラの焦点を設定
 	CameraTarget_ = { this->transform_.position_.x,this->transform_.position_.y, this->transform_.position_.z };
 
+	//キャラクターモデルの読み込み
+	hPlayer_ = Model::Load(_Modelpath);
+	assert(hPlayer_ >= 0);
 }
 
 void Player::SetJump()
@@ -481,7 +478,7 @@ void Player::CameraControl()
 	if(CameraState_ == S_NORMALCAMERA)
 	{
 		//A・Dキー/右スティックでカメラ回転
-		if (Input::IsKey(DIK_A) || Input::GetPadStickR(ControllerID_).x <= -Input::StickTilt)	//カメラ左右移動
+		if (Input::IsKey(DIK_A) || Input::GetPadStickR(ControllerID_).x <= -Input::StickTilt)
 		{
 			cameraTransform_.rotate_.y -= cameraRotate;
 		}
@@ -491,7 +488,7 @@ void Player::CameraControl()
 		}
 
 		//W・Sキーでカメラ上下移動
-		if (Input::IsKey(DIK_W) || Input::GetPadStickR(ControllerID_).y <= -Input::StickTilt)	//カメラ上下移動
+		if (Input::IsKey(DIK_W) || Input::GetPadStickR(ControllerID_).y <= -Input::StickTilt)
 		{
 			//カメラの上下移動の上限になったら位置固定
 			if (cameraTransform_.rotate_.x >= cameraUpperLimit)

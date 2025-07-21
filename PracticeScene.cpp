@@ -53,7 +53,7 @@ void PracticeScene::Initialize()
 	pPlayer1_->SetControllerID(0);
 
 	//Player1の初期化
-	pPlayer1_->PlayerInit("CSVdata\\CharacterData\\PlayerData1.csv");
+	pPlayer1_->PlayerInit("CSVdata\\CharacterData\\PlayerData1.csv", "Model\\chara.fbx");
 
 	//プレイヤー１のポインタを設定
 	GameView::SetPlayer1(pPlayer1_);
@@ -98,7 +98,7 @@ void PracticeScene::Initialize()
 		pPlayer2_->SetControllerID(1);
 
 		//Player2の初期化
-		pPlayer2_->PlayerInit("CSVdata\\CharacterData\\PlayerData2.csv");
+		pPlayer2_->PlayerInit("CSVdata\\CharacterData\\PlayerData2.csv", "Model\\chara_black.fbx");
 
 		Camera::HalfScreen();
 
@@ -217,5 +217,7 @@ void PracticeScene::UpdateTransition()
 		//ゲームシーン状態を通常に戻しておく
 		SceneState_ = S_Active;
 		
+		//1画面に戻す
+		GameView::SetGameViewMode(GameView::S_NormalScreen);
 	}
 }

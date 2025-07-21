@@ -13,7 +13,7 @@ private:
 	int hPlayer_;
 
 	//進行方向モデル
-	int hArrow_;
+	//int hArrow_;
 
 	//----------プレイヤーステート----------
 	//これらの値に応じて各Update関数を呼び出す
@@ -116,8 +116,9 @@ public:
 	/// <summary>
 	/// プレイヤーの初期化(別関数から呼ぶ用)
 	/// </summary>
-	/// <param name="_path">読み込むcsvファイルのパス</param>
-	void PlayerInit(std::string _path);
+	/// <param name="_CSVpath">読み込むcsvファイルのパス</param>
+	/// <param name="_Modelpath">読み込むfbxファイルのパス</param>
+	void PlayerInit(std::string _CSVpath, std::string _Modelpath);
 
 	//ジャンプ開始
 	void SetJump();

@@ -294,9 +294,14 @@ void Character::GetWireNormal()
 
 void Character::InitArrow()
 {
+	//矢印モデルのトランスフォームを初期化
 	MoveParam_.ArrowTransform_.position_ = { 0.0f,0.0f, 0.0f };
 	MoveParam_.ArrowTransform_.rotate_ = MoveParam_.ArrowRotate_;
 	MoveParam_.ArrowTransform_.scale_ = MoveParam_.ArrowScale_;
+
+	//矢印モデル読み込み
+	MoveParam_.hMoveArrow_ = Model::Load("Model\\AttackArrow2.fbx");
+	assert(MoveParam_.hMoveArrow_ >= 0);
 }
 
 void Character::DrawCharacterModel(int _handle, Transform _transform)
@@ -434,6 +439,7 @@ void Character::InitShadow()
 {
 	//初期化の時点でステージクラスのインスタンスを取得
 	ShadowParam_.pGround_ = (Ground*)FindObject("Ground");
+	assert(ShadowParam_.pGround_ != nullptr);
 
 	//影モデル読み込み
 	ShadowParam_.hShadow_ = Model::Load("Model\\ShadowPoint.fbx");
@@ -758,6 +764,12 @@ void Character::SetArrow()
 
 	//矢印のトランスフォームに代入
 	XMStoreFloat3(&this->MoveParam_.ArrowTransform_.position_, arrowPosVec);
+}
+
+void Character::DrawArrow()
+{
+	//矢印モデルを描画
+	Model::SetAndDraw(MoveParam_.hMoveArrow_, this->MoveParam_.ArrowTransform_);
 }
 
 XMVECTOR Character::RotateVecFront(float rotY, XMVECTOR front)

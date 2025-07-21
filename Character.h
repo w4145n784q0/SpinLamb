@@ -46,6 +46,7 @@ protected:
         float AcceleValue_ = 0.0f;//Acceleration_上昇時、1fあたりの増加量
         float FullAccelerate_ = 0.0f;//加速度の最大
         float Friction_ = 0.0f;//摩擦係数(減速率) 1fあたりの減速量
+        int hMoveArrow_ = -1;//チャージ中に表示する矢印モデル
         XMVECTOR ForwardVector_ = { 0,0,0 };//キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算 正規化した値を入れる
         XMVECTOR MoveDirection_ = { 0,0,0 };//移動方向 この値に速さの要素をかけて移動ベクトル化する
         XMVECTOR NewPositon_ = { 0,0,0 };//移動後の位置ベクトル
@@ -266,6 +267,11 @@ public:
     /// チャージ中の矢印位置をセット
     /// </summary>
     void SetArrow();
+
+    /// <summary>
+    /// 矢印モデルの描画
+    /// </summary>
+    void DrawArrow();
 
     //----------攻撃----------
 

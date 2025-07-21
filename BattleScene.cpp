@@ -70,7 +70,7 @@ void BattleScene::Initialize()
 	pPlayer1_->SetControllerID(0);
 
 	//Player1の初期化
-	pPlayer1_->PlayerInit("CSVdata\\CharacterData\\PlayerData1.csv");
+	pPlayer1_->PlayerInit("CSVdata\\CharacterData\\PlayerData1.csv", "Model\\chara.fbx");
 
 	//player1を監視対象に追加
 	pPlayer1_->AddObserver(this);
@@ -121,7 +121,7 @@ void BattleScene::Initialize()
 		pPlayer2_->SetControllerID(1);
 
 		//Player2の初期化
-		pPlayer2_->PlayerInit("CSVdata\\CharacterData\\PlayerData2.csv");
+		pPlayer2_->PlayerInit("CSVdata\\CharacterData\\PlayerData2.csv", "Model\\chara_black.fbx");
 
 		//player2を監視対象に追加
 		pPlayer2_->AddObserver(this);
@@ -187,6 +187,10 @@ void BattleScene::Update()
 	for (auto player : ActivePlayers_)
 	{
 		player->CharacterRun();
+	}
+	for (auto enemy : ActiveEnemys_)
+	{
+		//
 	}
 
 	//ミニマップの位置を更新
