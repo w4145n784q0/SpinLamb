@@ -22,7 +22,7 @@ GameModeScene::GameModeScene(GameObject* parent)
 	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),
 	hPlayerNumSelect_(-1), hPlayerSelectIcon_(-1), 
 	TextArray_({}), PlayerTransArray_({}), ButtonImageArray_({}), ModeTransArray_({}),
-	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), 
+	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), hSoundCancel_(-1),
 	SelectMode_(S_Battle),GameModeState_(S_Selecting),PlayerNum_(S_PvE),
 	pTransitionEffect_(nullptr)
 {
@@ -91,11 +91,14 @@ void GameModeScene::Initialize()
 	hSoundGameMode_ = Audio::Load("Sound\\BGM\\gameMode.wav",true);
 	assert(hSoundGameMode_ >= 0);
 
-	hSoundDecide_ = Audio::Load("Sound\\SE\\decide.wav");
+	hSoundDecide_ = Audio::Load("Sound\\SE\\decide.wav", false, Audio::GetDecideNum());
 	assert(hSoundDecide_ >= 0);
 
-	hSoundSelect_ = Audio::Load("Sound\\SE\\select.wav");
+	hSoundSelect_ = Audio::Load("Sound\\SE\\select.wav", false, Audio::GetSelectNum());
 	assert(hSoundSelect_ >= 0);
+
+	hSoundCancel_ = Audio::Load("Sound\\SE\\cancel.wav", false, Audio::GetCancelNum());
+	assert(hSoundCancel_ >= 0);
 
 	//各モードの画像ハンドルを配列に入れる
 	ButtonImageArray_ = { hBattle_, hPractice_, hHowtoPlay_, hBackTitle_ };
@@ -304,10 +307,8 @@ void GameModeScene::UpdateSelecting()
 		//決定音を再生
 		Audio::Play(hSoundDecide_);
 
-		//確認画面へ遷移
-		GameModeState_ = S_Confirmation;
 
-		if (hModeSelect_ == S_HowToPlay)
+		if (SelectMode_ == S_HowToPlay || SelectMode_ == S_Title)
 		{
 			//UpdateTransitionへ遷移
 			SceneState_ = S_Transition;
@@ -315,6 +316,11 @@ void GameModeScene::UpdateSelecting()
 			//シーン遷移エフェクト(ズームイン)を設定
 			pTransitionEffect_->ZoomInStart();
 			pTransitionEffect_->SetTransitionTime(SceneShortTransition);
+		}
+		else
+		{
+			//確認画面へ遷移
+			GameModeState_ = S_Confirmation;
 		}
 	}
 }
@@ -404,6 +410,9 @@ void GameModeScene::UpdateConfirmation()
 
 	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsPadButtonUp(XINPUT_GAMEPAD_A))
 	{
+		//キャンセル音再生
+		Audio::Play(hSoundCancel_);
+
 		//選択画面へ遷移
 		GameModeState_ = S_Selecting;
 	}

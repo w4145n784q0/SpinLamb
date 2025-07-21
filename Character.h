@@ -133,6 +133,7 @@ protected:
     //----------サウンド関連----------
     int ChargeSoundCount_ = 0;//チャージ音を鳴らす回数
     int AttackSoundCount_ = 0;//突撃音を鳴らす回数
+    int CollisionSoundCound_ = 0;//衝撃音を鳴らす回数
 
 public:
     Character(GameObject* parent);
@@ -437,11 +438,6 @@ public:
     /// 壁に接触時の衝撃エフェクトつける
     /// </summary>
     void SetWallHitEffect();
-
-    //----------サウンド関係----------
-
-    //CSVからパラメータを読み込みする
-    void InitCSVSound();
 
     //----------セッター・ゲッター関数----------
     void SetID(int _id) { InitParam_.CharacterID = _id; }

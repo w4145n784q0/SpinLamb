@@ -61,6 +61,7 @@ void PracticeScene::Initialize()
 	//実際に動くプレイヤー(CPUではない)を登録
 	ActivePlayers_.push_back(pPlayer1_);
 
+	pPlayer1_->PlayerStart();
 
 	//現在のモード(PvE or PvP)に合わせたキャラクターを生成
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
@@ -110,6 +111,8 @@ void PracticeScene::Initialize()
 
 		//実際に動くプレイヤー(CPUではない)を登録
 		ActivePlayers_.push_back(pPlayer2_);
+
+		pPlayer2_->PlayerStart();
 	}
 
 	//各クラス生成

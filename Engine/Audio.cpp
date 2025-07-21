@@ -1,11 +1,38 @@
 #include <xaudio2.h>
 #include <vector>
 #include "Audio.h"
+#include"CsvReader.h"
+#include"GameObject.h"
 
 #define SAFE_DELETE_ARRAY(p) if(p){delete[] p; p = nullptr;}
 
 namespace Audio
 {
+	//サウンドを鳴らす回数を初期化するインデックス
+	enum SoundNumIndex
+	{
+		i_start = 0,
+		i_select,
+		i_decide,
+		i_cancel,
+		i_whistle,
+		i_charge,
+		i_attack,
+		i_collision,
+	};
+
+	//----------汎用的に使うSE----------
+	int StartSoundNum_ = 0;//スタート音を同時に鳴らす回数
+	int SelectSoundNum_ = 0;//選択音を同時に鳴らす回数
+	int DecideSoundNum_ = 0;//決定音を同時に鳴らす回数
+	int CancelSoundNum_ = 0;//キャンセル音を同時に鳴らす回数
+
+	//----------ゲームプレイ中のSE----------
+	int WhistleSoundNum_ = 0;//ホイッスル音を同時に鳴らす回数
+	int	ChargeSoundNum_ = 0;//チャージ音を同時に鳴らす回数
+	int AttackSoundNum_ = 0;//攻撃音を同時に鳴らす回数
+	int CollisionSoundNum_ = 0;//ヒット音を同時に鳴らす回数
+
 	//XAudio本体
 	IXAudio2* pXAudio = nullptr;
 
@@ -38,6 +65,7 @@ void Audio::Initialize()
 	XAudio2Create(&pXAudio);
 	pXAudio->CreateMasteringVoice(&pMasteringVoice);
 
+	InitCSVAudio();
 }
 
 //サウンドファイル(.wav）をロード
@@ -199,4 +227,68 @@ void Audio::AllRelease()
 		pMasteringVoice->DestroyVoice();
 	}
 	pXAudio->Release();
+}
+
+void Audio::InitCSVAudio()
+{
+	//csvファイルを読み込む
+	CsvReader csv;
+	csv.Load("CSVData\\EngineData\\SoundData.csv");
+
+	//csvファイルの0列目の文字列を取得
+	std::string soundName = "SoundParam";
+
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> soundData = GameObject::GetCSVReadData(csv, soundName);
+
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	StartSoundNum_ = static_cast<int>(soundData[i_start]);
+	SelectSoundNum_ = static_cast<int>(soundData[i_select]);
+	DecideSoundNum_ = static_cast<int>(soundData[i_decide]);
+	CancelSoundNum_ = static_cast<int>(soundData[i_cancel]);
+	WhistleSoundNum_ = static_cast<int>(soundData[i_whistle]);
+	ChargeSoundNum_ = static_cast<int>(soundData[i_charge]);
+	AttackSoundNum_ = static_cast<int>(soundData[i_attack]);
+	CollisionSoundNum_ = static_cast<int>(soundData[i_collision]);
+}
+
+int Audio::GetStartNum()
+{
+	return StartSoundNum_;
+}
+
+int Audio::GetSelectNum()
+{
+	return SelectSoundNum_;
+}
+
+int Audio::GetDecideNum()
+{
+	return 	DecideSoundNum_;
+}
+
+int Audio::GetCancelNum()
+{
+	return CancelSoundNum_;
+}
+
+int Audio::GetWhistleNum()
+{
+	return WhistleSoundNum_;
+}
+
+int Audio::GetChargeNum()
+{
+	return ChargeSoundNum_;
+}
+
+int Audio::GetAttackNum()
+{
+	return AttackSoundNum_;
+}
+
+int Audio::GetCollisionNum()
+{
+	return CollisionSoundNum_;
 }

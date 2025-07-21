@@ -1,2 +1,2 @@
-﻿Data,chargeCount,AttackCount
-SoundParam,2,2
+﻿Data,start,select,decide,cancel ,whistle,charge,attack,collision
+SoundParam,1,3,1,1,1,4,4,8

@@ -165,7 +165,7 @@ void BattleScene::Initialize()
 	hSoundBattle_ = Audio::Load("Sound\\BGM\\battle.wav",true);
 	assert(hSoundBattle_>= 0);
 
-	hSoundWhistle_ = Audio::Load("Sound\\SE\\whistle.wav");
+	hSoundWhistle_ = Audio::Load("Sound\\SE\\whistle.wav", false, Audio::GetWhistleNum());
 	assert(hSoundWhistle_ >= 0);
 
 	//Player,Enemyのスコアを初期化
@@ -187,10 +187,6 @@ void BattleScene::Update()
 	for (auto player : ActivePlayers_)
 	{
 		player->CharacterRun();
-	}
-	for (auto enemy : ActiveEnemys_)
-	{
-		//
 	}
 
 	//ミニマップの位置を更新

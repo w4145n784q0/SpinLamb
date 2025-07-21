@@ -40,7 +40,7 @@ void HowToPlayScene::Initialize()
 	hSoundHowtoPlay_ = Audio::Load("Sound\\BGM\\howtoPlay.wav", true);
 	assert(hSoundHowtoPlay_ >= 0);
 
-	hBackGameMode_ = Audio::Load("Sound\\SE\\backgamemode.wav");
+	hBackGameMode_ = Audio::Load("Sound\\SE\\cancel.wav", false, Audio::GetCancelNum());
 	assert(hBackGameMode_ >= 0);
 
 	//ƒŠƒXƒg‚ÉŠeó‘Ô‚ð’Ç‰Á

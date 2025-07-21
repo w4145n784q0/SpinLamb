@@ -30,5 +30,25 @@ namespace Audio
 
 	//本体も解放
 	void AllRelease();
+
+	//鳴らす回数のCSV読み込み
+	void InitCSVAudio();
+
+	//ゲッター関数
+	int GetStartNum();
+
+	int GetSelectNum();
+
+	int GetDecideNum();
+
+	int GetCancelNum();
+
+	int GetWhistleNum();
+
+	int GetChargeNum();
+
+	int GetAttackNum();
+
+	int GetCollisionNum();
 };
 

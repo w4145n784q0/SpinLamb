@@ -1,4 +1,5 @@
 #include "GameView.h"
+#include "Engine/Global.h"
 
 //描画モードのインスタンス
 GameView::GameViewMode GameViewMode_;
@@ -24,6 +25,12 @@ void GameView::ViewNormal()
 	Camera::SetTarget(Camera::GetInitTar());
 
 	Camera::Update();
+}
+
+void GameView::Release()
+{
+	SAFE_DELETE(pPlayer1_);
+	SAFE_DELETE(pPlayer2_); 
 }
 
 void GameView::ViewPvE()

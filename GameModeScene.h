@@ -131,6 +131,9 @@ private:
 	//モード決定時のSE
 	int hSoundDecide_;
 
+	//キャンセル時のSE
+	int hSoundCancel_;
+
 
 	//各モードのリスト
 	std::list<SelectMode> ModeList_;

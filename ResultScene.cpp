@@ -64,7 +64,7 @@ void ResultScene::Initialize()
 	hSoundResult_ = Audio::Load("Sound\\BGM\\end.wav", true);
 	assert(hSoundResult_ >= 0);
 
-	hSoundBackTitle_ = Audio::Load("Sound\\SE\\backtitle.wav", false);
+	hSoundBackTitle_ = Audio::Load("Sound\\SE\\cancel.wav", false, Audio::GetCancelNum());
 	assert(hSoundBackTitle_ >= 0);
 
 	//SceneManagerインスタンスからBattleSceneから各スコアを取得

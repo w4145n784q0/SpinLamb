@@ -24,6 +24,8 @@ namespace GameView
 	//画面全体描画(メニューなど使用)
 	void ViewNormal();
 
+	void Release();
+
 	//一人プレイ用描画(プレイヤーの背中にカメラを置く)
 	void ViewPvE();
 

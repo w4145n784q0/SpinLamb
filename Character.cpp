@@ -98,6 +98,7 @@ namespace {
 	{
 		i_chargecount = 0,
 		i_attackcount,
+		i_collisioncount,
 	};
 }
 
@@ -112,14 +113,13 @@ Character::Character(GameObject* parent, const std::string& name)
 {
 	//csvからパラメータ読み込み
 	InitCSVEffect();
-	InitCSVSound();
 
 	//サウンドの読み込み
-	hSoundcharge_ = Audio::Load("Sound\\SE\\charge.wav",false, ChargeSoundCount_);
+	hSoundcharge_ = Audio::Load("Sound\\SE\\charge.wav",false, Audio::GetChargeNum());
 	assert(hSoundcharge_ >= 0);
-	hSoundattack_ = Audio::Load("Sound\\SE\\attack.wav", false, AttackSoundCount_);
+	hSoundattack_ = Audio::Load("Sound\\SE\\attack.wav", false, Audio::GetAttackNum());
 	assert(hSoundattack_ >= 0);
-	hSoundCollision_ = Audio::Load("Sound\\SE\\collision.wav",false);
+	hSoundCollision_ = Audio::Load("Sound\\SE\\collision.wav",false, Audio::GetCollisionNum());
 	assert(hSoundCollision_ >= 0);
 
 	//それぞれの柵の法線を取得
@@ -892,22 +892,4 @@ void Character::SetWallHitEffect()
 
 	//エフェクトを開始
 	VFX::Start(wallhit);
-}
-
-void Character::InitCSVSound()
-{
-	//csvファイルを読み込む
-	CsvReader csv;
-	csv.Load("CSVData\\EngineData\\SoundData.csv");
-
-	//csvファイルの0列目の文字列を取得
-	std::string soundName = "SoundParam";
-	
-	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> soundData = GetCSVReadData(csv, soundName);
-		
-	//初期化の順番はcsvの各行の順番に合わせる
-	//vの添え字はnamespaceで宣言した列挙型を使用
-	ChargeSoundCount_ = static_cast<int>(soundData[i_chargecount]);
-	AttackSoundCount_ = static_cast<int>(soundData[i_attackcount]);
 }
