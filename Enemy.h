@@ -14,7 +14,7 @@ private:
 
 	//----------インスタンス----------
 
-	//プレイヤーのインスタンス
+	//プレイヤーのインスタンス(Enemyからは取らず、上位シーンから設定)
 	Player* pPlayer_;
 
 	//敵(CPU)ステート
@@ -39,14 +39,14 @@ private:
 
 	//----------移動関係----------
 
-	//プレイヤーの位置を保管
-	XMVECTOR pPositionVec_;
+	//プレイヤーの位置ベクトルを保管
+	XMVECTOR TargetVec_;
 
 	//プレイヤーの位置(座標)
-	XMFLOAT3 PlayerPosition_;
+	XMFLOAT3 TargetPosition_;
 
 	//プレイヤーの速度
-	float PlayerAcceleration_;
+	float TargetAcceleration_;
 
 	//----------攻撃関係----------
 
@@ -121,5 +121,12 @@ public:
 	//Enemy限定のデータをCSV読み込み
 	void SetCSVEnemy();
 
-};
+	//セッター・ゲッター関数
+	void SetPlayerPointer(Player* _player) { pPlayer_ = _player; }
 
+	void SetTargetPosition(XMFLOAT3 _targetpos) { TargetPosition_ = _targetpos; }
+	XMFLOAT3 GetTargetPosition(){return TargetPosition_; }
+
+	void SetTargetAcceleration(float _acceleration) { TargetAcceleration_ = TargetAcceleration_; }
+	float GetTargetAcceleration() { return TargetAcceleration_; }
+};

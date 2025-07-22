@@ -87,7 +87,10 @@ private:
 	DrawMode DrawMode_;
 
 	//----------インスタンス----------
-	GameTimer* pGameTimer_;//hud側から操作する場合のタイマークラスポインタ
+	//hud側から操作する場合のタイマークラスポインタ
+	GameTimer* pGameTimer_;
+
+	//hud側から操作する場合のミニマップクラスポインタ
 	MiniMap* pMiniMap_;
 
 	//プレイヤーのスコア

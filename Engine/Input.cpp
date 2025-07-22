@@ -38,7 +38,7 @@ namespace Input
 	XINPUT_STATE prevControllerState_[MAX_PAD_NUM];
 
 
-
+	
 
 	//‰Šú‰»
 	void Initialize(HWND hWnd)

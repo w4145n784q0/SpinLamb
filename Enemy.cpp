@@ -47,9 +47,9 @@ namespace
 }
 
 Enemy::Enemy(GameObject* parent)
-	:Character(parent,"Enemy"), hEnemy_(-1), pPlayer_(nullptr),
+	:Character(parent,"Enemy"), hEnemy_(-1),pPlayer_(nullptr),
 	EnemyState_(S_STOP),AimTimer_(0), 
-	pPositionVec_({0,0,0}),PlayerPosition_({0,0,0}),PlayerAcceleration_(0.0f),
+	TargetVec_({0,0,0}), TargetPosition_({0,0,0}), TargetAcceleration_(0.0f),
 	RandomAim_(0), HitStopTimer_(0)
 {
 }
@@ -82,9 +82,7 @@ void Enemy::Initialize()
 	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), HitParam_.ColliderSize_);
 	this->AddCollider(collision);
 
-	//playerのインスタンス取得
-	pPlayer_ = (Player*)FindObject("Player1");
-
+	
 	//敵の攻撃時間配列の添え字をランダムに設定
 	RandomAim_ = rand() % EnemyAttackTimeArray.size();
 }
@@ -92,13 +90,13 @@ void Enemy::Initialize()
 void Enemy::Update()
 {
 	//プレイヤーの位置（ワールド座標）
-	PlayerPosition_ = pPlayer_->GetWorldPosition();
+	TargetPosition_ = pPlayer_->GetWorldPosition();
 
 	//プレイヤーの位置をベクトル化し取り続ける
-	pPositionVec_ = XMLoadFloat3(&PlayerPosition_);
+	TargetVec_ = XMLoadFloat3(&TargetPosition_);
 
 	//プレイヤーの加速度を取り続ける
-	PlayerAcceleration_ = pPlayer_->GetAcceleration();
+	TargetAcceleration_ = pPlayer_->GetAcceleration();
 	
 	//Characterクラスの共通処理
 	Character::Update();
@@ -184,16 +182,14 @@ void Enemy::OnCollision(GameObject* pTarget)
 	{
 		//自身の位置をXMVECTOR型にする
 		XMVECTOR enemyvector = XMLoadFloat3(&this->transform_.position_);
-		XMFLOAT3 getpositon = PlayerPosition_;
+		XMFLOAT3 getpositon = TargetPosition_;
 
 		//敵の位置を取りXMVECTOR型にする
 		XMVECTOR playervector = XMLoadFloat3(&getpositon);
 
-		//相手のスピードを取得
-		float playeraccele = PlayerAcceleration_;
-
+		
 		//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度)
-		Reflect(enemyvector, playervector, this->MoveParam_.Acceleration_, playeraccele);
+		Reflect(enemyvector, playervector, this->MoveParam_.Acceleration_, TargetAcceleration_);
 		
 		//接触時点で攻撃までのタイマーをリセット
 		AimTimer_ = 0;
@@ -339,7 +335,7 @@ void Enemy::UpdateAttack()
 		EnemyState_ = S_ROOT;
 
 		//攻撃までの時間を再抽選
-		RandomAim_ = rand() % EnemyAttackTimeArray.size();//攻撃終了後に攻撃時間をリセット
+		RandomAim_ = rand() % EnemyAttackTimeArray.size();
 	}
 
 	//攻撃SE再生
@@ -404,7 +400,7 @@ void Enemy::LookPlayer()
 
 	//プレイヤーの位置(ベクトル)から敵の位置(ベクトル)を引く
 	XMVECTOR enemyVector = XMLoadFloat3(&this->transform_.position_);
-	XMVECTOR PlayerDist = XMVectorSubtract(pPositionVec_ ,enemyVector);
+	XMVECTOR PlayerDist = XMVectorSubtract(TargetVec_ ,enemyVector);
 
 	//回転する方向を設定(初期化)
 	XMVECTOR RotateDirection = XMVectorZero();
@@ -458,7 +454,7 @@ float Enemy::PlayerEnemyDistanceX()
 	XMVECTOR EnemyPosition = XMLoadFloat3(&this->transform_.position_);
 
 	//Playerの位置ベクトル-自身の位置ベクトルを計算
-	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition, pPositionVec_);
+	XMVECTOR DistVec = XMVectorSubtract(EnemyPosition, TargetVec_);
 
 	//長さを取得し返す
 	float tmp = XMVectorGetX(XMVector3Length(DistVec));

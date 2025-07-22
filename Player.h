@@ -12,9 +12,6 @@ private:
 	//プレイヤーモデル
 	int hPlayer_;
 
-	//進行方向モデル
-	//int hArrow_;
-
 	//----------プレイヤーステート----------
 	//これらの値に応じて各Update関数を呼び出す
 	enum State
@@ -41,7 +38,7 @@ private:
 	
 	//----------初期化----------
 
-
+	//コントローラー使用時のID(キャラクタークラスのIDとは別)
 	int ControllerID_;
 
 	//----------移動関係----------
@@ -154,11 +151,9 @@ public:
 
 	//セッター・ゲッター関数
 	XMFLOAT3 GetCameraPosition() { return CameraPosition_; }
-
 	XMFLOAT3 GetCameraTarget() { return CameraTarget_; }
 
 	void SetControllerID(int _controllerID) { ControllerID_ = _controllerID; }
-
 	int GetControllerID() { return ControllerID_; }
 };
 

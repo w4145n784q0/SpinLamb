@@ -17,11 +17,19 @@ namespace
 	//バトルモードの制限時間
 	int GameTimeLimit = 0;
 
-	//エフェクト初期化時のインデックス
+	//バトルシーン初期化時のインデックス
 	enum ScorePosIndex
 	{
 		i_gametimelimit = 0,
 	};
+
+	//player初期化時の文字列配列
+	std::string PlayerNames[] = { "Player1","Player2" };
+
+	std::string csvPath[] = { "CSVdata\\CharacterData\\PlayerData1.csv" ,
+		"CSVdata\\CharacterData\\PlayerData2.csv" };
+
+	std::string modelPath[] = { "Model\\chara.fbx" ,"Model\\chara_black.fbx" };
 }
 
 BattleScene::BattleScene(GameObject* parent)
@@ -53,6 +61,97 @@ void BattleScene::Initialize()
 	float West = pStageManager->GetWestEnd();
 	float East = pStageManager->GetEastEnd();
 
+	//各キャラクターの初期化用の配列
+	std::vector<Player*> InitPlayers = {};
+	std::vector<Enemy*> InitEnemys = {};
+	std::vector<Character*> InitCharacters = {};
+
+	//登場させるキャラクターは事前に生成だけ行う
+	//値の初期化は後に行う
+	pPlayer1_ = Instantiate<Player>(this);
+	assert(pPlayer1_ != nullptr);
+
+	//初期化配列に追加
+	InitPlayers.push_back(pPlayer1_);
+	InitCharacters.push_back(pPlayer1_);
+
+	//「ひとりで」か「ふたりで」かで生成するキャラクターを変更
+	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+	if (pSceneManager->IsPlayerVSEnemy())
+	{
+		//事前に生成
+		pEnemy_ = Instantiate<Enemy>(this);
+		assert(pEnemy_ != nullptr);
+
+		//初期化配列に追加
+		InitCharacters.push_back(pEnemy_);
+		InitEnemys.push_back(pEnemy_);
+
+		//画面状態のセット(一人プレイ用)
+		GameView::SetGameViewMode(GameView::S_Single);
+	}
+	if (pSceneManager->IsPlayerVSPlayer())
+	{
+		//事前に生成
+		pPlayer2_ = Instantiate<Player>(this);
+		assert(pPlayer2_ != nullptr);
+
+		//初期化配列に追加
+		InitPlayers.push_back(pPlayer2_);
+		InitCharacters.push_back(pPlayer2_);
+
+		//画面状態のセット(二人プレイ用、左右分割する)
+		GameView::SetGameViewMode(GameView::S_Dual);
+
+		//二人プレイ用のカメラを設定
+		Camera::HalfScreen();
+	}
+
+	//Player,Enemy共通の初期化処理
+	for (int i = 0; i < InitCharacters.size(); i++)
+	{
+		//移動制限(各ステージの端)を渡す
+		InitCharacters[i]->SetEnd(North, South, West, East);
+
+		//IDを割り振る
+		InitCharacters[i]->SetID(i + 1);
+
+		//監視対象に追加
+		InitCharacters[i]->AddObserver(this);
+	}
+
+	//Playerの初期化処理
+	for (int i = 0; i < InitPlayers.size(); i++)
+	{
+		//プレイヤーの名前を設定
+		InitPlayers[i]->SetObjectName(PlayerNames[i]);
+
+		//使うコントローラーのID設定
+		InitPlayers[i]->SetControllerID(i);
+
+		//プレイヤーの初期化(csv、モデルのパス)
+		InitPlayers[i]->PlayerInit(csvPath[i], modelPath[i]);
+
+		//プレイヤーのポインタを設定
+		GameView::SetPlayer1(InitPlayers[i]);
+
+		//実際に動くプレイヤー(CPUではない)を登録
+		ActivePlayers_.push_back(InitPlayers[i]);
+	}
+
+	//Enemyの初期化処理
+	for (int i = 0; i < InitEnemys.size(); i++)
+	{
+		if (!InitPlayers.empty()) 
+		{
+			//プレイヤーの初期化配列からランダムなインスタンスをセット
+			//(現状は敵と一対一なのでplayer1が選ばれる)
+			//BattleSceneから設定することで値の相違・結合度の上昇を防ぐ
+			InitEnemys[i]->SetPlayerPointer(InitPlayers[rand() % InitPlayers.size()]);
+		}
+	}
+
+	/*
 	//プレイヤークラス(Player1)を生成
 	pPlayer1_ = Instantiate<Player>(this);
 	assert(pPlayer1_ != nullptr);
@@ -83,7 +182,7 @@ void BattleScene::Initialize()
 
 
 	//現在のモード(PvE or PvP)に合わせたキャラクターを生成
-	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+	//SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 	if (pSceneManager->IsPlayerVSEnemy())
 	{
 		//CPU(Enemyクラス)を生成
@@ -136,7 +235,7 @@ void BattleScene::Initialize()
 
 		//実際に動くプレイヤー(CPUではない)を登録
 		ActivePlayers_.push_back(pPlayer2_);
-	}
+	}*/
 
 	//各クラス生成
 	Instantiate<MiniMap>(this);
