@@ -199,11 +199,20 @@ void HUD::Update()
 
 void HUD::Draw()
 {
+	
+}
+
+void HUD::Release()
+{
+}
+
+void HUD::DrawFullScreen()
+{
 	//各オブジェクトに被さることを防ぐため、この関数から呼ぶ
 	//HUDクラスのDraw()は最後に呼ぶように設計
 	//状況に応じて切り替えたいもの(スタート/プレイ/終了時のロゴなど)は
 	//このswitch文で切り替わる
-	
+
 	//シーンクラスからの指示によって呼ぶ描画関数を変える
 	switch (DrawMode_)
 	{
@@ -211,26 +220,26 @@ void HUD::Draw()
 	{
 		DrawExplanation();
 	}
-		break;
+	break;
 	case S_Ready:
 	{
 		DrawScore();
 		DrawStartLogo();
 	}
-		break;
+	break;
 	case S_Playing:
 	{
 		DrawScore();
 		DrawTimer();
 	}
-		break;
+	break;
 	case S_Finish:
 	{
 		DrawTimer();
 		DrawFinishLogo();
 		DrawScore();
 	}
-		break;
+	break;
 	case S_Practice:
 		DrawPracticeLogo();
 		break;
@@ -242,10 +251,6 @@ void HUD::Draw()
 
 	//常に表示するものはswitch文の外で記述
 	DrawMiniMap();
-}
-
-void HUD::Release()
-{
 }
 
 void HUD::SetHUDCSV()

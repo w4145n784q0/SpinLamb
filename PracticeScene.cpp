@@ -115,9 +115,6 @@ void PracticeScene::Initialize()
 		//プレイヤーの初期化(csv、モデルのパス)
 		InitPlayers[i]->PlayerInit(csvPath[i], modelPath[i]);
 
-		//プレイヤーのポインタを設定
-		GameView::SetPlayer1(InitPlayers[i]);
-
 		//実際に動くプレイヤー(CPUではない)を登録
 		ActivePlayers_.push_back(InitPlayers[i]);
 
@@ -125,6 +122,9 @@ void PracticeScene::Initialize()
 		InitPlayers[i]->PlayerStart();
 	}
 
+	//プレイヤーのポインタを設定
+	GameView::SetPlayers(InitPlayers);
+	
 	//Enemyの初期化処理
 	for (int i = 0; i < InitEnemys.size(); i++)
 	{
@@ -149,6 +149,10 @@ void PracticeScene::Initialize()
 
 	//HUDにポインタを渡す
 	pHUD_->SetMiniMapPointer(pMiniMap_);
+
+	//GameViewにHUDのポインタを渡す
+	GameView::SetHUD(pHUD_);
+
 
 	//各画像・サウンドの読み込み
 	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");

@@ -189,6 +189,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//エフェクトの描画
 					VFX::Draw();
 
+					GameView::ViewHUDNormal();
 				}
 				else if (GameView::IsSingle())
 				{
@@ -200,6 +201,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 					//エフェクトの描画
 					VFX::Draw();
+
+					GameView::ViewHUDNormal();
 				}
 				else
 				{

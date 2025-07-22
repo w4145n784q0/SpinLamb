@@ -1,6 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"Player.h"
+#include"HUD.h"
 #include"Engine/Direct3D.h"
 
 #include"Engine/Camera.h"
@@ -35,6 +36,9 @@ namespace GameView
 	//二人プレイ用描画(右画面分割)
 	void ViewPlayer2();
 
+	//HUD用描画(画面全体)
+	void ViewHUDNormal();
+
 	///画面描画モードが一人プレイ中かどうか返す
 	bool IsSingle();
 
@@ -49,5 +53,10 @@ namespace GameView
 
 	//プレイヤー2のインスタンスを設定(Battle,Practiceで呼ぶ)
 	void SetPlayer2(Player* _pPlayer);
+
+	void SetPlayers(std::vector<Player*> _players);
+
+	//HUDのインスタンスを設定
+	void SetHUD(HUD* _HUD);
 };
 

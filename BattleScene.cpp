@@ -132,12 +132,12 @@ void BattleScene::Initialize()
 		//プレイヤーの初期化(csv、モデルのパス)
 		InitPlayers[i]->PlayerInit(csvPath[i], modelPath[i]);
 
-		//プレイヤーのポインタを設定
-		GameView::SetPlayer1(InitPlayers[i]);
-
 		//実際に動くプレイヤー(CPUではない)を登録
 		ActivePlayers_.push_back(InitPlayers[i]);
 	}
+
+	//プレイヤーのポインタを設定
+	GameView::SetPlayers(InitPlayers);
 
 	//Enemyの初期化処理
 	for (int i = 0; i < InitEnemys.size(); i++)
@@ -150,92 +150,6 @@ void BattleScene::Initialize()
 			InitEnemys[i]->SetPlayerPointer(InitPlayers[rand() % InitPlayers.size()]);
 		}
 	}
-
-	/*
-	//プレイヤークラス(Player1)を生成
-	pPlayer1_ = Instantiate<Player>(this);
-	assert(pPlayer1_ != nullptr);
-
-	//Player1の名前を設定
-	pPlayer1_->SetObjectName("Player1");
-
-	//Player1に移動制限(各ステージの端)を渡す
-	pPlayer1_->SetEnd(North, South, West, East);
-
-	//Player1にIDを割り振る
-	pPlayer1_->SetID(1);
-
-	//使うコントローラーのID設定
-	pPlayer1_->SetControllerID(0);
-
-	//Player1の初期化
-	pPlayer1_->PlayerInit("CSVdata\\CharacterData\\PlayerData1.csv", "Model\\chara.fbx");
-
-	//player1を監視対象に追加
-	pPlayer1_->AddObserver(this);
-
-	//プレイヤー１のポインタを設定
-	GameView::SetPlayer1(pPlayer1_);
-
-	//実際に動くプレイヤー(CPUではない)を登録
-	ActivePlayers_.push_back(pPlayer1_);
-
-
-	//現在のモード(PvE or PvP)に合わせたキャラクターを生成
-	//SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-	if (pSceneManager->IsPlayerVSEnemy())
-	{
-		//CPU(Enemyクラス)を生成
-		pEnemy_ = Instantiate<Enemy>(this);
-		assert(pEnemy_ != nullptr);
-
-		//Enemyに移動制限(各ステージの端)を渡す
-		pEnemy_->SetEnd(North, South, West, East);
-
-		//EnemyにIDを割り振る
-		pEnemy_->SetID(2);
-
-		//Enemyを監視対象に追加
-		pEnemy_->AddObserver(this);
-
-		//画面状態のセット(一人プレイ用)
-		GameView::SetGameViewMode(GameView::S_Single);
-	}
-	else if (pSceneManager->IsPlayerVSPlayer())
-	{
-		//Player2を生成
-		pPlayer2_ = Instantiate<Player>(this);
-		assert(pPlayer2_ != nullptr);
-
-		//Player2の名前を設定
-		pPlayer2_->SetObjectName("Player2");
-		
-		//Player2に移動制限(各ステージの端)を渡す
-		pPlayer2_->SetEnd(North, South, West, East);
-
-		//Player2にIDを割り振る
-		pPlayer2_->SetID(2);
-
-		//使うコントローラーのID設定
-		pPlayer2_->SetControllerID(1);
-
-		//Player2の初期化
-		pPlayer2_->PlayerInit("CSVdata\\CharacterData\\PlayerData2.csv", "Model\\chara_black.fbx");
-
-		//player2を監視対象に追加
-		pPlayer2_->AddObserver(this);
-
-		Camera::HalfScreen();
-		
-		//画面状態のセット(二人プレイ用、左右分割する)
-		GameView::SetGameViewMode(GameView::S_Dual);
-
-		//プレイヤー２のポインタを設定
-		GameView::SetPlayer2(pPlayer2_);
-
-		//実際に動くプレイヤー(CPUではない)を登録
-		ActivePlayers_.push_back(pPlayer2_);
-	}*/
 
 	//各クラス生成
 	Instantiate<MiniMap>(this);
@@ -253,6 +167,9 @@ void BattleScene::Initialize()
 	//HUDクラスと同じポインタを渡すことで値の相違を防ぐ
 	pHUD_->SetTimerPointer(pGameTimer_);
 	pHUD_->SetMiniMapPointer(pMiniMap_);
+
+	//GameViewにHUDのポインタを渡す
+	GameView::SetHUD(pHUD_);
 
 	//ゲーム制限時間を渡す
 	pGameTimer_->SetCurrentGameTime(GameTimeLimit);

@@ -130,6 +130,9 @@ public:
 	//開放
 	void Release() override;
 
+	//全画面描画
+	void DrawFullScreen();
+
 	//CSVファイルから必要パラメータを読み込みする
 	void SetHUDCSV();
 
