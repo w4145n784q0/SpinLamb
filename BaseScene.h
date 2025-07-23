@@ -14,7 +14,7 @@ protected:
 	{
 		S_Active = 0,//’Êí
 		S_Transition,//ƒV[ƒ“‘JˆÚ’†
-		MaxDecide
+		MaxScene
 	};
 	SceneState SceneState_;
 

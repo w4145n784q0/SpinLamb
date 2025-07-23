@@ -572,6 +572,8 @@ namespace Direct3D
 		}
 	}
 
+	//以下関数はビューポートのセット関数
+
 	void viewScreenNormal()
 	{
 		//一画面描画

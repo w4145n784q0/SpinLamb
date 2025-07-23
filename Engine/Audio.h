@@ -34,7 +34,7 @@ namespace Audio
 	//鳴らす回数のCSV読み込み
 	void InitCSVAudio();
 
-	//ゲッター関数
+	//----------SEを鳴らす回数のゲッター関数----------
 	int GetStartNum();
 
 	int GetSelectNum();

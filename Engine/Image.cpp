@@ -7,6 +7,7 @@
 //3D画像を管理する
 namespace Image
 {
+	//画像関連の変数を初期化するインデックス
 	enum ImageIndex
 	{
 		i_leftedge = 0,

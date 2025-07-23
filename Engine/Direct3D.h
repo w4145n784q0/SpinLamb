@@ -109,6 +109,7 @@ namespace Direct3D
 	//引数：isWrite	  true=書き込みON／false=書き込みOFF
 	void SetDepthBafferWriteEnable(bool isWrite);
 
+	//----------ビューポートのセット関数(描画範囲を指定する)----------
 
 	//スクリーン全体設定
 	void viewScreenNormal();

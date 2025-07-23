@@ -248,5 +248,11 @@ void PracticeScene::UpdateTransition()
 		
 		//1‰æ–Ê‚É–ß‚·
 		GameView::SetGameViewMode(GameView::S_NormalScreen);
+
+		//‰æ–Ê•ªŠ„‚µ‚Ä‚¢‚é‚È‚çƒJƒƒ‰‚ğ‘S‘Ì•\¦‚É–ß‚·
+		if (GameView::IsDual())
+		{
+			Camera::FullScreen();
+		}
 	}
 }

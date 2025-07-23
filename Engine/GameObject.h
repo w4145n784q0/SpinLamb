@@ -28,6 +28,7 @@ namespace
 		sca_z,
 	};
 
+	//汎用的に使用する変数を初期化するインデックス
 	enum CommonIndex
 	{
 		i_deltatime = 0,	
@@ -39,6 +40,8 @@ namespace
 	};
 
 }
+
+//----------オペレーター----------
 
 inline XMFLOAT3 operator + (const XMFLOAT3& a, const XMFLOAT3& b) {
 	XMFLOAT3 tmp = {0,0,0};

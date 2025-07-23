@@ -27,8 +27,6 @@ void BaseScene::Update()
 	case BaseScene::S_Transition:
 		UpdateTransition();
 		break;
-	case BaseScene::MaxDecide:
-		break;
 	default:
 		break;
 	}

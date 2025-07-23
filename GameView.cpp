@@ -56,10 +56,10 @@ namespace GameView
 		//全体画面描画
 		Direct3D::viewScreenNormal();
 
-		//カメラ位置はプレイヤー1に合わせる
-
+		//カメラ位置をプレイヤー1に合わせる
 		Camera::SetPosition(pPlayer1_->GetCameraPosition());
 
+		//カメラ焦点をプレイヤー1に合わせる
 		Camera::SetTarget(pPlayer1_->GetCameraTarget());
 
 		Camera::Update();
@@ -117,6 +117,8 @@ namespace GameView
 		Camera::SetPosition(Camera::GetInitPos());
 		Camera::SetTarget(Camera::GetInitTar());
 		Camera::Update();
+
+		//HUDを描画
 		pHUD_->DrawFullScreen();
 	}
 

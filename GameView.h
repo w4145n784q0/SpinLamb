@@ -6,7 +6,8 @@
 
 #include"Engine/Camera.h"
 //-----------------------------------------------------------
-//画面分割・描画
+// 画面分割・ビューポート設定・カメラ設定等を行う名前空間
+// 画面分割関連の処理はここで行う
 //-----------------------------------------------------------
 namespace GameView
 {
@@ -25,6 +26,7 @@ namespace GameView
 	//画面全体描画(メニューなど使用)
 	void ViewNormal();
 
+	//解放
 	void Release();
 
 	//一人プレイ用描画(プレイヤーの背中にカメラを置く)
@@ -54,6 +56,7 @@ namespace GameView
 	//プレイヤー2のインスタンスを設定(Battle,Practiceで呼ぶ)
 	void SetPlayer2(Player* _pPlayer);
 
+	//プレイヤーのインスタンスを配列で受け取り設定(Battle,Practiceで呼ぶ)
 	void SetPlayers(std::vector<Player*> _players);
 
 	//HUDのインスタンスを設定

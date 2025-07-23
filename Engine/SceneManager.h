@@ -25,7 +25,11 @@ private:
 	int FirstCharaScore_;		//プレイヤー1のスコア
 	int SecondCharaScore_;		//プレイヤー2or敵のスコア
 
-	enum PlayMode {
+	//ゲームプレイ時の遊ぶ人数　シーンをまたいでも管理できる
+	//GameViewの画面描画モードとは別
+	//(誰と誰が遊んでいるかの状態を保持)
+	enum PlayMode 
+	{
 		PlayerVSEnemy,//一人プレイの時(PvE)
 		PlayerVSPlayer,//二人プレイの時(PvP)
 		MaxPlay
@@ -46,6 +50,7 @@ public:
 	//引数：next	次のシーンのID
 	void ChangeScene(SCENE_ID next);
 
+	//セッター・ゲッター関数
 	void SetFirstCharaScore(int score) { FirstCharaScore_ = score; }
 	void SetSecondCharaScore(int score) { SecondCharaScore_ = score; }
 

@@ -172,22 +172,18 @@ void Camera::SetCSVCamera()
 	ShakeTimeLong = cameraData[i_shakeTimeLong];
 }
 
-//void Camera::SetScreen(int split)
-//{
-//	if (split == 2)
-//	{
-//		_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_ / 2.0f, 0.1f, 1000.0f);
-//	}
-//	else
-//	{
-//		_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_, 0.1f, 1000.0f);
-//	}
-//}
-
 void Camera::HalfScreen()
 {
+	//画面左右分割する際のプロジェクション行列作成
+	//第二引数:(画面幅 / 2) / 画面高さ(画面を左右に分けるので、本来の横幅を2で割り、それを縦幅で割る) 
 	_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, ( (FLOAT)Direct3D::screenWidth_ / 2.0f ) / (FLOAT)Direct3D::screenHeight_,  0.1f, 1000.0f);
 
+}
+
+void Camera::FullScreen()
+{
+	//全体描画のプロジェクション行列に戻す
+	_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_, 0.1f, 1000.0f);
 }
 
 //カメラの振動幅をセット(必要に応じてセット)
