@@ -166,7 +166,7 @@ void Player::OnCollision(GameObject* pTarget)
 
 }
 
-void Player::CharacterRun()
+void Player::PlayerRun()
 {
 	//CharacterƒNƒ‰ƒX‚Ì‹¤’Êˆ—
 	Character::Update();

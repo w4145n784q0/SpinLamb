@@ -148,6 +148,9 @@ void BattleScene::Initialize()
 			//(現状は敵と一対一なのでplayer1が選ばれる)
 			//BattleSceneから設定することで値の相違・結合度の上昇を防ぐ
 			InitEnemys[i]->SetPlayerPointer(InitPlayers[rand() % InitPlayers.size()]);
+
+			//生成した敵を登録
+			ActiveEnemys_.push_back(InitEnemys[i]);
 		}
 	}
 
@@ -197,12 +200,16 @@ void BattleScene::Update()
 	//UpdateActive,UpdateTranslationは継承先の関数が呼ばれる
 	BaseScene::Update();
 
-	//登録されたプレイヤーを更新
+	//登録されたプレイヤー・CPUを更新
 	//プレイヤーが複数存在する場合を想定して
 	//Battle,Practiceシーンから動かす
 	for (auto player : ActivePlayers_)
 	{
-		player->CharacterRun();
+		player->PlayerRun();
+	}
+	for (auto enemy : ActiveEnemys_)
+	{
+		enemy->EnemyRun();
 	}
 
 	//ミニマップの位置を更新

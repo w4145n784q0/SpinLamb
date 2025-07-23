@@ -24,8 +24,11 @@ private:
 	//あそびかたシーンBGM
 	int hSoundHowtoPlay_;
 	
+	//選択SE
+	int hSoundSelect_;
+
 	//ゲームモードに戻るSE
-	int hBackGameMode_;
+	int hSoundBackGameMode_;
 
 	//表示画像ステート
 	//これらの値に応じてDrawで描画する画像を変える

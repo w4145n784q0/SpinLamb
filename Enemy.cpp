@@ -89,54 +89,7 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-	//プレイヤーの位置（ワールド座標）
-	TargetPosition_ = pPlayer_->GetWorldPosition();
 
-	//プレイヤーの位置をベクトル化し取り続ける
-	TargetVec_ = XMLoadFloat3(&TargetPosition_);
-
-	//プレイヤーの加速度を取り続ける
-	TargetAcceleration_ = pPlayer_->GetAcceleration();
-	
-	//Characterクラスの共通処理
-	Character::Update();
-
-	//現在の状態によって更新を分ける
-	switch (EnemyState_)
-	{
-	case Enemy::S_ROOT:
-		UpdateRoot();
-		break;
-	case Enemy::S_CHASE:
-		UpdateChase();
-		break;
-	case Enemy::S_AIM:
-		UpdateAim();
-		break;
-	case Enemy::S_ATTACK:
-		UpdateAttack();
-		break;
-	case Enemy::S_HITSTOP:
-		UpdateHitStop();
-		break;
-	case Enemy::S_HIT:
-		UpdateHit();
-		break;
-	case Enemy::S_WALLHIT:
-		UpdateWallHit();
-		break;
-	case Enemy::S_STOP:
-		UpdateStop();
-		break;
-	default:
-		break;
-	}
-
-	//柵に接触状態でなければ無敵時間を更新
-	if (!(EnemyState_ == S_WALLHIT))
-	{
-		InvincibilityTimeCalclation();
-	}
 }
 
 void Enemy::Draw()
@@ -225,6 +178,58 @@ void Enemy::OnCollision(GameObject* pTarget)
 				}
 			}
 		}
+	}
+}
+
+void Enemy::EnemyRun()
+{
+	//プレイヤーの位置（ワールド座標）
+	TargetPosition_ = pPlayer_->GetWorldPosition();
+
+	//プレイヤーの位置をベクトル化し取り続ける
+	TargetVec_ = XMLoadFloat3(&TargetPosition_);
+
+	//プレイヤーの加速度を取り続ける
+	TargetAcceleration_ = pPlayer_->GetAcceleration();
+
+	//Characterクラスの共通処理
+	Character::Update();
+
+	//現在の状態によって更新を分ける
+	switch (EnemyState_)
+	{
+	case Enemy::S_ROOT:
+		UpdateRoot();
+		break;
+	case Enemy::S_CHASE:
+		UpdateChase();
+		break;
+	case Enemy::S_AIM:
+		UpdateAim();
+		break;
+	case Enemy::S_ATTACK:
+		UpdateAttack();
+		break;
+	case Enemy::S_HITSTOP:
+		UpdateHitStop();
+		break;
+	case Enemy::S_HIT:
+		UpdateHit();
+		break;
+	case Enemy::S_WALLHIT:
+		UpdateWallHit();
+		break;
+	case Enemy::S_STOP:
+		UpdateStop();
+		break;
+	default:
+		break;
+	}
+
+	//柵に接触状態でなければ無敵時間を更新
+	if (!(EnemyState_ == S_WALLHIT))
+	{
+		InvincibilityTimeCalclation();
 	}
 }
 

@@ -8,7 +8,7 @@
 HowToPlayScene::HowToPlayScene(GameObject* parent)
 	:BaseScene(parent, "GameModeScene"),
 	hExplanation_(-1), hOperateKeyboard_(-1), hOperateController_(-1),
-	hSoundHowtoPlay_(-1), hBackGameMode_(-1),
+	hSoundHowtoPlay_(-1), hSoundSelect_(-1),hSoundBackGameMode_(-1),
 	ImageState_(Explanation),pTransitionEffect_(nullptr)
 {
 }
@@ -40,8 +40,11 @@ void HowToPlayScene::Initialize()
 	hSoundHowtoPlay_ = Audio::Load("Sound\\BGM\\howtoPlay.wav", true);
 	assert(hSoundHowtoPlay_ >= 0);
 
-	hBackGameMode_ = Audio::Load("Sound\\SE\\cancel.wav", false, Audio::GetCancelNum());
-	assert(hBackGameMode_ >= 0);
+	hSoundSelect_ = Audio::Load("Sound\\SE\\select.wav", false, Audio::GetSelectNum());
+	assert(hSoundSelect_ >= 0);
+
+	hSoundBackGameMode_ = Audio::Load("Sound\\SE\\cancel.wav", false, Audio::GetCancelNum());
+	assert(hSoundBackGameMode_ >= 0);
 
 	//リストに各状態を追加
 	ImageList_ = { Explanation ,OperateKeyBoard,OperateController};
@@ -93,7 +96,8 @@ void HowToPlayScene::UpdateActive()
 	//表示画像の移動
 	//インデックスが先頭/末尾なら末尾/先頭へ戻る
 	//前置デクリメントで配列オーバー防ぐ
-	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT))
+	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT)
+		|| Input::IsStickTiltLX_RIGHT())
 	{
 		if (itr == ImageList_.begin())
 		{
@@ -104,8 +108,12 @@ void HowToPlayScene::UpdateActive()
 			--itr;
 		}
 		ImageState_ = *itr;
+
+		//選択SE再生
+		Audio::Play(hSoundSelect_);
 	}
-	if (Input::IsKeyDown(DIK_LEFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT))
+	if (Input::IsKeyDown(DIK_LEFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT)
+		|| Input::IsStickTiltLX_LEFT())
 	{
 		if (itr == --ImageList_.end())
 		{
@@ -116,6 +124,9 @@ void HowToPlayScene::UpdateActive()
 			++itr;
 		}
 		ImageState_ = *itr;
+
+		//選択SE再生
+		Audio::Play(hSoundSelect_);
 	}
 
 	//決定ボタン(Aキー・A/Startボタン)を押したらシーン遷移状態へ
@@ -128,7 +139,7 @@ void HowToPlayScene::UpdateActive()
 		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
 
 		//決定(ゲームモードシーンに戻る)SE再生
-		Audio::Play(hBackGameMode_);
+		Audio::Play(hSoundBackGameMode_);
 	}
 }
 

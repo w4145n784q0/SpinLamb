@@ -81,6 +81,7 @@ protected:
     struct HitParam
     {
         float ColliderSize_ = 0.0f; //当たり判定(球体)のサイズ
+        //float SpeedDifference = 0.0f; //
         float OriginaRangeMin_ = 0.0f; //変換元のノックバック量の最小値
         float OriginaRangeMax_ = 0.0f;  //変換元のノックバック量の最大値
         float ConvertedRangeMin_ = 0.0f; //変換後のノックバック量の最小値

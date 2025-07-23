@@ -33,10 +33,11 @@ namespace Input
 	POINT mousePos_;							//マウスカーソルの位置
 
 	//コントローラー
-	const int MAX_PAD_NUM = 4;
-	XINPUT_STATE controllerState_[MAX_PAD_NUM];
-	XINPUT_STATE prevControllerState_[MAX_PAD_NUM];
-
+	const int MAX_PAD_NUM = 4;						//コントローラーの接続最大数
+	XINPUT_STATE controllerState_[MAX_PAD_NUM];		//コントローラーの状態
+	XINPUT_STATE prevControllerState_[MAX_PAD_NUM];	//前フレームのコントローラーの状態
+	float PrevStickTiltL_X = 0.0f;					//前回のLスティック左右の入力保管
+	float PrevStickTiltL_Y = 0.0f;					//前回のLスティック上下の入力保管
 
 	
 
@@ -84,6 +85,10 @@ namespace Input
 			memcpy(&prevControllerState_[i], &controllerState_[i], sizeof(controllerState_[i]));
 			XInputGetState(i, &controllerState_[i]);
 		}
+
+		//前回の傾きに今回の代入
+		PrevStickTiltL_X = GetPadStickL().x;
+		PrevStickTiltL_Y = GetPadStickL().y;
 
 	}
 
@@ -300,6 +305,45 @@ namespace Input
 		vibration.wLeftMotorSpeed = l; // 左モーターの強さ
 		vibration.wRightMotorSpeed = r;// 右モーターの強さ
 		XInputSetState(padID, &vibration);
+	}
+
+	//左、下に倒した場合: 今回倒した値が-sticktiltより小さい && 前回倒した値が-sticktiltより大きい
+	//右、上に倒した場合: 今回倒した値がsticktiltより大きい && 前回倒した値がsticktiltより小さい 
+
+	bool IsStickTiltLX_LEFT()
+	{
+		//今回左スティックを左に一定以上倒した && 前回左スティックを左に一定以上倒していない
+		if (GetPadStickL().x <= -StickTilt && PrevStickTiltL_X >= -StickTilt)
+			return true;
+		else
+			return false;
+	}
+
+	bool IsStickTiltLX_RIGHT()
+	{
+		//今回左スティックを右に一定以上倒した && 前回左スティックを右に一定以上倒していない
+		if (GetPadStickL().x >= StickTilt && PrevStickTiltL_X <= StickTilt)
+			return true;
+		else
+			return false;
+	}
+
+	bool IsStickTiltLY_UP()
+	{
+		//今回左スティックを上に一定以上倒した && 前回左スティックを上に一定以上倒していない
+		if (GetPadStickL().y >= StickTilt && PrevStickTiltL_Y <= StickTilt)
+			return true;
+		else
+			return false;
+	}
+
+	bool IsStickTiltLY_DOWN()
+	{
+		//今回左スティックを下に一定以上倒した && 前回左スティックを下に一定以上倒していない
+		if (GetPadStickL().y <= -StickTilt && PrevStickTiltL_Y >= -StickTilt)
+			return true;
+		else
+			return false;
 	}
 
 	//csv読み込み

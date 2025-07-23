@@ -33,6 +33,9 @@ private:
 	//実際に動くプレイヤー(CPUではない)のリスト
 	std::vector<Player*> ActivePlayers_;
 
+	//生成された敵(CPU)を登録する配列
+	std::vector<Enemy*> ActiveEnemys_;
+
 	//長押しでタイトルに遷移するカウント
 	int Press_;
 

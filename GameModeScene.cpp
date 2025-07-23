@@ -254,7 +254,8 @@ void GameModeScene::UpdateSelecting()
 	//インデックスが先頭/末尾なら末尾/先頭へ戻る
 	//前置デクリメントで配列オーバー防ぐ
 
-	if (Input::IsKeyDown(DIK_UP) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP))
+	if (Input::IsKeyDown(DIK_UP) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP)
+		|| Input::IsStickTiltLY_UP())
 	{
 
 		if (Modeitr == ModeList_.begin())
@@ -270,7 +271,8 @@ void GameModeScene::UpdateSelecting()
 		//選択SE再生
 		Audio::Play(hSoundSelect_);
 	}
-	if (Input::IsKeyDown(DIK_DOWN) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN))
+	if (Input::IsKeyDown(DIK_DOWN) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN)
+		|| Input::IsStickTiltLY_DOWN())
 	{
 		if (Modeitr == --ModeList_.end())
 		{
@@ -331,7 +333,8 @@ void GameModeScene::UpdateConfirmation()
 	//インデックスが先頭/末尾なら末尾/先頭へ戻る
 	//前置デクリメントで配列オーバー防ぐ
 
-	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT))
+	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT)
+		|| Input::IsStickTiltLX_RIGHT())
 	{
 		if (PlayerNumitr == PlayerNumList_.begin())
 		{
@@ -346,7 +349,8 @@ void GameModeScene::UpdateConfirmation()
 		//選択SE再生
 		Audio::Play(hSoundSelect_);
 	}
-	if (Input::IsKeyDown(DIK_LEFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT))
+	if (Input::IsKeyDown(DIK_LEFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT)
+		|| Input::IsStickTiltLX_LEFT())
 	{
 		if (PlayerNumitr == --PlayerNumList_.end())
 		{

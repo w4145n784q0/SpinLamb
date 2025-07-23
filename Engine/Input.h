@@ -112,6 +112,11 @@ namespace Input
 	//U“®‚³‚¹‚é
 	void SetPadVibration(int l, int r, int padID = 0);
 
+	bool IsStickTiltLX_LEFT();
+	bool IsStickTiltLX_RIGHT();
+	bool IsStickTiltLY_UP();
+	bool IsStickTiltLY_DOWN();
+
 	//CSV‚©‚çƒpƒ‰ƒ[ƒ^‚ğ“Ç‚İ‚İ‚·‚é
 	void SetInputCSV();
 

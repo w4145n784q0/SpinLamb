@@ -80,7 +80,7 @@ public:
 	void OnCollision(GameObject* pTarget) override;
 
 	//動的に呼び出す更新処理
-	void CharacterRun();
+	void PlayerRun();
 
 	//----------PlayerState_に応じて内容が変わるUpdate関数----------
 

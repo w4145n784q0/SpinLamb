@@ -6,7 +6,8 @@ namespace GameView
 	enum pplayerIndex
 	{
 		i_player1 = 0,
-		i_player2
+		i_player2,
+		MaxPlayersNum,//参加できるプレイヤーの最大値
 	};
 
 	//描画モードのインスタンス
@@ -155,8 +156,28 @@ namespace GameView
 
 	void SetPlayers(std::vector<Player*> _players)
 	{
-		pPlayer1_ = _players[i_player1];
-		pPlayer2_ = _players[i_player2];
+		if (_players.empty() || _players.size() > MaxPlayersNum)
+		{
+			return;
+		}
+
+		if (_players.size() > i_player1)
+		{
+			pPlayer1_ = _players[i_player1];
+		}
+		else
+		{
+			pPlayer1_ = nullptr;
+		}
+
+		if (_players.size() > i_player2)
+		{
+			pPlayer2_ = _players[i_player2];
+		}
+		else
+		{
+			pPlayer2_ = nullptr;
+		}
 	}
 
 	void SetHUD(HUD* _HUD)

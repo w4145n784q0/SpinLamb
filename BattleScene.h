@@ -29,7 +29,9 @@ private:
 
 	//実際に操作するプレイヤーを登録する配列
 	std::vector<Player*> ActivePlayers_;
-	//std::vector<Enemy*> ActiveEnemys_;
+
+	//生成された敵(CPU)を登録する配列
+	std::vector<Enemy*> ActiveEnemys_;
 
 	//----------バトルシーンステート----------
 	//これらの値に応じて各Update関数を呼び出す

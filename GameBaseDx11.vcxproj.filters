@@ -203,9 +203,6 @@
     <ClCompile Include="OutStageThing.cpp">
       <Filter>05Stage</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerManager.cpp">
-      <Filter>04Chara</Filter>
-    </ClCompile>
     <ClCompile Include="GameView.cpp">
       <Filter>01Engine\DirectX</Filter>
     </ClCompile>
@@ -376,9 +373,6 @@
     </ClInclude>
     <ClInclude Include="OutStageThing.h">
       <Filter>05Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerManager.h">
-      <Filter>04Chara</Filter>
     </ClInclude>
     <ClInclude Include="GameView.h">
       <Filter>01Engine\DirectX</Filter>
