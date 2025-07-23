@@ -206,6 +206,46 @@ void HUD::Release()
 {
 }
 
+void HUD::DrawImGui()
+{
+	//シーンクラスからの指示によって呼ぶ描画関数を変える
+	switch (DrawMode_)
+	{
+	case S_BeforeStart:
+	{
+		DrawImGuiExplanation();
+	}
+	break;
+	case S_Ready:
+	{
+		DrawImGuiScore();
+		DrawImGuiStartLogo();
+	}
+	break;
+	case S_Playing:
+	{
+		DrawImGuiScore();
+		DrawImGuiTimer();
+	}
+	break;
+	case S_Finish:
+	{
+		DrawImGuiTimer();
+		DrawImGuiFinishLogo();
+		DrawImGuiScore();
+	}
+	break;
+	case S_Practice:
+		DrawImGuiPracticeLogo();
+		break;
+	default:
+		break;
+	}
+
+	//常に表示するものはswitch文の外で記述
+	DrawImGuiMiniMap();
+}
+
 void HUD::DrawFullScreen()
 {
 	//各オブジェクトに被さることを防ぐため、この関数から呼ぶ
@@ -287,17 +327,7 @@ void HUD::SetHUDCSV()
 
 void HUD::DrawPracticeLogo()
 {
-#ifdef _DEBUG
-	if (ImGui::TreeNode("PracticeLogo"))
-	{
-		ImGui::SliderFloat("backtitleX", &logo_backtitle.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("backtitleY", &logo_backtitle.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("practiceX", &logo_practice.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("practiceY", &logo_practice.position_.y, Image::UpEdge, Image::DownEdge);
-		ImGui::TreePop();
-	}
-#endif
 
 	//"タイトルに戻ります"ロゴ描画
 	Image::SetAndDraw(hBackTitleLogo_, logo_backtitle);
@@ -308,17 +338,7 @@ void HUD::DrawPracticeLogo()
 
 void HUD::DrawTimer()
 {
-#ifdef _DEBUG
-	if (ImGui::TreeNode("Timer"))
-	{
-		ImGui::SliderFloat("TenTimeX", &TenTime.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("TenTimeY", &TenTime.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("OneTimeX", &OneTime.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("OneTimeY", &OneTime.position_.y, Image::UpEdge, Image::DownEdge);
-		ImGui::TreePop();
-	}
-#endif
 
 
 	if(pGameTimer_ != nullptr)
@@ -335,14 +355,7 @@ void HUD::DrawTimer()
 
 void HUD::DrawExplanation()
 {
-#ifdef _DEBUG
-	if (ImGui::TreeNode("Explanation"))
-	{
-		ImGui::SliderFloat("ExplanationX", &logo_explanation.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("ExplanationY", &logo_explanation.position_.y, Image::UpEdge, Image::DownEdge);
-		ImGui::TreePop();
-	}
-#endif
+
 
 	//ゲーム説明ロゴ描画
 	Image::SetAndDraw(hGameExplanation_, logo_explanation);
@@ -350,14 +363,7 @@ void HUD::DrawExplanation()
 
 void HUD::DrawStartLogo()
 {
-#ifdef _DEBUG
-	if (ImGui::TreeNode("Start"))
-	{
-		ImGui::SliderFloat("StartX", &logo_start.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("StartY", &logo_start.position_.y, Image::UpEdge, Image::DownEdge);
-		ImGui::TreePop();
-	}
-#endif
+
 
 	//DrawStartの状態によって描画するロゴを切り替える
 	//DrawStart_の状態はstart_ready->start_goの順に変化するが
@@ -378,14 +384,6 @@ void HUD::DrawStartLogo()
 
 void HUD::DrawFinishLogo()
 {
-#ifdef _DEBUG
-	if (ImGui::TreeNode("Finish"))
-	{
-		ImGui::SliderFloat("FinishX", &logo_Finish.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("FinishY", &logo_Finish.position_.y, Image::UpEdge, Image::DownEdge);
-		ImGui::TreePop();
-	}
-#endif
 
 	//"Finish!"ロゴ描画
 	Image::SetAndDraw(hFinish_, logo_Finish);
@@ -393,21 +391,7 @@ void HUD::DrawFinishLogo()
 
 void HUD::DrawMiniMap()
 {
-#ifdef _DEBUG
-	if (ImGui::TreeNode("MiniMap"))
-	{
-		ImGui::SliderFloat("MiniMapX", &MapIcon.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("MiniMapY", &MapIcon.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::Text("playerIconX:%.3f", PlayerIcon.position_.x);
-		ImGui::Text("playerIconY:%.3f", PlayerIcon.position_.y);
-
-		ImGui::Text("EnemyIconX:%.3f", EnemyIcon.position_.x);
-		ImGui::Text("EnemyIconY:%.3f", EnemyIcon.position_.y);
-
-		ImGui::TreePop();
-	}
-#endif
 
 	if (pMiniMap_ != nullptr) 
 	{
@@ -422,6 +406,77 @@ void HUD::DrawMiniMap()
 }
 
 void HUD::DrawScore()
+{
+	//現在のスコアをそれぞれ計算
+	//十の位:現在のスコアを10で除算
+	//一の位:現在のスコアを10で除算した余り
+	pScoreIndexTen = FirstScore_ / TenDivision;
+	pScoreIndexOne = FirstScore_ % TenDivision;
+	eScoreIndexTen = SecondScore_ / TenDivision;
+	eScoreIndexOne = SecondScore_ % TenDivision;
+
+	//Playerのスコアの十の位,一の位を描画
+	Image::SetAndDraw(ArrayHandle[pScoreIndexTen], PlayerScoreTen);
+	Image::SetAndDraw(ArrayHandle[pScoreIndexOne], PlayerScoreOne);
+
+	//Enemyのスコアの十の位,一の位を描画
+	Image::SetAndDraw(ArrayHandle[eScoreIndexTen], EnemyScoreTen);
+	Image::SetAndDraw(ArrayHandle[eScoreIndexOne], EnemyScoreOne);
+}
+
+void HUD::DrawImGuiExplanation()
+{
+#ifdef _DEBUG
+	if (ImGui::TreeNode("Explanation"))
+	{
+		ImGui::SliderFloat("ExplanationX", &logo_explanation.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("ExplanationY", &logo_explanation.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::TreePop();
+	}
+#endif
+}
+
+void HUD::DrawImGuiStartLogo()
+{
+#ifdef _DEBUG
+	if (ImGui::TreeNode("Start"))
+	{
+		ImGui::SliderFloat("StartX", &logo_start.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("StartY", &logo_start.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::TreePop();
+	}
+#endif
+}
+
+void HUD::DrawImGuiFinishLogo()
+{
+#ifdef _DEBUG
+	if (ImGui::TreeNode("Finish"))
+	{
+		ImGui::SliderFloat("FinishX", &logo_Finish.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("FinishY", &logo_Finish.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::TreePop();
+	}
+#endif
+
+}
+
+void HUD::DrawImGuiPracticeLogo()
+{
+#ifdef _DEBUG
+	if (ImGui::TreeNode("PracticeLogo"))
+	{
+		ImGui::SliderFloat("backtitleX", &logo_backtitle.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("backtitleY", &logo_backtitle.position_.y, Image::UpEdge, Image::DownEdge);
+
+		ImGui::SliderFloat("practiceX", &logo_practice.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("practiceY", &logo_practice.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::TreePop();
+	}
+#endif
+}
+
+void HUD::DrawImGuiScore()
 {
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Score"))
@@ -441,22 +496,40 @@ void HUD::DrawScore()
 		ImGui::TreePop();
 	}
 #endif
+}
 
-	//現在のスコアをそれぞれ計算
-	//十の位:現在のスコアを10で除算
-	//一の位:現在のスコアを10で除算した余り
-	pScoreIndexTen = FirstScore_ / TenDivision;
-	pScoreIndexOne = FirstScore_ % TenDivision;
-	eScoreIndexTen = SecondScore_ / TenDivision;
-	eScoreIndexOne = SecondScore_ % TenDivision;
+void HUD::DrawImGuiTimer()
+{
+#ifdef _DEBUG
+	if (ImGui::TreeNode("Timer"))
+	{
+		ImGui::SliderFloat("TenTimeX", &TenTime.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("TenTimeY", &TenTime.position_.y, Image::UpEdge, Image::DownEdge);
 
-	//Playerのスコアの十の位,一の位を描画
-	Image::SetAndDraw(ArrayHandle[pScoreIndexTen], PlayerScoreTen);
-	Image::SetAndDraw(ArrayHandle[pScoreIndexOne], PlayerScoreOne);
+		ImGui::SliderFloat("OneTimeX", &OneTime.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("OneTimeY", &OneTime.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::TreePop();
+	}
+#endif
+}
 
-	//Enemyのスコアの十の位,一の位を描画
-	Image::SetAndDraw(ArrayHandle[eScoreIndexTen], EnemyScoreTen);
-	Image::SetAndDraw(ArrayHandle[eScoreIndexOne], EnemyScoreOne);
+void HUD::DrawImGuiMiniMap()
+{
+#ifdef _DEBUG
+	if (ImGui::TreeNode("MiniMap"))
+	{
+		ImGui::SliderFloat("MiniMapX", &MapIcon.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("MiniMapY", &MapIcon.position_.y, Image::UpEdge, Image::DownEdge);
+
+		ImGui::Text("playerIconX:%.3f", PlayerIcon.position_.x);
+		ImGui::Text("playerIconY:%.3f", PlayerIcon.position_.y);
+
+		ImGui::Text("EnemyIconX:%.3f", EnemyIcon.position_.x);
+		ImGui::Text("EnemyIconY:%.3f", EnemyIcon.position_.y);
+
+		ImGui::TreePop();
+	}
+#endif
 }
 
 void HUD::DrawReady()

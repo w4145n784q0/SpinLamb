@@ -189,6 +189,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//エフェクトの描画
 					VFX::Draw();
 
+					//Imguiの表示
+					GameView::ViewImGui();
+
+					//HUDの描画
 					GameView::ViewHUDNormal();
 				}
 				else if (GameView::IsSingle())
@@ -202,6 +206,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//エフェクトの描画
 					VFX::Draw();
 
+					//Imguiの表示
+					GameView::ViewImGui();
+
+					//HUDの描画
 					GameView::ViewHUDNormal();
 				}
 				else
@@ -214,22 +222,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 					//エフェクトの描画
 					VFX::Draw();
+
+					//Imguiの表示
+					//GameView::ViewImGui();
 				}
 
-
-				//全オブジェクトを描画
-				//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
-				//pRootObject->DrawSub();
-
-				//エフェクトの描画
-				//VFX::Draw();
-
-				//描画終了
 #ifdef _DEBUG
 
 				//ImGuiを終了する
 				ImGui::End();
 #endif
+
+				//描画終了
 				Direct3D::EndDraw();
 
 

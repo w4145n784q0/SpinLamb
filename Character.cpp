@@ -342,9 +342,9 @@ void Character::DrawCharacterImGui()
 	//キャラクターの回転量(rotate_.x,y,z)
 	if (ImGui::TreeNode("Transform.Rotate"))
 	{
-		ImGui::Text("RotateX:%.3f", &this->transform_.rotate_.x);
-		ImGui::Text("RotateY:%.3f", &this->transform_.rotate_.y);
-		ImGui::Text("RotateZ:%.3f", &this->transform_.rotate_.z);
+		ImGui::InputFloat("RotateX:%.3f", &this->transform_.rotate_.x);
+		ImGui::InputFloat("RotateY:%.3f", &this->transform_.rotate_.y);
+		ImGui::InputFloat("RotateZ:%.3f", &this->transform_.rotate_.z);
 		ImGui::TreePop();
 	}
 

@@ -57,6 +57,9 @@ public:
 	//開放
 	void Release() override;
 
+	//ImGuiの描画
+	void DrawImGui();
+
 	//----------セッター・ゲッター関数----------
 	void SetCabinTransform(std::vector<Transform> _data) { CabinData_  =  _data; }
 

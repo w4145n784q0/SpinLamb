@@ -45,6 +45,9 @@ public:
 	//ŠJ•ú
 	void Release() override;
 
+	//ImGui‚Ì•`‰æ
+	void DrawImGui();
+
 	/// <summary>
 	/// 4‚Â‚Ìò‚ÌˆÊ’uŒˆ’è
 	/// </summary>

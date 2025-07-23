@@ -64,6 +64,24 @@ void Fence::Update()
 
 void Fence::Draw()
 {
+
+
+	//柵モデルの描画
+	Model::SetAndDraw(hFence_, wireTransform);
+
+	//柱モデルの描画
+	for (int i = 0; i < pillersTransformArray.size(); i++)
+	{
+		Model::SetAndDraw(hPiller_, pillersTransformArray[i]);
+	}
+}
+
+void Fence::Release()
+{
+}
+
+void Fence::DrawImGui()
+{
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Fence"))
 	{
@@ -90,7 +108,7 @@ void Fence::Draw()
 				ImGui::InputFloat((PillerNameArray[i] + " PotisionX").c_str(), &pillersTransformArray[i].position_.x);
 				ImGui::InputFloat((PillerNameArray[i] + " PotisionY").c_str(), &pillersTransformArray[i].position_.y);
 				ImGui::InputFloat((PillerNameArray[i] + " PotisionZ").c_str(), &pillersTransformArray[i].position_.z);
-			
+
 				ImGui::InputFloat((PillerNameArray[i] + " RotateX").c_str(), &pillersTransformArray[i].rotate_.x);
 				ImGui::InputFloat((PillerNameArray[i] + " RotateY").c_str(), &pillersTransformArray[i].rotate_.y);
 				ImGui::InputFloat((PillerNameArray[i] + " RotateZ").c_str(), &pillersTransformArray[i].rotate_.z);
@@ -105,19 +123,6 @@ void Fence::Draw()
 		ImGui::TreePop();
 	}
 #endif
-
-	//柵モデルの描画
-	Model::SetAndDraw(hFence_, wireTransform);
-
-	//柱モデルの描画
-	for (int i = 0; i < pillersTransformArray.size(); i++)
-	{
-		Model::SetAndDraw(hPiller_, pillersTransformArray[i]);
-	}
-}
-
-void Fence::Release()
-{
 }
 
 void Fence::SetPiller(float upper, float lower, float left, float right, float height)

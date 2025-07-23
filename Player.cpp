@@ -96,14 +96,7 @@ void Player::Draw()
 		DrawArrow();
 	}
 
-	//Debug中はImGuiを設定
-#ifdef _DEBUG
-	if (ImGui::TreeNode((objectName_ + " Status").c_str()))
-	{
-		DrawCharacterImGui();
-	}
-	
-#endif
+
 
 }
 
@@ -695,6 +688,18 @@ void Player::CollisionCharacter(std::string _name)
 
 	//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度)
 	Reflect(PlayerVector, targetVector, this->MoveParam_.Acceleration_, targetSpeed);
+}
+
+void Player::DrawImGui()
+{
+	//Debug中はImGuiを設定
+#ifdef _DEBUG
+	if (ImGui::TreeNode((objectName_ + " Status").c_str()))
+	{
+		DrawCharacterImGui();
+	}
+
+#endif
 }
 
 void Player::SetCSVPlayer(std::string _path)

@@ -27,7 +27,14 @@ void Ground::Draw()
 {
 	//ƒ‚ƒfƒ‹•`‰æ
 	Model::SetAndDraw(hGrass_, this->transform_);
+}
 
+void Ground::Release()
+{
+}
+
+void Ground::DrawImGui()
+{
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Ground"))
 	{
@@ -58,9 +65,4 @@ void Ground::Draw()
 		ImGui::TreePop();
 	}
 #endif
-
-}
-
-void Ground::Release()
-{
 }

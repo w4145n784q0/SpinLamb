@@ -20,12 +20,29 @@ namespace GameView
 	//HUDのインスタンス
 	HUD* pHUD_;
 
+	//Enemyのインスタンス
+	Enemy* pEnemy_;
+
+	//地面クラスのインスタンス
+	Ground* pGround_;
+
+	//柵クラスのインスタンス
+	Fence* pFence_;
+
+	//ステージ外オブジェクトクラスのインスタンス
+	OutStageThing* pOutStageThing_;
+
+
 	void GameView::Initialize()
 	{
 		GameViewMode_ = S_NormalScreen;
 		pPlayer1_ = nullptr;
 		pPlayer2_ = nullptr;
 		pHUD_ = nullptr;
+		pEnemy_ = nullptr;
+		pGround_ = nullptr;
+		pFence_ = nullptr;
+		pOutStageThing_ = nullptr;
 	}
 
 	void GameView::ViewNormal()
@@ -104,6 +121,43 @@ namespace GameView
 		Camera::Update();
 	}
 
+	void ViewImGui()
+	{
+		if (pGround_ != nullptr)
+		{
+			pGround_->DrawImGui();
+		}
+		if (pFence_ != nullptr)
+		{
+			pFence_->DrawImGui();
+		}
+		if (pOutStageThing_ != nullptr)
+		{
+			pOutStageThing_->DrawImGui();
+		}
+
+
+		//プレイヤークラスのImgui描画
+		std::vector<Player*> players = { pPlayer1_,pPlayer2_ };
+		for (auto player : players)
+		{
+			if (player != nullptr)
+			{
+				player->DrawImGui();
+			}
+		}
+
+		if (pEnemy_ != nullptr)
+		{
+			pEnemy_->DrawImGui();
+		}
+
+		if (pHUD_ != nullptr)
+		{
+			pHUD_->DrawImGui();
+		}
+	}
+
 	void ViewHUDNormal()
 	{
 		//全体画面描画
@@ -144,16 +198,6 @@ namespace GameView
 		GameViewMode_ = mode;
 	}
 
-	void GameView::SetPlayer1(Player* _pPlayer)
-	{
-		pPlayer1_ = _pPlayer;
-	}
-
-	void GameView::SetPlayer2(Player* _pPlayer)
-	{
-		pPlayer2_ = _pPlayer;
-	}
-
 	void SetPlayers(std::vector<Player*> _players)
 	{
 		if (_players.empty() || _players.size() > MaxPlayersNum)
@@ -183,5 +227,25 @@ namespace GameView
 	void SetHUD(HUD* _HUD)
 	{
 		pHUD_ = _HUD;
+	}
+
+	void SetEnemy(Enemy* _enemy)
+	{
+		pEnemy_ = _enemy;
+	}
+
+	void SetGround(Ground* _ground)
+	{
+		pGround_ = _ground;
+	}
+
+	void SetFence(Fence* _fence)
+	{
+		pFence_ = _fence;
+	}
+
+	void SetOutStageThing(OutStageThing* _stagething)
+	{
+		pOutStageThing_ = _stagething;
 	}
 }

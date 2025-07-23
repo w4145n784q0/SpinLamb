@@ -206,6 +206,7 @@
     <ClCompile Include="GameView.cpp">
       <Filter>01Engine\DirectX</Filter>
     </ClCompile>
+    <ClCompile Include="ImGuiViewer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -380,6 +381,7 @@
     <ClInclude Include="IGameObserver.h">
       <Filter>04Chara</Filter>
     </ClInclude>
+    <ClInclude Include="ImGuiViewer.h" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

@@ -48,6 +48,15 @@ void OutStageThing::Draw()
 		}
 	}
 
+
+}
+
+void OutStageThing::Release()
+{
+}
+
+void OutStageThing::DrawImGui()
+{
 #ifdef _DEBUG
 	if (ImGui::TreeNode("OutStageThings"))
 	{
@@ -278,8 +287,4 @@ void OutStageThing::Draw()
 		ImGui::TreePop();
 	}
 #endif
-}
-
-void OutStageThing::Release()
-{
 }

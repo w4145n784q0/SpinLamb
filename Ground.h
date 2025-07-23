@@ -27,6 +27,9 @@ public:
 	//開放
 	void Release() override;
 
+	//ImGuiの描画
+	void DrawImGui();
+
 	//----------セッター・ゲッター関数----------
 
 	//ステージモデルのモデル番号を返す(レイキャスト用)

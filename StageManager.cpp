@@ -2,6 +2,8 @@
 #include"Engine/CsvReader.h"
 #include"Engine/Global.h"
 
+#include "GameView.h"
+
 namespace
 {
 	//csv読み込み時のインデックス(各ステージの端)
@@ -22,6 +24,10 @@ namespace
 		i_collisionZ,
 	};
 
+	//インスタンス
+	Ground* pGround_ = nullptr;
+	Fence* pFence_ = nullptr;
+	OutStageThing* pOutStageThing_ = nullptr;
 }
 
 StageManager::StageManager(GameObject* parent)
@@ -196,12 +202,15 @@ void StageManager::InitGroundData()
 	//Groundクラスの初期化行う
 
 	//地面クラスのインスタンスを取得
-	Ground* pGround = (Ground*)FindObject("Ground");
+	pGround_ = (Ground*)FindObject("Ground");
 
 	//CSVから読み込んだ拡大率,回転,位置を渡す
-	pGround->SetScale(GroundData_.scale_);
-	pGround->SetRotate(GroundData_.rotate_);
-	pGround->SetPosition(GroundData_.position_);
+	pGround_->SetScale(GroundData_.scale_);
+	pGround_->SetRotate(GroundData_.rotate_);
+	pGround_->SetPosition(GroundData_.position_);
+
+	//地面クラスのポインタを渡す
+	GameView::SetGround(pGround_);
 }
 
 void StageManager::InitFenceData()
@@ -209,12 +218,13 @@ void StageManager::InitFenceData()
 	//Fenceクラスのトランスフォーム関係の初期化行う
 
 	//柵クラスのインスタンスを取得
-	Fence* pFence = (Fence*)FindObject("Fence");
+	pFence_ = (Fence*)FindObject("Fence");
 
 	//CSVから読み込んだ柵,鉄線のトランスフォームを渡す
-	pFence->InitWireTransform(WireData_);
-	pFence->InitPillerTransform(PillerData_);
+	pFence_->InitWireTransform(WireData_);
+	pFence_->InitPillerTransform(PillerData_);
 
+	GameView::SetFence(pFence_);
 }
 
 void StageManager::InitEndData()
@@ -241,11 +251,13 @@ void StageManager::InitOutStageThingData()
 	//ステージ外オブジェクトを初期化
 
 	//OutStageThingのインスタンスを取得
-	OutStageThing* pOutStageThing = (OutStageThing*)FindObject("OutStageThing");
+	pOutStageThing_ = (OutStageThing*)FindObject("OutStageThing");
 
 	//CSVから読み込んだ小屋、木、丸太のトランスフォームを渡す
-	pOutStageThing->SetCabinTransform(CabinData_);
-	pOutStageThing->SetTreeTransform(TreeData_);
-	pOutStageThing->SetLogsTransform(LogsData_);
-	pOutStageThing->SetStrawTransform(StrawData_);
+	pOutStageThing_->SetCabinTransform(CabinData_);
+	pOutStageThing_->SetTreeTransform(TreeData_);
+	pOutStageThing_->SetLogsTransform(LogsData_);
+	pOutStageThing_->SetStrawTransform(StrawData_);
+
+	GameView::SetOutStageThing(pOutStageThing_);
 }

@@ -130,6 +130,9 @@ public:
 	//開放
 	void Release() override;
 
+	//ImGuiの描画
+	void DrawImGui();
+
 	//全画面描画
 	void DrawFullScreen();
 
@@ -174,6 +177,16 @@ public:
 
 	//スコア表示(BattleSceneで使用)
 	void DrawScore();
+
+	//----------ImGui描画関数(Imguiを外部から呼ぶ)----------
+	void DrawImGuiExplanation();
+	void DrawImGuiStartLogo();
+	void DrawImGuiFinishLogo();
+	void DrawImGuiPracticeLogo();
+
+	void DrawImGuiScore();
+	void DrawImGuiTimer();
+	void DrawImGuiMiniMap();
 
 private:
 	//以下の描画関数は他クラスから呼ばず、上記の描画関数から呼ぶ

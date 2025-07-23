@@ -141,7 +141,13 @@ public:
 	/// <param name="_move">移動する方向</param>
 	void PlayerMove(XMVECTOR _move);
 
+	/// <summary>
+	/// 受け取った名前に応じて要素を受け取り、反射処理をする
+	/// </summary>
+	/// <param name="_name">接触したオブジェクト名</param>
 	void CollisionCharacter(std::string _name);
+
+	void DrawImGui();
 
 	/// <summary>
 	/// Player限定のデータをCSV読み込み

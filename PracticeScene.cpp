@@ -75,6 +75,9 @@ void PracticeScene::Initialize()
 
 		//画面状態のセット(一人プレイ用)
 		GameView::SetGameViewMode(GameView::S_Single);
+
+		//画面を一人プレイ用に設定
+		Camera::FullScreen();
 	}
 	if (pSceneManager->IsPlayerVSPlayer())
 	{
@@ -121,9 +124,6 @@ void PracticeScene::Initialize()
 		//プレイヤーに移動を許可
 		InitPlayers[i]->PlayerStart();
 	}
-
-	//プレイヤーのポインタを設定
-	GameView::SetPlayers(InitPlayers);
 	
 	//Enemyの初期化処理
 	for (int i = 0; i < InitEnemys.size(); i++)
@@ -139,6 +139,12 @@ void PracticeScene::Initialize()
 			ActiveEnemys_.push_back(InitEnemys[i]);
 		}
 	}
+
+	//プレイヤーのポインタを設定
+	GameView::SetPlayers(InitPlayers);
+
+	//敵のポインタを設定
+	GameView::SetEnemy(pEnemy_);
 
 	//各クラス生成
 	Instantiate<MiniMap>(this);

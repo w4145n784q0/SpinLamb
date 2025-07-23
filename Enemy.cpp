@@ -105,23 +105,6 @@ void Enemy::Draw()
 	{
 		DrawArrow();
 	}
-
-	//Debug中はImGuiを設定
-#ifdef _DEBUG
-	if (ImGui::TreeNode("EnemyStatus"))
-	{
-		DrawCharacterImGui();
-	}
-
-	//デバッグ用のEnemyState_切り替えボタン
-	if (ImGui::Button("EnemyStop"))
-	{
-		if (EnemyState_ != S_STOP)
-			EnemyState_ = S_STOP;
-		else
-			EnemyState_ = S_ROOT;
-	}
-#endif
 }
 
 void Enemy::Release()
@@ -395,6 +378,26 @@ void Enemy::UpdateWallHit()
 void Enemy::UpdateStop()
 {
 	//何も処理をしない
+}
+
+void Enemy::DrawImGui()
+{
+	//Debug中はImGuiを設定
+#ifdef _DEBUG
+	if (ImGui::TreeNode("EnemyStatus"))
+	{
+		DrawCharacterImGui();
+	}
+
+	//デバッグ用のEnemyState_切り替えボタン
+	if (ImGui::Button("EnemyStop"))
+	{
+		if (EnemyState_ != S_STOP)
+			EnemyState_ = S_STOP;
+		else
+			EnemyState_ = S_ROOT;
+	}
+#endif
 }
 
 void Enemy::LookPlayer()

@@ -89,6 +89,9 @@ void BattleScene::Initialize()
 
 		//画面状態のセット(一人プレイ用)
 		GameView::SetGameViewMode(GameView::S_Single);
+
+		//画面を一人プレイ用に設定
+		Camera::FullScreen();
 	}
 	if (pSceneManager->IsPlayerVSPlayer())
 	{
@@ -136,9 +139,6 @@ void BattleScene::Initialize()
 		ActivePlayers_.push_back(InitPlayers[i]);
 	}
 
-	//プレイヤーのポインタを設定
-	GameView::SetPlayers(InitPlayers);
-
 	//Enemyの初期化処理
 	for (int i = 0; i < InitEnemys.size(); i++)
 	{
@@ -153,6 +153,12 @@ void BattleScene::Initialize()
 			ActiveEnemys_.push_back(InitEnemys[i]);
 		}
 	}
+
+	//プレイヤーのポインタを設定
+	GameView::SetPlayers(InitPlayers);
+
+	//敵のポインタを設定
+	GameView::SetEnemy(pEnemy_);
 
 	//各クラス生成
 	Instantiate<MiniMap>(this);
@@ -171,7 +177,7 @@ void BattleScene::Initialize()
 	pHUD_->SetTimerPointer(pGameTimer_);
 	pHUD_->SetMiniMapPointer(pMiniMap_);
 
-	//GameViewにHUDのポインタを渡す
+	//GameViewにポインタを渡す
 	GameView::SetHUD(pHUD_);
 
 	//ゲーム制限時間を渡す

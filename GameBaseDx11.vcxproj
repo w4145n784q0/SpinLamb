@@ -172,6 +172,7 @@
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="HowToPlayScene.cpp" />
     <ClCompile Include="HUD.cpp" />
+    <ClCompile Include="ImGuiViewer.cpp" />
     <ClCompile Include="imgui\imgui.cpp" />
     <ClCompile Include="imgui\imgui_demo.cpp" />
     <ClCompile Include="imgui\imgui_draw.cpp" />
@@ -230,6 +231,7 @@
     <ClInclude Include="HowToPlayScene.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="IGameObserver.h" />
+    <ClInclude Include="ImGuiViewer.h" />
     <ClInclude Include="imgui\imconfig.h" />
     <ClInclude Include="imgui\imgui.h" />
     <ClInclude Include="imgui\imgui_impl_dx11.h" />

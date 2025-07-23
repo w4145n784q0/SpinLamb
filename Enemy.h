@@ -107,7 +107,8 @@ public:
 	//“G‚ðŽ~‚ß‚é
 	void UpdateStop();
 
-
+	//ImGui‚Ì•`‰æ
+	void DrawImGui();
 	
 	//“G‚ÉˆÚ“®‚ð‹–‰Â
 	void EnemyStart() { EnemyState_ = S_ROOT; }
