@@ -39,7 +39,6 @@ void OutStageThing::Update()
 void OutStageThing::Draw()
 {
 	//Šeƒ‚ƒfƒ‹•`‰æ
-
 	for (int i = 0; i < StageTransArray_.size(); i++)
 	{
 		for (int j = 0; j < (*StageTransArray_[i]).size(); j++)
@@ -47,8 +46,6 @@ void OutStageThing::Draw()
 			Model::SetAndDraw(ModelHandleArray_[i],(*StageTransArray_[i])[j]);
 		}
 	}
-
-
 }
 
 void OutStageThing::Release()

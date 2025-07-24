@@ -68,10 +68,13 @@ namespace GameView
 	//Enemyのインスタンスを設定
 	void SetEnemy(Enemy* _enemy);
 
+	//Groundのインスタンスを設定
 	void SetGround(Ground* _ground);
 
+	//Fenceのインスタンスを設定
 	void SetFence(Fence* _fence);
 
+	//OutStageThingのインスタンスを設定
 	void SetOutStageThing(OutStageThing* _stagething);
 };
 

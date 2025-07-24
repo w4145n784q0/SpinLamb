@@ -171,6 +171,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 				if (GameView::IsDual())
 				{
+					//プレイヤー1用の画面セット
 					GameView::ViewPlayer1();
 
 					//全オブジェクトを描画
@@ -180,6 +181,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//エフェクトの描画
 					VFX::Draw();
 
+					//プレイヤー2用の画面セット
 					GameView::ViewPlayer2();
 
 					//全オブジェクトを描画
@@ -189,7 +191,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//エフェクトの描画
 					VFX::Draw();
 
-					//Imguiの表示
+					//Imguiの表示(ImGuiの描画は一度だけ行う)
 					GameView::ViewImGui();
 
 					//HUDの描画
@@ -197,6 +199,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				}
 				else if (GameView::IsSingle())
 				{
+					//プレイヤー1vsCPU用の画面セット
 					GameView::ViewPvE();
 
 					//全オブジェクトを描画
@@ -223,8 +226,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//エフェクトの描画
 					VFX::Draw();
 
-					//Imguiの表示
-					//GameView::ViewImGui();
 				}
 
 #ifdef _DEBUG
@@ -250,6 +251,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	//いろいろ解放
 	VFX::Release();
+	GameView::Release();
 	Audio::AllRelease();
 	Model::AllRelease();
 	Image::AllRelease();

@@ -64,8 +64,6 @@ void Fence::Update()
 
 void Fence::Draw()
 {
-
-
 	//òƒ‚ƒfƒ‹‚Ì•`‰æ
 	Model::SetAndDraw(hFence_, wireTransform);
 
