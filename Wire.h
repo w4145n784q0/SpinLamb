@@ -43,6 +43,6 @@ public:
 	void SetNormal(XMVECTOR _normal) { Normal_ = _normal; }
 
 	//–@ü‚ğæ“¾
-	XMVECTOR GetNormal() { return Normal_; }
+	XMVECTOR GetNormal() const { return Normal_; }
 };
 

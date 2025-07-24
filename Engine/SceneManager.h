@@ -50,7 +50,7 @@ public:
 	//引数：next	次のシーンのID
 	void ChangeScene(SCENE_ID next);
 
-	//セッター・ゲッター関数
+	//----------セッター・ゲッター関数----------
 	void SetFirstCharaScore(int score) { FirstCharaScore_ = score; }
 	void SetSecondCharaScore(int score) { SecondCharaScore_ = score; }
 

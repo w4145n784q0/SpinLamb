@@ -41,7 +41,7 @@ public:
 	//CSVファイルから必要パラメータを読み込みする
 	void SetMiniMapCSV();
 
-	//セッター・ゲッター関数
+	//----------セッター・ゲッター関数----------
 
 	void SetFirstPos(XMFLOAT3 _pos) { FirstPos_ = _pos; }
 	void SetSecondPos(XMFLOAT3 _pos) { SecondPos_ = _pos; }

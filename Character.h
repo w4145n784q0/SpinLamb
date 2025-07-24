@@ -441,9 +441,9 @@ public:
 
     //----------セッター・ゲッター関数----------
     void SetID(int _id) { InitParam_.CharacterID = _id; }
-    int GetID() { return InitParam_.CharacterID; }
+    int GetID() const { return InitParam_.CharacterID; }
     void SetAcceleration(float _acceleration) { MoveParam_.Acceleration_ = _acceleration; }
-    float GetAcceleration() { return MoveParam_.Acceleration_; }
+    float GetAcceleration() const { return MoveParam_.Acceleration_; }
 
     //キャラクターの移動制限をセット
     void SetEnd(float upper, float lower, float left, float right) {

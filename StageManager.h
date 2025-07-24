@@ -132,9 +132,9 @@ public:
 
 	//----------セッター・ゲッター関数----------
 
-	float GetNorthEnd() { return UpperEnd_; }
-	float GetSouthEnd() { return LowerEnd_; }
-	float GetEastEnd() { return RightEnd_; }
-	float GetWestEnd() { return LeftEnd_; }
+	float GetNorthEnd() const { return UpperEnd_; }
+	float GetSouthEnd() const { return LowerEnd_; }
+	float GetEastEnd() const { return RightEnd_; }
+	float GetWestEnd() const { return LeftEnd_; }
 };
 

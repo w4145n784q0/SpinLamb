@@ -155,11 +155,11 @@ public:
 	/// <param name="_path">読み込むcsvファイルのパス</param>
 	void SetCSVPlayer(std::string _path);
 
-	//セッター・ゲッター関数
-	XMFLOAT3 GetCameraPosition() { return CameraPosition_; }
-	XMFLOAT3 GetCameraTarget() { return CameraTarget_; }
+	//----------セッター・ゲッター関数----------
+	XMFLOAT3 GetCameraPosition() const { return CameraPosition_; }
+	XMFLOAT3 GetCameraTarget() const { return CameraTarget_; }
 
 	void SetControllerID(int _controllerID) { ControllerID_ = _controllerID; }
-	int GetControllerID() { return ControllerID_; }
+	int GetControllerID() const { return ControllerID_; }
 };
 

@@ -22,7 +22,7 @@ private:
         NoneEffect = 0,
         S_FadeOutBlack,//黒くフェードアウト
         S_FadeInBlack,//白くフェードイン
-        S_FadeOutWhite,//フェードイン
+        S_FadeOutWhite,//黒くフェードイン
         S_FadeInWhite,//白くフェードイン
         S_SlideInLTR,//スライドイン
         S_ZoomIn,//ズームイン

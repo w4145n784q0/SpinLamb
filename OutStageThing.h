@@ -60,7 +60,7 @@ public:
 	//ImGuiの描画
 	void DrawImGui();
 
-	//----------セッター・ゲッター関数----------
+	//----------セッター関数----------
 	void SetCabinTransform(std::vector<Transform> _data) { CabinData_  =  _data; }
 
 	void SetTreeTransform(std::vector<Transform> _data) { TreeData_  = _data; }

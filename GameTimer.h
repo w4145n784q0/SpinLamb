@@ -55,10 +55,10 @@ public:
 	//ゲーム時間の計算
 	void TimeCalclation();
 
-	//セッター・ゲッター関数
-	int GetTimeTen() { return Timeten_; }
-	int GetTimeOne() { return Timeone_; }
-	int GetCurrentGameTime() { return CurrentGameTime_; }
+	//----------セッター・ゲッター関数----------
+	int GetTimeTen() const { return Timeten_; }
+	int GetTimeOne() const { return Timeone_; }
+	int GetCurrentGameTime() const { return CurrentGameTime_; }
 	void SetCurrentGameTime(int _time) { CurrentGameTime_ = _time; }
 
 	//時間停止を指示

@@ -33,5 +33,5 @@ public:
 	//----------セッター・ゲッター関数----------
 
 	//ステージモデルのモデル番号を返す(レイキャスト用)
-	int GetModelHandle() { return hGrass_; }
+	int GetModelHandle() const { return hGrass_; }
 };

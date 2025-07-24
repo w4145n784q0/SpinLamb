@@ -125,12 +125,12 @@ public:
 	//Enemy限定のデータをCSV読み込み
 	void SetCSVEnemy();
 
-	//セッター・ゲッター関数
+	//----------セッター・ゲッター関数----------
 	void SetPlayerPointer(Player* _player) { pPlayer_ = _player; }
 
 	void SetTargetPosition(XMFLOAT3 _targetpos) { TargetPosition_ = _targetpos; }
-	XMFLOAT3 GetTargetPosition(){return TargetPosition_; }
+	XMFLOAT3 GetTargetPosition() const {return TargetPosition_; }
 
 	void SetTargetAcceleration(float _acceleration) { TargetAcceleration_ = TargetAcceleration_; }
-	float GetTargetAcceleration() { return TargetAcceleration_; }
+	float GetTargetAcceleration() const { return TargetAcceleration_; }
 };
