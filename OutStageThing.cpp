@@ -13,6 +13,8 @@ OutStageThing::~OutStageThing()
 
 void OutStageThing::Initialize()
 {
+	hmodel = Model::Load("haikei2.fbx");
+
 	//各モデルの読み込み
 	hCabin_ = Model::Load("Model\\House2.fbx");
 	assert(hCabin_ >= 0);
@@ -39,13 +41,15 @@ void OutStageThing::Update()
 void OutStageThing::Draw()
 {
 	//各モデル描画
-	for (int i = 0; i < StageTransArray_.size(); i++)
+	/*for (int i = 0; i < StageTransArray_.size(); i++)
 	{
 		for (int j = 0; j < (*StageTransArray_[i]).size(); j++)
 		{
 			Model::SetAndDraw(ModelHandleArray_[i],(*StageTransArray_[i])[j]);
 		}
-	}
+	}*/
+
+	Model::SetAndDraw(hmodel,transform_);
 }
 
 void OutStageThing::Release()

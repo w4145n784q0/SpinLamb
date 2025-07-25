@@ -10,6 +10,8 @@ class OutStageThing :
 private:
 	//----------モデルハンドル----------
 
+	int hmodel;
+
 	//小屋モデル
 	int hCabin_;
 
