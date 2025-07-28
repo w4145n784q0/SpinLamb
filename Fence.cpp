@@ -85,17 +85,17 @@ void Fence::DrawImGui()
 	{
 		if (ImGui::TreeNode("wire"))
 		{
-			ImGui::InputFloat("FencePositionX", &wireTransform.position_.x);
-			ImGui::InputFloat("FencePositionY", &wireTransform.position_.y);
-			ImGui::InputFloat("FencePositionZ", &wireTransform.position_.z);
+			ImGui::InputFloat("FencePositionX", &wireTransform.position_.x, ZeroPointOne);
+			ImGui::InputFloat("FencePositionY", &wireTransform.position_.y, ZeroPointOne);
+			ImGui::InputFloat("FencePositionZ", &wireTransform.position_.z, ZeroPointOne);
 
-			ImGui::InputFloat("FenceRotateX", &wireTransform.rotate_.x);
-			ImGui::InputFloat("FenceRotateY", &wireTransform.rotate_.y);
-			ImGui::InputFloat("FenceRotateZ", &wireTransform.rotate_.z);
+			ImGui::InputFloat("FenceRotateX", &wireTransform.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("FenceRotateY", &wireTransform.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("FenceRotateZ", &wireTransform.rotate_.z, ZeroPointOne);
 
-			ImGui::InputFloat("FenceScaleX", &wireTransform.scale_.x);
-			ImGui::InputFloat("FenceScaleY", &wireTransform.scale_.y);
-			ImGui::InputFloat("FenceScaleZ", &wireTransform.scale_.z);
+			ImGui::InputFloat("FenceScaleX", &wireTransform.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("FenceScaleY", &wireTransform.scale_.y, ZeroPointOne);
+			ImGui::InputFloat("FenceScaleZ", &wireTransform.scale_.z, ZeroPointOne);
 			ImGui::TreePop();
 		}
 
@@ -103,17 +103,17 @@ void Fence::DrawImGui()
 		{
 			for (int i = 0; i < pillersTransformArray.size(); i++)
 			{
-				ImGui::InputFloat((PillerNameArray[i] + " PotisionX").c_str(), &pillersTransformArray[i].position_.x);
-				ImGui::InputFloat((PillerNameArray[i] + " PotisionY").c_str(), &pillersTransformArray[i].position_.y);
-				ImGui::InputFloat((PillerNameArray[i] + " PotisionZ").c_str(), &pillersTransformArray[i].position_.z);
+				ImGui::InputFloat((PillerNameArray[i] + " PotisionX").c_str(), &pillersTransformArray[i].position_.x, ZeroPointOne);
+				ImGui::InputFloat((PillerNameArray[i] + " PotisionY").c_str(), &pillersTransformArray[i].position_.y, ZeroPointOne);
+				ImGui::InputFloat((PillerNameArray[i] + " PotisionZ").c_str(), &pillersTransformArray[i].position_.z, ZeroPointOne);
 
-				ImGui::InputFloat((PillerNameArray[i] + " RotateX").c_str(), &pillersTransformArray[i].rotate_.x);
-				ImGui::InputFloat((PillerNameArray[i] + " RotateY").c_str(), &pillersTransformArray[i].rotate_.y);
-				ImGui::InputFloat((PillerNameArray[i] + " RotateZ").c_str(), &pillersTransformArray[i].rotate_.z);
+				ImGui::InputFloat((PillerNameArray[i] + " RotateX").c_str(), &pillersTransformArray[i].rotate_.x, ZeroPointOne);
+				ImGui::InputFloat((PillerNameArray[i] + " RotateY").c_str(), &pillersTransformArray[i].rotate_.y, ZeroPointOne);
+				ImGui::InputFloat((PillerNameArray[i] + " RotateZ").c_str(), &pillersTransformArray[i].rotate_.z, ZeroPointOne);
 
-				ImGui::InputFloat((PillerNameArray[i] + " ScaleX").c_str(), &pillersTransformArray[i].scale_.x);
-				ImGui::InputFloat((PillerNameArray[i] + " ScaleY").c_str(), &pillersTransformArray[i].scale_.y);
-				ImGui::InputFloat((PillerNameArray[i] + " ScaleZ").c_str(), &pillersTransformArray[i].scale_.z);
+				ImGui::InputFloat((PillerNameArray[i] + " ScaleX").c_str(), &pillersTransformArray[i].scale_.x, ZeroPointOne);
+				ImGui::InputFloat((PillerNameArray[i] + " ScaleY").c_str(), &pillersTransformArray[i].scale_.y, ZeroPointOne);
+				ImGui::InputFloat((PillerNameArray[i] + " ScaleZ").c_str(), &pillersTransformArray[i].scale_.z, ZeroPointOne);
 
 			}
 			ImGui::TreePop();

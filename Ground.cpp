@@ -40,25 +40,25 @@ void Ground::DrawImGui()
 	{
 		if (ImGui::TreeNode("GroundPosition"))
 		{
-			ImGui::InputFloat("PositionX", &this->transform_.position_.x);
-			ImGui::InputFloat("PositionY", &this->transform_.position_.y);
-			ImGui::InputFloat("PositionZ", &this->transform_.position_.z);
+			ImGui::InputFloat("PositionX", &this->transform_.position_.x, ZeroPointOne);
+			ImGui::InputFloat("PositionY", &this->transform_.position_.y, ZeroPointOne);
+			ImGui::InputFloat("PositionZ", &this->transform_.position_.z, ZeroPointOne);
 			ImGui::TreePop();
 		}
 
 		if (ImGui::TreeNode("GroundRotate"))
 		{
-			ImGui::InputFloat("RotateX", &this->transform_.rotate_.x);
-			ImGui::InputFloat("RotateY", &this->transform_.rotate_.y);
-			ImGui::InputFloat("RotateZ", &this->transform_.rotate_.z);
+			ImGui::InputFloat("RotateX", &this->transform_.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("RotateY", &this->transform_.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("RotateZ", &this->transform_.rotate_.z, ZeroPointOne);
 			ImGui::TreePop();
 		}
 
 		if (ImGui::TreeNode("GroundScale"))
 		{
-			ImGui::InputFloat("ScaleX", &this->transform_.scale_.x);
-			ImGui::InputFloat("ScaleY", &this->transform_.scale_.y);
-			ImGui::InputFloat("ScaleZ", &this->transform_.scale_.z);
+			ImGui::InputFloat("ScaleX", &this->transform_.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("ScaleY", &this->transform_.scale_.y, ZeroPointOne);
+			ImGui::InputFloat("ScaleZ", &this->transform_.scale_.z, ZeroPointOne);
 			ImGui::TreePop();
 		}
 

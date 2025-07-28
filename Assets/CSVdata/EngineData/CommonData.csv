@@ -1,2 +1,2 @@
-﻿Data,DeltaTime,oneSecond,TimeDivision,SceneShortTransition,SceneTransition,SceneLongTransition
-CommonData,0.016,60,10,60,90,120
+﻿Data,DeltaTime,oneSecond,TimeDivision,SceneShortTransition,SceneTransition,SceneLongTransition,ZeroPointOne
+CommonData,0.016,60,10,60,90,120,0.1

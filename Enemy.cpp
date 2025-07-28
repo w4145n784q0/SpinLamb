@@ -387,15 +387,15 @@ void Enemy::DrawImGui()
 	if (ImGui::TreeNode("EnemyStatus"))
 	{
 		DrawCharacterImGui();
-	}
 
-	//デバッグ用のEnemyState_切り替えボタン
-	if (ImGui::Button("EnemyStop"))
-	{
-		if (EnemyState_ != S_STOP)
-			EnemyState_ = S_STOP;
-		else
-			EnemyState_ = S_ROOT;
+		//デバッグ用のEnemyState_切り替えボタン
+		if (ImGui::Button("EnemyStop"))
+		{
+			if (EnemyState_ != S_STOP)
+				EnemyState_ = S_STOP;
+			else
+				EnemyState_ = S_ROOT;
+		}
 	}
 #endif
 }

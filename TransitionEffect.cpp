@@ -188,8 +188,8 @@ void TransitionEffect::SetSCVTransitionEffect()
 	CsvReader csvTransform;
 	csvTransform.Load("CSVdata\\EffectData\\TransitionData.csv");
 
-	//csvファイルの各0列目の文字列の配列を取得
-	std::vector<std::string> ParamNames = { "Fade" ,"Slide","Zoom"};
+	//csvファイル(TransitionData.csv)の各0列目の文字列の配列
+	std::vector<std::string> ParamNames = { "Fade" ,"Slide","Zoom" };
 
 	//各トランスフォームを配列に入れる
 	std::vector<std::reference_wrapper<Transform>> EffectArray = {
@@ -203,11 +203,11 @@ void TransitionEffect::SetSCVTransitionEffect()
 	CsvReader csvParam;
 	csvParam.Load("CSVdata\\EffectData\\TransitionSomeData.csv");
 
-	//csvファイルの各0列目の文字列を取得
-	std::string Params = "ZoomParam";
+	//csvファイル(TransitionSomeData)の0列目の文字列を取得
+	std::string SomeParams = "ZoomParam";
 
 	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> Transitiondata = GetCSVReadData(csvParam, Params);
+	std::vector<float> Transitiondata = GetCSVReadData(csvParam, SomeParams);
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用

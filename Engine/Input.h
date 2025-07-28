@@ -112,6 +112,7 @@ namespace Input
 	//振動させる
 	void SetPadVibration(int l, int r, int padID = 0);
 
+	//スティックを左右上下に一定以上倒したか
 	bool IsStickTiltLX_LEFT();
 	bool IsStickTiltLX_RIGHT();
 	bool IsStickTiltLY_UP();

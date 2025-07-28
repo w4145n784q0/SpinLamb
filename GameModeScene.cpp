@@ -9,10 +9,8 @@
 namespace
 {
 	//プレイボタン,フリープレイボタン,遊び方ボタン,タイトルボタン
+	//クラス内で使いまわす文字列なのでnamespacenに宣言
 	std::string ModeStringArray[] = { "Battle", "Practice", "HowToPlay", "BackTitle" };
-
-	//PvE(一人プレイ),PvP(二人プレイ)
-	std::string PlayerStringArray[] = { "PvE","PvP" };
 }
 
 GameModeScene::GameModeScene(GameObject* parent)
@@ -240,6 +238,9 @@ void GameModeScene::SetGameModeSCV()
 
 	//プレイ人数選択画面のトランスフォーム初期化
 	InitCSVTransform(csv, "PlayerNum", TransPlayer_);
+
+	//PvE(一人プレイ),PvP(二人プレイ)
+	std::string PlayerStringArray[] = { "PvE","PvP" };
 
 	//プレイ人数選択画面のアイコンの位置を初期化
 	for (int i = 0; i < MaxPlayerNum; i++)

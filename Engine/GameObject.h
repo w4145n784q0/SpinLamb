@@ -37,6 +37,7 @@ namespace
 		i_sceneshorttransition,
 		i_scenetransition,
 		i_scenelongtransition,
+		i_zeropointone,
 	};
 
 }
@@ -129,6 +130,12 @@ protected:
 	/// 次のシーン遷移までの時間(2秒程)
 	/// </summary>
 	static int SceneLongTransition;
+
+	/// <summary>
+	/// 0.1 を表す定数
+	/// ImGuiの操作などに使う
+	/// </summary>
+	static float ZeroPointOne;
 
 public:
 	//コンストラクタ
@@ -396,6 +403,7 @@ public:
 		SceneShortTransition = static_cast<int>(commondata[i_sceneshorttransition]);
         SceneTransition = static_cast<int>(commondata[i_scenetransition]);
 		SceneLongTransition = static_cast<int>(commondata[i_scenelongtransition]);
+		ZeroPointOne = commondata[i_zeropointone];
     }
 
 private:

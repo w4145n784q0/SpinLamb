@@ -9,6 +9,7 @@ int GameObject::TenDivision = 0;
 int GameObject::SceneShortTransition = 0;
 int GameObject::SceneTransition = 0;
 int GameObject::SceneLongTransition = 0;
+float GameObject::ZeroPointOne = 0;
 
 //コンストラクタ（親も名前もなし）
 GameObject::GameObject(void) :

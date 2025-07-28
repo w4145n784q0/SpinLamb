@@ -342,9 +342,9 @@ void Character::DrawCharacterImGui()
 	//キャラクターの回転量(rotate_.x,y,z)
 	if (ImGui::TreeNode("Transform.Rotate"))
 	{
-		ImGui::InputFloat("RotateX:%.3f", &this->transform_.rotate_.x);
-		ImGui::InputFloat("RotateY:%.3f", &this->transform_.rotate_.y);
-		ImGui::InputFloat("RotateZ:%.3f", &this->transform_.rotate_.z);
+		ImGui::InputFloat("RotateX:%.3f", &this->transform_.rotate_.x, ZeroPointOne);
+		ImGui::InputFloat("RotateY:%.3f", &this->transform_.rotate_.y, ZeroPointOne);
+		ImGui::InputFloat("RotateZ:%.3f", &this->transform_.rotate_.z, ZeroPointOne);
 		ImGui::TreePop();
 	}
 
@@ -362,46 +362,46 @@ void Character::DrawCharacterImGui()
 	//初速度,加速量,最大加速,チャージの際に使う仮の加速度
 	if (ImGui::TreeNode("Move"))
 	{
-		ImGui::InputFloat("velocity", &this->MoveParam_.Velocity_);
-		ImGui::InputFloat("AcceleValue", &this->MoveParam_.AcceleValue_);
-		ImGui::InputFloat("FullAccelerate", &this->MoveParam_.FullAccelerate_);
-		ImGui::InputFloat("TmpAccele", &this->MoveParam_.TmpAccele_);
+		ImGui::InputFloat("velocity", &this->MoveParam_.Velocity_, ZeroPointOne);
+		ImGui::InputFloat("AcceleValue", &this->MoveParam_.AcceleValue_, ZeroPointOne);
+		ImGui::InputFloat("FullAccelerate", &this->MoveParam_.FullAccelerate_, ZeroPointOne);
+		ImGui::InputFloat("TmpAccele", &this->MoveParam_.TmpAccele_, ZeroPointOne);
 		ImGui::TreePop();
 	}
 
 	//キャラクター移動時の通常の回転量、チャージ中の回転量
 	if (ImGui::TreeNode("Rotate"))
 	{
-		ImGui::InputFloat("normalRotate", &this->RotateParam_.MoveRotateX);
-		ImGui::InputFloat("fastRotate", &this->RotateParam_.FastRotateX);
+		ImGui::InputFloat("normalRotate", &this->RotateParam_.MoveRotateX, ZeroPointOne);
+		ImGui::InputFloat("fastRotate", &this->RotateParam_.FastRotateX, ZeroPointOne);
 		ImGui::TreePop();
 	}
 
 	//キャラクターにかかる重力,高さの上限,下限
 	if (ImGui::TreeNode("Jump"))
 	{
-		ImGui::InputFloat("Gravity", &this->JumpParam_.Gravity_);
-		ImGui::InputFloat("HeightLowerLimit", &this->JumpParam_.HeightLowerLimit_);
-		ImGui::InputFloat("HeightUpperLimit", &this->JumpParam_.HeightUpperLimit_);
+		ImGui::InputFloat("Gravity", &this->JumpParam_.Gravity_, ZeroPointOne);
+		ImGui::InputFloat("HeightLowerLimit", &this->JumpParam_.HeightLowerLimit_, ZeroPointOne);
+		ImGui::InputFloat("HeightUpperLimit", &this->JumpParam_.HeightUpperLimit_, ZeroPointOne);
 		ImGui::TreePop();
 	}
 
 	//ノックバック量計算時の変換前の範囲,変換後の範囲,減速率,ノックバックを終了する値
 	if (ImGui::TreeNode("Hit"))
 	{
-		ImGui::InputFloat("OriginaRangeMin", &this->HitParam_.OriginaRangeMin_);
-		ImGui::InputFloat("OriginaRangeMax", &this->HitParam_.OriginaRangeMax_);
-		ImGui::InputFloat("ConvertedRangeMin", &this->HitParam_.ConvertedRangeMin_);
-		ImGui::InputFloat("ConvertedRangeMax", &this->HitParam_.ConvertedRangeMax_);
-		ImGui::InputFloat("DecelerationRate", &this->HitParam_.DecelerationRate_);
-		ImGui::InputFloat("KnockBackEnd", &this->HitParam_.KnockBackEnd_);
+		ImGui::InputFloat("OriginaRangeMin", &this->HitParam_.OriginaRangeMin_, ZeroPointOne);
+		ImGui::InputFloat("OriginaRangeMax", &this->HitParam_.OriginaRangeMax_, ZeroPointOne);
+		ImGui::InputFloat("ConvertedRangeMin", &this->HitParam_.ConvertedRangeMin_, ZeroPointOne);
+		ImGui::InputFloat("ConvertedRangeMax", &this->HitParam_.ConvertedRangeMax_, ZeroPointOne);
+		ImGui::InputFloat("DecelerationRate", &this->HitParam_.DecelerationRate_, ZeroPointOne);
+		ImGui::InputFloat("KnockBackEnd", &this->HitParam_.KnockBackEnd_, ZeroPointOne);
 		ImGui::TreePop();
 	}
 
 	//柵ヒット時のノックバック量,無敵時間,無敵時間中の描画間隔
 	if (ImGui::TreeNode("WallHit"))
 	{
-		ImGui::InputFloat("Collider", &this->WallHitParam_.KnockBackPower_);
+		ImGui::InputFloat("KnockBackPower", &this->WallHitParam_.KnockBackPower_, ZeroPointOne);
 		ImGui::InputInt("InvincibilityTime", &this->WallHitParam_.InvincibilityValue_);
 		ImGui::InputInt("blinkValue", &this->WallHitParam_.blinkValue_);
 		ImGui::TreePop();
@@ -410,7 +410,7 @@ void Character::DrawCharacterImGui()
 	//影の位置の補正
 	if (ImGui::TreeNode("Shadow"))
 	{
-		ImGui::InputFloat("Collider", &this->ShadowParam_.ShadowCorrection_);
+		ImGui::InputFloat("ShadowCorrection", &this->ShadowParam_.ShadowCorrection_, ZeroPointOne);
 		ImGui::TreePop();
 	}
 
