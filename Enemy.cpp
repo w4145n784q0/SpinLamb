@@ -44,6 +44,9 @@ namespace
 
 	//敵が攻撃するまでの時間の配列　ランダムに選ばれる
 	std::vector<int> EnemyAttackTimeArray = {0,0,0,0};
+
+	//敵が攻撃・移動する方向 LookPlayerで指定する
+	XMVECTOR AutoAttackDirection = { 0,0,0 };
 }
 
 Enemy::Enemy(GameObject* parent)
@@ -132,6 +135,9 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 		//被弾状態になる
 		EnemyState_ = S_HIT;
+
+		//状態遷移の際は一度x回転をストップ
+		RotateStop();
 	}
 
 	//各柵に接触した時の処理
@@ -157,6 +163,9 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 					//カメラ振動
 					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
+
+					//状態遷移の際は一度x回転をストップ
+					RotateStop();
 
 				}
 			}
@@ -228,10 +237,16 @@ void Enemy::UpdateRoot()
 	if (dist > ChaseLength)
 	{
 		EnemyState_ = S_CHASE;
+
+		//状態遷移の際は一度x回転をストップ
+		RotateStop();
 	}
 	else//接近しているなら攻撃準備
 	{
 		EnemyState_ = S_AIM;
+
+		//状態遷移の際は一度x回転をストップ
+		RotateStop();
 	}
 }
 
@@ -243,7 +258,7 @@ void Enemy::UpdateChase()
 	LookPlayer();
 
 	//更新した方向へ移動
-	CharacterMove(MoveParam_.MoveDirection_);
+	CharacterMove(AutoAttackDirection);
 
 	//自身とPlayerの距離を測る 
 	float dist = PlayerEnemyDistanceX();
@@ -252,7 +267,7 @@ void Enemy::UpdateChase()
 		//一定以下なら攻撃準備状態へ
 		EnemyState_ = S_AIM;
 
-		//回転を一時停止
+		//状態遷移の際は一度x回転をストップ
 		RotateStop();
 	}
 
@@ -273,7 +288,7 @@ void Enemy::UpdateAim()
 	//矢印モデルをセット
 	SetArrow();
 
-	//矢印モデルの位置を自身の回転と合わせる
+	//矢印モデルの位置を自身の回転と合わせる(Enemyの場合、矢印の回転に補正をかけておく)
 	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y + ArrowRotateCorrection;
 
 	//チャージ中のエフェクトを出す
@@ -293,6 +308,9 @@ void Enemy::UpdateAim()
 
 		//攻撃状態へ移行
 		EnemyState_ = S_ATTACK;
+
+		//状態遷移の際は一度x回転をストップ
+		RotateStop();
 	}
 
 }
@@ -305,7 +323,7 @@ void Enemy::UpdateAttack()
 	SetAttackLocusEffect();
 
 	//正面ベクトルの方向に移動
-	CharacterMove(MoveParam_.MoveDirection_);
+	CharacterMove(AutoAttackDirection);
 
 	//摩擦量分速度を減少
 	FrictionDeceleration();
@@ -317,13 +335,16 @@ void Enemy::UpdateAttack()
 	if (IsDashStop())
 	{
 		//明示的に加速量を0にする
-		RotateStop();
+		AccelerationStop();
 
 		//ルートへ戻る
 		EnemyState_ = S_ROOT;
 
 		//攻撃までの時間を再抽選
 		RandomAim_ = rand() % EnemyAttackTimeArray.size();
+
+		//状態遷移の際は一度x回転をストップ
+		RotateStop();
 	}
 
 	//攻撃SE再生
@@ -339,6 +360,9 @@ void Enemy::UpdateHitStop()
 	{
 		HitStopTimer_ = 0;
 		EnemyState_ = S_HIT;
+
+		//状態遷移の際は一度x回転をストップ
+		RotateStop();
 	}
 }
 
@@ -353,10 +377,13 @@ void Enemy::UpdateHit()
 	if (IsKnockBackEnd())
 	{
 		//ノックバック速度を0に戻しておく
-		HitParam_.KnockBack_Velocity_ = { 0,0,0 };
+		KnockBackVelocityReset();
 
 		//ルートへ戻る
 		EnemyState_ = S_ROOT;
+
+		//状態遷移の際は一度x回転をストップ
+		RotateStop();
 	}
 }
 
@@ -370,8 +397,14 @@ void Enemy::UpdateWallHit()
 	//ノックバックする速度が一定以下なら通常状態へ戻る
 	if (IsKnockBackEnd())
 	{
+		//ノックバック速度を0に戻しておく
+		KnockBackVelocityReset();
+
+		//ルートへ戻る
 		EnemyState_ = S_ROOT;
 
+		//状態遷移の際は一度x回転をストップ
+		RotateStop();
 	}
 }
 
@@ -420,7 +453,7 @@ void Enemy::LookPlayer()
 	}
 
 	//敵への移動方向を保管
-	MoveParam_.MoveDirection_ = RotateDirection;
+	AutoAttackDirection = RotateDirection;
 
 	//------------角度に応じて回転------------
 	

@@ -68,7 +68,7 @@ protected:
     //----------空中----------
     struct JumpParam
     {
-        float Gravity_ = 0.0f; //重力 キャラクターの下方向にかかる力 9.8/60(1秒)より軽くしている
+        float Gravity_ = 0.0f; //重力 キャラクターの下方向にかかる力 実際の重力より(9.8/60 m/s)より軽くしている
         bool IsOnGround_ = false;//地面にいるか
         float JumpSpeed_ = 0.0f; //プレイヤーの上方向に向く力 +ならジャンプしている状態 -なら下降～地面にいる状態
         float HeightLowerLimit_ = 0.0f;//高さの下限
@@ -125,7 +125,7 @@ protected:
     //----------エフェクト関連----------
 
     std::vector<float> ChargeParam_ = {};//チャージ状態エフェクトのパラメータ
-    std::vector<float> FullChargeParam = {};
+    std::vector<float> FullChargeParam = {};//最大チャージ状態エフェクトのパラメータ
     std::vector<float> AttackLocusParam_ = {};//突撃エフェクトのパラメータ
     std::vector<float> HitEffectParam_ = {};//接触時の衝撃エフェクトのパラメータ
     std::vector<float> WallHitEffectParam_ = {};//壁に接触時の衝撃エフェクトのパラメータ
@@ -146,9 +146,6 @@ public:
 
     //描画(継承先の共通描画のみ行う)
     void Draw() override;
-
-    //動的に呼び出す更新処理
-    //virtual void CharacterRun() {};
 
     //----------初期化----------
 
@@ -367,6 +364,13 @@ public:
     /// </summary>
     /// <returns>ノックバック速度が終了値以下か</returns>
     bool IsKnockBackEnd();
+
+    /// <summary>
+    /// ノックバック速度を0に戻す
+    /// </summary>
+    void KnockBackVelocityReset() {
+        HitParam_.KnockBack_Velocity_ = { 0,0,0 };
+    }
 
     /// <summary>
     /// ダメージ後の無敵時間の計算

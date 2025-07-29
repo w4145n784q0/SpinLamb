@@ -96,8 +96,6 @@ void Player::Draw()
 		DrawArrow();
 	}
 
-
-
 }
 
 void Player::Release()
@@ -113,7 +111,7 @@ void Player::OnCollision(GameObject* pTarget)
 		//接触したキャラクターの名前を取得
 		std::string targetName = pTarget->GetObjectName();
 
-		//あたった対象に応じた反射処理
+		//当たった対象に応じた反射処理
 		CollisionCharacter(targetName);
 
 		//被弾状態になる
@@ -127,6 +125,9 @@ void Player::OnCollision(GameObject* pTarget)
 
 		//衝撃音
 		Audio::Play(hSoundCollision_);
+
+		//状態遷移の際は一度x回転をストップ
+		RotateStop();
 	}
 
 	//各柵に接触した時の処理
@@ -152,6 +153,9 @@ void Player::OnCollision(GameObject* pTarget)
 
 					//カメラ振動
 					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
+
+					//状態遷移の際は一度x回転をストップ
+					RotateStop();
 				}
 			}
 		}
@@ -251,6 +255,9 @@ void Player::UpdateIdle()
 		{
 			//地上にいるならチャージ状態へ移行
 			PlayerState_ = S_CHARGE;
+
+			//状態遷移の際は一度x回転をストップ
+			RotateStop();
 		}
 	}
 
@@ -299,6 +306,9 @@ void Player::UpdateCharge()
 
 			//通常状態へ戻る
 			PlayerState_ = S_IDLE;
+
+			//状態遷移の際は一度x回転をストップ
+			RotateStop();
 		}
 	}
 
@@ -321,6 +331,9 @@ void Player::UpdateCharge()
 
 		//攻撃状態へ移行
 		PlayerState_ = S_ATTACK;
+
+		//状態遷移の際は一度x回転をストップ
+		RotateStop();
 	}
 
 	//高速X回転
@@ -354,6 +367,9 @@ void Player::UpdateAttack()
 
 		//通常状態へ戻る
 		PlayerState_ = S_IDLE;
+
+		//状態遷移の際は一度x回転をストップ
+		RotateStop();
 	}
 
 	//攻撃SE再生
@@ -371,9 +387,13 @@ void Player::UpdateHit()
 	if (IsKnockBackEnd())
 	{
 		//ノックバック速度を0に戻しておく
-		HitParam_.KnockBack_Velocity_ = { 0,0,0 };
+		KnockBackVelocityReset();
 
+		//通常状態へ戻る
 		PlayerState_ = S_IDLE;
+
+		//状態遷移の際は一度x回転をストップ
+		RotateStop();
 	}
 }
 
@@ -387,9 +407,14 @@ void Player::UpdateWallHit()
 	//ノックバックする速度が一定以下なら通常状態へ戻る
 	if (IsKnockBackEnd())
 	{
+		//ノックバック速度を0に戻しておく
+		KnockBackVelocityReset();
+
 		//通常状態へ戻る
 		PlayerState_ = S_IDLE;
 
+		//状態遷移の際は一度x回転をストップ
+		RotateStop();
 	}
 }
 
