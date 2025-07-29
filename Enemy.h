@@ -26,7 +26,7 @@ private:
 		S_ATTACK,//攻撃
 		S_HITSTOP,//ヒットストップ
 		S_HIT,//弾かれる
-		S_WALLHIT,//壁にヒット
+		S_FENCEHIT,//柵にヒット
 		S_STOP,//敵を止める
 		S_MAX
 	};
@@ -102,7 +102,7 @@ public:
 	void UpdateHit();
 
 	//壁に接触状態
-	void UpdateWallHit();
+	void UpdateFenceHit();
 	
 	//敵を止める
 	void UpdateStop();

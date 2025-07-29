@@ -20,7 +20,7 @@ private:
 		S_CHARGE,//チャージ中
 		S_ATTACK,//攻撃
 		S_HIT,//弾かれる
-		S_WALLHIT,//壁にヒット
+		S_FENCEHIT,//柵にヒット
 		S_STOP,//プレイヤーを止める状態
 		S_MAX
 	};
@@ -97,7 +97,7 @@ public:
 	void UpdateHit();
 
 	//壁に接触状態
-	void UpdateWallHit();
+	void UpdateFenceHit();
 
 	//プレイヤーを止める状態
 	void UpdateStop();

@@ -53,6 +53,7 @@ namespace {
 		i_gravity = 0,
 		i_upperlimit,
 		i_lowerlimit,
+		i_minuslimit,
 	};
 
 	//被弾関係
@@ -69,7 +70,7 @@ namespace {
 	};
 
 	//柵に接触関係
-	enum WallHitIndex
+	enum FenceHitIndex
 	{
 		i_knockbackpower = 0,
 		i_invincibilityvalue,
@@ -90,7 +91,7 @@ namespace {
 		i_Charge = 0,
 		i_Locus,
 		i_Hit,
-		i_WallHit,
+		i_fenceHit,
 	};
 
 	//サウンド初期化時のインデックス
@@ -223,6 +224,7 @@ void Character::SetcsvStatus(std::string _path)
 	JumpParam_.Gravity_ = JumpData[i_gravity];
 	JumpParam_.HeightLowerLimit_ = JumpData[i_upperlimit];
 	JumpParam_.HeightUpperLimit_ = JumpData[i_lowerlimit];
+	JumpParam_.MinusLimit_ = JumpData[i_minuslimit];
 
 	//--------------------被弾関係のパラメータ--------------------
 
@@ -245,16 +247,16 @@ void Character::SetcsvStatus(std::string _path)
 	//--------------------柵に接触関係のパラメータ--------------------
 
 	//csvファイルの0列目の文字列を取得	
-	std::string p_wallhit = "WallHitParam";
+	std::string p_fencehit = "FenceHitParam";
 
 	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> WallHitData = GetCSVReadData(csv, p_wallhit);
+	std::vector<float> FenceHitData = GetCSVReadData(csv, p_fencehit);
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	WallHitParam_.KnockBackPower_ = WallHitData[i_knockbackpower];
-	WallHitParam_.InvincibilityValue_ = static_cast<int>(WallHitData[i_invincibilityvalue]);
-	WallHitParam_.blinkValue_ = static_cast<int>(WallHitData[i_blinkvalue]);
+	FenceHitParam_.KnockBackPower_ = FenceHitData[i_knockbackpower];
+	FenceHitParam_.InvincibilityValue_ = static_cast<int>(FenceHitData[i_invincibilityvalue]);
+	FenceHitParam_.blinkValue_ = static_cast<int>(FenceHitData[i_blinkvalue]);
 	
 
 
@@ -275,21 +277,21 @@ void Character::GetWireNormal()
 {
 	//各インスタンスから柵の法線を取得
 	UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");
-	WallHitParam_.UpperNormal_ = pUpperWire->GetNormal();
+	FenceHitParam_.UpperNormal_ = pUpperWire->GetNormal();
 
 	LowerWire* pLowerWire = (LowerWire*)FindObject("LowerWire");
-	WallHitParam_.LowerNormal_ = pLowerWire->GetNormal();
+	FenceHitParam_.LowerNormal_ = pLowerWire->GetNormal();
 
 	RightWire* pRightWire = (RightWire*)FindObject("RightWire");
-	WallHitParam_.RightNormal_ = pRightWire->GetNormal();
+	FenceHitParam_.RightNormal_ = pRightWire->GetNormal();
 
 	LeftWire* pLeftWire = (LeftWire*)FindObject("LeftWire");
-	WallHitParam_.LeftNormal_ = pLeftWire->GetNormal();
+	FenceHitParam_.LeftNormal_ = pLeftWire->GetNormal();
 
 	//取得した法線を配列に格納
 	//これらが柵に接触した際の跳ね返る方向になる
-	WallHitParam_.NormalArray_ = { WallHitParam_.UpperNormal_,  WallHitParam_.LowerNormal_,
-		 WallHitParam_.RightNormal_, WallHitParam_.LeftNormal_, };
+	FenceHitParam_.NormalArray_ = { FenceHitParam_.UpperNormal_,  FenceHitParam_.LowerNormal_,
+		 FenceHitParam_.RightNormal_, FenceHitParam_.LeftNormal_, };
 }
 
 void Character::InitArrow()
@@ -308,12 +310,12 @@ void Character::DrawCharacterModel(int _handle, Transform _transform)
 {
 	//無敵時間中かどうかでモデルの点滅表現を行う
 
-	if (WallHitParam_.IsInvincibility_)
+	if (FenceHitParam_.IsInvincibility_)
 	{
 		//無敵時間中ならタイマーを使い、一定フレームおきにモデルを描画
-		if (++WallHitParam_.blinkTimer_ > WallHitParam_.blinkValue_) {
+		if (++FenceHitParam_.blinkTimer_ > FenceHitParam_.blinkValue_) {
 
-			WallHitParam_.blinkTimer_ = 0;
+			FenceHitParam_.blinkTimer_ = 0;
 			Model::SetAndDraw(_handle, _transform);
 		}
 	}
@@ -328,7 +330,7 @@ void Character::DrawCharacterImGui()
 {
 	//ImGuiの描画
 	//Slider:スライダーを使って値を調整可能
-	//Input:値を直接入力
+	//Input:値を直接入力 +-による調整も可能
 	//Text:記述のみ
 
 	//キャラクターの位置(position_.x,y,z)
@@ -399,11 +401,11 @@ void Character::DrawCharacterImGui()
 	}
 
 	//柵ヒット時のノックバック量,無敵時間,無敵時間中の描画間隔
-	if (ImGui::TreeNode("WallHit"))
+	if (ImGui::TreeNode("FenceHit"))
 	{
-		ImGui::InputFloat("KnockBackPower", &this->WallHitParam_.KnockBackPower_, ZeroPointOne);
-		ImGui::InputInt("InvincibilityTime", &this->WallHitParam_.InvincibilityValue_);
-		ImGui::InputInt("blinkValue", &this->WallHitParam_.blinkValue_);
+		ImGui::InputFloat("KnockBackPower", &this->FenceHitParam_.KnockBackPower_, ZeroPointOne);
+		ImGui::InputInt("InvincibilityTime", &this->FenceHitParam_.InvincibilityValue_);
+		ImGui::InputInt("blinkValue", &this->FenceHitParam_.blinkValue_);
 		ImGui::TreePop();
 	}
 
@@ -420,7 +422,7 @@ void Character::DrawCharacterImGui()
 void Character::CharacterGravity()
 {
 	//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
-	JumpParam_. JumpSpeed_ -= JumpParam_.Gravity_;
+	JumpParam_.JumpSpeed_ -= JumpParam_.Gravity_;
 
 	//フィールドに乗っているかは関係なく重力はかかり続ける
 	this->transform_.position_.y += JumpParam_.JumpSpeed_;
@@ -432,6 +434,13 @@ void Character::CharacterGravity()
 
 		//一定以下のy座標になった場合,着地している判定にする
 		JumpParam_.IsOnGround_ = true;
+	}
+
+	//マイナスし続けるので、念のためオーバーフロー防止
+	//JumpSpeedが最低値以下になったら最低値の値で固定
+	if (JumpParam_.JumpSpeed_ <= JumpParam_.MinusLimit_)
+	{
+		JumpParam_.JumpSpeed_ = JumpParam_.MinusLimit_;
 	}
 }
 
@@ -562,7 +571,7 @@ float Character::RotateDirectionVector(XMVECTOR _MoveVector)
 void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, float eVelocity)
 {
 	//無敵状態なら処理しない
-	if (this->WallHitParam_.IsInvincibility_)
+	if (this->FenceHitParam_.IsInvincibility_)
 	{
 		return;
 	}
@@ -644,26 +653,25 @@ void Character::KnockBack()
 
 XMVECTOR Character::HitNormal(std::string _normal)
 {
-	//wallArray[] = { "UpperWire", "LowerWire", "RightWire" ,"LeftWire" };
 	
-	//指定した名前の鉄線がWallArrayから見つかったら対応した法線を返す
+	//指定した名前の鉄線がWireArrayから見つかったら対応した法線を返す
 	//返した方向が柵に接触した際のノックバック方向となる
 	//見つからない場合は0を返す
-	for (int i = 0; i < WallHitParam_.WireArray_.size(); i++)
+	for (int i = 0; i < FenceHitParam_.WireArray_.size(); i++)
 	{
-		if (_normal == WallHitParam_.WireArray_[i])
+		if (_normal == FenceHitParam_.WireArray_[i])
 		{
-			return WallHitParam_.NormalArray_[i];
+			return FenceHitParam_.NormalArray_[i];
 		}
 	}
 
 	return { 0,0,0 };
 }
 
-void Character::WallReflect(XMVECTOR normal)
+void Character::FenceReflect(XMVECTOR normal)
 {
 	//接触エフェクトを指定
-	SetWallHitEffect();
+	SetFenceHitEffect();
 
 	//溜めている速度をリセット
 	ChargeReset();
@@ -678,11 +686,11 @@ void Character::WallReflect(XMVECTOR normal)
 	HitParam_.KnockBack_Direction_ = { tmp };
 
 	//ノックバック量を速度に代入(一定値)
-	HitParam_.KnockBack_Velocity_.x = WallHitParam_.KnockBackPower_;
-	HitParam_.KnockBack_Velocity_.z = WallHitParam_.KnockBackPower_;
+	HitParam_.KnockBack_Velocity_.x = FenceHitParam_.KnockBackPower_;
+	HitParam_.KnockBack_Velocity_.z = FenceHitParam_.KnockBackPower_;
 
 	//無敵状態を設定
-	WallHitParam_.IsInvincibility_ = true;
+	FenceHitParam_.IsInvincibility_ = true;
 
 	//接触通知
 	NotifyFenceHit();
@@ -708,13 +716,13 @@ void Character::InvincibilityTimeCalclation()
 	//無敵時間の計算
 
 	//無敵時間かどうか判定(この関数は毎フレーム呼ばれるため)
-	if (WallHitParam_.IsInvincibility_)
+	if (FenceHitParam_.IsInvincibility_)
 	{
 		//タイマーが終了値を超えたら無敵時間を終わる
-		if (++WallHitParam_.InvincibilityTime_ > WallHitParam_.InvincibilityValue_)
+		if (++FenceHitParam_.InvincibilityTime_ > FenceHitParam_.InvincibilityValue_)
 		{
-			WallHitParam_.InvincibilityTime_ = 0;
-			WallHitParam_.IsInvincibility_ = false;
+			FenceHitParam_.InvincibilityTime_ = 0;
+			FenceHitParam_.IsInvincibility_ = false;
 		}
 	}
 }
@@ -794,12 +802,12 @@ void Character::InitCSVEffect()
 	csv.Load("CSVData\\EffectData\\VFXData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
-	std::string effects[] = { "Charge","FullCharge" ,"Locus" , "Hit" , "WallHit" };
+	std::string effects[] = { "Charge","FullCharge" ,"Locus" , "Hit" , "FenceHit" };
   
 	//ChargeParam_から始まるVFXのパラメータ(vector<float>型の配列)の参照を
 	//ポインタ配列に格納
 	std::vector<float>* param[] = { &ChargeParam_,&FullChargeParam,
-		&AttackLocusParam_, &HitEffectParam_, &WallHitEffectParam_ };  
+		&AttackLocusParam_, &HitEffectParam_, &FenceHitEffectParam_ };  
 
 
     for (int i = 0; i < sizeof(effects) / sizeof(effects[0]); i++)  
@@ -878,18 +886,18 @@ void Character::SetHitEffect()
 	VFX::Start(hit);
 }
 
-void Character::SetWallHitEffect()
+void Character::SetFenceHitEffect()
 {
 	//csvから読み込んだ,柵に接触時エフェクトのパラメータを実際にセットする
-	EmitterData  wallhit;
-	VFX::SetEmitter(wallhit, WallHitEffectParam_);
+	EmitterData  fencehit;
+	VFX::SetEmitter(fencehit, FenceHitEffectParam_);
 
 	//使用する画像のパスをセットする
-	wallhit.textureFileName = "PaticleAssets\\flashB_W.png";
+	fencehit.textureFileName = "PaticleAssets\\flashB_W.png";
 
 	//発射位置をセット
-	wallhit.position = this->transform_.position_;
+	fencehit.position = this->transform_.position_;
 
 	//エフェクトを開始
-	VFX::Start(wallhit);
+	VFX::Start(fencehit);
 }

@@ -3,7 +3,7 @@
 
 namespace GameView
 {
-	//プレイヤー数を初期化するインデックス
+	//参加できるプレイヤー数
 	enum pplayerIndex
 	{
 		i_player1 = 0,
@@ -174,6 +174,10 @@ namespace GameView
 
 	void ViewHUDNormal()
 	{
+		//渡されたポインタからHUDを描画
+		//複数描画する必要が無い(画面に一つだけ描画する)ものを描画
+		//タイマーやテキスト画像など
+
 		//全体画面描画
 		Direct3D::viewScreenNormal();
 
@@ -191,6 +195,7 @@ namespace GameView
 		pHUD_->DrawFullScreen();
 	}
 
+	//一人プレイ状態かどうか
 	bool GameView::IsSingle()
 	{
 		if (GameViewMode_ == S_Single)
@@ -199,6 +204,7 @@ namespace GameView
 			return false;
 	}
 
+	//二人プレイ状態かどうか
 	bool GameView::IsDual()
 	{
 		if (GameViewMode_ == S_Dual)
@@ -207,6 +213,7 @@ namespace GameView
 			return false;
 	}
 
+	//描画モード設定
 	void GameView::SetGameViewMode(GameViewMode mode)
 	{
 		GameViewMode_ = mode;
@@ -241,26 +248,31 @@ namespace GameView
 		}
 	}
 
+	//HUDのインスタンスを設定
 	void SetHUD(HUD* _HUD)
 	{
 		pHUD_ = _HUD;
 	}
 
+	//Enemyのインスタンスを設定
 	void SetEnemy(Enemy* _enemy)
 	{
 		pEnemy_ = _enemy;
 	}
 
+	//Groundのインスタンスを設定
 	void SetGround(Ground* _ground)
 	{
 		pGround_ = _ground;
 	}
 
+	//Fenceのインスタンスを設定
 	void SetFence(Fence* _fence)
 	{
 		pFence_ = _fence;
 	}
 
+	//OutStageThingのインスタンスを設定
 	void SetOutStageThing(OutStageThing* _stagething)
 	{
 		pOutStageThing_ = _stagething;

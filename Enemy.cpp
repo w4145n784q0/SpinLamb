@@ -33,7 +33,7 @@ namespace
 	//追跡状態から攻撃準備に移る距離
 	float ChaseLength = 0.0f;
 
-	//敵がプレイヤーの方向を向く際のトリガー　この値を超えたら回転
+	//敵がプレイヤーの方向を向く際のトリガー この値を超えたら回転
 	float LookRotaeAngle = 0;
 	
 	//プレイヤー方向を向く際の1fごとの回転量
@@ -120,15 +120,15 @@ void Enemy::OnCollision(GameObject* pTarget)
 	if (pTarget->GetObjectName() == "Player1")
 	{
 		//自身の位置をXMVECTOR型にする
-		XMVECTOR enemyvector = XMLoadFloat3(&this->transform_.position_);
-		XMFLOAT3 getpositon = TargetPosition_;
+		XMVECTOR MyVector = XMLoadFloat3(&this->transform_.position_);
 
-		//敵の位置を取りXMVECTOR型にする
-		XMVECTOR playervector = XMLoadFloat3(&getpositon);
+		//相手の位置を取得、XMVECTOR型にする
+		XMFLOAT3 TargetPos = TargetPosition_;
+		XMVECTOR TargetVector = XMLoadFloat3(&TargetPosition_);
 
 		
 		//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度)
-		Reflect(enemyvector, playervector, this->MoveParam_.Acceleration_, TargetAcceleration_);
+		Reflect(MyVector, TargetVector, this->MoveParam_.Acceleration_, TargetAcceleration_);
 		
 		//接触時点で攻撃までのタイマーをリセット
 		AimTimer_ = 0;
@@ -144,11 +144,11 @@ void Enemy::OnCollision(GameObject* pTarget)
 	if (pTarget->GetObjectName() == "UpperWire" || pTarget->GetObjectName() == "LowerWire" ||
 		pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
 	{
-		//自身が柵に接触状態ではない and 無敵状態でないなら続ける
-		if (!WallHitParam_.IsInvincibility_ && !(EnemyState_ == S_WALLHIT))
+		//自身が柵に接触状態ではない かつ無敵状態でないなら続ける
+		if (!FenceHitParam_.IsInvincibility_ && !(EnemyState_ == S_FENCEHIT))
 		{
 			//柵の名前のいずれかに接触しているなら
-			for (const std::string& arr : WallHitParam_.WireArray_)
+			for (const std::string& arr : FenceHitParam_.WireArray_)
 			{
 				if (pTarget->GetObjectName() == arr)
 				{
@@ -156,10 +156,10 @@ void Enemy::OnCollision(GameObject* pTarget)
 					XMVECTOR normal = HitNormal(arr);
 
 					//反射開始
-					WallReflect(normal);
+					FenceReflect(normal);
 
 					//CPUの状態を柵に接触状態にする
-					EnemyState_ = S_WALLHIT;
+					EnemyState_ = S_FENCEHIT;
 
 					//カメラ振動
 					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
@@ -208,8 +208,8 @@ void Enemy::EnemyRun()
 	case Enemy::S_HIT:
 		UpdateHit();
 		break;
-	case Enemy::S_WALLHIT:
-		UpdateWallHit();
+	case Enemy::S_FENCEHIT:
+		UpdateFenceHit();
 		break;
 	case Enemy::S_STOP:
 		UpdateStop();
@@ -219,7 +219,7 @@ void Enemy::EnemyRun()
 	}
 
 	//柵に接触状態でなければ無敵時間を更新
-	if (!(EnemyState_ == S_WALLHIT))
+	if (!(EnemyState_ == S_FENCEHIT))
 	{
 		InvincibilityTimeCalclation();
 	}
@@ -387,7 +387,7 @@ void Enemy::UpdateHit()
 	}
 }
 
-void Enemy::UpdateWallHit()
+void Enemy::UpdateFenceHit()
 {
 	//ダメージを受ける柵と接触した状態 
 
@@ -472,7 +472,7 @@ void Enemy::LookPlayer()
 	float Dig = XMConvertToDegrees(XMVectorGetX(angle));
 	if (Dig > LookRotaeAngle)
 	{
-		//外積Yが0以上なら左周り(半時計周り)
+		//外積Yが0以上なら左周り(反時計周り)
 		if (crossY > 0.0)
 		{
 			transform_.rotate_.y -= LookRotateValue;
@@ -484,6 +484,7 @@ void Enemy::LookPlayer()
 		}
 	}
 
+	//計算を確定
 	transform_.Calclation();
 }
 

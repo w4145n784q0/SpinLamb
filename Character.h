@@ -73,6 +73,7 @@ protected:
         float JumpSpeed_ = 0.0f; //プレイヤーの上方向に向く力 +ならジャンプしている状態 -なら下降～地面にいる状態
         float HeightLowerLimit_ = 0.0f;//高さの下限
         float HeightUpperLimit_ = 0.0f;//高さの上限
+        float MinusLimit_ = 0.0f;//JumpSpeedの最低値(念のためオーバーフローを防止する)
     };
     JumpParam JumpParam_;
 
@@ -92,8 +93,8 @@ protected:
     };
     HitParam HitParam_;
 
-    //----------壁の接触ダメージ----------
-    struct WallHitParam
+    //----------柵の接触----------
+    struct FenceHitParam
     {
         XMVECTOR UpperNormal_ = { 0,0,0 };//ステージ北端(前方)の法線ベクトル
         XMVECTOR LowerNormal_ = { 0,0,0 };//ステージ南端(後方)の法線ベクトル
@@ -109,7 +110,7 @@ protected:
         int blinkTimer_ = 0;//ダメージ後の点滅カウント
         int blinkValue_ = 0;//この値にblinkTimerが到達すると描画する
     };
-    WallHitParam WallHitParam_;
+    FenceHitParam FenceHitParam_;
 
     //----------影付け----------
     struct ShadowParam
@@ -128,7 +129,7 @@ protected:
     std::vector<float> FullChargeParam = {};//最大チャージ状態エフェクトのパラメータ
     std::vector<float> AttackLocusParam_ = {};//突撃エフェクトのパラメータ
     std::vector<float> HitEffectParam_ = {};//接触時の衝撃エフェクトのパラメータ
-    std::vector<float> WallHitEffectParam_ = {};//壁に接触時の衝撃エフェクトのパラメータ
+    std::vector<float> FenceHitEffectParam_ = {};//壁に接触時の衝撃エフェクトのパラメータ
 
     //----------サウンド関連----------
     int ChargeSoundCount_ = 0;//チャージ音を鳴らす回数
@@ -357,7 +358,7 @@ public:
     /// 壁に接触した際の計算処理　壁の法線で計算
     /// </summary>
     /// <param name="normal">反射される方向(接触した柵の法線ベクトル)</param>
-    void WallReflect(XMVECTOR normal);
+    void FenceReflect(XMVECTOR normal);
 
     /// <summary>
     /// ノックバック終了判定
@@ -439,9 +440,9 @@ public:
     void SetHitEffect();
 
     /// <summary>
-    /// 壁に接触時の衝撃エフェクトつける
+    /// 柵に接触時の衝撃エフェクトつける
     /// </summary>
-    void SetWallHitEffect();
+    void SetFenceHitEffect();
 
     //----------セッター・ゲッター関数----------
     void SetID(int _id) { InitParam_.CharacterID = _id; }

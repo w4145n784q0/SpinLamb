@@ -61,8 +61,7 @@ namespace {
 
 Player::Player(GameObject* parent) 
 	: Character(parent,"Player"),
-	hPlayer_(-1), 
-	ControllerID_(-1),
+	hPlayer_(-1), ControllerID_(-1),
 	PlayerState_(S_STOP),CameraState_(S_NORMALCAMERA),
 	Direction_({ 0,0,0 }),BackCamera_({ 0,0,0 }), CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 })
 {
@@ -120,7 +119,7 @@ void Player::OnCollision(GameObject* pTarget)
 		//接触エフェクト
 		SetHitEffect();
 
-		//カメラ振動
+		//カメラ振動(短く)
 		Camera::CameraShakeStart(Camera::GetShakeTimeShort());
 
 		//衝撃音
@@ -134,11 +133,11 @@ void Player::OnCollision(GameObject* pTarget)
 	if (pTarget->GetObjectName() == "UpperWire" || pTarget->GetObjectName() == "LowerWire" ||
 		pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
 	{
-		//自身が柵に接触状態ではない and 無敵状態でないなら続ける
-		if (!WallHitParam_.IsInvincibility_ && !(PlayerState_ == S_WALLHIT))
+		//自身が柵に接触状態ではない かつ無敵状態でないなら続ける
+		if (!FenceHitParam_.IsInvincibility_ && !(PlayerState_ == S_FENCEHIT))
 		{
 			//柵の名前のいずれかに接触しているなら
-            for (const std::string& arr : WallHitParam_.WireArray_)
+            for (const std::string& arr : FenceHitParam_.WireArray_)
 			{
 				if (pTarget->GetObjectName() == arr)
 				{
@@ -146,12 +145,12 @@ void Player::OnCollision(GameObject* pTarget)
 					XMVECTOR normal = HitNormal(arr);
 
 					//反射開始
-					WallReflect(normal);
+					FenceReflect(normal);
 
 					//プレイヤーの状態を柵に接触状態にする
-					PlayerState_ = S_WALLHIT;
+					PlayerState_ = S_FENCEHIT;
 
-					//カメラ振動
+					//カメラ振動(中くらいの長さ)
 					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
 
 					//状態遷移の際は一度x回転をストップ
@@ -183,8 +182,8 @@ void Player::PlayerRun()
 	case Player::S_HIT:
 		UpdateHit();
 		break;
-	case Player::S_WALLHIT:
-		UpdateWallHit();
+	case Player::S_FENCEHIT:
+		UpdateFenceHit();
 		break;
 	case Player::S_STOP:
 		UpdateStop();
@@ -194,7 +193,7 @@ void Player::PlayerRun()
 	}
 
 	//柵に接触状態でなければ無敵時間を更新
-	if (!(PlayerState_ == S_WALLHIT))
+	if (!(PlayerState_ == S_FENCEHIT))
 	{
 		InvincibilityTimeCalclation();
 	}
@@ -273,7 +272,7 @@ void Player::UpdateIdle()
 		}
 	}
 
-	//カメラ操作可能
+	//カメラ操作
 	CameraControl();
 }
 
@@ -339,7 +338,7 @@ void Player::UpdateCharge()
 	//高速X回転
 	FastRotate();
 
-	//カメラ操作可能
+	//カメラ操作
 	CameraControl();
 }
 
@@ -397,7 +396,7 @@ void Player::UpdateHit()
 	}
 }
 
-void Player::UpdateWallHit()
+void Player::UpdateFenceHit()
 {	
 	//ダメージを受ける柵と接触した状態 操作不可
 
@@ -560,7 +559,7 @@ void Player::CameraUpdate()
 	CameraTarget_ = { this->transform_.position_ };
 
 	//カメラの回転行列作成(X軸・Y軸)
-	//CameraControllで動かしたcameraTransform_をラジアン化し、回転行列にする
+	//CameraControl()で動かしたcameraTransform_をラジアン化し、回転行列にする
 	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform_.rotate_.y));
 	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(cameraTransform_.rotate_.x));
 	
@@ -579,20 +578,15 @@ void Player::CameraUpdate()
 	//--------------カメラ振動--------------
 	// 全ステート共有
 
-	//カメラの振動量をカメラ位置に加算(0でも行う)
+	//カメラの振動量をカメラ位置に加算(振動量が0でも行う)
 	CameraPosition_.x += Camera::CameraShakeFloat3().x;
 	CameraPosition_.y += Camera::CameraShakeFloat3().y;
 	CameraPosition_.z += Camera::CameraShakeFloat3().z;
 
-	//カメラの位置をセット 
-	//Camera::SetPosition(CameraPosition_);
-
-	//カメラの焦点をセット
-	//Camera::SetTarget(CameraTarget_);
-
 	//バックカメラベクトルをリセット
 	BackCamera_ = { BackCameraPos };
 	
+	//カメラの位置・焦点はGameViewから行う
 }
 
 void Player::KeyBoradMove()
@@ -636,6 +630,7 @@ void Player::ControllerMove(int _PadID)
 	//少しでもスティックを傾けたら
 	if (length > Input::StickMicroTilt)
 	{
+		//入力された分移動する
 		PlayerMove(SetController);
 	}
 }
@@ -676,9 +671,9 @@ void Player::CollisionCharacter(std::string _name)
 	//自身の位置をXMVECTOR型として先に保管する
 	XMVECTOR PlayerVector = XMLoadFloat3(&this->transform_.position_);
 
-	float targetSpeed = 0.0f;
-	XMFLOAT3 targetPos = {};
-	XMVECTOR targetVector = {};
+	float TargetSpeed = 0.0f;
+	XMFLOAT3 TargetPos = {};
+	XMVECTOR TargetVector = {};
 
 	if (_name == "Enemy")
 	{
@@ -687,11 +682,11 @@ void Player::CollisionCharacter(std::string _name)
 		assert(pEnemy != nullptr);
 
 		//敵の位置を取りXMVECTOR型にする
-		targetPos = pEnemy->GetPosition();
-		targetVector = XMLoadFloat3(&targetPos);
+		TargetPos = pEnemy->GetPosition();
+		TargetVector = XMLoadFloat3(&TargetPos);
 
 		//相手のスピードを取得
-		targetSpeed = pEnemy->GetAcceleration();
+		TargetSpeed = pEnemy->GetAcceleration();
 	}
 	else if (_name == "Player1" || _name == "Player2")
 	{
@@ -700,11 +695,11 @@ void Player::CollisionCharacter(std::string _name)
 		assert(pPlayer != nullptr);
 
 		//プレイヤーの位置を取りXMVECTOR型にする
-		targetPos = pPlayer->GetPosition();
-		targetVector = XMLoadFloat3(&targetPos);
+		TargetPos = pPlayer->GetPosition();
+		TargetVector = XMLoadFloat3(&TargetPos);
 
 		//相手のスピードを取得
-		targetSpeed = pPlayer->GetAcceleration();
+		TargetSpeed = pPlayer->GetAcceleration();
 	}
 	else
 	{
@@ -712,7 +707,7 @@ void Player::CollisionCharacter(std::string _name)
 	}
 
 	//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度)
-	Reflect(PlayerVector, targetVector, this->MoveParam_.Acceleration_, targetSpeed);
+	Reflect(PlayerVector, TargetVector, this->MoveParam_.Acceleration_, TargetSpeed);
 }
 
 void Player::DrawImGui()
