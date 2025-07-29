@@ -4,7 +4,7 @@
 //BattleSceneのみこのインターフェースを継承
 
 
-//キャラクター(Player,Enemy)が壁にヒットした時の監視役
+//キャラクター(Player,Enemy)が柵にヒットした時の監視役
 class IGameObserver {
 public:
 

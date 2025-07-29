@@ -103,7 +103,7 @@ protected:
         std::vector<XMVECTOR> NormalArray_ = {};//各法線ベクトルを格納した配列
         std::vector<std::string> WireArray_ = { "UpperWire", "LowerWire", "RightWire" ,"LeftWire" };//各鉄線の名前の配列
 
-        float KnockBackPower_ = 0.0f; //壁ヒットでノックバックする強さ（変化なし）
+        float KnockBackPower_ = 0.0f; //柵ヒットでノックバックする強さ（変化なし）
         int InvincibilityTime_ = 0;//ダメージ後の無敵時間 1fごとに上昇
         bool IsInvincibility_ = false;//無敵時間か
         int InvincibilityValue_ = 0;//無敵時間の値　この値を超えると無敵時間終了
@@ -129,7 +129,7 @@ protected:
     std::vector<float> FullChargeParam = {};//最大チャージ状態エフェクトのパラメータ
     std::vector<float> AttackLocusParam_ = {};//突撃エフェクトのパラメータ
     std::vector<float> HitEffectParam_ = {};//接触時の衝撃エフェクトのパラメータ
-    std::vector<float> FenceHitEffectParam_ = {};//壁に接触時の衝撃エフェクトのパラメータ
+    std::vector<float> FenceHitEffectParam_ = {};//柵に接触時の衝撃エフェクトのパラメータ
 
     //----------サウンド関連----------
     int ChargeSoundCount_ = 0;//チャージ音を鳴らす回数
@@ -355,7 +355,7 @@ public:
     XMVECTOR HitNormal(std::string _normal);
 
     /// <summary>
-    /// 壁に接触した際の計算処理　壁の法線で計算
+    /// 柵に接触した際の計算処理　柵の法線で計算
     /// </summary>
     /// <param name="normal">反射される方向(接触した柵の法線ベクトル)</param>
     void FenceReflect(XMVECTOR normal);
@@ -388,7 +388,7 @@ public:
         //InitParam_.observers自体が空なのでfor文がスルーされる)
         for (IGameObserver* observer : InitParam_.observers) {
 
-            //監視者へ壁にヒットしたこと（当たったCharacterのID）を通知
+            //監視者へ柵にヒットしたこと（当たったCharacterのID）を通知
             observer->OnCharacterFenceHit(this->InitParam_.CharacterID);
         }
     }

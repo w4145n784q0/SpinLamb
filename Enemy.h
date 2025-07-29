@@ -101,7 +101,7 @@ public:
 	//’e‚©‚ê‚½ó‘Ô
 	void UpdateHit();
 
-	//•Ç‚ÉÚGó‘Ô
+	//ò‚ÉÚG‚µ‚½ó‘Ô
 	void UpdateFenceHit();
 	
 	//“G‚ğ~‚ß‚é
