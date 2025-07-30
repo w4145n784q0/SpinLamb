@@ -9,7 +9,7 @@
 namespace
 {
 	//プレイボタン,フリープレイボタン,遊び方ボタン,タイトルボタン
-	//クラス内で使いまわす文字列なのでnamespacenに宣言
+	//クラス内で使いまわす文字列なのでnamespaceに宣言
 	std::string ModeStringArray[] = { "Battle", "Practice", "HowToPlay", "BackTitle" };
 }
 
@@ -107,13 +107,13 @@ void GameModeScene::Initialize()
 	//各モードをリストに入れる
 	ModeList_ = { S_Battle,S_Practice,S_HowToPlay,S_Title };
 
-	//Modeitrのインデックスの初期位置を指定
+	//Modeitrの初期位置を指定
 	Modeitr = ModeList_.begin();
 
 	//PlayerNumの状態リストを初期化
 	PlayerNumList_ = { S_PvE,S_PvP };
 
-	//PlayerNumList_のインデックスの書記位置を指定
+	//PlayerNumList_のインデックスの初期位置を指定
 	PlayerNumitr = PlayerNumList_.begin();
 
 	//インスタンス生成
@@ -188,7 +188,7 @@ void GameModeScene::Draw()
 	}
 
 #ifdef _DEBUG
-	//各画像トランスフォームの位置変更
+	//各画像のトランスフォームの位置変更
 	if (ImGui::TreeNode("GameModeSelect"))
 	{
 		ImGui::SliderFloat("BackCharaX", &BackChara_.position_.x, Image::LeftEdge, Image::RightEdge);
@@ -242,7 +242,7 @@ void GameModeScene::SetGameModeSCV()
 	//PvE(一人プレイ),PvP(二人プレイ)
 	std::string PlayerStringArray[] = { "PvE","PvP" };
 
-	//プレイ人数選択画面のアイコンの位置を初期化
+	//プレイ人数選択画面のアイコン位置を初期化
 	for (int i = 0; i < MaxPlayerNum; i++)
 	{
 		InitCSVTransform(csv, PlayerStringArray[i], PlayerTransArray_[i]);
@@ -252,7 +252,7 @@ void GameModeScene::SetGameModeSCV()
 void GameModeScene::UpdateSelecting()
 {
 	//ボタンの選択枠の移動
-	//インデックスが先頭/末尾なら末尾/先頭へ戻る
+	//インデックスが先頭/末尾の場合、末尾/先頭へ戻る
 	//前置デクリメントで配列オーバー防ぐ
 
 	if (Input::IsKeyDown(DIK_UP) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP)
@@ -289,7 +289,7 @@ void GameModeScene::UpdateSelecting()
 		Audio::Play(hSoundSelect_);
 	}
 
-	//選択枠の位置を選択中のモードの位置に合わせる
+	//選択枠の位置を、選択中のモードの位置に合わせる
 	switch (SelectMode_)
 	{
 	case GameModeScene::S_Battle:
@@ -331,7 +331,7 @@ void GameModeScene::UpdateSelecting()
 void GameModeScene::UpdateConfirmation()
 {
 	//ボタンの選択枠の移動
-	//インデックスが先頭/末尾なら末尾/先頭へ戻る
+	//インデックスが先頭/末尾の場合、末尾/先頭へ戻る
 	//前置デクリメントで配列オーバー防ぐ
 
 	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT)
@@ -367,7 +367,7 @@ void GameModeScene::UpdateConfirmation()
 		Audio::Play(hSoundSelect_);
 	}
 
-	//プレイ人数選択アイコンの位置調整
+	//プレイ人数選択アイコンの位置を調整
 	switch (PlayerNum_)
 	{
 	case GameModeScene::S_PvE:
@@ -466,7 +466,7 @@ void GameModeScene::UpdateTransition()
 			break;
 		}
 
-		//シーン遷移用タイマーを戻す
+		//シーン遷移用タイマーをリセット
 		SceneTransitionTimer_ = 0;
 
 		//モード選択用サウンド停止

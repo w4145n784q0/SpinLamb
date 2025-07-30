@@ -250,7 +250,7 @@ void PracticeScene::UpdateTransition()
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_TITLE);
 
-		//シーン遷移用タイマーを戻す
+		//シーン遷移用タイマーをリセット
 		SceneTransitionTimer_ = 0;
 
 		//練習用サウンド停止

@@ -477,6 +477,7 @@ void Player::CameraControl()
 	//カメラを上部に移動
 
 	//Qキーを押したらデバッグカメラに移行(Debugの時のみ)
+	//再度押すと通常カメラに戻る
 	if (Input::IsKeyDown(DIK_Q))
 	{
 		if (CameraState_ == S_NORMALCAMERA)
@@ -530,7 +531,7 @@ void Player::CameraControl()
 			}
 		}
 
-		//Zキー/Yボタンでカメラの回転リセット
+		//Zキー/X・Yボタンでカメラの回転リセット
 		if (Input::IsKey(DIK_Z) ||
 			Input::IsPadButton(XINPUT_GAMEPAD_Y, ControllerID_) || Input::IsPadButton(XINPUT_GAMEPAD_X, ControllerID_))
 		{

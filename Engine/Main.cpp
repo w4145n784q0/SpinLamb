@@ -217,6 +217,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				}
 				else
 				{
+					//通常(カメラの位置・焦点を初期位置にし全体を描画)の画面セット
 					GameView::ViewNormal();
 
 					//全オブジェクトを描画

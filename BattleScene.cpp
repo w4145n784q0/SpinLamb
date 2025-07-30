@@ -299,7 +299,7 @@ void BattleScene::UpdateTransition()
 		pSceneManager->SetFirstCharaScore(FirstScore_);
 		pSceneManager->SetSecondCharaScore(SecondScore_);
 
-		//シーン遷移用タイマーを戻す
+		//シーン遷移用タイマーをリセット
 		SceneTransitionTimer_ = 0;
 
 		//バトル用サウンド停止

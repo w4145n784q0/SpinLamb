@@ -78,7 +78,7 @@ void TitleScene::UpdateTransition()
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
 
-		//シーン遷移用タイマーを戻す
+		//シーン遷移用タイマーをリセット
 		SceneTransitionTimer_ = 0;
 
 		//タイトル用サウンド停止

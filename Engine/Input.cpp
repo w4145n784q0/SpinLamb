@@ -38,7 +38,8 @@ namespace Input
 	XINPUT_STATE prevControllerState_[MAX_PAD_NUM];	//前フレームのコントローラーの状態
 	float PrevStickTiltL_X = 0.0f;					//前回のLスティック左右の入力保管
 	float PrevStickTiltL_Y = 0.0f;					//前回のLスティック上下の入力保管
-
+	float NowStickTiltL_X = 0.0f;					//今回のLスティック左右の入力保管
+	float NowStickTiltL_Y = 0.0f;					//今回のLスティック上下の入力保管
 	
 
 	//初期化
@@ -86,10 +87,13 @@ namespace Input
 			XInputGetState(i, &controllerState_[i]);
 		}
 
-		//前回の傾きに今回の代入
-		PrevStickTiltL_X = GetPadStickL().x;
-		PrevStickTiltL_Y = GetPadStickL().y;
+		//前回の傾きに今回の傾きを代入し更新
+		PrevStickTiltL_X = NowStickTiltL_X;
+		PrevStickTiltL_Y = NowStickTiltL_Y;
 
+		//今の入力状態から今回の傾きを取得
+		NowStickTiltL_X = GetPadStickL().x;
+		NowStickTiltL_Y = GetPadStickL().y;
 	}
 
 
@@ -313,7 +317,7 @@ namespace Input
 	bool IsStickTiltLX_LEFT()
 	{
 		//今回左スティックを左に一定以上倒した && 前回左スティックを左に一定以上倒していない
-		if (GetPadStickL().x <= -StickTilt && PrevStickTiltL_X >= -StickTilt)
+		if (NowStickTiltL_X <= -StickTilt && PrevStickTiltL_X >= -StickTilt)
 			return true;
 		else
 			return false;
@@ -322,7 +326,7 @@ namespace Input
 	bool IsStickTiltLX_RIGHT()
 	{
 		//今回左スティックを右に一定以上倒した && 前回左スティックを右に一定以上倒していない
-		if (GetPadStickL().x >= StickTilt && PrevStickTiltL_X <= StickTilt)
+		if (NowStickTiltL_X >= StickTilt && PrevStickTiltL_X <= StickTilt)
 			return true;
 		else
 			return false;
@@ -331,7 +335,7 @@ namespace Input
 	bool IsStickTiltLY_UP()
 	{
 		//今回左スティックを上に一定以上倒した && 前回左スティックを上に一定以上倒していない
-		if (GetPadStickL().y >= StickTilt && PrevStickTiltL_Y <= StickTilt)
+		if (NowStickTiltL_Y >= StickTilt && PrevStickTiltL_Y <= StickTilt)
 			return true;
 		else
 			return false;
@@ -340,7 +344,7 @@ namespace Input
 	bool IsStickTiltLY_DOWN()
 	{
 		//今回左スティックを下に一定以上倒した && 前回左スティックを下に一定以上倒していない
-		if (GetPadStickL().y <= -StickTilt && PrevStickTiltL_Y >= -StickTilt)
+		if (NowStickTiltL_Y <= -StickTilt && PrevStickTiltL_Y >= -StickTilt)
 			return true;
 		else
 			return false;

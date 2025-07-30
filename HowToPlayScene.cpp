@@ -94,7 +94,7 @@ void HowToPlayScene::Release()
 void HowToPlayScene::UpdateActive()
 {
 	//表示画像の移動
-	//インデックスが先頭/末尾なら末尾/先頭へ戻る
+	//インデックスが先頭/末尾の場合、末尾/先頭へ戻る
 	//前置デクリメントで配列オーバー防ぐ
 	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT)
 		|| Input::IsStickTiltLX_RIGHT())
@@ -154,7 +154,7 @@ void HowToPlayScene::UpdateTransition()
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
 
-		//シーン遷移用タイマーを戻す
+		//シーン遷移用タイマーをリセット
 		SceneTransitionTimer_ = 0;
 
 		//あそびかた用サウンド停止
