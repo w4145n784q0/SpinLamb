@@ -15,13 +15,7 @@
 
 namespace
 {
-	//player初期化時の文字列配列
-	std::string PlayerNames[] = { "Player1","Player2" };
-
-	std::string csvPath[] = { "CSVdata\\CharacterData\\PlayerData1.csv" ,
-		"CSVdata\\CharacterData\\PlayerData2.csv" };
-
-	std::string modelPath[] = { "Model\\chara.fbx" ,"Model\\chara_black.fbx" };
+	
 }
 
 PracticeScene::PracticeScene(GameObject* parent)
@@ -107,6 +101,18 @@ void PracticeScene::Initialize()
 	}
 
 	//Playerの初期化処理
+
+	//player初期化時の文字列配列
+	std::string PlayerNames[] = { "Player1","Player2" };
+
+	//プレイヤー初期化時に読み込むcsvファイルのパス
+	std::string csvPath[] = { "CSVdata\\CharacterData\\PlayerData1.csv" ,
+		"CSVdata\\CharacterData\\PlayerData2.csv" };
+
+	//プレイヤー初期化時に読み込むfbxモデルのパス
+	std::string modelPath[] = { "Model\\chara.fbx" ,"Model\\chara_black.fbx" };
+
+	//InitPlayers分だけ初期化
 	for (int i = 0; i < InitPlayers.size(); i++)
 	{
 		//プレイヤーの名前を設定
@@ -132,7 +138,7 @@ void PracticeScene::Initialize()
 		{
 			//プレイヤーの初期化配列からランダムなインスタンスをセット
 			//(現状は敵と一対一なのでplayer1が選ばれる)
-			//BattleSceneから設定することで値の相違・結合度の上昇を防ぐ
+			//PracticeSceneから設定することで値の相違・結合度の上昇を防ぐ
 			InitEnemys[i]->SetPlayerPointer(InitPlayers[rand() % InitPlayers.size()]);
 
 			//生成した敵を登録

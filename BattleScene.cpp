@@ -22,14 +22,6 @@ namespace
 	{
 		i_gametimelimit = 0,
 	};
-
-	//player初期化時の文字列配列
-	std::string PlayerNames[] = { "Player1","Player2" };
-
-	std::string csvPath[] = { "CSVdata\\CharacterData\\PlayerData1.csv" ,
-		"CSVdata\\CharacterData\\PlayerData2.csv" };
-
-	std::string modelPath[] = { "Model\\chara.fbx" ,"Model\\chara_black.fbx" };
 }
 
 BattleScene::BattleScene(GameObject* parent)
@@ -124,6 +116,18 @@ void BattleScene::Initialize()
 	}
 
 	//Playerの初期化処理
+
+	//player初期化時の文字列配列
+	std::string PlayerNames[] = { "Player1","Player2" };
+
+	//プレイヤー初期化時に読み込むcsvファイルのパス
+	std::string csvPath[] = { "CSVdata\\CharacterData\\PlayerData1.csv" ,
+		"CSVdata\\CharacterData\\PlayerData2.csv" };
+
+	//プレイヤー初期化時に読み込むfbxモデルのパス
+	std::string modelPath[] = { "Model\\chara.fbx" ,"Model\\chara_black.fbx" };
+
+	//InitPlayers分だけ初期化
 	for (int i = 0; i < InitPlayers.size(); i++)
 	{
 		//プレイヤーの名前を設定

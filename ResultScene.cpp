@@ -43,22 +43,26 @@ void ResultScene::Initialize()
 	hBackScreen_ = Image::Load("Image\\GameMode\\back_mode.jpg");
 	assert(hBackScreen_ >= 0);
 
-	hYouWin_ = Image::Load("Image\\Result\\YouWin.png");
+	//同じディレクトリ内からのパスは省略
+	//パスの一部を文字列にし、結合させる
+	std::string path = "Image\\Result\\";
+
+	hYouWin_ = Image::Load(path + "YouWin.png");
 	assert(hYouWin_ >= 0);
 
-	hCpuWin_ = Image::Load("Image\\Result\\CPUWin.png");
+	hCpuWin_ = Image::Load(path + "CPUWin.png");
 	assert(hCpuWin_ >= 0);
 
-	hPlayer1Win_ = Image::Load("Image\\Result\\Player1Win.png");
+	hPlayer1Win_ = Image::Load(path + "Player1Win.png");
 	assert(hPlayer1Win_);
 
-	hPlayer2Win_ = Image::Load("Image\\Result\\Player2Win.png");
+	hPlayer2Win_ = Image::Load(path + "Player2Win.png");
 	assert(hPlayer2Win_);
 
-	hDraw_ = Image::Load("Image\\Result\\Draw.png");
+	hDraw_ = Image::Load(path + "Draw.png");
 	assert(hDraw_ >= 0);
 
-	hlogoTitle_ = Image::Load("Image\\Result\\PushToTitle.png");
+	hlogoTitle_ = Image::Load("PushToTitle.png");
 	assert(hlogoTitle_ >= 0);
 
 	hSoundResult_ = Audio::Load("Sound\\BGM\\end.wav", true);

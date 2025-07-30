@@ -20,6 +20,7 @@ protected:
 
 	//ƒV[ƒ“‘JˆÚ‚Ü‚Å‚ÌŠÔ‚ğŒv‚é
 	int SceneTransitionTimer_;
+
 public:
 	BaseScene(GameObject* parent);
 	BaseScene(GameObject* parent, const std::string& name);

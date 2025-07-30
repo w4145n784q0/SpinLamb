@@ -126,65 +126,75 @@ void HUD::Initialize()
 	SetHUDCSV();
 	Easing::SetSCVEasing();
 
+	//同じディレクトリ内からのパスは省略
+	//パスの一部を文字列にし、結合させる
+
+	std::string Image = "Image\\";
+	std::string Practice = "Practice\\";
+	std::string Battle = "Battle\\";
+	std::string Number = "number\\";
+	std::string MiniMap = "MiniMap\\";
+
+
 	//各画像の読み込み
-	hBackTitleLogo_ = Image::Load("Image\\Practice\\BackTitleLogo.png");
+	hBackTitleLogo_ = Image::Load(Image + Practice + "BackTitleLogo.png");
 	assert(hBackTitleLogo_ >= 0);
 
-	hPracticeNow_ = Image::Load("Image\\Practice\\PracticeLogo.png");
+	hPracticeNow_ = Image::Load(Image + Practice + "PracticeLogo.png");
 	assert(hPracticeNow_ >= 0);
 
-	hGameExplanation_ = Image::Load("Image\\Battle\\rule2.png");
+	hGameExplanation_ = Image::Load(Image + Battle + "rule.png");
 	assert(hGameExplanation_ >= 0);
 
-	hStart_ = Image::Load("Image\\Battle\\start_logo.png");
+	hStart_ = Image::Load(Image + Battle + "start_logo.png");
 	assert(hStart_ >= 0);
 
-	hReady_ = Image::Load("Image\\Battle\\ready_logo.png");
+	hReady_ = Image::Load(Image + Battle + "ready_logo.png");
 	assert(hReady_ >= 0);
 
-	hGo_ = Image::Load("Image\\Battle\\go_logo.png");
+	hGo_ = Image::Load(Image + Battle + "go_logo.png");
 	assert(hGo_ >= 0);
 
-	hFinish_ = Image::Load("Image\\Battle\\finish_logo.png");
+	hFinish_ = Image::Load(Image + Battle + "finish_logo.png");
 	assert(hFinish_ >= 0);
 
-	hNumber0_ = Image::Load("Image\\number\\number_0.png");
+	hNumber0_ = Image::Load(Image + Number + "number_0.png");
 	assert(hNumber0_ >= 0);
 
-	hNumber1_ = Image::Load("Image\\number\\number_1.png");
+	hNumber1_ = Image::Load(Image + Number + "number_1.png");
 	assert(hNumber1_ >= 0);
 
-	hNumber2_ = Image::Load("Image\\number\\number_2.png");
+	hNumber2_ = Image::Load(Image + Number + "number_2.png");
 	assert(hNumber2_ >= 0);
 	
-	hNumber3_ = Image::Load("Image\\number\\number_3.png");
+	hNumber3_ = Image::Load(Image + Number + "number_3.png");
 	assert(hNumber3_ >= 0);
 	
-	hNumber4_ = Image::Load("Image\\number\\number_4.png");
+	hNumber4_ = Image::Load(Image + Number + "number_4.png");
 	assert(hNumber4_ >= 0);
 
-	hNumber5_ = Image::Load("Image\\number\\number_5.png");
+	hNumber5_ = Image::Load(Image + Number + "number_5.png");
 	assert(hNumber5_ >= 0);
 
-	hNumber6_ = Image::Load("Image\\number\\number_6.png");
+	hNumber6_ = Image::Load(Image + Number + "number_6.png");
 	assert(hNumber6_ >= 0);
 
-	hNumber7_ = Image::Load("Image\\number\\number_7.png");
+	hNumber7_ = Image::Load(Image + Number + "number_7.png");
 	assert(hNumber7_ >= 0);
 
-	hNumber8_ = Image::Load("Image\\number\\number_8.png");
+	hNumber8_ = Image::Load(Image + Number + "number_8.png");
 	assert(hNumber8_ >= 0);
 
-	hNumber9_ = Image::Load("Image\\number\\number_9.png");
+	hNumber9_ = Image::Load(Image + Number + "number_9.png");
 	assert(hNumber9_ >= 0);
 
-	hMap_ = Image::Load("Image\\MiniMap\\minimap2.png");
+	hMap_ = Image::Load(Image + MiniMap + "minimap2.png");
 	assert(hMap_ >= 0);
 
-	hFirstIcon_ = Image::Load("Image\\MiniMap\\blue_circle.png");
+	hFirstIcon_ = Image::Load(Image + MiniMap + "blue_circle.png");
 	assert(hFirstIcon_ >= 0);
 
-	hSecondIcon_ = Image::Load("Image\\MiniMap\\red_circle.png");
+	hSecondIcon_ = Image::Load(Image + MiniMap + "red_circle.png");
 	assert(hSecondIcon_ >= 0);
 
 
