@@ -188,7 +188,7 @@ void HUD::Initialize()
 	hNumber9_ = Image::Load(Image + Number + "number_9.png");
 	assert(hNumber9_ >= 0);
 
-	hMap_ = Image::Load(Image + MiniMap + "minimap2.png");
+	hMap_ = Image::Load(Image + MiniMap + "MiniMap.png");
 	assert(hMap_ >= 0);
 
 	hFirstIcon_ = Image::Load(Image + MiniMap + "blue_circle.png");

@@ -302,7 +302,7 @@ void Character::InitArrow()
 	MoveParam_.ArrowTransform_.scale_ = MoveParam_.ArrowScale_;
 
 	//–îˆóƒ‚ƒfƒ‹“Ç‚Ýž‚Ý
-	MoveParam_.hMoveArrow_ = Model::Load("Model\\AttackArrow2.fbx");
+	MoveParam_.hMoveArrow_ = Model::Load("Model\\AttackArrow.fbx");
 	assert(MoveParam_.hMoveArrow_ >= 0);
 }
 

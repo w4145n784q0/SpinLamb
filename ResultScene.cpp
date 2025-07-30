@@ -62,7 +62,7 @@ void ResultScene::Initialize()
 	hDraw_ = Image::Load(path + "Draw.png");
 	assert(hDraw_ >= 0);
 
-	hlogoTitle_ = Image::Load("PushToTitle.png");
+	hlogoTitle_ = Image::Load(path + "PushToTitle.png");
 	assert(hlogoTitle_ >= 0);
 
 	hSoundResult_ = Audio::Load("Sound\\BGM\\end.wav", true);

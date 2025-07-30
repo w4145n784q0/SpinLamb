@@ -47,7 +47,7 @@ void GameModeScene::Initialize()
 	hBackScreen_ = Image::Load(path + "back_mode.jpg");
 	assert(hBackScreen_ >= 0);
 
-	hBackChara_ = Image::Load(path + "sheepImage.png");
+	hBackChara_ = Image::Load(path + "SheepImage.png");
 	assert(hBackChara_ >= 0);
 
 	hBattle_ = Image::Load(path + "BattleButton.png");
@@ -80,7 +80,7 @@ void GameModeScene::Initialize()
 	hTitleText_ = Image::Load(path + "TitleText.png");
 	assert(hTitleText_ >= 0);
 
-	hPlayerNumSelect_ = Image::Load(path + "selectplayer.png");
+	hPlayerNumSelect_ = Image::Load(path + "SelectPlayer.png");
 	assert(hPlayerNumSelect_ >= 0);
 
 	hPlayerSelectIcon_ = Image::Load(path + "SelectIcon.png");

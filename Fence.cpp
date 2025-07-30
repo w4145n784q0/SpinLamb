@@ -44,10 +44,10 @@ Fence::~Fence()
 void Fence::Initialize()
 {
 	//各モデル読み込み
-	hPiller_ = Model::Load("Model\\piller.fbx");
+	hPiller_ = Model::Load("Model\\Piller.fbx");
 	assert(hPiller_ >= 0);
 
-	hFence_ = Model::Load("Model\\wire.fbx");
+	hFence_ = Model::Load("Model\\Wire.fbx");
 	assert(hFence_ >= 0);
 
 	//前後左右の鉄線クラス生成

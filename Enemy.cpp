@@ -71,7 +71,7 @@ void Enemy::Initialize()
 	SetCSVEnemy();
 
 	//Šeƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
-	hEnemy_ = Model::Load("Model\\chara_black.fbx");
+	hEnemy_ = Model::Load("Model\\Character_black.fbx");
 	assert(hEnemy_ >= 0);
 
 

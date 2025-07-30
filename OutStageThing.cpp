@@ -15,7 +15,7 @@ void OutStageThing::Initialize()
 {
 
 	//Šeƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
-	hCabin_ = Model::Load("Model\\House2.fbx");
+	hCabin_ = Model::Load("Model\\House.fbx");
 	assert(hCabin_ >= 0);
 
 	hTree_ = Model::Load("Model\\LittleTree.fbx");

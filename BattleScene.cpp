@@ -125,7 +125,7 @@ void BattleScene::Initialize()
 		"CSVdata\\CharacterData\\PlayerData2.csv" };
 
 	//プレイヤー初期化時に読み込むfbxモデルのパス
-	std::string modelPath[] = { "Model\\chara.fbx" ,"Model\\chara_black.fbx" };
+	std::string modelPath[] = { "Model\\Character.fbx" ,"Model\\Character_black.fbx" };
 
 	//InitPlayers分だけ初期化
 	for (int i = 0; i < InitPlayers.size(); i++)
