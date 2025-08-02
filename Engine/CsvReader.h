@@ -11,7 +11,7 @@ class CsvReader
 	std::vector<std::vector<std::string>> data_;
 
 	//「,」か「改行」までの文字列を取得
-	//引数：reuult	結果を入れるアドレス
+	//引数：result	結果を入れるアドレス
 	//引数：data	もとの文字列データ
 	//引数：index	何文字目から調べるか
 	//戻値：なし

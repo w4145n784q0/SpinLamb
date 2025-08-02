@@ -845,7 +845,7 @@ void Character::SetFullChargeEffect()
 	VFX::SetEmitter(fullcharge, FullChargeParam);
 
 	//使用する画像のパスをセットする
-	fullcharge.textureFileName = "PaticleAssets\\circle_W.png";
+	fullcharge.textureFileName = "ParticleAssets\\circle_W.png";
 
 	//発射位置をセット
 	fullcharge.position = this->transform_.position_;
@@ -861,7 +861,7 @@ void Character::SetAttackLocusEffect()
 	VFX::SetEmitter(locus, AttackLocusParam_);
 
 	//使用する画像のパスをセットする
-	locus.textureFileName = "PaticleAssets\\flashB_Y.png";
+	locus.textureFileName = "ParticleAssets\\flashB_Y.png";
 
 	//発射位置をセット
 	locus.position = this->transform_.position_;
@@ -877,7 +877,7 @@ void Character::SetHitEffect()
 	VFX::SetEmitter(hit, HitEffectParam_);
 
 	//使用する画像のパスをセットする
-	hit.textureFileName = "PaticleAssets\\flashB_W.png";
+	hit.textureFileName = "ParticleAssets\\flashB_W.png";
 
 	//発射位置をセット
 	hit.position = this->transform_.position_;
@@ -893,7 +893,7 @@ void Character::SetFenceHitEffect()
 	VFX::SetEmitter(fencehit, FenceHitEffectParam_);
 
 	//使用する画像のパスをセットする
-	fencehit.textureFileName = "PaticleAssets\\flashB_W.png";
+	fencehit.textureFileName = "ParticleAssets\\flashB_W.png";
 
 	//発射位置をセット
 	fencehit.position = this->transform_.position_;

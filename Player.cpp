@@ -290,7 +290,7 @@ void Player::UpdateCharge()
 	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
 	
 	//チャージ中のエフェクトを出す
-	SetChargingEffect("PaticleAssets\\circle_B.png");
+	SetChargingEffect("ParticleAssets\\circle_B.png");
 
 	//SPACEキー/Aボタンが押され,地上にいるなら
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A, ControllerID_))

@@ -143,19 +143,19 @@ void HUD::Initialize()
 	hPracticeNow_ = Image::Load(Image + Practice + "PracticeLogo.png");
 	assert(hPracticeNow_ >= 0);
 
-	hGameExplanation_ = Image::Load(Image + Battle + "rule.png");
+	hGameExplanation_ = Image::Load(Image + Battle + "Rule.png");
 	assert(hGameExplanation_ >= 0);
 
-	hStart_ = Image::Load(Image + Battle + "start_logo.png");
+	hStart_ = Image::Load(Image + Battle + "StartLogo.png");
 	assert(hStart_ >= 0);
 
-	hReady_ = Image::Load(Image + Battle + "ready_logo.png");
+	hReady_ = Image::Load(Image + Battle + "ReadyLogo.png");
 	assert(hReady_ >= 0);
 
-	hGo_ = Image::Load(Image + Battle + "go_logo.png");
+	hGo_ = Image::Load(Image + Battle + "GoLogo.png");
 	assert(hGo_ >= 0);
 
-	hFinish_ = Image::Load(Image + Battle + "finish_logo.png");
+	hFinish_ = Image::Load(Image + Battle + "FinishLogo.png");
 	assert(hFinish_ >= 0);
 
 	hNumber0_ = Image::Load(Image + Number + "number_0.png");

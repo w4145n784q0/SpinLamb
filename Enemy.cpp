@@ -292,7 +292,7 @@ void Enemy::UpdateAim()
 	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y + ArrowRotateCorrection;
 
 	//チャージ中のエフェクトを出す
-	SetChargingEffect("PaticleAssets\\circle_R.png");
+	SetChargingEffect("ParticleAssets\\circle_R.png");
 
 	//高速X回転
 	FastRotate();

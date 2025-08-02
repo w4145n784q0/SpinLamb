@@ -556,7 +556,7 @@ namespace Direct3D
 	}
 
 	//Zバッファへの書き込みON/OFF
-	void SetDepthBafferWriteEnable(bool isWrite)
+	void SetDepthBufferWriteEnable(bool isWrite)
 	{
 		//ON
 		if (isWrite)
