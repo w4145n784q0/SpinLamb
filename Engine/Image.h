@@ -105,8 +105,8 @@ namespace Image
 	//戻値：ワールド行列
 	XMMATRIX GetMatrix(int handle);
 
-	//scv読み込み行う
-	void SetSCVImage();
+	//csv読み込み行う
+	void SetCSVImage();
 
 	//ワールド行列設定と描画を同時に行う
 	//引数：handle	設定したいモデルの番号

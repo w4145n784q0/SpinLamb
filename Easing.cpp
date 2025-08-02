@@ -57,7 +57,7 @@ double Easing::calculateScale(float _MaxScale, float _EasingCount)
     return tmp;
 }
 
-void Easing::SetSCVEasing()
+void Easing::SetCSVEasing()
 {
     //csvファイル読み込む
     CsvReader csveasing;
@@ -71,7 +71,7 @@ void Easing::SetSCVEasing()
 
     //初期化の順番はcsvの各行の順番に合わせる
     //vの添え字はnamespaceで宣言した列挙型を使用
-    Adjust = static_cast<int>(easeInitData[i_adjust]);
+    Adjust = static_cast<double>(easeInitData[i_adjust]);
     Squared = static_cast<int>(easeInitData[i_squared]);
     Cubed = static_cast<int>(easeInitData[i_cubed]);
 

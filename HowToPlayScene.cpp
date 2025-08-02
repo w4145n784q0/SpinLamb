@@ -6,7 +6,7 @@
 #include"Engine/CsvReader.h"
 
 HowToPlayScene::HowToPlayScene(GameObject* parent)
-	:BaseScene(parent, "GameModeScene"),
+	:BaseScene(parent, "HowToPlayScene"),
 	hExplanation_(-1), hOperateKeyboard_(-1), hOperateController_(-1),
 	hSoundHowtoPlay_(-1), hSoundSelect_(-1),hSoundBackGameMode_(-1),
 	ImageState_(Explanation),pTransitionEffect_(nullptr)
@@ -62,7 +62,7 @@ void HowToPlayScene::Initialize()
 void HowToPlayScene::Update()
 {
 	//BaseScene‚ÌXVˆ—‚ğŒÄ‚Ô
-	//UpdateActive,UpdateTranslation‚ÍŒp³æ‚ÌŠÖ”‚ªŒÄ‚Î‚ê‚é
+	//UpdateActive,UpdateTransition‚ÍŒp³æ‚ÌŠÖ”‚ªŒÄ‚Î‚ê‚é
 	BaseScene::Update();
 }
 

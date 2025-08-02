@@ -207,7 +207,7 @@ void BattleScene::Initialize()
 void BattleScene::Update()
 {
 	//BaseSceneの更新処理を呼ぶ
-	//UpdateActive,UpdateTranslationは継承先の関数が呼ばれる
+	//UpdateActive,UpdateTransitionは継承先の関数が呼ばれる
 	BaseScene::Update();
 
 	//登録されたプレイヤー・CPUを更新

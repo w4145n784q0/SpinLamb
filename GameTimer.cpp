@@ -20,7 +20,7 @@ GameTimer::~GameTimer()
 
 void GameTimer::Initialize()
 {
-	TimeCalclation();
+	TimeCalculation();
 }
 
 void GameTimer::Update()
@@ -50,7 +50,7 @@ void GameTimer::Release()
 void GameTimer::UpdateTimeStop()
 {
 	//停止中も計算は行う
-	TimeCalclation();
+	TimeCalculation();
 }
 
 void GameTimer::UpdateTimeCount()
@@ -64,12 +64,12 @@ void GameTimer::UpdateTimeCount()
 		}
 
 		//一秒経過の度に計算
-		TimeCalclation();
+		TimeCalculation();
 		Timecounter = 0;
 	}
 }
 
-void GameTimer::TimeCalclation()
+void GameTimer::TimeCalculation()
 {
 	//現在の時間をそれぞれ計算
 	//十の位:現在の時間を10で除算

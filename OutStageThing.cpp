@@ -85,7 +85,7 @@ void OutStageThing::DrawImGui()
 					std::string labelX = "CabinRotateX_" + std::to_string(i);
 					ImGui::InputFloat((labelX.c_str()), &CabinData_[i].rotate_.x, ZeroPointOne);
 
-					std::string labelY = "CabiRotateY_" + std::to_string(i);
+					std::string labelY = "CabinRotateY_" + std::to_string(i);
 					ImGui::InputFloat((labelY.c_str()), &CabinData_[i].rotate_.y, ZeroPointOne);
 
 					std::string labelZ = "CabinRotateZ_" + std::to_string(i);
@@ -101,7 +101,7 @@ void OutStageThing::DrawImGui()
 					std::string labelX = "CabinScaleX_" + std::to_string(i);
 					ImGui::InputFloat((labelX.c_str()), &CabinData_[i].scale_.x, ZeroPointOne);
 
-					std::string labelY = "CabiScaleY_" + std::to_string(i);
+					std::string labelY = "CabinScaleY_" + std::to_string(i);
 					ImGui::InputFloat((labelY.c_str()), &CabinData_[i].scale_.y, ZeroPointOne);
 
 					std::string labelZ = "CabinScaleZ_" + std::to_string(i);

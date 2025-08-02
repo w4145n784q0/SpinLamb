@@ -13,7 +13,7 @@ namespace
 		i_down,
 		i_right,
 		i_left,
-		i_pillernum,
+		i_pillarnum,
 	};
 
 	//csv読み込み時のインデックス(当たり判定の読み込み)
@@ -32,7 +32,7 @@ namespace
 
 StageManager::StageManager(GameObject* parent)
 	:GameObject(parent,"StageManager"),
-	UpperEnd_(0.0f), LowerEnd_(0.0f), RightEnd_(0.0f), LeftEnd_(0.0f),PillerNum_(0),
+	UpperEnd_(0.0f), LowerEnd_(0.0f), RightEnd_(0.0f), LeftEnd_(0.0f),PillarNum_(0),
 	WirePosUpper_({ 0,0,0 }), WirePosLower_({ 0,0,0 }),WirePosRight_({ 0,0,0 }), WirePosLeft_({ 0,0,0 }), 
 	WireSizeUpper_({ 0,0,0 }), WireSizeLower_({ 0,0,0 }), WireSizeRight_({ 0,0,0 }),WireSizeLeft_({ 0,0,0 }),
 	UpperNormal_({ 0,0,0 }), LowerNormal_({ 0,0,0 }), RightNormal_({ 0,0,0 }), LeftNormal_({ 0,0,0 })
@@ -48,7 +48,7 @@ void StageManager::Initialize()
 	//Stage関係の値は基本StageManagerクラスで読み込み、渡す
 
 	//csvからパラメータ読み込み
-	SetStageInitSCV();
+	SetStageInitCSV();
 
 	//Groundクラス生成
 	Instantiate<Ground>(this);
@@ -80,7 +80,7 @@ void StageManager::Release()
 {
 }
 
-void StageManager::SetStageInitSCV()
+void StageManager::SetStageInitCSV()
 {
 
 	//----------地面,鉄線,柱の各トランスフォーム初期化----------
@@ -91,12 +91,12 @@ void StageManager::SetStageInitSCV()
 
 	//csvファイルの各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {
-		"Ground","wire","piller"
+		"Ground","wire","pillar"
 	};
 
 	//各トランスフォームを配列に入れる
 	std::vector<std::reference_wrapper<Transform>> TransformArray = {
-		GroundData_,WireData_,PillerData_
+		GroundData_,WireData_,PillarData_
 	};
 
 	//まとめて初期化
@@ -121,7 +121,7 @@ void StageManager::SetStageInitSCV()
 	LowerEnd_ = enddata[i_down];
 	RightEnd_ = enddata[i_right];
 	LeftEnd_ = enddata[i_left];
-	PillerNum_ = static_cast<int>(enddata[i_pillernum]);
+	PillarNum_ = static_cast<int>(enddata[i_pillarnum]);
 
 
 	//----------当たり判定の位置、サイズ,法線の初期化----------
@@ -222,7 +222,7 @@ void StageManager::InitFenceData()
 
 	//CSVから読み込んだ柵,鉄線のトランスフォームを渡す
 	pFence_->InitWireTransform(WireData_);
-	pFence_->InitPillerTransform(PillerData_);
+	pFence_->InitPillarTransform(PillarData_);
 
 	GameView::SetFence(pFence_);
 }
@@ -235,8 +235,8 @@ void StageManager::InitEndData()
 	Fence* pFence = (Fence*)FindObject("Fence");
 
 	//柱の数、柱の位置を初期化
-	pFence->SetPillerNum(PillerNum_);
-	pFence->SetPiller(UpperEnd_,LowerEnd_,RightEnd_,LeftEnd_, PillerData_.position_.y);
+	pFence->SetPillarNum(PillarNum_);
+	pFence->SetPillar(UpperEnd_,LowerEnd_,RightEnd_,LeftEnd_, PillarData_.position_.y);
 
 	//各鉄線の衝突判定を初期化(当たり判定の位置,当たり判定のサイズ,鉄線が持つ法線)
 	pFence->SetWireCollisionUpper(WirePosUpper_, WireSizeUpper_, UpperNormal_);

@@ -34,7 +34,7 @@ namespace
 	float ChaseLength = 0.0f;
 
 	//敵がプレイヤーの方向を向く際のトリガー この値を超えたら回転
-	float LookRotaeAngle = 0;
+	float LookRotateAngle = 0;
 	
 	//プレイヤー方向を向く際の1fごとの回転量
 	float LookRotateValue = 0.0f;
@@ -65,7 +65,7 @@ void Enemy::Initialize()
 {
 	//csvからパラメータ読み込み
 	std::string path = "CSVdata\\CharacterData\\EnemyData.csv";
-	SetcsvStatus(path);
+	SetCSVStatus(path);
 
 	//csvからパラメータ読み込み(Enemyのみ使う情報)
 	SetCSVEnemy();
@@ -221,7 +221,7 @@ void Enemy::EnemyRun()
 	//柵に接触状態でなければ無敵時間を更新
 	if (!(EnemyState_ == S_FENCEHIT))
 	{
-		InvincibilityTimeCalclation();
+		InvincibilityTimeCalculation();
 	}
 }
 
@@ -470,7 +470,7 @@ void Enemy::LookPlayer()
 	//二つのベクトル間のラジアン角を度数に戻し
 	//一定以上開いているなら回転
 	float Dig = XMConvertToDegrees(XMVectorGetX(angle));
-	if (Dig > LookRotaeAngle)
+	if (Dig > LookRotateAngle)
 	{
 		//外積Yが0以上なら左周り(反時計周り)
 		if (crossY > 0.0)
@@ -485,7 +485,7 @@ void Enemy::LookPlayer()
 	}
 
 	//計算を確定
-	transform_.Calclation();
+	transform_.Calculation();
 }
 
 float Enemy::PlayerEnemyDistanceX()
@@ -519,7 +519,7 @@ void Enemy::SetCSVEnemy()
 	//vの添え字はnamespaceで宣言した列挙型を使用
 	HitStop = static_cast<int>(OnlyData[i_hitstop]);
 	ChaseLength = OnlyData[i_chaseLength];
-	LookRotaeAngle = OnlyData[i_lookRotateAngle];
+	LookRotateAngle = OnlyData[i_lookRotateAngle];
 	LookRotateValue = OnlyData[i_lookRotateValue];
 	ArrowRotateCorrection = OnlyData[i_arrowrotatecorrection];
 

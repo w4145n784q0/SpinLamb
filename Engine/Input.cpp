@@ -62,7 +62,7 @@ namespace Input
 		pMouseDevice_->SetDataFormat(&c_dfDIMouse);
 		pMouseDevice_->SetCooperativeLevel(hWnd_, DISCL_NONEXCLUSIVE | DISCL_FOREGROUND);
 
-		//scvì«Ç›çûÇ›çsÇ§
+		//csvì«Ç›çûÇ›çsÇ§
 		SetInputCSV();
 	}
 

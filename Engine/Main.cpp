@@ -87,8 +87,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	pRootObject->Initialize();
 
 	//共通データを初期化
-	GameObject::SCVCommonDataInitialize();
-	Image::SetSCVImage();
+	GameObject::CSVCommonDataInitialize();
+	Image::SetCSVImage();
 
 	//ゲームの映し方の準備
 	GameView::Initialize();

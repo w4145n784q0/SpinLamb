@@ -17,7 +17,7 @@ Transform::~Transform()
 {
 }
 
-void Transform::Calclation()
+void Transform::Calculation()
 {
 	//ˆÚ“®s—ñ
 	matTranslate_ = XMMatrixTranslation(position_.x, position_.y, position_.z);
@@ -35,7 +35,7 @@ void Transform::Calclation()
 
 XMMATRIX Transform::GetWorldMatrix() 
 {
-	Calclation();
+	Calculation();
 	if (pParent_)
 	{
 		return  matScale_ * matRotate_ * matTranslate_ * pParent_->GetWorldMatrix();

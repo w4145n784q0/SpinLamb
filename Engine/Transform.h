@@ -27,7 +27,7 @@ public:
 	//各行列の計算
 	//引数：なし
 	//戻値：なし
-	void Calclation();
+	void Calculation();
 
 	//ワールド行列を取得
 	//引数：なし

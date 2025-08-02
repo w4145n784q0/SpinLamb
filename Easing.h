@@ -22,6 +22,6 @@ namespace Easing
 	double calculateScale(float _MaxScale,float _EasingCount);
 
 	//CSVファイルから必要パラメータを読み込みする
-	void SetSCVEasing();
+	void SetCSVEasing();
 }
 

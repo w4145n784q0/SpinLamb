@@ -69,7 +69,7 @@ void MiniMap::SetMiniMapCSV()
 	csv.Load("CSVdata\\HUDData\\MiniMapData.csv");
 
 	//csvファイルの各0列目の文字列を取得
-	std::string init = "MIniMapInit";
+	std::string init = "MiniMapInit";
 
 	//0列目の文字列を渡し、その行のパラメータを取得
 	std::vector<float> MapData = GetCSVReadData(csv, init);

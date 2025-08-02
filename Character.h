@@ -49,7 +49,7 @@ protected:
         int hMoveArrow_ = -1;//チャージ中に表示する矢印モデル
         XMVECTOR ForwardVector_ = { 0,0,0 };//キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算 正規化した値を入れる
         XMVECTOR MoveDirection_ = { 0,0,0 };//移動方向 この値に速さの要素をかけて移動ベクトル化する
-        XMVECTOR NewPositon_ = { 0,0,0 };//移動後の位置ベクトル
+        XMVECTOR NewPosition_ = { 0,0,0 };//移動後の位置ベクトル
         Transform ArrowTransform_;//チャージ/攻撃準備中の矢印のトランスフォーム
         XMFLOAT3 ArrowRotate_ = { 0,0,0 };//矢印の初期回転
         XMFLOAT3 ArrowScale_ = { 0,0,0 };//矢印の大きさ
@@ -82,8 +82,8 @@ protected:
     struct HitParam
     {
         float ColliderSize_ = 0.0f; //当たり判定(球体)のサイズ
-        float OriginaRangeMin_ = 0.0f; //変換元のノックバック量の最小値
-        float OriginaRangeMax_ = 0.0f;  //変換元のノックバック量の最大値
+        float OriginalRangeMin_ = 0.0f; //変換元のノックバック量の最小値
+        float OriginalRangeMax_ = 0.0f;  //変換元のノックバック量の最大値
         float ConvertedRangeMin_ = 0.0f; //変換後のノックバック量の最小値
         float ConvertedRangeMax_ = 0.0f; //変換後のノックバック量の最大値
         XMFLOAT3 KnockBack_Direction_ = { 0,0,0 };//ノックバックする方向
@@ -155,7 +155,7 @@ public:
     /// Characterクラス限定
     /// </summary>
     /// <param name="_path">csvファイルのパス</param>
-    void SetcsvStatus(std::string _path);
+    void SetCSVStatus(std::string _path);
 
     /// <summary>
     /// 各方向の柵から法線ベクトルを取得しNormalArrayを初期化
@@ -376,7 +376,7 @@ public:
     /// <summary>
     /// ダメージ後の無敵時間の計算
     /// </summary>
-    void InvincibilityTimeCalclation();
+    void InvincibilityTimeCalculation();
 
     /// <summary>
     /// 監視する対象(配列)に柵にヒットしたことを通知

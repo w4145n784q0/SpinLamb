@@ -100,7 +100,7 @@ namespace Image
 		{
 			return;
 		}
-		_datas[handle]->transform.Calclation();
+		_datas[handle]->transform.Calculation();
 		_datas[handle]->pSprite->Draw(_datas[handle]->transform, _datas[handle]->rect, _datas[handle]->alpha);
 	}
 
@@ -213,7 +213,7 @@ namespace Image
 		return _datas[handle]->transform.GetWorldMatrix();
 	}
 
-	void SetSCVImage()
+	void SetCSVImage()
 	{
 		//csvƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş
 		CsvReader csv;

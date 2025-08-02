@@ -27,7 +27,7 @@ TransitionEffect::~TransitionEffect()
 void TransitionEffect::Initialize()
 {
 	//csvからパラメータ読み込み
-	SetSCVTransitionEffect();
+	SetCSVTransitionEffect();
 
 	//各画像の読み込み
 	hFadeBlack_ = Image::Load("Image\\Transition\\fade_black.png");
@@ -182,7 +182,7 @@ void TransitionEffect::UpdateZoomOut()
 	}
 }
 
-void TransitionEffect::SetSCVTransitionEffect()
+void TransitionEffect::SetCSVTransitionEffect()
 {
 	//csvファイルを読み込む
 	CsvReader csvTransform;

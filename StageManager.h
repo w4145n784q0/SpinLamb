@@ -18,7 +18,7 @@ private:
 	Transform WireData_;
 
 	//柵クラス(柱)に渡すデータ
-	Transform PillerData_;
+	Transform PillarData_;
 
 	//ステージ外オブジェクトに渡すデータ(小屋)
 	std::vector<Transform>  CabinData_;
@@ -46,7 +46,7 @@ private:
 	float LeftEnd_;
 
 	//柱の数
-	int PillerNum_;
+	int PillarNum_;
 
 	//----------当たり判定関係----------
 
@@ -108,7 +108,7 @@ public:
 	void Release() override;
 
 	//CSVファイルから必要パラメータを読み込みする
-	void SetStageInitSCV();
+	void SetStageInitCSV();
 
 	/// <summary>
 	/// 地面クラスのトランスフォーム初期化

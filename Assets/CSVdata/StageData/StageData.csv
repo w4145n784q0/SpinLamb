@@ -1,4 +1,4 @@
 ﻿Data,pos.x,pos.y,pos.z,rot.x,rot.y,rot.z,sca.x,sca.y,sca.z
 Ground,0,0,0,0,0,0,2,1,2
 wire,0,5,0,0,0,0,1,1,1
-piller,0,0,0,0,0,0,1,1,1
+pillar,0,0,0,0,0,0,1,1,1

@@ -21,7 +21,7 @@ namespace
 ResultScene::ResultScene(GameObject* parent)
 	:BaseScene(parent, "ResultScene"), hBackScreen_(-1), hYouWin_(-1),hCpuWin_(-1),
 	hPlayer1Win_(-1),hPlayer2Win_(-1),
-	hDraw_(-1), hlogoTitle_(-1),
+	hDraw_(-1), hPushTitle_(-1),
 	hSoundResult_(-1), hSoundBackTitle_(-1), winner_(RESULTMAX), ResultArray_({}),
 	pTransitionEffect_(nullptr)
 {
@@ -62,8 +62,8 @@ void ResultScene::Initialize()
 	hDraw_ = Image::Load(path + "Draw.png");
 	assert(hDraw_ >= 0);
 
-	hlogoTitle_ = Image::Load(path + "PushToTitle.png");
-	assert(hlogoTitle_ >= 0);
+	hPushTitle_ = Image::Load(path + "PushToTitle.png");
+	assert(hPushTitle_ >= 0);
 
 	hSoundResult_ = Audio::Load("Sound\\BGM\\end.wav", true);
 	assert(hSoundResult_ >= 0);
@@ -107,7 +107,7 @@ void ResultScene::Initialize()
 void ResultScene::Update()
 {
 	//BaseSceneの更新処理を呼ぶ
-	//UpdateActive,UpdateTranslationは継承先の関数が呼ばれる
+	//UpdateActive,UpdateTransitionは継承先の関数が呼ばれる
 	BaseScene::Update();
 	Audio::Play(hSoundResult_);
 }
@@ -118,7 +118,7 @@ void ResultScene::Draw()
 	Image::SetAndDraw(hBackScreen_, this->transform_);
 
 	//"Push Title"描画
-	Image::SetAndDraw(hlogoTitle_, PushTitle_);
+	Image::SetAndDraw(hPushTitle_, PushTitle_);
 
 	//結果のテキスト画像を表示
 	//ResultArray_の添え字に勝敗状態を使う

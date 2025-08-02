@@ -155,7 +155,7 @@ void Character::Draw()
 	ShadowDraw();
 }
 
-void Character::SetcsvStatus(std::string _path)
+void Character::SetCSVStatus(std::string _path)
 {
 	//csvファイルを読み込む
 	CsvReader csv;
@@ -237,8 +237,8 @@ void Character::SetcsvStatus(std::string _path)
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
 	HitParam_.ColliderSize_ = HitData[i_collider];
-	HitParam_.OriginaRangeMin_ = HitData[i_originalrangemin];
-	HitParam_.OriginaRangeMax_ = HitData[i_originalrangemax];
+	HitParam_.OriginalRangeMin_ = HitData[i_originalrangemin];
+	HitParam_.OriginalRangeMax_ = HitData[i_originalrangemax];
 	HitParam_.ConvertedRangeMin_ = HitData[i_convertedrangemin];
 	HitParam_.ConvertedRangeMax_ = HitData[i_convertedrangemax];
 	HitParam_.DecelerationRate_ = HitData[i_deceleration];
@@ -391,8 +391,8 @@ void Character::DrawCharacterImGui()
 	//ノックバック量計算時の変換前の範囲,変換後の範囲,減速率,ノックバックを終了する値
 	if (ImGui::TreeNode("Hit"))
 	{
-		ImGui::InputFloat("OriginaRangeMin", &this->HitParam_.OriginaRangeMin_, ZeroPointOne);
-		ImGui::InputFloat("OriginaRangeMax", &this->HitParam_.OriginaRangeMax_, ZeroPointOne);
+		ImGui::InputFloat("OriginaRangeMin", &this->HitParam_.OriginalRangeMin_, ZeroPointOne);
+		ImGui::InputFloat("OriginaRangeMax", &this->HitParam_.OriginalRangeMax_, ZeroPointOne);
 		ImGui::InputFloat("ConvertedRangeMin", &this->HitParam_.ConvertedRangeMin_, ZeroPointOne);
 		ImGui::InputFloat("ConvertedRangeMax", &this->HitParam_.ConvertedRangeMax_, ZeroPointOne);
 		ImGui::InputFloat("DecelerationRate", &this->HitParam_.DecelerationRate_, ZeroPointOne);
@@ -503,7 +503,7 @@ void Character::CharacterMove(XMVECTOR _direction)
 
 	//場外でなければ位置更新 
 	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, MoveParam_.NewPositon_);
+	XMStoreFloat3(&tmp, MoveParam_.NewPosition_);
 	if (!IsOutsideStage(tmp))
 	{
 		MoveConfirm();
@@ -519,7 +519,7 @@ void Character::CreateMoveVector()
 	//現在位置と移動ベクトルを加算し
 	//移動後のベクトルを作成(この時点では移動確定していない)
 	XMVECTOR PrevPos = XMLoadFloat3(&this->transform_.position_);
-	MoveParam_.NewPositon_ = PrevPos + MoveVector;
+	MoveParam_.NewPosition_ = PrevPos + MoveVector;
 }
 
 bool Character::IsOutsideStage(XMFLOAT3 _position)
@@ -538,7 +538,7 @@ bool Character::IsOutsideStage(XMFLOAT3 _position)
 void Character::MoveConfirm()
 {
 	//移動後のベクトルをtransform_.positionに代入し、移動を確定する
-	XMStoreFloat3(&this->transform_.position_, MoveParam_.NewPositon_);
+	XMStoreFloat3(&this->transform_.position_, MoveParam_.NewPosition_);
 }
 
 float Character::RotateDirectionVector(XMVECTOR _MoveVector)
@@ -596,7 +596,7 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 
 	//速度差の判定は線形補完元の最大値を適用
 	//速度差が自身の方が一定以上なら、自身のノックバック量は0
-	if (subVelocity >= HitParam_.OriginaRangeMax_)
+	if (subVelocity >= HitParam_.OriginalRangeMax_)
 	{
 		KnockBackValue = 0.0f;
 	}
@@ -610,7 +610,7 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 
 		//ノックバック量の線形補完を行う
 		KnockBackValue = LinearCompletion(subVelocity,
-			HitParam_.OriginaRangeMin_, HitParam_.OriginaRangeMax_,
+			HitParam_.OriginalRangeMin_, HitParam_.OriginalRangeMax_,
 			HitParam_.ConvertedRangeMin_, HitParam_.ConvertedRangeMax_);
 	}
 
@@ -640,11 +640,11 @@ void Character::KnockBack()
 	TmpPos.z += HitParam_.KnockBack_Direction_.z * HitParam_.KnockBack_Velocity_.z;
 
 	//この時点では変更せず、移動後の仮の位置に保管
-	MoveParam_.NewPositon_ = XMLoadFloat3(&TmpPos);
+	MoveParam_.NewPosition_ = XMLoadFloat3(&TmpPos);
 
 	//場外でなければ位置更新 
 	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, MoveParam_. NewPositon_);
+	XMStoreFloat3(&tmp, MoveParam_. NewPosition_);
 	if (!IsOutsideStage(tmp))
 	{
 		MoveConfirm();
@@ -711,7 +711,7 @@ bool Character::IsKnockBackEnd()
 	}
 }
 
-void Character::InvincibilityTimeCalclation()
+void Character::InvincibilityTimeCalculation()
 {
 	//無敵時間の計算
 

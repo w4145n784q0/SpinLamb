@@ -383,7 +383,7 @@ public:
 	/// <summary>
 	/// GameObjectの共通データ初期化
 	/// </summary>
-    static void SCVCommonDataInitialize() {  
+    static void CSVCommonDataInitialize() {  
 
 		//csvファイルを読み込む
         CsvReader csv;  

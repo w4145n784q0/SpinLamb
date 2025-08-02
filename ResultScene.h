@@ -30,7 +30,7 @@ private:
 	int hDraw_;
 
 	//"push title"のロゴ
-	int hlogoTitle_;
+	int hPushTitle_;
 
 	//----------サウンドハンドル----------
 

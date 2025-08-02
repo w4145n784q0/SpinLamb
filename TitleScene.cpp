@@ -37,7 +37,7 @@ void TitleScene::Initialize()
 void TitleScene::Update()
 {
 	//BaseScene‚ÌXVˆ—‚ğŒÄ‚Ô
-	//UpdateActive,UpdateTranslation‚ÍŒp³æ‚ÌŠÖ”‚ªŒÄ‚Î‚ê‚é
+	//UpdateActive,UpdateTransition‚ÍŒp³æ‚ÌŠÖ”‚ªŒÄ‚Î‚ê‚é
 	BaseScene::Update();
 }
 

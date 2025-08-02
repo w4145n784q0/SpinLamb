@@ -167,7 +167,7 @@ public:
 	void Release() override;
 
 	//CSVファイルから必要パラメータを読み込みする
-	void SetGameModeSCV();
+	void SetGameModeCSV();
 
 	//----------GameModeState_に応じて内容が変わるUpdate関数----------
 	void UpdateSelecting();

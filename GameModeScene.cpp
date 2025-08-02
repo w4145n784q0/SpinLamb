@@ -36,7 +36,7 @@ void GameModeScene::Initialize()
 	Instantiate<TransitionEffect>(this);
 
 	//csvからパラメータ読み込み
-	SetGameModeSCV();
+	SetGameModeCSV();
 
 	//各画像・サウンドの読み込み
 
@@ -126,7 +126,7 @@ void GameModeScene::Initialize()
 void GameModeScene::Update()
 {
 	//BaseSceneの更新処理を呼ぶ
-	//UpdateActive,UpdateTranslationは継承先の関数が呼ばれる
+	//UpdateActive,UpdateTransitionは継承先の関数が呼ばれる
 	BaseScene::Update();
 }
 
@@ -215,7 +215,7 @@ void GameModeScene::Release()
 {
 }
 
-void GameModeScene::SetGameModeSCV()
+void GameModeScene::SetGameModeCSV()
 {
 	//各画像を表示する際のトランスフォーム初期化
 	CsvReader csv;

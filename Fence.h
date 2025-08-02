@@ -9,7 +9,7 @@ private:
 	//----------モデルハンドル----------
 
 	//柱モデル
-	int hPiller_;
+	int hPillar_;
 
 	//柵モデル
 	int hFence_;
@@ -17,16 +17,16 @@ private:
 	//----------柵の位置----------
 
 	//左上
-	XMFLOAT3 piller_UpperLeft_;
+	XMFLOAT3 Pillar_UpperLeft_;
 
 	//右上
-	XMFLOAT3 piller_UpperRight_;
+	XMFLOAT3 Pillar_UpperRight_;
 
 	//左下
-	XMFLOAT3 piller_LowerLeft_;
+	XMFLOAT3 Pillar_LowerLeft_;
 
 	//右下
-	XMFLOAT3 piller_LowerRight_;
+	XMFLOAT3 Pillar_LowerRight_;
 	
 
 public:
@@ -56,13 +56,13 @@ public:
 	/// <param name="left">西端</param>
 	/// <param name="right">東端</param>
 	/// <param name="height">柱の高さ</param>
-	void SetPiller(float upper, float lower, float left, float right, float height);
+	void SetPillar(float upper, float lower, float left, float right, float height);
 
 	/// <summary>
 	///	柱の数を設定
 	/// </summary>
 	/// <param name="num">柱の数</param>
-	void SetPillerNum(int num);
+	void SetPillarNum(int num);
 
 	/// <summary>
 	/// 鉄線のトランスフォームを初期化
@@ -74,7 +74,7 @@ public:
 	/// 柱のトランスフォームを初期化
 	/// </summary>
 	/// <param name="_t">StageManagerで初期化したトランスフォーム</param>
-	void InitPillerTransform(Transform _t);
+	void InitPillarTransform(Transform _t);
 	
 	/// <summary>
 	/// 各鉄線の衝突判定を設定

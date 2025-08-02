@@ -53,7 +53,7 @@ public:
 	void UpdateTimeCount();
 
 	//ゲーム時間の計算
-	void TimeCalclation();
+	void TimeCalculation();
 
 	//----------セッター・ゲッター関数----------
 	int GetTimeTen() const { return Timeten_; }

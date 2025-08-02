@@ -131,6 +131,6 @@ public:
 	void SetTargetPosition(XMFLOAT3 _targetpos) { TargetPosition_ = _targetpos; }
 	XMFLOAT3 GetTargetPosition() const {return TargetPosition_; }
 
-	void SetTargetAcceleration(float _acceleration) { TargetAcceleration_ = TargetAcceleration_; }
+	void SetTargetAcceleration(float _acceleration) { TargetAcceleration_ = _acceleration; }
 	float GetTargetAcceleration() const { return TargetAcceleration_; }
 };

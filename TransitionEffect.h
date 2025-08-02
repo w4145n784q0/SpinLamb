@@ -21,8 +21,8 @@ private:
 
         NoneEffect = 0,
         S_FadeOutBlack,//黒くフェードアウト
-        S_FadeInBlack,//白くフェードイン
-        S_FadeOutWhite,//黒くフェードイン
+        S_FadeInBlack,//黒くフェードイン
+        S_FadeOutWhite,//白くフェードアウト
         S_FadeInWhite,//白くフェードイン
         S_SlideInLTR,//スライドイン
         S_ZoomIn,//ズームイン
@@ -103,7 +103,7 @@ public:
     void UpdateZoomOut();
 
     //CSVファイルから必要パラメータを読み込みする
-    void SetSCVTransitionEffect();
+    void SetCSVTransitionEffect();
 
 
     /// <summary>

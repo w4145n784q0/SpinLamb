@@ -12,28 +12,28 @@
 
 namespace
 {
-	//柱の数 setpillerの初期化に用いる
-	int pillerNum = 0;
+	//柱の数 setpillarの初期化に用いる
+	int PillarNum = 0;
 
 	//鉄線のトランスフォーム
-	Transform wireTransform;
+	Transform WireTransform;
 
 	//柱のトランスフォーム(回転・拡大率のみ 位置は別に扱う)
-	Transform pillerTransform;
+	Transform PillarTransform;
 
 	//柱の位置を格納するTransform配列
-	std::vector<Transform> pillersTransformArray = {};
+	std::vector<Transform> PillarsTransformArray = {};
 
 	//柱の位置(XMFLOAT3)の配列
-	std::vector<XMFLOAT3> PillerPosArray = {};
+	std::vector<XMFLOAT3> PillarPosArray = {};
 
 	//Imgui表示用の文字列配列
-	std::string PillerNameArray[] = { "UpperPiller", "LowerPiller", "RightPiller", "LeftPiller" };
+	std::string PillarNameArray[] = { "UpperPillar", "LowerPillar", "RightPillar", "LeftPillar" };
 }
 
 Fence::Fence(GameObject* parent)
-	:GameObject(parent,"Fence"),hPiller_(-1), hFence_(-1),
-	piller_UpperLeft_({0,0,0}),piller_UpperRight_({0,0,0}),piller_LowerLeft_({0,0,0}),piller_LowerRight_({0,0,0})
+	:GameObject(parent,"Fence"),hPillar_(-1), hFence_(-1),
+	Pillar_UpperLeft_({0,0,0}),Pillar_UpperRight_({0,0,0}),Pillar_LowerLeft_({0,0,0}),Pillar_LowerRight_({0,0,0})
 {
 }
 
@@ -44,8 +44,8 @@ Fence::~Fence()
 void Fence::Initialize()
 {
 	//各モデル読み込み
-	hPiller_ = Model::Load("Model\\Piller.fbx");
-	assert(hPiller_ >= 0);
+	hPillar_ = Model::Load("Model\\Pillar.fbx");
+	assert(hPillar_ >= 0);
 
 	hFence_ = Model::Load("Model\\Wire.fbx");
 	assert(hFence_ >= 0);
@@ -65,12 +65,12 @@ void Fence::Update()
 void Fence::Draw()
 {
 	//柵モデルの描画
-	Model::SetAndDraw(hFence_, wireTransform);
+	Model::SetAndDraw(hFence_, WireTransform);
 
 	//柱モデルの描画
-	for (int i = 0; i < pillersTransformArray.size(); i++)
+	for (int i = 0; i < PillarsTransformArray.size(); i++)
 	{
-		Model::SetAndDraw(hPiller_, pillersTransformArray[i]);
+		Model::SetAndDraw(hPillar_, PillarsTransformArray[i]);
 	}
 }
 
@@ -85,35 +85,35 @@ void Fence::DrawImGui()
 	{
 		if (ImGui::TreeNode("wire"))
 		{
-			ImGui::InputFloat("FencePositionX", &wireTransform.position_.x, ZeroPointOne);
-			ImGui::InputFloat("FencePositionY", &wireTransform.position_.y, ZeroPointOne);
-			ImGui::InputFloat("FencePositionZ", &wireTransform.position_.z, ZeroPointOne);
+			ImGui::InputFloat("FencePositionX", &WireTransform.position_.x, ZeroPointOne);
+			ImGui::InputFloat("FencePositionY", &WireTransform.position_.y, ZeroPointOne);
+			ImGui::InputFloat("FencePositionZ", &WireTransform.position_.z, ZeroPointOne);
 
-			ImGui::InputFloat("FenceRotateX", &wireTransform.rotate_.x, ZeroPointOne);
-			ImGui::InputFloat("FenceRotateY", &wireTransform.rotate_.y, ZeroPointOne);
-			ImGui::InputFloat("FenceRotateZ", &wireTransform.rotate_.z, ZeroPointOne);
+			ImGui::InputFloat("FenceRotateX", &WireTransform.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("FenceRotateY", &WireTransform.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("FenceRotateZ", &WireTransform.rotate_.z, ZeroPointOne);
 
-			ImGui::InputFloat("FenceScaleX", &wireTransform.scale_.x, ZeroPointOne);
-			ImGui::InputFloat("FenceScaleY", &wireTransform.scale_.y, ZeroPointOne);
-			ImGui::InputFloat("FenceScaleZ", &wireTransform.scale_.z, ZeroPointOne);
+			ImGui::InputFloat("FenceScaleX", &WireTransform.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("FenceScaleY", &WireTransform.scale_.y, ZeroPointOne);
+			ImGui::InputFloat("FenceScaleZ", &WireTransform.scale_.z, ZeroPointOne);
 			ImGui::TreePop();
 		}
 
-		if (ImGui::TreeNode("Piller"))
+		if (ImGui::TreeNode("Pillar"))
 		{
-			for (int i = 0; i < pillersTransformArray.size(); i++)
+			for (int i = 0; i < PillarsTransformArray.size(); i++)
 			{
-				ImGui::InputFloat((PillerNameArray[i] + " PotisionX").c_str(), &pillersTransformArray[i].position_.x, ZeroPointOne);
-				ImGui::InputFloat((PillerNameArray[i] + " PotisionY").c_str(), &pillersTransformArray[i].position_.y, ZeroPointOne);
-				ImGui::InputFloat((PillerNameArray[i] + " PotisionZ").c_str(), &pillersTransformArray[i].position_.z, ZeroPointOne);
+				ImGui::InputFloat((PillarNameArray[i] + " PosisionX").c_str(), &PillarsTransformArray[i].position_.x, ZeroPointOne);
+				ImGui::InputFloat((PillarNameArray[i] + " PositionY").c_str(), &PillarsTransformArray[i].position_.y, ZeroPointOne);
+				ImGui::InputFloat((PillarNameArray[i] + " PositionZ").c_str(), &PillarsTransformArray[i].position_.z, ZeroPointOne);
 
-				ImGui::InputFloat((PillerNameArray[i] + " RotateX").c_str(), &pillersTransformArray[i].rotate_.x, ZeroPointOne);
-				ImGui::InputFloat((PillerNameArray[i] + " RotateY").c_str(), &pillersTransformArray[i].rotate_.y, ZeroPointOne);
-				ImGui::InputFloat((PillerNameArray[i] + " RotateZ").c_str(), &pillersTransformArray[i].rotate_.z, ZeroPointOne);
+				ImGui::InputFloat((PillarNameArray[i] + " RotateX").c_str(), &PillarsTransformArray[i].rotate_.x, ZeroPointOne);
+				ImGui::InputFloat((PillarNameArray[i] + " RotateY").c_str(), &PillarsTransformArray[i].rotate_.y, ZeroPointOne);
+				ImGui::InputFloat((PillarNameArray[i] + " RotateZ").c_str(), &PillarsTransformArray[i].rotate_.z, ZeroPointOne);
 
-				ImGui::InputFloat((PillerNameArray[i] + " ScaleX").c_str(), &pillersTransformArray[i].scale_.x, ZeroPointOne);
-				ImGui::InputFloat((PillerNameArray[i] + " ScaleY").c_str(), &pillersTransformArray[i].scale_.y, ZeroPointOne);
-				ImGui::InputFloat((PillerNameArray[i] + " ScaleZ").c_str(), &pillersTransformArray[i].scale_.z, ZeroPointOne);
+				ImGui::InputFloat((PillarNameArray[i] + " ScaleX").c_str(), &PillarsTransformArray[i].scale_.x, ZeroPointOne);
+				ImGui::InputFloat((PillarNameArray[i] + " ScaleY").c_str(), &PillarsTransformArray[i].scale_.y, ZeroPointOne);
+				ImGui::InputFloat((PillarNameArray[i] + " ScaleZ").c_str(), &PillarsTransformArray[i].scale_.z, ZeroPointOne);
 
 			}
 			ImGui::TreePop();
@@ -123,44 +123,44 @@ void Fence::DrawImGui()
 #endif
 }
 
-void Fence::SetPiller(float upper, float lower, float left, float right, float height)
+void Fence::SetPillar(float upper, float lower, float left, float right, float height)
 {
 	//柱の位置(左上,右上,左下,右下)を設定
-	piller_UpperLeft_ = { left,height,upper };
-	piller_UpperRight_ = { right,height,upper };
-	piller_LowerLeft_ = { left, height,lower };
-	piller_LowerRight_ = { right, height,lower };
+	Pillar_UpperLeft_ = { left,height,upper };
+	Pillar_UpperRight_ = { right,height,upper };
+	Pillar_LowerLeft_ = { left, height,lower };
+	Pillar_LowerRight_ = { right, height,lower };
 	
-	//この時点でPillerPosArrayの値を初期化
-	PillerPosArray = { piller_UpperLeft_ ,piller_UpperRight_ , piller_LowerLeft_,piller_LowerRight_ };
+	//この時点でPillarPosArrayの値を初期化
+	PillarPosArray = { Pillar_UpperLeft_, Pillar_UpperRight_,  Pillar_LowerLeft_, Pillar_LowerRight_ };
 
-	//pillersTransformのサイズを柱の数分に変更
-	pillersTransformArray.resize(pillerNum);
+	//PillarsTransformのサイズを柱の数分に変更
+	PillarsTransformArray.resize(PillarNum);
 
 	//柱の位置,回転,拡大率を配列にセット
-	//位置はPillerPosArrayの値を用いる
-	//回転,拡大率はpillerTransformで統一
-	for (int i = 0; i < pillerNum; i++)
+	//位置はPillarPosArrayの値を用いる
+	//回転,拡大率はpillarTransformで統一
+	for (int i = 0; i < PillarNum; i++)
 	{
-		pillersTransformArray[i].position_ = PillerPosArray[i];
-		pillersTransformArray[i].rotate_ = pillerTransform.rotate_;
-		pillersTransformArray[i].scale_ = pillerTransform.scale_;
+		PillarsTransformArray[i].position_ = PillarPosArray[i];
+		PillarsTransformArray[i].rotate_ = PillarTransform.rotate_;
+		PillarsTransformArray[i].scale_ = PillarTransform.scale_;
 	}
 }
 
-void Fence::SetPillerNum(int num)
+void Fence::SetPillarNum(int num)
 {
-	pillerNum = num;
+	PillarNum = num;
 }
 
 void Fence::InitWireTransform(Transform _t)
 {
-	wireTransform = _t;
+	WireTransform = _t;
 }
 
-void Fence::InitPillerTransform(Transform _t)
+void Fence::InitPillarTransform(Transform _t)
 {
-	pillerTransform = _t;
+	PillarTransform = _t;
 }
 
 void Fence::SetWireCollisionUpper(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal)

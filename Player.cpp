@@ -195,7 +195,7 @@ void Player::PlayerRun()
 	//柵に接触状態でなければ無敵時間を更新
 	if (!(PlayerState_ == S_FENCEHIT))
 	{
-		InvincibilityTimeCalclation();
+		InvincibilityTimeCalculation();
 	}
 
 	//毎フレームカメラの更新
@@ -237,7 +237,7 @@ void Player::UpdateIdle()
 	}
 
 	//キーボードの入力した分を実際に移動
-	KeyBoradMove();
+	KeyBoardMove();
 
 	//------------------ゲームパッドスティックの移動------------------//
 
@@ -425,7 +425,7 @@ void Player::UpdateStop()
 void Player::PlayerInit(std::string _CSVpath, std::string _Modelpath)
 {
 	//csvからパラメータ読み込み
-	SetcsvStatus(_CSVpath);
+	SetCSVStatus(_CSVpath);
 
 	//csvからパラメータ読み込み(Playerのみ使う情報)
 	SetCSVPlayer(_CSVpath);
@@ -590,7 +590,7 @@ void Player::CameraUpdate()
 	//カメラの位置・焦点はGameViewから行う
 }
 
-void Player::KeyBoradMove()
+void Player::KeyBoardMove()
 {
 	//キーボード入力時の移動・回転計算
 

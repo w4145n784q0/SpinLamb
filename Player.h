@@ -127,7 +127,7 @@ public:
 	void CameraUpdate();
 
 	//キーボード移動操作
-	void KeyBoradMove();
+	void KeyBoardMove();
 
 	/// <summary>
 	/// コントローラ移動操作
