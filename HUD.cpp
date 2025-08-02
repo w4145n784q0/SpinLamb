@@ -158,43 +158,43 @@ void HUD::Initialize()
 	hFinish_ = Image::Load(Image + Battle + "FinishLogo.png");
 	assert(hFinish_ >= 0);
 
-	hNumber0_ = Image::Load(Image + Number + "number_0.png");
+	hNumber0_ = Image::Load(Image + Number + "Number0.png");
 	assert(hNumber0_ >= 0);
 
-	hNumber1_ = Image::Load(Image + Number + "number_1.png");
+	hNumber1_ = Image::Load(Image + Number + "Number1.png");
 	assert(hNumber1_ >= 0);
 
-	hNumber2_ = Image::Load(Image + Number + "number_2.png");
+	hNumber2_ = Image::Load(Image + Number + "Number2.png");
 	assert(hNumber2_ >= 0);
 	
-	hNumber3_ = Image::Load(Image + Number + "number_3.png");
+	hNumber3_ = Image::Load(Image + Number + "Number3.png");
 	assert(hNumber3_ >= 0);
 	
-	hNumber4_ = Image::Load(Image + Number + "number_4.png");
+	hNumber4_ = Image::Load(Image + Number + "Number4.png");
 	assert(hNumber4_ >= 0);
 
-	hNumber5_ = Image::Load(Image + Number + "number_5.png");
+	hNumber5_ = Image::Load(Image + Number + "Number5.png");
 	assert(hNumber5_ >= 0);
 
-	hNumber6_ = Image::Load(Image + Number + "number_6.png");
+	hNumber6_ = Image::Load(Image + Number + "Number6.png");
 	assert(hNumber6_ >= 0);
 
-	hNumber7_ = Image::Load(Image + Number + "number_7.png");
+	hNumber7_ = Image::Load(Image + Number + "Number7.png");
 	assert(hNumber7_ >= 0);
 
-	hNumber8_ = Image::Load(Image + Number + "number_8.png");
+	hNumber8_ = Image::Load(Image + Number + "Number8.png");
 	assert(hNumber8_ >= 0);
 
-	hNumber9_ = Image::Load(Image + Number + "number_9.png");
+	hNumber9_ = Image::Load(Image + Number + "Number9.png");
 	assert(hNumber9_ >= 0);
 
 	hMap_ = Image::Load(Image + MiniMap + "MiniMap.png");
 	assert(hMap_ >= 0);
 
-	hFirstIcon_ = Image::Load(Image + MiniMap + "blue_circle.png");
+	hFirstIcon_ = Image::Load(Image + MiniMap + "BlueIcon.png");
 	assert(hFirstIcon_ >= 0);
 
-	hSecondIcon_ = Image::Load(Image + MiniMap + "red_circle.png");
+	hSecondIcon_ = Image::Load(Image + MiniMap + "RedIcon.png");
 	assert(hSecondIcon_ >= 0);
 
 

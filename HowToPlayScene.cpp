@@ -28,26 +28,26 @@ void HowToPlayScene::Initialize()
 	//パスの一部を文字列にし、結合させる
 	std::string path = "Image\\HowToPlay\\";
 
-	hExplanation_ = Image::Load(path + "spinlamb_explanation.jpg");
+	hExplanation_ = Image::Load(path + "Explanation.jpg");
 	assert(hExplanation_ >= 0);
 
-	hOperateKeyboard_ = Image::Load(path + "Howto_keyboard.jpg");
+	hOperateKeyboard_ = Image::Load(path + "HowToKeyboard.jpg");
 	assert(hOperateKeyboard_ >= 0);
 
-	hOperateController_ = Image::Load(path + "Howto_controller.jpg");
+	hOperateController_ = Image::Load(path + "HowToController.jpg");
 	assert(hOperateController_ >= 0);
 
-	hSoundHowtoPlay_ = Audio::Load("Sound\\BGM\\howtoPlay.wav", true);
+	hSoundHowtoPlay_ = Audio::Load("Sound\\BGM\\HowToPlay.wav", true);
 	assert(hSoundHowtoPlay_ >= 0);
 
-	hSoundSelect_ = Audio::Load("Sound\\SE\\select.wav", false, Audio::GetSelectNum());
+	hSoundSelect_ = Audio::Load("Sound\\SE\\Select.wav", false, Audio::GetSelectNum());
 	assert(hSoundSelect_ >= 0);
 
-	hSoundBackGameMode_ = Audio::Load("Sound\\SE\\cancel.wav", false, Audio::GetCancelNum());
+	hSoundBackGameMode_ = Audio::Load("Sound\\SE\\Cancel.wav", false, Audio::GetCancelNum());
 	assert(hSoundBackGameMode_ >= 0);
 
 	//リストに各状態を追加
-	ImageList_ = { Explanation ,OperateKeyBoard,OperateController};
+	ImageList_ = { Explanation, OperateKeyBoard, OperateController };
 
 	////インデックスの初期位置を指定
 	itr = ImageList_.begin();

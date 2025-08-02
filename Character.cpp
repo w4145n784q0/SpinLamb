@@ -116,11 +116,11 @@ Character::Character(GameObject* parent, const std::string& name)
 	InitCSVEffect();
 
 	//サウンドの読み込み
-	hSoundcharge_ = Audio::Load("Sound\\SE\\charge.wav",false, Audio::GetChargeNum());
+	hSoundcharge_ = Audio::Load("Sound\\SE\\Charge.wav",false, Audio::GetChargeNum());
 	assert(hSoundcharge_ >= 0);
-	hSoundattack_ = Audio::Load("Sound\\SE\\attack.wav", false, Audio::GetAttackNum());
+	hSoundattack_ = Audio::Load("Sound\\SE\\Attack.wav", false, Audio::GetAttackNum());
 	assert(hSoundattack_ >= 0);
-	hSoundCollision_ = Audio::Load("Sound\\SE\\collision.wav",false, Audio::GetCollisionNum());
+	hSoundCollision_ = Audio::Load("Sound\\SE\\Collision.wav",false, Audio::GetCollisionNum());
 	assert(hSoundCollision_ >= 0);
 
 	//それぞれの柵の法線を取得

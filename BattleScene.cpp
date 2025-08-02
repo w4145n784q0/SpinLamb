@@ -188,13 +188,13 @@ void BattleScene::Initialize()
 	pGameTimer_->SetCurrentGameTime(GameTimeLimit);
 
 	//各画像・サウンドの読み込み
-	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");
+	hBackScreen_ = Image::Load("Image\\Battle\\BackSky.jpg");
 	assert(hBackScreen_ >= 0);
 
-	hSoundBattle_ = Audio::Load("Sound\\BGM\\battle.wav",true);
+	hSoundBattle_ = Audio::Load("Sound\\BGM\\Battle.wav",true);
 	assert(hSoundBattle_>= 0);
 
-	hSoundWhistle_ = Audio::Load("Sound\\SE\\whistle.wav", false, Audio::GetWhistleNum());
+	hSoundWhistle_ = Audio::Load("Sound\\SE\\Whistle.wav", false, Audio::GetWhistleNum());
 	assert(hSoundWhistle_ >= 0);
 
 	//Player,Enemyのスコアを初期化

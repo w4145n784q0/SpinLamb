@@ -44,7 +44,7 @@ void GameModeScene::Initialize()
 	//パスの一部を文字列にし、結合させる
 	std::string path = "Image\\GameMode\\";
 
-	hBackScreen_ = Image::Load(path + "back_mode.jpg");
+	hBackScreen_ = Image::Load(path + "GameModeScreen.jpg");
 	assert(hBackScreen_ >= 0);
 
 	hBackChara_ = Image::Load(path + "SheepImage.png");
@@ -86,16 +86,16 @@ void GameModeScene::Initialize()
 	hPlayerSelectIcon_ = Image::Load(path + "SelectIcon.png");
 	assert(hPlayerSelectIcon_ >= 0);
 
-	hSoundGameMode_ = Audio::Load("Sound\\BGM\\gameMode.wav",true);
+	hSoundGameMode_ = Audio::Load("Sound\\BGM\\GameMode.wav",true);
 	assert(hSoundGameMode_ >= 0);
 
-	hSoundDecide_ = Audio::Load("Sound\\SE\\decide.wav", false, Audio::GetDecideNum());
+	hSoundDecide_ = Audio::Load("Sound\\SE\\Decide.wav", false, Audio::GetDecideNum());
 	assert(hSoundDecide_ >= 0);
 
-	hSoundSelect_ = Audio::Load("Sound\\SE\\select.wav", false, Audio::GetSelectNum());
+	hSoundSelect_ = Audio::Load("Sound\\SE\\Select.wav", false, Audio::GetSelectNum());
 	assert(hSoundSelect_ >= 0);
 
-	hSoundCancel_ = Audio::Load("Sound\\SE\\cancel.wav", false, Audio::GetCancelNum());
+	hSoundCancel_ = Audio::Load("Sound\\SE\\Cancel.wav", false, Audio::GetCancelNum());
 	assert(hSoundCancel_ >= 0);
 
 	//各モードの画像ハンドルを配列に入れる

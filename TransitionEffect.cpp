@@ -30,10 +30,10 @@ void TransitionEffect::Initialize()
 	SetCSVTransitionEffect();
 
 	//Še‰æ‘œ‚Ì“Ç‚Ýž‚Ý
-	hFadeBlack_ = Image::Load("Image\\Transition\\fade_black.png");
+	hFadeBlack_ = Image::Load("Image\\Transition\\FadeBlack.png");
 	assert(hFadeBlack_ >= 0);
 
-	hFadeWhite_ = Image::Load("Image\\Transition\\fade_white.png");
+	hFadeWhite_ = Image::Load("Image\\Transition\\FadeWhite.png");
 	assert(hFadeWhite_ >= 0);
 
 	hZoomSheep_ = Image::Load("Image\\Transition\\SheepBlack.png");

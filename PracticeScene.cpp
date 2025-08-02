@@ -170,10 +170,10 @@ void PracticeScene::Initialize()
 
 
 	//各画像・サウンドの読み込み
-	hBackScreen_ = Image::Load("Image\\Battle\\back_sky.jpg");
+	hBackScreen_ = Image::Load("Image\\Battle\\BackSky.jpg");
 	assert(hBackScreen_ >= 0);
 
-	hSoundPractice_ = Audio::Load("Sound\\BGM\\practice.wav", true);
+	hSoundPractice_ = Audio::Load("Sound\\BGM\\Practice.wav", true);
 	assert(hSoundPractice_ >= 0);
 
 	//フリープレイ用サウンド再生

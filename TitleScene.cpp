@@ -22,9 +22,9 @@ void TitleScene::Initialize()
 	//各画像・サウンドの読み込み
 	hBackScreen_ = Image::Load("Image\\Title\\TitleScreen.jpg");
 	assert(hBackScreen_ >= 0);
-	hSoundTitle_ = Audio::Load("Sound\\BGM\\title.wav",true); 
+	hSoundTitle_ = Audio::Load("Sound\\BGM\\Title.wav",true); 
 	assert(hSoundTitle_ >= 0);
-	hSoundStart_ = Audio::Load("Sound\\SE\\start.wav", false, Audio::GetStartNum());
+	hSoundStart_ = Audio::Load("Sound\\SE\\Start.wav", false, Audio::GetStartNum());
 	assert(hSoundStart_ >= 0);
 
 	//タイトル用サウンド再生

@@ -40,7 +40,7 @@ void ResultScene::Initialize()
 	SetCSVResult();
 
 	//各画像・サウンドの読み込み
-	hBackScreen_ = Image::Load("Image\\GameMode\\back_mode.jpg");
+	hBackScreen_ = Image::Load("Image\\GameMode\\GameModeScreen.jpg");
 	assert(hBackScreen_ >= 0);
 
 	//同じディレクトリ内からのパスは省略
@@ -65,10 +65,10 @@ void ResultScene::Initialize()
 	hPushTitle_ = Image::Load(path + "PushToTitle.png");
 	assert(hPushTitle_ >= 0);
 
-	hSoundResult_ = Audio::Load("Sound\\BGM\\end.wav", true);
+	hSoundResult_ = Audio::Load("Sound\\BGM\\Result.wav", true);
 	assert(hSoundResult_ >= 0);
 
-	hSoundBackTitle_ = Audio::Load("Sound\\SE\\cancel.wav", false, Audio::GetCancelNum());
+	hSoundBackTitle_ = Audio::Load("Sound\\SE\\Cancel.wav", false, Audio::GetCancelNum());
 	assert(hSoundBackTitle_ >= 0);
 
 	//SceneManagerインスタンスからBattleSceneから各スコアを取得
@@ -165,7 +165,7 @@ void ResultScene::SetCSVResult()
 {
 	//csvファイルを読み込む
 	CsvReader csv;
-	csv.Load("CSVdata\\SceneData\\SceneData.csv");
+	csv.Load("CSVdata\\SceneData\\ResultData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {
