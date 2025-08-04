@@ -124,7 +124,6 @@ void HUD::Initialize()
 
 	//csvからパラメータ読み込み
 	SetHUDCSV();
-	Easing::SetCSVEasing();
 
 	//同じディレクトリ内からのパスは省略
 	//パスの一部を文字列にし、結合させる

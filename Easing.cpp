@@ -2,86 +2,220 @@
 #include"Engine/SceneManager.h"
 #include"Engine/CsvReader.h"
 
-namespace
+namespace Easing
 {
-    //イージング処理全般に使用する値を初期化する際のインデックス
-    enum CommonEasingIndex
-    {
-        i_adjust = 0,
-        i_squared,
-        i_cubed,
-    };
+   
 
-    //easeOutBackに使用する際のインデックス
-    enum easeOutBackIndex
-    {
-        i_overshoot = 0,
-    };
-
-    //イージングの補正値(基本1.0)
-    double Adjust = 0.0;
-
-    //2乗する際の指数 pow()に使用
-    int Squared = 0;
-
-    //3乗する際の指数 pow()に使用
-    int Cubed = 0;
-
-    //EaseOutBackの演出用の構造体
-    struct EaseOutBack
-    {
-        double OverShoot = 0.0;//イージング曲線の跳ね返り具合
-    };
-    EaseOutBack EaseOutBackParam;
+double Easing::EaseInSine(double x)
+{
+    return 1 - cos(((x) * XM_PI) / 2.0f);
 }
 
-double Easing::easeOutBack(double x)
+double Easing::EaseOutSine(double x)
 {
-    const double c1 = EaseOutBackParam.OverShoot;
-    const double c3 = c1 + Adjust;
+    return  sin((x * XM_PI) / 2);
+}
 
-    //1 + c3 *  (x - 1)^3 + c1 * (x - 1)^2;
-    return Adjust + c3 * pow(x - Adjust, Cubed) + c1 * pow(x - Adjust, Squared);
+double Easing::EaseInOutSine(double x)
+{
+    return  -(cos(XM_PI * x) - 1) / 2;
+}
+
+double Easing::EaseInQuad(double x)
+{
+    return x * x;
+}
+
+double Easing::EaseOutQuad(double x)
+{
+    return 1 - (1 - x) * (1 - x);
+}
+
+double Easing::EaseInOutQuad(double x)
+{
+    return x < 0.5 ? 2 * x * x : 1 - pow(-2 * x + 2, 2) / 2;
+}
+
+double Easing::EaseInCubic(double x)
+{
+    return x * x * x;
 }
 
 double Easing::easeOutCubic(double x)
 {
-    //1 - (1 - x, 3)^3;
-   return Adjust - pow(Adjust - x, Cubed);
+    return 1 - pow(1 - x, 3);
+}
+
+double Easing::EaseInOutCubic(double x)
+{
+    return x < 0.5 ? 4 * x * x * x : 1 - pow(-2 * x + 2, 3) / 2;
+}
+
+double Easing::EaseInQuart(double x)
+{
+    return x * x * x * x;
+}
+
+double Easing::EaseOutQuart(double x)
+{
+    return 1 - pow(1 - x, 4);
+}
+
+double Easing::EaseInOutQuart(double x)
+{
+    return x < 0.5 ? 8 * x * x * x * x : 1 - pow(-2 * x + 2, 4) / 2;
+}
+
+double Easing::EaseInQuint(double x)
+{
+    return x * x * x * x * x;
+}
+
+double Easing::EaseOutQuint(double x)
+{
+    return 1 - pow(1 - x, 5);
+}
+
+double Easing::EaseInOutQuint(double x)
+{
+    return x < 0.5 ? 16 * x * x * x * x * x : 1 - pow(-2 * x + 2, 5) / 2;
+}
+
+double Easing::EaseInExpo(double x)
+{
+    return x == 0 ? 0 : pow(2, 10 * x - 10);
+}
+
+double Easing::EaseOutExpo(double x)
+{
+    return x == 1 ? 1 : 1 - pow(2, -10 * x);
+}
+
+double Easing::EaseInOutExpo(double x)
+{
+    return x == 0
+        ? 0
+        : x == 1
+        ? 1
+        : x < 0.5 ? pow(2, 20 * x - 10) / 2
+        : (2 - pow(2, -20 * x + 10)) / 2;
+}
+
+double Easing::EaseInCirc(double x)
+{
+    return 1 - sqrt(1 - pow(x, 2));
+}
+
+double Easing::EaseOutCirc(double x)
+{
+    return sqrt(1 - pow(x - 1, 2));
+}
+
+double Easing::EaseInOutCirc(double x)
+{
+    return x < 0.5
+        ? (1 - sqrt(1 - pow(2 * x, 2))) / 2
+        : (sqrt(1 - pow(-2 * x + 2, 2)) + 1) / 2;
+}
+
+double Easing::EaseInBack(double x)
+{
+    float c1 = 1.70158f;
+    float c3 = c1 + 1;
+
+    return c3 * x * x * x - c1 * x * x;
+}
+
+double Easing::easeOutBack(double x)
+{
+    float c1 = 1.70158;
+    float c3 = c1 + 1;
+
+    return 1 + c3 * pow(x - 1, 3) + c1 * pow(x - 1, 2);
+}
+
+double Easing::EaseInOutBack(double x)
+{
+    float c1 = 1.70158;
+    float c2 = c1 * 1.525;
+
+    return x < 0.5
+        ? (pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2
+        : (pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2;
+}
+
+double Easing::EaseInElastic(double x)
+{
+    float c4 = (2 * XM_PI) / 3;
+
+    return x == 0
+        ? 0
+        : x == 1
+        ? 1
+        : -pow(2, 10 * x - 10) * sin((x * 10 - 10.75) * c4);
+}
+
+double Easing::EaseOutElastic(double x)
+{
+    float c4 = (2 * XM_PI) / 3;
+
+    return x == 0
+        ? 0
+        : x == 1
+        ? 1
+        : pow(2, -10 * x) * sin((x * 10 - 0.75) * c4) + 1;
+}
+
+double Easing::EaseInOutElastic(double x)
+{
+    float c5 = (2 * XM_PI) / 4.5;
+
+    return x == 0
+        ? 0
+        : x == 1
+        ? 1
+        : x < 0.5
+        ? -(pow(2, 20 * x - 10) * sin((20 * x - 11.125) * c5)) / 2
+        : (pow(2, -20 * x + 10) * sin((20 * x - 11.125) * c5)) / 2 + 1;
+
+}
+
+double Easing::EaseInBounce(double x)
+{
+    return 1 - EaseOutBounce(1 - x);
+}
+
+double Easing::EaseOutBounce(double x)
+{
+    float n1 = 7.5625;
+    float d1 = 2.75;
+
+    if (x < 1 / d1) {
+        return n1 * x * x;
+    }
+    else if (x < 2 / d1) {
+        return n1 * (x -= 1.5 / d1) * x + 0.75;
+    }
+    else if (x < 2.5 / d1) {
+        return n1 * (x -= 2.25 / d1) * x + 0.9375;
+    }
+    else {
+        return n1 * (x -= 2.625 / d1) * x + 0.984375;
+    }
+}
+
+double Easing::EaseInOutBounce(double x)
+{
+    return x < 0.5
+        ? (1 - EaseOutBounce(1 - 2 * x)) / 2
+        : (1 + EaseOutBounce(2 * x - 1)) / 2;
 }
 
 double Easing::calculateScale(float _MaxScale, float _EasingCount)
 {
     //tmp = 1 + (目標スケール - 1) * easeOutBack(x);
-    double tmp = Adjust + (_MaxScale - Adjust) * Easing::easeOutBack(_EasingCount);
+    double tmp = 1 + (_MaxScale - 1) * Easing::easeOutBack(_EasingCount);
     return tmp;
 }
 
-void Easing::SetCSVEasing()
-{
-    //csvファイル読み込む
-    CsvReader csveasing;
-    csveasing.Load("CSVdata\\EffectData\\EasingData.csv");
-
-    //csvファイルの各0列目の文字列を取得
-    std::string easeInit= "CommonEasing";
-
-    //0列目の文字列を渡し、その行のパラメータを取得
-    std::vector<float> easeInitData = csveasing.GetParam(easeInit);
-
-    //初期化の順番はcsvの各行の順番に合わせる
-    //vの添え字はnamespaceで宣言した列挙型を使用
-    Adjust = static_cast<double>(easeInitData[i_adjust]);
-    Squared = static_cast<int>(easeInitData[i_squared]);
-    Cubed = static_cast<int>(easeInitData[i_cubed]);
-
-    //csvファイルの各0列目の文字列を取得
-    std::string easeout = "EaseOutBackParam";
-
-    //0列目の文字列を渡し、その行のパラメータを取得
-    std::vector<float> easeoutData = csveasing.GetParam(easeout);
-
-    //初期化の順番はcsvの各行の順番に合わせる
-    //vの添え字はnamespaceで宣言した列挙型を使用
-    EaseOutBackParam.OverShoot = easeoutData[i_overshoot];
 }
