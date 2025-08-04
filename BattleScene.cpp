@@ -223,6 +223,7 @@ void BattleScene::Update()
 	}
 
 	//ミニマップの位置を更新
+	//Enemy,Player2のnullチェックを行い,存在するなら位置データを渡す
 	pMiniMap_->SetOriginalFirstPos(pPlayer1_->GetPosition());
 	if (pPlayer2_ != nullptr)
 	{
@@ -354,8 +355,8 @@ void BattleScene::UpdateBattleReady()
 		BattleState_ = S_NOW;
 
 		//時間経過でPlayer,Enemyに移動許可を出す
+		//Enemy,Player2のnullチェックを行い、存在するなら実行
 		pPlayer1_->PlayerStart();
-		//pEnemy_->EnemyStart();
 
 		if (pPlayer2_ != nullptr)
 		{
@@ -387,6 +388,8 @@ void BattleScene::UpdateBattle()
 		pGameTimer_->StopTimer();
 
 		//player,Enemyの動きを止める
+		//Enemy,Player2のnullチェックを行い、存在するなら実行
+
 		pPlayer1_->PlayerStop();
 
 		if (pPlayer2_ != nullptr)
@@ -445,22 +448,27 @@ void BattleScene::SetCSVBattle()
 	GameTimeLimit = static_cast<int>(battleData[i_gametimelimit]);
 }
 
-void BattleScene::OnCharacterFenceHit(int HitCharaID)
+void BattleScene::OnCharacterFenceHit(int _HitCharaID)
 {
-	if (pPlayer1_->GetID() == HitCharaID)
+	//_HitCharaIDには柵に接触したキャラクターIDが入る
+	//それぞれ接触したキャラクターIDを確認し
+	//一致するなら相手側のスコアを加算する
+	//Enemy,Player2は必ずnullチェックする
+
+	if (pPlayer1_->GetID() == _HitCharaID)
 	{
 		PlusSecondScore();
 	}
 	else if (pEnemy_ != nullptr)
 	{
-		if (pEnemy_->GetID() == HitCharaID)
+		if (pEnemy_->GetID() == _HitCharaID)
 		{
 			PlusFirstScore();
 		}
 	}
 	else if (pPlayer2_ != nullptr)
 	{
-		if (pPlayer2_->GetID() == HitCharaID)
+		if (pPlayer2_->GetID() == _HitCharaID)
 		{
 			PlusFirstScore();
 		}

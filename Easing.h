@@ -1,6 +1,7 @@
 #pragma once
 
 //イージング処理を行う
+//参考: https://easings.net/ja
 namespace Easing
 {
 	//----------イージング関数----------

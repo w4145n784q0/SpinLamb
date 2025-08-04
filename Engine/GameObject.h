@@ -326,7 +326,7 @@ public:
 			else
 			{
 				//配列が空だった場合はエラーメッセージを出す
-				std::string message = "指定された文字列" + _name + "のデータが見つかりません。";
+				std::string message = "指定された文字列" + _name + "のデータはありませんでした。";
 				MessageBox(NULL, message.c_str(), "BaseProjDx9エラー", MB_OK);
 
 				//空の配列を返す

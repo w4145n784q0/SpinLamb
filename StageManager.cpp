@@ -25,6 +25,7 @@ namespace
 	};
 
 	//インスタンス
+	//このcppファイル内で一度しか使わないので名前空間で宣言
 	Ground* pGround_ = nullptr;
 	Fence* pFence_ = nullptr;
 	OutStageThing* pOutStageThing_ = nullptr;
@@ -87,7 +88,7 @@ void StageManager::SetStageInitCSV()
 
 	//csvファイルを読み込む
 	CsvReader csv;
-	csv.Load("CSVdata\\StageData\\StageData.csv");
+	csv.Load("CSVdata\\StageData\\StageTransformData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {
@@ -209,7 +210,8 @@ void StageManager::InitGroundData()
 	pGround_->SetRotate(GroundData_.rotate_);
 	pGround_->SetPosition(GroundData_.position_);
 
-	//地面クラスのポインタを渡す
+	//GameViewに地面クラスのポインタを渡す
+	//ImGui描画用
 	GameView::SetGround(pGround_);
 }
 
@@ -224,6 +226,8 @@ void StageManager::InitFenceData()
 	pFence_->InitWireTransform(WireData_);
 	pFence_->InitPillarTransform(PillarData_);
 
+	//GameViewに柵クラスのポインタを渡す
+	//ImGui描画用
 	GameView::SetFence(pFence_);
 }
 

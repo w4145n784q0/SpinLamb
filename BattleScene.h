@@ -105,17 +105,17 @@ public:
 	//CSVから必要パラメータを読み込みする
 	void SetCSVBattle();
 
-	//Playerのスコア上昇
+	//プレイヤー1のスコア上昇
 	void PlusFirstScore() { FirstScore_++; }
 
-	//CPUのスコア上昇
+	//CPU・プレイヤー2のスコア上昇
 	void PlusSecondScore() { SecondScore_++; }
 
 	/// <summary>
 	/// 柵にヒットした際の処理
 	/// </summary>
 	/// <param name="HitCharaID">ヒットしたキャラクターのID</param>
-	void OnCharacterFenceHit(int HitCharaID) override;
+	void OnCharacterFenceHit(int _HitCharaID) override;
 
 };
 
