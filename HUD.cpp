@@ -96,7 +96,7 @@ namespace
 	float LogoChangeCount = 0;
 
 	//startlogo変更の際、どのタイミングで切り替えるか(定数)
-	float LogoChange = 0.0f;
+	//float LogoChange = 0.0f;
 
 	//Go! のロゴの最大拡大率(定数)
 	float MaxScale = 0.0f;
@@ -109,7 +109,7 @@ HUD::HUD(GameObject* parent)
 	hNumber5_(-1), hNumber6_(-1), hNumber7_(-1), hNumber8_(-1), hNumber9_(-1),
 	hFinish_(-1), hMap_(-1), hFirstIcon_(-1), hSecondIcon_(-1),
 	GameModeHUD_(Max), pGameTimer_(nullptr), pMiniMap_(nullptr), DrawMode_(S_None),
-	FirstScore_(0),SecondScore_(0),ReadyTimer_(0),DrawStart_(start_max)
+	FirstScore_(0),SecondScore_(0),ReadyTimer_(0), EasingCount_(0), DrawStart_(start_max)
 
 {
 }
@@ -330,7 +330,7 @@ void HUD::SetHUDCSV()
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	LogoChange = easingData[i_logochange];
+	//LogoChange = easingData[i_logochange];
 	MaxScale = easingData[i_maxscale];
 }
 
@@ -559,15 +559,21 @@ void HUD::DrawGo()
 {
 	//徐々にロゴが拡大する動き
 
-	//カウンターに毎フレーム加算
 	EasingCount_ += DeltaTime;
 
-	//拡大率をイージング処理で計算
-	float scale = static_cast<float>(Easing::calculateScale(MaxScale, EasingCount_));
+	double t = EasingCount_ / 1.0;
+	if (t > 1.0)
+		t = 1.0;
+	else if( t < 0.0)
+		t = 0.0;
+
+	double eased = Easing::easeOutCubic(t);
+
+	double sca = 1.0 + (MaxScale - 1.0) * eased;
 
 	//トランスフォームの拡大量に代入
-	logo_start.scale_.x = scale;
-	logo_start.scale_.y = scale;
+	logo_start.scale_.x = sca;
+	logo_start.scale_.y = sca;
 
 	//"Go!"のロゴ描画
 	Image::SetAndDraw(hGo_, logo_start);

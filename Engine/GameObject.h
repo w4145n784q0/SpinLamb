@@ -291,6 +291,45 @@ public:
 	}
 
 	/// <summary>
+	/// 正規化(floatで受け取り返す)
+	/// </summary>
+	/// <param name="_value">変換される値</param>
+	/// <param name="_min">下限値</param>
+	/// <param name="_max">上限値</param>
+	/// <returns></returns>
+	float Normalize(float _value, float _min, float _max)
+	{
+		//値を0から1の範囲に正規化
+
+		//_minと_maxが同じ場合は0を返す(0除算対策)
+		if (_min == _max)
+		{
+			return 0.0f; 
+		}
+
+		// minとmaxの順序が逆なら入れ替える
+		if (_min > _max)
+		{
+			std::swap(_min, _max);
+		}
+
+		//正規化の計算(対象の値 - 下限値) / (上限値 - 下限値)
+		float normalized = (_value - _min) / (_max - _min);
+
+		//正規化された値が1.0f以上~0.0f以下にならないように値を制限
+		if (normalized >= 1.0f)
+		{
+			normalized = 1.0f;
+		}
+		if (normalized <= 0.0f)
+		{
+			normalized = 0.0f;
+		}
+
+		return normalized;
+	}
+
+	/// <summary>
 	/// csv読み込み時の各トランスフォーム初期化
 	/// </summary>
 	/// <param name="tr">代入するトランスフォーム変数</param>

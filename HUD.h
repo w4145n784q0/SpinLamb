@@ -112,7 +112,7 @@ private:
 	int ReadyTimer_;
 
 	//イージング使用時のカウンター
-	float EasingCount_ = 0;
+	float EasingCount_;
 
 public:
 	HUD(GameObject* parent);
