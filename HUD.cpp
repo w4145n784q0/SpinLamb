@@ -8,45 +8,32 @@
 //描画操作のみ扱うクラス
 namespace
 {
-	//時間の数字表記のインデックス
-	enum NumberIndex
-	{
-		i_Number0 = 0,
-		i_Number1,
-		i_Number2,
-		i_Number3,
-		i_Number4,
-		i_Number5,
-		i_Number6,
-		i_Number7,
-		i_Number8,
-		i_Number9,
-		MaxNumberIndex,
-	};
-
 	//csv読み込み時のインデックス
 	enum EasingIndex
 	{
-		i_logochange = 0,
-		i_maxscale,
+		i_gominscale = 0,
+		i_gomaxscale,
+		i_timeminscale,
+		i_timemaxscale,
+		i_timeduration,
 		i_max
 	};
 
 	//----------画像描画用トランスフォーム----------
 	//"タイトルに戻ります"
-	Transform logo_backtitle;
+	Transform LogoBackTitle;
 
 	//"練習モード"
-	Transform logo_practice;
+	Transform LogoPractice;
 
 	//ゲーム簡易説明
-	Transform logo_explanation;
+	Transform LogoExplanation;
 
 	//Ready,Go!ロゴ
-	Transform logo_start;
+	Transform LogoStart;
 
 	//Finish!ロゴ
-	Transform logo_Finish;
+	Transform LogoFinish;
 
 	//時間表記十の位
 	Transform TenTime;
@@ -72,13 +59,14 @@ namespace
 	//画像用トランスフォームを配列に入れる
 	//初期化の際に使用する
 	std::vector<std::reference_wrapper<Transform>> ImageArray = {
-	logo_backtitle,logo_practice,logo_explanation,logo_start,
-	logo_Finish ,TenTime ,OneTime, MapIcon,PlayerIcon,EnemyIcon,
+	LogoBackTitle,LogoPractice,LogoExplanation,LogoStart,
+	LogoFinish ,TenTime ,OneTime, MapIcon,PlayerIcon,EnemyIcon,
 	PlayerScoreTen,PlayerScoreOne,EnemyScoreTen, EnemyScoreOne
 	};
 
 	//ナンバーハンドルの配列
-	std::array<int, MaxNumberIndex> ArrayHandle;
+	//std::array<int, MaxNumberIndex> ArrayHandle;
+	std::vector<int> ArrayHandle = {};
 
 	//時間表記のナンバーハンドルの添え字(10の位)
 	int TimeIndexTen = 0;
@@ -95,11 +83,22 @@ namespace
 	//ロゴ変更までのカウンター
 	float LogoChangeCount = 0;
 
-	//startlogo変更の際、どのタイミングで切り替えるか(定数)
-	//float LogoChange = 0.0f;
+	//----------イージング用定数----------
+
+	//Go!のロゴの最小拡大率(定数)
+	float GoMinScale = 0.0f;
 
 	//Go! のロゴの最大拡大率(定数)
-	float MaxScale = 0.0f;
+	float GoMaxScale = 0.0f;
+
+	//制限時間の最小拡大率(定数)
+	float TimeMinScale = 0.0f;
+
+	//制限時間の最大拡大率(定数)
+	float TimeMaxScale = 0.0f;
+
+	//制限時間に行うイージング処理の実行時間(定数)
+	float TimeDuration = 0.0f;
 }
 
 HUD::HUD(GameObject* parent)
@@ -330,8 +329,11 @@ void HUD::SetHUDCSV()
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	//LogoChange = easingData[i_logochange];
-	MaxScale = easingData[i_maxscale];
+	GoMinScale = easingData[i_gominscale];
+	GoMaxScale = easingData[i_gomaxscale];
+	TimeMinScale = easingData[i_timeminscale];
+	TimeMaxScale = easingData[i_timemaxscale];
+	TimeDuration = easingData[i_timeduration];
 }
 
 void HUD::DrawPracticeLogo()
@@ -339,22 +341,22 @@ void HUD::DrawPracticeLogo()
 
 
 	//"タイトルに戻ります"ロゴ描画
-	Image::SetAndDraw(hBackTitleLogo_, logo_backtitle);
+	Image::SetAndDraw(hBackTitleLogo_, LogoBackTitle);
 
 	//"練習モード"ロゴ描画
-	Image::SetAndDraw(hPracticeNow_, logo_practice);
+	Image::SetAndDraw(hPracticeNow_, LogoPractice);
 }
 
 void HUD::DrawTimer()
 {
-
-
-
 	if(pGameTimer_ != nullptr)
 	{
 		//現在の時間(十の位,一の位)を取得
 		TimeIndexTen = pGameTimer_->GetTimeTen();
 		TimeIndexOne = pGameTimer_->GetTimeOne();
+
+		//制限時間にイージング処理を行う処理
+		DrawTimerEasing();
 
 		//制限時間の十の位,一の位を描画
 		Image::SetAndDraw(ArrayHandle[TimeIndexTen], TenTime);
@@ -362,18 +364,56 @@ void HUD::DrawTimer()
 	}
 }
 
+void HUD::DrawTimerEasing()
+{
+	//残り時間10秒でイージング拡大処理
+	if (pGameTimer_->IsEasingTime() && pGameTimer_->IsCounting())
+	{
+		//時間が切り替わったタイミングでEasingCountを戻す
+		if (pGameTimer_->GetIsSecondCount())
+		{
+			EasingCount_ = 0.0; 
+		}
+
+		if (EasingCount_ < TimeDuration)
+		{
+			//イージング経過時間を計算
+			EasingCount_ += DeltaTime;
+
+			//正規化する
+			double ratio = static_cast<double>(Normalize(EasingCount_));
+
+			//拡大率を計算
+			double eased = Easing::EaseOutCubic(ratio);
+
+			//拡大率を最小値~最大値の間で補完する
+			double sca = Easing::Complement(TimeMinScale, TimeMaxScale, eased);
+
+			//トランスフォームの拡大量に代入
+			TenTime.scale_.x = TenTime.scale_.y = OneTime.scale_.x = OneTime.scale_.y = static_cast<float>(sca);
+		}
+		else
+		{
+			//イージング完了後は拡大率を戻す
+			TenTime.scale_.x = TenTime.scale_.y = OneTime.scale_.x = OneTime.scale_.y = 1.0f;
+		}
+	}
+	else
+	{
+		//計測中でない、または残り時間10秒以上なら拡大率は1.0f
+		TenTime.scale_.x = TenTime.scale_.y = OneTime.scale_.x = OneTime.scale_.y = 1.0f;
+		EasingCount_ = 1.0f;
+	}
+}
+
 void HUD::DrawExplanation()
 {
-
-
 	//ゲーム説明ロゴ描画
-	Image::SetAndDraw(hGameExplanation_, logo_explanation);
+	Image::SetAndDraw(hGameExplanation_, LogoExplanation);
 }
 
 void HUD::DrawStartLogo()
 {
-
-
 	//DrawStartの状態によって描画するロゴを切り替える
 	//DrawStart_の状態はstart_ready->start_goの順に変化するが
 	//start_readyに戻る処理はBattleSceneから指示
@@ -395,7 +435,7 @@ void HUD::DrawFinishLogo()
 {
 
 	//"Finish!"ロゴ描画
-	Image::SetAndDraw(hFinish_, logo_Finish);
+	Image::SetAndDraw(hFinish_, LogoFinish);
 }
 
 void HUD::DrawMiniMap()
@@ -438,8 +478,8 @@ void HUD::DrawImGuiExplanation()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Explanation"))
 	{
-		ImGui::SliderFloat("ExplanationX", &logo_explanation.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("ExplanationY", &logo_explanation.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("ExplanationX", &LogoExplanation.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("ExplanationY", &LogoExplanation.position_.y, Image::UpEdge, Image::DownEdge);
 		ImGui::TreePop();
 	}
 #endif
@@ -450,8 +490,8 @@ void HUD::DrawImGuiStartLogo()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Start"))
 	{
-		ImGui::SliderFloat("StartX", &logo_start.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("StartY", &logo_start.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("StartX", &LogoStart.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("StartY", &LogoStart.position_.y, Image::UpEdge, Image::DownEdge);
 		ImGui::TreePop();
 	}
 #endif
@@ -462,8 +502,8 @@ void HUD::DrawImGuiFinishLogo()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Finish"))
 	{
-		ImGui::SliderFloat("FinishX", &logo_Finish.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("FinishY", &logo_Finish.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("FinishX", &LogoFinish.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("FinishY", &LogoFinish.position_.y, Image::UpEdge, Image::DownEdge);
 		ImGui::TreePop();
 	}
 #endif
@@ -475,11 +515,11 @@ void HUD::DrawImGuiPracticeLogo()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("PracticeLogo"))
 	{
-		ImGui::SliderFloat("backtitleX", &logo_backtitle.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("backtitleY", &logo_backtitle.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("backtitleX", &LogoBackTitle.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("backtitleY", &LogoBackTitle.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("practiceX", &logo_practice.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("practiceY", &logo_practice.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("practiceX", &LogoPractice.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("practiceY", &LogoPractice.position_.y, Image::UpEdge, Image::DownEdge);
 		ImGui::TreePop();
 	}
 #endif
@@ -546,7 +586,7 @@ void HUD::DrawReady()
 	if (++LogoChangeCount < ReadyTimer_)
 	{
 		//"Ready?"のロゴ描画
-		Image::SetAndDraw(hReady_, logo_start);
+		Image::SetAndDraw(hReady_, LogoStart);
 	}
 	else
 	{
@@ -559,22 +599,21 @@ void HUD::DrawGo()
 {
 	//徐々にロゴが拡大する動き
 
+	//イージング経過時間を計算
 	EasingCount_ += DeltaTime;
 
-	double t = EasingCount_ / 1.0;
-	if (t > 1.0)
-		t = 1.0;
-	else if( t < 0.0)
-		t = 0.0;
+	//正規化する
+	double ratio = static_cast<double>(Normalize(EasingCount_));
 
-	double eased = Easing::easeOutCubic(t);
+	//拡大率を計算
+	double eased = Easing::EaseOutElastic(ratio);
 
-	double sca = 1.0 + (MaxScale - 1.0) * eased;
+	//拡大率を最小値~最大値の間で補完する
+	double sca = Easing::Complement(GoMinScale, GoMaxScale, eased);
 
 	//トランスフォームの拡大量に代入
-	logo_start.scale_.x = sca;
-	logo_start.scale_.y = sca;
+	LogoStart.scale_.x = LogoStart.scale_.y = static_cast<float>(sca);
 
 	//"Go!"のロゴ描画
-	Image::SetAndDraw(hGo_, logo_start);
+	Image::SetAndDraw(hGo_, LogoStart);
 }

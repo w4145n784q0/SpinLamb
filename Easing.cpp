@@ -40,7 +40,7 @@ namespace Easing
         return x * x * x;
     }
 
-    double Easing::easeOutCubic(double x)
+    double Easing::EaseOutCubic(double x)
     {
         return 1 - pow(1 - x, 3);
     }
@@ -125,7 +125,7 @@ namespace Easing
         return c3 * x * x * x - c1 * x * x;
     }
 
-    double Easing::easeOutBack(double x)
+    double Easing::EaseOutBack(double x)
     {
         float c1 = 1.70158;
         float c3 = c1 + 1;
@@ -210,10 +210,9 @@ namespace Easing
             : (1 + EaseOutBounce(2 * x - 1)) / 2;
     }
 
-    double Easing::calculateScale(float _MaxScale, float _EasingCount)
+    double Complement(double _Min, double _Max, double _Eased)
     {
-        //tmp = 1 + (目標スケール - 1) * easeOutBack(x);
-        double tmp = 1 + (_MaxScale - 1) * Easing::easeOutBack(_EasingCount);
-        return tmp;
+        //値 = 下限値 + (上限値 - 下限値) * 割合
+        return _Min + (_Max - _Min) * _Eased;
     }
 }

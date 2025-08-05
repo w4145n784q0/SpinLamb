@@ -163,6 +163,9 @@ public:
 	//タイマー
 	void DrawTimer();
 
+	//タイマーのイージング処理
+	void DrawTimerEasing();
+
 	//ゲームの簡易説明
 	void DrawExplanation();
 
@@ -175,7 +178,7 @@ public:
 	//ミニマップ
 	void DrawMiniMap();
 
-	//スコア表示(BattleSceneで使用)
+	//スコア表示
 	void DrawScore();
 
 	//----------ImGui描画関数(Imguiを外部から呼ぶ)----------

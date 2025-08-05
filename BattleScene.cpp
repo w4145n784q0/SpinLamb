@@ -17,10 +17,14 @@ namespace
 	//バトルモードの制限時間
 	int GameTimeLimit = 0;
 
+	//制限時間のうち、残りn秒でイージング処理を行う際の開始時間
+	int EasingTime = 0;
+
 	//バトルシーン初期化時のインデックス
 	enum ScorePosIndex
 	{
 		i_gametimelimit = 0,
+		i_easingtime,
 	};
 }
 
@@ -186,6 +190,11 @@ void BattleScene::Initialize()
 
 	//ゲーム制限時間を渡す
 	pGameTimer_->SetCurrentGameTime(GameTimeLimit);
+
+	//イージング開始時間を渡す
+	//GameTimerが受け取り保管、HUD側で制限時間がEasingTime以下になったことを検知し
+	//イージング処理を行う
+	pGameTimer_->SetEasingTime(EasingTime);
 
 	//各画像・サウンドの読み込み
 	hBackScreen_ = Image::Load("Image\\Battle\\BackSky.jpg");
@@ -446,6 +455,7 @@ void BattleScene::SetCSVBattle()
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
 	GameTimeLimit = static_cast<int>(battleData[i_gametimelimit]);
+	EasingTime = static_cast<int>(battleData[i_easingtime]);
 }
 
 void BattleScene::OnCharacterFenceHit(int _HitCharaID)

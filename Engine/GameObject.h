@@ -260,14 +260,14 @@ public:
 
 
 	/// <summary>
-	/// 線形補完(floatで受け取り返す)
+	/// 座標ベース線形補完(floatで受け取り返す)
 	/// </summary>
 	/// <param name="convert">変換したい値(x)</param>
 	/// <param name="originalMin">変換元の範囲の最小値(x1)</param>
 	/// <param name="originalMax">変換元の範囲の最大値(x2)</param>
 	/// <param name="conversionMin">変換後の範囲の最小値(y1)</param>
 	/// <param name="conversionMax">変換後の範囲の最大値(y2)</param>
-	/// <returns>補正後の値(y)</returns>
+	/// <returns>補正後の値(y) 変換後の範囲に収まる</returns>
 	float LinearCompletion(float convert,float originalMin,float originalMax, 
 		float conversionMin,float conversionMax)
 	{
@@ -297,7 +297,7 @@ public:
 	/// <param name="_min">下限値</param>
 	/// <param name="_max">上限値</param>
 	/// <returns></returns>
-	float Normalize(float _value, float _min, float _max)
+	float Normalize(float _value, float _min = 0.0f, float _max = 1.0f)
 	{
 		//値を0から1の範囲に正規化
 

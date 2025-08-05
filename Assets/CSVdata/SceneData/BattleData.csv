@@ -1,2 +1,2 @@
-﻿Data,GameTimeLimit
-Battle,60
+﻿Data,GameTimeLimit,EasingTimer
+Battle,60,10

@@ -66,6 +66,14 @@ void GameTimer::UpdateTimeCount()
 		//一秒経過の度に計算
 		TimeCalculation();
 		Timecounter = 0;
+
+		//このタイミングでtrue
+		IsSecondCount_ = true;
+	}
+	else
+	{
+		//通常はfalse
+		IsSecondCount_ = false;
 	}
 }
 

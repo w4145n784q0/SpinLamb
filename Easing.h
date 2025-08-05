@@ -28,7 +28,7 @@ namespace Easing
 	double EaseInCubic(double x);
 
 	//始めに大きく加速し、徐々に緩やかになる
-	double easeOutCubic(double x);
+	double EaseOutCubic(double x);
 
 	//緩やかに加速、一定のラインで大きくし、緩やかに減衰する
 	double EaseInOutCubic(double x);
@@ -73,7 +73,7 @@ namespace Easing
 	double EaseInBack(double x);
 
 	//大きく上昇してから戻る
-	double easeOutBack(double x);
+	double EaseOutBack(double x);
 
 	//下降→急上昇→下降する
 	double EaseInOutBack(double x);
@@ -99,12 +99,12 @@ namespace Easing
 	//----------イージング関数応用(必要に応じて追加)----------
 
 	/// <summary>
-	/// 拡大率計算関数
+	/// 数値ベース線形補間
 	/// </summary>
-	/// <param name="_MaxScale">最終的な最大拡大値</param>
-	/// <param name="_EasingCount">アニメーション進行度</param>
-	/// <returns>拡大割合</returns>
-	double calculateScale(float _MaxScale,float _EasingCount);
-
+	/// <param name="_Min">下限値</param>
+	/// <param name="_Max">上限値</param>
+	/// <param name="_Eased">イージング計算後の値</param>
+	/// <returns>0～1に収めた変換後の割合</returns>
+	double Complement(double _Min, double _Max, double _Eased);
 }
 

@@ -19,6 +19,14 @@ private:
 	//1の位の値
 	int Timeone_;
 
+	//今のフレームで秒カウントをしているか
+	//秒カウントしたタイミングでtrue
+	bool IsSecondCount_;
+
+	//イージング処理(残りn秒になったら文字を拡大表記)をする時間
+	//BattleSceneから受け取る(GameTimerの中では定義しない)
+	int EasingTime_ = 0;
+
 	//時間の状態
 	//これらの値に応じて各Update関数を呼び出す
 	enum TimeState
@@ -55,11 +63,20 @@ public:
 	//ゲーム時間の計算
 	void TimeCalculation();
 
+	//イージング処理を行う時間かどうかを設定
+	bool IsEasingTime() {if (CurrentGameTime_ < EasingTime_) return true; else return false;}
+
 	//----------セッター・ゲッター関数----------
 	int GetTimeTen() const { return Timeten_; }
 	int GetTimeOne() const { return Timeone_; }
 	int GetCurrentGameTime() const { return CurrentGameTime_; }
 	void SetCurrentGameTime(int _time) { CurrentGameTime_ = _time; }
+	void SetEasingTime(int _time) { EasingTime_ = _time; }
+	int GetEasingTime() const { return EasingTime_; }
+	bool GetIsSecondCount() const { return IsSecondCount_; }
+
+	//時間計測中かどうか返す
+	bool IsCounting() const { if (TimeState_ == COUNTING) return true; else return false; }
 
 	//時間停止を指示
 	void StartTimer() { TimeState_ = COUNTING; }
