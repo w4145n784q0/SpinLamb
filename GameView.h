@@ -3,12 +3,10 @@
 #include"Player.h"
 #include"Enemy.h"
 #include"HUD.h"
-#include"Engine/Direct3D.h"
 #include"Ground.h"
 #include"Fence.h"
 #include"OutStageThing.h"
 
-#include"Engine/Camera.h"
 //-----------------------------------------------------------
 // 画面分割・ビューポート設定・カメラ設定等を行う名前空間
 // 画面分割関連の処理はここで行う

@@ -1,13 +1,6 @@
 #pragma once
 #include "Engine/GameObject.h"
-#include "Engine/CsvReader.h"
 #include "Ground.h"
-
-#include"UpperWire.h"
-#include"LowerWire.h"
-#include"LeftWire.h"
-#include"RightWire.h"
-
 #include"IGameObserver.h"
 
 //プレイヤー,敵クラスの共通事項クラス

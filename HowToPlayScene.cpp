@@ -3,7 +3,6 @@
 #include"Engine/Input.h"
 #include"Engine/SceneManager.h"
 #include"Engine/Audio.h"
-#include"Engine/CsvReader.h"
 
 HowToPlayScene::HowToPlayScene(GameObject* parent)
 	:BaseScene(parent, "HowToPlayScene"),

@@ -1,6 +1,8 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"BaseScene.h"
+#include"Player.h"
+#include"Enemy.h"
 #include"HUD.h"
 #include"MiniMap.h"
 #include"TransitionEffect.h"

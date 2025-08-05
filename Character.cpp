@@ -2,7 +2,11 @@
 #include"Engine/VFX.h"
 #include"Engine/Model.h"
 #include"Engine/Audio.h"
-#include"Engine/Global.h"
+#include "Engine/CsvReader.h"
+#include"UpperWire.h"
+#include"LowerWire.h"
+#include"LeftWire.h"
+#include"RightWire.h"
 
 namespace {
 	

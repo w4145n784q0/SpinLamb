@@ -1,8 +1,5 @@
 #pragma once
 #include "Engine/GameObject.h"
-#include"Ground.h"
-#include"Fence.h"
-#include"OutStageThing.h"
 
 //ステージ全体管理クラス
 class StageManager :

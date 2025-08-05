@@ -1,7 +1,5 @@
 #pragma once
 #include "Engine/GameObject.h"
-#include"Player.h"
-#include"Enemy.h"
 
 //画面右下のミニマップを表示するクラス
 class MiniMap :

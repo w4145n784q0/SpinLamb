@@ -5,7 +5,6 @@
 #include"Engine/Audio.h"
 #include"Engine/CsvReader.h"
 
-#include"GameView.h"
 namespace
 {
 	//プレイボタン,フリープレイボタン,遊び方ボタン,タイトルボタン

@@ -1,8 +1,6 @@
 #include "HUD.h"
 #include"Engine/Image.h"
-#include"BattleScene.h"
-#include <unordered_map>
-#include<functional>
+#include"Easing.h"
 
 
 //描画操作のみ扱うクラス
@@ -65,7 +63,6 @@ namespace
 	};
 
 	//ナンバーハンドルの配列
-	//std::array<int, MaxNumberIndex> ArrayHandle;
 	std::vector<int> ArrayHandle = {};
 
 	//時間表記のナンバーハンドルの添え字(10の位)
@@ -383,7 +380,7 @@ void HUD::DrawTimerEasing()
 			//正規化する
 			double ratio = static_cast<double>(Normalize(EasingCount_));
 
-			//拡大率を計算
+			//拡大率をイージング計算
 			double eased = Easing::EaseOutCubic(ratio);
 
 			//拡大率を最小値~最大値の間で補完する
@@ -605,7 +602,7 @@ void HUD::DrawGo()
 	//正規化する
 	double ratio = static_cast<double>(Normalize(EasingCount_));
 
-	//拡大率を計算
+	//拡大率をイージング計算
 	double eased = Easing::EaseOutElastic(ratio);
 
 	//拡大率を最小値~最大値の間で補完する

@@ -4,10 +4,6 @@
 #include"Engine/Audio.h"
 #include"Engine/Camera.h"
 #include"Engine/SphereCollider.h"
-#include"Engine/VFX.h"
-#include"Engine/SceneManager.h"
-
-#include"BattleScene.h"
 #include"Enemy.h"
 
 namespace {

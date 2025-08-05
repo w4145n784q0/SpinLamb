@@ -191,9 +191,6 @@
     <ClCompile Include="BaseScene.cpp">
       <Filter>03Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Easing.cpp">
-      <Filter>06UI</Filter>
-    </ClCompile>
     <ClCompile Include="TransitionEffect.cpp">
       <Filter>06UI</Filter>
     </ClCompile>
@@ -206,7 +203,9 @@
     <ClCompile Include="GameView.cpp">
       <Filter>01Engine\DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="ImGuiViewer.cpp" />
+    <ClCompile Include="Easing.cpp">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -363,9 +362,6 @@
     <ClInclude Include="BaseScene.h">
       <Filter>03Scene</Filter>
     </ClInclude>
-    <ClInclude Include="Easing.h">
-      <Filter>06UI</Filter>
-    </ClInclude>
     <ClInclude Include="TransitionEffect.h">
       <Filter>06UI</Filter>
     </ClInclude>
@@ -381,7 +377,9 @@
     <ClInclude Include="IGameObserver.h">
       <Filter>04Chara</Filter>
     </ClInclude>
-    <ClInclude Include="ImGuiViewer.h" />
+    <ClInclude Include="Easing.h">
+      <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

@@ -1,13 +1,14 @@
 #include "Easing.h"
-#include"Engine/SceneManager.h"
-#include"Engine/CsvReader.h"
+#include <DirectXMath.h>
+
+using namespace DirectX;
 
 namespace Easing
 {
 
     double Easing::EaseInSine(double x)
     {
-        return 1 - cos(((x)*XM_PI) / 2.0f);
+        return 1 - cos(((x) * XM_PI) / 2.0f);
     }
 
     double Easing::EaseOutSine(double x)
@@ -119,24 +120,24 @@ namespace Easing
 
     double Easing::EaseInBack(double x)
     {
-        float c1 = 1.70158f;
-        float c3 = c1 + 1;
+        double c1 = 1.70158f;
+        double c3 = c1 + 1;
 
         return c3 * x * x * x - c1 * x * x;
     }
 
     double Easing::EaseOutBack(double x)
     {
-        float c1 = 1.70158;
-        float c3 = c1 + 1;
+        double c1 = 1.70158;
+        double c3 = c1 + 1;
 
         return 1 + c3 * pow(x - 1, 3) + c1 * pow(x - 1, 2);
     }
 
     double Easing::EaseInOutBack(double x)
     {
-        float c1 = 1.70158;
-        float c2 = c1 * 1.525;
+        double c1 = 1.70158;
+        double c2 = c1 * 1.525;
 
         return x < 0.5
             ? (pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2)) / 2
@@ -145,7 +146,7 @@ namespace Easing
 
     double Easing::EaseInElastic(double x)
     {
-        float c4 = (2 * XM_PI) / 3;
+        double c4 = (2 * XM_PI) / 3;
 
         return x == 0
             ? 0
@@ -156,7 +157,7 @@ namespace Easing
 
     double Easing::EaseOutElastic(double x)
     {
-        float c4 = (2 * XM_PI) / 3;
+        double c4 = (2 * XM_PI) / 3;
 
         return x == 0
             ? 0
@@ -167,7 +168,7 @@ namespace Easing
 
     double Easing::EaseInOutElastic(double x)
     {
-        float c5 = (2 * XM_PI) / 4.5;
+        double c5 = (2 * XM_PI) / 4.5;
 
         return x == 0
             ? 0
@@ -186,8 +187,8 @@ namespace Easing
 
     double Easing::EaseOutBounce(double x)
     {
-        float n1 = 7.5625;
-        float d1 = 2.75;
+        double n1 = 7.5625;
+        double d1 = 2.75;
 
         if (x < 1 / d1) {
             return n1 * x * x;

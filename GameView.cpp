@@ -1,5 +1,6 @@
 #include "GameView.h"
-#include "Engine/Global.h"
+#include"Engine/Direct3D.h"
+#include"Engine/Camera.h"
 
 namespace GameView
 {

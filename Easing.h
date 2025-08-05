@@ -1,12 +1,14 @@
 #pragma once
 
 //イージング処理を行う
-//使用したサイト: https://easings.net/ja
+//引用したサイト: https://easings.net/ja
 namespace Easing
 {
 	//----------イージング関数(基本的な計算)----------
 
-	//最初だけゆるやかに加速、徐々に一定の速度
+	//----------正弦波----------
+
+	//最初だけゆるやかに加速、徐々に一定の速度指
 	double EaseInSine(double x);
 
 	//最初は一定の速度で、徐々にゆるやかに減速
@@ -14,6 +16,8 @@ namespace Easing
 
 	//最初はゆるやかに加速、徐々に一定の速度、最後に減速
 	double EaseInOutSine(double x);
+
+	//----------2~5次関数----------
 
 	//始めは緩やかに、徐々に加速する
 	double EaseInQuad(double x);
@@ -51,6 +55,8 @@ namespace Easing
 	//始めはあまり動かない→中間で急加速→後半あまり動かない
 	double EaseInOutQuint(double x);
 
+	//----------指数関数----------
+
 	//始めはほぼ動かず後半に急加速する
 	double EaseInExpo(double x);
 
@@ -59,6 +65,8 @@ namespace Easing
 
 	//始めはほぼ動かず、後半に急加速し、最後に減速する
 	double EaseInOutExpo(double x);
+
+	//----------円弧----------
 
 	//始めは緩やかに上昇し、後半に急加速
 	double EaseInCirc(double x);
@@ -69,6 +77,8 @@ namespace Easing
 	//緩やかに加速→中間で急加速→後半は緩やかに上昇
 	double EaseInOutCirc(double x);
 
+	//----------オーバーシュート----------
+
 	//始めは下降し、急上昇する
 	double EaseInBack(double x);
 
@@ -77,6 +87,8 @@ namespace Easing
 
 	//下降→急上昇→下降する
 	double EaseInOutBack(double x);
+
+	//----------跳ね返り----------
 
 	//始めは緩やかに、徐々に振動する
 	double EaseInElastic(double x);
@@ -96,7 +108,7 @@ namespace Easing
 	//徐々に跳ね上がり、徐々に減衰する弾性の動き
 	double EaseInOutBounce(double x);
 
-	//----------イージング関数応用(必要に応じて追加)----------
+	//----------イージング処理(必要に応じて追加)----------
 
 	/// <summary>
 	/// 数値ベース線形補間

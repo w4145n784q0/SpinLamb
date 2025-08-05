@@ -4,9 +4,7 @@
 #include"Engine/SceneManager.h"
 #include"Engine/Audio.h"
 #include"StageManager.h"
-
 #include"Engine/Camera.h"
-
 #include"GameView.h"
 
 namespace

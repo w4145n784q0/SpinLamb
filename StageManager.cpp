@@ -1,8 +1,9 @@
 #include "StageManager.h"
 #include"Engine/CsvReader.h"
-#include"Engine/Global.h"
-
 #include "GameView.h"
+#include"Ground.h"
+#include"Fence.h"
+#include"OutStageThing.h"
 
 namespace
 {

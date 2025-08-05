@@ -1,5 +1,4 @@
 #include "MiniMap.h"
-#include"Engine/Image.h"
 
 namespace
 {
@@ -11,6 +10,7 @@ namespace
 		i_CorrectionValueXParam,
 		i_CorrectionValueYParam,
 	};
+
 	//キャラクターのX座標を縮小する値
 	float reductionX = 0.0f;
 

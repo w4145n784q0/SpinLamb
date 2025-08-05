@@ -1,13 +1,9 @@
 #include "Enemy.h"
 
 #include"Engine/Model.h"
-#include"Engine/Input.h"
 #include"Engine/Camera.h"
 #include"Engine/SphereCollider.h"
 #include"Engine/Audio.h"
-#include"Engine/SceneManager.h"
-
-#include"BattleScene.h"
 
 
 

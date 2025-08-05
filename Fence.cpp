@@ -1,13 +1,11 @@
 #include "Fence.h"
 #include"Engine/Model.h"
-#include"Engine/BoxCollider.h"
 #include"UpperWire.h"
 #include"LowerWire.h"
 #include"LeftWire.h"
 #include"RightWire.h"
 
 
-#include<array>
 #include<vector>
 
 namespace

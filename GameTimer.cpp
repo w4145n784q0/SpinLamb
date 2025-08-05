@@ -1,6 +1,4 @@
 #include "GameTimer.h"
-#include"Engine/Image.h"
-#include<array>
 
 namespace
 {
@@ -10,7 +8,8 @@ namespace
 
 GameTimer::GameTimer(GameObject* parent)
 	: GameObject(parent,"GameTimer"),
-	CurrentGameTime_(0), Timeten_(0), Timeone_(0),TimeState_(STOP)
+	CurrentGameTime_(0), Timeten_(0), Timeone_(0),TimeState_(STOP),
+	IsSecondCount_(false),EasingTime_(0)
 {
 }
 

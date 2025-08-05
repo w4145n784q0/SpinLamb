@@ -1,13 +1,11 @@
 #pragma once
 #include "Engine/GameObject.h"
 #include"BaseScene.h"
-
 #include"Player.h"
 #include"Enemy.h"
 #include"GameTimer.h"
 #include"MiniMap.h"
 #include"HUD.h"
-
 #include"TransitionEffect.h"
 
 //"バトル"から始まるモードシーン

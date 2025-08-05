@@ -1,9 +1,7 @@
 #pragma once
 #include "Engine/GameObject.h"
-#include"array"
 #include"GameTimer.h"
 #include"MiniMap.h"
-#include"Easing.h"
 
 //時間表示・ロゴ・モード表示などのUIを描画するクラス
 //座標などを初期化時に読みこみ、指示されたら表示する
