@@ -192,6 +192,13 @@ namespace GameView
 		Camera::SetTarget(Camera::GetInitTar());
 		Camera::Update();
 
+		//“ñ‰æ–Êó‘Ô‚È‚ç‰æ–Ê•ªŠ„—p‚Ì˜gü‚ð•`‰æ
+		//’Êí‚ÌHUD‚æ‚è‚à‘O‚É•`‰æ‚·‚é(‘¼‚ÌƒIƒuƒWƒFƒNƒg‚Æ”í‚é‚Ì‚ð–h‚®‚½‚ß)
+		if (IsDual())
+		{
+			pHUD_->DrawSplitLine();
+		}
+
 		//HUD‚ð•`‰æ
 		pHUD_->DrawFullScreen();
 	}

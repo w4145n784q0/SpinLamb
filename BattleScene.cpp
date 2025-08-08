@@ -28,7 +28,7 @@ namespace
 
 BattleScene::BattleScene(GameObject* parent)
 	:BaseScene(parent,"BattleScene") ,BattleState_(S_BEFORE),
-	 hBackScreen_(-1),hSoundBattle_(-1), hSoundWhistle_(-1),
+	 hBackScreen_(-1), hSoundBattle_(-1), hSoundWhistle_(-1),
 	FirstScore_(0),SecondScore_(0),
 	pPlayer1_(nullptr), pPlayer2_(nullptr), pEnemy_(nullptr),
 	pHUD_(nullptr),pMiniMap_(nullptr),
@@ -244,6 +244,7 @@ void BattleScene::Update()
 
 void BattleScene::Draw()
 {
+	
 	//”wŒi•`‰æ
 	Image::SetAndDraw(hBackScreen_, this->transform_);
 

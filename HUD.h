@@ -46,6 +46,12 @@ private:
 	//ゲーム開始"go!"ロゴ(バトルシーン用)
 	int hGo_;
 
+	//フィニッシュのロゴ(バトルシーン用)
+	int hFinish_;
+
+	//画面分割の枠
+	int hSplitLine_;
+
 	//ナンバー
 	int hNumber0_;
 	int hNumber1_;
@@ -57,9 +63,6 @@ private:
 	int hNumber7_;
 	int hNumber8_;
 	int hNumber9_;
-
-	//フィニッシュのロゴ(バトルシーン用)
-	int hFinish_;
 
 	//マップ全体
 	int hMap_;
@@ -172,6 +175,9 @@ public:
 
 	//終了ロゴ
 	void DrawFinishLogo();
+
+	//画面分割の枠線
+	void DrawSplitLine();
 
 	//ミニマップ
 	void DrawMiniMap();

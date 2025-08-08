@@ -624,9 +624,6 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 
 	//溜めている速度をリセット
 	ChargeReset();
-
-	//ダッシュ中の速度リセット
-	AccelerationStop();
 }
 
 void Character::KnockBack()

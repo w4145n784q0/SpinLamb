@@ -389,6 +389,9 @@ void Player::UpdateHit()
 
 		//状態遷移の際は一度x回転をストップ
 		RotateStop();
+
+		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
+		AccelerationStop();
 	}
 }
 
@@ -410,6 +413,9 @@ void Player::UpdateFenceHit()
 
 		//状態遷移の際は一度x回転をストップ
 		RotateStop();
+
+		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
+		AccelerationStop();
 	}
 }
 

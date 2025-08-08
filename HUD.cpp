@@ -33,6 +33,9 @@ namespace
 	//Finish!ロゴ
 	Transform LogoFinish;
 
+	//画面分割の枠
+	Transform SplitLine;
+
 	//時間表記十の位
 	Transform TenTime;
 
@@ -58,7 +61,7 @@ namespace
 	//初期化の際に使用する
 	std::vector<std::reference_wrapper<Transform>> ImageArray = {
 	LogoBackTitle,LogoPractice,LogoExplanation,LogoStart,
-	LogoFinish ,TenTime ,OneTime, MapIcon,PlayerIcon,EnemyIcon,
+	LogoFinish, SplitLine, TenTime ,OneTime, MapIcon,PlayerIcon,EnemyIcon,
 	PlayerScoreTen,PlayerScoreOne,EnemyScoreTen, EnemyScoreOne
 	};
 
@@ -99,7 +102,7 @@ namespace
 }
 
 HUD::HUD(GameObject* parent)
-	:GameObject(parent, "HUD"), hBackTitleLogo_(-1), hPracticeNow_(-1), hGameExplanation_(-1),
+	:GameObject(parent, "HUD"), hBackTitleLogo_(-1), hPracticeNow_(-1), hSplitLine_(-1), hGameExplanation_(-1),
 	hStart_(-1),hReady_(-1),hGo_(-1),
 	hNumber0_(-1), hNumber1_(-1), hNumber2_(-1), hNumber3_(-1), hNumber4_(-1),
 	hNumber5_(-1), hNumber6_(-1), hNumber7_(-1), hNumber8_(-1), hNumber9_(-1),
@@ -152,6 +155,9 @@ void HUD::Initialize()
 
 	hFinish_ = Image::Load(Image + Battle + "FinishLogo.png");
 	assert(hFinish_ >= 0);
+
+	hSplitLine_ = Image::Load(Image + Battle + "ViewLine.png");
+	assert(hSplitLine_ >= 0);
 
 	hNumber0_ = Image::Load(Image + Number + "Number0.png");
 	assert(hNumber0_ >= 0);
@@ -306,7 +312,7 @@ void HUD::SetHUDCSV()
 
 	//csvファイルの各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {
-		"backtitle","practice","explanation","start","finish",
+		"backtitle","practice","explanation","start","finish","split",
 		"tentime","onetime","minimap","playericon", "enemyicon",
 		"playerscoreten","playerscoreone","enemyscoreten","enemyscoreone",
 	};
@@ -430,9 +436,14 @@ void HUD::DrawStartLogo()
 
 void HUD::DrawFinishLogo()
 {
-
 	//"Finish!"ロゴ描画
 	Image::SetAndDraw(hFinish_, LogoFinish);
+}
+
+void HUD::DrawSplitLine()
+{
+	//画面分割の枠線描画
+	Image::SetAndDraw(hSplitLine_, SplitLine);
 }
 
 void HUD::DrawMiniMap()

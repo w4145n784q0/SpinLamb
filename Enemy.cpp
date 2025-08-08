@@ -380,6 +380,9 @@ void Enemy::UpdateHit()
 
 		//状態遷移の際は一度x回転をストップ
 		RotateStop();
+
+		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
+		AccelerationStop();
 	}
 }
 
@@ -401,6 +404,9 @@ void Enemy::UpdateFenceHit()
 
 		//状態遷移の際は一度x回転をストップ
 		RotateStop();
+
+		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
+		AccelerationStop();
 	}
 }
 
