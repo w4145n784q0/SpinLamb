@@ -42,10 +42,15 @@ Fence::~Fence()
 void Fence::Initialize()
 {
 	//各モデル読み込み
-	hPillar_ = Model::Load("Model\\Pillar.fbx");
+
+	//同じディレクトリ内からのパスは省略
+	//パスの一部を文字列にし、結合させる
+	std::string Model = "Model\\";
+
+	hPillar_ = Model::Load(Model + "Pillar.fbx");
 	assert(hPillar_ >= 0);
 
-	hFence_ = Model::Load("Model\\Wire.fbx");
+	hFence_ = Model::Load(Model + "Wire.fbx");
 	assert(hFence_ >= 0);
 
 	//前後左右の鉄線クラス生成

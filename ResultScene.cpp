@@ -45,30 +45,33 @@ void ResultScene::Initialize()
 
 	//同じディレクトリ内からのパスは省略
 	//パスの一部を文字列にし、結合させる
-	std::string path = "Image\\Result\\";
+	std::string Result = "Image\\Result\\";
+	std::string Sound = "Sound\\";
+	std::string BGM = "BGM\\";
+	std::string SE = "SE\\";
 
-	hYouWin_ = Image::Load(path + "YouWin.png");
+	hYouWin_ = Image::Load(Result + "YouWin.png");
 	assert(hYouWin_ >= 0);
 
-	hCpuWin_ = Image::Load(path + "CPUWin.png");
+	hCpuWin_ = Image::Load(Result + "CPUWin.png");
 	assert(hCpuWin_ >= 0);
 
-	hPlayer1Win_ = Image::Load(path + "Player1Win.png");
+	hPlayer1Win_ = Image::Load(Result + "Player1Win.png");
 	assert(hPlayer1Win_);
 
-	hPlayer2Win_ = Image::Load(path + "Player2Win.png");
+	hPlayer2Win_ = Image::Load(Result + "Player2Win.png");
 	assert(hPlayer2Win_);
 
-	hDraw_ = Image::Load(path + "Draw.png");
+	hDraw_ = Image::Load(Result + "Draw.png");
 	assert(hDraw_ >= 0);
 
-	hPushTitle_ = Image::Load(path + "PushToTitle.png");
+	hPushTitle_ = Image::Load(Result + "PushToTitle.png");
 	assert(hPushTitle_ >= 0);
 
-	hSoundResult_ = Audio::Load("Sound\\BGM\\Result.wav", true);
+	hSoundResult_ = Audio::Load(Sound + BGM + "Result.wav", true);
 	assert(hSoundResult_ >= 0);
 
-	hSoundBackTitle_ = Audio::Load("Sound\\SE\\Cancel.wav", false, Audio::GetCancelNum());
+	hSoundBackTitle_ = Audio::Load(Sound + SE + "Cancel.wav", false, Audio::GetCancelNum());
 	assert(hSoundBackTitle_ >= 0);
 
 	//SceneManagerインスタンスからBattleSceneから各スコアを取得

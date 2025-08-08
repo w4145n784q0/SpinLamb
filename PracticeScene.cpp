@@ -165,10 +165,17 @@ void PracticeScene::Initialize()
 
 
 	//各画像・サウンドの読み込み
-	hBackScreen_ = Image::Load("Image\\Battle\\BackSky.jpg");
+
+	//同じディレクトリ内からのパスは省略
+	//パスの一部を文字列にし、結合させる
+	std::string Battle = "Image\\Battle\\";
+	std::string Sound = "Sound\\";
+	std::string BGM = "BGM\\";
+
+	hBackScreen_ = Image::Load(Battle + "BackSky.jpg");
 	assert(hBackScreen_ >= 0);
 
-	hSoundPractice_ = Audio::Load("Sound\\BGM\\Practice.wav", true);
+	hSoundPractice_ = Audio::Load(Sound + BGM + "Practice.wav", true);
 	assert(hSoundPractice_ >= 0);
 
 	//フリープレイ用サウンド再生

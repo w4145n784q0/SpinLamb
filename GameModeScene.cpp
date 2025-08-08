@@ -41,60 +41,63 @@ void GameModeScene::Initialize()
 
 	//同じディレクトリ内からのパスは省略
 	//パスの一部を文字列にし、結合させる
-	std::string path = "Image\\GameMode\\";
+	std::string GameMode = "Image\\GameMode\\";
+	std::string Sound = "Sound\\";
+	std::string BGM = "BGM\\";
+	std::string SE = "SE\\";
 
-	hBackScreen_ = Image::Load(path + "GameModeScreen.jpg");
+	hBackScreen_ = Image::Load(GameMode + "GameModeScreen.jpg");
 	assert(hBackScreen_ >= 0);
 
-	hBackChara_ = Image::Load(path + "SheepImage.png");
+	hBackChara_ = Image::Load(GameMode + "SheepImage.png");
 	assert(hBackChara_ >= 0);
 
-	hBattle_ = Image::Load(path + "BattleButton.png");
+	hBattle_ = Image::Load(GameMode + "BattleButton.png");
 	assert(hBattle_ >= 0);
 
-	hPractice_ = Image::Load(path + "FreeplayButton.png");
+	hPractice_ = Image::Load(GameMode + "FreeplayButton.png");
 	assert(hPractice_ >= 0);
 
-	hHowtoPlay_ = Image::Load(path + "HowToPlayButton.png");
+	hHowtoPlay_ = Image::Load(GameMode + "HowToPlayButton.png");
 	assert(hHowtoPlay_ >= 0);
 
-	hBackTitle_ = Image::Load(path + "TitleButton.png");
+	hBackTitle_ = Image::Load(GameMode + "TitleButton.png");
 	assert(hBackTitle_ >= 0);
 
-	hFrameLine_ = Image::Load(path + "LineFrame.png");
+	hFrameLine_ = Image::Load(GameMode + "LineFrame.png");
 	assert(hFrameLine_ >= 0);
 
-	hModeSelect_ = Image::Load(path + "ModeSelect.png");
+	hModeSelect_ = Image::Load(GameMode + "ModeSelect.png");
 	assert(hModeSelect_>= 0);
 
-	hBattleText_ = Image::Load(path + "BattleText.png");
+	hBattleText_ = Image::Load(GameMode + "BattleText.png");
 	assert(hBattleText_ >= 0);
 
-	hFreePlayText_ = Image::Load(path + "FreeplayText.png"); 
+	hFreePlayText_ = Image::Load(GameMode + "FreeplayText.png");
 	assert(hFreePlayText_ >= 0);
 
-	hHowtoPlayText_ = Image::Load(path + "HowToPlayText.png");
+	hHowtoPlayText_ = Image::Load(GameMode + "HowToPlayText.png");
 	assert(hHowtoPlayText_ >= 0);
 
-	hTitleText_ = Image::Load(path + "TitleText.png");
+	hTitleText_ = Image::Load(GameMode + "TitleText.png");
 	assert(hTitleText_ >= 0);
 
-	hPlayerNumSelect_ = Image::Load(path + "SelectPlayer.png");
+	hPlayerNumSelect_ = Image::Load(GameMode + "SelectPlayer.png");
 	assert(hPlayerNumSelect_ >= 0);
 
-	hPlayerSelectIcon_ = Image::Load(path + "SelectIcon.png");
+	hPlayerSelectIcon_ = Image::Load(GameMode + "SelectIcon.png");
 	assert(hPlayerSelectIcon_ >= 0);
 
-	hSoundGameMode_ = Audio::Load("Sound\\BGM\\GameMode.wav",true);
+	hSoundGameMode_ = Audio::Load(Sound + BGM + "GameMode.wav",true);
 	assert(hSoundGameMode_ >= 0);
 
-	hSoundDecide_ = Audio::Load("Sound\\SE\\Decide.wav", false, Audio::GetDecideNum());
+	hSoundDecide_ = Audio::Load(Sound + SE + "Decide.wav", false, Audio::GetDecideNum());
 	assert(hSoundDecide_ >= 0);
 
-	hSoundSelect_ = Audio::Load("Sound\\SE\\Select.wav", false, Audio::GetSelectNum());
+	hSoundSelect_ = Audio::Load(Sound + SE + "Select.wav", false, Audio::GetSelectNum());
 	assert(hSoundSelect_ >= 0);
 
-	hSoundCancel_ = Audio::Load("Sound\\SE\\Cancel.wav", false, Audio::GetCancelNum());
+	hSoundCancel_ = Audio::Load(Sound + SE + "Cancel.wav", false, Audio::GetCancelNum());
 	assert(hSoundCancel_ >= 0);
 
 	//各モードの画像ハンドルを配列に入れる

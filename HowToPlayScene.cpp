@@ -18,31 +18,34 @@ HowToPlayScene::~HowToPlayScene()
 
 void HowToPlayScene::Initialize()
 {
-	//各クラス生成
+	//シーン遷移エフェクトクラス生成
 	Instantiate<TransitionEffect>(this);
 
 	//各画像・サウンドの読み込み
 
 	//同じディレクトリ内からのパスは省略
 	//パスの一部を文字列にし、結合させる
-	std::string path = "Image\\HowToPlay\\";
+	std::string HowToPlay = "Image\\HowToPlay\\";
+	std::string Sound = "Sound\\";
+	std::string BGM = "BGM\\";
+	std::string SE = "SE\\";
 
-	hExplanation_ = Image::Load(path + "Explanation.jpg");
+	hExplanation_ = Image::Load(HowToPlay + "Explanation.jpg");
 	assert(hExplanation_ >= 0);
 
-	hOperateKeyboard_ = Image::Load(path + "HowToKeyboard.jpg");
+	hOperateKeyboard_ = Image::Load(HowToPlay + "HowToKeyboard.jpg");
 	assert(hOperateKeyboard_ >= 0);
 
-	hOperateController_ = Image::Load(path + "HowToController.jpg");
+	hOperateController_ = Image::Load(HowToPlay + "HowToController.jpg");
 	assert(hOperateController_ >= 0);
 
-	hSoundHowtoPlay_ = Audio::Load("Sound\\BGM\\HowToPlay.wav", true);
+	hSoundHowtoPlay_ = Audio::Load(Sound + BGM + "HowToPlay.wav", true);
 	assert(hSoundHowtoPlay_ >= 0);
 
-	hSoundSelect_ = Audio::Load("Sound\\SE\\Select.wav", false, Audio::GetSelectNum());
+	hSoundSelect_ = Audio::Load(Sound + SE + "Select.wav", false, Audio::GetSelectNum());
 	assert(hSoundSelect_ >= 0);
 
-	hSoundBackGameMode_ = Audio::Load("Sound\\SE\\Cancel.wav", false, Audio::GetCancelNum());
+	hSoundBackGameMode_ = Audio::Load(Sound + SE + "Cancel.wav", false, Audio::GetCancelNum());
 	assert(hSoundBackGameMode_ >= 0);
 
 	//リストに各状態を追加

@@ -29,14 +29,18 @@ void TransitionEffect::Initialize()
 	//csvからパラメータ読み込み
 	SetCSVTransitionEffect();
 
+	//同じディレクトリ内からのパスは省略
+	//パスの一部を文字列にし、結合させる
+	std::string transition = "Image\\Transition\\";
+
 	//各画像の読み込み
-	hFadeBlack_ = Image::Load("Image\\Transition\\FadeBlack.png");
+	hFadeBlack_ = Image::Load(transition + "FadeBlack.png");
 	assert(hFadeBlack_ >= 0);
 
-	hFadeWhite_ = Image::Load("Image\\Transition\\FadeWhite.png");
+	hFadeWhite_ = Image::Load(transition + "FadeWhite.png");
 	assert(hFadeWhite_ >= 0);
 
-	hZoomSheep_ = Image::Load("Image\\Transition\\SheepBlack.png");
+	hZoomSheep_ = Image::Load(transition + "SheepBlack.png");
 	assert(hZoomSheep_ >= 0);
 }
 
@@ -119,6 +123,7 @@ void TransitionEffect::UpdateFadeOut()
 	}
 	else
 	{
+		//透明度に (透過度の最小値 / 遷移時間) を加算して透過度を上げていき、画面を隠していく
 		FadeEffect_.AlphaValue_ += Image::AlphaMin / TransitionTime_;
 	}
 
@@ -133,6 +138,7 @@ void TransitionEffect::UpdateFadeIn()
 	}
 	else
 	{
+		//透明度に (透過度の最小値 / 遷移時間) を減算して透過度を下げていき、画面を見せていく
 		FadeEffect_.AlphaValue_ -= Image::AlphaMin / TransitionTime_;
 	}
 }
@@ -146,6 +152,7 @@ void TransitionEffect::UpdateSlideInLTR()
 	}
 	else
 	{
+		//スライド画像位置に (右端から左端を引いた値 / 遷移時間) を加算していく
 		SlideEffect_.SlideTransform_.position_.x += (Image::RightEdge - Image::LeftEdge) / TransitionTime_;
 	}
 }
@@ -161,6 +168,7 @@ void TransitionEffect::UpdateZoomIn()
 	}
 	else
 	{
+		//ズーム量に (最大値 / 遷移時間) を加算してだんだん大きくする
 		ZoomEffect_.ZoomTransform_.scale_.x += ZoomEffect_.MaxZoomValue_ / TransitionTime_;
 		ZoomEffect_.ZoomTransform_.scale_.y += ZoomEffect_.MaxZoomValue_ / TransitionTime_;
 	}
@@ -177,6 +185,7 @@ void TransitionEffect::UpdateZoomOut()
 	}
 	else
 	{
+		//ズーム量に (最大値 / 遷移時間) 減算してだんだん小さくする
 		ZoomEffect_.ZoomTransform_.scale_.x -= ZoomEffect_.MaxZoomValue_ / TransitionTime_;
 		ZoomEffect_.ZoomTransform_.scale_.y -= ZoomEffect_.MaxZoomValue_ / TransitionTime_;
 	}
@@ -207,10 +216,10 @@ void TransitionEffect::SetCSVTransitionEffect()
 	std::string SomeParams = "ZoomParam";
 
 	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> Transitiondata = GetCSVReadData(csvParam, SomeParams);
+	std::vector<float> transitionData = GetCSVReadData(csvParam, SomeParams);
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	ZoomEffect_.MaxZoomValue_ = Transitiondata[i_maxzoomvalue];
+	ZoomEffect_.MaxZoomValue_ = transitionData[i_maxzoomvalue];
 	
 }

@@ -20,11 +20,19 @@ void TitleScene::Initialize()
 	Instantiate<TransitionEffect>(this);
 
 	//各画像・サウンドの読み込み
-	hBackScreen_ = Image::Load("Image\\Title\\TitleScreen.jpg");
+
+	//同じディレクトリ内からのパスは省略
+	//パスの一部を文字列にし、結合させる
+	std::string Title = "Image\\Title\\";
+	std::string Sound = "Sound\\";
+	std::string BGM = "BGM\\";
+	std::string SE = "SE\\";
+
+	hBackScreen_ = Image::Load(Title + "TitleScreen.jpg");
 	assert(hBackScreen_ >= 0);
-	hSoundTitle_ = Audio::Load("Sound\\BGM\\Title.wav",true); 
+	hSoundTitle_ = Audio::Load(Sound + BGM + "Title.wav",true);
 	assert(hSoundTitle_ >= 0);
-	hSoundStart_ = Audio::Load("Sound\\SE\\Start.wav", false, Audio::GetStartNum());
+	hSoundStart_ = Audio::Load(Sound + SE + "Start.wav", false, Audio::GetStartNum());
 	assert(hSoundStart_ >= 0);
 
 	//タイトル用サウンド再生

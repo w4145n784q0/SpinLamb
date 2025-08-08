@@ -15,7 +15,8 @@ namespace
 	//バトルモードの制限時間
 	int GameTimeLimit = 0;
 
-	//制限時間のうち、残りn秒でイージング処理を行う際の開始時間
+	//制限時間のうち、残りn秒で拡大イージング処理を行う際の開始時間
+	//現状は残り10秒で制限時間を拡大
 	int EasingTime = 0;
 
 	//バトルシーン初期化時のインデックス
@@ -195,13 +196,21 @@ void BattleScene::Initialize()
 	pGameTimer_->SetEasingTime(EasingTime);
 
 	//各画像・サウンドの読み込み
-	hBackScreen_ = Image::Load("Image\\Battle\\BackSky.jpg");
+	
+	//同じディレクトリ内からのパスは省略
+	//パスの一部を文字列にし、結合させる
+	std::string Battle = "Image\\Battle\\";
+	std::string Sound = "Sound\\";
+	std::string BGM = "BGM\\";
+	std::string SE = "SE\\";
+
+	hBackScreen_ = Image::Load(Battle + "BackSky.jpg");
 	assert(hBackScreen_ >= 0);
 
-	hSoundBattle_ = Audio::Load("Sound\\BGM\\Battle.wav",true);
+	hSoundBattle_ = Audio::Load(Sound + BGM + "Battle.wav", true);
 	assert(hSoundBattle_>= 0);
 
-	hSoundWhistle_ = Audio::Load("Sound\\SE\\Whistle.wav", false, Audio::GetWhistleNum());
+	hSoundWhistle_ = Audio::Load(Sound + SE + "Whistle.wav", false, Audio::GetWhistleNum());
 	assert(hSoundWhistle_ >= 0);
 
 	//Player,Enemyのスコアを初期化

@@ -15,16 +15,21 @@ void OutStageThing::Initialize()
 {
 
 	//各モデルの読み込み
-	hCabin_ = Model::Load("Model\\House.fbx");
+
+	//同じディレクトリ内からのパスは省略
+	//パスの一部を文字列にし、結合させる
+	std::string Model = "Model\\";
+
+	hCabin_ = Model::Load(Model + "House.fbx");
 	assert(hCabin_ >= 0);
 
-	hTree_ = Model::Load("Model\\LittleTree.fbx");
+	hTree_ = Model::Load(Model + "LittleTree.fbx");
 	assert(hTree_ >= 0);
 
-	hLogs_ = Model::Load("Model\\Logs.fbx");
+	hLogs_ = Model::Load(Model + "Logs.fbx");
 	assert(hLogs_ >= 0);
 
-	hStraw_ = Model::Load("Model\\Straw.fbx");
+	hStraw_ = Model::Load(Model + "Straw.fbx");
 	assert(hStraw_ >= 0);
 
 	ModelHandleArray_ = { hCabin_, hTree_, hLogs_, hStraw_ };
