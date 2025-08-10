@@ -260,6 +260,30 @@ public:
 
 
 	/// <summary>
+	/// XMVECTORをXMFLOAT3に変換
+	/// </summary>
+	/// <param name="_v">変換元のXMVECTOR型の値</param>
+	/// <returns>変換後のXMFLOAT3型の値</returns>
+	XMFLOAT3 ConversionXMVECTORToXMFLOAT3(XMVECTOR _v)
+	{
+		XMFLOAT3 tmp = { 0,0,0 };
+		XMStoreFloat3(&tmp, _v);
+		return tmp;
+	}
+
+	/// <summary>
+	/// XMFLOAT3をXMVECTORに変換
+	/// </summary>
+	/// <param name="_f">変換元のXMFLOAT3型の値</param>
+	/// <returns>変換後のXMVECTOR型の値</returns>
+	XMVECTOR ConversionXMFLOAT3ToXMVECTOR(XMFLOAT3 _f)
+	{
+		//XMFLOAT3型をXMVECTOR型に変換
+		XMVECTOR tmp =  XMLoadFloat3(&_f);
+		return tmp;
+	}
+
+	/// <summary>
 	/// 座標ベース線形補完(floatで受け取り返す)
 	/// </summary>
 	/// <param name="convert">変換したい値(x)</param>

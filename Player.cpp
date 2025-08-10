@@ -122,7 +122,8 @@ void Player::OnCollision(GameObject* pTarget)
 		Audio::Play(hSoundCollision_);
 
 		//状態遷移の際は一度x回転をストップ
-		RotateStop();
+		RotateXStop();
+		RotateYStop();
 	}
 
 	//各柵に接触した時の処理
@@ -150,7 +151,8 @@ void Player::OnCollision(GameObject* pTarget)
 					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
 
 					//状態遷移の際は一度x回転をストップ
-					RotateStop();
+					RotateXStop();
+					RotateYStop();
 				}
 			}
 		}
@@ -252,7 +254,7 @@ void Player::UpdateIdle()
 			PlayerState_ = S_CHARGE;
 
 			//状態遷移の際は一度x回転をストップ
-			RotateStop();
+			RotateXStop();
 		}
 	}
 
@@ -303,7 +305,7 @@ void Player::UpdateCharge()
 			PlayerState_ = S_IDLE;
 
 			//状態遷移の際は一度x回転をストップ
-			RotateStop();
+			RotateXStop();
 		}
 	}
 
@@ -328,11 +330,11 @@ void Player::UpdateCharge()
 		PlayerState_ = S_ATTACK;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateStop();
+		RotateXStop();
 	}
 
 	//高速X回転
-	FastRotate();
+	FastRotateX();
 
 	//カメラ操作
 	CameraControl();
@@ -352,7 +354,7 @@ void Player::UpdateAttack()
 	FrictionDeceleration();
 
 	//高速X回転
-	FastRotate();
+	FastRotateX();
 
 	//加速量が0になったら
 	if (IsDashStop())
@@ -364,7 +366,7 @@ void Player::UpdateAttack()
 		PlayerState_ = S_IDLE;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateStop();
+		RotateXStop();
 	}
 
 	//攻撃SE再生
@@ -388,7 +390,9 @@ void Player::UpdateHit()
 		PlayerState_ = S_IDLE;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateStop();
+		//Y軸回転の停止はノックバックから復活する時のみ行う(攻撃やチャージへの干渉を防ぐため)
+		RotateXStop();
+		RotateYStop();
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
 		AccelerationStop();
@@ -412,7 +416,9 @@ void Player::UpdateFenceHit()
 		PlayerState_ = S_IDLE;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateStop();
+		//Y軸回転の停止はノックバックから復活する時のみ行う(攻撃やチャージへの干渉を防ぐため)
+		RotateXStop();
+		RotateYStop();
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
 		AccelerationStop();
@@ -666,7 +672,7 @@ void Player::PlayerMove(XMVECTOR _move)
 	CharacterMove(_move);
 
 	//キャラクターをX回転
-	MoveRotate();
+	MoveRotateX();
 }
 
 void Player::CollisionCharacter(std::string _name)

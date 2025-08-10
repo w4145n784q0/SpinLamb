@@ -628,7 +628,8 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 
 void Character::KnockBack()
 {
-	MoveRotateReverse();
+	//x軸の-回転を行う
+	MoveRotateXReverse();
 
 	//毎フレームノックバック速度を減少
 	HitParam_.KnockBack_Velocity_.x *= HitParam_.DecelerationRate_;

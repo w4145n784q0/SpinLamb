@@ -119,6 +119,12 @@ public:
 	//プレイヤーの方向に回転する
 	void LookPlayer();
 
+	/// <summary>
+	/// 自身のY軸回転量を指定された方向に合わせて更新
+	/// </summary>
+	/// <param name="_direction">回転量を計算する際のベクトル</param>
+	void RotateFromDirection(XMVECTOR _direction);
+
 	//敵とプレイヤーの距離を返す
 	float PlayerEnemyDistanceX();
 

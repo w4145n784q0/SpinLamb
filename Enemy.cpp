@@ -16,7 +16,6 @@ namespace
 		i_chaseLength,
 		i_lookRotateAngle,
 		i_lookRotateValue,
-		i_arrowrotatecorrection,
 		i_EnemyAttackTime_1,
 		i_EnemyAttackTime_2,
 		i_EnemyAttackTime_3,
@@ -34,9 +33,6 @@ namespace
 	
 	//プレイヤー方向を向く際の1fごとの回転量
 	float LookRotateValue = 0.0f;
-
-	//矢印モデルの回転補正
-	float ArrowRotateCorrection = 0.0f;
 
 	//敵が攻撃するまでの時間の配列　ランダムに選ばれる
 	std::vector<int> EnemyAttackTimeArray = {0,0,0,0};
@@ -132,8 +128,8 @@ void Enemy::OnCollision(GameObject* pTarget)
 		//被弾状態になる
 		EnemyState_ = S_HIT;
 
-		//状態遷移の際は一度x回転をストップ
-		RotateStop();
+		//状態遷移の際は一度回転をストップ
+		RotateXStop();
 	}
 
 	//各柵に接触した時の処理
@@ -160,8 +156,8 @@ void Enemy::OnCollision(GameObject* pTarget)
 					//カメラ振動
 					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
 
-					//状態遷移の際は一度x回転をストップ
-					RotateStop();
+					//状態遷移の際は一度回転をストップ
+					RotateXStop();
 
 				}
 			}
@@ -235,14 +231,14 @@ void Enemy::UpdateRoot()
 		EnemyState_ = S_CHASE;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateStop();
+		RotateXStop();
 	}
 	else//接近しているなら攻撃準備
 	{
 		EnemyState_ = S_AIM;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateStop();
+		RotateXStop();
 	}
 }
 
@@ -252,9 +248,12 @@ void Enemy::UpdateChase()
 
 	//プレイヤーのいる方向へY回転する
 	LookPlayer();
-
+	
 	//更新した方向へ移動
 	CharacterMove(AutoAttackDirection);
+
+	//進行方向に合わせてY軸を回転
+	RotateFromDirection(AutoAttackDirection);
 
 	//自身とPlayerの距離を測る 
 	float dist = PlayerEnemyDistanceX();
@@ -264,11 +263,11 @@ void Enemy::UpdateChase()
 		EnemyState_ = S_AIM;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateStop();
+		RotateXStop();
 	}
 
 	//通常X回転
-	MoveRotate();
+	MoveRotateX();
 }
 
 void Enemy::UpdateAim()
@@ -278,6 +277,9 @@ void Enemy::UpdateAim()
 	//プレイヤーのいる方向へY回転する
 	LookPlayer();
 
+	//進行方向に合わせてY軸を回転
+	RotateFromDirection(AutoAttackDirection);
+
 	//加速度を溜める
 	Charging();
 
@@ -285,13 +287,13 @@ void Enemy::UpdateAim()
 	SetArrow();
 
 	//矢印モデルの位置を自身の回転と合わせる(Enemyの場合、矢印の回転に補正をかけておく)
-	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y + ArrowRotateCorrection;
+	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
 
 	//チャージ中のエフェクトを出す
 	SetChargingEffect("ParticleAssets\\circle_R.png");
 
 	//高速X回転
-	FastRotate();
+	FastRotateX();
 
 	//時間経過で攻撃状態へ（配列中のランダムな時間）
 	if (++AimTimer_ > EnemyAttackTimeArray[RandomAim_])
@@ -306,7 +308,7 @@ void Enemy::UpdateAim()
 		EnemyState_ = S_ATTACK;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateStop();
+		RotateXStop();
 	}
 
 }
@@ -321,11 +323,14 @@ void Enemy::UpdateAttack()
 	//正面ベクトルの方向に移動
 	CharacterMove(AutoAttackDirection);
 
+	//進行方向に合わせてY軸を回転
+	RotateFromDirection(AutoAttackDirection);
+
 	//摩擦量分速度を減少
 	FrictionDeceleration();
 
 	//高速X回転
-	FastRotate();
+	FastRotateX();
 
 	//加速量が0になったら
 	if (IsDashStop())
@@ -340,7 +345,7 @@ void Enemy::UpdateAttack()
 		RandomAim_ = rand() % EnemyAttackTimeArray.size();
 
 		//状態遷移の際は一度x回転をストップ
-		RotateStop();
+		RotateXStop();
 	}
 
 	//攻撃SE再生
@@ -358,7 +363,7 @@ void Enemy::UpdateHitStop()
 		EnemyState_ = S_HIT;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateStop();
+		RotateXStop();
 	}
 }
 
@@ -379,7 +384,9 @@ void Enemy::UpdateHit()
 		EnemyState_ = S_ROOT;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateStop();
+		//Y軸回転の停止はノックバックから復活する時のみ行う(攻撃やチャージへの干渉を防ぐため)
+		RotateXStop();
+		RotateYStop();
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
 		AccelerationStop();
@@ -403,7 +410,9 @@ void Enemy::UpdateFenceHit()
 		EnemyState_ = S_ROOT;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateStop();
+		//Y軸回転の停止はノックバックから復活する時のみ行う(攻撃やチャージへの干渉を防ぐため)
+		RotateXStop();
+		RotateYStop();
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
 		AccelerationStop();
@@ -444,7 +453,7 @@ void Enemy::LookPlayer()
 	//プレイヤーの位置(ベクトル)から敵の位置(ベクトル)を引く
 	XMVECTOR enemyVector = XMLoadFloat3(&this->transform_.position_);
 	XMVECTOR PlayerDist = XMVectorSubtract(TargetVec_ ,enemyVector);
-
+	
 	//回転する方向を設定(初期化)
 	XMVECTOR RotateDirection = XMVectorZero();
 
@@ -458,7 +467,7 @@ void Enemy::LookPlayer()
 	AutoAttackDirection = RotateDirection;
 
 	//------------角度に応じて回転------------
-	
+
 	//二つのベクトル間のラジアン角を求める
 	XMVECTOR angle = XMVector3AngleBetweenVectors(RotateDirection, MoveParam_.ForwardVector_);
 
@@ -488,6 +497,21 @@ void Enemy::LookPlayer()
 
 	//計算を確定
 	transform_.Calculation();
+}
+
+void Enemy::RotateFromDirection(XMVECTOR _direction)
+{
+	//移動方向を正規化
+	XMVECTOR moveDir = XMVector3Normalize(_direction);
+
+	//XMFLOAT3に変換
+	XMFLOAT3 dir = ConversionXMVECTORToXMFLOAT3(moveDir);
+
+	//XZ平面上のベクトルからY軸回転角を求める
+	float angleY = static_cast<float>(atan2(dir.x, dir.z));
+
+	//angleYはラジアン角なのでディグリー角に変換し、Y軸回転にセット
+	transform_.rotate_.y = XMConvertToDegrees(angleY);
 }
 
 float Enemy::PlayerEnemyDistanceX()
@@ -523,7 +547,6 @@ void Enemy::SetCSVEnemy()
 	ChaseLength = OnlyData[i_chaseLength];
 	LookRotateAngle = OnlyData[i_lookRotateAngle];
 	LookRotateValue = OnlyData[i_lookRotateValue];
-	ArrowRotateCorrection = OnlyData[i_arrowrotatecorrection];
 
 	int arr[] = { static_cast<int>(OnlyData[i_EnemyAttackTime_1]), static_cast<int>(OnlyData[i_EnemyAttackTime_2]),
 			static_cast<int>(OnlyData[i_EnemyAttackTime_3]), static_cast<int>(OnlyData[i_EnemyAttackTime_4]) };

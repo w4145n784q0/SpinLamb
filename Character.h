@@ -301,17 +301,17 @@ public:
     /// <summary>
     /// ’ÊíX²‰ñ“]
     /// </summary>
-    void MoveRotate() { this->transform_.rotate_.x += RotateParam_.MoveRotateX; }
+    void MoveRotateX() { this->transform_.rotate_.x += RotateParam_.MoveRotateX; }
 
     /// <summary>
     /// ’ÊíX²‰ñ“](-x‰ñ“])
     /// </summary>
-    void MoveRotateReverse() { this->transform_.rotate_.x -= RotateParam_.MoveRotateX; }
+    void MoveRotateXReverse() { this->transform_.rotate_.x -= RotateParam_.MoveRotateX; }
 
     /// <summary>
     /// ‚‘¬X²‰ñ“]
     /// </summary>
-    void FastRotate() { this->transform_.rotate_.x += RotateParam_.FastRotateX; }
+    void FastRotateX() { this->transform_.rotate_.x += RotateParam_.FastRotateX; }
 
     /// <summary>
     /// ‚‘¬X²‰ñ“](-x‰ñ“])
@@ -321,7 +321,12 @@ public:
     /// <summary>
     /// X‰ñ“]‚ğ~‚ß‚é
     /// </summary>
-    void RotateStop() { this->transform_.rotate_.x = 0.0f; }
+    void RotateXStop() { this->transform_.rotate_.x = 0.0f; }
+
+    /// <summary>
+    /// Y‰ñ“]‚ğ~‚ß‚é
+    /// </summary>
+    void RotateYStop() { this->transform_.rotate_.y = 0.0f; }
 
 
     //----------”í’e----------
