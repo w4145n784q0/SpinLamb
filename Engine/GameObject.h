@@ -263,10 +263,11 @@ public:
 	/// XMVECTOR‚ðXMFLOAT3‚É•ÏŠ·
 	/// </summary>
 	/// <param name="_v">•ÏŠ·Œ³‚ÌXMVECTORŒ^‚Ì’l</param>
-	/// <returns>•ÏŠ·Œã‚ÌXMFLOAT3Œ^‚Ì’l</returns>
-	XMFLOAT3 ConversionXMVECTORToXMFLOAT3(XMVECTOR _v)
+	/// <param name="_f">‘ã“ü‚·‚éXMFLOAT3Œ^‚Ì’l È—ª‚µ‚½ê‡‚Í0,0,0</param>
+	/// <returns></returns>
+	XMFLOAT3 ConversionXMVECTORToXMFLOAT3(XMVECTOR _v, XMFLOAT3 _f = { 0,0,0 })
 	{
-		XMFLOAT3 tmp = { 0,0,0 };
+		XMFLOAT3 tmp = _f;
 		XMStoreFloat3(&tmp, _v);
 		return tmp;
 	}

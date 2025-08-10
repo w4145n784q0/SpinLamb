@@ -23,7 +23,8 @@ namespace {
 		i_camerarotate,
 		i_cameraupperlimit,
 		i_cameralowerlimit,
-		i_cameradebugPos,
+		i_cameradebugHeight,
+		i_cameradebugDepth,
 	};
 
 	//カメラの固定位置
@@ -51,15 +52,19 @@ namespace {
 	//上下入力時のカメラの高さの最低値
 	float cameraLowerLimit = 0.0f;
 
-	//デバッグカメラ状態時のカメラの固定位置
-	float cameraDebugPos = 0.0f;
+	//デバッグカメラ状態時のカメラのY位置
+	float cameraDebugHeight = 0.0f;
+
+	//デバッグカメラ状態時のカメラのZ位置
+	float cameraDebugDepth = 0.0f;
 }
 
 Player::Player(GameObject* parent) 
 	: Character(parent,"Player"),
 	hPlayer_(-1), ControllerID_(-1),
 	PlayerState_(S_STOP),CameraState_(S_NORMALCAMERA),
-	Direction_({ 0,0,0 }),BackCamera_({ 0,0,0 }), CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 })
+	Direction_({ 0,0,0 }), CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 }),
+	BackCamera_({ 0,0,0 }), DebugCameraPos_{ 0,0,0 }
 {
 	
 }
@@ -553,8 +558,8 @@ void Player::CameraControl()
 	}
 	else if (CameraState_ == S_DEBUGCAMERA)
 	{
-		//デバッグカメラ中はカメラの回転位置を固定
-		cameraTransform_.rotate_.x = cameraDebugPos;
+		//デバッグカメラ中はカメラの位置を固定
+		DebugCameraPos_ = { 0.0f, cameraDebugHeight, cameraDebugDepth };
 	}
 }
 
@@ -564,25 +569,38 @@ void Player::CameraUpdate()
 
 	//--------------カメラ追従--------------
 
-	//カメラの焦点は自機の位置
-	CameraTarget_ = { this->transform_.position_ };
+	//通常カメラの場合はプレイヤー後方にカメラをセット
+	if (CameraState_ == S_NORMALCAMERA)
+	{
+		//カメラの焦点は自機の位置
+		CameraTarget_ = { this->transform_.position_ };
 
-	//カメラの回転行列作成(X軸・Y軸)
-	//CameraControl()で動かしたcameraTransform_をラジアン化し、回転行列にする
-	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform_.rotate_.y));
-	XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(cameraTransform_.rotate_.x));
-	
-	//両方の回転行列を乗算
-	XMMATRIX rotCamera = XMMatrixMultiply(rotX, rotY);
+		//カメラの回転行列作成(X軸・Y軸)
+		//CameraControl()で動かしたcameraTransform_をラジアン化し、回転行列にする
+		XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraTransform_.rotate_.y));
+		XMMATRIX rotX = XMMatrixRotationX(XMConvertToRadians(cameraTransform_.rotate_.x));
 
-	//作成した両方の回転行列をバックカメラのベクトルに乗算
-	BackCamera_ = XMVector3TransformCoord(BackCamera_, rotCamera);
+		//両方の回転行列を乗算
+		XMMATRIX rotCamera = XMMatrixMultiply(rotX, rotY);
 
-	//プレイヤーの位置を取得
-	XMVECTOR PlayerPosVec = XMLoadFloat3(&this->transform_.position_);	
+		//作成した両方の回転行列をバックカメラのベクトルに乗算
+		BackCamera_ = XMVector3TransformCoord(BackCamera_, rotCamera);
 
-	//プレイヤーの移動ベクトルとバックカメラを加算
-	XMStoreFloat3(&CameraPosition_, PlayerPosVec + BackCamera_);
+		//プレイヤーの位置を取得
+		XMVECTOR PlayerPosVec = XMLoadFloat3(&this->transform_.position_);
+
+		//プレイヤーの移動ベクトルとバックカメラを加算
+		XMStoreFloat3(&CameraPosition_, PlayerPosVec + BackCamera_);
+	}
+	//デバッグカメラの場合は真上から見下ろすようにセット
+	else if (CameraState_ == S_DEBUGCAMERA)
+	{
+		//カメラの位置をCameraUpdateの固定位置にセット
+		CameraPosition_ = DebugCameraPos_;
+
+		//カメラの焦点をステージ中心(原点)にセット
+		CameraTarget_ = { 0,0,0 };
+	}
 
 	//--------------カメラ振動--------------
 	// 全ステート共有
@@ -592,10 +610,10 @@ void Player::CameraUpdate()
 	CameraPosition_.y += Camera::CameraShakeFloat3().y;
 	CameraPosition_.z += Camera::CameraShakeFloat3().z;
 
-	//バックカメラベクトルをリセット
+	//バックカメラベクトルをリセット(DEBUGCAMERAでは使用しない)
 	BackCamera_ = { BackCameraPos };
 	
-	//カメラの位置・焦点はGameViewから行う
+	//カメラの位置・焦点のセットはGameViewから行う
 }
 
 void Player::KeyBoardMove()
@@ -753,5 +771,6 @@ void Player::SetCSVPlayer(std::string _path)
 	cameraRotate = OnlyData[i_camerarotate];
 	cameraUpperLimit = OnlyData[i_cameraupperlimit];
 	cameraLowerLimit = OnlyData[i_cameralowerlimit];
-	cameraDebugPos = OnlyData[i_cameradebugPos];
+	cameraDebugHeight = OnlyData[i_cameradebugHeight]; 
+	cameraDebugDepth = OnlyData[i_cameradebugDepth];
 }

@@ -60,6 +60,9 @@ private:
 	//プレイヤーの後ろに置くカメラの位置
 	XMVECTOR BackCamera_;
 
+	//デバッグカメラ時のカメラ位置
+	XMFLOAT3 DebugCameraPos_;
+
 public:
 	Player(GameObject* parent);
 	~Player();

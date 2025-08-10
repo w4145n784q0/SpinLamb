@@ -340,17 +340,19 @@ void Character::DrawCharacterImGui()
 	//キャラクターの位置(position_.x,y,z)
 	if (ImGui::TreeNode("Transform.Position"))
 	{
-		ImGui::SliderFloat("PositionX:%.3f", &this->transform_.position_.x, WestEnd_, EastEnd_);
-		ImGui::SliderFloat("PositionZ:%.3f", &this->transform_.position_.z, SouthEnd_, NorthEnd_);
+		ImGui::SliderFloat("PositionX", &this->transform_.position_.x, WestEnd_, EastEnd_);
+		ImGui::SliderFloat("PositionY", &this->transform_.position_.y, JumpParam_.HeightLowerLimit_,
+			JumpParam_.HeightUpperLimit_);
+		ImGui::SliderFloat("PositionZ", &this->transform_.position_.z, SouthEnd_, NorthEnd_);
 		ImGui::TreePop();
 	}
 
 	//キャラクターの回転量(rotate_.x,y,z)
 	if (ImGui::TreeNode("Transform.Rotate"))
 	{
-		ImGui::InputFloat("RotateX:%.3f", &this->transform_.rotate_.x, ZeroPointOne);
-		ImGui::InputFloat("RotateY:%.3f", &this->transform_.rotate_.y, ZeroPointOne);
-		ImGui::InputFloat("RotateZ:%.3f", &this->transform_.rotate_.z, ZeroPointOne);
+		ImGui::InputFloat("RotateX", &this->transform_.rotate_.x, ZeroPointOne);
+		ImGui::InputFloat("RotateY", &this->transform_.rotate_.y, ZeroPointOne);
+		ImGui::InputFloat("RotateZ", &this->transform_.rotate_.z, ZeroPointOne);
 		ImGui::TreePop();
 	}
 
