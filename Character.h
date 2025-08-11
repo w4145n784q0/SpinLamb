@@ -193,7 +193,7 @@ public:
     /// <summary>
     /// キャラクターの移動処理
     /// </summary>
-    /// <param name="_direction">動かす方向ベクトル</param>
+    /// <param name="_direction">動かす方向</param>
     void CharacterMove(XMVECTOR _direction);
 
     /// <summary>
@@ -332,13 +332,13 @@ public:
     //----------被弾----------
 
     /// <summary>
-    /// 反射処理
+    /// キャラクター同士の反射処理
     /// </summary>
     /// <param name="myVector">自身の位置ベクトル</param>
-    /// <param name="eVector">相手の位置ベクトル</param>
+    /// <param name="targetVector">相手の位置ベクトル</param>
     /// <param name="myVelocity">自身の加速度</param>
-    /// <param name="eVelocity">相手の加速度</param>
-    void Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, float eVelocity);
+    /// <param name="targetVelocity">相手の加速度</param>
+    void Reflect(XMVECTOR myVector, XMVECTOR targetVector, float myVelocity, float targetVelocity);
 
     /// <summary>
     /// ノックバック移動処理

@@ -501,6 +501,12 @@ void Character::ShadowDraw()
 
 void Character::CharacterMove(XMVECTOR _direction)
 {
+	//受け取った方向が0ベクトルなら処理しない(0ベクトルを正規化はできない)
+	if (XMVector3Equal(_direction, XMVectorZero()))
+	{
+		return;
+	}
+
 	//単位ベクトル化し、移動方向を確定
 	MoveParam_.MoveDirection_ = XMVector3Normalize(_direction);
 
@@ -574,7 +580,7 @@ float Character::RotateDirectionVector(XMVECTOR _MoveVector)
 	return angleDeg;
 }
 
-void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, float eVelocity)
+void Character::Reflect(XMVECTOR myVector, XMVECTOR targetVector, float myVelocity, float targetVelocity)
 {
 	//無敵状態なら処理しない
 	if (this->FenceHitParam_.IsInvincibility_)
@@ -582,8 +588,17 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 		return;
 	}
 
-	//接触相手のベクトルから自身のベクトルを引き、正規化
-	XMVECTOR subVector = XMVector3Normalize(XMVectorSubtract(eVector ,myVector));
+	//接触相手のベクトルから自身のベクトルを引く
+	XMVECTOR subVector = XMVectorSubtract(targetVector, myVector);
+
+	//引いたベクトルが0ならお互いの位置が同じなので処理しない(0ベクトルを正規化はできない)
+	if (XMVector3Equal(subVector, XMVectorZero()))
+	{
+		return;
+	}
+
+	//単位ベクトルに変換
+	subVector = XMVector3Normalize(subVector);
 	
 	//逆ベクトルにして反射方向を決定
 	subVector = XMVectorNegate(subVector);
@@ -594,10 +609,10 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR eVector, float myVelocity, f
 	 HitParam_.KnockBack_Direction_ = tmp;
 
 	//自身の速度と相手の速度の差分をとる
-	float subVelocity = myVelocity - eVelocity;
+	float subVelocity = myVelocity - targetVelocity;
 
 	//ノックバック量の初期化
-	//値が変化するのでローカル変数
+	//毎回値が変化するのでローカル変数
 	float KnockBackValue = 0.0f;
 
 	//速度差の判定は線形補完元の最大値を適用

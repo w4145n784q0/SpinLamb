@@ -23,6 +23,7 @@ namespace {
 		i_camerarotate,
 		i_cameraupperlimit,
 		i_cameralowerlimit,
+		i_cameradebugWidth,
 		i_cameradebugHeight,
 		i_cameradebugDepth,
 	};
@@ -44,27 +45,23 @@ namespace {
 	XMFLOAT3 CameraInit = { 0,0,0 };
 
 	//左右入力時のカメラの回転量
-	float cameraRotate = 0.0f;
+	float CameraRotate = 0.0f;
 
 	//上下入力時のカメラの高さの最高値
-	float cameraUpperLimit = 0.0f;
+	float CameraUpperLimit = 0.0f;
 
 	//上下入力時のカメラの高さの最低値
-	float cameraLowerLimit = 0.0f;
+	float CameraLowerLimit = 0.0f;
 
-	//デバッグカメラ状態時のカメラのY位置
-	float cameraDebugHeight = 0.0f;
-
-	//デバッグカメラ状態時のカメラのZ位置
-	float cameraDebugDepth = 0.0f;
+	//デバッグカメラ状態時のカメラの位置
+	XMFLOAT3 CameraDebugPos = { 0,0,0 };
 }
 
 Player::Player(GameObject* parent) 
 	: Character(parent,"Player"),
 	hPlayer_(-1), ControllerID_(-1),
 	PlayerState_(S_STOP),CameraState_(S_NORMALCAMERA),
-	Direction_({ 0,0,0 }), CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 }),
-	BackCamera_({ 0,0,0 }), DebugCameraPos_{ 0,0,0 }
+	Direction_({ 0,0,0 }), CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 }),BackCamera_({ 0,0,0 })
 {
 	
 }
@@ -511,36 +508,36 @@ void Player::CameraControl()
 		//A・Dキー/右スティックでカメラ回転
 		if (Input::IsKey(DIK_A) || Input::GetPadStickR(ControllerID_).x <= -Input::StickTilt)
 		{
-			cameraTransform_.rotate_.y -= cameraRotate;
+			cameraTransform_.rotate_.y -= CameraRotate;
 		}
 		if (Input::IsKey(DIK_D) || Input::GetPadStickR(ControllerID_).x >= Input::StickTilt)
 		{
-			cameraTransform_.rotate_.y += cameraRotate;
+			cameraTransform_.rotate_.y += CameraRotate;
 		}
 
 		//W・Sキーでカメラ上下移動
 		if (Input::IsKey(DIK_W) || Input::GetPadStickR(ControllerID_).y <= -Input::StickTilt)
 		{
 			//カメラの上下移動の上限になったら位置固定
-			if (cameraTransform_.rotate_.x >= cameraUpperLimit)
+			if (cameraTransform_.rotate_.x >= CameraUpperLimit)
 			{
-				cameraTransform_.rotate_.x = cameraUpperLimit;
+				cameraTransform_.rotate_.x = CameraUpperLimit;
 			}
 			else
 			{
-				cameraTransform_.rotate_.x += cameraRotate;
+				cameraTransform_.rotate_.x += CameraRotate;
 			}
 		}
 		if (Input::IsKey(DIK_S) || Input::GetPadStickR(ControllerID_).y >= Input::StickTilt)
 		{
 			//カメラの上下移動の下限になったら位置固定
-			if (cameraTransform_.rotate_.x <= cameraLowerLimit)
+			if (cameraTransform_.rotate_.x <= CameraLowerLimit)
 			{
-				cameraTransform_.rotate_.x = cameraLowerLimit;
+				cameraTransform_.rotate_.x = CameraLowerLimit;
 			}
 			else
 			{
-				cameraTransform_.rotate_.x -= cameraRotate;
+				cameraTransform_.rotate_.x -= CameraRotate;
 			}
 		}
 
@@ -558,8 +555,7 @@ void Player::CameraControl()
 	}
 	else if (CameraState_ == S_DEBUGCAMERA)
 	{
-		//デバッグカメラ中はカメラの位置を固定
-		DebugCameraPos_ = { 0.0f, cameraDebugHeight, cameraDebugDepth };
+		//デバッグカメラ中はカメラの位置を固定し、操作しない
 	}
 }
 
@@ -596,7 +592,7 @@ void Player::CameraUpdate()
 	else if (CameraState_ == S_DEBUGCAMERA)
 	{
 		//カメラの位置をCameraUpdateの固定位置にセット
-		CameraPosition_ = DebugCameraPos_;
+		CameraPosition_ = CameraDebugPos;
 
 		//カメラの焦点をステージ中心(原点)にセット
 		CameraTarget_ = { 0,0,0 };
@@ -768,9 +764,8 @@ void Player::SetCSVPlayer(std::string _path)
 	MoveValue = OnlyData[i_movevalue];
 	Jumpheight = OnlyData[i_jumpheight];
 	CameraInit = { OnlyData[i_camerainitx] ,OnlyData[i_camerainity] , OnlyData[i_camerainitz] };
-	cameraRotate = OnlyData[i_camerarotate];
-	cameraUpperLimit = OnlyData[i_cameraupperlimit];
-	cameraLowerLimit = OnlyData[i_cameralowerlimit];
-	cameraDebugHeight = OnlyData[i_cameradebugHeight]; 
-	cameraDebugDepth = OnlyData[i_cameradebugDepth];
+	CameraRotate = OnlyData[i_camerarotate];
+	CameraUpperLimit = OnlyData[i_cameraupperlimit];
+	CameraLowerLimit = OnlyData[i_cameralowerlimit];
+	CameraDebugPos = { OnlyData[i_cameradebugWidth],OnlyData[i_cameradebugHeight],OnlyData[i_cameradebugDepth] };
 }

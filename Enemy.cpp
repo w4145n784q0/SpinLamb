@@ -457,11 +457,14 @@ void Enemy::LookPlayer()
 	//回転する方向を設定(初期化)
 	XMVECTOR RotateDirection = XMVectorZero();
 
-	//距離を単位ベクトル化(PlayerDistが0,0,0でエラー防止)
-	if(!XMVector3Equal(PlayerDist, XMVectorZero()))
+	//プレイヤーの位置から自身の位置を引いた距離が0ベクトルなら何もしない(0ベクトルを正規化はできない)
+	if(XMVector3Equal(PlayerDist, XMVectorZero()))
 	{
-		RotateDirection = XMVector3Normalize(PlayerDist);
+		return;
 	}
+	
+	//距離を単位ベクトル化
+	RotateDirection = XMVector3Normalize(PlayerDist);
 
 	//敵への移動方向を保管
 	AutoAttackDirection = RotateDirection;
@@ -501,11 +504,18 @@ void Enemy::LookPlayer()
 
 void Enemy::RotateFromDirection(XMVECTOR _direction)
 {
+	//移動方向が0ベクトルなら何もしない(0ベクトルを正規化はできない)
+	if (XMVector3Equal(_direction, XMVectorZero()))
+	{
+		return;
+	}
+
 	//移動方向を正規化
 	XMVECTOR moveDir = XMVector3Normalize(_direction);
 
 	//XMFLOAT3に変換
-	XMFLOAT3 dir = ConversionXMVECTORToXMFLOAT3(moveDir);
+	XMFLOAT3 dir = { 0,0,0 };
+	XMStoreFloat3(&dir, moveDir);
 
 	//XZ平面上のベクトルからY軸回転角を求める
 	float angleY = static_cast<float>(atan2(dir.x, dir.z));

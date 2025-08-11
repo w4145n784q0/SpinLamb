@@ -258,32 +258,6 @@ public:
 	void SetScale(XMFLOAT3 scale) { transform_.scale_ = scale; }
 	void SetScale(float x, float y, float z) { SetScale(XMFLOAT3(x, y, z)); }
 
-
-	/// <summary>
-	/// XMVECTORをXMFLOAT3に変換
-	/// </summary>
-	/// <param name="_v">変換元のXMVECTOR型の値</param>
-	/// <param name="_f">代入するXMFLOAT3型の値 省略した場合は0,0,0</param>
-	/// <returns></returns>
-	XMFLOAT3 ConversionXMVECTORToXMFLOAT3(XMVECTOR _v, XMFLOAT3 _f = { 0,0,0 })
-	{
-		XMFLOAT3 tmp = _f;
-		XMStoreFloat3(&tmp, _v);
-		return tmp;
-	}
-
-	/// <summary>
-	/// XMFLOAT3をXMVECTORに変換
-	/// </summary>
-	/// <param name="_f">変換元のXMFLOAT3型の値</param>
-	/// <returns>変換後のXMVECTOR型の値</returns>
-	XMVECTOR ConversionXMFLOAT3ToXMVECTOR(XMFLOAT3 _f)
-	{
-		//XMFLOAT3型をXMVECTOR型に変換
-		XMVECTOR tmp =  XMLoadFloat3(&_f);
-		return tmp;
-	}
-
 	/// <summary>
 	/// 座標ベース線形補完(floatで受け取り返す)
 	/// </summary>
