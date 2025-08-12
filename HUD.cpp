@@ -6,15 +6,15 @@
 //描画操作のみ扱うクラス
 namespace
 {
-	//csv読み込み時のインデックス
+	//csv読み込み時のインデックス(イージング処理用の変数)
 	enum EasingIndex
 	{
-		i_gominscale = 0,
-		i_gomaxscale,
-		i_timeminscale,
-		i_timemaxscale,
-		i_timeduration,
-		i_max
+		i_GoMinScale = 0,
+		i_GoMaxScale,
+		i_TimeMinScale,
+		i_TimeMaxScale,
+		i_TimeDuration,
+		i_Max
 	};
 
 	//----------画像描画用トランスフォーム----------
@@ -74,11 +74,11 @@ namespace
 	//時間表記のナンバーハンドルの添え字(1の位)
 	int TimeIndexOne = 0; 
 	
-	//ナンバーハンドルの添え字 Player,Enemyそれぞれの十の位、一の位
-	int pScoreIndexTen = 0;
-	int pScoreIndexOne = 0;
-	int eScoreIndexTen = 0;
-	int eScoreIndexOne = 0;
+	//ナンバーハンドルの添え字 Player1またはPlayer2,Enemyそれぞれの十の位、一の位
+	int FirstScoreIndexTen = 0;
+	int FirstScoreIndexOne = 0;
+	int SecondScoreIndexTen = 0;
+	int SecondScoreIndexOne = 0;
 
 	//ロゴ変更までのカウンター
 	float LogoChangeCount = 0;
@@ -102,13 +102,13 @@ namespace
 }
 
 HUD::HUD(GameObject* parent)
-	:GameObject(parent, "HUD"), hBackTitleLogo_(-1), hPracticeNow_(-1), hSplitLine_(-1), hGameExplanation_(-1),
-	hStart_(-1),hReady_(-1),hGo_(-1),
+	:GameObject(parent, "HUD"), hBackTitleLogo_(-1), hPracticeNow_(-1), hGameExplanation_(-1),
+	hStart_(-1),hReady_(-1),hGo_(-1),hFinish_(-1), hSplitLine_(-1),
 	hNumber0_(-1), hNumber1_(-1), hNumber2_(-1), hNumber3_(-1), hNumber4_(-1),
 	hNumber5_(-1), hNumber6_(-1), hNumber7_(-1), hNumber8_(-1), hNumber9_(-1),
-	hFinish_(-1), hMap_(-1), hFirstIcon_(-1), hSecondIcon_(-1),
-	GameModeHUD_(Max), pGameTimer_(nullptr), pMiniMap_(nullptr), DrawMode_(S_None),
-	FirstScore_(0),SecondScore_(0),ReadyTimer_(0), EasingCount_(0), DrawStart_(start_max)
+	hMap_(-1), hFirstIcon_(-1), hSecondIcon_(-1), FirstScore_(0), SecondScore_(0),
+	pGameTimer_(nullptr), pMiniMap_(nullptr), DrawMode_(Mode_None),DrawStart_(S_MaxStartMode),
+	ReadyTimer_(0), EasingCount_(0) 
 
 {
 }
@@ -119,7 +119,7 @@ HUD::~HUD()
 
 void HUD::Initialize()
 {
-	DrawStart_ = start_ready;
+	DrawStart_ = S_StartReady;
 
 	//csvからパラメータ読み込み
 	SetHUDCSV();
@@ -210,7 +210,6 @@ void HUD::Update()
 
 void HUD::Draw()
 {
-	
 }
 
 void HUD::Release()
@@ -222,31 +221,31 @@ void HUD::DrawImGui()
 	//シーンクラスからの指示によって呼ぶ描画関数を変える
 	switch (DrawMode_)
 	{
-	case S_BeforeStart:
+	case Mode_BeforeStart:
 	{
 		DrawImGuiExplanation();
 	}
 	break;
-	case S_Ready:
+	case Mode_JustBefore:
 	{
 		DrawImGuiScore();
 		DrawImGuiStartLogo();
 	}
 	break;
-	case S_Playing:
+	case Mode_Playing:
 	{
 		DrawImGuiScore();
 		DrawImGuiTimer();
 	}
 	break;
-	case S_Finish:
+	case Mode_Finish:
 	{
 		DrawImGuiTimer();
 		DrawImGuiFinishLogo();
 		DrawImGuiScore();
 	}
 	break;
-	case S_Practice:
+	case Mode_Practice:
 		DrawImGuiPracticeLogo();
 		break;
 	default:
@@ -267,34 +266,34 @@ void HUD::DrawFullScreen()
 	//シーンクラスからの指示によって呼ぶ描画関数を変える
 	switch (DrawMode_)
 	{
-	case S_BeforeStart:
+	case Mode_BeforeStart:
 	{
 		DrawExplanation();
 	}
 	break;
-	case S_Ready:
+	case Mode_JustBefore:
 	{
 		DrawScore();
 		DrawStartLogo();
 	}
 	break;
-	case S_Playing:
+	case Mode_Playing:
 	{
 		DrawScore();
 		DrawTimer();
 	}
 	break;
-	case S_Finish:
+	case Mode_Finish:
 	{
 		DrawTimer();
 		DrawFinishLogo();
 		DrawScore();
 	}
 	break;
-	case S_Practice:
+	case Mode_Practice:
 		DrawPracticeLogo();
 		break;
-	case S_None:
+	case Mode_None:
 		break;
 	default:
 		break;
@@ -308,9 +307,9 @@ void HUD::SetHUDCSV()
 {
 	//csvファイルを読み込む
 	CsvReader csvTransform;
-	csvTransform.Load("CSVdata\\HUDData\\HUDData.csv");
+	csvTransform.Load("CSVdata\\HUDData\\HUDTransformData.csv");
 
-	//csvファイルの各0列目の文字列の配列を取得
+	//csvファイル(HUDTransformData.csv)の各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {
 		"backtitle","practice","explanation","start","finish","split",
 		"tentime","onetime","minimap","playericon", "enemyicon",
@@ -321,28 +320,26 @@ void HUD::SetHUDCSV()
 	InitCSVTransformArray(csvTransform, ParamNames, ImageArray);
 
 	//csvファイルを読み込む
-	CsvReader csveasing;
-	csveasing.Load("CSVdata\\HUDData\\HUDSomeData.csv");
+	CsvReader csvEasing;
+	csvEasing.Load("CSVdata\\HUDData\\HUDSomeData.csv");
 
-	//csvファイルの0列目の文字列を取得
-	std::string easingLogoName = "Easing";
+	//csvファイル(HUDSomeData.csv)の0列目の文字列を取得
+	std::string EasingLogoName = "Easing";
 
 	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> easingData = GetCSVReadData(csveasing, easingLogoName);
+	std::vector<float> EasingData = GetCSVReadData(csvEasing, EasingLogoName);
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	GoMinScale = easingData[i_gominscale];
-	GoMaxScale = easingData[i_gomaxscale];
-	TimeMinScale = easingData[i_timeminscale];
-	TimeMaxScale = easingData[i_timemaxscale];
-	TimeDuration = easingData[i_timeduration];
+	GoMinScale = EasingData[i_GoMinScale];
+	GoMaxScale = EasingData[i_GoMaxScale];
+	TimeMinScale = EasingData[i_TimeMinScale];
+	TimeMaxScale = EasingData[i_TimeMaxScale];
+	TimeDuration = EasingData[i_TimeDuration];
 }
 
 void HUD::DrawPracticeLogo()
 {
-
-
 	//"タイトルに戻ります"ロゴ描画
 	Image::SetAndDraw(hBackTitleLogo_, LogoBackTitle);
 
@@ -422,10 +419,10 @@ void HUD::DrawStartLogo()
 	//start_readyに戻る処理はBattleSceneから指示
 	switch (DrawStart_)
 	{
-	case start_ready:
+	case S_StartReady:
 		DrawReady();
 		break;
-	case start_go:
+	case S_StartGo:
 		DrawGo();
 		break;
 	default:
@@ -467,18 +464,18 @@ void HUD::DrawScore()
 	//現在のスコアをそれぞれ計算
 	//十の位:現在のスコアを10で除算
 	//一の位:現在のスコアを10で除算した余り
-	pScoreIndexTen = FirstScore_ / TenDivision;
-	pScoreIndexOne = FirstScore_ % TenDivision;
-	eScoreIndexTen = SecondScore_ / TenDivision;
-	eScoreIndexOne = SecondScore_ % TenDivision;
+	FirstScoreIndexTen = FirstScore_ / TenDivision;
+	FirstScoreIndexOne = FirstScore_ % TenDivision;
+	SecondScoreIndexTen = SecondScore_ / TenDivision;
+	SecondScoreIndexOne = SecondScore_ % TenDivision;
 
-	//Playerのスコアの十の位,一の位を描画
-	Image::SetAndDraw(ArrayHandle[pScoreIndexTen], PlayerScoreTen);
-	Image::SetAndDraw(ArrayHandle[pScoreIndexOne], PlayerScoreOne);
+	//Player1のスコアの十の位,一の位を描画
+	Image::SetAndDraw(ArrayHandle[FirstScoreIndexTen], PlayerScoreTen);
+	Image::SetAndDraw(ArrayHandle[FirstScoreIndexOne], PlayerScoreOne);
 
-	//Enemyのスコアの十の位,一の位を描画
-	Image::SetAndDraw(ArrayHandle[eScoreIndexTen], EnemyScoreTen);
-	Image::SetAndDraw(ArrayHandle[eScoreIndexOne], EnemyScoreOne);
+	//Player2,Enemyのスコアの十の位,一の位を描画
+	Image::SetAndDraw(ArrayHandle[SecondScoreIndexTen], EnemyScoreTen);
+	Image::SetAndDraw(ArrayHandle[SecondScoreIndexOne], EnemyScoreOne);
 }
 
 void HUD::DrawImGuiExplanation()
@@ -599,7 +596,7 @@ void HUD::DrawReady()
 	else
 	{
 		LogoChangeCount = 0;
-		DrawStart_ = start_go;
+		DrawStart_ = S_StartGo;
 	}
 }
 

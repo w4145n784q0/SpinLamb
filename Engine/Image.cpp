@@ -7,15 +7,15 @@
 //3D画像を管理する
 namespace Image
 {
-	//画像関連の変数を初期化するインデックス
+	//csv読み込み時のインデックス(画像関連の変数)
 	enum ImageIndex
 	{
-		i_leftedge = 0,
-		i_rightedge,
-		i_upedge,
-		i_downedge,
-		i_center,
-		i_alphamin,
+		i_LeftEdge = 0,
+		i_RightEdge,
+		i_UpEdge,
+		i_DownEdge,
+		i_Center,
+		i_AlphaMin,
 	};
 
 	float LeftEdge = 0.0f;//画像の左端
@@ -220,19 +220,19 @@ namespace Image
 		csv.Load("CSVdata\\EngineData\\ImageData.csv");
 
 		//csvファイルの各0列目の文字列を取得
-		std::string imagename = "Image";
+		std::string ImageName = "Image";
 		
 		//0列目の文字列を渡し、その行のパラメータを取得
-		std::vector<float> imagedata = GameObject::GetCSVReadData(csv, imagename);
+		std::vector<float> ImageData = GameObject::GetCSVReadData(csv, ImageName);
 			
 		//初期化の順番はcsvの各行の順番に合わせる
 		//vの添え字はnamespaceで宣言した列挙型を使用
-		LeftEdge = imagedata[i_leftedge];
-		RightEdge = imagedata[i_rightedge];
-		UpEdge = imagedata[i_upedge];
-		DownEdge = imagedata[i_downedge];
-		Center = imagedata[i_center];
-		AlphaMin = static_cast<int>(imagedata[i_alphamin]);
+		LeftEdge = ImageData[i_LeftEdge];
+		RightEdge = ImageData[i_RightEdge];
+		UpEdge = ImageData[i_UpEdge];
+		DownEdge = ImageData[i_DownEdge];
+		Center = ImageData[i_Center];
+		AlphaMin = static_cast<int>(ImageData[i_AlphaMin]);
 	}
 
 	//ワールド行列設定と描画を同時に行う

@@ -26,8 +26,8 @@ private:
 	int SecondCharaScore_;		//プレイヤー2or敵のスコア
 
 	//ゲームプレイ時の遊ぶ人数　シーンをまたいでも管理できる
-	//GameViewの画面描画モードとは別
-	//(誰と誰が遊んでいるかの状態を保持)
+	//GameViewの画面描画モードとは別で
+	//誰と誰が遊んでいるかの状態を保持
 	enum PlayMode 
 	{
 		PlayerVSEnemy,//一人プレイの時(PvE)

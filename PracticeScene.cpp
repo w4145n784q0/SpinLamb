@@ -8,15 +8,12 @@
 #include"Engine/Camera.h"
 #include"GameView.h"
 
-namespace
-{
-	
-}
-
 PracticeScene::PracticeScene(GameObject* parent)
-	:BaseScene(parent,"PracticeScene"), hBackScreen_(-1),hSoundPractice_(-1),
-	pPlayer1_(nullptr), pPlayer2_(nullptr), pEnemy_(nullptr), pHUD_(nullptr),pMiniMap_(nullptr),
-	pTransitionEffect_(nullptr),Press_(0)
+	:BaseScene(parent,"PracticeScene"),
+	hBackScreen_(-1),hSoundPractice_(-1),
+	pPlayer1_(nullptr), pPlayer2_(nullptr), pEnemy_(nullptr), pHUD_(nullptr),
+	pTransitionEffect_(nullptr), pMiniMap_(nullptr),
+	ActivePlayers_({}), ActiveEnemys_({})
 {
 }
 
@@ -218,7 +215,7 @@ void PracticeScene::Draw()
 	Image::SetAndDraw(hBackScreen_, this->transform_);
 
 	//HUDクラスに練習モード中であることを描画指示
-	pHUD_->SetDrawMode(S_Practice);
+	pHUD_->SetDrawMode(Mode_Practice);
 
 }
 

@@ -10,101 +10,68 @@
 
 namespace {
 	
-	//キャラクタークラスの共通変数を初期化するインデックス
-	//初期化関係
-	enum InitializeIndex
-	{
-		i_posX = 0,
-		i_posY,
-		i_posZ,
-		i_rotateX,
-		i_rotateY,
-		i_rotateZ,
-		i_scaleX,
-		i_scaleY,
-		i_scaleZ,
-		i_frontX,
-		i_frontY,
-		i_frontZ,
-	};
+	//csv読み込み時のインデックス
+	//キャラクタークラスの共通変数を初期化
 
 	//移動関係
-	enum moveIndex
+	enum MoveIndex
 	{
-		i_vel = 0,
-		i_accele_value,
-		i_accele_max,
-		i_friction,
-		i_arrowrotateX,
-		i_arrowrotateY,
-		i_arrowrotateZ,
-		i_arrowscaleX,
-		i_arrowscaleY,
-		i_arrowscaleZ,
-		i_addarrowdepth
+		i_Velocity = 0,
+		i_AcceleValue,
+		i_AcceleMax,
+		i_Friction,
+		i_ArrowRotateX,
+		i_ArrowRotateY,
+		i_ArrowRotateZ,
+		i_ArrowScaleX,
+		i_ArrowScaleY,
+		i_ArrowScaleZ,
+		i_AddArrowDepth
 	};
 
 	//回転関係
 	enum RotateIndex
 	{
-		i_moverot = 0,
-		i_fastrot ,
+		i_MoveRotate = 0,
+		i_FastRotate,
 	};
 
 	//空中関係
 	enum JumpIndex
 	{
-		i_gravity = 0,
-		i_upperlimit,
-		i_lowerlimit,
-		i_minuslimit,
+		i_Gravity = 0,
+		i_UpperLimit,
+		i_LowerLimit,
+		i_MinusLimit,
 	};
 
 	//被弾関係
 	enum HitIndex
 	{
-		i_collider = 0,
-		i_originalrangemin,
-		i_originalrangemax,
-		i_convertedrangemin,
-		i_convertedrangemax,
-
-		i_deceleration,
-		i_knockbackend,
+		i_Collider = 0,
+		i_OriginalRangeMin,
+		i_OriginalRangeMax,
+		i_ConvertedRangeMin,
+		i_ConvertedRangeMax,
+		i_DecelerationRate,
+		i_KnockBackEnd,
 	};
 
 	//柵に接触関係
 	enum FenceHitIndex
 	{
-		i_knockbackpower = 0,
-		i_invincibilityvalue,
-		i_blinkvalue,
+		i_KnockBackPower = 0,
+		i_InvincibilityValue,
+		i_BlinkValue,
 
 	};
 
 	//影付け関係
 	enum ShadowIndex
 	{
-		i_shadowcorrection = 0,
+		i_ShadowCorrection = 0,
 	};
 
-
-	//エフェクト初期化時のインデックス
-	enum EffectParamIndex
-	{
-		i_Charge = 0,
-		i_Locus,
-		i_Hit,
-		i_fenceHit,
-	};
-
-	//サウンド初期化時のインデックス
-	enum SoundParamIndex
-	{
-		i_chargecount = 0,
-		i_attackcount,
-		i_collisioncount,
-	};
 }
 
 
@@ -176,9 +143,6 @@ void Character::SetCSVStatus(std::string _path)
 	//自身のトランスフォームを初期化
 	SetTransformPRS(this->transform_,initData);
 
-	//正面ベクトル初期化
-	InitParam_.FrontDirection_ = { initData[i_frontX],initData[i_frontY],initData[i_frontZ]};
-
 	//初期位置を保管する
 	InitParam_.StartPosition_ = this->transform_.position_;
 
@@ -193,13 +157,13 @@ void Character::SetCSVStatus(std::string _path)
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	MoveParam_.Velocity_ = MoveData[i_vel];
-	MoveParam_.AcceleValue_ = MoveData[i_accele_value];
-	MoveParam_.FullAccelerate_ = MoveData[i_accele_max];
-	MoveParam_.Friction_ = MoveData[i_friction];
-	MoveParam_.ArrowRotate_ = { MoveData[i_arrowrotateX],MoveData[i_arrowrotateY],MoveData[i_arrowrotateZ] };
-	MoveParam_.ArrowScale_ = { MoveData[i_arrowscaleX],MoveData[i_arrowscaleY],MoveData[i_arrowscaleZ] };
-	MoveParam_.AddArrowDepth_ = MoveData[i_addarrowdepth];
+	MoveParam_.Velocity_ = MoveData[i_Velocity];
+	MoveParam_.AcceleValue_ = MoveData[i_AcceleValue];
+	MoveParam_.FullAccelerate_ = MoveData[i_AcceleMax];
+	MoveParam_.Friction_ = MoveData[i_Friction];
+	MoveParam_.ArrowRotate_ = { MoveData[i_ArrowRotateX],MoveData[i_ArrowRotateY],MoveData[i_ArrowRotateZ] };
+	MoveParam_.ArrowScale_ = { MoveData[i_ArrowScaleX],MoveData[i_ArrowScaleY],MoveData[i_ArrowScaleZ] };
+	MoveParam_.AddArrowDepth_ = MoveData[i_AddArrowDepth];
 
 	//--------------------回転関係のパラメータ--------------------
 
@@ -211,8 +175,8 @@ void Character::SetCSVStatus(std::string _path)
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	RotateParam_.MoveRotateX = RotData[i_moverot];
-	RotateParam_.FastRotateX = RotData[i_fastrot];
+	RotateParam_.MoveRotateX = RotData[i_MoveRotate];
+	RotateParam_.FastRotateX = RotData[i_FastRotate];
 
 
 	//--------------------空中関係のパラメータ--------------------
@@ -225,10 +189,10 @@ void Character::SetCSVStatus(std::string _path)
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	JumpParam_.Gravity_ = JumpData[i_gravity];
-	JumpParam_.HeightLowerLimit_ = JumpData[i_upperlimit];
-	JumpParam_.HeightUpperLimit_ = JumpData[i_lowerlimit];
-	JumpParam_.MinusLimit_ = JumpData[i_minuslimit];
+	JumpParam_.Gravity_ = JumpData[i_Gravity];
+	JumpParam_.HeightLowerLimit_ = JumpData[i_UpperLimit];
+	JumpParam_.HeightUpperLimit_ = JumpData[i_LowerLimit];
+	JumpParam_.MinusLimit_ = JumpData[i_MinusLimit];
 
 	//--------------------被弾関係のパラメータ--------------------
 
@@ -240,13 +204,13 @@ void Character::SetCSVStatus(std::string _path)
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	HitParam_.ColliderSize_ = HitData[i_collider];
-	HitParam_.OriginalRangeMin_ = HitData[i_originalrangemin];
-	HitParam_.OriginalRangeMax_ = HitData[i_originalrangemax];
-	HitParam_.ConvertedRangeMin_ = HitData[i_convertedrangemin];
-	HitParam_.ConvertedRangeMax_ = HitData[i_convertedrangemax];
-	HitParam_.DecelerationRate_ = HitData[i_deceleration];
-	HitParam_.KnockBackEnd_ = HitData[i_knockbackend];
+	HitParam_.ColliderSize_ = HitData[i_Collider];
+	HitParam_.OriginalRangeMin_ = HitData[i_OriginalRangeMin];
+	HitParam_.OriginalRangeMax_ = HitData[i_OriginalRangeMax];
+	HitParam_.ConvertedRangeMin_ = HitData[i_ConvertedRangeMin];
+	HitParam_.ConvertedRangeMax_ = HitData[i_ConvertedRangeMax];
+	HitParam_.DecelerationRate_ = HitData[i_DecelerationRate];
+	HitParam_.KnockBackEnd_ = HitData[i_KnockBackEnd];
 
 	//--------------------柵に接触関係のパラメータ--------------------
 
@@ -258,9 +222,9 @@ void Character::SetCSVStatus(std::string _path)
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	FenceHitParam_.KnockBackPower_ = FenceHitData[i_knockbackpower];
-	FenceHitParam_.InvincibilityValue_ = static_cast<int>(FenceHitData[i_invincibilityvalue]);
-	FenceHitParam_.blinkValue_ = static_cast<int>(FenceHitData[i_blinkvalue]);
+	FenceHitParam_.KnockBackPower_ = FenceHitData[i_KnockBackPower];
+	FenceHitParam_.InvincibilityValue_ = static_cast<int>(FenceHitData[i_InvincibilityValue]);
+	FenceHitParam_.blinkValue_ = static_cast<int>(FenceHitData[i_BlinkValue]);
 	
 
 
@@ -274,7 +238,7 @@ void Character::SetCSVStatus(std::string _path)
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	ShadowParam_.ShadowCorrection_ = ShadowData[i_shadowcorrection];
+	ShadowParam_.ShadowCorrection_ = ShadowData[i_ShadowCorrection];
 }
 
 void Character::GetWireNormal()
@@ -472,7 +436,7 @@ void Character::ShadowSet()
 	//レイの発射位置を設定
 	data.start = this->transform_.position_;
 
-	//レイの方向を設定
+	//レイの方向を設定(0, -1, 0なので下向き)
 	data.dir = XMFLOAT3(0, -1, 0);
 
 	//レイを発射
@@ -539,10 +503,12 @@ bool Character::IsOutsideStage(XMFLOAT3 _position)
 	//指定位置が一つでもステージ端を超えるかどうか判定し、真偽を返す
 	//ステージ外判定をする際に使用
 
-	if (_position.x > EastEnd_ || _position.x < WestEnd_ || _position.z > NorthEnd_ || _position.z < SouthEnd_){
+	if (_position.x > EastEnd_ || _position.x < WestEnd_ || _position.z > NorthEnd_ || _position.z < SouthEnd_)
+	{
 			return true;
 	}
-	else {
+	else 
+	{
 		return false;
 	}
 }
@@ -781,13 +747,13 @@ void Character::ChargeReset()
 void Character::SetArrow()
 {
 	//正面ベクトルに前方向の調整値を乗算し、矢印の正面位置を計算
-	XMVECTOR frontArrow = XMVectorScale(this->MoveParam_.ForwardVector_, this->MoveParam_.AddArrowDepth_);
+	XMVECTOR FrontArrow = XMVectorScale(this->MoveParam_.ForwardVector_, this->MoveParam_.AddArrowDepth_);
 	
 	//現在位置を取得
 	XMVECTOR PosVec = XMLoadFloat3(&this->transform_.position_);
 
 	//矢印の正面位置と現在位置を加算
-	XMVECTOR arrowPosVec = XMVectorAdd(PosVec, frontArrow);
+	XMVECTOR arrowPosVec = XMVectorAdd(PosVec, FrontArrow);
 
 	//矢印のトランスフォームに代入
 	XMStoreFloat3(&this->MoveParam_.ArrowTransform_.position_, arrowPosVec);
@@ -821,22 +787,22 @@ void Character::InitCSVEffect()
 	csv.Load("CSVData\\EffectData\\VFXData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
-	std::string effects[] = { "Charge","FullCharge" ,"Locus" , "Hit" , "FenceHit" };
+	std::string Effects[] = { "Charge","FullCharge" ,"Locus" , "Hit" , "FenceHit" };
   
 	//ChargeParam_から始まるVFXのパラメータ(vector<float>型の配列)の参照を
 	//ポインタ配列に格納
-	std::vector<float>* param[] = { &ChargeParam_,&FullChargeParam,
+	std::vector<float>* Param[] = { &ChargeParam_,&FullChargeParam,
 		&AttackLocusParam_, &HitEffectParam_, &FenceHitEffectParam_ };  
 
 
-    for (int i = 0; i < sizeof(effects) / sizeof(effects[0]); i++)  
+    for (int i = 0; i < sizeof(Effects) / sizeof(Effects[0]); i++)  
     {  
 		//0列目の文字列を渡し、その行のパラメータを取得
-		std::vector<float> v = GetCSVReadData(csv, effects[i]);
+		std::vector<float> v = GetCSVReadData(csv, Effects[i]);
 
 		//この時点では代入のみ行われる
 		// SetEmitterで実際にVFXのパラメータにセットされる 
-		*param[i] = v;  
+		*Param[i] = v;  
             
     }
 }

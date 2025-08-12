@@ -10,6 +10,7 @@ class Character :
 protected:
 
     //----------ステージの端----------
+    //キャラクターが持つ移動制限の値
     float NorthEnd_ = 0.0f;//ステージ北端(前方)の位置
     float SouthEnd_ = 0.0f;//ステージ南端(後方)の位置
     float EastEnd_ = 0.0f;//ステージ東端(右側)の位置

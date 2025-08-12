@@ -13,6 +13,18 @@ class BattleScene :
 	public BaseScene,public IGameObserver
 {
 private:
+	//----------画像ハンドル----------
+
+	//タイトル画像
+	int hBackScreen_;
+
+	//----------サウンドハンドル----------
+
+	//バトル中サウンド
+	int hSoundBattle_;
+
+	//開始・終了ホイッスルサウンド
+	int hSoundWhistle_;
 
 	//----------インスタンス----------
 	Player* pPlayer1_;
@@ -31,30 +43,21 @@ private:
 	//生成された敵(CPU)を登録する配列
 	std::vector<Enemy*> ActiveEnemys_;
 
-	//----------バトルシーンステート----------
+	//----------状態遷移----------
+	 
+	//バトルシーンの状態遷移
 	//これらの値に応じて各Update関数を呼び出す
 	enum Battle
 	{
-		S_BEFORE = 0,//開始前説明
-		S_READY,//開始直前
-		S_NOW,//バトル中
-		S_AFTER,//終了後
-		MAXMODE
+		S_Before = 0,//開始前説明
+		S_Ready,//開始直前
+		S_Now,//バトル中
+		S_After,//終了後
+		MaxMode
 	};
 	Battle BattleState_;
 
-	//----------画像ハンドル----------
-
-	//タイトル画像
-	int hBackScreen_;
-
-	//----------サウンドハンドル----------
-
-	//バトル中サウンド
-	int hSoundBattle_;
-
-	//開始・終了ホイッスルサウンド
-	int hSoundWhistle_;
+	//----------スコア----------
 
 	//プレイヤーのスコア
 	int FirstScore_;

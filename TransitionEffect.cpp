@@ -4,17 +4,18 @@
 
 namespace
 {
-	//csv読み込み時のインデックス
+	//csv読み込み時のインデックス(シーン遷移演出用変数)
 	enum ZoomIndex
 	{
-		i_maxzoomvalue = 0,
-		i_max
+		i_MaxZoomValue = 0,
+		i_Max
 	};
 }
 
 TransitionEffect::TransitionEffect(GameObject* parent)
-	: GameObject(parent, "TransitionEffect"),hFadeBlack_(-1),hFadeWhite_(-1),
-	hZoomSheep_(-1), EffectType_(NoneEffect),TransitionTime_(0)
+	: GameObject(parent, "TransitionEffect"),
+	hFadeBlack_(-1),hFadeWhite_(-1),hZoomSheep_(-1), 
+	EffectType_(NoneEffect),TransitionTime_(0)
 {
 	FadeEffect_.AlphaValue_ = 0;
 	ZoomEffect_.MaxZoomValue_ = 0;
@@ -195,9 +196,9 @@ void TransitionEffect::SetCSVTransitionEffect()
 {
 	//csvファイルを読み込む
 	CsvReader csvTransform;
-	csvTransform.Load("CSVdata\\EffectData\\TransitionData.csv");
+	csvTransform.Load("CSVdata\\EffectData\\TransitionTransformData.csv");
 
-	//csvファイル(TransitionData.csv)の各0列目の文字列の配列
+	//csvファイル(TransitionTransformData.csv)の各0列目の文字列の配列
 	std::vector<std::string> ParamNames = { "Fade" ,"Slide","Zoom" };
 
 	//各トランスフォームを配列に入れる
@@ -212,7 +213,7 @@ void TransitionEffect::SetCSVTransitionEffect()
 	CsvReader csvParam;
 	csvParam.Load("CSVdata\\EffectData\\TransitionSomeData.csv");
 
-	//csvファイル(TransitionSomeData)の0列目の文字列を取得
+	//csvファイル(TransitionSomeData.csv)の0列目の文字列を取得
 	std::string SomeParams = "ZoomParam";
 
 	//0列目の文字列を渡し、その行のパラメータを取得
@@ -220,6 +221,6 @@ void TransitionEffect::SetCSVTransitionEffect()
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	ZoomEffect_.MaxZoomValue_ = transitionData[i_maxzoomvalue];
+	ZoomEffect_.MaxZoomValue_ = transitionData[i_MaxZoomValue];
 	
 }

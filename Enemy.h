@@ -2,7 +2,7 @@
 #include "Engine/GameObject.h"
 #include"Player.h"
 
-//敵キャラクターの処理を行うクラス
+//敵(CPU)キャラクターの処理を行うクラス
 class Enemy :
     public Character
 {
@@ -17,18 +17,20 @@ private:
 	//プレイヤーのインスタンス(Enemyからは取らず、上位シーンから設定)
 	Player* pPlayer_;
 
-	//敵(CPU)ステート
+	//----------状態遷移----------
+
+	//敵(CPU)の状態遷移
 	//これらの値に応じて各Update関数を呼び出す
 	enum State {
-		S_ROOT = 0,//判断用
-		S_CHASE,//追いかける
-		S_AIM,//プレイヤーを狙う(攻撃準備)
-		S_ATTACK,//攻撃
-		S_HITSTOP,//ヒットストップ
-		S_HIT,//弾かれる
-		S_FENCEHIT,//柵にヒット
-		S_STOP,//敵を止める
-		S_MAX
+		S_Root = 0,//判断用
+		S_Chase,//追いかける
+		S_Aim,//プレイヤーを狙う(攻撃準備)
+		S_Attack,//攻撃
+		S_HitStop,//ヒットストップ
+		S_Hit,//弾かれる
+		S_FenceHit,//柵にヒット
+		S_Stop,//敵を止める
+		S_MaxState
 	};
 	State EnemyState_;
 
@@ -53,7 +55,7 @@ private:
 	//EnemyAttackTimeArrayの添え字
 	int RandomAim_; 
 
-	///----------ダメージ関係/----------
+	//----------ダメージ関係----------
 
 	//ヒットストップ時間
 	int HitStopTimer_;
@@ -111,10 +113,10 @@ public:
 	void DrawImGui();
 	
 	//敵に移動を許可
-	void EnemyStart() { EnemyState_ = S_ROOT; }
+	void EnemyStart() { EnemyState_ = S_Root; }
 
 	//敵を止める
-	void EnemyStop() { EnemyState_ = S_STOP; }
+	void EnemyStop() { EnemyState_ = S_Stop; }
 	
 	//プレイヤーの方向に回転する
 	void LookPlayer();

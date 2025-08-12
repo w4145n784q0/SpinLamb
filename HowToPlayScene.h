@@ -30,13 +30,16 @@ private:
 	//ゲームモードに戻るSE
 	int hSoundBackGameMode_;
 
+	//----------状態遷移----------
+
 	//表示画像ステート
 	//これらの値に応じてDrawで描画する画像を変える
 	enum HowtoImage 
 	{
-		Explanation = 0,//ゲーム説明
-		OperateKeyBoard,//操作方法(キーボード)
-		OperateController,//操作方法(コントローラ)
+		S_Explanation = 0,//ゲーム説明
+		S_OperateKeyBoard,//操作方法(キーボード)
+		S_OperateController,//操作方法(コントローラ)
+		MaxImage,
 	};
 	HowtoImage ImageState_;
 

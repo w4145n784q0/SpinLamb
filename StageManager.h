@@ -29,6 +29,7 @@ private:
 	//ステージ外オブジェクトに渡すデータ(藁束)
 	std::vector<Transform> StrawData_;
 
+	//----------ステージの端の情報----------
 
 	//ステージ北端
 	float UpperEnd_;

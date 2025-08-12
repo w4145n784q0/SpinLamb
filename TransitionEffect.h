@@ -30,9 +30,6 @@ private:
     };
     EffectType EffectType_;
 
-    //遷移時間 他クラスから代入される
-    int TransitionTime_;
-
     //----------各画面遷移の演出用の構造体----------
 
     //フェードイン/アウト用
@@ -58,6 +55,10 @@ private:
     };
     ZoomInOut ZoomEffect_;
 
+    //----------タイマー----------
+
+    //遷移時間 他クラスから代入される
+    int TransitionTime_;
 
 public:
     TransitionEffect(GameObject* parent);

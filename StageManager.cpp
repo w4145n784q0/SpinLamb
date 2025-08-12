@@ -10,19 +10,19 @@ namespace
 	//csv読み込み時のインデックス(各ステージの端)
 	enum GroundEndIndex
 	{
-		i_up = 0,
-		i_down,
-		i_right,
-		i_left,
-		i_pillarnum,
+		i_Up = 0,
+		i_Down,
+		i_Right,
+		i_Left,
+		i_PillarNum,
 	};
 
 	//csv読み込み時のインデックス(当たり判定の読み込み)
 	enum StageCollisionIndex
 	{
-		i_collisionX = 0,
-		i_collisionY,
-		i_collisionZ,
+		i_CollisionX = 0,
+		i_CollisionY,
+		i_CollisionZ,
 	};
 
 	//インスタンス
@@ -108,29 +108,29 @@ void StageManager::SetStageInitCSV()
 	//----------ステージの各端の位置、柱の本数----------
 
 	//csvファイルを読み込む
-	CsvReader csv_end;
-	csv_end.Load("CSVdata\\StageData\\StageEndData.csv");
+	CsvReader csvEnd;
+	csvEnd.Load("CSVdata\\StageData\\StageEndData.csv");
 
 	//csvファイルの0列目の文字列を取得
 	std::string end = "end";
 
 	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> enddata = GetCSVReadData(csv_end, end);
+	std::vector<float> EndData = GetCSVReadData(csvEnd, end);
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	UpperEnd_ = enddata[i_up];
-	LowerEnd_ = enddata[i_down];
-	RightEnd_ = enddata[i_right];
-	LeftEnd_ = enddata[i_left];
-	PillarNum_ = static_cast<int>(enddata[i_pillarnum]);
+	UpperEnd_ = EndData[i_Up];
+	LowerEnd_ = EndData[i_Down];
+	RightEnd_ = EndData[i_Right];
+	LeftEnd_ = EndData[i_Left];
+	PillarNum_ = static_cast<int>(EndData[i_PillarNum]);
 
 
 	//----------当たり判定の位置、サイズ,法線の初期化----------
 
 	//csvファイルを読み込む
-	CsvReader csv_wire;
-	csv_wire.Load("CSVdata\\StageData\\StageWireData.csv");
+	CsvReader csvWire;
+	csvWire.Load("CSVdata\\StageData\\StageWireData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
 	std::string collisionName[] = { "UpperPos","LowerPos","RightPos","LeftPos",
@@ -145,19 +145,19 @@ void StageManager::SetStageInitCSV()
 	for (int i = 0; i < sizeof(collisionName) / sizeof(collisionName[0]); i++)
 	{
 		//0列目の文字列を渡し、その行のパラメータを取得
-		std::vector<float> Collisiondata = GetCSVReadData(csv_wire, collisionName[i]);
+		std::vector<float> Collisiondata = GetCSVReadData(csvWire, collisionName[i]);
 
 		//初期化の順番はcsvの各行の順番に合わせる
 		//vの添え字はnamespaceで宣言した列挙型を使用
-	    CollisionFloat[i]->x = Collisiondata[i_collisionX];
-		CollisionFloat[i]->y = Collisiondata[i_collisionY];
-		CollisionFloat[i]->z = Collisiondata[i_collisionZ];
+	    CollisionFloat[i]->x = Collisiondata[i_CollisionX];
+		CollisionFloat[i]->y = Collisiondata[i_CollisionY];
+		CollisionFloat[i]->z = Collisiondata[i_CollisionZ];
 	}
 
 	//----------ステージ外オブジェクトの各トランスフォーム初期化----------
 	//csvファイルを読み込む
-	CsvReader csv_out;
-	csv_out.Load("CSVdata\\StageData\\OutStageData.csv");
+	CsvReader csvOut;
+	csvOut.Load("CSVdata\\StageData\\OutStageData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
 
@@ -193,7 +193,7 @@ void StageManager::SetStageInitCSV()
 		//各トランスフォーム[トランスフォームの種類][その種類のi番目]
 		for (size_t i = 0; i < OutStageNames[type].size(); ++i)
 		{
-			InitCSVTransform(csv_out, OutStageNames[type][i], (*OutStageTrans[type])[i]);
+			InitCSVTransform(csvOut, OutStageNames[type][i], (*OutStageTrans[type])[i]);
 		}
 	}
 

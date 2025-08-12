@@ -9,7 +9,7 @@ namespace GameView
 	{
 		i_player1 = 0,
 		i_player2,
-		MaxPlayersNum,//参加できるプレイヤーの最大値
+		MaxPlayersNum//参加できるプレイヤーの最大値
 	};
 
 	//描画モードのインスタンス

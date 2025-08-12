@@ -8,7 +8,7 @@ class GameTimer :
 {
 private:
 
-	//----------時間描画----------
+	//----------描画する時間の情報----------
 
 	//現在の時間
 	int CurrentGameTime_;
@@ -23,17 +23,21 @@ private:
 	//秒カウントしたタイミングでtrue
 	bool IsSecondCount_;
 
+	//----------イージング----------
+
 	//イージング処理(残りn秒になったら文字を拡大表記)をする時間
 	//BattleSceneから受け取る(GameTimerの中では定義しない)
 	int EasingTime_ = 0;
+
+	//----------状態遷移----------
 
 	//時間の状態
 	//これらの値に応じて各Update関数を呼び出す
 	enum TimeState
 	{
-		STOP = 0,  //待機中
-		COUNTING, //カウント中
-		MAXTIME 
+		S_Stop = 0,  //待機中
+		S_Counting, //カウント中
+		S_MaxTimeState
 	};
 	TimeState TimeState_;
 
@@ -76,11 +80,11 @@ public:
 	bool GetIsSecondCount() const { return IsSecondCount_; }
 
 	//時間計測中かどうか返す
-	bool IsCounting() const { if (TimeState_ == COUNTING) return true; else return false; }
+	bool IsCounting() const { if (TimeState_ == S_Counting) return true; else return false; }
 
 	//時間停止を指示
-	void StartTimer() { TimeState_ = COUNTING; }
+	void StartTimer() { TimeState_ = S_Counting; }
 
 	//時間計測を指示
-	void StopTimer() { TimeState_ = STOP; }
+	void StopTimer() { TimeState_ = S_Stop; }
 };

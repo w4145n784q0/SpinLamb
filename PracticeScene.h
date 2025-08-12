@@ -18,7 +18,6 @@ private:
 	//タイトル画像
 	int hBackScreen_;
 
-
 	//----------サウンドハンドル----------
 	int hSoundPractice_; 
 

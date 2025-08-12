@@ -9,23 +9,23 @@
 namespace {
 
 	//csv読み込み時のインデックス
-	enum playeronlyIndex
+	enum PlayerOnlyIndex
 	{
-		i_backcameraX = 0,
-		i_backcameraY,
-		i_backcameraZ,
-		i_keyboardrotateY,
-		i_movevalue,
-		i_jumpheight,
-		i_camerainitx,
-		i_camerainity,
-		i_camerainitz,
-		i_camerarotate,
-		i_cameraupperlimit,
-		i_cameralowerlimit,
-		i_cameradebugWidth,
-		i_cameradebugHeight,
-		i_cameradebugDepth,
+		i_BackCameraX = 0,
+		i_BackCameraY,
+		i_BackCameraZ,
+		i_KeyboardRotateY,
+		i_MoveValue,
+		i_JumpHeight,
+		i_CameraInitX,
+		i_CameraInitY,
+		i_CameraInitZ,
+		i_CameraRotate,
+		i_CameraUpperlimit,
+		i_CameraLowerlimit,
+		i_CameraDebugWidth,
+		i_CameraDebugHeight,
+		i_CameraDebugDepth,
 	};
 
 	//カメラの固定位置
@@ -59,9 +59,10 @@ namespace {
 
 Player::Player(GameObject* parent) 
 	: Character(parent,"Player"),
-	hPlayer_(-1), ControllerID_(-1),
-	PlayerState_(S_STOP),CameraState_(S_NORMALCAMERA),
-	Direction_({ 0,0,0 }), CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 }),BackCamera_({ 0,0,0 })
+	hPlayer_(-1), 
+	PlayerState_(S_Stop),CameraState_(S_NormalCamera),
+	ControllerID_(-1),Direction_({ 0,0,0 }),
+	CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 }),BackCamera_({ 0,0,0 })
 {
 	
 }
@@ -88,7 +89,7 @@ void Player::Draw()
 	DrawCharacterModel(hPlayer_, this->transform_);
 
 	//チャージ中のみ矢印モデル描画
-	if (PlayerState_ == S_CHARGE)
+	if (PlayerState_ == S_Charge)
 	{
 		DrawArrow();
 	}
@@ -112,7 +113,7 @@ void Player::OnCollision(GameObject* pTarget)
 		CollisionCharacter(targetName);
 
 		//被弾状態になる
-		PlayerState_ = S_HIT;
+		PlayerState_ = S_Hit;
 
 		//接触エフェクト
 		SetHitEffect();
@@ -133,7 +134,7 @@ void Player::OnCollision(GameObject* pTarget)
 		pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
 	{
 		//自身が柵に接触状態ではない かつ無敵状態でないなら続ける
-		if (!FenceHitParam_.IsInvincibility_ && !(PlayerState_ == S_FENCEHIT))
+		if (!FenceHitParam_.IsInvincibility_ && !(PlayerState_ == S_FenceHit))
 		{
 			//柵の名前のいずれかに接触しているなら
             for (const std::string& arr : FenceHitParam_.WireArray_)
@@ -147,7 +148,7 @@ void Player::OnCollision(GameObject* pTarget)
 					FenceReflect(normal);
 
 					//プレイヤーの状態を柵に接触状態にする
-					PlayerState_ = S_FENCEHIT;
+					PlayerState_ = S_FenceHit;
 
 					//カメラ振動(中くらいの長さ)
 					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
@@ -170,22 +171,22 @@ void Player::PlayerRun()
 	//現在の状態によって更新を分ける
 	switch (PlayerState_)
 	{
-	case Player::S_IDLE:
+	case Player::S_Idle:
 		UpdateIdle();
 		break;
-	case Player::S_CHARGE:
+	case Player::S_Charge:
 		UpdateCharge();
 		break;
-	case Player::S_ATTACK:
+	case Player::S_Attack:
 		UpdateAttack();
 		break;
-	case Player::S_HIT:
+	case Player::S_Hit:
 		UpdateHit();
 		break;
-	case Player::S_FENCEHIT:
+	case Player::S_FenceHit:
 		UpdateFenceHit();
 		break;
-	case Player::S_STOP:
+	case Player::S_Stop:
 		UpdateStop();
 		break;
 	default:
@@ -193,7 +194,7 @@ void Player::PlayerRun()
 	}
 
 	//柵に接触状態でなければ無敵時間を更新
-	if (!(PlayerState_ == S_FENCEHIT))
+	if (!(PlayerState_ == S_FenceHit))
 	{
 		InvincibilityTimeCalculation();
 	}
@@ -253,7 +254,7 @@ void Player::UpdateIdle()
 		if (JumpParam_.IsOnGround_)
 		{
 			//地上にいるならチャージ状態へ移行
-			PlayerState_ = S_CHARGE;
+			PlayerState_ = S_Charge;
 
 			//状態遷移の際は一度x回転をストップ
 			RotateXStop();
@@ -304,7 +305,7 @@ void Player::UpdateCharge()
 			SetJump();
 
 			//通常状態へ戻る
-			PlayerState_ = S_IDLE;
+			PlayerState_ = S_Idle;
 
 			//状態遷移の際は一度x回転をストップ
 			RotateXStop();
@@ -329,7 +330,7 @@ void Player::UpdateCharge()
 		ChargeRelease();
 
 		//攻撃状態へ移行
-		PlayerState_ = S_ATTACK;
+		PlayerState_ = S_Attack;
 
 		//状態遷移の際は一度x回転をストップ
 		RotateXStop();
@@ -365,7 +366,7 @@ void Player::UpdateAttack()
 		AccelerationStop();
 
 		//通常状態へ戻る
-		PlayerState_ = S_IDLE;
+		PlayerState_ = S_Idle;
 
 		//状態遷移の際は一度x回転をストップ
 		RotateXStop();
@@ -389,7 +390,7 @@ void Player::UpdateHit()
 		KnockBackVelocityReset();
 
 		//通常状態へ戻る
-		PlayerState_ = S_IDLE;
+		PlayerState_ = S_Idle;
 
 		//状態遷移の際は一度x回転をストップ
 		//Y軸回転の停止はノックバックから復活する時のみ行う(攻撃やチャージへの干渉を防ぐため)
@@ -415,7 +416,7 @@ void Player::UpdateFenceHit()
 		KnockBackVelocityReset();
 
 		//通常状態へ戻る
-		PlayerState_ = S_IDLE;
+		PlayerState_ = S_Idle;
 
 		//状態遷移の際は一度x回転をストップ
 		//Y軸回転の停止はノックバックから復活する時のみ行う(攻撃やチャージへの干渉を防ぐため)
@@ -490,20 +491,20 @@ void Player::CameraControl()
 	//再度押すと通常カメラに戻る
 	if (Input::IsKeyDown(DIK_Q))
 	{
-		if (CameraState_ == S_NORMALCAMERA)
+		if (CameraState_ == S_NormalCamera)
 		{
-			CameraState_ = S_DEBUGCAMERA;
+			CameraState_ = S_DebugCamera;
 		}
-		else if (CameraState_ == S_DEBUGCAMERA)
+		else if (CameraState_ == S_DebugCamera)
 		{
-			CameraState_ = S_NORMALCAMERA;
+			CameraState_ = S_NormalCamera;
 			cameraTransform_.rotate_.x = 0.0f;
 		}
 	}
 #endif 
 
 	//通常カメラ
-	if(CameraState_ == S_NORMALCAMERA)
+	if(CameraState_ == S_NormalCamera)
 	{
 		//A・Dキー/右スティックでカメラ回転
 		if (Input::IsKey(DIK_A) || Input::GetPadStickR(ControllerID_).x <= -Input::StickTilt)
@@ -553,7 +554,7 @@ void Player::CameraControl()
 			this->transform_.rotate_.y = cameraTransform_.rotate_.y;
 		}
 	}
-	else if (CameraState_ == S_DEBUGCAMERA)
+	else if (CameraState_ == S_DebugCamera)
 	{
 		//デバッグカメラ中はカメラの位置を固定し、操作しない
 	}
@@ -566,7 +567,7 @@ void Player::CameraUpdate()
 	//--------------カメラ追従--------------
 
 	//通常カメラの場合はプレイヤー後方にカメラをセット
-	if (CameraState_ == S_NORMALCAMERA)
+	if (CameraState_ == S_NormalCamera)
 	{
 		//カメラの焦点は自機の位置
 		CameraTarget_ = { this->transform_.position_ };
@@ -589,7 +590,7 @@ void Player::CameraUpdate()
 		XMStoreFloat3(&CameraPosition_, PlayerPosVec + BackCamera_);
 	}
 	//デバッグカメラの場合は真上から見下ろすようにセット
-	else if (CameraState_ == S_DEBUGCAMERA)
+	else if (CameraState_ == S_DebugCamera)
 	{
 		//カメラの位置をCameraUpdateの固定位置にセット
 		CameraPosition_ = CameraDebugPos;
@@ -759,13 +760,13 @@ void Player::SetCSVPlayer(std::string _path)
 		
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	BackCameraPos = { OnlyData[i_backcameraX], OnlyData[i_backcameraY], OnlyData[i_backcameraZ] };
-	KeyBoardRotateY = OnlyData[i_keyboardrotateY];
-	MoveValue = OnlyData[i_movevalue];
-	Jumpheight = OnlyData[i_jumpheight];
-	CameraInit = { OnlyData[i_camerainitx] ,OnlyData[i_camerainity] , OnlyData[i_camerainitz] };
-	CameraRotate = OnlyData[i_camerarotate];
-	CameraUpperLimit = OnlyData[i_cameraupperlimit];
-	CameraLowerLimit = OnlyData[i_cameralowerlimit];
-	CameraDebugPos = { OnlyData[i_cameradebugWidth],OnlyData[i_cameradebugHeight],OnlyData[i_cameradebugDepth] };
+	BackCameraPos = { OnlyData[i_BackCameraX], OnlyData[i_BackCameraY], OnlyData[i_BackCameraZ] };
+	KeyBoardRotateY = OnlyData[i_KeyboardRotateY];
+	MoveValue = OnlyData[i_MoveValue];
+	Jumpheight = OnlyData[i_JumpHeight];
+	CameraInit = { OnlyData[i_CameraInitX] ,OnlyData[i_CameraInitY] , OnlyData[i_CameraInitZ] };
+	CameraRotate = OnlyData[i_CameraRotate];
+	CameraUpperLimit = OnlyData[i_CameraUpperlimit];
+	CameraLowerLimit = OnlyData[i_CameraLowerlimit];
+	CameraDebugPos = { OnlyData[i_CameraDebugWidth],OnlyData[i_CameraDebugHeight],OnlyData[i_CameraDebugDepth] };
 }

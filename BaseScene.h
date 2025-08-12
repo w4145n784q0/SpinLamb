@@ -8,15 +8,19 @@ class BaseScene :
 {
 protected:
 
+	//----------状態遷移----------
+	
 	//ゲームシーン全般の状態
 	//これらの値に応じて各Update関数を呼び出す
 	enum SceneState
 	{
 		S_Active = 0,//通常
 		S_Transition,//シーン遷移中
-		MaxScene
+		S_MaxScene
 	};
 	SceneState SceneState_;
+
+	//----------タイマー----------
 
 	//シーン遷移までの時間を計る
 	int SceneTransitionTimer_;

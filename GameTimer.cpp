@@ -3,13 +3,14 @@
 namespace
 {
 	//時間計測用の整数 毎フレーム加算
-	int Timecounter = 0;
+	int TimeCounter = 0;
 }
 
 GameTimer::GameTimer(GameObject* parent)
 	: GameObject(parent,"GameTimer"),
-	CurrentGameTime_(0), Timeten_(0), Timeone_(0),TimeState_(STOP),
-	IsSecondCount_(false),EasingTime_(0)
+	CurrentGameTime_(0), Timeten_(0), Timeone_(0),
+	IsSecondCount_(false),EasingTime_(0),
+	TimeState_(S_Stop)
 {
 }
 
@@ -27,10 +28,10 @@ void GameTimer::Update()
 	//現在の時間の状態によって更新を分ける
 	switch (TimeState_)
 	{
-	case GameTimer::STOP:
+	case GameTimer::S_Stop:
 		UpdateTimeStop();
 		break;
-	case GameTimer::COUNTING:
+	case GameTimer::S_Counting:
 		UpdateTimeCount();
 		break;
 	default:
@@ -55,7 +56,7 @@ void GameTimer::UpdateTimeStop()
 void GameTimer::UpdateTimeCount()
 {
 	//時間の更新処理
-	if (++Timecounter > oneSecond)
+	if (++TimeCounter > oneSecond)
 	{
 		if (CurrentGameTime_ > 0)
 		{
@@ -64,7 +65,9 @@ void GameTimer::UpdateTimeCount()
 
 		//一秒経過の度に計算
 		TimeCalculation();
-		Timecounter = 0;
+
+		//時間計測用のカウンターをリセット
+		TimeCounter = 0;
 
 		//このタイミングでtrue
 		IsSecondCount_ = true;

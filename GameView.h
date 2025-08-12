@@ -25,7 +25,7 @@ namespace GameView
 	//ゲーム画面の映し方の初期化
 	void Initialize();
 
-	//画面全体描画(メニューなど使用)
+	//画面全体描画(メニューなどに使用)
 	void ViewNormal();
 
 	//解放

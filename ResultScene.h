@@ -48,17 +48,19 @@ private:
 	//結果画面の下のロゴの位置
 	Transform PushTitle_;
 
+	//----------状態----------
+
 	//勝敗状態(状態に応じて処理を変化させる)
 	enum WinnerState {
-		YOU_WIN = 0,//Playerの勝利
-		CPU_WIN,//Enemyの勝利
-		DRAW,//引き分け
-		RESULTMAX
+		FirstWin = 0,//Playerの勝利
+		SecondWin,//Enemyの勝利
+		ResultDraw,//引き分け
+		MaxResult
 	};
-	WinnerState winner_;
+	WinnerState Winner_;
 
 	//各結果ロゴの画像ハンドル配列
-	std::array<int, RESULTMAX> ResultArray_;
+	std::array<int, MaxResult> ResultArray_;
 
 	//----------インスタンス----------
 	TransitionEffect* pTransitionEffect_;

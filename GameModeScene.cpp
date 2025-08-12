@@ -14,13 +14,23 @@ namespace
 
 GameModeScene::GameModeScene(GameObject* parent)
 	:BaseScene(parent, "GameModeScene"), 
+	//----------状態遷移----------
+	SelectMode_(S_Battle), GameModeState_(S_Selecting), PlayerNum_(S_PvE),
+	
+	//----------背景----------
 	hBackScreen_(-1), hBackChara_(-1),
+
+	//----------ボタン----------
 	hBattle_(-1),hPractice_(-1), hHowtoPlay_(-1),hBackTitle_(-1), hFrameLine_(-1),
+	ModeTransArray_({}), ButtonImageArray_({}), 
+
+	//----------ロゴ・テキスト----------
 	hModeSelect_(-1), hBattleText_(-1), hFreePlayText_(-1), hHowtoPlayText_(-1),hTitleText_(-1),
 	hPlayerNumSelect_(-1), hPlayerSelectIcon_(-1), 
-	TextArray_({}), PlayerTransArray_({}), ButtonImageArray_({}), ModeTransArray_({}),
+	TextArray_({}), PlayerTransArray_({}), 
+
+	//----------サウンド・インスタンス----------
 	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), hSoundCancel_(-1),
-	SelectMode_(S_Battle),GameModeState_(S_Selecting),PlayerNum_(S_PvE),
 	pTransitionEffect_(nullptr)
 {
 }
@@ -221,7 +231,7 @@ void GameModeScene::SetGameModeCSV()
 {
 	//各画像を表示する際のトランスフォーム初期化
 	CsvReader csv;
-	csv.Load("CSVdata\\SceneData\\GameModeData.csv");
+	csv.Load("CSVdata\\SceneData\\GameModeTransformData.csv");
 
 	//選択枠のトランスフォーム初期化
 	InitCSVTransform(csv, "FrameLine", TransFrame_);

@@ -12,27 +12,29 @@ private:
 	//プレイヤーモデル
 	int hPlayer_;
 
-	//----------プレイヤーステート----------
+	//----------状態遷移----------
+	
+	//プレイヤーの状態遷移
 	//これらの値に応じて各Update関数を呼び出す
 	enum State
 	{
-		S_IDLE,//通常
-		S_CHARGE,//チャージ中
-		S_ATTACK,//攻撃
-		S_HIT,//弾かれる
-		S_FENCEHIT,//柵にヒット
-		S_STOP,//プレイヤーを止める状態
-		S_MAX
+		S_Idle,//通常
+		S_Charge,//チャージ中
+		S_Attack,//攻撃
+		S_Hit,//弾かれる
+		S_FenceHit,//柵にヒット
+		S_Stop,//プレイヤーを止める状態
+		S_MaxState,
 	};
 	State PlayerState_;
 
-	//----------カメラステート----------
+	//カメラの状態
 	//これらの値に応じてカメラの位置・回転量を変化させる
 	enum CameraState
 	{
-		S_NORMALCAMERA,//通常カメラ
-		S_DEBUGCAMERA,//デバッグ用カメラ
-		S_MAXCAMERA,
+		S_NormalCamera,//通常カメラ
+		S_DebugCamera,//デバッグ用カメラ
+		S_MaxCamera,
 	};
 	CameraState CameraState_;
 	
@@ -102,13 +104,11 @@ public:
 	//プレイヤーを止める状態
 	void UpdateStop();
 
-
-
 	//プレイヤーに移動を許可
-	void PlayerStart() { PlayerState_ = S_IDLE; }
+	void PlayerStart() { PlayerState_ = S_Idle; }
 
 	//プレイヤーを止める
-	void PlayerStop() { PlayerState_ = S_STOP; }
+	void PlayerStop() { PlayerState_ = S_Stop; }
 	
 	/// <summary>
 	/// プレイヤーの初期化(別関数から呼ぶ用)
@@ -147,6 +147,7 @@ public:
 	/// <param name="_name">接触したオブジェクト名</param>
 	void CollisionCharacter(std::string _name);
 
+	//ImGuiの描画
 	void DrawImGui();
 
 	/// <summary>

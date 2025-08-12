@@ -2,20 +2,20 @@
 
 namespace
 {
-	//補正値のインデックス
+	//csv読み込み時のインデックス(マップの各補正値)
 	enum MiniMapIndex
 	{
-		i_reductionXParam = 0,
-		i_reductionZParam,
+		i_ReductionXParam = 0,
+		i_ReductionZParam,
 		i_CorrectionValueXParam,
 		i_CorrectionValueYParam,
 	};
 
 	//キャラクターのX座標を縮小する値
-	float reductionX = 0.0f;
+	float ReductionX = 0.0f;
 
 	//キャラクターのZ座標を縮小する値
-	float reductionY = 0.0f;
+	float ReductionY = 0.0f;
 
 	//マップのX座標を補正する値
 	float CorrectionValueX = 0.0f;
@@ -46,11 +46,11 @@ void MiniMap::Update()
 	//プレイヤー・CPUの位置をとり続ける
 	//キャラクターのワールド座標を縮小,補正値を足してマップ内に表示
 
-	FirstPos_.x = (OriginalFirstPos_.x * reductionX) + CorrectionValueX;
-	FirstPos_.y = (OriginalFirstPos_.z * reductionY) - CorrectionValueY;
+	FirstPos_.x = (OriginalFirstPos_.x * ReductionX) + CorrectionValueX;
+	FirstPos_.y = (OriginalFirstPos_.z * ReductionY) - CorrectionValueY;
 
-	SecondPos_.x = (OriginalSecondPos_.x * reductionX) + CorrectionValueX;
-	SecondPos_.y = (OriginalSecondPos_.z * reductionY) - CorrectionValueY;
+	SecondPos_.x = (OriginalSecondPos_.x * ReductionX) + CorrectionValueX;
+	SecondPos_.y = (OriginalSecondPos_.z * ReductionY) - CorrectionValueY;
 }
 
 void MiniMap::Draw()
@@ -69,15 +69,15 @@ void MiniMap::SetMiniMapCSV()
 	csv.Load("CSVdata\\HUDData\\MiniMapData.csv");
 
 	//csvファイルの各0列目の文字列を取得
-	std::string init = "MiniMapInit";
+	std::string Init = "MiniMapInit";
 
 	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> MapData = GetCSVReadData(csv, init);
+	std::vector<float> MapData = GetCSVReadData(csv, Init);
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	reductionX = MapData[i_reductionXParam];
-	reductionY = MapData[i_reductionZParam];
+	ReductionX = MapData[i_ReductionXParam];
+	ReductionY = MapData[i_ReductionZParam];
 	CorrectionValueX = MapData[i_CorrectionValueXParam];
 	CorrectionValueY = MapData[i_CorrectionValueYParam];
 	

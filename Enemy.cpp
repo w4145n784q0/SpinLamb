@@ -9,13 +9,13 @@
 
 namespace
 {
-	//csv読み込み時のインデックス
-	enum enemyonlyIndex
+	//csv読み込み時のインデックス(Enemyクラスの固有の変数)
+	enum EnemyOnlyIndex
 	{
-		i_hitstop = 0,
-		i_chaseLength,
-		i_lookRotateAngle,
-		i_lookRotateValue,
+		i_HitStop = 0,
+		i_ChaseLength,
+		i_LookRotateAngle,
+		i_LookRotateValue,
 		i_EnemyAttackTime_1,
 		i_EnemyAttackTime_2,
 		i_EnemyAttackTime_3,
@@ -43,7 +43,7 @@ namespace
 
 Enemy::Enemy(GameObject* parent)
 	:Character(parent,"Enemy"), hEnemy_(-1),pPlayer_(nullptr),
-	EnemyState_(S_STOP),AimTimer_(0), 
+	EnemyState_(S_Stop),AimTimer_(0), 
 	TargetVec_({0,0,0}), TargetPosition_({0,0,0}), TargetAcceleration_(0.0f),
 	RandomAim_(0), HitStopTimer_(0)
 {
@@ -96,7 +96,7 @@ void Enemy::Draw()
 	DrawCharacterModel(hEnemy_, this->transform_);
 
 	//チャージ中のみ矢印モデル描画
-	if (EnemyState_ == S_AIM)
+	if (EnemyState_ == S_Aim)
 	{
 		DrawArrow();
 	}
@@ -126,7 +126,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 		AimTimer_ = 0;
 
 		//被弾状態になる
-		EnemyState_ = S_HIT;
+		EnemyState_ = S_Hit;
 
 		//状態遷移の際は一度回転をストップ
 		RotateXStop();
@@ -137,7 +137,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 		pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
 	{
 		//自身が柵に接触状態ではない かつ無敵状態でないなら続ける
-		if (!FenceHitParam_.IsInvincibility_ && !(EnemyState_ == S_FENCEHIT))
+		if (!FenceHitParam_.IsInvincibility_ && !(EnemyState_ == S_FenceHit))
 		{
 			//柵の名前のいずれかに接触しているなら
 			for (const std::string& arr : FenceHitParam_.WireArray_)
@@ -151,7 +151,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 					FenceReflect(normal);
 
 					//CPUの状態を柵に接触状態にする
-					EnemyState_ = S_FENCEHIT;
+					EnemyState_ = S_FenceHit;
 
 					//カメラ振動
 					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
@@ -182,28 +182,28 @@ void Enemy::EnemyRun()
 	//現在の状態によって更新を分ける
 	switch (EnemyState_)
 	{
-	case Enemy::S_ROOT:
+	case Enemy::S_Root:
 		UpdateRoot();
 		break;
-	case Enemy::S_CHASE:
+	case Enemy::S_Chase:
 		UpdateChase();
 		break;
-	case Enemy::S_AIM:
+	case Enemy::S_Aim:
 		UpdateAim();
 		break;
-	case Enemy::S_ATTACK:
+	case Enemy::S_Attack:
 		UpdateAttack();
 		break;
-	case Enemy::S_HITSTOP:
+	case Enemy::S_HitStop:
 		UpdateHitStop();
 		break;
-	case Enemy::S_HIT:
+	case Enemy::S_Hit:
 		UpdateHit();
 		break;
-	case Enemy::S_FENCEHIT:
+	case Enemy::S_FenceHit:
 		UpdateFenceHit();
 		break;
-	case Enemy::S_STOP:
+	case Enemy::S_Stop:
 		UpdateStop();
 		break;
 	default:
@@ -211,7 +211,7 @@ void Enemy::EnemyRun()
 	}
 
 	//柵に接触状態でなければ無敵時間を更新
-	if (!(EnemyState_ == S_FENCEHIT))
+	if (!(EnemyState_ == S_FenceHit))
 	{
 		InvincibilityTimeCalculation();
 	}
@@ -228,14 +228,14 @@ void Enemy::UpdateRoot()
 	//一定距離以上離れているなら追跡
 	if (dist > ChaseLength)
 	{
-		EnemyState_ = S_CHASE;
+		EnemyState_ = S_Chase;
 
 		//状態遷移の際は一度x回転をストップ
 		RotateXStop();
 	}
 	else//接近しているなら攻撃準備
 	{
-		EnemyState_ = S_AIM;
+		EnemyState_ = S_Aim;
 
 		//状態遷移の際は一度x回転をストップ
 		RotateXStop();
@@ -260,7 +260,7 @@ void Enemy::UpdateChase()
 	if (dist < ChaseLength)
 	{
 		//一定以下なら攻撃準備状態へ
-		EnemyState_ = S_AIM;
+		EnemyState_ = S_Aim;
 
 		//状態遷移の際は一度x回転をストップ
 		RotateXStop();
@@ -305,7 +305,7 @@ void Enemy::UpdateAim()
 		ChargeRelease();
 
 		//攻撃状態へ移行
-		EnemyState_ = S_ATTACK;
+		EnemyState_ = S_Attack;
 
 		//状態遷移の際は一度x回転をストップ
 		RotateXStop();
@@ -339,7 +339,7 @@ void Enemy::UpdateAttack()
 		AccelerationStop();
 
 		//ルートへ戻る
-		EnemyState_ = S_ROOT;
+		EnemyState_ = S_Root;
 
 		//攻撃までの時間を再抽選
 		RandomAim_ = rand() % EnemyAttackTimeArray.size();
@@ -360,7 +360,7 @@ void Enemy::UpdateHitStop()
 	if (++HitStopTimer_ > HitStop)
 	{
 		HitStopTimer_ = 0;
-		EnemyState_ = S_HIT;
+		EnemyState_ = S_Hit;
 
 		//状態遷移の際は一度x回転をストップ
 		RotateXStop();
@@ -381,7 +381,7 @@ void Enemy::UpdateHit()
 		KnockBackVelocityReset();
 
 		//ルートへ戻る
-		EnemyState_ = S_ROOT;
+		EnemyState_ = S_Root;
 
 		//状態遷移の際は一度x回転をストップ
 		//Y軸回転の停止はノックバックから復活する時のみ行う(攻撃やチャージへの干渉を防ぐため)
@@ -407,7 +407,7 @@ void Enemy::UpdateFenceHit()
 		KnockBackVelocityReset();
 
 		//ルートへ戻る
-		EnemyState_ = S_ROOT;
+		EnemyState_ = S_Root;
 
 		//状態遷移の際は一度x回転をストップ
 		//Y軸回転の停止はノックバックから復活する時のみ行う(攻撃やチャージへの干渉を防ぐため)
@@ -435,10 +435,10 @@ void Enemy::DrawImGui()
 		//デバッグ用のEnemyState_切り替えボタン
 		if (ImGui::Button("EnemyStop"))
 		{
-			if (EnemyState_ != S_STOP)
-				EnemyState_ = S_STOP;
+			if (EnemyState_ != S_Stop)
+				EnemyState_ = S_Stop;
 			else
-				EnemyState_ = S_ROOT;
+				EnemyState_ = S_Root;
 		}
 	}
 #endif
@@ -553,10 +553,10 @@ void Enemy::SetCSVEnemy()
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	HitStop = static_cast<int>(OnlyData[i_hitstop]);
-	ChaseLength = OnlyData[i_chaseLength];
-	LookRotateAngle = OnlyData[i_lookRotateAngle];
-	LookRotateValue = OnlyData[i_lookRotateValue];
+	HitStop = static_cast<int>(OnlyData[i_HitStop]);
+	ChaseLength = OnlyData[i_ChaseLength];
+	LookRotateAngle = OnlyData[i_LookRotateAngle];
+	LookRotateValue = OnlyData[i_LookRotateValue];
 
 	int arr[] = { static_cast<int>(OnlyData[i_EnemyAttackTime_1]), static_cast<int>(OnlyData[i_EnemyAttackTime_2]),
 			static_cast<int>(OnlyData[i_EnemyAttackTime_3]), static_cast<int>(OnlyData[i_EnemyAttackTime_4]) };

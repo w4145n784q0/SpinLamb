@@ -8,17 +8,17 @@
 
 namespace Audio
 {
-	//サウンドを鳴らす回数を初期化するインデックス
+	//csv読み込み時のインデックス(サウンドを一度に鳴らすことができる回数)
 	enum SoundNumIndex
 	{
-		i_start = 0,
-		i_select,
-		i_decide,
-		i_cancel,
-		i_whistle,
-		i_charge,
-		i_attack,
-		i_collision,
+		i_Start = 0,
+		i_Select,
+		i_Decide,
+		i_Cancel,
+		i_Whistle,
+		i_Charge,
+		i_Attack,
+		i_Collision,
 	};
 
 	//SEを鳴らす回数(効果音は同じものを一度に複数鳴らすことを想定)
@@ -240,21 +240,21 @@ void Audio::InitCSVAudio()
 	csv.Load("CSVData\\EngineData\\SoundData.csv");
 
 	//csvファイルの0列目の文字列を取得
-	std::string soundName = "SoundParam";
+	std::string SoundName = "SoundParam";
 
 	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> soundData = GameObject::GetCSVReadData(csv, soundName);
+	std::vector<float> SoundData = GameObject::GetCSVReadData(csv, SoundName);
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	StartSoundNum_ = static_cast<int>(soundData[i_start]);
-	SelectSoundNum_ = static_cast<int>(soundData[i_select]);
-	DecideSoundNum_ = static_cast<int>(soundData[i_decide]);
-	CancelSoundNum_ = static_cast<int>(soundData[i_cancel]);
-	WhistleSoundNum_ = static_cast<int>(soundData[i_whistle]);
-	ChargeSoundNum_ = static_cast<int>(soundData[i_charge]);
-	AttackSoundNum_ = static_cast<int>(soundData[i_attack]);
-	CollisionSoundNum_ = static_cast<int>(soundData[i_collision]);
+	StartSoundNum_ = static_cast<int>(SoundData[i_Start]);
+	SelectSoundNum_ = static_cast<int>(SoundData[i_Select]);
+	DecideSoundNum_ = static_cast<int>(SoundData[i_Decide]);
+	CancelSoundNum_ = static_cast<int>(SoundData[i_Cancel]);
+	WhistleSoundNum_ = static_cast<int>(SoundData[i_Whistle]);
+	ChargeSoundNum_ = static_cast<int>(SoundData[i_Charge]);
+	AttackSoundNum_ = static_cast<int>(SoundData[i_Attack]);
+	CollisionSoundNum_ = static_cast<int>(SoundData[i_Collision]);
 }
 
 int Audio::GetStartNum()

@@ -8,7 +8,7 @@ HowToPlayScene::HowToPlayScene(GameObject* parent)
 	:BaseScene(parent, "HowToPlayScene"),
 	hExplanation_(-1), hOperateKeyboard_(-1), hOperateController_(-1),
 	hSoundHowtoPlay_(-1), hSoundSelect_(-1),hSoundBackGameMode_(-1),
-	ImageState_(Explanation),pTransitionEffect_(nullptr)
+	ImageState_(S_Explanation),pTransitionEffect_(nullptr)
 {
 }
 
@@ -49,7 +49,7 @@ void HowToPlayScene::Initialize()
 	assert(hSoundBackGameMode_ >= 0);
 
 	//リストに各状態を追加
-	ImageList_ = { Explanation, OperateKeyBoard, OperateController };
+	ImageList_ = { S_Explanation, S_OperateKeyBoard, S_OperateController };
 
 	////インデックスの初期位置を指定
 	itr = ImageList_.begin();
@@ -72,15 +72,15 @@ void HowToPlayScene::Draw()
 {
 	switch (ImageState_)
 	{
-	case HowToPlayScene::Explanation:
+	case HowToPlayScene::S_Explanation:
 		//ゲーム説明描画
 		Image::SetAndDraw(hExplanation_, this->transform_);
 		break;
-	case HowToPlayScene::OperateKeyBoard:
+	case HowToPlayScene::S_OperateKeyBoard:
 		//キーボード操作説明描画
 		Image::SetAndDraw(hOperateKeyboard_, this->transform_);
 		break;
-	case HowToPlayScene::OperateController:
+	case HowToPlayScene::S_OperateController:
 		//コントローラー操作説明描画
 		Image::SetAndDraw(hOperateController_, this->transform_);
 		break;

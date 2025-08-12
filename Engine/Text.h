@@ -39,5 +39,8 @@ public:
 
 	//‰ğ•ú
 	void Release();
+
+	//csv“Ç‚İ‚İs‚¤
+	void SetCSVText();
 };
 

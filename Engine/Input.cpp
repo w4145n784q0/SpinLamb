@@ -6,10 +6,11 @@
 
 namespace Input
 {
+	//csv読み込み時のインデックス(入力関連の変数)
 	enum InputIndex
 	{
-		i_sticktilt = 0,
-		i_stickMicrotilt,
+		i_StickTilt = 0,
+		i_StickMicroTilt,
 	};
 
 	float StickTilt = 0.0f;
@@ -358,15 +359,15 @@ namespace Input
 		csv.Load("CSVdata\\EngineData\\InputData.csv");
 
 		//csvファイルの0列目の文字列を取得
-		std::string inputname = "Input";
+		std::string InputName = "Input";
 
 		//0列目の文字列を渡し、その行のパラメータを取得
-		std::vector<float> inputdata = GameObject::GetCSVReadData(csv,inputname);
+		std::vector<float> InputData = GameObject::GetCSVReadData(csv, InputName);
 
 		//初期化の順番はcsvの各行の順番に合わせる
 		//vの添え字はnamespaceで宣言した列挙型を使用
-		StickTilt = inputdata[i_sticktilt];
-		StickMicroTilt = inputdata[i_stickMicrotilt];
+		StickTilt = InputData[i_StickTilt];
+		StickMicroTilt = InputData[i_StickMicroTilt];
 	}
 
 }

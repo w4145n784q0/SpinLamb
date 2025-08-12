@@ -10,14 +10,15 @@ namespace
 {
 
 	//描画モード（状況に応じて表示/非表示を切り替えたいもの）を指定
+	//他クラスからSetDrawModeを通じて指示するため、namespaceに宣言(このクラスからは変更しない)
 	enum DrawMode
 	{
-		S_BeforeStart = 0,//スタート前
-		S_Ready,//"Ready?","Go!"を出す
-		S_Playing,//ゲーム中
-		S_Finish,//"Finish"を出す
-		S_Practice,//フリープレイ時
-		S_None,
+		Mode_BeforeStart = 0,//スタート前
+		Mode_JustBefore,//"Ready?","Go!"を出す、ゲーム開始直前
+		Mode_Playing,//ゲーム中
+		Mode_Finish,//"Finish"を出す
+		Mode_Practice,//フリープレイ時
+		Mode_None,
 	};
 
 }
@@ -73,19 +74,13 @@ private:
 	//敵のアイコン
 	int hSecondIcon_;
 
-	//----------ゲームシーン状態遷移(状態により描画内容を変更)----------
-	enum GameMode
-	{
-		BattlePreStart,//バトルシーン開始前
-		BattleInProgress,//バトルシーンプレイ中
-		BattleEnd,//バトルシーン終了
-		Practice,//練習シーン
-		Max,
-	};
-	GameMode GameModeHUD_;
+	//----------スコア----------
 
-	//描画モードを格納する変数
-	DrawMode DrawMode_;
+	//プレイヤーのスコア
+	int FirstScore_;
+
+	//CPUのスコア
+	int SecondScore_;
 
 	//----------インスタンス----------
 	//hud側から操作する場合のタイマークラスポインタ
@@ -94,22 +89,24 @@ private:
 	//hud側から操作する場合のミニマップクラスポインタ
 	MiniMap* pMiniMap_;
 
-	//プレイヤーのスコア
-	int FirstScore_;
+	//----------状態遷移----------
 
-	//CPUのスコア
-	int SecondScore_;
+	//描画モードを格納する変数
+	//直接代入はせず、SetDrawModeから変更される
+	DrawMode DrawMode_;
 
-	//----------DrawStartで呼ぶ状態遷移----------
 	enum DrawStartMode
 	{
-		start_ready = 0,
-		start_go,
-		start_max
+		S_StartReady = 0,//"Ready?"を表示している状態
+		S_StartGo,//"Go!"を表示している状態
+		S_MaxStartMode,
 	};
-	DrawStartMode DrawStart_;
+	DrawStartMode DrawStart_;//DrawStartで呼ぶ状態遷移
 
-	//	DrawReady()からDrawGo()に遷る際のタイマー
+	//----------イージング----------
+
+	//DrawReady()からDrawGo()に遷る際のタイマー
+	//このクラス内では定義せず他クラスから代入される
 	int ReadyTimer_;
 
 	//イージング使用時のカウンター
@@ -148,7 +145,7 @@ public:
 	void SetTimerPointer(GameTimer* _gametimer) { pGameTimer_ = _gametimer; }
 	void SetMiniMapPointer(MiniMap* _minimap) { pMiniMap_ = _minimap; }
 
-	//描画モードを変更 ここで指定したdrawmodeがDraw()にて呼ばれる
+	//描画モードを変更 ここで指定した_drawmodeがDraw()にて呼ばれる
 	void SetDrawMode(DrawMode _drawmode) { DrawMode_ = _drawmode; }
 
 	//DrawReady()からDrawGo()に遷る時間設定

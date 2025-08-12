@@ -20,9 +20,9 @@ namespace
 
 ResultScene::ResultScene(GameObject* parent)
 	:BaseScene(parent, "ResultScene"), hBackScreen_(-1), hYouWin_(-1),hCpuWin_(-1),
-	hPlayer1Win_(-1),hPlayer2Win_(-1),
-	hDraw_(-1), hPushTitle_(-1),
-	hSoundResult_(-1), hSoundBackTitle_(-1), winner_(RESULTMAX), ResultArray_({}),
+	hPlayer1Win_(-1),hPlayer2Win_(-1),hDraw_(-1), hPushTitle_(-1),
+	hSoundResult_(-1), hSoundBackTitle_(-1),
+	Winner_(MaxResult), ResultArray_({}),
 	pTransitionEffect_(nullptr)
 {
 }
@@ -82,15 +82,15 @@ void ResultScene::Initialize()
 	//スコアによって勝敗状態を変化
 	if (FirstCharaScore > SecondCharaScore)
 	{
-		winner_ = YOU_WIN;
+		Winner_ = FirstWin;
 	}
 	else if (FirstCharaScore < SecondCharaScore)
 	{
-		winner_ = CPU_WIN;
+		Winner_ = SecondWin;
 	}
 	else if (FirstCharaScore == SecondCharaScore)
 	{
-		winner_ = DRAW;
+		Winner_ = ResultDraw;
 	}
 
 	//画像ハンドル配列を初期化(プレイ人数によって分ける)
@@ -125,13 +125,13 @@ void ResultScene::Draw()
 
 	//結果のテキスト画像を表示
 	//ResultArray_の添え字に勝敗状態を使う
-	switch (winner_)
+	switch (Winner_)
 	{
-	case ResultScene::YOU_WIN:
-	case ResultScene::CPU_WIN:
-	case ResultScene::DRAW:
+	case ResultScene::FirstWin:
+	case ResultScene::SecondWin:
+	case ResultScene::ResultDraw:
 	{
-		Image::SetAndDraw(ResultArray_[winner_], Result_);
+		Image::SetAndDraw(ResultArray_[Winner_], Result_);
 	}
 		break;
 	default:
@@ -168,7 +168,7 @@ void ResultScene::SetCSVResult()
 {
 	//csvファイルを読み込む
 	CsvReader csv;
-	csv.Load("CSVdata\\SceneData\\ResultData.csv");
+	csv.Load("CSVdata\\SceneData\\ResultTransformData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {

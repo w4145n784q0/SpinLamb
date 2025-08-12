@@ -14,8 +14,10 @@
 
 namespace
 {
-	//トランスフォームの初期化値をCSVから読み込む際のインデックス
-	enum initTransform
+	//csv読み込み時のインデックス
+	
+	//トランスフォームの初期化値
+	enum InitTransform
 	{
 		pos_x = 0,
 		pos_y,
@@ -28,16 +30,16 @@ namespace
 		sca_z,
 	};
 
-	//汎用的に使用する変数を初期化するインデックス
+	//GameObject軽傷先で汎用的に使用する変数
 	enum CommonIndex
 	{
-		i_deltatime = 0,	
-		i_onesecond,		
-		i_tendivision,
-		i_sceneshorttransition,
-		i_scenetransition,
-		i_scenelongtransition,
-		i_zeropointone,
+		i_DeltaTime = 0,	
+		i_OneSecond,		
+		i_TenDivision,
+		i_SceneShortTransition,
+		i_SceneTransition,
+		i_SceneLongTransition,
+		i_ZeroPointOne,
 	};
 
 }
@@ -428,20 +430,20 @@ public:
         csv.Load("CSVdata\\EngineData\\CommonData.csv");  
 
 		//csvファイルの各0列目の文字列を取得
-		std::string common = "CommonData";
+		std::string Common = "CommonData";
 
 		//0列目の文字列を渡し、その行のパラメータを取得
-		std::vector<float> commondata = GetCSVReadData(csv,common);
+		std::vector<float> CommonData = GetCSVReadData(csv,Common);
             
 		//初期化の順番はcsvの各行の順番に合わせる
 		//vの添え字はnamespaceで宣言した列挙型を使用
-		DeltaTime = commondata[i_deltatime];
-        oneSecond = static_cast<int>(commondata[i_onesecond]);
-        TenDivision = static_cast<int>(commondata[i_tendivision]);
-		SceneShortTransition = static_cast<int>(commondata[i_sceneshorttransition]);
-        SceneTransition = static_cast<int>(commondata[i_scenetransition]);
-		SceneLongTransition = static_cast<int>(commondata[i_scenelongtransition]);
-		ZeroPointOne = commondata[i_zeropointone];
+		DeltaTime = CommonData[i_DeltaTime];
+        oneSecond = static_cast<int>(CommonData[i_OneSecond]);
+        TenDivision = static_cast<int>(CommonData[i_TenDivision]);
+		SceneShortTransition = static_cast<int>(CommonData[i_SceneShortTransition]);
+        SceneTransition = static_cast<int>(CommonData[i_SceneTransition]);
+		SceneLongTransition = static_cast<int>(CommonData[i_SceneLongTransition]);
+		ZeroPointOne = CommonData[i_ZeroPointOne];
     }
 
 private:

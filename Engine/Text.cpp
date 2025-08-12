@@ -1,13 +1,23 @@
 #include <stdlib.h>
 #include "Direct3D.h"
 #include "Text.h"
+#include"CsvReader.h"
+#include"GameObject.h"
+
+namespace {
+
+	//csv読み込み時のインデックス(テキストクラスの各変数)
+	enum TextIndex
+	{
+		i_width = 0,
+		i_height,
+		i_rowLength,
+		i_twoDivide,
+	};
+}
 
 Text::Text() : hPict_(-1), width_(0), height_(0), fileName_("char.png"), rowLength_(0),twoDivide_(0.0f)
 {
-	width_ = GetPrivateProfileInt("TEXT", "Width", 0, ".\\TextInit.ini");
-	height_ = GetPrivateProfileInt("TEXT", "Height", 0, ".\\TextInit.ini");
-	rowLength_ = GetPrivateProfileInt("TEXT", "rowLength", 0, ".\\TextInit.ini");
-	twoDivide_ = GetPrivateProfileInt("TEXT", "twoDevide", 0, ".\\TextInit.ini");
 }
 
 Text::~Text()
@@ -17,6 +27,10 @@ Text::~Text()
 //初期化（デフォルト）
 HRESULT Text::Initialize()
 {
+	//csvファイルを読み込む
+	SetCSVText();
+
+	//テキスト画像を読み込む
 	hPict_ = Image::Load(fileName_);
 	assert(hPict_ >= 0);
 
@@ -94,4 +108,24 @@ void Text::Draw(int x, int y, int value)
 void Text::Release()
 {
 	Image::Release(hPict_);
+}
+
+void Text::SetCSVText()
+{
+	//csvファイルを読み込む
+	CsvReader csv;
+	csv.Load("CSVdata\\EngineData\\TextData.csv");
+
+	//csvファイルの各0列目の文字列を取得
+	std::string TextName = "Text";
+
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> TextData = GameObject::GetCSVReadData(csv, TextName);
+
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	width_ = static_cast<unsigned int>(TextData[i_width]);
+	height_ = static_cast<unsigned int>(TextData[i_height]);
+	rowLength_ = static_cast<unsigned int>(TextData[i_rowLength]);
+	twoDivide_ = TextData[i_twoDivide];
 }

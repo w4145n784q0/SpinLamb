@@ -12,21 +12,21 @@ XMMATRIX _billBoard;
 
 namespace
 {
-	//csv読み込み時のインデックス
+	//csv読み込み時のインデックス(カメラの各変数)
 	enum CameraIndex
 	{
-		i_shakeSpeed = 0,	//振動スピード
-		i_shakeWidth,		//振動幅
-		i_frame,			//1フレーム
-		i_initPositionX,	//初期位置X
-		i_initPositionY,	//初期位置Y
-		i_initPositionZ,	//初期位置Z
-		i_initTargetX,		//初期焦点X
-		i_initTargetY,		//初期焦点Y
-		i_initTargetZ,		//初期焦点Z
-		i_shakeTimeShort,	//振動時間(短)
-		i_shakeTimeMiddle,	//振動時間(中)
-		i_shakeTimeLong,	//振動時間(長)
+		i_ShakeSpeed = 0,	//振動スピード
+		i_ShakeWidth,		//振動幅
+		i_Frame,			//1フレーム
+		i_InitPositionX,	//初期位置X
+		i_InitPositionY,	//初期位置Y
+		i_InitPositionZ,	//初期位置Z
+		i_InitTargetX,		//初期焦点X
+		i_InitTargetY,		//初期焦点Y
+		i_InitTargetZ,		//初期焦点Z
+		i_ShakeTimeShort,	//振動時間(短)
+		i_ShakeTimeMiddle,	//振動時間(中)
+		i_ShakeTimeLong,	//振動時間(長)
 	};
 
 	bool IsCameraShake;//カメラが振動してるか
@@ -155,21 +155,21 @@ void Camera::SetCSVCamera()
 	csv.Load("CSVdata\\EngineData\\CameraData.csv");
 
 	//csvファイルの各0列目の文字列を取得
-	std::string cameraName = "Camera";
+	std::string CameraName = "Camera";
 
 	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> cameraData = GameObject::GetCSVReadData(csv, cameraName);
+	std::vector<float> CameraData = GameObject::GetCSVReadData(csv, CameraName);
 		
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	ShakeSpeed = cameraData[i_shakeSpeed];
-	ShakeWidth = cameraData[i_shakeWidth];
-	frame = cameraData[i_frame];
-	InitPosition = { cameraData[i_initPositionX],  cameraData[i_initPositionY],  cameraData[i_initPositionZ] };
-	InitTarget = { cameraData[i_initTargetX],  cameraData[i_initTargetY],  cameraData[i_initTargetZ] };
-	ShakeTimeShort = cameraData[i_shakeTimeShort];
-	ShakeTimeMiddle = cameraData[i_shakeTimeMiddle]; 
-	ShakeTimeLong = cameraData[i_shakeTimeLong];
+	ShakeSpeed = CameraData[i_ShakeSpeed];
+	ShakeWidth = CameraData[i_ShakeWidth];
+	frame = CameraData[i_Frame];
+	InitPosition = { CameraData[i_InitPositionX],  CameraData[i_InitPositionY],  CameraData[i_InitPositionZ] };
+	InitTarget = { CameraData[i_InitTargetX],  CameraData[i_InitTargetY],  CameraData[i_InitTargetZ] };
+	ShakeTimeShort = CameraData[i_ShakeTimeShort];
+	ShakeTimeMiddle = CameraData[i_ShakeTimeMiddle]; 
+	ShakeTimeLong = CameraData[i_ShakeTimeLong];
 }
 
 void Camera::HalfScreen()

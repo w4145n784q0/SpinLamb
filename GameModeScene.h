@@ -12,6 +12,8 @@ class GameModeScene :
 {
 private:
 
+	//----------状態遷移----------
+
 	//現在選択しているモード
 	enum SelectMode
 	{
@@ -23,7 +25,7 @@ private:
 	};
 	SelectMode SelectMode_;
 
-	//ゲームモードシーンの状態
+	//選択中・確認画面の状態
 	enum GameModeState
 	{
 		S_Selecting,//モードの選択中
@@ -40,6 +42,8 @@ private:
 		MaxPlayerNum
 	};
 	PlayerNum PlayerNum_;
+
+	//----------画像ハンドルおよび関連するトランスフォーム----------
 
 	//----------背景----------
 
@@ -96,10 +100,10 @@ private:
 	//画面下部のゲーム説明テキスト画像(タイトル用)
 	int hTitleText_;
 
-	//プレイ人数選択画面(あそぶ人数を選んでください~の画像)
+	//プレイ人数選択画面(「あそぶ人数を選んでください」の画像)
 	int hPlayerNumSelect_;
 
-	//プレイ人数選択画面で出す、選択中のアイコン(矢印または★)
+	//プレイ人数選択画面で出す、選択中のアイコン(★マーク)
 	int hPlayerSelectIcon_;
 
 	//"モードセレクト"画像のトランスフォーム
@@ -134,6 +138,7 @@ private:
 	//キャンセル時のSE
 	int hSoundCancel_;
 
+	//----------選択状態を管理するリスト----------
 
 	//各モードのリスト
 	std::list<SelectMode> ModeList_;

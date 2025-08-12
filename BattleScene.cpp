@@ -19,21 +19,23 @@ namespace
 	//現状は残り10秒で制限時間を拡大
 	int EasingTime = 0;
 
-	//バトルシーン初期化時のインデックス
+	//csv読み込み時のインデックス(バトルシーンの各変数)
 	enum ScorePosIndex
 	{
-		i_gametimelimit = 0,
-		i_easingtime,
+		i_GameTimeLimit = 0,
+		i_EasingTime,
 	};
 }
 
 BattleScene::BattleScene(GameObject* parent)
-	:BaseScene(parent,"BattleScene") ,BattleState_(S_BEFORE),
-	 hBackScreen_(-1), hSoundBattle_(-1), hSoundWhistle_(-1),
-	FirstScore_(0),SecondScore_(0),
+	:BaseScene(parent,"BattleScene"),
+	hBackScreen_(-1), hSoundBattle_(-1), hSoundWhistle_(-1),
 	pPlayer1_(nullptr), pPlayer2_(nullptr), pEnemy_(nullptr),
-	pHUD_(nullptr),pMiniMap_(nullptr),
-	pGameTimer_(nullptr),pTransitionEffect_(nullptr)
+	pHUD_(nullptr),pTransitionEffect_(nullptr),
+	pGameTimer_(nullptr),pMiniMap_(nullptr),
+	ActivePlayers_({}), ActiveEnemys_({}),
+	BattleState_(S_Before),
+	FirstScore_(0),SecondScore_(0)
 {
 }
 
@@ -70,7 +72,7 @@ void BattleScene::Initialize()
 	InitPlayers.push_back(pPlayer1_);
 	InitCharacters.push_back(pPlayer1_);
 
-	//「ひとりで」か「ふたりで」かで生成するキャラクターを変更
+	//「ひとりで」か「ふたりで」のどちらかによって生成するキャラクターを変更
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 	if (pSceneManager->IsPlayerVSEnemy())
 	{
@@ -260,17 +262,17 @@ void BattleScene::Draw()
 	//今のBattleSceneの状態から、HUDクラスに描画するものを指示
 	switch (BattleState_)
 	{
-	case BattleScene::S_BEFORE:
-		pHUD_->SetDrawMode(S_BeforeStart);
+	case BattleScene::S_Before:
+		pHUD_->SetDrawMode(DrawMode::Mode_BeforeStart);
 		break;
-	case BattleScene::S_READY:
-		pHUD_->SetDrawMode(S_Ready);
+	case BattleScene::S_Ready:
+		pHUD_->SetDrawMode(DrawMode::Mode_JustBefore);
 		break;
-	case BattleScene::S_NOW:
-		pHUD_->SetDrawMode(S_Playing);
+	case BattleScene::S_Now:
+		pHUD_->SetDrawMode(DrawMode::Mode_Playing);
 		break;
-	case BattleScene::S_AFTER:
-		pHUD_->SetDrawMode(S_Finish);
+	case BattleScene::S_After:
+		pHUD_->SetDrawMode(DrawMode::Mode_Finish);
 		break;
 	default:
 		break;
@@ -286,16 +288,16 @@ void BattleScene::UpdateActive()
 	//BattleState_に応じて、各Update関数を呼ぶ
 	switch (BattleState_)
 	{
-	case BattleScene::S_BEFORE:
+	case BattleScene::S_Before:
 		UpdateBattleBefore();
 		break;
-	case BattleScene::S_READY:
+	case BattleScene::S_Ready:
 		UpdateBattleReady();
 		break;
-	case BattleScene::S_NOW:
+	case BattleScene::S_Now:
 		UpdateBattle();
 		break;
-	case BattleScene::S_AFTER:
+	case BattleScene::S_After:
 		UpdateBattleAfter();
 		break;
 	default:
@@ -352,7 +354,7 @@ void BattleScene::UpdateBattleBefore()
 		StateCounter = 0;
 
 		//時間経過したら開始直前状態へ以降
-		BattleState_ = S_READY;
+		BattleState_ = S_Ready;
 
 		//Ready?を表示する時間を渡す
 		pHUD_->SetReadyTimer(SceneTransition);
@@ -369,7 +371,7 @@ void BattleScene::UpdateBattleReady()
 		StateCounter = 0;
 
 		//時間経過したらバトル中状態へ以降
-		BattleState_ = S_NOW;
+		BattleState_ = S_Now;
 
 		//時間経過でPlayer,Enemyに移動許可を出す
 		//Enemy,Player2のnullチェックを行い、存在するなら実行
@@ -399,7 +401,7 @@ void BattleScene::UpdateBattle()
 	if (pGameTimer_->GetCurrentGameTime() <= 0)
 	{
 		//終了状態へ以降
-		BattleState_ = S_AFTER;
+		BattleState_ = S_After;
 
 		//タイマーを止める
 		pGameTimer_->StopTimer();
@@ -455,15 +457,15 @@ void BattleScene::SetCSVBattle()
 	csv.Load("CSVdata\\SceneData\\BattleData.csv");
 
 	//csvファイルの各0列目の文字列を取得
-	std::string battleName = "Battle";
+	std::string BattleName = "Battle";
 
 	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> battleData = GetCSVReadData(csv, battleName);
+	std::vector<float> BattleData = GetCSVReadData(csv, BattleName);
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	GameTimeLimit = static_cast<int>(battleData[i_gametimelimit]);
-	EasingTime = static_cast<int>(battleData[i_easingtime]);
+	GameTimeLimit = static_cast<int>(BattleData[i_GameTimeLimit]);
+	EasingTime = static_cast<int>(BattleData[i_EasingTime]);
 }
 
 void BattleScene::OnCharacterFenceHit(int _HitCharaID)

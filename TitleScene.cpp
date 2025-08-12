@@ -5,7 +5,8 @@
 #include"Engine/Audio.h"
 
 TitleScene::TitleScene(GameObject* parent)
-	:BaseScene(parent,"TitleScene"), hBackScreen_(-1),hSoundTitle_(-1),hSoundStart_(-1),
+	:BaseScene(parent,"TitleScene"),
+	hBackScreen_(-1),hSoundTitle_(-1),hSoundStart_(-1),
 	pTransitionEffect_(nullptr)
 {
 }
