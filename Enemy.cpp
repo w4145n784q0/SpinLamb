@@ -286,7 +286,7 @@ void Enemy::UpdateAim()
 	//矢印モデルをセット
 	SetArrow();
 
-	//矢印モデルの位置を自身の回転と合わせる(Enemyの場合、矢印の回転に補正をかけておく)
+	//矢印モデルの位置を自身の回転と合わせる
 	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
 
 	//チャージ中のエフェクトを出す
@@ -384,9 +384,7 @@ void Enemy::UpdateHit()
 		EnemyState_ = S_Root;
 
 		//状態遷移の際は一度x回転をストップ
-		//Y軸回転の停止はノックバックから復活する時のみ行う(攻撃やチャージへの干渉を防ぐため)
 		RotateXStop();
-		RotateYStop();
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
 		AccelerationStop();
@@ -410,9 +408,7 @@ void Enemy::UpdateFenceHit()
 		EnemyState_ = S_Root;
 
 		//状態遷移の際は一度x回転をストップ
-		//Y軸回転の停止はノックバックから復活する時のみ行う(攻撃やチャージへの干渉を防ぐため)
 		RotateXStop();
-		RotateYStop();
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
 		AccelerationStop();

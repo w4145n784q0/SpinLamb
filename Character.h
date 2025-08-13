@@ -217,10 +217,10 @@ public:
     /// <summary>
     /// Y軸の回転行列をベクトルに変換
     /// </summary>
-    /// <param name="rotY">Y軸に回転したい角度（Degree）</param>
-    /// <param name="front">正面ベクトル(ローカル空間)</param>
+    /// <param name="_rotY">Y軸に回転したい角度（Degree）</param>
+    /// <param name="_front">正面ベクトル(ローカル空間)</param>
     /// <returns>変形したベクトル（ワールド空間）</returns>
-    XMVECTOR RotateVecFront(float rotY, XMVECTOR front);
+    XMVECTOR RotateVecFront(float _rotY, XMVECTOR _front);
 
     /// <summary>
     /// 正面ベクトルを更新
@@ -324,22 +324,22 @@ public:
     /// </summary>
     void RotateXStop() { this->transform_.rotate_.x = 0.0f; }
 
-    /// <summary>
-    /// Y回転を止める
-    /// </summary>
-    void RotateYStop() { this->transform_.rotate_.y = 0.0f; }
-
-
     //----------被弾----------
 
     /// <summary>
     /// キャラクター同士の反射処理
     /// </summary>
-    /// <param name="myVector">自身の位置ベクトル</param>
-    /// <param name="targetVector">相手の位置ベクトル</param>
-    /// <param name="myVelocity">自身の加速度</param>
-    /// <param name="targetVelocity">相手の加速度</param>
-    void Reflect(XMVECTOR myVector, XMVECTOR targetVector, float myVelocity, float targetVelocity);
+    /// <param name="_myVector">自身の位置ベクトル</param>
+    /// <param name="_targetVector">相手の位置ベクトル</param>
+    /// <param name="_myVelocity">自身の加速度</param>
+    /// <param name="_targetVelocity">相手の加速度</param>
+    void Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity);
+
+    /// <summary>
+    /// ノックバック中のY軸回転角の計算 ノックバック直前に行う
+    /// </summary>
+    /// <param name="_KnockBackVector">ノックバックする方向(正規化されていること前提)</param>
+    void KnockBackAngleY(XMFLOAT3 _KnockBackVector);
 
     /// <summary>
     /// ノックバック移動処理
@@ -356,8 +356,8 @@ public:
     /// <summary>
     /// 柵に接触した際の計算処理　柵の法線で計算
     /// </summary>
-    /// <param name="normal">反射される方向(接触した柵の法線ベクトル)</param>
-    void FenceReflect(XMVECTOR normal);
+    /// <param name="_normal">反射される方向(接触した柵の法線ベクトル)</param>
+    void FenceReflect(XMVECTOR _normal);
 
     /// <summary>
     /// ノックバック終了判定
@@ -450,10 +450,10 @@ public:
     float GetAcceleration() const { return MoveParam_.Acceleration_; }
 
     //キャラクターの移動制限をセット
-    void SetEnd(float upper, float lower, float left, float right) {
-        NorthEnd_ = upper;
-        SouthEnd_ = lower;
-        WestEnd_ = left;
-        EastEnd_ = right;
+    void SetEnd(float _upper, float _lower, float _left, float _right) {
+        NorthEnd_ = _upper;
+        SouthEnd_ = _lower;
+        WestEnd_ = _left;
+        EastEnd_ = _right;
     }
 };

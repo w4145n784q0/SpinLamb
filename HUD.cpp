@@ -46,23 +46,24 @@ namespace
 	Transform MapIcon;
 
 	//プレイヤーアイコンのトランスフォーム
-	Transform PlayerIcon;
+	Transform FirstIcon;
 
 	//敵アイコンのトランスフォーム
-	Transform EnemyIcon;
+	Transform SecondIcon;
+
 
 	//スコア表示位置のトランスフォーム
-	Transform PlayerScoreTen;
-	Transform PlayerScoreOne;
-	Transform EnemyScoreTen;
-	Transform EnemyScoreOne;
+	Transform FirstScoreTen;
+	Transform FirstScoreOne;
+	Transform SecondScoreTen;
+	Transform SecondScoreOne;
 
 	//画像用トランスフォームを配列に入れる
 	//初期化の際に使用する
 	std::vector<std::reference_wrapper<Transform>> ImageArray = {
 	LogoBackTitle,LogoPractice,LogoExplanation,LogoStart,
-	LogoFinish, SplitLine, TenTime ,OneTime, MapIcon,PlayerIcon,EnemyIcon,
-	PlayerScoreTen,PlayerScoreOne,EnemyScoreTen, EnemyScoreOne
+	LogoFinish, SplitLine, TenTime ,OneTime, MapIcon,FirstIcon,SecondIcon,
+	FirstScoreTen, FirstScoreOne, SecondScoreTen, SecondScoreOne
 	};
 
 	//ナンバーハンドルの配列
@@ -312,8 +313,8 @@ void HUD::SetHUDCSV()
 	//csvファイル(HUDTransformData.csv)の各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {
 		"backtitle","practice","explanation","start","finish","split",
-		"tentime","onetime","minimap","playericon", "enemyicon",
-		"playerscoreten","playerscoreone","enemyscoreten","enemyscoreone",
+		"tentime","onetime","minimap","firsticon", "secondicon",
+		"firstscoreten","firstscoreone","secondscoreten","secondscoreone",
 	};
 
 	//まとめて初期化
@@ -445,18 +446,17 @@ void HUD::DrawSplitLine()
 
 void HUD::DrawMiniMap()
 {
-
-
+	//ミニマップを描画
 	if (pMiniMap_ != nullptr) 
 	{
-		PlayerIcon.position_ = pMiniMap_->GetFirstPos();
-		EnemyIcon.position_ = pMiniMap_->GetSecondPos();
+		FirstIcon.position_ = pMiniMap_->GetFirstPos();
+		SecondIcon.position_ = pMiniMap_->GetSecondPos();
 	}
 
-	//マップ画像,Player,Enemyのアイコン描画
+	//マップ画像,Player1,Player2・敵(CPU)のアイコン描画
 	Image::SetAndDraw(hMap_, MapIcon);
-	Image::SetAndDraw(hFirstIcon_, PlayerIcon);
-	Image::SetAndDraw(hSecondIcon_, EnemyIcon);
+	Image::SetAndDraw(hFirstIcon_, FirstIcon);
+	Image::SetAndDraw(hSecondIcon_, SecondIcon);
 }
 
 void HUD::DrawScore()
@@ -470,12 +470,12 @@ void HUD::DrawScore()
 	SecondScoreIndexOne = SecondScore_ % TenDivision;
 
 	//Player1のスコアの十の位,一の位を描画
-	Image::SetAndDraw(ArrayHandle[FirstScoreIndexTen], PlayerScoreTen);
-	Image::SetAndDraw(ArrayHandle[FirstScoreIndexOne], PlayerScoreOne);
+	Image::SetAndDraw(ArrayHandle[FirstScoreIndexTen], FirstScoreTen);
+	Image::SetAndDraw(ArrayHandle[FirstScoreIndexOne], FirstScoreOne);
 
 	//Player2,Enemyのスコアの十の位,一の位を描画
-	Image::SetAndDraw(ArrayHandle[SecondScoreIndexTen], EnemyScoreTen);
-	Image::SetAndDraw(ArrayHandle[SecondScoreIndexOne], EnemyScoreOne);
+	Image::SetAndDraw(ArrayHandle[SecondScoreIndexTen], SecondScoreTen);
+	Image::SetAndDraw(ArrayHandle[SecondScoreIndexOne], SecondScoreOne);
 }
 
 void HUD::DrawImGuiExplanation()
@@ -535,17 +535,17 @@ void HUD::DrawImGuiScore()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Score"))
 	{
-		ImGui::SliderFloat("PlayerScoreTenX", &PlayerScoreTen.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("PlayerScoreTenY", &PlayerScoreTen.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("FirstScoreTenX", &FirstScoreTen.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("FirstScoreTenY", &FirstScoreTen.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("PlayerScoreOneX", &PlayerScoreOne.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("PlayerScoreOneY", &PlayerScoreOne.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("FirstScoreOneX", &FirstScoreOne.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("FirstScoreOneY", &FirstScoreOne.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("EnemyScoreTenX", &EnemyScoreTen.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("EnemyScoreTenY", &EnemyScoreTen.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("SecondScoreTenX", &SecondScoreTen.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("SecondScoreTenY", &SecondScoreTen.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("EnemyScoreOneX", &EnemyScoreOne.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("EnemyScoreOneY", &EnemyScoreOne.position_.y, Image::UpEdge, Image::DownEdge);
+		ImGui::SliderFloat("SecondScoreOneX", &SecondScoreOne.position_.x, Image::LeftEdge, Image::RightEdge);
+		ImGui::SliderFloat("SecondScoreOneY", &SecondScoreOne.position_.y, Image::UpEdge, Image::DownEdge);
 
 		ImGui::TreePop();
 	}
@@ -575,11 +575,11 @@ void HUD::DrawImGuiMiniMap()
 		ImGui::SliderFloat("MiniMapX", &MapIcon.position_.x, Image::LeftEdge, Image::RightEdge);
 		ImGui::SliderFloat("MiniMapY", &MapIcon.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::Text("playerIconX:%.3f", PlayerIcon.position_.x);
-		ImGui::Text("playerIconY:%.3f", PlayerIcon.position_.y);
+		ImGui::Text("FirstIconX:%.3f", FirstIcon.position_.x);
+		ImGui::Text("FirstIconY:%.3f", FirstIcon.position_.y);
 
-		ImGui::Text("EnemyIconX:%.3f", EnemyIcon.position_.x);
-		ImGui::Text("EnemyIconY:%.3f", EnemyIcon.position_.y);
+		ImGui::Text("SecondIconX:%.3f", SecondIcon.position_.x);
+		ImGui::Text("SecondIconY:%.3f", SecondIcon.position_.y);
 
 		ImGui::TreePop();
 	}

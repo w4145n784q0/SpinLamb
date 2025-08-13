@@ -126,7 +126,7 @@ void Player::OnCollision(GameObject* pTarget)
 
 		//状態遷移の際は一度x回転をストップ
 		RotateXStop();
-		RotateYStop();
+
 	}
 
 	//各柵に接触した時の処理
@@ -155,7 +155,6 @@ void Player::OnCollision(GameObject* pTarget)
 
 					//状態遷移の際は一度x回転をストップ
 					RotateXStop();
-					RotateYStop();
 				}
 			}
 		}
@@ -393,9 +392,7 @@ void Player::UpdateHit()
 		PlayerState_ = S_Idle;
 
 		//状態遷移の際は一度x回転をストップ
-		//Y軸回転の停止はノックバックから復活する時のみ行う(攻撃やチャージへの干渉を防ぐため)
 		RotateXStop();
-		RotateYStop();
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
 		AccelerationStop();
@@ -419,9 +416,7 @@ void Player::UpdateFenceHit()
 		PlayerState_ = S_Idle;
 
 		//状態遷移の際は一度x回転をストップ
-		//Y軸回転の停止はノックバックから復活する時のみ行う(攻撃やチャージへの干渉を防ぐため)
 		RotateXStop();
-		RotateYStop();
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
 		AccelerationStop();

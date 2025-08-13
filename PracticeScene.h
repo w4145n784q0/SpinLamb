@@ -62,5 +62,8 @@ public:
 
 	//シーン遷移中の処理
 	void UpdateTransition() override;
+
+	//CSVから必要パラメータを読み込みする
+	void SetCSVPractice();
 };
 

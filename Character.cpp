@@ -546,7 +546,7 @@ float Character::RotateDirectionVector(XMVECTOR _MoveVector)
 	return angleDeg;
 }
 
-void Character::Reflect(XMVECTOR myVector, XMVECTOR targetVector, float myVelocity, float targetVelocity)
+void Character::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity)
 {
 	//無敵状態なら処理しない
 	if (this->FenceHitParam_.IsInvincibility_)
@@ -555,7 +555,7 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR targetVector, float myVeloci
 	}
 
 	//接触相手のベクトルから自身のベクトルを引く
-	XMVECTOR subVector = XMVectorSubtract(targetVector, myVector);
+	XMVECTOR subVector = XMVectorSubtract(_targetVector, _myVector);
 
 	//引いたベクトルが0ならお互いの位置が同じなので処理しない(0ベクトルを正規化はできない)
 	if (XMVector3Equal(subVector, XMVectorZero()))
@@ -572,10 +572,10 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR targetVector, float myVeloci
 	XMStoreFloat3(&tmp,subVector);
 
 	//反射方向を設定
-	 HitParam_.KnockBack_Direction_ = tmp;
+	HitParam_.KnockBack_Direction_ = tmp;
 
 	//自身の速度と相手の速度の差分をとる
-	float subVelocity = myVelocity - targetVelocity;
+	float subVelocity = _myVelocity - _targetVelocity;
 
 	//ノックバック量の初期化
 	//毎回値が変化するのでローカル変数
@@ -607,12 +607,24 @@ void Character::Reflect(XMVECTOR myVector, XMVECTOR targetVector, float myVeloci
 
 	//溜めている速度をリセット
 	ChargeReset();
+
+	//ノックバック時の回転角の固定
+	KnockBackAngleY(HitParam_.KnockBack_Direction_);
+}
+
+void Character::KnockBackAngleY(XMFLOAT3 _KnockBackVector)
+{
+	//ノックバック中のY軸の回転角を求める
+	float angleY = static_cast<float>(atan2(_KnockBackVector.x, _KnockBackVector.z));
+
+	//angleYはラジアン角なのでディグリー角に変換し、Y軸回転にセット
+	this->transform_.rotate_.y = XMConvertToDegrees(angleY);
 }
 
 void Character::KnockBack()
 {
-	//x軸の-回転を行う
-	MoveRotateXReverse();
+	//x軸の+回転を行う
+	MoveRotateX();
 
 	//毎フレームノックバック速度を減少
 	HitParam_.KnockBack_Velocity_.x *= HitParam_.DecelerationRate_;
@@ -653,7 +665,7 @@ XMVECTOR Character::HitNormal(std::string _normal)
 	return { 0,0,0 };
 }
 
-void Character::FenceReflect(XMVECTOR normal)
+void Character::FenceReflect(XMVECTOR _normal)
 {
 	//接触エフェクトを指定
 	SetFenceHitEffect();
@@ -664,8 +676,19 @@ void Character::FenceReflect(XMVECTOR normal)
 	//ダッシュ中の速度リセット
 	AccelerationStop();
 
+	//念のため正規化する
+	//反射方向が0なら処理しない(0ベクトルを正規化はできない)
+	if (XMVector3Equal(_normal, XMVectorZero()))
+	{
+		return;
+	}
+
+	//単位ベクトルに変換
+	_normal = XMVector3Normalize(_normal);
+
+	//XMFLOAT3型に変換
 	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, normal);
+	XMStoreFloat3(&tmp, _normal);
 
 	//受け取った法線をノックバック方向に代入
 	HitParam_.KnockBack_Direction_ = { tmp };
@@ -679,6 +702,9 @@ void Character::FenceReflect(XMVECTOR normal)
 
 	//接触通知
 	NotifyFenceHit();
+
+	//ノックバック時の回転角の固定
+	KnockBackAngleY(HitParam_.KnockBack_Direction_);
 }
 
 bool Character::IsKnockBackEnd()
@@ -765,14 +791,14 @@ void Character::DrawArrow()
 	Model::SetAndDraw(MoveParam_.hMoveArrow_, this->MoveParam_.ArrowTransform_);
 }
 
-XMVECTOR Character::RotateVecFront(float rotY, XMVECTOR front)
+XMVECTOR Character::RotateVecFront(float _rotY, XMVECTOR _front)
 {
 	//回転させたいベクトル（方向）を代入
 	//基本はローカル正面ベクトル
-	XMVECTOR v = front;
+	XMVECTOR v = _front;
 
 	//Y回転をラジアンにし、回転行列を作成
-	XMMATRIX m = XMMatrixRotationY(XMConvertToRadians(rotY));
+	XMMATRIX m = XMMatrixRotationY(XMConvertToRadians(_rotY));
 
 	//方向ベクトルを回転行列で変換し、ワールド座標での向いている方向が出る
 	v = XMVector3TransformCoord(v, m);

@@ -59,10 +59,10 @@ private:
 
 	//----------スコア----------
 
-	//プレイヤーのスコア
+	//プレイヤー1のスコア
 	int FirstScore_;
 
-	//敵のスコア
+	//敵(CPU)・プレイヤー2のスコア
 	int SecondScore_;
 
 public:

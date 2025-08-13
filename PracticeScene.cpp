@@ -8,12 +8,24 @@
 #include"Engine/Camera.h"
 #include"GameView.h"
 
+namespace
+{
+	//csv読み込み時のインデックス(練習シーンの各変数)
+	enum PracticeIndex
+	{
+		i_CharacterAddID = 0,
+	};
+
+	//キャラクターの初期化時、IDに加算する値(for文でiに加算する値)
+	int CharacterAddID = 0;
+}
+
 PracticeScene::PracticeScene(GameObject* parent)
 	:BaseScene(parent,"PracticeScene"),
 	hBackScreen_(-1),hSoundPractice_(-1),
 	pPlayer1_(nullptr), pPlayer2_(nullptr), pEnemy_(nullptr), pHUD_(nullptr),
 	pTransitionEffect_(nullptr), pMiniMap_(nullptr),
-	ActivePlayers_({}), ActiveEnemys_({})
+	ActivePlayers_({}), ActiveEnemys_({}),Press_(0)
 {
 }
 
@@ -23,6 +35,9 @@ PracticeScene::~PracticeScene()
 
 void PracticeScene::Initialize()
 {
+	//csvからパラメータ読み込み
+	SetCSVPractice();
+
 	//StageManagerクラス生成
 	Instantiate<StageManager>(this);
 
@@ -89,7 +104,7 @@ void PracticeScene::Initialize()
 		InitCharacters[i]->SetEnd(North, South, West, East);
 
 		//IDを割り振る
-		InitCharacters[i]->SetID(i + 1);
+		InitCharacters[i]->SetID(i + CharacterAddID);
 	}
 
 	//Playerの初期化処理
@@ -273,4 +288,21 @@ void PracticeScene::UpdateTransition()
 			Camera::FullScreen();
 		}
 	}
+}
+
+void PracticeScene::SetCSVPractice()
+{
+	//csvファイル読み込む
+	CsvReader csv;
+	csv.Load("CSVdata\\SceneData\\PracticeData.csv");
+
+	//csvファイルの各0列目の文字列を取得
+	std::string PracticeName = "Practice";
+
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> PracticeData = GetCSVReadData(csv, PracticeName);
+
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	CharacterAddID = static_cast<int>(PracticeData[i_CharacterAddID]);
 }

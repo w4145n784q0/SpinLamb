@@ -23,7 +23,7 @@ private:
 	SCENE_ID nextSceneID_;		//次のシーン
 
 	int FirstCharaScore_;		//プレイヤー1のスコア
-	int SecondCharaScore_;		//プレイヤー2or敵のスコア
+	int SecondCharaScore_;		//プレイヤー2・敵(CPU)のスコア
 
 	//ゲームプレイ時の遊ぶ人数　シーンをまたいでも管理できる
 	//GameViewの画面描画モードとは別で

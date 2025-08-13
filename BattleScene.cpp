@@ -12,6 +12,9 @@ namespace
 	//次のバトルの状態に遷移するまでの時間計測
 	int StateCounter = 0;
 
+	//キャラクターの初期化時、IDに加算する値(for文でiに加算する値)
+	int CharacterAddID = 0;
+
 	//バトルモードの制限時間
 	int GameTimeLimit = 0;
 
@@ -20,9 +23,10 @@ namespace
 	int EasingTime = 0;
 
 	//csv読み込み時のインデックス(バトルシーンの各変数)
-	enum ScorePosIndex
+	enum BattleIndex
 	{
-		i_GameTimeLimit = 0,
+		i_CharacterAddID = 0,
+		i_GameTimeLimit,
 		i_EasingTime,
 	};
 }
@@ -114,7 +118,7 @@ void BattleScene::Initialize()
 		InitCharacters[i]->SetEnd(North, South, West, East);
 
 		//IDを割り振る
-		InitCharacters[i]->SetID(i + 1);
+		InitCharacters[i]->SetID(i + CharacterAddID);
 
 		//監視対象に追加
 		InitCharacters[i]->AddObserver(this);
@@ -464,6 +468,7 @@ void BattleScene::SetCSVBattle()
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
+	CharacterAddID = static_cast<int>(BattleData[i_CharacterAddID]);
 	GameTimeLimit = static_cast<int>(BattleData[i_GameTimeLimit]);
 	EasingTime = static_cast<int>(BattleData[i_EasingTime]);
 }
