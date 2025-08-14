@@ -91,6 +91,8 @@ void HowToPlayScene::Draw()
 
 void HowToPlayScene::Release()
 {
+	//実体は消さず、アドレスのみ無効化する
+	pTransitionEffect_ = nullptr;
 }
 
 void HowToPlayScene::UpdateActive()

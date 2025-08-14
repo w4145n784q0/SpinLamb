@@ -236,6 +236,14 @@ void PracticeScene::Draw()
 
 void PracticeScene::Release()
 {
+	//実体は消さず、アドレスのみ無効化する
+	pPlayer1_ = nullptr;
+	pPlayer2_ = nullptr;
+	pEnemy_ = nullptr;
+	pHUD_ = nullptr;
+	pTransitionEffect_ = nullptr;
+
+	pMiniMap_ = nullptr;
 }
 
 void PracticeScene::UpdateActive()

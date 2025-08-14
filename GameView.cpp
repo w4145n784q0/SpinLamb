@@ -12,7 +12,7 @@ namespace GameView
 		MaxPlayersNum//参加できるプレイヤーの最大値
 	};
 
-	//描画モードのインスタンス
+	//描画モードの状態を保持
 	GameView::GameViewMode GameViewMode_;
 
 	//プレイヤー1,2のインスタンス
@@ -62,7 +62,9 @@ namespace GameView
 
 	void GameView::Release()
 	{
-		//実体は消さず、所有権のみnullにする
+		//実体の解放はSceneManager(シーン切り替え時)
+		//またはmain(プログラム終了時)で行われるので
+		//実体は消さず、アドレス値を無効化するのみ
 		pPlayer1_ = nullptr;
 		pPlayer2_ = nullptr;
 		pHUD_ = nullptr;

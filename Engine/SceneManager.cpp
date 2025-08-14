@@ -3,6 +3,7 @@
 #include "Model.h"
 #include "Image.h"
 #include "Audio.h"
+#include"../GameView.h"
 
 #include"../TitleScene.h"
 #include"../ResultScene.h"
@@ -41,6 +42,10 @@ void SceneManager::Update()
 		Audio::Release();
 		Model::AllRelease();
 		Image::AllRelease();
+
+		//GameViewの各ポインタのアドレスを無効化してから次のシーンを作成
+		//実体そのものはKillAllChildren()で消えている
+		GameView::Release();
 
 		//次のシーンを作成
 		switch (nextSceneID_)
