@@ -3,14 +3,14 @@
 #include "Model.h"
 #include "Image.h"
 #include "Audio.h"
-#include"../GameView.h"
+#include"../ViewSourceFile/GameView.h"
 
-#include"../TitleScene.h"
-#include"../ResultScene.h"
-#include"../GameModeScene.h"
-#include"../BattleScene.h"
-#include"../PracticeScene.h"
-#include"../HowToPlayScene.h"
+#include"../SceneSourceFile/TitleScene.h"
+#include"../SceneSourceFile/ResultScene.h"
+#include"../SceneSourceFile/GameModeScene.h"
+#include"../SceneSourceFile/BattleScene.h"
+#include"../SceneSourceFile/PracticeScene.h"
+#include"../SceneSourceFile/HowToPlayScene.h"
 
 
 //コンストラクタ

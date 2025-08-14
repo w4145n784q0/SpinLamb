@@ -110,18 +110,6 @@
     <ClCompile Include="Engine\VFX.cpp">
       <Filter>01Engine\ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="TitleScene.cpp">
-      <Filter>03Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>04Chara</Filter>
-    </ClCompile>
-    <ClCompile Include="Ground.cpp">
-      <Filter>05Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>04Chara</Filter>
-    </ClCompile>
     <ClCompile Include="imgui\imgui.cpp">
       <Filter>00imgui</Filter>
     </ClCompile>
@@ -143,68 +131,80 @@
     <ClCompile Include="imgui\imgui_widgets.cpp">
       <Filter>00imgui</Filter>
     </ClCompile>
-    <ClCompile Include="Fence.cpp">
-      <Filter>05Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="PracticeScene.cpp">
-      <Filter>03Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameModeScene.cpp">
-      <Filter>03Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="BattleScene.cpp">
-      <Filter>03Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="Character.cpp">
-      <Filter>04Chara</Filter>
-    </ClCompile>
-    <ClCompile Include="StageManager.cpp">
-      <Filter>05Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="MiniMap.cpp">
-      <Filter>06UI</Filter>
-    </ClCompile>
-    <ClCompile Include="HUD.cpp">
-      <Filter>06UI</Filter>
-    </ClCompile>
-    <ClCompile Include="HowToPlayScene.cpp">
-      <Filter>03Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="LeftWire.cpp">
-      <Filter>05Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="LowerWire.cpp">
-      <Filter>05Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="RightWire.cpp">
-      <Filter>05Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="UpperWire.cpp">
-      <Filter>05Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="ResultScene.cpp">
-      <Filter>03Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameTimer.cpp">
-      <Filter>06UI</Filter>
-    </ClCompile>
-    <ClCompile Include="BaseScene.cpp">
-      <Filter>03Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="TransitionEffect.cpp">
-      <Filter>06UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Wire.cpp">
-      <Filter>05Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="OutStageThing.cpp">
-      <Filter>05Stage</Filter>
-    </ClCompile>
-    <ClCompile Include="GameView.cpp">
+    <ClCompile Include="ViewSourceFile\GameView.cpp">
       <Filter>01Engine\DirectX</Filter>
     </ClCompile>
-    <ClCompile Include="Easing.cpp">
+    <ClCompile Include="CharacterSourceFile\Character.cpp">
+      <Filter>04Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\Enemy.cpp">
+      <Filter>04Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\Player.cpp">
+      <Filter>04Chara</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSourceFile\Fence.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSourceFile\Ground.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSourceFile\LeftWire.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSourceFile\LowerWire.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSourceFile\OutStageThing.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSourceFile\RightWire.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSourceFile\StageManager.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSourceFile\UpperWire.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSourceFile\Wire.cpp">
+      <Filter>05Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="UISourceFile\GameTimer.cpp">
+      <Filter>06UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UISourceFile\HUD.cpp">
+      <Filter>06UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UISourceFile\MiniMap.cpp">
+      <Filter>06UI</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectSourceFile\TransitionEffect.cpp">
+      <Filter>06UI</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectSourceFile\Easing.cpp">
       <Filter>01Engine\ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneSourceFile\BaseScene.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneSourceFile\BattleScene.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneSourceFile\GameModeScene.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneSourceFile\HowToPlayScene.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneSourceFile\PracticeScene.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneSourceFile\ResultScene.cpp">
+      <Filter>03Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneSourceFile\TitleScene.cpp">
+      <Filter>03Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -278,18 +278,6 @@
       <Filter>01Engine\ResourceManager</Filter>
     </ClInclude>
     <ClInclude Include="resource.h" />
-    <ClInclude Include="TitleScene.h">
-      <Filter>03Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>04Chara</Filter>
-    </ClInclude>
-    <ClInclude Include="Ground.h">
-      <Filter>05Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>04Chara</Filter>
-    </ClInclude>
     <ClInclude Include="imgui\imconfig.h">
       <Filter>00imgui</Filter>
     </ClInclude>
@@ -314,71 +302,83 @@
     <ClInclude Include="imgui\imstb_truetype.h">
       <Filter>00imgui</Filter>
     </ClInclude>
-    <ClInclude Include="Fence.h">
-      <Filter>05Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="PracticeScene.h">
-      <Filter>03Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameModeScene.h">
-      <Filter>03Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="BattleScene.h">
-      <Filter>03Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Character.h">
-      <Filter>04Chara</Filter>
-    </ClInclude>
-    <ClInclude Include="StageManager.h">
-      <Filter>05Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="MiniMap.h">
-      <Filter>06UI</Filter>
-    </ClInclude>
-    <ClInclude Include="HUD.h">
-      <Filter>06UI</Filter>
-    </ClInclude>
-    <ClInclude Include="HowToPlayScene.h">
-      <Filter>03Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="LeftWire.h">
-      <Filter>05Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="LowerWire.h">
-      <Filter>05Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="RightWire.h">
-      <Filter>05Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="UpperWire.h">
-      <Filter>05Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="ResultScene.h">
-      <Filter>03Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameTimer.h">
-      <Filter>06UI</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseScene.h">
-      <Filter>03Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="TransitionEffect.h">
-      <Filter>06UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Wire.h">
-      <Filter>05Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="OutStageThing.h">
-      <Filter>05Stage</Filter>
-    </ClInclude>
-    <ClInclude Include="GameView.h">
+    <ClInclude Include="ViewSourceFile\GameView.h">
       <Filter>01Engine\DirectX</Filter>
     </ClInclude>
-    <ClInclude Include="IGameObserver.h">
+    <ClInclude Include="CharacterSourceFile\Character.h">
       <Filter>04Chara</Filter>
     </ClInclude>
-    <ClInclude Include="Easing.h">
+    <ClInclude Include="CharacterSourceFile\Enemy.h">
+      <Filter>04Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\Player.h">
+      <Filter>04Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="InterfaceSourceFile\IGameObserver.h">
+      <Filter>04Chara</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSourceFile\Fence.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSourceFile\Ground.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSourceFile\LeftWire.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSourceFile\LowerWire.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSourceFile\OutStageThing.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSourceFile\RightWire.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSourceFile\StageManager.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSourceFile\UpperWire.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSourceFile\Wire.h">
+      <Filter>05Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="UISourceFile\GameTimer.h">
+      <Filter>06UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UISourceFile\HUD.h">
+      <Filter>06UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UISourceFile\MiniMap.h">
+      <Filter>06UI</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectSourceFile\TransitionEffect.h">
+      <Filter>06UI</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectSourceFile\Easing.h">
       <Filter>01Engine\ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneSourceFile\BaseScene.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneSourceFile\BattleScene.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneSourceFile\GameModeScene.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneSourceFile\HowToPlayScene.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneSourceFile\PracticeScene.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneSourceFile\ResultScene.h">
+      <Filter>03Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneSourceFile\TitleScene.h">
+      <Filter>03Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

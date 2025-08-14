@@ -12,7 +12,7 @@
 #include "Audio.h"
 #include "VFX.h"
 
-#include"../GameView.h"
+#include "../ViewSourceFile/GameView.h"
 
 #include "../imGui/imgui.h" 
 #include "../imGui/imgui_impl_dx11.h" 
