@@ -226,7 +226,10 @@ void GameModeScene::Draw()
 void GameModeScene::Release()
 {
 	//実体は消さず、アドレスのみ無効化する
-	pTransitionEffect_ = nullptr;
+	if (pTransitionEffect_ != nullptr)
+	{
+		pTransitionEffect_ = nullptr;
+	}
 }
 
 void GameModeScene::SetGameModeCSV()

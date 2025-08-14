@@ -19,11 +19,11 @@ namespace GameView
 	Player* pPlayer1_;
 	Player* pPlayer2_;
 
-	//HUDのインスタンス
-	HUD* pHUD_;
-
 	//Enemyのインスタンス
 	Enemy* pEnemy_;
+
+	//HUDのインスタンス
+	HUD* pHUD_;
 
 	//地面クラスのインスタンス
 	Ground* pGround_;
@@ -64,14 +64,36 @@ namespace GameView
 	{
 		//実体の解放はSceneManager(シーン切り替え時)
 		//またはmain(プログラム終了時)で行われるので
-		//実体は消さず、アドレス値を無効化するのみ
-		pPlayer1_ = nullptr;
-		pPlayer2_ = nullptr;
-		pHUD_ = nullptr;
-		pEnemy_ = nullptr;
-		pGround_ = nullptr;
-		pFence_ = nullptr;
-		pOutStageThing_ = nullptr;
+		//実体は消さず、アドレス値を無効化するのみ(ダングリングポインタ防止)
+
+		if (pPlayer1_ != nullptr)
+		{
+			pPlayer1_ = nullptr;
+		}
+		if (pPlayer2_ != nullptr)
+		{
+			pPlayer2_ = nullptr;
+		}
+		if (pEnemy_ != nullptr)
+		{
+			pEnemy_ = nullptr;
+		}
+		if (pHUD_ != nullptr)
+		{
+			pHUD_ = nullptr;
+		}
+		if (pGround_ != nullptr)
+		{
+			pGround_ = nullptr;
+		}
+		if (pFence_ != nullptr)
+		{
+			pFence_ = nullptr;
+		}
+		if (pOutStageThing_ != nullptr)
+		{
+			pOutStageThing_ = nullptr;
+		}
 	}
 
 	void GameView::ViewPvE()

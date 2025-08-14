@@ -286,14 +286,35 @@ void BattleScene::Draw()
 void BattleScene::Release()
 {	
 	//実体は消さず、アドレスのみ無効化する
-	pPlayer1_ = nullptr;
-	pPlayer2_ = nullptr;
-	pEnemy_ = nullptr;
-	pHUD_ = nullptr;
-	pTransitionEffect_ = nullptr;
+	if (pPlayer1_ != nullptr)
+	{
+		pPlayer1_ = nullptr;
+	}
+	if (pPlayer2_ != nullptr)
+	{
+		pPlayer2_ = nullptr;
+	}
+	if (pEnemy_ != nullptr)
+	{
+		pEnemy_ = nullptr;
+	}
+	if (pHUD_ != nullptr)
+	{
+		pHUD_ = nullptr;
+	}
+	if (pTransitionEffect_ != nullptr)
+	{
+		pTransitionEffect_ = nullptr;
+	}
 
-	pGameTimer_ = nullptr;
-	pMiniMap_ = nullptr;
+	if (pGameTimer_ != nullptr)
+	{
+		pGameTimer_ = nullptr;
+	}
+	if (pMiniMap_ != nullptr)
+	{
+		pMiniMap_ = nullptr;
+	}
 }
 
 void BattleScene::UpdateActive()

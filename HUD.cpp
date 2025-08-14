@@ -215,6 +215,16 @@ void HUD::Draw()
 
 void HUD::Release()
 {
+	//実体は消さず、アドレスのみ無効化する
+	if (pGameTimer_ != nullptr)
+	{
+		pGameTimer_ = nullptr;
+	}
+	
+	if (pMiniMap_ != nullptr)
+	{
+		pMiniMap_ = nullptr;
+	}
 }
 
 void HUD::DrawImGui()

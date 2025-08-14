@@ -104,6 +104,11 @@ void Enemy::Draw()
 
 void Enemy::Release()
 {
+	//実体は消さず、アドレスのみ無効化する
+	if (pPlayer_ != nullptr)
+	{
+		pPlayer_ = nullptr;
+	}
 }
 
 void Enemy::OnCollision(GameObject* pTarget)

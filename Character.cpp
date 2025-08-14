@@ -103,6 +103,25 @@ Character::Character(GameObject* parent, const std::string& name)
 
 Character::~Character()
 {
+	//実体は消さず、アドレスのみ無効化する
+	for (auto& observer : InitParam_.observers)
+	{
+		if(observer != nullptr)
+		{
+			//監視対象の配列から削除
+			//通知者(Character)→監視者(BattleScene)の順に解放されるので、
+			//CharacterのデストラクタでRemoveObserverを呼ぶ
+			RemoveObserver(observer);
+
+			//安全策としてアドレスを無効化
+			observer = nullptr;
+		}
+	}
+
+	if(ShadowParam_.pGround_ != nullptr)
+	{
+		ShadowParam_.pGround_ = nullptr;
+	}
 }
 
 void Character::Update()
@@ -272,6 +291,31 @@ void Character::InitArrow()
 	//矢印モデル読み込み
 	MoveParam_.hMoveArrow_ = Model::Load("Model\\AttackArrow.fbx");
 	assert(MoveParam_.hMoveArrow_ >= 0);
+}
+
+void Character::AddObserver(IGameObserver* _observer)
+{
+	//監視者を配列に追加する
+	InitParam_.observers.push_back(_observer);
+}
+
+void Character::RemoveObserver(IGameObserver* _observer)
+{
+	auto it = InitParam_.observers.begin();
+
+	while (it != InitParam_.observers.end())
+	{
+		if (*it == _observer)
+		{
+			//監視される対象の配列ループ内で、監視対象を見つけたら削除
+			//イテレータ削除後は次の要素を参照する
+			it = InitParam_.observers.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}
 }
 
 void Character::DrawCharacterModel(int _handle, Transform _transform)
@@ -738,6 +782,19 @@ void Character::InvincibilityTimeCalculation()
 	}
 }
 
+void Character::NotifyFenceHit()
+{
+	//通知を受け取る側がoverrideしていなかった場合は何も起こらない
+	//BattleSceneでのみ有効(監視対象がない=AddObserverを呼ばない場合、
+	//InitParam_.observers自体が空なのでfor文がスルーされる)
+	for (IGameObserver* observer : InitParam_.observers) 
+	{
+
+		//監視者へ柵にヒットしたこと（当たったCharacterのID）を通知
+		observer->OnCharacterFenceHit(this->InitParam_.CharacterID);
+	}
+}
+
 void Character::Charging()
 {
 	//チャージ中のSE再生
@@ -804,6 +861,13 @@ XMVECTOR Character::RotateVecFront(float _rotY, XMVECTOR _front)
 	v = XMVector3TransformCoord(v, m);
 
 	return v;
+}
+
+void Character::FrontVectorConfirm()
+{
+	//ローカル正面ベクトルを現在のy軸回転量で変形すると、正面からどれだけ回転したかが計算される
+	//その値がワールド正面ベクトルとなる
+	MoveParam_.ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, InitParam_.FrontDirection_);
 }
 
 void Character::InitCSVEffect()

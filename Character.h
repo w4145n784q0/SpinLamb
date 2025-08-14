@@ -157,7 +157,7 @@ public:
     void GetWireNormal();
 
     /// <summary>
-    /// 初期位置の設定
+    /// 自身の位置を初期位置に設定
     /// </summary>
     void SetStartPosition() { this->transform_.position_ = InitParam_.StartPosition_; }
 
@@ -167,13 +167,17 @@ public:
     void InitArrow();
 
     /// <summary>
-    /// 自身を監視する対象を追加
+    /// 自身を監視する対象を配列に追加
     /// BattleSceneでのみ行われる
     /// </summary>
-    /// <param name="_observer"></param>
-    void AddObserver(IGameObserver* _observer) {
-        InitParam_.observers.push_back(_observer);
-    }
+    /// <param name="_observer">追加する監視対象</param>
+    void AddObserver(IGameObserver* _observer);
+
+    /// <summary>
+    /// 自身を監視する対象を配列から削除
+    /// </summary>
+    /// <param name="_observer">削除する監視対象</param>
+    void RemoveObserver(IGameObserver* _observer);
 
     //----------描画----------
 
@@ -225,12 +229,7 @@ public:
     /// <summary>
     /// 正面ベクトルを更新
     /// </summary>
-    void FrontVectorConfirm() {
-
-        //ローカル正面ベクトルを現在のy軸回転量で変形すると、正面からどれだけ回転したかが計算される
-        //その値がワールド正面ベクトルとなる
-        MoveParam_.ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, InitParam_.FrontDirection_);
-    }
+    void FrontVectorConfirm();
 
     /// <summary>
     /// 受け取ったベクトルからキャラクターの回転量を計算
@@ -380,17 +379,7 @@ public:
     /// <summary>
     /// 監視する対象(配列)に柵にヒットしたことを通知
     /// </summary>
-    void NotifyFenceHit()
-    {   
-        //通知を受け取る側がoverrideしていなかった場合は何も起こらない
-        //BattleSceneでのみ有効(監視対象がない=AddObserverを呼ばない場合、
-        //InitParam_.observers自体が空なのでfor文がスルーされる)
-        for (IGameObserver* observer : InitParam_.observers) {
-
-            //監視者へ柵にヒットしたこと（当たったCharacterのID）を通知
-            observer->OnCharacterFenceHit(this->InitParam_.CharacterID);
-        }
-    }
+    void NotifyFenceHit();
 
     //----------影付け----------
 
