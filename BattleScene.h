@@ -47,7 +47,7 @@ private:
 	 
 	//バトルシーンの状態遷移
 	//これらの値に応じて各Update関数を呼び出す
-	enum Battle
+	enum BattleState
 	{
 		S_Before = 0,//開始前説明
 		S_Ready,//開始直前
@@ -55,7 +55,7 @@ private:
 		S_After,//終了後
 		MaxMode
 	};
-	Battle BattleState_;
+	BattleState BattleState_;
 
 	//----------スコア----------
 

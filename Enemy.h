@@ -21,7 +21,7 @@ private:
 
 	//“G(CPU)‚Ìó‘Ô‘JˆÚ
 	//‚±‚ê‚ç‚Ì’l‚É‰‚¶‚ÄŠeUpdateŠÖ”‚ğŒÄ‚Ño‚·
-	enum State {
+	enum EnemyState {
 		S_Root = 0,//”»’f—p
 		S_Chase,//’Ç‚¢‚©‚¯‚é
 		S_Aim,//ƒvƒŒƒCƒ„[‚ğ‘_‚¤(UŒ‚€”õ)
@@ -32,7 +32,7 @@ private:
 		S_Stop,//“G‚ğ~‚ß‚é
 		S_MaxState
 	};
-	State EnemyState_;
+	EnemyState EnemyState_;
 
 	//----------UŒ‚ŠÖŒW----------
 	

@@ -33,7 +33,7 @@ namespace
 	float ShakeTimer;//カメラの振動カウント
 	float ShakeSpeed = 0.0f;//振動スピード
 	float ShakeWidth = 0.0f;//振動幅
-	float frame = 0.0f;//1フレーム
+	float Frame = 0.0f;//1フレーム
 	XMFLOAT3 InitPosition = { 0,0,0 };//初期位置
 	XMFLOAT3 InitTarget = { 0,0,0 };//初期焦点
 	float ShakeTimeShort = 0.0f;//振動時間(短)
@@ -99,7 +99,7 @@ float Camera::CameraShake()
 
 	if (IsCameraShake)
 	{
-		ShakeTimer -= frame;
+		ShakeTimer -= Frame;
 		if (ShakeTimer <= 0.0f)
 		{
 			IsCameraShake = false;
@@ -123,7 +123,7 @@ XMFLOAT3 Camera::CameraShakeFloat3()
 
 	if (IsCameraShake)
 	{
-		ShakeTimer -= frame;
+		ShakeTimer -= Frame;
 		if (ShakeTimer <= 0.0f)
 		{
 			IsCameraShake = false;
@@ -164,7 +164,7 @@ void Camera::SetCSVCamera()
 	//vの添え字はnamespaceで宣言した列挙型を使用
 	ShakeSpeed = CameraData[i_ShakeSpeed];
 	ShakeWidth = CameraData[i_ShakeWidth];
-	frame = CameraData[i_Frame];
+	Frame = CameraData[i_Frame];
 	InitPosition = { CameraData[i_InitPositionX],  CameraData[i_InitPositionY],  CameraData[i_InitPositionZ] };
 	InitTarget = { CameraData[i_InitTargetX],  CameraData[i_InitTargetY],  CameraData[i_InitTargetZ] };
 	ShakeTimeShort = CameraData[i_ShakeTimeShort];
