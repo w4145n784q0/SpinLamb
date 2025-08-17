@@ -1,2 +1,2 @@
-﻿Data,shakespeed,shakewidth,frame,InitPosition.x,InitPosition.y,InitPosition.z,InitTarget.x,InitTarget.y,InitTarget.z,ShakeTimeShort,ShakeTimeMiddle,ShakeTimeLong
-Camera,300,0.5,0.016,0,3,-10,0,0,0,0.25,0.5,1
+﻿Data,NearZ,FarZ,shakespeed,shakewidth,frame,InitPosition.x,InitPosition.y,InitPosition.z,InitTarget.x,InitTarget.y,InitTarget.z,ShakeTimeShort,ShakeTimeMiddle,ShakeTimeLong
+Camera,0.1,1000,300,0.5,0.016,0,3,-10,0,0,0,0.25,0.5,1

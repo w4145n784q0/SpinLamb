@@ -4,7 +4,7 @@
 
 namespace GameView
 {
-	//参加できるプレイヤー数
+	//参加できるプレイヤー数のインデックス
 	enum pplayerIndex
 	{
 		i_player1 = 0,

@@ -15,7 +15,9 @@ namespace
 	//csv読み込み時のインデックス(カメラの各変数)
 	enum CameraIndex
 	{
-		i_ShakeSpeed = 0,	//振動スピード
+		i_NearZ = 0,		//ニア平面
+		i_FarZ,				//ファー平面
+		i_ShakeSpeed,		//振動スピード
 		i_ShakeWidth,		//振動幅
 		i_Frame,			//1フレーム
 		i_InitPositionX,	//初期位置X
@@ -29,6 +31,8 @@ namespace
 		i_ShakeTimeLong,	//振動時間(長)
 	};
 
+	float NearZ = 0.0f; //クリッピング面(ニア平面 カメラに最も近い)
+	float FarZ = 0.0f;//クリッピング面(ファー平面 カメラから最も遠い)
 	bool IsCameraShake;//カメラが振動してるか
 	float ShakeTimer;//カメラの振動カウント
 	float ShakeSpeed = 0.0f;//振動スピード
@@ -44,13 +48,14 @@ namespace
 //初期化（プロジェクション行列作成）
 void Camera::Initialize()
 {
+	//csvファイルを読み込む
 	SetCSVCamera();
 
 	_position = InitPosition;	//カメラの位置
 	_target = InitTarget;	//カメラの焦点
 
 	//プロジェクション行列
-	_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_, 0.1f, 1000.0f);
+	_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_, NearZ, FarZ);
 }
 
 //更新（ビュー行列作成）
@@ -162,6 +167,8 @@ void Camera::SetCSVCamera()
 		
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
+	NearZ = CameraData[i_NearZ];
+	FarZ = CameraData[i_FarZ];
 	ShakeSpeed = CameraData[i_ShakeSpeed];
 	ShakeWidth = CameraData[i_ShakeWidth];
 	Frame = CameraData[i_Frame];
@@ -176,14 +183,14 @@ void Camera::HalfScreen()
 {
 	//画面左右分割する際のプロジェクション行列作成
 	//第二引数:(画面幅 / 2) / 画面高さ(画面を左右に分けるので、本来の横幅を2で割り、それを縦幅で割る) 
-	_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, ( (FLOAT)Direct3D::screenWidth_ / 2.0f ) / (FLOAT)Direct3D::screenHeight_,  0.1f, 1000.0f);
+	_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, ((FLOAT)Direct3D::screenWidth_ / 2.0f) / (FLOAT)Direct3D::screenHeight_, NearZ, FarZ);
 
 }
 
 void Camera::FullScreen()
 {
 	//全体描画のプロジェクション行列に戻す
-	_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_, 0.1f, 1000.0f);
+	_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_, NearZ, FarZ);
 }
 
 //カメラの振動幅をセット(必要に応じてセット)

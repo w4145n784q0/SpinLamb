@@ -4,7 +4,7 @@
 
 //コンストラクタ
 Sprite::Sprite():
-	pTexture_(nullptr)
+	pVertexBuffer_(nullptr),pIndexBuffer_(nullptr),	pTexture_(nullptr),pConstantBuffer_(nullptr)
 {
 }
 

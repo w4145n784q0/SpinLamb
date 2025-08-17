@@ -9,57 +9,57 @@ namespace VFX
     //EmitterDataに順番に値を入れる際のインデックス
     enum VFXIndex
     {
-        i_position_x = 0,
-        i_position_y,
-        i_position_z,
+        i_positionX = 0,
+        i_positionY,
+        i_positionZ,
 
-        i_positionRnd_x,
-        i_positionRnd_y,
-        i_positionRnd_z,
+        i_positionRndX,
+        i_positionRndY,
+        i_positionRndZ,
 
-        i_direction_x,
-        i_direction_y,
-        i_direction_z,
+        i_directionX,
+        i_directionY,
+        i_directionZ,
 
-        i_directionRnd_x,
-        i_directionRnd_y,
-        i_directionRnd_z,
+        i_directionRndX,
+        i_directionRndY,
+        i_directionRndZ,
 
         i_speed,
         i_speedRnd,
         i_accel,
         i_gravity,
 
-        i_color_x,
-        i_color_y,
-        i_color_z,
-        i_color_w,
+        i_colorX,
+        i_colorY,
+        i_colorZ,
+        i_colorW,
 
-        i_deltaColor_x,
-        i_deltaColor_y,
-        i_deltaColor_z,
-        i_deltaColor_w,
+        i_deltaColorX,
+        i_deltaColorY,
+        i_deltaColorZ,
+        i_deltaColorW,
 
-        i_rotate_x,
-        i_rotate_y,
-        i_rotate_z,
+        i_rotateX,
+        i_rotateY,
+        i_rotateZ,
 
-        i_rotateRnd_x,
-        i_rotateRnd_y,
-        i_rotateRnd_z,
+        i_rotateRndX,
+        i_rotateRndY,
+        i_rotateRndZ,
 
-        i_spin_x,
-        i_spin_y,
-        i_spin_z,
+        i_spinX,
+        i_spinY,
+        i_spinZ,
 
-        i_size_x,
-        i_size_y,
+        i_sizeX,
+        i_sizeY,
 
-        i_sizeRnd_x,
-        i_sizeRnd_y,
+        i_sizeRndX,
+        i_sizeRndY,
 
-        i_scale_x,
-        i_scale_y,
+        i_scaleX,
+        i_scaleY,
 
         i_lifeTime,
         i_delay,
@@ -350,22 +350,22 @@ void VFX::SetEmitter(EmitterData &data, std::vector<float> v)
     //表示画像のパスはこの処理の後に個別にセットする
     //csvで読み取れる値以外を入れたい場合もこの処理の後に個別にセットする
 
-    data.position = {v[i_position_x],v[i_position_y],v[i_position_z]};
-    data.positionRnd = { v[i_positionRnd_x],v[i_positionRnd_y],v[i_positionRnd_z] };
-	data.direction = { v[i_direction_x],v[i_direction_y],v[i_direction_z] };
-	data.directionRnd = { v[i_directionRnd_x],v[i_directionRnd_y],v[i_directionRnd_z] };
+    data.position = {v[i_positionX],v[i_positionY],v[i_positionZ]};
+    data.positionRnd = { v[i_positionRndX],v[i_positionRndY],v[i_positionRndZ] };
+	data.direction = { v[i_directionX],v[i_directionY],v[i_directionZ] };
+	data.directionRnd = { v[i_directionRndX],v[i_directionRndY],v[i_directionRndZ] };
 	data.speed = v[i_speed];
 	data.speedRnd = v[i_speedRnd];
 	data.accel = v[i_accel];
 	data.gravity = v[i_gravity];
-	data.color = { v[i_color_x],v[i_color_y],v[i_color_z],v[i_color_w] };
-	data.deltaColor = { v[i_deltaColor_x],v[i_deltaColor_y],v[i_deltaColor_z],v[i_deltaColor_w] };
-    data.rotate = { v[i_rotate_x],v[i_rotate_y],v[i_rotate_z] };
-	data.rotateRnd = { v[i_rotateRnd_x],v[i_rotateRnd_y],v[i_rotateRnd_z] };
-	data.spin = { v[i_spin_x],v[i_spin_y],v[i_spin_z] };
-	data.size = { v[i_size_x],v[i_size_y] };
-	data.sizeRnd = { v[i_sizeRnd_x],v[i_sizeRnd_y] };
-	data.scale = { v[i_scale_x],v[i_scale_y] };
+	data.color = { v[i_colorX],v[i_colorY],v[i_colorZ],v[i_colorW] };
+	data.deltaColor = { v[i_deltaColorX],v[i_deltaColorY],v[i_deltaColorZ],v[i_deltaColorW] };
+    data.rotate = { v[i_rotateX],v[i_rotateY],v[i_rotateZ] };
+	data.rotateRnd = { v[i_rotateRndX],v[i_rotateRndY],v[i_rotateRndZ] };
+	data.spin = { v[i_spinX],v[i_spinY],v[i_spinZ] };
+	data.size = { v[i_sizeX],v[i_sizeY] };
+	data.sizeRnd = { v[i_sizeRndX],v[i_sizeRndY] };
+	data.scale = { v[i_scaleX],v[i_scaleY] };
 	data.lifeTime = (DWORD)v[i_lifeTime];
 	data.delay = (DWORD)v[i_delay];
 	data.number = (DWORD)v[i_number];
