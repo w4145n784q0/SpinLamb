@@ -14,7 +14,7 @@ namespace {
 		i_BackCameraX = 0,
 		i_BackCameraY,
 		i_BackCameraZ,
-		i_KeyboardRotateY,
+		i_ChargeRotateY,
 		i_MoveValue,
 		i_CameraInitX,
 		i_CameraInitY,
@@ -29,10 +29,10 @@ namespace {
 
 	//カメラの固定位置
 	//BackCameraの値を毎フレームこの値にする（値が変わり続けるのを防ぐ）
-	XMVECTOR BackCameraPos = { 0.0f,0.0f,0.0f };
+	XMVECTOR BackCameraDefault = { 0.0f,0.0f,0.0f };
 
 	//チャージ中の左右入力時の回転量
-	float KeyBoardRotateY = 0.0f;
+	float ChargeRotateY = 0.0f;
 
 	//キーボード入力時、Direction_に加算される値
 	float MoveValue = 0.0f;
@@ -310,11 +310,11 @@ void Player::UpdateCharge()
 	//左右キー/スティックが倒されたら回転
 	if (Input::IsKey(DIK_LEFT) || Input::GetPadStickL(ControllerID_).x < -Input::StickTilt)
 	{
-		this->transform_.rotate_.y -= KeyBoardRotateY;
+		this->transform_.rotate_.y -= ChargeRotateY;
 	}
 	if (Input::IsKey(DIK_RIGHT) || Input::GetPadStickL(ControllerID_).x > Input::StickTilt)
 	{
-		this->transform_.rotate_.y += KeyBoardRotateY;
+		this->transform_.rotate_.y += ChargeRotateY;
 	}
 
 	//SHIFTキー/Bボタンを離したら
@@ -444,7 +444,7 @@ void Player::PlayerInit(std::string _CSVpath, std::string _Modelpath)
 
 	//バックカメラの初期値をセット 自分の位置に固定値を足す
 	XMVECTOR cameraAdd = XMLoadFloat3(&this->transform_.position_);
-	BackCamera_ = { BackCameraPos + cameraAdd };
+	BackCamera_ = { BackCameraDefault + cameraAdd };
 
 	//カメラのトランスフォームを設定
 	cameraTransform_ = this->transform_;
@@ -588,7 +588,7 @@ void Player::CameraUpdate()
 	CameraPosition_.z += Camera::CameraShakeFloat3().z;
 
 	//バックカメラベクトルをリセット(DEBUGCAMERAでは使用しない)
-	BackCamera_ = { BackCameraPos };
+	BackCamera_ = { BackCameraDefault };
 	
 	//カメラの位置・焦点のセットはGameViewから行う
 }
@@ -723,6 +723,64 @@ void Player::DrawImGui()
 		DrawCharacterImGui();
 	}
 
+	if (ImGui::TreeNode((objectName_ + " OnlyStatus").c_str()))
+	{
+		if (ImGui::TreeNode("PlayerInit"))
+		{
+			//コントローラーID
+			ImGui::Text("ControllerID:%2d", ControllerID_);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Camera"))
+		{
+			//カメラの最終的な位置
+			ImGui::InputFloat("CameraPositionX", &CameraPosition_.x, ZeroPointOne);
+			ImGui::InputFloat("CameraPositionY", &CameraPosition_.y, ZeroPointOne);
+			ImGui::InputFloat("CameraPositionZ", &CameraPosition_.z, ZeroPointOne);
+
+			//カメラの焦点
+			ImGui::InputFloat("CameraTargetX", &CameraTarget_.x, ZeroPointOne);
+			ImGui::InputFloat("CameraTargetY", &CameraTarget_.y, ZeroPointOne);
+			ImGui::InputFloat("CameraTargetZ", &CameraTarget_.z, ZeroPointOne);
+
+			//カメラの回転量
+			ImGui::InputFloat("CameraTransform.rotateX", &cameraTransform_.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("CameraTransform.rotateY", &cameraTransform_.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("CameraTransform.rotateZ", &cameraTransform_.rotate_.z, ZeroPointOne);
+
+			//カメラの後方位置
+			XMFLOAT3 tmpBackCamera;
+			XMStoreFloat3(&tmpBackCamera, BackCamera_);
+			ImGui::InputFloat("BackCameraX", &tmpBackCamera.x, ZeroPointOne);
+			ImGui::InputFloat("BackCameraY", &tmpBackCamera.y, ZeroPointOne);
+			ImGui::InputFloat("BackCameraZ", &tmpBackCamera.z, ZeroPointOne);
+
+			//カメラに毎フレーム代入する固定位置
+			XMFLOAT3 tmpBackCameraDefault;
+			XMStoreFloat3(&tmpBackCameraDefault, BackCameraDefault);
+			ImGui::InputFloat("BackCameraDefaultX", &tmpBackCameraDefault.x, ZeroPointOne);
+			ImGui::InputFloat("BackCameraDefaultY", &tmpBackCameraDefault.y, ZeroPointOne);
+			ImGui::InputFloat("BackCameraDefaultZ", &tmpBackCameraDefault.z, ZeroPointOne);
+
+			//デバッグカメラ時のカメラ位置
+			ImGui::InputFloat("CameraDebugPosX", &CameraDebugPos.x, ZeroPointOne);
+			ImGui::InputFloat("CameraDebugPosY", &CameraDebugPos.y, ZeroPointOne);
+			ImGui::InputFloat("CameraDebugPosZ", &CameraDebugPos.z, ZeroPointOne);
+
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Charge"))
+		{
+			//チャージ中にプレイヤーを回転させた際の1fごとの回転量
+			ImGui::InputFloat("ChargeRotateY", &ChargeRotateY, ZeroPointOne);
+			ImGui::TreePop();
+		}
+
+		ImGui::TreePop();
+	}
+
 #endif
 }
 
@@ -740,8 +798,8 @@ void Player::SetCSVPlayer(std::string _path)
 		
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	BackCameraPos = { OnlyData[i_BackCameraX], OnlyData[i_BackCameraY], OnlyData[i_BackCameraZ] };
-	KeyBoardRotateY = OnlyData[i_KeyboardRotateY];
+	BackCameraDefault = { OnlyData[i_BackCameraX], OnlyData[i_BackCameraY], OnlyData[i_BackCameraZ] };
+	ChargeRotateY = OnlyData[i_ChargeRotateY];
 	MoveValue = OnlyData[i_MoveValue];
 	CameraInit = { OnlyData[i_CameraInitX] ,OnlyData[i_CameraInitY] , OnlyData[i_CameraInitZ] };
 	CameraRotate = OnlyData[i_CameraRotate];

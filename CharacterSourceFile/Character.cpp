@@ -378,7 +378,8 @@ void Character::DrawCharacterImGui()
 		ImGui::TreePop();
 	}
 
-	//初速度,加速量,最大加速,チャージの際に使う仮の加速度
+	//初速度,加速量,チャージの際に使う仮の加速度,1fごとの増加量,最大加速,摩擦係数,
+	//移動方向、移動後の更新位置
 	if (ImGui::TreeNode("Move"))
 	{
 		ImGui::InputFloat("Velocity", &this->MoveParam_.Velocity_, ZeroPointOne);
@@ -387,18 +388,32 @@ void Character::DrawCharacterImGui()
 		ImGui::InputFloat("AcceleValue", &this->MoveParam_.AcceleValue_, ZeroPointOne);
 		ImGui::InputFloat("FullAccelerate", &this->MoveParam_.FullAccelerate_, ZeroPointOne);
 		ImGui::InputFloat("Friction", &this->MoveParam_.Friction_, ZeroPointOne);
+
+		XMFLOAT3 move;
+		XMStoreFloat3(&move, MoveParam_.MoveDirection_);
+		ImGui::Text("MoveDirectionX:%.3f", move.x);
+		ImGui::Text("MoveDirectionY:%.3f", move.y);
+		ImGui::Text("MoveDirectionZ:%.3f", move.z);
+
+		XMFLOAT3 NewPos;
+		XMStoreFloat3(&NewPos, MoveParam_.NewPosition_);
+		ImGui::Text("NewPositionX:%.3f", NewPos.x);
+		ImGui::Text("NewPositionY:%.3f", NewPos.y);
+		ImGui::Text("NewPositionZ:%.3f", NewPos.z);
+
 		ImGui::TreePop();
 	}
 
 	//キャラクター移動時の通常の回転量、チャージ中の回転量
 	if (ImGui::TreeNode("Rotate"))
 	{
-		ImGui::InputFloat("normalRotate", &this->RotateParam_.MoveRotateX, ZeroPointOne);
-		ImGui::InputFloat("fastRotate", &this->RotateParam_.FastRotateX, ZeroPointOne);
+		ImGui::InputFloat("NormalRotate", &this->RotateParam_.MoveRotateX, ZeroPointOne);
+		ImGui::InputFloat("FastRotate", &this->RotateParam_.FastRotateX, ZeroPointOne);
 		ImGui::TreePop();
 	}
 
-	//キャラクターにかかる重力,高さの上限,下限
+	//キャラクターにかかる重力,キャラクターの上方向の力、ジャンプの高さ
+	// 高さの上限,下限
 	if (ImGui::TreeNode("Jump"))
 	{
 		ImGui::InputFloat("Gravity", &this->JumpParam_.Gravity_, ZeroPointOne);
@@ -410,30 +425,65 @@ void Character::DrawCharacterImGui()
 	}
 
 	//ノックバック量計算時の変換前の範囲,変換後の範囲,減速率,ノックバックを終了する値
+	//ノックバックする方向、ノックバックの速度
 	if (ImGui::TreeNode("Hit"))
 	{
-		ImGui::InputFloat("OriginaRangeMin", &this->HitParam_.OriginalRangeMin_, ZeroPointOne);
-		ImGui::InputFloat("OriginaRangeMax", &this->HitParam_.OriginalRangeMax_, ZeroPointOne);
+		ImGui::InputFloat("OriginalRangeMin", &this->HitParam_.OriginalRangeMin_, ZeroPointOne);
+		ImGui::InputFloat("OriginalRangeMax", &this->HitParam_.OriginalRangeMax_, ZeroPointOne);
 		ImGui::InputFloat("ConvertedRangeMin", &this->HitParam_.ConvertedRangeMin_, ZeroPointOne);
 		ImGui::InputFloat("ConvertedRangeMax", &this->HitParam_.ConvertedRangeMax_, ZeroPointOne);
 		ImGui::InputFloat("DecelerationRate", &this->HitParam_.DecelerationRate_, ZeroPointOne);
 		ImGui::InputFloat("KnockBackEnd", &this->HitParam_.KnockBackEnd_, ZeroPointOne);
+
+		ImGui::Text("KnockBack_DirectionX:%.3f", HitParam_.KnockBack_Direction_.x);
+		ImGui::Text("KnockBack_DirectionY:%.3f", HitParam_.KnockBack_Direction_.y);
+		ImGui::Text("KnockBack_DirectionZ:%.3f", HitParam_.KnockBack_Direction_.z);
+
+		ImGui::Text("KnockBack_VelocityX:%.3f", HitParam_.KnockBack_Velocity_.x);
+		ImGui::Text("KnockBack_VelocityY:%.3f", HitParam_.KnockBack_Velocity_.y);
+		ImGui::Text("KnockBack_VelocityZ:%.3f", HitParam_.KnockBack_Velocity_.z);
+
 		ImGui::TreePop();
 	}
 
-	//柵ヒット時のノックバック量,無敵時間,無敵時間中の描画間隔
+	//柵ヒット時のノックバック量,無敵時間,無敵時間の終了する値
+	// 無敵時間中の描画間隔,描画中に点滅表現をさせる値
 	if (ImGui::TreeNode("FenceHit"))
 	{
 		ImGui::InputFloat("KnockBackPower", &this->FenceHitParam_.KnockBackPower_, ZeroPointOne);
-		ImGui::InputInt("InvincibilityTime", &this->FenceHitParam_.InvincibilityValue_);
+		ImGui::InputInt("InvincibilityTime", &this->FenceHitParam_.InvincibilityTime_);
+		ImGui::InputInt("InvincibilityValue", &this->FenceHitParam_.InvincibilityValue_);
+		ImGui::InputInt("blinkTimer", &this->FenceHitParam_.BlinkTimer_);
 		ImGui::InputInt("blinkValue", &this->FenceHitParam_.BlinkValue_);
+
 		ImGui::TreePop();
 	}
 
 	//影の位置の補正
 	if (ImGui::TreeNode("Shadow"))
 	{
+		ImGui::InputFloat("ShadowHeight", &this->ShadowParam_.ShadowHeight_, ZeroPointOne);
 		ImGui::InputFloat("ShadowCorrection", &this->ShadowParam_.ShadowCorrection_, ZeroPointOne);
+		ImGui::TreePop();
+	}
+
+	//矢印モデルの位置・回転・拡大率、位置の補正
+	if (ImGui::TreeNode("Arrow"))
+	{
+		ImGui::InputFloat("ArrowTransform.PositionX", &this->MoveParam_.ArrowTransform_.position_.x, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.PositionY", &this->MoveParam_.ArrowTransform_.position_.y, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.PositionZ", &this->MoveParam_.ArrowTransform_.position_.z, ZeroPointOne);
+
+		ImGui::InputFloat("ArrowTransform.RotateX", &this->MoveParam_.ArrowTransform_.rotate_.x, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.RotateY", &this->MoveParam_.ArrowTransform_.rotate_.y, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.RotateZ", &this->MoveParam_.ArrowTransform_.rotate_.z, ZeroPointOne);
+
+		ImGui::InputFloat("ArrowTransform.ScaleX", &this->MoveParam_.ArrowTransform_.scale_.x, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.ScaleY", &this->MoveParam_.ArrowTransform_.scale_.y, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.ScaleZ", &this->MoveParam_.ArrowTransform_.scale_.z, ZeroPointOne);
+
+		ImGui::InputFloat("AddArrowDepth", &this->MoveParam_.AddArrowDepth_, ZeroPointOne);
+
 		ImGui::TreePop();
 	}
 

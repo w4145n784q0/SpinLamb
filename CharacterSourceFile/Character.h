@@ -64,7 +64,7 @@ protected:
     {
         float Gravity_ = 0.0f; //重力 キャラクターの下方向にかかる力 実際の重力より(9.8/60 m/s)より軽くしている
         bool IsOnGround_ = false;//地面にいるか
-        float JumpSpeed_ = 0.0f;//プレイヤーの上方向に向く力 +ならジャンプしている状態 -なら下降～地面にいる状態
+        float JumpSpeed_ = 0.0f;//キャラクターの上方向に向く力 +ならジャンプしている状態 -なら下降～地面にいる状態
         float JumpHeight = 0.0f;//ジャンプ時の一時的に代入する値(=ジャンプの高さ)
         float HeightLowerLimit_ = 0.0f;//高さの下限
         float HeightUpperLimit_ = 0.0f;//高さの上限
@@ -483,5 +483,44 @@ public:
     void SetJumpHeight(float _jumpHeight) { JumpParam_.JumpHeight = _jumpHeight; }
     float GetJumpHeight() { return JumpParam_.JumpHeight; }
 
+    //被弾
+    void SetOriginalRangeMin(float _originalRangeMin) { HitParam_.OriginalRangeMin_ = _originalRangeMin; }
+    float GetOriginalRangeMin() { return HitParam_.OriginalRangeMin_; }
 
+    void SetOriginalRangeMax(float _originalRangeMax) { HitParam_.OriginalRangeMax_ = _originalRangeMax; }
+    float GetOriginalRangeMax() { return HitParam_.OriginalRangeMax_; }
+
+    void SetConvertedRangeMin(float _convertedRangeMin) { HitParam_.ConvertedRangeMin_ = _convertedRangeMin; }
+    float GetConvertedRangeMin() { return  HitParam_.ConvertedRangeMin_; }
+
+    void SetConvertedRangeMax(float _convertedRangeMax) { HitParam_.ConvertedRangeMax_ = _convertedRangeMax; }
+    float GetConvertedRangeMax() { return  HitParam_.ConvertedRangeMax_; }
+
+    void SetKnockBackDirection(XMFLOAT3 _knockbackDirection) { HitParam_.KnockBack_Direction_ = _knockbackDirection; }
+    XMFLOAT3 GetKnockBackDirection() { return  HitParam_.KnockBack_Direction_; }
+
+    void SetKnockBackVelocity(XMFLOAT3 _knockbackVelocity) { HitParam_.KnockBack_Velocity_ = _knockbackVelocity; }
+    XMFLOAT3 GetKnockBackVelocity() { return HitParam_.KnockBack_Velocity_; }
+
+    void SetDecelerationRate(float _decelerationRate) { HitParam_.DecelerationRate_ = _decelerationRate; }
+    float GetDecelerationRate() { return  HitParam_.DecelerationRate_; }
+
+    void SetKnockBackEnd(float _knockbackEnd) { HitParam_.KnockBackEnd_ = _knockbackEnd; }
+    float GetKnockBackEnd() { return HitParam_.KnockBackEnd_; }
+
+    //柵の接触
+    void SetKnockBackPower(float _knockbackPower) { FenceHitParam_.KnockBackPower_ = _knockbackPower; }
+    float GetKnockBackPower() { return FenceHitParam_.KnockBackPower_; }
+
+    void SetInvincibilityTime(int _invincibilityTime) { FenceHitParam_.InvincibilityTime_ = _invincibilityTime; }
+    int GetInvincibilityTime() { return FenceHitParam_.InvincibilityTime_; }
+
+    void SetInvincibilityValue(int _invincibilityValue) { FenceHitParam_.InvincibilityValue_ = _invincibilityValue; }
+    int GetInvincibilityValue() { return FenceHitParam_.InvincibilityValue_; }
+
+    void SetBlinkTimer(int _blinkTimer) { FenceHitParam_.BlinkTimer_ = _blinkTimer; }
+    int GetBlinkTimer() { return  FenceHitParam_.BlinkTimer_; }
+
+    void SetBlinkValue(int _blinkValue) { FenceHitParam_.BlinkValue_ = _blinkValue; }
+    int GetBlinkValue() { return FenceHitParam_.BlinkValue_; }
 };

@@ -154,7 +154,10 @@ public:
 	void SetCSVPlayer(std::string _path);
 
 	//----------セッター・ゲッター関数----------
+	void SetCameraPosition(XMFLOAT3 _pos) { CameraPosition_ = _pos; }
 	XMFLOAT3 GetCameraPosition() const { return CameraPosition_; }
+
+	void SetCameraTarget(XMFLOAT3 _tar) { CameraTarget_ = _tar; }
 	XMFLOAT3 GetCameraTarget() const { return CameraTarget_; }
 
 	void SetControllerID(int _controllerID) { ControllerID_ = _controllerID; }

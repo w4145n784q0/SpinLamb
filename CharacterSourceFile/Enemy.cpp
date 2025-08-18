@@ -388,6 +388,9 @@ void Enemy::UpdateHit()
 		//ルートへ戻る
 		EnemyState_ = S_Root;
 
+		//攻撃までの時間を再抽選(ノックバックした際も抽選し、頻繁に変わるようにする)
+		RandomAim_ = rand() % EnemyAttackTimeArray.size();
+
 		//状態遷移の際は一度x回転をストップ
 		RotateXStop();
 
@@ -412,6 +415,9 @@ void Enemy::UpdateFenceHit()
 		//ルートへ戻る
 		EnemyState_ = S_Root;
 
+		//攻撃までの時間を再抽選(ノックバックした際も抽選し、頻繁に変わるようにする)
+		RandomAim_ = rand() % EnemyAttackTimeArray.size();
+
 		//状態遷移の際は一度x回転をストップ
 		RotateXStop();
 
@@ -433,6 +439,40 @@ void Enemy::DrawImGui()
 	{
 		DrawCharacterImGui();
 
+
+	}
+
+	if (ImGui::TreeNode("EnemyOnlyStatus"))
+	{
+		if (ImGui::TreeNode("Chase"))
+		{
+			//プレイヤーとの距離
+			float dist = PlayerEnemyDistanceX();
+			ImGui::Text("PlayerDistance:%.3f", dist);
+
+			//攻撃準備状態(UpdateAim)に入るのに必要な距離
+			ImGui::InputFloat("ChaseLength", &ChaseLength, ZeroPointOne);
+
+			//プレイヤーを向く方向
+			XMFLOAT3 AutoDir;
+			XMStoreFloat3(&AutoDir, AutoAttackDirection);
+			ImGui::Text("AutoAttackDirectionX:%.3f", AutoDir.x);
+			ImGui::Text("AutoAttackDirectionY:%.3f", AutoDir.y);
+			ImGui::Text("AutoAttackDirectionZ:%.3f", AutoDir.z);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("Aim"))
+		{
+			//攻撃までの時間(定数)
+			ImGui::Text("EnemyAttackTime:%3d", EnemyAttackTimeArray[RandomAim_]);
+
+			//攻撃までの時間(残り何フレームか)
+			ImGui::Text("AimTimer:%3d", AimTimer_);
+
+			ImGui::TreePop();
+		}
+
 		//デバッグ用のEnemyState_切り替えボタン
 		if (ImGui::Button("EnemyStop"))
 		{
@@ -441,7 +481,10 @@ void Enemy::DrawImGui()
 			else
 				EnemyState_ = S_Root;
 		}
+
+		ImGui::TreePop();
 	}
+
 #endif
 }
 
