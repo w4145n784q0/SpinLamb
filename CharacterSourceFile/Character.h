@@ -35,7 +35,7 @@ protected:
     struct MoveParam
     {
         float Velocity_ = 0.0f;//初速度 この速度に加速度が加算される
-        float Acceleration_ = 0.0f;//加速度
+        float Acceleration_ = 0.0f;//加速度 ダッシュ攻撃中に使用する値
         float TmpAccele_ = 0.0f;//加速度上昇時に使う仮の値
         float AcceleValue_ = 0.0f;//Acceleration_上昇時、1fあたりの増加量
         float FullAccelerate_ = 0.0f;//加速度の最大
@@ -64,7 +64,8 @@ protected:
     {
         float Gravity_ = 0.0f; //重力 キャラクターの下方向にかかる力 実際の重力より(9.8/60 m/s)より軽くしている
         bool IsOnGround_ = false;//地面にいるか
-        float JumpSpeed_ = 0.0f; //プレイヤーの上方向に向く力 +ならジャンプしている状態 -なら下降～地面にいる状態
+        float JumpSpeed_ = 0.0f;//プレイヤーの上方向に向く力 +ならジャンプしている状態 -なら下降～地面にいる状態
+        float JumpHeight = 0.0f;//ジャンプ時の一時的に代入する値(=ジャンプの高さ)
         float HeightLowerLimit_ = 0.0f;//高さの下限
         float HeightUpperLimit_ = 0.0f;//高さの上限
         float MinusLimit_ = 0.0f;//JumpSpeedの最低値(念のためオーバーフローを防止する)
@@ -101,8 +102,8 @@ protected:
         int InvincibilityTime_ = 0;//ダメージ後の無敵時間 1fごとに上昇
         bool IsInvincibility_ = false;//無敵時間か
         int InvincibilityValue_ = 0;//無敵時間の値　この値を超えると無敵時間終了
-        int blinkTimer_ = 0;//ダメージ後の点滅カウント
-        int blinkValue_ = 0;//この値にblinkTimerが到達すると描画する
+        int BlinkTimer_ = 0;//ダメージ後の点滅カウント
+        int BlinkValue_ = 0;//この値にblinkTimerが到達すると通常描画する(それまでは点滅)
     };
     FenceHitParam FenceHitParam_;
 
@@ -124,11 +125,6 @@ protected:
     std::vector<float> AttackLocusParam_ = {};//突撃エフェクトのパラメータ
     std::vector<float> HitEffectParam_ = {};//接触時の衝撃エフェクトのパラメータ
     std::vector<float> FenceHitEffectParam_ = {};//柵に接触時の衝撃エフェクトのパラメータ
-
-    //----------サウンド関連----------
-    int ChargeSoundCount_ = 0;//チャージ音を鳴らす回数
-    int AttackSoundCount_ = 0;//突撃音を鳴らす回数
-    int CollisionSoundCound_ = 0;//衝撃音を鳴らす回数
 
 public:
     Character(GameObject* parent);
@@ -296,6 +292,11 @@ public:
     /// </summary>
     void CharacterGravity();
 
+    /// <summary>
+    /// ジャンプ開始
+    /// </summary>
+    void SetJump();
+
     //----------回転----------
 
     /// <summary>
@@ -367,9 +368,7 @@ public:
     /// <summary>
     /// ノックバック速度を0に戻す
     /// </summary>
-    void KnockBackVelocityReset() {
-        HitParam_.KnockBack_Velocity_ = { 0,0,0 };
-    }
+    void KnockBackVelocityReset() { HitParam_.KnockBack_Velocity_ = { 0,0,0 };}
 
     /// <summary>
     /// ダメージ後の無敵時間の計算
@@ -433,10 +432,6 @@ public:
     void SetFenceHitEffect();
 
     //----------セッター・ゲッター関数----------
-    void SetID(int _id) { InitParam_.CharacterID = _id; }
-    int GetID() const { return InitParam_.CharacterID; }
-    void SetAcceleration(float _acceleration) { MoveParam_.Acceleration_ = _acceleration; }
-    float GetAcceleration() const { return MoveParam_.Acceleration_; }
 
     //キャラクターの移動制限をセット
     void SetEnd(float _upper, float _lower, float _left, float _right) {
@@ -445,4 +440,48 @@ public:
         WestEnd_ = _left;
         EastEnd_ = _right;
     }
+
+    //初期状態
+
+    void SetID(int _id) { InitParam_.CharacterID = _id; }
+    int GetID() const { return InitParam_.CharacterID; }
+
+    void SetStartPosition(XMFLOAT3 _pos) { InitParam_.StartPosition_ = _pos; }
+    XMFLOAT3 GetStartPosition() const { return InitParam_.StartPosition_; }
+
+    //移動
+
+    void SetVelocity(float _velocity) { MoveParam_.Velocity_ = _velocity; }
+    float GetVelocity() const { return MoveParam_.Velocity_; }
+
+    void SetAcceleration(float _acceleration) { MoveParam_.Acceleration_ = _acceleration; }
+    float GetAcceleration() const { return MoveParam_.Acceleration_; }
+
+    void SetTmpAccele(float _tmpAccele) { MoveParam_.TmpAccele_ = _tmpAccele; }
+    float GetTmpAccele() const { return MoveParam_.TmpAccele_; }
+
+    void SetAcceleValue(float _acceleValue) { MoveParam_.AcceleValue_ = _acceleValue; }
+    float GetAcceleValue() const { return MoveParam_.AcceleValue_; }
+
+    void SetFullAccelerate(float _fullAccelerate) { MoveParam_.FullAccelerate_; }
+    float GetFullAccelerate() { return MoveParam_.FullAccelerate_; }
+
+    void SetFriction(float _friction) { MoveParam_.Friction_; }
+    float GetFriction() { return  MoveParam_.Friction_; }
+
+    //回転
+    void SetMoveRotateX(float _moveRotate) { RotateParam_.MoveRotateX = _moveRotate; }
+    float GetMoveRotateX() const { return RotateParam_.MoveRotateX ; }
+
+    void SetFastRotateX(float _fastRotate) { RotateParam_.FastRotateX = _fastRotate; }
+    float GetFastRotateX() const { return RotateParam_.FastRotateX; }
+
+    //空中
+    void SetGravity(float _gravity) { JumpParam_.Gravity_ = _gravity; }
+    float GetGravity() { return JumpParam_.Gravity_ ; }
+
+    void SetJumpHeight(float _jumpHeight) { JumpParam_.JumpHeight = _jumpHeight; }
+    float GetJumpHeight() { return JumpParam_.JumpHeight; }
+
+
 };

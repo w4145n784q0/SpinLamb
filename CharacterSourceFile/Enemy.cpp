@@ -464,10 +464,10 @@ void Enemy::LookPlayer()
 		return;
 	}
 	
-	//距離を単位ベクトル化
+	//距離を単位ベクトル化し、移動方向として扱えるようにする
 	RotateDirection = XMVector3Normalize(PlayerDist);
 
-	//敵への移動方向を保管
+	//敵の移動方向を保管
 	AutoAttackDirection = RotateDirection;
 
 	//------------角度に応じて回転------------

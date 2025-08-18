@@ -121,7 +121,7 @@ int CsvReader::GetValue(DWORD x, DWORD y)
 
 float CsvReader::GetValueFloat(DWORD x, DWORD y)
 {
-	return atof(GetString(x, y).c_str());
+	return static_cast<float>(atof(GetString(x, y).c_str()));
 }
 
 //ƒtƒ@ƒCƒ‹‚Ì—ñ”‚ğæ“¾

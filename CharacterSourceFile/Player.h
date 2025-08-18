@@ -117,9 +117,6 @@ public:
 	/// <param name="_Modelpath">読み込むfbxファイルのパス</param>
 	void PlayerInit(std::string _CSVpath, std::string _Modelpath);
 
-	//ジャンプ開始
-	void SetJump();
-
 	//カメラの操作（一部のステートのみ）
 	void CameraControl();
 

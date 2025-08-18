@@ -293,6 +293,156 @@ GameObject * GameObject::GetRootJob()
 	else return GetParent()->GetRootJob();
 }
 
+float GameObject::LinearInterpolation(float _convert, float _originalMin, float _originalMax, float _conversionMin, float _conversionMax)
+{
+	//線形補完の計算
+	//y = y1 + (x - x1) * (y2 - y1) / (x2 - x1) に基づく
+
+	if (_originalMin == _originalMax)
+	{
+		return _conversionMin; // originalMinとoriginalMaxが同じ場合はconversionMinを返す(0除算対策)
+	}
+	if (_convert < _originalMin)
+	{
+		return _conversionMin; // convertがoriginalMinより小さい場合はconversionMinを返す(外挿対策)
+	}
+	if (_convert > _originalMax)
+	{
+		return _conversionMax; // convertがoriginalMaxより大きい場合はconversionMaxを返す(外挿対策)
+	}
+
+	float y = _conversionMin + (_convert - _originalMin) * (_conversionMax - _conversionMin) / (_originalMax - _originalMin);
+	return y;
+}
+
+float GameObject::Normalize(float _value, float _min, float _max)
+{
+	//値を0から1の範囲に正規化
+
+	//_minと_maxが同じ場合は0を返す(0除算対策)
+	if (_min == _max)
+	{
+		return 0.0f;
+	}
+
+	//minとmaxの順序が逆なら入れ替える
+	if (_min > _max)
+	{
+		std::swap(_min, _max);
+	}
+
+	//正規化の計算(対象の値 - 下限値) / (上限値 - 下限値)
+	float normalized = (_value - _min) / (_max - _min);
+
+	//正規化された値が1.0f以上~0.0f以下にならないように値を制限
+	if (normalized >= 1.0f)
+	{
+		normalized = 1.0f;
+	}
+	if (normalized <= 0.0f)
+	{
+		normalized = 0.0f;
+	}
+
+	return normalized;
+}
+
+void GameObject::SetTransformPRS(Transform& _tr, std::vector<float> _v)
+{
+	//pos_xは0から始まる整数で、Transformデータ配列の添え字となる
+	//Transformの各要素のx,y,zに_vの値を順番に入れていく
+
+	_tr.position_ = { _v[pos_x],_v[pos_y],_v[pos_z] };
+	_tr.rotate_ = { _v[rot_x], _v[rot_y],_v[rot_z] };
+	_tr.scale_ = { _v[sca_x] ,_v[sca_y],_v[sca_z] };
+}
+
+std::vector<float> GameObject::GetCSVReadData(CsvReader& _csv, const std::string& _name)
+{
+	//csvファイル内から受け取った文字列を読み込み、配列で返す
+
+	//指定した文字列がいずれかの0列目に存在したら
+	if (_csv.IsGetParamName(_name))
+	{
+		//その行を配列として全取得
+		std::vector<float> v = _csv.GetParam(_name);
+		if (!v.empty())
+		{
+			//配列が空でなければ読み込んだデータ(配列)を返す
+			return v;
+		}
+		else
+		{
+			//配列が空だった場合はエラーメッセージを出す
+			std::string message = "指定された文字列" + _name + "のデータはありませんでした。";
+			MessageBox(NULL, message.c_str(), "BaseProjDx9エラー", MB_OK);
+
+			//空の配列を返す
+			return {};
+		}
+
+	}
+	else
+	{
+		//存在しなかった場合はエラーメッセージを出す
+		std::string message = "指定された文字列" + _name + "が見つかりませんでした。";
+		MessageBox(NULL, message.c_str(), "BaseProjDx9エラー", MB_OK);
+
+		//空の配列を返す
+		return {};
+	}
+
+}
+
+void GameObject::InitCSVTransform(CsvReader& _csv, const std::string& _name, Transform& _tr)
+{
+	//csvからデータを取得
+	std::vector<float> v = GetCSVReadData(_csv, _name);
+	SetTransformPRS(_tr, v);
+}
+
+void GameObject::InitCSVTransformArray(CsvReader& _csv, const std::vector<std::string>& _names, std::vector<std::reference_wrapper<Transform>>& _Transforms)
+{
+	//InitCSVTransform(トランスフォームの初期化)を配列単位でまとめて初期化する
+
+	//名前配列とトランスフォーム配列数が一致している必要あり
+	if (_names.size() != _Transforms.size())
+	{
+		return;
+	}
+
+	//名前配列とトランスフォーム配列の数だけInitCSVTransformを呼び出す
+	for (size_t i = 0; i < _names.size(); i++)
+	{
+		InitCSVTransform(_csv, _names[i], _Transforms[i]);
+	}
+}
+
+void GameObject::CSVCommonDataInitialize()
+{
+	//GameObjectで共通する汎用データの初期化
+
+	//csvファイルを読み込む
+	CsvReader csv;
+	csv.Load("CSVdata\\EngineData\\CommonData.csv");
+
+	//csvファイルの各0列目の文字列を取得
+	std::string Common = "CommonData";
+
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> CommonData = GetCSVReadData(csv, Common);
+
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	DeltaTime = CommonData[i_DeltaTime];
+	oneSecond = static_cast<int>(CommonData[i_OneSecond]);
+	TenDivision = static_cast<int>(CommonData[i_TenDivision]);
+	SceneShortTransition = static_cast<int>(CommonData[i_SceneShortTransition]);
+	SceneTransition = static_cast<int>(CommonData[i_SceneTransition]);
+	SceneLongTransition = static_cast<int>(CommonData[i_SceneLongTransition]);
+	ZeroPointOne = CommonData[i_ZeroPointOne];
+}
+
 
 
 

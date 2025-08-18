@@ -16,7 +16,6 @@ namespace {
 		i_BackCameraZ,
 		i_KeyboardRotateY,
 		i_MoveValue,
-		i_JumpHeight,
 		i_CameraInitX,
 		i_CameraInitY,
 		i_CameraInitZ,
@@ -37,9 +36,6 @@ namespace {
 
 	//キーボード入力時、Direction_に加算される値
 	float MoveValue = 0.0f;
-
-	//ジャンプ時の一時的に代入する値
-	float Jumpheight = 0.0f;
 
 	//カメラの初期化位置
 	XMFLOAT3 CameraInit = { 0,0,0 };
@@ -464,17 +460,6 @@ void Player::PlayerInit(std::string _CSVpath, std::string _Modelpath)
 	assert(hPlayer_ >= 0);
 }
 
-void Player::SetJump()
-{
-	//ジャンプを開始する処理
-
-	//地上判定をfalseにする
-	JumpParam_.IsOnGround_ = false;
-
-	//一時的にy方向にマイナスされている値を大きくすることで、キャラクターが飛び上がる
-	JumpParam_.JumpSpeed_ = Jumpheight;
-}
-
 void Player::CameraControl()
 {
 	//カメラを操作する
@@ -758,7 +743,6 @@ void Player::SetCSVPlayer(std::string _path)
 	BackCameraPos = { OnlyData[i_BackCameraX], OnlyData[i_BackCameraY], OnlyData[i_BackCameraZ] };
 	KeyBoardRotateY = OnlyData[i_KeyboardRotateY];
 	MoveValue = OnlyData[i_MoveValue];
-	Jumpheight = OnlyData[i_JumpHeight];
 	CameraInit = { OnlyData[i_CameraInitX] ,OnlyData[i_CameraInitY] , OnlyData[i_CameraInitZ] };
 	CameraRotate = OnlyData[i_CameraRotate];
 	CameraUpperLimit = OnlyData[i_CameraUpperlimit];

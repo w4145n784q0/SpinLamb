@@ -266,27 +266,8 @@ public:
 	/// <param name="conversionMin">変換後の範囲の最小値(y1)</param>
 	/// <param name="conversionMax">変換後の範囲の最大値(y2)</param>
 	/// <returns>補正後の値(y) 変換後の範囲に収まる</returns>
-	float LinearCompletion(float convert,float originalMin,float originalMax, 
-		float conversionMin,float conversionMax)
-	{
-		//y = y1 + (x - x1) * (y2 - y1) / (x2 - x1);
-
-		if (originalMin == originalMax)
-		{
-			return conversionMin; // originalMinとoriginalMaxが同じ場合はconversionMinを返す(0除算対策)
-		}
-		if (convert < originalMin)
-		{
-			return conversionMin; // convertがoriginalMinより小さい場合はconversionMinを返す(外挿対策)
-		}
-		if (convert > originalMax)
-		{
-			return conversionMax; // convertがoriginalMaxより大きい場合はconversionMaxを返す(外挿対策)
-		}
-
-		float y =  conversionMin + (convert - originalMin) * (conversionMax - conversionMin) / (originalMax - originalMin);
-		return y;
-	}
+	float LinearInterpolation(
+		float _convert, float _originalMin, float _originalMax,float _conversionMin, float _conversionMax);
 
 	/// <summary>
 	/// 正規化(floatで受け取り返す)
@@ -295,52 +276,14 @@ public:
 	/// <param name="_min">下限値</param>
 	/// <param name="_max">上限値</param>
 	/// <returns></returns>
-	float Normalize(float _value, float _min = 0.0f, float _max = 1.0f)
-	{
-		//値を0から1の範囲に正規化
-
-		//_minと_maxが同じ場合は0を返す(0除算対策)
-		if (_min == _max)
-		{
-			return 0.0f; 
-		}
-
-		// minとmaxの順序が逆なら入れ替える
-		if (_min > _max)
-		{
-			std::swap(_min, _max);
-		}
-
-		//正規化の計算(対象の値 - 下限値) / (上限値 - 下限値)
-		float normalized = (_value - _min) / (_max - _min);
-
-		//正規化された値が1.0f以上~0.0f以下にならないように値を制限
-		if (normalized >= 1.0f)
-		{
-			normalized = 1.0f;
-		}
-		if (normalized <= 0.0f)
-		{
-			normalized = 0.0f;
-		}
-
-		return normalized;
-	}
+	float Normalize(float _value, float _min = 0.0f, float _max = 1.0f);
 
 	/// <summary>
 	/// csv読み込み時の各トランスフォーム初期化
 	/// </summary>
 	/// <param name="tr">代入するトランスフォーム変数</param>
 	/// <param name="v">受け取った一行分のTransformデータ配列</param>
-	void SetTransformPRS(Transform &_tr, std::vector<float> _v)
-	{
-		//pos_xは0から始まる整数で、Transformデータ配列の添え字となる
-		//Transformの各要素のx,y,zに_vの値を順番に入れていく
-
-		_tr.position_ = { _v[pos_x],_v[pos_y],_v[pos_z] };
-		_tr.rotate_ = { _v[rot_x], _v[rot_y],_v[rot_z] };
-		_tr.scale_ = { _v[sca_x] ,_v[sca_y],_v[sca_z] };
-	}
+	void SetTransformPRS(Transform& _tr, std::vector<float> _v);
 
 	/// <summary>
 	/// csvから読み込んだデータを配列として取得
@@ -348,54 +291,16 @@ public:
 	/// <param name="_csv">読み込むcsvファイル</param>
 	/// <param name="_name">読み込むcsvファイルの0列目の文字列</param>
 	/// <returns>読み込んだデータの配列</returns>
-	static std::vector<float> GetCSVReadData(CsvReader& _csv, const std::string& _name)
-	{
-		//指定した文字列がいずれかの0列目に存在したら
-		if (_csv.IsGetParamName(_name))
-		{
-			//その行を配列として全取得
-			std::vector<float> v = _csv.GetParam(_name);
-			if (!v.empty())
-			{
-				//配列が空でなければ読み込んだデータ(配列)を返す
-				return v;
-			}
-			else
-			{
-				//配列が空だった場合はエラーメッセージを出す
-				std::string message = "指定された文字列" + _name + "のデータはありませんでした。";
-				MessageBox(NULL, message.c_str(), "BaseProjDx9エラー", MB_OK);
-
-				//空の配列を返す
-				return {};
-			}
-
-		}
-		else
-		{
-			//存在しなかった場合はエラーメッセージを出す
-			std::string message = "指定された文字列" + _name + "が見つかりませんでした。";
-			MessageBox(NULL, message.c_str(), "BaseProjDx9エラー", MB_OK);
-
-			//空の配列を返す
-			return {};
-		}
-
-	}
-
+	static std::vector<float> GetCSVReadData(CsvReader& _csv, const std::string& _name);
+	
 	/// <summary>
 	/// Transformを初期化する際の共通処理
 	/// </summary>
 	/// <param name="_csv">読み込んだCSVインスタンス</param>
 	/// <param name="_name">読み込みたいパラメータの名前</param>
 	/// <param name="_tr">代入するトランスフォーム変数</param>
-	void InitCSVTransform(CsvReader& _csv, const std::string& _name, Transform& _tr)
-	{
-		//csvからデータを取得
-		std::vector<float> v = GetCSVReadData(_csv, _name);
-		SetTransformPRS(_tr, v);
-	}
-
+	void InitCSVTransform(CsvReader& _csv, const std::string& _name, Transform& _tr);
+	
 	/// <summary>
 	/// Transformをまとめて初期化する際の共通処理
 	/// </summary>
@@ -403,45 +308,14 @@ public:
 	/// <param name="_names">読み込みたいパラメータの名前配列</param>
 	/// <param name="_Transforms">代入するトランスフォーム配列</param>
 	void InitCSVTransformArray(CsvReader& _csv, const std::vector<std::string>& _names,
-		std::vector<std::reference_wrapper<Transform>>& _Transforms)
-	{
-		//名前配列とトランスフォーム配列数が一致しているなら続ける
-		if (_names.size() != _Transforms.size())
-		{
-			return;
-		}
-
-		for (size_t i = 0; i < _names.size(); i++)
-		{
-			InitCSVTransform(_csv, _names[i], _Transforms[i]);
-		}
-	}
+		std::vector<std::reference_wrapper<Transform>>& _Transforms);
 
 	/// <summary>
 	/// GameObjectの共通データ初期化
+	/// ゲームループ開始前に一度だけ呼ぶ
 	/// </summary>
-    static void CSVCommonDataInitialize() {  
+	static void CSVCommonDataInitialize();
 
-		//csvファイルを読み込む
-        CsvReader csv;  
-        csv.Load("CSVdata\\EngineData\\CommonData.csv");  
-
-		//csvファイルの各0列目の文字列を取得
-		std::string Common = "CommonData";
-
-		//0列目の文字列を渡し、その行のパラメータを取得
-		std::vector<float> CommonData = GetCSVReadData(csv,Common);
-            
-		//初期化の順番はcsvの各行の順番に合わせる
-		//vの添え字はnamespaceで宣言した列挙型を使用
-		DeltaTime = CommonData[i_DeltaTime];
-        oneSecond = static_cast<int>(CommonData[i_OneSecond]);
-        TenDivision = static_cast<int>(CommonData[i_TenDivision]);
-		SceneShortTransition = static_cast<int>(CommonData[i_SceneShortTransition]);
-        SceneTransition = static_cast<int>(CommonData[i_SceneTransition]);
-		SceneLongTransition = static_cast<int>(CommonData[i_SceneLongTransition]);
-		ZeroPointOne = CommonData[i_ZeroPointOne];
-    }
 
 private:
 

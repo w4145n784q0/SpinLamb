@@ -41,6 +41,7 @@ namespace {
 	enum JumpIndex
 	{
 		i_Gravity = 0,
+		i_JumpHeight,
 		i_UpperLimit,
 		i_LowerLimit,
 		i_MinusLimit,
@@ -210,6 +211,7 @@ void Character::SetCSVStatus(std::string _path)
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
 	JumpParam_.Gravity_ = JumpData[i_Gravity];
+	JumpParam_.JumpHeight = JumpData[i_JumpHeight];
 	JumpParam_.HeightLowerLimit_ = JumpData[i_UpperLimit];
 	JumpParam_.HeightUpperLimit_ = JumpData[i_LowerLimit];
 	JumpParam_.MinusLimit_ = JumpData[i_MinusLimit];
@@ -244,7 +246,7 @@ void Character::SetCSVStatus(std::string _path)
 	//vの添え字はnamespaceで宣言した列挙型を使用
 	FenceHitParam_.KnockBackPower_ = FenceHitData[i_KnockBackPower];
 	FenceHitParam_.InvincibilityValue_ = static_cast<int>(FenceHitData[i_InvincibilityValue]);
-	FenceHitParam_.blinkValue_ = static_cast<int>(FenceHitData[i_BlinkValue]);
+	FenceHitParam_.BlinkValue_ = static_cast<int>(FenceHitData[i_BlinkValue]);
 	
 
 
@@ -326,9 +328,9 @@ void Character::DrawCharacterModel(int _handle, Transform _transform)
 	if (FenceHitParam_.IsInvincibility_)
 	{
 		//無敵時間中ならタイマーを使い、一定フレームおきにモデルを描画
-		if (++FenceHitParam_.blinkTimer_ > FenceHitParam_.blinkValue_) {
+		if (++FenceHitParam_.BlinkTimer_ > FenceHitParam_.BlinkValue_) {
 
-			FenceHitParam_.blinkTimer_ = 0;
+			FenceHitParam_.BlinkTimer_ = 0;
 			Model::SetAndDraw(_handle, _transform);
 		}
 	}
@@ -379,10 +381,12 @@ void Character::DrawCharacterImGui()
 	//初速度,加速量,最大加速,チャージの際に使う仮の加速度
 	if (ImGui::TreeNode("Move"))
 	{
-		ImGui::InputFloat("velocity", &this->MoveParam_.Velocity_, ZeroPointOne);
+		ImGui::InputFloat("Velocity", &this->MoveParam_.Velocity_, ZeroPointOne);
+		ImGui::InputFloat("Acceleration", &this->MoveParam_.Acceleration_, ZeroPointOne);
+		ImGui::InputFloat("TmpAccele", &this->MoveParam_.TmpAccele_, ZeroPointOne);
 		ImGui::InputFloat("AcceleValue", &this->MoveParam_.AcceleValue_, ZeroPointOne);
 		ImGui::InputFloat("FullAccelerate", &this->MoveParam_.FullAccelerate_, ZeroPointOne);
-		ImGui::InputFloat("TmpAccele", &this->MoveParam_.TmpAccele_, ZeroPointOne);
+		ImGui::InputFloat("Friction", &this->MoveParam_.Friction_, ZeroPointOne);
 		ImGui::TreePop();
 	}
 
@@ -398,6 +402,8 @@ void Character::DrawCharacterImGui()
 	if (ImGui::TreeNode("Jump"))
 	{
 		ImGui::InputFloat("Gravity", &this->JumpParam_.Gravity_, ZeroPointOne);
+		ImGui::InputFloat("JumpSpeed", &this->JumpParam_.JumpSpeed_, ZeroPointOne);
+		ImGui::InputFloat("JumpHeight", &this->JumpParam_.JumpHeight, ZeroPointOne);
 		ImGui::InputFloat("HeightLowerLimit", &this->JumpParam_.HeightLowerLimit_, ZeroPointOne);
 		ImGui::InputFloat("HeightUpperLimit", &this->JumpParam_.HeightUpperLimit_, ZeroPointOne);
 		ImGui::TreePop();
@@ -420,7 +426,7 @@ void Character::DrawCharacterImGui()
 	{
 		ImGui::InputFloat("KnockBackPower", &this->FenceHitParam_.KnockBackPower_, ZeroPointOne);
 		ImGui::InputInt("InvincibilityTime", &this->FenceHitParam_.InvincibilityValue_);
-		ImGui::InputInt("blinkValue", &this->FenceHitParam_.blinkValue_);
+		ImGui::InputInt("blinkValue", &this->FenceHitParam_.BlinkValue_);
 		ImGui::TreePop();
 	}
 
@@ -457,6 +463,17 @@ void Character::CharacterGravity()
 	{
 		JumpParam_.JumpSpeed_ = JumpParam_.MinusLimit_;
 	}
+}
+
+void Character::SetJump()
+{
+	//ジャンプを開始する処理
+
+	//地上判定をfalseにする
+	JumpParam_.IsOnGround_ = false;
+
+	//一時的にy方向にマイナスされている値を大きくすることで、キャラクターが飛び上がる
+	JumpParam_.JumpSpeed_ = JumpParam_.JumpHeight;
 }
 
 void Character::InitShadow()
@@ -620,6 +637,7 @@ void Character::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVel
 	HitParam_.KnockBack_Direction_ = tmp;
 
 	//自身の速度と相手の速度の差分をとる
+	//速度の差分に応じてノックバック量を変化させる
 	float subVelocity = _myVelocity - _targetVelocity;
 
 	//ノックバック量の初期化
@@ -641,7 +659,7 @@ void Character::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVel
 		}
 
 		//ノックバック量の線形補完を行う
-		KnockBackValue = LinearCompletion(subVelocity,
+		KnockBackValue = LinearInterpolation(subVelocity,
 			HitParam_.OriginalRangeMin_, HitParam_.OriginalRangeMax_,
 			HitParam_.ConvertedRangeMin_, HitParam_.ConvertedRangeMax_);
 	}
@@ -653,7 +671,7 @@ void Character::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVel
 	//溜めている速度をリセット
 	ChargeReset();
 
-	//ノックバック時の回転角の固定
+	//ノックバック時のY軸回転角の固定
 	KnockBackAngleY(HitParam_.KnockBack_Direction_);
 }
 
@@ -748,7 +766,7 @@ void Character::FenceReflect(XMVECTOR _normal)
 	//接触通知
 	NotifyFenceHit();
 
-	//ノックバック時の回転角の固定
+	//ノックバック時のY軸回転角の固定
 	KnockBackAngleY(HitParam_.KnockBack_Direction_);
 }
 
