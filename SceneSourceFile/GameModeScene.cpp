@@ -190,10 +190,8 @@ void GameModeScene::Draw()
 			//選択している状態に合わせてアイコンつける
 		}
 			break;
-		//case GameModeScene::S_HowToPlay:
-		//	break;
-		//case GameModeScene::S_Title:
-		//	break;
+		case GameModeScene::S_HowToPlay:
+		case GameModeScene::S_Title:
 		default:
 			break;
 		}
@@ -203,19 +201,163 @@ void GameModeScene::Draw()
 	//各画像のトランスフォームの位置変更
 	if (ImGui::TreeNode("GameModeSelect"))
 	{
-		ImGui::SliderFloat("BackCharaX", &BackChara_.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("BackCharaY", &BackChara_.position_.y, Image::UpEdge, Image::DownEdge);
-
-		ImGui::SliderFloat("TransSelectX", &TransSelect_.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("TransSelectY", &TransSelect_.position_.y, Image::UpEdge, Image::DownEdge);
-
-		ImGui::SliderFloat("TransTextX", &TransText_.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("TransTextY", &TransText_.position_.y, Image::UpEdge, Image::DownEdge);
-
-		for (int i = 0; i < ModeTransArray_.size(); i++)
+		if (ImGui::TreeNode("BackChara"))
 		{
-			ImGui::SliderFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].position_.x, Image::LeftEdge, Image::RightEdge);
-			ImGui::SliderFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].position_.y, Image::UpEdge, Image::DownEdge);
+			if (ImGui::TreeNode("BackCharaPosition"))
+			{
+				ImGui::SliderFloat("BackCharaPositionX", &BackChara_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("BackCharaPositionY", &BackChara_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("BackCharaRotate"))
+			{
+				ImGui::InputFloat("BackCharaRotateX", &BackChara_.rotate_.x, ZeroPointOne);
+				ImGui::InputFloat("BackCharaRotateY", &BackChara_.rotate_.y, ZeroPointOne);
+				ImGui::InputFloat("BackCharaRotateZ", &BackChara_.rotate_.z, ZeroPointOne);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("BackCharaScale"))
+			{
+				ImGui::InputFloat("BackCharaScaleX", &BackChara_.scale_.x, ZeroPointOne);
+				ImGui::InputFloat("BackCharaScaleY", &BackChara_.scale_.y, ZeroPointOne);
+				ImGui::TreePop();
+			}
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("TransSelect"))
+		{
+			if (ImGui::TreeNode("TransSelectPosition"))
+			{
+				ImGui::SliderFloat("TransSelectPositionX", &TransSelect_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("TransSelectPositionY", &TransSelect_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransSelectRotate"))
+			{
+				ImGui::InputFloat("TransSelectRotateX", &TransSelect_.rotate_.x, ZeroPointOne);
+				ImGui::InputFloat("TransSelectRotateY", &TransSelect_.rotate_.y, ZeroPointOne);
+				ImGui::InputFloat("TransSelectRotateZ", &TransSelect_.rotate_.z, ZeroPointOne);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransSelectScale"))
+			{
+				ImGui::InputFloat("TransSelectScaleX", &TransSelect_.scale_.x, ZeroPointOne);
+				ImGui::InputFloat("TransSelectScaleY", &TransSelect_.scale_.y, ZeroPointOne);
+				ImGui::TreePop();
+			}
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("TransText"))
+		{
+			if (ImGui::TreeNode("TransTextPosition"))
+			{
+				ImGui::SliderFloat("TransTextPositionX", &TransText_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("TransTextPositionY", &TransText_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransTextRotate"))
+			{
+				ImGui::InputFloat("TransTextRotateX", &TransText_.rotate_.x, ZeroPointOne);
+				ImGui::InputFloat("TransTextRotateY", &TransText_.rotate_.y, ZeroPointOne);
+				ImGui::InputFloat("TransTextRotateZ", &TransText_.rotate_.z, ZeroPointOne);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransTextScale"))
+			{
+				ImGui::InputFloat("TransTextScaleX", &TransText_.scale_.x, ZeroPointOne);
+				ImGui::InputFloat("TransTextScaleY", &TransText_.scale_.y, ZeroPointOne);
+				ImGui::TreePop();
+			}
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("ModeTransArray"))
+		{
+			if (ImGui::TreeNode("ModeTransArrayPosition"))
+			{
+				for (int i = 0; i < ModeTransArray_.size(); i++)
+				{
+					ImGui::SliderFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].position_.x, Image::LeftEdge, Image::RightEdge);
+					ImGui::SliderFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].position_.y, Image::UpEdge, Image::DownEdge);
+				}
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("ModeTransArrayRotate"))
+			{
+				for (int i = 0; i < ModeTransArray_.size(); i++)
+				{
+					ImGui::InputFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].rotate_.x, ZeroPointOne);
+					ImGui::InputFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].rotate_.y, ZeroPointOne);
+					ImGui::InputFloat((ModeStringArray[i] + "Z").c_str(), &ModeTransArray_[i].rotate_.z, ZeroPointOne);
+				}
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("ModeTransArrayScale"))
+			{
+				for (int i = 0; i < ModeTransArray_.size(); i++)
+				{
+					ImGui::InputFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].scale_.x, ZeroPointOne);
+					ImGui::InputFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].scale_.y, ZeroPointOne);
+				}
+				ImGui::TreePop();
+			}
+			ImGui::TreePop();
+		}
+
+		ImGui::TreePop();
+	}
+	
+
+	if (ImGui::TreeNode("Confirmation"))
+	{
+		if (ImGui::TreeNode("TransPlayer"))
+		{
+			if (ImGui::TreeNode("TransPlayerPosition"))
+			{
+				ImGui::SliderFloat("TransPlayerPositionX", &TransPlayer_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("TransPlayerPositionY", &TransPlayer_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransPlayerRotate"))
+			{
+				ImGui::InputFloat("TransPlayerRotateX", &TransPlayer_.rotate_.x, ZeroPointOne);
+				ImGui::InputFloat("TransPlayerRotateY", &TransPlayer_.rotate_.y, ZeroPointOne);
+				ImGui::InputFloat("TransPlayerRotateZ", &TransPlayer_.rotate_.z, ZeroPointOne);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransPlayerScale"))
+			{
+				ImGui::InputFloat("TransPlayerScaleX", &TransPlayer_.scale_.x, ZeroPointOne);
+				ImGui::InputFloat("TransPlayerScaleY", &TransPlayer_.scale_.y, ZeroPointOne);
+				ImGui::TreePop();
+			}
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("TransSelectPlayerNum"))
+		{
+			if (ImGui::TreeNode("TransSelectPlayerPosition"))
+			{
+				ImGui::SliderFloat("TransSelectPlayerPositionX", &TransSelectPlayerNum_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("TransSelectPlayerPositionY", &TransSelectPlayerNum_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransSelectPlayerRotate"))
+			{
+				ImGui::InputFloat("TransSelectPlayerRotateX", &TransSelectPlayerNum_.rotate_.x, ZeroPointOne);
+				ImGui::InputFloat("TransSelectPlayerRotateY", &TransSelectPlayerNum_.rotate_.y, ZeroPointOne);
+				ImGui::InputFloat("TransSelectPlayerRotateZ", &TransSelectPlayerNum_.rotate_.z, ZeroPointOne);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransSelectPlayerScale"))
+			{
+				ImGui::InputFloat("TransSelectPlayerScaleX", &TransSelectPlayerNum_.scale_.x, ZeroPointOne);
+				ImGui::InputFloat("TransSelectPlayerScaleY", &TransSelectPlayerNum_.scale_.y, ZeroPointOne);
+				ImGui::TreePop();
+			}
+			ImGui::TreePop();
 		}
 
 		ImGui::TreePop();

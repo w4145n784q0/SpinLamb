@@ -545,17 +545,58 @@ void HUD::DrawImGuiScore()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Score"))
 	{
-		ImGui::SliderFloat("FirstScoreTenX", &FirstScoreTen.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("FirstScoreTenY", &FirstScoreTen.position_.y, Image::UpEdge, Image::DownEdge);
+		if (ImGui::TreeNode("ScorePosition"))
+		{
+			ImGui::SliderFloat("FirstScoreTen_PositionX", &FirstScoreTen.position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat("FirstScoreTen_PositionY", &FirstScoreTen.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("FirstScoreOneX", &FirstScoreOne.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("FirstScoreOneY", &FirstScoreOne.position_.y, Image::UpEdge, Image::DownEdge);
+			ImGui::SliderFloat("FirstScoreOne_PositionX", &FirstScoreOne.position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat("FirstScoreOne_PositionY", &FirstScoreOne.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("SecondScoreTenX", &SecondScoreTen.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("SecondScoreTenY", &SecondScoreTen.position_.y, Image::UpEdge, Image::DownEdge);
+			ImGui::SliderFloat("SecondScoreTen_PositionX", &SecondScoreTen.position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat("SecondScoreTen_PositionY", &SecondScoreTen.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("SecondScoreOneX", &SecondScoreOne.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("SecondScoreOneY", &SecondScoreOne.position_.y, Image::UpEdge, Image::DownEdge);
+			ImGui::SliderFloat("SecondScoreOne_PositionX", &SecondScoreOne.position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat("SecondScoreOne_PositionY", &SecondScoreOne.position_.y, Image::UpEdge, Image::DownEdge);
+
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("ScoreRotate"))
+		{
+			ImGui::InputFloat("FirstScoreTen_RotateX", &FirstScoreTen.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("FirstScoreTen_RotateY", &FirstScoreTen.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("FirstScoreTen_RotateZ", &FirstScoreTen.rotate_.z, ZeroPointOne);
+
+			ImGui::InputFloat("FirstScoreOne_RotateX", &FirstScoreOne.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("FirstScoreOne_RotateY", &FirstScoreOne.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("FirstScoreOne_RotateZ", &FirstScoreOne.rotate_.z, ZeroPointOne);
+
+			ImGui::InputFloat("SecondScoreTen_RotateX", &SecondScoreTen.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("SecondScoreTen_RotateY", &SecondScoreTen.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("SecondScoreTen_RotateZ", &SecondScoreTen.rotate_.z, ZeroPointOne);
+
+			ImGui::InputFloat("SecondScoreOne_RotateX", &SecondScoreOne.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("SecondScoreOne_RotateY", &SecondScoreOne.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("SecondScoreOne_RotateZ", &SecondScoreOne.rotate_.z, ZeroPointOne);
+
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("ScoreScale"))
+		{
+			ImGui::InputFloat("FirstScoreTen_ScaleX", &FirstScoreTen.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("FirstScoreTen_ScaleY", &FirstScoreTen.scale_.y, ZeroPointOne);
+
+			ImGui::InputFloat("FirstScoreOne_ScaleX", &FirstScoreOne.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("FirstScoreOne_ScaleY", &FirstScoreOne.scale_.y, ZeroPointOne);
+
+			ImGui::InputFloat("SecondScoreTen_ScaleX", &SecondScoreTen.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("SecondScoreTen_ScaleY", &SecondScoreTen.scale_.y, ZeroPointOne);
+
+			ImGui::InputFloat("SecondScoreOne_ScaleX", &SecondScoreOne.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("SecondScoreOne_ScaleY", &SecondScoreOne.scale_.y, ZeroPointOne);
+
+			ImGui::TreePop();
+		}
 
 		ImGui::TreePop();
 	}
@@ -567,11 +608,36 @@ void HUD::DrawImGuiTimer()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Timer"))
 	{
-		ImGui::SliderFloat("TenTimeX", &TenTime.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("TenTimeY", &TenTime.position_.y, Image::UpEdge, Image::DownEdge);
+		if (ImGui::TreeNode("TimerPosition"))
+		{
+			ImGui::SliderFloat("TenTimePositionX", &TenTime.position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat("TenTimePositionY", &TenTime.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("OneTimeX", &OneTime.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("OneTimeY", &OneTime.position_.y, Image::UpEdge, Image::DownEdge);
+			ImGui::SliderFloat("OneTimePositionX", &OneTime.position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat("OneTimePositionY", &OneTime.position_.y, Image::UpEdge, Image::DownEdge);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("TimerRotate"))
+		{
+			ImGui::InputFloat("TenTimeRotateX", &TenTime.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("TenTimeRotateY", &TenTime.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("TenTimeRotateZ", &TenTime.rotate_.z, ZeroPointOne);
+
+			ImGui::InputFloat("OneTimeRotateX", &OneTime.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("OneTimeRotateY", &OneTime.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("OneTimeRotateZ", &OneTime.rotate_.z, ZeroPointOne);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("TimerScale"))
+		{
+			ImGui::InputFloat("TenTimeScaleX", &TenTime.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("TenTimeScaleY", &TenTime.scale_.y, ZeroPointOne);
+
+			ImGui::InputFloat("OneTimeScaleX", &OneTime.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("OneTimeScaleY", &OneTime.scale_.y, ZeroPointOne);
+			ImGui::TreePop();
+		}
+
 		ImGui::TreePop();
 	}
 #endif
@@ -582,8 +648,26 @@ void HUD::DrawImGuiMiniMap()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("MiniMap"))
 	{
-		ImGui::SliderFloat("MiniMapX", &MapIcon.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("MiniMapY", &MapIcon.position_.y, Image::UpEdge, Image::DownEdge);
+		if (ImGui::TreeNode("MiniMapPosition"))
+		{
+			ImGui::SliderFloat("MiniMapPositionX", &MapIcon.position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat("MiniMapPositionY", &MapIcon.position_.y, Image::UpEdge, Image::DownEdge);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("MiniMapRotate"))
+		{
+			ImGui::InputFloat("MiniMapRotateX", &MapIcon.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("MiniMapRotateY", &MapIcon.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("MiniMapRotateZ", &MapIcon.rotate_.z, ZeroPointOne);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("MiniMapScale"))
+		{
+			ImGui::InputFloat("MiniMapScaleX", &MapIcon.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("MiniMapScaleY", &MapIcon.scale_.y, ZeroPointOne);
+			ImGui::TreePop();
+		}
 
 		ImGui::Text("FirstIconX:%.3f", FirstIcon.position_.x);
 		ImGui::Text("FirstIconY:%.3f", FirstIcon.position_.y);
