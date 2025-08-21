@@ -9,7 +9,38 @@ int GameObject::TenDivision = 0;
 int GameObject::SceneShortTransition = 0;
 int GameObject::SceneTransition = 0;
 int GameObject::SceneLongTransition = 0;
-float GameObject::ZeroPointOne = 0;
+float GameObject::ZeroPointOne = 0.0f;
+
+namespace
+{
+	//csv読み込み時のインデックス
+
+//トランスフォームの初期化値
+	enum InitTransform
+	{
+		pos_x = 0,
+		pos_y,
+		pos_z,
+		rot_x,
+		rot_y,
+		rot_z,
+		sca_x,
+		sca_y,
+		sca_z,
+	};
+
+	//GameObject軽傷先で汎用的に使用する変数
+	enum CommonIndex
+	{
+		i_DeltaTime = 0,
+		i_OneSecond,
+		i_TenDivision,
+		i_SceneShortTransition,
+		i_SceneTransition,
+		i_SceneLongTransition,
+		i_ZeroPointOne,
+	};
+}
 
 //コンストラクタ（親も名前もなし）
 GameObject::GameObject(void) :

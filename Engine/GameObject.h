@@ -14,33 +14,6 @@
 
 namespace
 {
-	//csv読み込み時のインデックス
-	
-	//トランスフォームの初期化値
-	enum InitTransform
-	{
-		pos_x = 0,
-		pos_y,
-		pos_z,
-		rot_x,
-		rot_y,
-		rot_z,
-		sca_x,
-		sca_y,
-		sca_z,
-	};
-
-	//GameObject軽傷先で汎用的に使用する変数
-	enum CommonIndex
-	{
-		i_DeltaTime = 0,	
-		i_OneSecond,		
-		i_TenDivision,
-		i_SceneShortTransition,
-		i_SceneTransition,
-		i_SceneLongTransition,
-		i_ZeroPointOne,
-	};
 
 }
 

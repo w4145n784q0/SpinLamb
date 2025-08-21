@@ -377,7 +377,7 @@ void HUD::DrawTimer()
 
 void HUD::DrawTimerEasing()
 {
-	//残り時間10秒でイージング拡大処理
+	//残り時間n秒でイージング拡大処理(今は10秒)
 	if (pGameTimer_->IsEasingTime() && pGameTimer_->IsCounting())
 	{
 		//時間が切り替わったタイミングでEasingCountを戻す
@@ -493,8 +493,27 @@ void HUD::DrawImGuiExplanation()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Explanation"))
 	{
-		ImGui::SliderFloat("ExplanationX", &LogoExplanation.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("ExplanationY", &LogoExplanation.position_.y, Image::UpEdge, Image::DownEdge);
+		if (ImGui::TreeNode("ExplanationPosition"))
+		{
+			ImGui::SliderFloat("Explanation_PositionX", &LogoExplanation.position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat("Explanation_PositionY", &LogoExplanation.position_.y, Image::UpEdge, Image::DownEdge);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("ExplanationRotate"))
+		{
+			ImGui::InputFloat("ExplanationRotateX", &LogoExplanation.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("ExplanationRotateY", &LogoExplanation.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("ExplanationRotateY", &LogoExplanation.rotate_.y, ZeroPointOne);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("ExplanationScale"))
+		{
+			ImGui::InputFloat("ExplanationScaleX", &LogoExplanation.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("ExplanationScaleY", &LogoExplanation.scale_.y, ZeroPointOne);
+			ImGui::TreePop();
+		}
+
+
 		ImGui::TreePop();
 	}
 #endif
@@ -505,8 +524,26 @@ void HUD::DrawImGuiStartLogo()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Start"))
 	{
-		ImGui::SliderFloat("StartX", &LogoStart.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("StartY", &LogoStart.position_.y, Image::UpEdge, Image::DownEdge);
+		if (ImGui::TreeNode("StartPosition"))
+		{
+			ImGui::SliderFloat("StartPositionX", &LogoStart.position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat("StartPositionY", &LogoStart.position_.y, Image::UpEdge, Image::DownEdge);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("StartRotate"))
+		{
+			ImGui::InputFloat("StartRotateX", &LogoStart.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("StartRotateY", &LogoStart.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("StartRotateY", &LogoStart.rotate_.y, ZeroPointOne);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("StartScale"))
+		{
+			ImGui::InputFloat("StartScaleX", &LogoStart.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("StartScaleY", &LogoStart.scale_.y, ZeroPointOne);
+			ImGui::TreePop();
+		}
+
 		ImGui::TreePop();
 	}
 #endif
@@ -517,8 +554,26 @@ void HUD::DrawImGuiFinishLogo()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Finish"))
 	{
-		ImGui::SliderFloat("FinishX", &LogoFinish.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("FinishY", &LogoFinish.position_.y, Image::UpEdge, Image::DownEdge);
+		if (ImGui::TreeNode("FinishPosition"))
+		{
+			ImGui::SliderFloat("FinishPositionX", &LogoFinish.position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat("FinishPositionY", &LogoFinish.position_.y, Image::UpEdge, Image::DownEdge);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("FinishRotate"))
+		{
+			ImGui::InputFloat("FinishRotateX", &LogoFinish.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("FinishRotateY", &LogoFinish.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("FinishRotateY", &LogoFinish.rotate_.y, ZeroPointOne);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("FinishScale"))
+		{
+			ImGui::InputFloat("FinishScaleX", &LogoFinish.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("FinishScaleY", &LogoFinish.scale_.y, ZeroPointOne);
+			ImGui::TreePop();
+		}
+
 		ImGui::TreePop();
 	}
 #endif
@@ -530,11 +585,37 @@ void HUD::DrawImGuiPracticeLogo()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("PracticeLogo"))
 	{
-		ImGui::SliderFloat("backtitleX", &LogoBackTitle.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("backtitleY", &LogoBackTitle.position_.y, Image::UpEdge, Image::DownEdge);
+		if (ImGui::TreeNode("PracticeLogoPosition"))
+		{
+			ImGui::SliderFloat("BackTitle_PositionX", &LogoBackTitle.position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat("BackTitle_PositionY", &LogoBackTitle.position_.y, Image::UpEdge, Image::DownEdge);
 
-		ImGui::SliderFloat("practiceX", &LogoPractice.position_.x, Image::LeftEdge, Image::RightEdge);
-		ImGui::SliderFloat("practiceY", &LogoPractice.position_.y, Image::UpEdge, Image::DownEdge);
+			ImGui::SliderFloat("Practice_PositionX", &LogoPractice.position_.x, Image::LeftEdge, Image::RightEdge);
+			ImGui::SliderFloat("Practice_PositionY", &LogoPractice.position_.y, Image::UpEdge, Image::DownEdge);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("PracticeLogoRotate"))
+		{
+			ImGui::InputFloat("BackTitle_RotateX", &LogoBackTitle.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("BackTitle_RotateY", &LogoBackTitle.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("BackTitle_RotateZ", &LogoBackTitle.rotate_.z, ZeroPointOne);
+
+			ImGui::InputFloat("Practice_RotateX", &LogoPractice.rotate_.x, ZeroPointOne);
+			ImGui::InputFloat("Practice_RotateY", &LogoPractice.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("Practice_RotateZ", &LogoPractice.rotate_.z, ZeroPointOne);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("PracticeLogoScale"))
+		{
+			ImGui::InputFloat("BackTitle_ScaleX", &LogoBackTitle.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("BackTitle_ScaleY", &LogoBackTitle.scale_.y, ZeroPointOne);
+
+			ImGui::InputFloat("Practice_ScaleX", &LogoPractice.scale_.x, ZeroPointOne);
+			ImGui::InputFloat("Practice_ScaleY", &LogoPractice.scale_.y, ZeroPointOne);
+			ImGui::TreePop();
+		}
+
+
 		ImGui::TreePop();
 	}
 #endif

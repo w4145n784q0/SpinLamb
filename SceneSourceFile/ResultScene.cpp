@@ -143,15 +143,50 @@ void ResultScene::Draw()
 	{
 		if (ImGui::TreeNode("Result"))
 		{
-			ImGui::SliderFloat("ResultPositionX", &Result_.position_.x, Image::LeftEdge, Image::RightEdge);
-			ImGui::SliderFloat("ResultPositionY", &Result_.position_.y, Image::UpEdge, Image::DownEdge);
+			if (ImGui::TreeNode("ResultPosition"))
+			{
+				ImGui::SliderFloat("ResultPositionX", &Result_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("ResultPositionY", &Result_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("ResultRotate"))
+			{
+				ImGui::InputFloat("ResultRotateX", &Result_.rotate_.x, ZeroPointOne);
+				ImGui::InputFloat("ResultRotateY", &Result_.rotate_.y, ZeroPointOne);
+				ImGui::InputFloat("ResultRotateZ", &Result_.rotate_.z, ZeroPointOne);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("ResultScale"))
+			{
+				ImGui::InputFloat("ResultScaleX", &Result_.scale_.x, ZeroPointOne);
+				ImGui::InputFloat("ResultScaleY", &Result_.scale_.y, ZeroPointOne);
+				ImGui::TreePop();
+			}
 			ImGui::TreePop();
 		}
 
 		if (ImGui::TreeNode("PushTitle"))
 		{
-			ImGui::SliderFloat("PushTitlePositionX", &PushTitle_.position_.x, Image::LeftEdge, Image::RightEdge);
-			ImGui::SliderFloat("PushTitlePositionY", &PushTitle_.position_.y, Image::UpEdge, Image::DownEdge);
+			if (ImGui::TreeNode("PushTitlePosition"))
+			{
+				ImGui::SliderFloat("PushTitlePositionX", &PushTitle_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("PushTitlePositionY", &PushTitle_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("PushTitleRotate"))
+			{
+				ImGui::InputFloat("PushTitleRotateX", &PushTitle_.rotate_.x, ZeroPointOne);
+				ImGui::InputFloat("PushTitleRotateY", &PushTitle_.rotate_.y, ZeroPointOne);
+				ImGui::InputFloat("PushTitleRotateZ", &PushTitle_.rotate_.z, ZeroPointOne);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("PushTitleScale"))
+			{
+				ImGui::InputFloat("PushTitleScaleX", &PushTitle_.scale_.x, ZeroPointOne);
+				ImGui::InputFloat("PushTitleScaleY", &PushTitle_.scale_.y, ZeroPointOne);
+				ImGui::TreePop();
+			}
+
 			ImGui::TreePop();
 		}
 		ImGui::TreePop();
