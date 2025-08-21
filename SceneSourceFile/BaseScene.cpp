@@ -16,12 +16,17 @@ BaseScene::~BaseScene()
 
 void BaseScene::Update()
 {
-	//現在のシーンの状態(通常・遷移中)によって更新を分ける
-	//この処理は継承先のUpdateで必ず呼ぶ
+	//現在のシーンの状態(通常・停止・遷移中)によって更新を分ける
+	//継承先がSceneManagerに登録されているシーンの場合、Updateで必ず呼ぶ
+	//何の処理を実装するかは継承先によって分ける
+
 	switch (SceneState_)
 	{
 	case BaseScene::S_Active:
 		UpdateActive();
+		break;
+	case BaseScene::S_InActive:
+		UpdateInActive();
 		break;
 	case BaseScene::S_Transition:
 		UpdateTransition();

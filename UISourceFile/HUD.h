@@ -112,6 +112,14 @@ private:
 	//イージング使用時のカウンター
 	float EasingCount_;
 
+	//----------ポーズ画面----------
+	
+	//ポーズ画面
+	int hPause_;
+
+	//ポーズ画面の選択アイコン
+	int hPauseIcon_;
+
 public:
 	HUD(GameObject* parent);
 	~HUD();
@@ -152,8 +160,14 @@ public:
 	//バラバラに持つことを防ぐため,BattleSceneから指示して設定
 	void SetReadyTimer(int _timer) { ReadyTimer_ = _timer; }
 
-	//----------描画関数----------
-	//これらは直接呼ばず、SetDrawModeを介して,HUDクラスのDrawから描画(常に表示するものは例外)
+	//ポーズ画面選択アイコンの位置設定
+	//HUDからは変更せずに、BattleScene,Practiceシーンからセット
+	void SetPauseIcon(XMFLOAT3 _position);
+
+	//----------以下は個別に指定する描画関数----------
+
+	//-----以下は直接呼ばず、SetDrawModeを介して
+	//描画する(シーンによって切り替わるものなど)-----
 
 	//練習モード中
 	void DrawPracticeLogo();
@@ -161,26 +175,33 @@ public:
 	//タイマー
 	void DrawTimer();
 
-	//タイマーのイージング処理
-	void DrawTimerEasing();
-
 	//ゲームの簡易説明
 	void DrawExplanation();
 
-	//開始時(Ready)のロゴ
+	//開始時(Ready,Go)のロゴ
 	void DrawStartLogo();
 
-	//終了ロゴ
+	//終了(Finish)ロゴ
 	void DrawFinishLogo();
-
-	//画面分割の枠線
-	void DrawSplitLine();
 
 	//ミニマップ
 	void DrawMiniMap();
 
 	//スコア表示
 	void DrawScore();
+
+	//ポーズ画面
+	void DrawPause();
+
+	//-----以下はHUDのポインタから描画する-----
+	
+	//画面分割の枠線
+	void DrawSplitLine();
+
+	//-----以下はHUDクラス内で描画する-----
+
+	//タイマーのイージング処理
+	void DrawTimerEasing();
 
 	//----------ImGui描画関数(Imguiを外部から呼ぶ)----------
 	void DrawImGuiExplanation();

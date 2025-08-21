@@ -15,6 +15,7 @@ protected:
 	enum SceneState
 	{
 		S_Active = 0,//通常
+		S_InActive,  //止めている
 		S_Transition,//シーン遷移中
 		S_MaxScene
 	};
@@ -37,6 +38,9 @@ public:
 
 	//通常の処理
 	virtual void UpdateActive() = 0;
+
+	//止めているときの処理
+	virtual void UpdateInActive() {};
 
 	//シーン遷移中の処理(シーン遷移中の演出などに使用)
 	virtual void UpdateTransition() = 0;

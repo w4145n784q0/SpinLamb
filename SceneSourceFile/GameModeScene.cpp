@@ -554,6 +554,7 @@ void GameModeScene::UpdateConfirmation()
 
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 
+		//SceneManager‚É—V‚Ôl”‚ğ“n‚·
 		switch (PlayerNum_)
 		{
 		case GameModeScene::S_PvE:

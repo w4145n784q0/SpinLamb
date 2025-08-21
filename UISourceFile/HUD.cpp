@@ -53,17 +53,24 @@ namespace
 
 
 	//スコア表示位置のトランスフォーム
-	Transform FirstScoreTen;
-	Transform FirstScoreOne;
-	Transform SecondScoreTen;
-	Transform SecondScoreOne;
+	Transform FirstScoreTen;//プレイヤー1の10の位
+	Transform FirstScoreOne;//プレイヤー1の1の位
+	Transform SecondScoreTen;//プレイヤー2・Enemyの1の位
+	Transform SecondScoreOne;//プレイヤー2・Enemyの1の位
+
+	//ポーズ画面のトランスフォーム
+	Transform TransPause;
+
+	//ポーズ画面の選択アイコンのトランスフォーム
+	Transform TransPauseIcon;
 
 	//画像用トランスフォームを配列に入れる
 	//初期化の際に使用する
 	std::vector<std::reference_wrapper<Transform>> ImageArray = {
 	LogoBackTitle,LogoPractice,LogoExplanation,LogoStart,
 	LogoFinish, SplitLine, TenTime ,OneTime, MapIcon,FirstIcon,SecondIcon,
-	FirstScoreTen, FirstScoreOne, SecondScoreTen, SecondScoreOne
+	FirstScoreTen, FirstScoreOne, SecondScoreTen, SecondScoreOne,
+	TransPause, TransPauseIcon
 	};
 
 	//ナンバーハンドルの配列
@@ -107,7 +114,8 @@ HUD::HUD(GameObject* parent)
 	hStart_(-1),hReady_(-1),hGo_(-1),hFinish_(-1), hSplitLine_(-1),
 	hNumber0_(-1), hNumber1_(-1), hNumber2_(-1), hNumber3_(-1), hNumber4_(-1),
 	hNumber5_(-1), hNumber6_(-1), hNumber7_(-1), hNumber8_(-1), hNumber9_(-1),
-	hMap_(-1), hFirstIcon_(-1), hSecondIcon_(-1), FirstScore_(0), SecondScore_(0),
+	hMap_(-1), hFirstIcon_(-1), hSecondIcon_(-1), hPause_(-1),hPauseIcon_(-1),
+	FirstScore_(0), SecondScore_(0),
 	pGameTimer_(nullptr), pMiniMap_(nullptr), DrawMode_(Mode_None),DrawStart_(S_MaxStartMode),
 	ReadyTimer_(0), EasingCount_(0) 
 
@@ -199,6 +207,11 @@ void HUD::Initialize()
 	hSecondIcon_ = Image::Load(Image + MiniMap + "RedIcon.png");
 	assert(hSecondIcon_ >= 0);
 
+	hPause_ = Image::Load(Image + "Play\\Pause.png");
+	assert(hPause_ >= 0);
+
+	hPauseIcon_ = Image::Load(Image + "GameMode\\SelectIcon.png");
+	assert(hPauseIcon_ >= 0);
 
 	//数字画像ハンドル配列を初期化
 	ArrayHandle = { hNumber0_,hNumber1_,hNumber2_,hNumber3_,hNumber4_,
@@ -325,6 +338,7 @@ void HUD::SetHUDCSV()
 		"backtitle","practice","explanation","start","finish","split",
 		"tentime","onetime","minimap","firsticon", "secondicon",
 		"firstscoreten","firstscoreone","secondscoreten","secondscoreone",
+		"pause","pauseicon"
 	};
 
 	//まとめて初期化
@@ -347,6 +361,11 @@ void HUD::SetHUDCSV()
 	TimeMinScale = EasingData[i_TimeMinScale];
 	TimeMaxScale = EasingData[i_TimeMaxScale];
 	TimeDuration = EasingData[i_TimeDuration];
+}
+
+void HUD::SetPauseIcon(XMFLOAT3 _position)
+{
+	TransPauseIcon.position_ = _position;
 }
 
 void HUD::DrawPracticeLogo()
@@ -452,6 +471,13 @@ void HUD::DrawSplitLine()
 {
 	//画面分割の枠線描画
 	Image::SetAndDraw(hSplitLine_, SplitLine);
+}
+
+void HUD::DrawPause()
+{
+	//ポーズ画面と選択アイコンの描画
+	Image::SetAndDraw(hPause_, TransPause);
+	Image::SetAndDraw(hPauseIcon_, TransPauseIcon);
 }
 
 void HUD::DrawMiniMap()

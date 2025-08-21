@@ -32,10 +32,10 @@ namespace
 }
 
 BattleScene::BattleScene(GameObject* parent)
-	:BaseScene(parent,"BattleScene"),
+	:PlayScene(parent,"BattleScene"),
 	hBackScreen_(-1), hSoundBattle_(-1), hSoundWhistle_(-1),
 	pPlayer1_(nullptr), pPlayer2_(nullptr), pEnemy_(nullptr),
-	pHUD_(nullptr),pTransitionEffect_(nullptr),
+	pHUD_(nullptr), pTransitionEffect_(nullptr),
 	pGameTimer_(nullptr),pMiniMap_(nullptr),
 	ActivePlayers_({}), ActiveEnemys_({}),
 	BattleState_(S_Before),
@@ -49,6 +49,9 @@ BattleScene::~BattleScene()
 
 void BattleScene::Initialize()
 {
+	//プレイシーン(基底クラス)の初期化を行う
+	PlayScene::Initialize();
+
 	//csvからパラメータ読み込み
 	SetCSVBattle();
 
@@ -210,8 +213,8 @@ void BattleScene::Initialize()
 	std::string BGM = "BGM\\";
 	std::string SE = "SE\\";
 
-	hBackScreen_ = Image::Load(Battle + "BackSky.jpg");
-	assert(hBackScreen_ >= 0);
+	//hBackScreen_ = Image::Load(Battle + "BackSky.jpg");
+	//assert(hBackScreen_ >= 0);
 
 	hSoundBattle_ = Audio::Load(Sound + BGM + "Battle.wav", true);
 	assert(hSoundBattle_>= 0);
@@ -232,36 +235,15 @@ void BattleScene::Update()
 	//UpdateActive,UpdateTransitionは継承先の関数が呼ばれる
 	BaseScene::Update();
 
-	//登録されたプレイヤー・CPUを更新
-	//プレイヤーが複数存在する場合を想定して
-	//Battle,Practiceシーンから動かす
-	for (auto player : ActivePlayers_)
-	{
-		player->PlayerRun();
-	}
-	for (auto enemy : ActiveEnemys_)
-	{
-		enemy->EnemyRun();
-	}
 
-	//ミニマップの位置を更新
-	//Enemy,Player2のnullチェックを行い,存在するなら位置データを渡す
-	pMiniMap_->SetOriginalFirstPos(pPlayer1_->GetPosition());
-	if (pPlayer2_ != nullptr)
-	{
-		pMiniMap_->SetOriginalSecondPos(pPlayer2_->GetPosition());
-	}
-	else if (pEnemy_ != nullptr)
-	{
-		pMiniMap_->SetOriginalSecondPos(pEnemy_->GetPosition());
-	}
 }
 
 void BattleScene::Draw()
 {
 	
 	//背景描画
-	Image::SetAndDraw(hBackScreen_, this->transform_);
+	//Image::SetAndDraw(hBackScreen_, this->transform_);
+	PlayScene::DrawBackScreen();
 
 	//今のBattleSceneの状態から、HUDクラスに描画するものを指示
 	switch (BattleState_)
@@ -280,6 +262,14 @@ void BattleScene::Draw()
 		break;
 	default:
 		break;
+	}
+
+	//ポーズ中ならHUDクラスにポーズ画面描画を指示
+	if (SceneState_ == BaseScene::S_InActive)
+	{
+		pHUD_->DrawPause();
+		//Image::SetAndDraw(hBackScreen_, this->transform_);
+		//PlayScene::DrawPauseMenu();
 	}
 }
 
@@ -338,7 +328,38 @@ void BattleScene::UpdateActive()
 		break;
 	}
 
+	//以下はシーンがActiveのときに毎回通る処理
 
+	//登録されたプレイヤー・CPUを更新
+	//プレイヤーが複数存在する場合を想定して
+	//Battle,Practiceシーンから動かす
+	for (auto player : ActivePlayers_)
+	{
+		player->PlayerRun();
+	}
+	for (auto enemy : ActiveEnemys_)
+	{
+		enemy->EnemyRun();
+	}
+
+	//ミニマップの位置を更新
+	//Enemy,Player2のnullチェックを行い,存在するなら位置データを渡す
+	pMiniMap_->SetOriginalFirstPos(pPlayer1_->GetPosition());
+	if (pPlayer2_ != nullptr)
+	{
+		pMiniMap_->SetOriginalSecondPos(pPlayer2_->GetPosition());
+	}
+	else if (pEnemy_ != nullptr)
+	{
+		pMiniMap_->SetOriginalSecondPos(pEnemy_->GetPosition());
+	}
+
+}
+
+void BattleScene::UpdateInActive()
+{
+	//escキーかstartボタンで戻る
+	PlayScene::UpdatePauseMenu();
 }
 
 void BattleScene::UpdateTransition()
@@ -431,6 +452,13 @@ void BattleScene::UpdateBattleReady()
 void BattleScene::UpdateBattle()
 {
 	//ゲームプレイ中
+
+	//タイマーが止まっていたら再開 ポーズ画面から戻った際に使用
+	if (!pGameTimer_->IsCounting())
+	{
+		pGameTimer_->StartTimer();
+	}
+
 	//GameTimerから時間切れになったことを受け取ったら終了状態へ
 	if (pGameTimer_->GetCurrentGameTime() <= 0)
 	{
@@ -464,6 +492,13 @@ void BattleScene::UpdateBattle()
 	//スコアは毎フレーム渡し続ける
 	pHUD_->SetFirstScore(FirstScore_);
 	pHUD_->SetSecondScore(SecondScore_);
+
+	//escキーかstartボタンで一時停止
+	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	{
+		SceneState_ = S_InActive;
+		pGameTimer_->StopTimer();
+	}
 }
 
 void BattleScene::UpdateBattleAfter()
@@ -478,9 +513,30 @@ void BattleScene::UpdateBattleAfter()
 		StateCounter = 0;
 
 		//シーン遷移エフェクト(ズームイン)を設定
+		//pTransitionEffect_->FadeOutStartWhite();
+		//pTransitionEffect_->SetTransitionTime(SceneShortTransition);
+
+		//シーン遷移エフェクト(ズームイン)を設定
+		SetTransitionEffect();
+	}
+}
+
+void BattleScene::SetTransitionEffect()
+{
+	//シーン遷移エフェクトを設定する関数
+	//PlaySceneから上書き
+	if(pTransitionEffect_ != nullptr)
+	{
 		pTransitionEffect_->FadeOutStartWhite();
 		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
+	}
+}
 
+void BattleScene::SetPauseIconY()
+{
+	if (pHUD_ != nullptr)
+	{
+		pHUD_->SetPauseIcon(TmpIconPos_);
 	}
 }
 

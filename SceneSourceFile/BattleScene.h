@@ -7,10 +7,11 @@
 #include"../UISourceFile/MiniMap.h"
 #include"../UISourceFile/HUD.h"
 #include"../EffectSourceFile/TransitionEffect.h"
+#include"PlayScene.h"
 
 //"バトル"から始まるモードシーン
 class BattleScene :
-	public BaseScene,public IGameObserver
+	public PlayScene, public IGameObserver
 {
 private:
 	//----------画像ハンドル----------
@@ -50,9 +51,10 @@ private:
 	enum BattleState
 	{
 		S_Before = 0,//開始前説明
-		S_Ready,//開始直前
-		S_Now,//バトル中
-		S_After,//終了後
+		S_Ready,     //開始直前
+		S_Now,       //バトル中
+		S_Pause,     //ポーズ中
+		S_After,     //終了後
 		MaxMode
 	};
 	BattleState BattleState_;
@@ -85,8 +87,16 @@ public:
 	//通常の処理
 	void UpdateActive() override;
 
+	//止めているときの処理
+	void UpdateInActive() override;
+
 	//シーン遷移中の処理
 	void UpdateTransition() override;
+
+	//----------PlaySceneの継承関数----------
+	void SetTransitionEffect() override;
+
+	void SetPauseIconY() override;
 
 	//----------BattleState_に応じて内容が変わるUpdate関数----------
 	//バトル開始前
@@ -101,7 +111,6 @@ public:
 	//バトル終了後
 	void UpdateBattleAfter();
 
-	//------------------------------
 
 	//CSVから必要パラメータを読み込みする
 	void SetCSVBattle();
