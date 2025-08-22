@@ -4,6 +4,7 @@
 #include"../Engine/Audio.h"
 #include"../Engine/SceneManager.h"
 #include"../Engine/CsvReader.h"
+#include"../ViewSourceFile/GameView.h"
 
 namespace
 {
@@ -130,6 +131,9 @@ void GameModeScene::Initialize()
 
 	//インスタンス生成
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
+
+	//GameViewにポインタを渡す
+	GameView::SetTransitionEffect(pTransitionEffect_);
 
 	//モード選択用サウンド再生
 	Audio::Play(hSoundGameMode_);

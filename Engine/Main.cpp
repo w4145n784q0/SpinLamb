@@ -80,6 +80,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//オーディオ（効果音）の準備
 	Audio::Initialize();
 
+	//ゲームの映し方の準備
+	GameView::Initialize();
 
 	//ルートオブジェクト準備
 	//すべてのゲームオブジェクトの親となるオブジェクト
@@ -90,8 +92,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	GameObject::CSVCommonDataInitialize();
 	Image::SetCSVImage();
 
-	//ゲームの映し方の準備
-	GameView::Initialize();
 
 
 	//メッセージループ（何か起きるのを待つ）
@@ -196,6 +196,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 					//HUDの描画
 					GameView::ViewHUDNormal();
+
+					//遷移演出の描画
+					GameView::ViewTransitionEffect();
 				}
 				else if (GameView::IsSingle())
 				{
@@ -214,6 +217,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 					//HUDの描画
 					GameView::ViewHUDNormal();
+
+					//遷移演出の描画
+					GameView::ViewTransitionEffect();
 				}
 				else
 				{
@@ -227,6 +233,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//エフェクトの描画
 					VFX::Draw();
 
+					//遷移演出の描画
+					GameView::ViewTransitionEffect();
 				}
 
 #ifdef _DEBUG

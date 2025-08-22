@@ -76,6 +76,9 @@ public:
     //開放
     void Release() override;
 
+    //遷移演出を別クラスから描画
+    void DrawDelay();
+
     //画面遷移エフェクトの種類を指示
     //フェードイン時は初めに画像の透明度を最低値にする
 

@@ -78,9 +78,8 @@ public:
 	//通常状態に移動する
 	virtual void GotoPlay() {};
 
-	//シーン遷移エフェクトをセット
-	//基底クラスの時点では処理を決めず、継承先のものを使用する
-	virtual void SetTransitionEffect() {};
+	//タイトルに移動する
+	virtual void GotoTitle() {};
 
 	//選択アイコンの位置をセット
 	//このクラスでは方法を指定しない

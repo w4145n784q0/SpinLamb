@@ -3,6 +3,7 @@
 #include"../Engine/Input.h"
 #include"../Engine/Audio.h"
 #include"../Engine/SceneManager.h"
+#include"../ViewSourceFile/GameView.h"
 
 TitleScene::TitleScene(GameObject* parent)
 	:BaseScene(parent,"TitleScene"),
@@ -41,6 +42,9 @@ void TitleScene::Initialize()
 
 	//インスタンス生成
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
+
+	//GameViewにポインタを渡す
+	GameView::SetTransitionEffect(pTransitionEffect_);
 }
 
 void TitleScene::Update()

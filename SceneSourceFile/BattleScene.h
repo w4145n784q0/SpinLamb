@@ -99,7 +99,7 @@ public:
 
 	void GotoPlay() override;
 
-	void SetTransitionEffect() override;
+	void GotoTitle() override;
 
 	void SetPauseIconY() override;
 

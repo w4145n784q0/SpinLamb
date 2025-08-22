@@ -195,6 +195,7 @@ void BattleScene::Initialize()
 
 	//GameViewにポインタを渡す
 	GameView::SetHUD(pHUD_);
+	GameView::SetTransitionEffect(pTransitionEffect_);
 
 	//ゲーム制限時間を渡す
 	pGameTimer_->SetCurrentGameTime(GameTimeLimit);
@@ -208,13 +209,9 @@ void BattleScene::Initialize()
 	
 	//同じディレクトリ内からのパスは省略
 	//パスの一部を文字列にし、結合させる
-	std::string Battle = "Image\\Battle\\";
 	std::string Sound = "Sound\\";
 	std::string BGM = "BGM\\";
 	std::string SE = "SE\\";
-
-	//hBackScreen_ = Image::Load(Battle + "BackSky.jpg");
-	//assert(hBackScreen_ >= 0);
 
 	hSoundBattle_ = Audio::Load(Sound + BGM + "Battle.wav", true);
 	assert(hSoundBattle_>= 0);
@@ -360,7 +357,6 @@ void BattleScene::UpdateInActive()
 
 void BattleScene::UpdateTransition()
 {
-
 	//時間経過で次のシーンに遷移
 	//カウント中はシーン遷移エフェクト行う
 	if (++SceneTransitionTimer_ > SceneShortTransition)
@@ -405,6 +401,8 @@ void BattleScene::UpdateTransition()
 
 void BattleScene::GotoPause()
 {
+	//ポーズ画面に向かう処理 PlaySceneから上書き
+
 	//ポーズ画面状態へ移行
 	BattleState_ = S_Pause;
 
@@ -414,11 +412,25 @@ void BattleScene::GotoPause()
 
 void BattleScene::GotoPlay()
 {
+	//ゲーム画面に向かう処理 PlaySceneから上書き
+
 	//バトル中状態へ移行
 	BattleState_ = S_Now;
 
 	//タイマーを再開
 	pGameTimer_->StartTimer();
+}
+
+void BattleScene::GotoTitle()
+{
+	//タイトルに向かう処理 PlaySceneから上書き
+
+	//シーン遷移エフェクト(黒くフェードアウト)を設定
+	if (pTransitionEffect_ != nullptr)
+	{
+		pTransitionEffect_->FadeOutStartBlack();
+		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
+	}
 }
 
 void BattleScene::UpdateBattleBefore()
@@ -537,19 +549,8 @@ void BattleScene::UpdateBattleAfter()
 		//シーン遷移タイマーをリセット
 		StateCounter = 0;
 
-		//シーン遷移エフェクト(ズームイン)を設定
+		//シーン遷移エフェクト(白くフェードアウト)を設定
 		pTransitionEffect_->FadeOutStartWhite();
-		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
-	}
-}
-
-void BattleScene::SetTransitionEffect()
-{
-	//シーン遷移エフェクトを設定する関数
-	//PlaySceneから上書き
-	if(pTransitionEffect_ != nullptr)
-	{
-		pTransitionEffect_->FadeOutStartBlack();
 		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
 	}
 }

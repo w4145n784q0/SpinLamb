@@ -117,7 +117,7 @@ void PlayScene::UpdatePauseMenu()
 		break;
 	}
 
-	//TmpIconPos_.yの位置をHUDに渡す(処理は派生先で記述、ここではポインタは持たない)
+	//TmpIconPosY_の位置をHUDに渡す(処理は派生先で記述、ここではポインタは持たない)
 	SetPauseIconY();
 
 	//決定ボタン(Pキー・Bボタン)を押したら
@@ -137,8 +137,7 @@ void PlayScene::UpdatePauseMenu()
 			//"ゲームをやめる"を選択中なら遷移状態へ
 			SceneState_ = S_Transition;
 
-			//継承先によって異なる遷移エフェクトを呼ぶ
-			SetTransitionEffect();
+			GotoTitle();
 		}
 	}
 

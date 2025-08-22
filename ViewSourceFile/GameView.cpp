@@ -1,6 +1,7 @@
 #include "GameView.h"
 #include"../Engine/Direct3D.h"
 #include"../Engine/Camera.h"
+#include"../EffectSourceFile/TransitionEffect.h"
 
 namespace GameView
 {
@@ -34,6 +35,8 @@ namespace GameView
 	//ステージ外オブジェクトクラスのインスタンス
 	OutStageThing* pOutStageThing_;
 
+	//シーン遷移演出クラスのインスタンス
+	TransitionEffect* pTransitionEffect_;
 
 	void GameView::Initialize()
 	{
@@ -45,19 +48,7 @@ namespace GameView
 		pGround_ = nullptr;
 		pFence_ = nullptr;
 		pOutStageThing_ = nullptr;
-	}
-
-	void GameView::ViewNormal()
-	{
-		//全体画面描画
-		Direct3D::viewScreenNormal();
-
-		//カメラ位置・焦点は初期値のまま
-		Camera::SetPosition(Camera::GetInitPos());
-		Camera::SetTarget(Camera::GetInitTar());
-
-		//カメラ更新
-		Camera::Update();
+		pTransitionEffect_ = nullptr;
 	}
 
 	void GameView::Release()
@@ -94,6 +85,23 @@ namespace GameView
 		{
 			pOutStageThing_ = nullptr;
 		}
+		if (pTransitionEffect_ != nullptr)
+		{
+			pTransitionEffect_ = nullptr;
+		}
+	}
+
+	void GameView::ViewNormal()
+	{
+		//全体画面描画
+		Direct3D::viewScreenNormal();
+
+		//カメラ位置・焦点は初期値のまま
+		Camera::SetPosition(Camera::GetInitPos());
+		Camera::SetTarget(Camera::GetInitTar());
+
+		//カメラ更新
+		Camera::Update();
 	}
 
 	void GameView::ViewPvE()
@@ -227,6 +235,29 @@ namespace GameView
 		pHUD_->DrawFullScreen();
 	}
 
+	void ViewTransitionEffect()
+	{
+		//渡されたポインタから遷移演出を描画
+		//最終的に画面全体を覆うのでDraw()とは切り離し、mainでこの関数を呼ぶ
+		//どの演出にするかは各シーンから指示
+
+		//全体画面描画
+		Direct3D::viewScreenNormal();
+
+		if (pTransitionEffect_ == nullptr)
+		{
+			return;
+		}
+
+		//カメラ位置・焦点は初期値のまま
+		Camera::SetPosition(Camera::GetInitPos());
+		Camera::SetTarget(Camera::GetInitTar());
+		Camera::Update();
+
+		//遷移演出を描画
+		pTransitionEffect_->DrawDelay();
+	}
+
 	//一人プレイ状態かどうか
 	bool GameView::IsSingle()
 	{
@@ -308,5 +339,11 @@ namespace GameView
 	void SetOutStageThing(OutStageThing* _stagething)
 	{
 		pOutStageThing_ = _stagething;
+	}
+
+	//TransitionEffectのインスタンスを設定
+	void SetTransitionEffect(TransitionEffect* _transition)
+	{
+		pTransitionEffect_ = _transition;
 	}
 }

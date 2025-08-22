@@ -3,6 +3,7 @@
 #include"../Engine/Input.h"
 #include"../Engine/Audio.h"
 #include"../Engine/SceneManager.h"
+#include"../ViewSourceFile/GameView.h"
 
 HowToPlayScene::HowToPlayScene(GameObject* parent)
 	:BaseScene(parent, "HowToPlayScene"),
@@ -56,6 +57,9 @@ void HowToPlayScene::Initialize()
 
 	//インスタンス生成
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
+
+	//GameViewにポインタを渡す
+	GameView::SetTransitionEffect(pTransitionEffect_);
 
 	//あそびかた用サウンド再生
 	Audio::Play(hSoundHowtoPlay_);

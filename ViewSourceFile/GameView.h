@@ -6,6 +6,7 @@
 #include"../StageSourceFile/Ground.h"
 #include"../StageSourceFile/Fence.h"
 #include"../StageSourceFile/OutStageThing.h"
+#include"../EffectSourceFile/TransitionEffect.h"
 
 //-----------------------------------------------------------
 // 画面分割・ビューポート設定・カメラ設定等を行う名前空間
@@ -25,11 +26,11 @@ namespace GameView
 	//ゲーム画面の映し方の初期化
 	void Initialize();
 
-	//画面全体描画(メニューなどに使用)
-	void ViewNormal();
-
 	//解放
 	void Release();
+
+	//画面全体描画(メニューなどに使用)
+	void ViewNormal();
 
 	//一人プレイ用描画(プレイヤーの背中にカメラを置く)
 	void ViewPvE();
@@ -45,6 +46,9 @@ namespace GameView
 
 	//HUD用描画(画面全体)
 	void ViewHUDNormal();
+
+	//シーン遷移演出描画
+	void ViewTransitionEffect();
 
 	///画面描画モードが一人プレイ中かどうか返す
 	bool IsSingle();
@@ -74,5 +78,8 @@ namespace GameView
 
 	//OutStageThingのインスタンスを設定
 	void SetOutStageThing(OutStageThing* _stagething);
+
+	//TransitionEffectのインスタンスを設定
+	void SetTransitionEffect(TransitionEffect* _transition);
 };
 
