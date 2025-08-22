@@ -30,9 +30,13 @@ private:
 	HUD* pHUD_;
 	TransitionEffect* pTransitionEffect_;
 
-	//HUDクラスに渡すポインタ
-	GameTimer* pGameTimer_;//BattleScene側から操作する場合のタイマークラスポインタ
-	MiniMap* pMiniMap_;//HUDクラスに渡すポインタ
+	//-----HUDクラスに渡すポインタ-----
+
+	//BattleScene側から操作する場合のタイマークラスポインタ
+	GameTimer* pGameTimer_;	
+
+	//HUDクラスに渡すミニマップクラスのポインタ
+	MiniMap* pMiniMap_;		
 
 	//実際に操作するプレイヤーを登録する配列
 	std::vector<Player*> ActivePlayers_;

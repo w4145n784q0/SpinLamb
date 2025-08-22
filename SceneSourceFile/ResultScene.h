@@ -52,9 +52,9 @@ private:
 
 	//Ÿ”só‘Ô(ó‘Ô‚É‰‚¶‚Äˆ—‚ğ•Ï‰»‚³‚¹‚é)
 	enum WinnerState {
-		FirstWin = 0,//Player1‚ÌŸ—˜
-		SecondWin,//Player2,Enemy‚ÌŸ—˜
-		ResultDraw,//ˆø‚«•ª‚¯
+		FirstWin = 0,	//Player1‚ÌŸ—˜
+		SecondWin,		//Player2,Enemy‚ÌŸ—˜
+		ResultDraw,		//ˆø‚«•ª‚¯
 		MaxResult
 	};
 	WinnerState Winner_;

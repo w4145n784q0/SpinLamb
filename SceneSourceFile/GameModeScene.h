@@ -17,19 +17,19 @@ private:
 	//現在選択しているモード
 	enum SelectMode
 	{
-		S_Battle = 0,//"バトル"を選択中
-		S_Practice,//"フリープレイ"を選択中
-		S_HowToPlay,//"あそびかた"を選択中
-		S_Title,//"タイトル"を選択中
-		MaxMode //モードの最大値
+		S_Battle = 0,	//"バトル"を選択中
+		S_Practice,		//"フリープレイ"を選択中
+		S_HowToPlay,	//"あそびかた"を選択中
+		S_Title,		//"タイトル"を選択中
+		MaxMode			//モードの最大値
 	};
 	SelectMode SelectMode_;
 
 	//選択中・確認画面の状態
 	enum GameModeState
 	{
-		S_Selecting,//モードの選択中
-		S_Confirmation,//決定後の確認画面(必要に応じて実装)
+		S_Selecting,	//モードの選択中
+		S_Confirmation,	//決定後の確認画面(必要に応じて実装)
 		MaxState
 	};
 	GameModeState GameModeState_;
@@ -37,8 +37,8 @@ private:
 	//選択中のプレイ人数
 	enum PlayerNum
 	{
-		S_PvE = 0,//一人プレイ
-		S_PvP,//二人プレイ
+		S_PvE = 0,	//一人プレイ
+		S_PvP,		//二人プレイ
 		MaxPlayerNum
 	};
 	PlayerNum PlayerNum_;

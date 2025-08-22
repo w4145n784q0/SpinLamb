@@ -36,8 +36,8 @@ private:
 	//これらの値に応じてDrawで描画する画像を変える
 	enum HowtoImage 
 	{
-		S_Explanation = 0,//ゲーム説明
-		S_OperateKeyBoard,//操作方法(キーボード)
+		S_Explanation = 0,	//ゲーム説明
+		S_OperateKeyBoard,	//操作方法(キーボード)
 		S_OperateController,//操作方法(コントローラ)
 		MaxImage,
 	};
