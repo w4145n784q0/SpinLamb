@@ -25,8 +25,8 @@ protected:
 	//ポーズ画面のときに選択している状態
 	enum PauseSelect
 	{
-		S_Continue = 0,//続ける
-		S_Exit,        //やめる
+		S_Continue = 0,		//続ける
+		S_Exit,				//やめる
 		MaxPauseSelect
 	};
 	PauseSelect PauseSelect_;
@@ -37,8 +37,8 @@ protected:
 	// PauseSelectList_のインデックスを指す値
 	std::list<PauseSelect>::iterator Pauseitr;
 
-	//ポーズ画面の選択アイコンを仮に入れる変数
-	XMFLOAT3 TmpIconPos_;
+	//ポーズ画面の選択アイコンの位置を仮に保管する
+	float TmpIconPosY_;
 
 	//ポーズ画面の選択アイコンの位置配列
 	//PauseSelectの要素数を使い、それぞれの数値が選択中のアイコンのY位置となる
@@ -65,6 +65,18 @@ public:
 
  	//ポーズ画面の処理
 	void UpdatePauseMenu();
+
+	//ポーズ画面に遷移を待つ処理(S_Activeに記述)
+	void WaitGotoPause();
+
+	//プレイ画面に遷移を待つ処理(S_InActiveに記述)
+	void WaitGotoPlay();
+
+	//ポーズ画面に移動する
+	virtual void GotoPause() {};
+
+	//通常状態に移動する
+	virtual void GotoPlay() {};
 
 	//シーン遷移エフェクトをセット
 	//基底クラスの時点では処理を決めず、継承先のものを使用する

@@ -16,7 +16,7 @@ protected:
 	{
 		S_Active = 0,//通常
 		S_InActive,  //止めている
-		S_Transition,//シーン遷移中
+		S_Transition,//次のシーンに遷移中
 		S_MaxScene
 	};
 	SceneState SceneState_;

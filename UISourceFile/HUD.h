@@ -13,11 +13,13 @@ namespace
 	//他クラスからSetDrawModeを通じて指示するため、namespaceに宣言(このクラスからは変更しない)
 	enum DrawMode
 	{
-		Mode_BeforeStart = 0,//スタート前
-		Mode_JustBefore,//"Ready?","Go!"を出す、ゲーム開始直前
-		Mode_Playing,//ゲーム中
-		Mode_Finish,//"Finish"を出す
-		Mode_Practice,//フリープレイ時
+		Mode_BeforeStart = 0,	//スタート前
+		Mode_JustBefore,		//"Ready?","Go!"を出す、ゲーム開始直前
+		Mode_Playing,			//バトルシーンのゲーム中
+		Mode_PlayPause,			//バトルシーンのポーズ中
+		Mode_Finish,			//"Finish"を出す ゲーム終了
+		Mode_Practice,			//フリープレイのゲーム中
+		Mode_PracticePause,		//フリープレイのポーズ中
 		Mode_None,
 	};
 
@@ -74,6 +76,12 @@ private:
 	//敵(CPU)・プレイヤー2のアイコン
 	int hSecondIcon_;
 
+	//ポーズ画面
+	int hPauseMenu_;
+
+	//ポーズ画面の選択アイコン
+	int hPauseIcon_;
+
 	//----------スコア----------
 
 	//プレイヤー1のスコア
@@ -97,8 +105,8 @@ private:
 
 	enum DrawStartMode
 	{
-		S_StartReady = 0,//"Ready?"を表示している状態
-		S_StartGo,//"Go!"を表示している状態
+		S_StartReady = 0,	//"Ready?"を表示している状態
+		S_StartGo,			//"Go!"を表示している状態
 		S_MaxStartMode,
 	};
 	DrawStartMode DrawStart_;//DrawStartで呼ぶ状態遷移
@@ -112,13 +120,7 @@ private:
 	//イージング使用時のカウンター
 	float EasingCount_;
 
-	//----------ポーズ画面----------
-	
-	//ポーズ画面
-	int hPause_;
 
-	//ポーズ画面の選択アイコン
-	int hPauseIcon_;
 
 public:
 	HUD(GameObject* parent);
@@ -162,7 +164,7 @@ public:
 
 	//ポーズ画面選択アイコンの位置設定
 	//HUDからは変更せずに、BattleScene,Practiceシーンからセット
-	void SetPauseIcon(XMFLOAT3 _position);
+	void SetPauseIcon(float	_posY);
 
 	//----------以下は個別に指定する描画関数----------
 
@@ -212,6 +214,7 @@ public:
 	void DrawImGuiScore();
 	void DrawImGuiTimer();
 	void DrawImGuiMiniMap();
+	void DrawImGuiPause();
 
 private:
 	//以下の描画関数は他クラスから呼ばず、上記の描画関数から呼ぶ

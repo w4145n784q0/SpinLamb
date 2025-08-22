@@ -239,10 +239,8 @@ void BattleScene::Update()
 }
 
 void BattleScene::Draw()
-{
-	
+{	
 	//背景描画
-	//Image::SetAndDraw(hBackScreen_, this->transform_);
 	PlayScene::DrawBackScreen();
 
 	//今のBattleSceneの状態から、HUDクラスに描画するものを指示
@@ -257,6 +255,9 @@ void BattleScene::Draw()
 	case BattleScene::S_Now:
 		pHUD_->SetDrawMode(DrawMode::Mode_Playing);
 		break;
+	case BattleScene::S_Pause:
+		pHUD_->SetDrawMode(DrawMode::Mode_PlayPause);
+		break;
 	case BattleScene::S_After:
 		pHUD_->SetDrawMode(DrawMode::Mode_Finish);
 		break;
@@ -264,13 +265,6 @@ void BattleScene::Draw()
 		break;
 	}
 
-	//ポーズ中ならHUDクラスにポーズ画面描画を指示
-	if (SceneState_ == BaseScene::S_InActive)
-	{
-		pHUD_->DrawPause();
-		//Image::SetAndDraw(hBackScreen_, this->transform_);
-		//PlayScene::DrawPauseMenu();
-	}
 }
 
 void BattleScene::Release()
@@ -310,6 +304,7 @@ void BattleScene::Release()
 void BattleScene::UpdateActive()
 {
 	//BattleState_に応じて、各Update関数を呼ぶ
+	//BattleScene::S_PauseはActiveでは呼ばれない
 	switch (BattleState_)
 	{
 	case BattleScene::S_Before:
@@ -358,8 +353,9 @@ void BattleScene::UpdateActive()
 
 void BattleScene::UpdateInActive()
 {
-	//escキーかstartボタンで戻る
+	//Pause表示中の処理
 	PlayScene::UpdatePauseMenu();
+	PlayScene::WaitGotoPlay();
 }
 
 void BattleScene::UpdateTransition()
@@ -370,13 +366,22 @@ void BattleScene::UpdateTransition()
 	if (++SceneTransitionTimer_ > SceneShortTransition)
 	{
 
-		//SceneManagerのインスタンスからタイトルシーンへ
+		//SceneManagerのインスタンスを取得
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
-		pSceneManager->ChangeScene(SCENE_ID_RESULT);
+		if (BattleState_ == S_After)
+		{
+			//バトル終了していたらリザルトシーンへ
+			pSceneManager->ChangeScene(SCENE_ID_RESULT);
 
-		//Player,Enemyのスコアを渡す
-		pSceneManager->SetFirstCharaScore(FirstScore_);
-		pSceneManager->SetSecondCharaScore(SecondScore_);
+			//Player,Enemyのスコアを渡す
+			pSceneManager->SetFirstCharaScore(FirstScore_);
+			pSceneManager->SetSecondCharaScore(SecondScore_);
+		}
+		else
+		{
+			//S_Afterではない (=ポーズから中断した場合)はタイトルシーンへ
+			pSceneManager->ChangeScene(SCENE_ID_TITLE);
+		}
 
 		//シーン遷移用タイマーをリセット
 		SceneTransitionTimer_ = 0;
@@ -398,6 +403,24 @@ void BattleScene::UpdateTransition()
 	}
 }
 
+void BattleScene::GotoPause()
+{
+	//ポーズ画面状態へ移行
+	BattleState_ = S_Pause;
+
+	//タイマーを一旦止める
+	pGameTimer_->StopTimer();
+}
+
+void BattleScene::GotoPlay()
+{
+	//バトル中状態へ移行
+	BattleState_ = S_Now;
+
+	//タイマーを再開
+	pGameTimer_->StartTimer();
+}
+
 void BattleScene::UpdateBattleBefore()
 {
 	//説明文を出している状態
@@ -408,7 +431,7 @@ void BattleScene::UpdateBattleBefore()
 		//シーン遷移タイマーをリセット
 		StateCounter = 0;
 
-		//時間経過したら開始直前状態へ以降
+		//時間経過したら開始直前状態へ移行
 		BattleState_ = S_Ready;
 
 		//Ready?を表示する時間を渡す
@@ -425,7 +448,7 @@ void BattleScene::UpdateBattleReady()
 		//シーン遷移タイマーをリセット
 		StateCounter = 0;
 
-		//時間経過したらバトル中状態へ以降
+		//時間経過したらバトル中状態へ移行
 		BattleState_ = S_Now;
 
 		//時間経過でPlayer,Enemyに移動許可を出す
@@ -462,7 +485,7 @@ void BattleScene::UpdateBattle()
 	//GameTimerから時間切れになったことを受け取ったら終了状態へ
 	if (pGameTimer_->GetCurrentGameTime() <= 0)
 	{
-		//終了状態へ以降
+		//終了状態へ移行
 		BattleState_ = S_After;
 
 		//タイマーを止める
@@ -493,12 +516,14 @@ void BattleScene::UpdateBattle()
 	pHUD_->SetFirstScore(FirstScore_);
 	pHUD_->SetSecondScore(SecondScore_);
 
-	//escキーかstartボタンで一時停止
-	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	//escキーかstartボタンでポーズ画面へ
+	/*if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
 	{
 		SceneState_ = S_InActive;
+		BattleState_ = S_Pause;
 		pGameTimer_->StopTimer();
-	}
+	}*/
+	PlayScene::WaitGotoPause();
 }
 
 void BattleScene::UpdateBattleAfter()
@@ -513,11 +538,8 @@ void BattleScene::UpdateBattleAfter()
 		StateCounter = 0;
 
 		//シーン遷移エフェクト(ズームイン)を設定
-		//pTransitionEffect_->FadeOutStartWhite();
-		//pTransitionEffect_->SetTransitionTime(SceneShortTransition);
-
-		//シーン遷移エフェクト(ズームイン)を設定
-		SetTransitionEffect();
+		pTransitionEffect_->FadeOutStartWhite();
+		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
 	}
 }
 
@@ -527,7 +549,7 @@ void BattleScene::SetTransitionEffect()
 	//PlaySceneから上書き
 	if(pTransitionEffect_ != nullptr)
 	{
-		pTransitionEffect_->FadeOutStartWhite();
+		pTransitionEffect_->FadeOutStartBlack();
 		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
 	}
 }
@@ -536,7 +558,7 @@ void BattleScene::SetPauseIconY()
 {
 	if (pHUD_ != nullptr)
 	{
-		pHUD_->SetPauseIcon(TmpIconPos_);
+		pHUD_->SetPauseIcon(TmpIconPosY_);
 	}
 }
 

@@ -13,12 +13,14 @@ namespace
 }
 
 PlayScene::PlayScene(GameObject* parent)
-	:BaseScene(parent, "PlayScene"), hBackScreen_(-1), PauseSelect_(S_Continue), IconPosYArray({})
+	:BaseScene(parent, "PlayScene"), hBackScreen_(-1), PauseSelect_(S_Continue),
+	TmpIconPosY_(0.0f), IconPosYArray({})
 {
 }
 
 PlayScene::PlayScene(GameObject* parent, const std::string& name)
-	:BaseScene(parent, name), hBackScreen_(-1), PauseSelect_(S_Continue), IconPosYArray({})
+	:BaseScene(parent, name), hBackScreen_(-1), PauseSelect_(S_Continue),
+	TmpIconPosY_(0.0f), IconPosYArray({})
 {
 }
 
@@ -28,10 +30,12 @@ PlayScene::~PlayScene()
 
 void PlayScene::Initialize()
 {
+	SetPlaySceneCSV();
+
 	//各画像・サウンドの読み込み
 	//同じディレクトリ内からのパスは省略
 	//パスの一部を文字列にし、結合させる
-	std::string Play = "Image\\Play\\";
+	//std::string Play = "Image\\Play\\";
 
 	hBackScreen_ = Image::Load("Image\\Battle\\BackSky.jpg");
 	assert(hBackScreen_ >= 0);
@@ -104,23 +108,29 @@ void PlayScene::UpdatePauseMenu()
 	switch (PauseSelect_)
 	{
 	case PlayScene::S_Continue:
-		TmpIconPos_.y = IconPosYArray[S_Continue];
+		TmpIconPosY_ = IconPosYArray[S_Continue];
 		break;
 	case PlayScene::S_Exit:
-		TmpIconPos_.y = IconPosYArray[S_Exit];
+		TmpIconPosY_ = IconPosYArray[S_Exit];
 		break;
 	default:
 		break;
 	}
 
-	//決定ボタン(Pキー・B/Startボタン)を押したら
-	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	//TmpIconPos_.yの位置をHUDに渡す(処理は派生先で記述、ここではポインタは持たない)
+	SetPauseIconY();
+
+	//決定ボタン(Pキー・Bボタン)を押したら
+	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
 	{
 		
 		if (PauseSelect_ == S_Continue)
 		{
 			//"ゲームをつづける"を選択中なら即座に戻る
 			SceneState_ = S_Active;
+
+			//プレイ画面に行く際の処理(仮想関数なので派生先で処理を追加する)
+			GotoPlay();
 		}
 		if (PauseSelect_ == S_Exit)
 		{
@@ -130,6 +140,34 @@ void PlayScene::UpdatePauseMenu()
 			//継承先によって異なる遷移エフェクトを呼ぶ
 			SetTransitionEffect();
 		}
+	}
+
+	//WaitGotoPlay();
+}
+
+void PlayScene::WaitGotoPause()
+{
+	//escキーかstartボタンでポーズ画面へ
+	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	{
+		//シーンをポーズ状態にする(ここは共通)
+		SceneState_ = S_InActive;
+
+		//ポーズ画面に行く際の処理(仮想関数なので派生先で処理を追加する)
+		GotoPause();
+	}
+}
+
+void PlayScene::WaitGotoPlay()
+{
+	//ESCキー・Startボタンを押したらActiveに戻る
+	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	{
+		//シーンを通常状態にする(ここは共通)
+		SceneState_ = S_Active;
+
+		//プレイ画面に行く際の処理(仮想関数なので派生先で処理を追加する)
+		GotoPlay();
 	}
 }
 

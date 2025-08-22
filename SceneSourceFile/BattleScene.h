@@ -94,6 +94,11 @@ public:
 	void UpdateTransition() override;
 
 	//----------PlayScene‚ÌŒp³ŠÖ”----------
+
+	void GotoPause() override;
+
+	void GotoPlay() override;
+
 	void SetTransitionEffect() override;
 
 	void SetPauseIconY() override;

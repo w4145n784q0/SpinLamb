@@ -59,7 +59,7 @@ namespace
 	Transform SecondScoreOne;//プレイヤー2・Enemyの1の位
 
 	//ポーズ画面のトランスフォーム
-	Transform TransPause;
+	Transform TransPauseMenu;
 
 	//ポーズ画面の選択アイコンのトランスフォーム
 	Transform TransPauseIcon;
@@ -70,7 +70,7 @@ namespace
 	LogoBackTitle,LogoPractice,LogoExplanation,LogoStart,
 	LogoFinish, SplitLine, TenTime ,OneTime, MapIcon,FirstIcon,SecondIcon,
 	FirstScoreTen, FirstScoreOne, SecondScoreTen, SecondScoreOne,
-	TransPause, TransPauseIcon
+	TransPauseMenu, TransPauseIcon
 	};
 
 	//ナンバーハンドルの配列
@@ -114,7 +114,7 @@ HUD::HUD(GameObject* parent)
 	hStart_(-1),hReady_(-1),hGo_(-1),hFinish_(-1), hSplitLine_(-1),
 	hNumber0_(-1), hNumber1_(-1), hNumber2_(-1), hNumber3_(-1), hNumber4_(-1),
 	hNumber5_(-1), hNumber6_(-1), hNumber7_(-1), hNumber8_(-1), hNumber9_(-1),
-	hMap_(-1), hFirstIcon_(-1), hSecondIcon_(-1), hPause_(-1),hPauseIcon_(-1),
+	hMap_(-1), hFirstIcon_(-1), hSecondIcon_(-1), hPauseMenu_(-1),hPauseIcon_(-1),
 	FirstScore_(0), SecondScore_(0),
 	pGameTimer_(nullptr), pMiniMap_(nullptr), DrawMode_(Mode_None),DrawStart_(S_MaxStartMode),
 	ReadyTimer_(0), EasingCount_(0) 
@@ -207,8 +207,8 @@ void HUD::Initialize()
 	hSecondIcon_ = Image::Load(Image + MiniMap + "RedIcon.png");
 	assert(hSecondIcon_ >= 0);
 
-	hPause_ = Image::Load(Image + "Play\\Pause.png");
-	assert(hPause_ >= 0);
+	hPauseMenu_ = Image::Load(Image + "Play\\Pause.png");
+	assert(hPauseMenu_ >= 0);
 
 	hPauseIcon_ = Image::Load(Image + "GameMode\\SelectIcon.png");
 	assert(hPauseIcon_ >= 0);
@@ -262,6 +262,13 @@ void HUD::DrawImGui()
 		DrawImGuiTimer();
 	}
 	break;
+	case Mode_PlayPause:
+	{
+		DrawImGuiScore();
+		DrawImGuiTimer();
+		DrawImGuiPause();
+	}
+	break;
 	case Mode_Finish:
 	{
 		DrawImGuiTimer();
@@ -307,6 +314,13 @@ void HUD::DrawFullScreen()
 		DrawTimer();
 	}
 	break;
+	case Mode_PlayPause:
+	{
+		DrawScore();
+		DrawTimer();
+		DrawPause();
+	}
+	break;
 	case Mode_Finish:
 	{
 		DrawTimer();
@@ -338,7 +352,7 @@ void HUD::SetHUDCSV()
 		"backtitle","practice","explanation","start","finish","split",
 		"tentime","onetime","minimap","firsticon", "secondicon",
 		"firstscoreten","firstscoreone","secondscoreten","secondscoreone",
-		"pause","pauseicon"
+		"pausemenu","pauseicon"
 	};
 
 	//まとめて初期化
@@ -363,9 +377,10 @@ void HUD::SetHUDCSV()
 	TimeDuration = EasingData[i_TimeDuration];
 }
 
-void HUD::SetPauseIcon(XMFLOAT3 _position)
+void HUD::SetPauseIcon(float	_posY)
 {
-	TransPauseIcon.position_ = _position;
+	//Y座標だけをトランスフォームに渡す(変わるのはY座標の位置のみ)
+	TransPauseIcon.position_.y = _posY;
 }
 
 void HUD::DrawPracticeLogo()
@@ -476,7 +491,7 @@ void HUD::DrawSplitLine()
 void HUD::DrawPause()
 {
 	//ポーズ画面と選択アイコンの描画
-	Image::SetAndDraw(hPause_, TransPause);
+	Image::SetAndDraw(hPauseMenu_, TransPauseMenu);
 	Image::SetAndDraw(hPauseIcon_, TransPauseIcon);
 }
 
@@ -781,6 +796,70 @@ void HUD::DrawImGuiMiniMap()
 
 		ImGui::Text("SecondIconX:%.3f", SecondIcon.position_.x);
 		ImGui::Text("SecondIconY:%.3f", SecondIcon.position_.y);
+
+		ImGui::TreePop();
+	}
+#endif
+}
+
+void HUD::DrawImGuiPause()
+{
+#ifdef _DEBUG
+	if (ImGui::TreeNode("Pause"))
+	{
+		if (ImGui::TreeNode("PauseMenu"))
+		{
+			if (ImGui::TreeNode("PauseMenuPosition"))
+			{
+				ImGui::SliderFloat("PauseMenuPositionX", &TransPauseMenu.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("PauseMenuPositionY", &TransPauseMenu.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("PauseMenuRotate"))
+			{
+				ImGui::InputFloat("PauseMenuRotateX", &TransPauseMenu.rotate_.x, ZeroPointOne);
+				ImGui::InputFloat("PauseMenuRotateY", &TransPauseMenu.rotate_.y, ZeroPointOne);
+				ImGui::InputFloat("PauseMenuRotateZ", &TransPauseMenu.rotate_.z, ZeroPointOne);
+
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("PauseMenuScale"))
+			{
+				ImGui::InputFloat("PauseMenuScaleX", &TransPauseMenu.scale_.x, ZeroPointOne);
+				ImGui::InputFloat("PauseMenuScaleY", &TransPauseMenu.scale_.y, ZeroPointOne);
+
+				ImGui::TreePop();
+			}
+
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("PauseIcon"))
+		{
+			if (ImGui::TreeNode("PauseIconPosition"))
+			{
+				ImGui::SliderFloat("PauseIconPositionX", &TransPauseIcon.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("PauseIconPositionY", &TransPauseIcon.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("PauseIconRotate"))
+			{
+				ImGui::InputFloat("PauseIconRotateX", &TransPauseIcon.rotate_.x, ZeroPointOne);
+				ImGui::InputFloat("PauseIconRotateY", &TransPauseIcon.rotate_.y, ZeroPointOne);
+				ImGui::InputFloat("PauseIconRotateZ", &TransPauseIcon.rotate_.z, ZeroPointOne);
+
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("PauseIconScale"))
+			{
+				ImGui::InputFloat("PauseIconScaleX", &TransPauseIcon.scale_.x, ZeroPointOne);
+				ImGui::InputFloat("PauseIconScaleY", &TransPauseIcon.scale_.y, ZeroPointOne);
+
+				ImGui::TreePop();
+			}
+
+			ImGui::TreePop();
+		}
 
 		ImGui::TreePop();
 	}
