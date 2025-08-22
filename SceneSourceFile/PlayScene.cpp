@@ -1,6 +1,7 @@
 #include "PlayScene.h"
 #include"../Engine/Image.h"
 #include"../Engine/Input.h"
+#include"../Engine/Audio.h"
 
 namespace
 {
@@ -36,9 +37,20 @@ void PlayScene::Initialize()
 	//同じディレクトリ内からのパスは省略
 	//パスの一部を文字列にし、結合させる
 	std::string Play = "Image\\Play\\";
+	std::string Sound = "Sound\\";
+	std::string SE = "SE\\";
 
 	hBackScreen_ = Image::Load(Play + "BackSky.jpg");
 	assert(hBackScreen_ >= 0);
+
+	hSoundPause_ = Audio::Load(Sound + SE + "Pause.wav", false, Audio::GetSelectNum());
+	assert(hSoundPause_ >= 0);
+
+	hSoundSelect_ = Audio::Load(Sound + SE + "Select.wav", false, Audio::GetSelectNum());
+	assert(hSoundSelect_ >= 0);
+
+	hSoundExit_ = Audio::Load(Sound + SE + "Cancel.wav", false, Audio::GetCancelNum());
+	assert(hSoundExit_ >= 0);
 
 	//各モードをリストに入れる
 	PauseSelectList_ = { S_Continue,S_Exit };
@@ -87,6 +99,8 @@ void PlayScene::UpdatePauseMenu()
 		}
 		PauseSelect_ = *Pauseitr;
 
+		//選択SE再生
+		Audio::Play(hSoundSelect_);
 
 	}
 	if (Input::IsKeyDown(DIK_DOWN) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN)
@@ -102,6 +116,8 @@ void PlayScene::UpdatePauseMenu()
 		}
 		PauseSelect_ = *Pauseitr;
 
+		//選択SE再生
+		Audio::Play(hSoundSelect_);
 	}
 
 	//選択アイコンの位置を調整
@@ -129,6 +145,9 @@ void PlayScene::UpdatePauseMenu()
 			//"ゲームをつづける"を選択中なら即座に戻る
 			SceneState_ = S_Active;
 
+			//ポーズ画面SE再生
+			Audio::Play(hSoundPause_);
+
 			//プレイ画面に行く際の処理(仮想関数なので派生先で処理を追加する)
 			GotoPlay();
 		}
@@ -137,6 +156,10 @@ void PlayScene::UpdatePauseMenu()
 			//"ゲームをやめる"を選択中なら遷移状態へ
 			SceneState_ = S_Transition;
 
+			//タイトルに戻るSE再生
+			Audio::Play(hSoundExit_);
+
+			//タイトルに戻る際の処理(仮想関数なので派生先で処理を追加する)
 			GotoTitle();
 		}
 	}
@@ -153,6 +176,9 @@ void PlayScene::WaitGotoPause()
 		//シーンをポーズ状態にする(ここは共通)
 		SceneState_ = S_InActive;
 
+		//ポーズ画面SE再生
+		Audio::Play(hSoundPause_);
+
 		//ポーズ画面に行く際の処理(仮想関数なので派生先で処理を追加する)
 		GotoPause();
 	}
@@ -165,6 +191,9 @@ void PlayScene::WaitGotoPlay()
 	{
 		//シーンを通常状態にする(ここは共通)
 		SceneState_ = S_Active;
+
+		//ポーズ画面SE再生
+		Audio::Play(hSoundPause_);
 
 		//プレイ画面に行く際の処理(仮想関数なので派生先で処理を追加する)
 		GotoPlay();

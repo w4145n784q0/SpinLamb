@@ -50,5 +50,7 @@ namespace Audio
 	int GetAttackNum();
 
 	int GetCollisionNum();
+
+	int GetJumpNum();
 };
 

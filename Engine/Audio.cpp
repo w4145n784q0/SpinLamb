@@ -19,6 +19,7 @@ namespace Audio
 		i_Charge,
 		i_Attack,
 		i_Collision,
+		i_Jump,
 	};
 
 	//SEを鳴らす回数(効果音は同じものを一度に複数鳴らすことを想定)
@@ -26,16 +27,17 @@ namespace Audio
 	//音そのものの読み込みは各クラスで行い、シーン遷移ごとに解放
 	
 	//----------汎用的に使うSE----------
-	int StartSoundNum_ = 0;//スタート音を同時に鳴らす回数
-	int SelectSoundNum_ = 0;//選択音を同時に鳴らす回数
-	int DecideSoundNum_ = 0;//決定音を同時に鳴らす回数
-	int CancelSoundNum_ = 0;//キャンセル音を同時に鳴らす回数
+	int StartSoundNum_ = 0;		//スタート音を同時に鳴らす回数
+	int SelectSoundNum_ = 0;	//選択音を同時に鳴らす回数
+	int DecideSoundNum_ = 0;	//決定音を同時に鳴らす回数
+	int CancelSoundNum_ = 0;	//キャンセル音を同時に鳴らす回数
 
 	//----------ゲームプレイ中のSE----------
-	int WhistleSoundNum_ = 0;//ホイッスル音を同時に鳴らす回数
-	int	ChargeSoundNum_ = 0;//チャージ音を同時に鳴らす回数
-	int AttackSoundNum_ = 0;//攻撃音を同時に鳴らす回数
-	int CollisionSoundNum_ = 0;//ヒット音を同時に鳴らす回数
+	int WhistleSoundNum_ = 0;	//ホイッスル音を同時に鳴らす回数
+	int	ChargeSoundNum_ = 0;	//チャージ音を同時に鳴らす回数
+	int AttackSoundNum_ = 0;	//攻撃音を同時に鳴らす回数
+	int CollisionSoundNum_ = 0;	//ヒット音を同時に鳴らす回数
+	int JumpSoundNum_ = 0;		//ジャンプ音を同時に鳴らす回数
 
 	//XAudio本体
 	IXAudio2* pXAudio = nullptr;
@@ -255,6 +257,7 @@ void Audio::InitCSVAudio()
 	ChargeSoundNum_ = static_cast<int>(SoundData[i_Charge]);
 	AttackSoundNum_ = static_cast<int>(SoundData[i_Attack]);
 	CollisionSoundNum_ = static_cast<int>(SoundData[i_Collision]);
+	JumpSoundNum_ = static_cast<int>(SoundData[i_Jump]);
 }
 
 int Audio::GetStartNum()
@@ -295,4 +298,9 @@ int Audio::GetAttackNum()
 int Audio::GetCollisionNum()
 {
 	return CollisionSoundNum_;
+}
+
+int Audio::GetJumpNum()
+{
+	return JumpSoundNum_;
 }

@@ -74,12 +74,16 @@ public:
 
 	//----------PlaySceneの継承関数----------
 
+	//ポーズ画面に移動する
 	void GotoPause() override;
 
+	//通常状態に移動する
 	void GotoPlay() override;
 
+	//タイトルに移動する
 	void GotoTitle() override;
 
+	//選択アイコンの位置をセット
 	void SetPauseIconY() override;
 
 	//CSVから必要パラメータを読み込みする

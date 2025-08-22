@@ -40,7 +40,7 @@ public:
 	virtual void UpdateActive() = 0;
 
 	//止めているときの処理
-	virtual void UpdateInActive() {};
+	virtual void UpdateInActive() = 0;
 
 	//シーン遷移中の処理(シーン遷移中の演出などに使用)
 	virtual void UpdateTransition() = 0;

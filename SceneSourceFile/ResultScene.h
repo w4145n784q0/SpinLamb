@@ -87,6 +87,9 @@ public:
 	//通常の処理
 	void UpdateActive() override;
 
+	//止めているときの処理(このシーンではS_InActiveを使用しないので空)
+	void UpdateInActive() override {};
+
 	//シーン遷移中の処理
 	void UpdateTransition() override;
 };

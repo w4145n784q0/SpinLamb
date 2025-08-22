@@ -14,6 +14,17 @@ protected:
 	//背景
 	int hBackScreen_;
 
+	//----------サウンドハンドル----------
+
+	//ポーズ画面を開いた・閉じた際
+	int hSoundPause_;
+
+	//選択時のSE
+	int hSoundSelect_;
+
+	//ポーズ画面からゲームを終了した際
+	int hSoundExit_;
+
 	//----------トランスフォーム----------
  
 	//背景のトランスフォーム

@@ -19,7 +19,8 @@ protected:
     //----------サウンドハンドル----------
     int hSoundcharge_ = -1; //チャージ音のハンドル
     int hSoundattack_ = -1; //突撃音のハンドル
-    int hSoundCollision_ = -1;//接触音
+    int hSoundCollision_ = -1;//接触音のハンドル
+    int hSoundJump_ = -1;//ジャンプ音のハンドル
 
     //----------初期状態----------
     struct InitializeParam
