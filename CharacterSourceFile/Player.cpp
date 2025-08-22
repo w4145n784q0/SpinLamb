@@ -199,7 +199,7 @@ void Player::PlayerRun()
 
 #ifdef _DEBUG
 
-	//デバッグ中のみescキーで初期位置に戻る
+	//デバッグ中のみEnterキーで初期位置に戻る
 	if (Input::IsKeyDown(DIK_RETURN))
 	{
 		SetStartPosition();

@@ -20,13 +20,13 @@ private:
     enum EffectType {
 
         NoneEffect = 0,
-        S_FadeOutBlack,//黒くフェードアウト
-        S_FadeInBlack,//黒くフェードイン
-        S_FadeOutWhite,//白くフェードアウト
-        S_FadeInWhite,//白くフェードイン
-        S_SlideInLTR,//スライドイン
-        S_ZoomIn,//ズームイン
-        S_ZoomOut,//ズームアウト
+        S_FadeOutBlack,     //黒くフェードアウト
+        S_FadeInBlack,      //黒くフェードイン
+        S_FadeOutWhite,     //白くフェードアウト
+        S_FadeInWhite,      //白くフェードイン
+        S_SlideInLTR,       //スライドイン
+        S_ZoomIn,           //ズームイン
+        S_ZoomOut,          //ズームアウト
     };
     EffectType EffectType_;
 
@@ -35,23 +35,23 @@ private:
     //フェードイン/アウト用
     struct FadeInOut
     {
-        Transform FadeTransform_;//フェードイン/アウト用トランスフォーム
-        int AlphaValue_;//画像の透明度
+        Transform FadeTransform_;   //フェードイン/アウト用トランスフォーム
+        int AlphaValue_;            //画像の透明度
     };
     FadeInOut FadeEffect_;
 
     //スライドイン/アウト用
     struct SlideInOut
     {
-        Transform SlideTransform_;//スライドイン/アウト用トランスフォーム
+        Transform SlideTransform_;  //スライドイン/アウト用トランスフォーム
     };
     SlideInOut SlideEffect_;
 
     //ズームイン/アウト処理
     struct ZoomInOut
     {
-        Transform ZoomTransform_;//ズームイン/アウト用トランスフォーム
-        float MaxZoomValue_;//ズーム拡大最大値
+        Transform ZoomTransform_;   //ズームイン/アウト用トランスフォーム
+        float MaxZoomValue_;        //ズーム拡大最大値
     };
     ZoomInOut ZoomEffect_;
 

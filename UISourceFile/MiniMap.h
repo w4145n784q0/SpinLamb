@@ -1,7 +1,7 @@
 #pragma once
 #include "../Engine/GameObject.h"
 
-//画面右下のミニマップを表示するクラス
+//画面右下のミニマップの計算を行うクラス(描画はHUDで行う)
 class MiniMap :
 	public GameObject
 {

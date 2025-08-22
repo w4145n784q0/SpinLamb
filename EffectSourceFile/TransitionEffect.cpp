@@ -75,40 +75,8 @@ void TransitionEffect::Update()
 
 void TransitionEffect::Draw()
 {
-	////EffectType_から行う描画を指示
-	//switch (EffectType_)
-	//{
-	//case TransitionEffect::S_FadeOutBlack:
-	//case TransitionEffect::S_FadeInBlack:
-	//{
-	//	//黒いフェードイン/アウト描画
-	//	Image::SetAlphaAndDraw(hFadeBlack_, FadeEffect_.AlphaValue_, FadeEffect_.FadeTransform_);
-	//}
-	//	break;
-	//case TransitionEffect::S_FadeOutWhite:
-	//case TransitionEffect::S_FadeInWhite:
-	//{
-	//	//白いフェードイン/アウト描画
-	//	Image::SetAlphaAndDraw(hFadeWhite_, FadeEffect_.AlphaValue_, FadeEffect_.FadeTransform_);
-	//}
-	//	break;
-	//case TransitionEffect::S_SlideInLTR:
-	//{
-	//	//左から右にスライドインする描画
-	//	Image::SetAndDraw(hFadeBlack_, SlideEffect_.SlideTransform_);
-	//}
-	//	break;
-	//case TransitionEffect::S_ZoomIn:
-	//case TransitionEffect::S_ZoomOut:
-	//{
-	//	//ズームイン/アウトする描画
-	//	Image::SetAndDraw(hZoomSheep_, ZoomEffect_.ZoomTransform_);
-	//}
-	//	break;
-	//default:
-	//	break;
-	//}
-
+	//ここでは描画は行わない
+	//GameViewから直接指示される際に描画
 }
 
 void TransitionEffect::Release()
@@ -117,6 +85,8 @@ void TransitionEffect::Release()
 
 void TransitionEffect::DrawDelay()
 {
+	//GameViewからこの描画関数が呼び出される(最終的にこれらが描画されるようにするため)
+
 	//EffectType_から行う描画を指示
 	switch (EffectType_)
 	{

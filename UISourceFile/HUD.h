@@ -215,7 +215,7 @@ public:
 
 private:
 	//以下の描画関数は他クラスから呼ばず、上記の描画関数から呼ぶ
-	//Draw -> DrawStart -> DrawReady DrawGo
+	//Draw → DrawStart → DrawReady DrawGo
 
 	void DrawReady();
 	void DrawGo();
