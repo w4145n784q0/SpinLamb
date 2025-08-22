@@ -18,8 +18,6 @@ namespace
 	};
 
 	//----------画像描画用トランスフォーム----------
-	//"タイトルに戻ります"
-	Transform LogoBackTitle;
 
 	//"練習モード"
 	Transform LogoPractice;
@@ -67,7 +65,7 @@ namespace
 	//画像用トランスフォームを配列に入れる
 	//初期化の際に使用する
 	std::vector<std::reference_wrapper<Transform>> ImageArray = {
-	LogoBackTitle,LogoPractice,LogoExplanation,LogoStart,
+	LogoPractice,LogoExplanation,LogoStart,
 	LogoFinish, SplitLine, TenTime ,OneTime, MapIcon,FirstIcon,SecondIcon,
 	FirstScoreTen, FirstScoreOne, SecondScoreTen, SecondScoreOne,
 	TransPauseMenu, TransPauseIcon
@@ -110,7 +108,7 @@ namespace
 }
 
 HUD::HUD(GameObject* parent)
-	:GameObject(parent, "HUD"), hBackTitleLogo_(-1), hPracticeNow_(-1), hGameExplanation_(-1),
+	:GameObject(parent, "HUD"), hPracticeNow_(-1), hGameExplanation_(-1),
 	hStart_(-1),hReady_(-1),hGo_(-1),hFinish_(-1), hSplitLine_(-1),
 	hNumber0_(-1), hNumber1_(-1), hNumber2_(-1), hNumber3_(-1), hNumber4_(-1),
 	hNumber5_(-1), hNumber6_(-1), hNumber7_(-1), hNumber8_(-1), hNumber9_(-1),
@@ -139,13 +137,14 @@ void HUD::Initialize()
 	std::string Image = "Image\\";
 	std::string Practice = "Practice\\";
 	std::string Battle = "Battle\\";
+	std::string Play = "Play\\";
 	std::string Number = "number\\";
 	std::string MiniMap = "MiniMap\\";
 
 
 	//各画像の読み込み
-	hBackTitleLogo_ = Image::Load(Image + Practice + "BackTitleLogo.png");
-	assert(hBackTitleLogo_ >= 0);
+//	hBackTitleLogo_ = Image::Load(Image + Practice + "BackTitleLogo.png");
+//	assert(hBackTitleLogo_ >= 0);
 
 	hPracticeNow_ = Image::Load(Image + Practice + "PracticeLogo.png");
 	assert(hPracticeNow_ >= 0);
@@ -165,7 +164,7 @@ void HUD::Initialize()
 	hFinish_ = Image::Load(Image + Battle + "FinishLogo.png");
 	assert(hFinish_ >= 0);
 
-	hSplitLine_ = Image::Load(Image + Battle + "ViewLine.png");
+	hSplitLine_ = Image::Load(Image + Play + "ViewLine.png");
 	assert(hSplitLine_ >= 0);
 
 	hNumber0_ = Image::Load(Image + Number + "Number0.png");
@@ -277,8 +276,16 @@ void HUD::DrawImGui()
 	}
 	break;
 	case Mode_Practice:
+	{
 		DrawImGuiPracticeLogo();
+	}
 		break;
+	case Mode_PracticePause:
+	{
+		DrawImGuiPracticeLogo();
+		DrawImGuiPause();
+	}
+	break;
 	default:
 		break;
 	}
@@ -330,10 +337,16 @@ void HUD::DrawFullScreen()
 	}
 	break;
 	case Mode_Practice:
+	{
 		DrawPracticeLogo();
-		break;
-	case Mode_None:
-		break;
+	}
+	break;
+	case Mode_PracticePause:
+	{
+		DrawPracticeLogo();
+		DrawPause();
+	}
+	break;
 	default:
 		break;
 	}
@@ -350,7 +363,7 @@ void HUD::SetHUDCSV()
 
 	//csvファイル(HUDTransformData.csv)の各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {
-		"backtitle","practice","explanation","start","finish","split",
+		"practice","explanation","start","finish","split",
 		"tentime","onetime","minimap","firsticon", "secondicon",
 		"firstscoreten","firstscoreone","secondscoreten","secondscoreone",
 		"pausemenu","pauseicon"
@@ -386,9 +399,6 @@ void HUD::SetPauseIcon(float	_posY)
 
 void HUD::DrawPracticeLogo()
 {
-	//"タイトルに戻ります"ロゴ描画
-	Image::SetAndDraw(hBackTitleLogo_, LogoBackTitle);
-
 	//"練習モード"ロゴ描画
 	Image::SetAndDraw(hPracticeNow_, LogoPractice);
 }
@@ -629,19 +639,12 @@ void HUD::DrawImGuiPracticeLogo()
 	{
 		if (ImGui::TreeNode("PracticeLogoPosition"))
 		{
-			ImGui::SliderFloat("BackTitle_PositionX", &LogoBackTitle.position_.x, Image::LeftEdge, Image::RightEdge);
-			ImGui::SliderFloat("BackTitle_PositionY", &LogoBackTitle.position_.y, Image::UpEdge, Image::DownEdge);
-
 			ImGui::SliderFloat("Practice_PositionX", &LogoPractice.position_.x, Image::LeftEdge, Image::RightEdge);
 			ImGui::SliderFloat("Practice_PositionY", &LogoPractice.position_.y, Image::UpEdge, Image::DownEdge);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("PracticeLogoRotate"))
 		{
-			ImGui::InputFloat("BackTitle_RotateX", &LogoBackTitle.rotate_.x, ZeroPointOne);
-			ImGui::InputFloat("BackTitle_RotateY", &LogoBackTitle.rotate_.y, ZeroPointOne);
-			ImGui::InputFloat("BackTitle_RotateZ", &LogoBackTitle.rotate_.z, ZeroPointOne);
-
 			ImGui::InputFloat("Practice_RotateX", &LogoPractice.rotate_.x, ZeroPointOne);
 			ImGui::InputFloat("Practice_RotateY", &LogoPractice.rotate_.y, ZeroPointOne);
 			ImGui::InputFloat("Practice_RotateZ", &LogoPractice.rotate_.z, ZeroPointOne);
@@ -649,9 +652,6 @@ void HUD::DrawImGuiPracticeLogo()
 		}
 		if (ImGui::TreeNode("PracticeLogoScale"))
 		{
-			ImGui::InputFloat("BackTitle_ScaleX", &LogoBackTitle.scale_.x, ZeroPointOne);
-			ImGui::InputFloat("BackTitle_ScaleY", &LogoBackTitle.scale_.y, ZeroPointOne);
-
 			ImGui::InputFloat("Practice_ScaleX", &LogoPractice.scale_.x, ZeroPointOne);
 			ImGui::InputFloat("Practice_ScaleY", &LogoPractice.scale_.y, ZeroPointOne);
 			ImGui::TreePop();

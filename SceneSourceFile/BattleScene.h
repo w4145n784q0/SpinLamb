@@ -14,10 +14,6 @@ class BattleScene :
 	public PlayScene, public IGameObserver
 {
 private:
-	//----------画像ハンドル----------
-
-	//タイトル画像
-	int hBackScreen_;
 
 	//----------サウンドハンドル----------
 
@@ -48,6 +44,7 @@ private:
 	 
 	//バトルシーンの状態遷移
 	//これらの値に応じて各Update関数を呼び出す
+	//そのほか描画指示にも使用する
 	enum BattleState
 	{
 		S_Before = 0,//開始前説明
@@ -55,7 +52,7 @@ private:
 		S_Now,       //バトル中
 		S_Pause,     //ポーズ中
 		S_After,     //終了後
-		MaxMode
+		MaxBattleMode
 	};
 	BattleState BattleState_;
 

@@ -6,17 +6,13 @@
 #include"../UISourceFile/MiniMap.h"
 #include"../UISourceFile/HUD.h"
 #include"../EffectSourceFile/TransitionEffect.h"
+#include"PlayScene.h"
 
 //"フリープレイ"から始まる練習モードシーン
 class PracticeScene :
-    public BaseScene
+    public PlayScene
 {
 private:
-
-	//----------画像ハンドル----------
-
-	//タイトル画像
-	int hBackScreen_;
 
 	//----------サウンドハンドル----------
 	int hSoundPractice_; 
@@ -37,8 +33,18 @@ private:
 	//生成された敵(CPU)を登録する配列
 	std::vector<Enemy*> ActiveEnemys_;
 
-	//長押しでタイトルに遷移するカウント
-	int Press_;
+	//----------状態遷移----------
+
+	//練習シーンの状態遷移
+	//これらの値に応じて描画指示
+	//PracticeSceneではこのシーン特有のUpdate関数はない
+	enum PracticeState
+	{
+		S_Now = 0,		//練習中
+		S_Pause,		//ポーズ中
+		MaxPracticeMode
+	};
+	PracticeState PracticeState_;
 
 public:
 	PracticeScene(GameObject* parent);
@@ -60,8 +66,21 @@ public:
 	//通常の処理
 	void UpdateActive() override;
 
+	//止めているときの処理
+	void UpdateInActive() override;
+
 	//シーン遷移中の処理
 	void UpdateTransition() override;
+
+	//----------PlaySceneの継承関数----------
+
+	void GotoPause() override;
+
+	void GotoPlay() override;
+
+	void GotoTitle() override;
+
+	void SetPauseIconY() override;
 
 	//CSVから必要パラメータを読み込みする
 	void SetCSVPractice();

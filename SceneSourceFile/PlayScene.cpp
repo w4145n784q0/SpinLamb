@@ -35,9 +35,9 @@ void PlayScene::Initialize()
 	//各画像・サウンドの読み込み
 	//同じディレクトリ内からのパスは省略
 	//パスの一部を文字列にし、結合させる
-	//std::string Play = "Image\\Play\\";
+	std::string Play = "Image\\Play\\";
 
-	hBackScreen_ = Image::Load("Image\\Battle\\BackSky.jpg");
+	hBackScreen_ = Image::Load(Play + "BackSky.jpg");
 	assert(hBackScreen_ >= 0);
 
 	//各モードをリストに入れる
@@ -141,7 +141,8 @@ void PlayScene::UpdatePauseMenu()
 		}
 	}
 
-	//WaitGotoPlay();
+	//S_Activeへの遷移を待つ(キーボードかボタン操作によって遷移)
+	WaitGotoPlay();
 }
 
 void PlayScene::WaitGotoPause()

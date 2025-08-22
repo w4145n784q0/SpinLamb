@@ -14,7 +14,6 @@ protected:
 	//背景
 	int hBackScreen_;
 
-
 	//----------トランスフォーム----------
  
 	//背景のトランスフォーム
@@ -71,6 +70,8 @@ public:
 
 	//プレイ画面に遷移を待つ処理(S_InActiveに記述)
 	void WaitGotoPlay();
+
+	//以下は仮想関数で、継承先で別途処理をするものを記述
 
 	//ポーズ画面に移動する
 	virtual void GotoPause() {};

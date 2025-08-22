@@ -14,8 +14,8 @@ protected:
 	//これらの値に応じて各Update関数を呼び出す
 	enum SceneState
 	{
-		S_Active = 0,//通常
-		S_InActive,  //止めている
+		S_Active = 0,//通常のプレイ状態
+		S_InActive,  //止めている状態
 		S_Transition,//次のシーンに遷移中
 		S_MaxScene
 	};

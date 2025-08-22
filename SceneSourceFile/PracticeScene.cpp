@@ -20,11 +20,11 @@ namespace
 }
 
 PracticeScene::PracticeScene(GameObject* parent)
-	:BaseScene(parent,"PracticeScene"),
-	hBackScreen_(-1),hSoundPractice_(-1),
+	:PlayScene(parent,"PracticeScene"),
+	hSoundPractice_(-1),
 	pPlayer1_(nullptr), pPlayer2_(nullptr), pEnemy_(nullptr), pHUD_(nullptr),
 	pTransitionEffect_(nullptr), pMiniMap_(nullptr),
-	ActivePlayers_({}), ActiveEnemys_({}),Press_(0)
+	ActivePlayers_({}), ActiveEnemys_({}),PracticeState_(S_Now)
 {
 }
 
@@ -34,6 +34,9 @@ PracticeScene::~PracticeScene()
 
 void PracticeScene::Initialize()
 {
+	//プレイシーン(基底クラス)の初期化を行う
+	PlayScene::Initialize();
+
 	//csvからパラメータ読み込み
 	SetCSVPractice();
 
@@ -42,6 +45,8 @@ void PracticeScene::Initialize()
 
 	//StageManagerから各移動制限の値を取得
 	StageManager* pStageManager = (StageManager*)FindObject("StageManager");
+	assert(pStageManager != nullptr);
+
 	float North = pStageManager->GetNorthEnd();
 	float South = pStageManager->GetSouthEnd();
 	float West = pStageManager->GetWestEnd();
@@ -165,26 +170,29 @@ void PracticeScene::Initialize()
 
 	//インスタンスを初期化
 	pMiniMap_ = (MiniMap*)FindObject("MiniMap");
-	pHUD_ = (HUD*)FindObject("HUD");
-	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
+	assert(pMiniMap_ != nullptr);
 
-	//HUDにポインタを渡す
+	pHUD_ = (HUD*)FindObject("HUD");
+	assert(pHUD_ != nullptr);
+
+	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
+	assert(pTransitionEffect_ != nullptr);
+
+	//MiniMapのポインタを渡す
+	//HUDクラスと同じポインタを渡すことで値の相違を防ぐ
 	pHUD_->SetMiniMapPointer(pMiniMap_);
 
 	//GameViewにHUDのポインタを渡す
-	GameView::SetHUD(pHUD_);
 
+	GameView::SetHUD(pHUD_);
+	GameView::SetTransitionEffect(pTransitionEffect_);
 
 	//各画像・サウンドの読み込み
 
 	//同じディレクトリ内からのパスは省略
 	//パスの一部を文字列にし、結合させる
-	std::string Battle = "Image\\Battle\\";
 	std::string Sound = "Sound\\";
 	std::string BGM = "BGM\\";
-
-	hBackScreen_ = Image::Load(Battle + "BackSky.jpg");
-	assert(hBackScreen_ >= 0);
 
 	hSoundPractice_ = Audio::Load(Sound + BGM + "Practice.wav", true);
 	assert(hSoundPractice_ >= 0);
@@ -198,38 +206,25 @@ void PracticeScene::Update()
 	//BaseSceneの更新処理を呼ぶ
 	//UpdateActive,UpdateTransitionは継承先の関数が呼ばれる
 	BaseScene::Update();
-
-	//登録されたプレイヤー・CPUを更新
-	//プレイヤーが複数存在する場合を想定して
-	//Battle,Practiceシーンから動かす
-	for (auto player : ActivePlayers_)
-	{
-		player->PlayerRun();
-	}
-	for (auto enemy : ActiveEnemys_)
-	{
-		enemy->EnemyRun();
-	}
-
-	//ミニマップの位置を更新
-	pMiniMap_->SetOriginalFirstPos(pPlayer1_->GetPosition());
-	if (pPlayer2_ != nullptr)
-	{
-		pMiniMap_->SetOriginalSecondPos(pPlayer2_->GetPosition());
-	}
-	else if (pEnemy_ != nullptr)
-	{
-		pMiniMap_->SetOriginalSecondPos(pEnemy_->GetPosition());
-	}
 }
 
 void PracticeScene::Draw()
 {
 	//背景描画
-	Image::SetAndDraw(hBackScreen_, this->transform_);
+	PlayScene::DrawBackScreen();
 
-	//HUDクラスに練習モード中であることを描画指示
-	pHUD_->SetDrawMode(Mode_Practice);
+	//今のPracticeStateの状態から、HUDクラスに描画するものを指示
+	switch (PracticeState_)
+	{
+	case PracticeScene::S_Now:
+		pHUD_->SetDrawMode(Mode_Practice);
+		break;
+	case PracticeScene::S_Pause:
+		pHUD_->SetDrawMode(Mode_PracticePause);
+		break;
+	default:
+		break;
+	}
 
 }
 
@@ -265,30 +260,46 @@ void PracticeScene::Release()
 
 void PracticeScene::UpdateActive()
 {
-	//Pキー・SL・SRボタン長押しでタイトルに戻る
-	if (Input::IsKey(DIK_P) || Input::IsPadButton(XINPUT_GAMEPAD_RIGHT_SHOULDER) || Input::IsPadButton(XINPUT_GAMEPAD_LEFT_SHOULDER))
+	//通常の動いている状態
+
+	//登録されたプレイヤー・CPUを更新
+	//プレイヤーが複数存在する場合を想定して
+	//Battle,Practiceシーンから動かす
+	for (auto player : ActivePlayers_)
 	{
-		Press_++;
+		player->PlayerRun();
 	}
-	else
+	for (auto enemy : ActiveEnemys_)
 	{
-		Press_ = 0;
+		enemy->EnemyRun();
 	}
 
-	
-	if (Press_ >= SceneTransition)
+	//ミニマップの位置を更新
+	pMiniMap_->SetOriginalFirstPos(pPlayer1_->GetPosition());
+	if (pPlayer2_ != nullptr)
 	{
-		//シーン遷移状態へ
-		SceneState_ = S_Transition;
-
-		//シーン遷移エフェクト(フェードアウト)を設定
-		pTransitionEffect_->FadeOutStartBlack();
-		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
+		pMiniMap_->SetOriginalSecondPos(pPlayer2_->GetPosition());
 	}
+	else if (pEnemy_ != nullptr)
+	{
+		pMiniMap_->SetOriginalSecondPos(pEnemy_->GetPosition());
+	}
+
+	PlayScene::WaitGotoPause();
+}
+
+void PracticeScene::UpdateInActive()
+{	
+	//画面を止めている状態
+
+	//Pause表示中の処理
+	PlayScene::UpdatePauseMenu();
 }
 
 void PracticeScene::UpdateTransition()
 {
+	//シーン遷移状態
+
 	if (++SceneTransitionTimer_ > SceneShortTransition)
 	{
 		//SceneManagerのインスタンスからタイトルシーンへ
@@ -312,6 +323,42 @@ void PracticeScene::UpdateTransition()
 		{
 			Camera::FullScreen();
 		}
+	}
+}
+
+void PracticeScene::GotoPause()
+{
+	//ポーズ画面に向かう処理 PlaySceneから上書き
+
+	//ポーズ画面状態へ移行
+	PracticeState_ = S_Pause;
+}
+
+void PracticeScene::GotoPlay()
+{
+	//ゲーム画面に向かう処理 PlaySceneから上書き
+
+	//練習中状態へ移行
+	PracticeState_ = S_Now;
+}
+
+void PracticeScene::GotoTitle()
+{
+	//タイトルに向かう処理 PlaySceneから上書き
+
+	//シーン遷移エフェクト(黒くフェードアウト)を設定
+	if (pTransitionEffect_ != nullptr)
+	{
+		pTransitionEffect_->FadeOutStartBlack();
+		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
+	}
+}
+
+void PracticeScene::SetPauseIconY()
+{
+	if (pHUD_ != nullptr)
+	{
+		pHUD_->SetPauseIcon(TmpIconPosY_);
 	}
 }
 

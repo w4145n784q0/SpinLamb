@@ -33,7 +33,7 @@ namespace
 
 BattleScene::BattleScene(GameObject* parent)
 	:PlayScene(parent,"BattleScene"),
-	hBackScreen_(-1), hSoundBattle_(-1), hSoundWhistle_(-1),
+	hSoundBattle_(-1), hSoundWhistle_(-1),
 	pPlayer1_(nullptr), pPlayer2_(nullptr), pEnemy_(nullptr),
 	pHUD_(nullptr), pTransitionEffect_(nullptr),
 	pGameTimer_(nullptr),pMiniMap_(nullptr),
@@ -60,6 +60,8 @@ void BattleScene::Initialize()
 
 	//StageManagerから各移動制限の値を取得
 	StageManager* pStageManager = (StageManager*)FindObject("StageManager");
+	assert(pStageManager != nullptr);
+
 	float North = pStageManager->GetNorthEnd();
 	float South = pStageManager->GetSouthEnd();
 	float West = pStageManager->GetWestEnd();
@@ -184,9 +186,16 @@ void BattleScene::Initialize()
 
 	//インスタンスを初期化
 	pGameTimer_ = (GameTimer*)FindObject("GameTimer");
+	assert(pGameTimer_ != nullptr);
+
 	pMiniMap_ = (MiniMap*)FindObject("MiniMap");
+	assert(pMiniMap_ != nullptr);
+
 	pHUD_ = (HUD*)FindObject("HUD");
+	assert(pHUD_ != nullptr);
+
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
+	assert(pTransitionEffect_ != nullptr);
 
 	//GameTimer,MiniMapのポインタを渡す
 	//HUDクラスと同じポインタを渡すことで値の相違を防ぐ
@@ -231,8 +240,6 @@ void BattleScene::Update()
 	//BaseSceneの更新処理を呼ぶ
 	//UpdateActive,UpdateTransitionは継承先の関数が呼ばれる
 	BaseScene::Update();
-
-
 }
 
 void BattleScene::Draw()
@@ -240,7 +247,7 @@ void BattleScene::Draw()
 	//背景描画
 	PlayScene::DrawBackScreen();
 
-	//今のBattleSceneの状態から、HUDクラスに描画するものを指示
+	//今のBattleStateの状態から、HUDクラスに描画するものを指示
 	switch (BattleState_)
 	{
 	case BattleScene::S_Before:
@@ -300,6 +307,8 @@ void BattleScene::Release()
 
 void BattleScene::UpdateActive()
 {
+	//通常の動いている状態
+
 	//BattleState_に応じて、各Update関数を呼ぶ
 	//BattleScene::S_PauseはActiveでは呼ばれない
 	switch (BattleState_)
@@ -350,13 +359,16 @@ void BattleScene::UpdateActive()
 
 void BattleScene::UpdateInActive()
 {
+	//画面を止めている状態
+
 	//Pause表示中の処理
 	PlayScene::UpdatePauseMenu();
-	PlayScene::WaitGotoPlay();
 }
 
 void BattleScene::UpdateTransition()
 {
+	//シーン遷移状態
+
 	//時間経過で次のシーンに遷移
 	//カウント中はシーン遷移エフェクト行う
 	if (++SceneTransitionTimer_ > SceneShortTransition)
@@ -430,6 +442,14 @@ void BattleScene::GotoTitle()
 	{
 		pTransitionEffect_->FadeOutStartBlack();
 		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
+	}
+}
+
+void BattleScene::SetPauseIconY()
+{
+	if (pHUD_ != nullptr)
+	{
+		pHUD_->SetPauseIcon(TmpIconPosY_);
 	}
 }
 
@@ -529,12 +549,6 @@ void BattleScene::UpdateBattle()
 	pHUD_->SetSecondScore(SecondScore_);
 
 	//escキーかstartボタンでポーズ画面へ
-	/*if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
-	{
-		SceneState_ = S_InActive;
-		BattleState_ = S_Pause;
-		pGameTimer_->StopTimer();
-	}*/
 	PlayScene::WaitGotoPause();
 }
 
@@ -552,14 +566,6 @@ void BattleScene::UpdateBattleAfter()
 		//シーン遷移エフェクト(白くフェードアウト)を設定
 		pTransitionEffect_->FadeOutStartWhite();
 		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
-	}
-}
-
-void BattleScene::SetPauseIconY()
-{
-	if (pHUD_ != nullptr)
-	{
-		pHUD_->SetPauseIcon(TmpIconPosY_);
 	}
 }
 

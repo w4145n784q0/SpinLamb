@@ -31,9 +31,6 @@ class HUD :
 private:
 	//----------画像ハンドル----------
 
-	//タイトルに戻る(練習シーン用)
-	int hBackTitleLogo_;
-
 	//練習中(練習シーン用)
 	int hPracticeNow_;
 
