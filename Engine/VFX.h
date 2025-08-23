@@ -9,26 +9,26 @@
 struct EmitterData
 {
 	std::string textureFileName;	//画像ファイル名
-	XMFLOAT3 position;		//位置
-	XMFLOAT3 positionRnd;	//位置の誤差
-	XMFLOAT3 direction;		//パーティクルの移動方向
-	XMFLOAT3 directionRnd;	//移動方向の誤差（各軸の角度）
-	float	 speed;			//1フレームの速度
-	float	 speedRnd;		//速度誤差（0～1）
-	float	 accel;			//加速度
-	float	 gravity;		//重力
-	XMFLOAT4 color;			//色（RGBA 0～1）
-	XMFLOAT4 deltaColor;	//色の変化量
-	XMFLOAT3 rotate;		//各軸での角度
-	XMFLOAT3 rotateRnd;		//角度誤差
-	XMFLOAT3 spin;			//回転速度
-	XMFLOAT2 size;			//サイズ
-	XMFLOAT2 sizeRnd;		//サイズ誤差（0～1）
-	XMFLOAT2 scale;			//1フレームの拡大率
-	DWORD	 lifeTime;		//パーティクルの寿命（フレーム数）
-	DWORD	 delay;			//何フレームおきにパーティクルを発生させるか
-	DWORD	 number;		//1度に出すパーティクル量
-	bool	 isBillBoard;	//ビルボードかどうか
+	XMFLOAT3 position;				//位置
+	XMFLOAT3 positionRnd;			//位置の誤差
+	XMFLOAT3 direction;				//パーティクルの移動方向
+	XMFLOAT3 directionRnd;			//移動方向の誤差（各軸の角度）
+	float	 speed;					//1フレームの速度
+	float	 speedRnd;				//速度誤差（0～1）
+	float	 accel;					//加速度
+	float	 gravity;				//重力
+	XMFLOAT4 color;					//色（RGBA 0～1）
+	XMFLOAT4 deltaColor;			//色の変化量
+	XMFLOAT3 rotate;				//各軸での角度
+	XMFLOAT3 rotateRnd;				//角度誤差
+	XMFLOAT3 spin;					//回転速度
+	XMFLOAT2 size;					//サイズ
+	XMFLOAT2 sizeRnd;				//サイズ誤差（0～1）
+	XMFLOAT2 scale;					//1フレームの拡大率
+	DWORD	 lifeTime;				//パーティクルの寿命（フレーム数）
+	DWORD	 delay;					//何フレームおきにパーティクルを発生させるか
+	DWORD	 number;				//1度に出すパーティクル量
+	bool	 isBillBoard;			//ビルボードかどうか
 
 	//初期化
 	EmitterData()
@@ -59,12 +59,12 @@ namespace VFX
 	//エミッター（パーティクルの噴射口）
 	struct Emitter
 	{
-		EmitterData data ;		//作成時に指定されたデータ
-		int handle = -1;		//ハンドル（番号）
-		DWORD frameCount = 0;	//開始してからのフレーム数
+		EmitterData data ;					//作成時に指定されたデータ
+		int handle = -1;					//ハンドル（番号）
+		DWORD frameCount = 0;				//開始してからのフレーム数
 		BillBoard* pBillBoard = nullptr;	//パーティクルに使うポリゴン
-		bool isDead = false;	//削除対象かどうか（実際はパーティクルが全部消えるまでエミッターは消えない）
-		int particleNum = 0;	//このエミッターから出た現存パーティクルの数
+		bool isDead = false;				//削除対象かどうか（実際はパーティクルが全部消えるまでエミッターは消えない）
+		int particleNum = 0;				//このエミッターから出た現存パーティクルの数
 	};
 
 

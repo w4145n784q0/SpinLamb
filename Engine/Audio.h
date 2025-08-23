@@ -35,22 +35,32 @@ namespace Audio
 	void InitCSVAudio();
 
 	//----------SEを鳴らす回数のゲッター関数----------
+
+	//スタート音を同時に鳴らす回数
 	int GetStartNum();
 
+	//選択音を同時に鳴らす回数
 	int GetSelectNum();
 
+	//決定音を同時に鳴らす回数
 	int GetDecideNum();
 
+	//キャンセル音を同時に鳴らす回数
 	int GetCancelNum();
 
+	//ホイッスル音を同時に鳴らす回数
 	int GetWhistleNum();
 
+	//チャージ音を同時に鳴らす回数
 	int GetChargeNum();
 
+	//攻撃音を同時に鳴らす回数
 	int GetAttackNum();
 
+	//ヒット音を同時に鳴らす回数
 	int GetCollisionNum();
 
+	//ジャンプ音を同時に鳴らす回数
 	int GetJumpNum();
 };
 

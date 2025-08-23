@@ -18,12 +18,12 @@ private:
 	//これらの値に応じて各Update関数を呼び出す
 	enum State
 	{
-		S_Idle,//通常
-		S_Charge,//チャージ中
-		S_Attack,//攻撃
-		S_Hit,//弾かれる
-		S_FenceHit,//柵にヒット
-		S_Stop,//プレイヤーを止める状態
+		S_Idle,		//通常
+		S_Charge,	//チャージ中
+		S_Attack,	//攻撃
+		S_Hit,		//弾かれる
+		S_FenceHit,	//柵にヒット
+		S_Stop,		//プレイヤーを止める状態
 		S_MaxState,
 	};
 	State PlayerState_;
@@ -32,8 +32,8 @@ private:
 	//これらの値に応じてカメラの位置・回転量を変化させる
 	enum CameraState
 	{
-		S_NormalCamera,//通常カメラ
-		S_DebugCamera,//デバッグ用カメラ
+		S_NormalCamera,		//通常カメラ
+		S_DebugCamera,		//デバッグ用カメラ
 		S_MaxCamera,
 	};
 	CameraState CameraState_;
@@ -104,6 +104,11 @@ public:
 	//プレイヤーを止める状態
 	void UpdateStop();
 
+	//----------Player処理関数----------
+
+	//ImGuiの描画
+	void DrawImGui();
+
 	//プレイヤーに移動を許可
 	void PlayerStart() { PlayerState_ = S_Idle; }
 
@@ -143,9 +148,6 @@ public:
 	/// </summary>
 	/// <param name="_name">接触したオブジェクト名</param>
 	void CollisionCharacter(std::string _name);
-
-	//ImGuiの描画
-	void DrawImGui();
 
 	/// <summary>
 	/// Player限定のデータをCSV読み込み

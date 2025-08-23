@@ -5,12 +5,12 @@
 //ゲームに登場するシーン
 enum SCENE_ID
 {
-	SCENE_ID_TITLE = 0,//タイトル
-	SCENE_ID_GAMEMODE,//ゲームモード選択
-	SCENE_ID_BATTLE,//バトル
-	SCENE_ID_PRACTICE,//フリープレイ(練習)
-	SCENE_ID_HOWTOPLAY,//あそびかた
-	SCENE_ID_RESULT,//リザルト
+	SCENE_ID_TITLE = 0,	//タイトル
+	SCENE_ID_GAMEMODE,	//ゲームモード選択
+	SCENE_ID_BATTLE,	//バトル
+	SCENE_ID_PRACTICE,	//フリープレイ(練習)
+	SCENE_ID_HOWTOPLAY,	//あそびかた
+	SCENE_ID_RESULT,	//リザルト
 };
 
 //-----------------------------------------------------------
@@ -30,8 +30,8 @@ private:
 	//誰と誰が遊んでいるかの状態を保持
 	enum PlayMode 
 	{
-		PlayerVSEnemy,//一人プレイの時(PvE)
-		PlayerVSPlayer,//二人プレイの時(PvP)
+		PlayerVSEnemy,	//一人プレイの時(PvE)
+		PlayerVSPlayer,	//二人プレイの時(PvP)
 		MaxPlay
 	};
 	PlayMode PlayMode_;

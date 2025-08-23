@@ -32,6 +32,7 @@ void OutStageThing::Initialize()
 	hStraw_ = Model::Load(Model + "Straw.fbx");
 	assert(hStraw_ >= 0);
 
+	//各モデルハンドルを配列に入れる
 	ModelHandleArray_ = { hCabin_, hTree_, hLogs_, hStraw_ };
 
 	//モデル用トランスフォーム配列初期化

@@ -22,14 +22,14 @@ private:
 	//敵(CPU)の状態遷移
 	//これらの値に応じて各Update関数を呼び出す
 	enum EnemyState {
-		S_Root = 0,//判断用
-		S_Chase,//追いかける
-		S_Aim,//プレイヤーを狙う(攻撃準備)
-		S_Attack,//攻撃
-		S_HitStop,//ヒットストップ
-		S_Hit,//弾かれる
-		S_FenceHit,//柵にヒット
-		S_Stop,//敵を止める
+		S_Root = 0,		//判断用
+		S_Chase,		//追いかける
+		S_Aim,			//プレイヤーを狙う(攻撃準備)
+		S_Attack,		//攻撃
+		S_HitStop,		//ヒットストップ
+		S_Hit,			//弾かれる
+		S_FenceHit,		//柵にヒット
+		S_Stop,			//敵を止める
 		S_MaxState
 	};
 	EnemyState EnemyState_;
@@ -108,10 +108,12 @@ public:
 	
 	//敵を止める
 	void UpdateStop();
+	
+	//----------Enemy処理関数----------
 
 	//ImGuiの描画
 	void DrawImGui();
-	
+
 	//敵に移動を許可
 	void EnemyStart() { EnemyState_ = S_Root; }
 

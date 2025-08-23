@@ -17,9 +17,9 @@ namespace GameView
 	//画面描画モード
 	enum GameViewMode
 	{
-		S_NormalScreen = 0,//タイトル,ゲームモードなどの全体画面
-		S_Single,//一人プレイ中の描画
-		S_Dual,//二人プレイ中の描画
+		S_NormalScreen = 0,	//タイトル,ゲームモードなどの全体画面
+		S_Single,			//一人プレイ中の描画
+		S_Dual,				//二人プレイ中の描画
 		MaxScreen
 	};
 

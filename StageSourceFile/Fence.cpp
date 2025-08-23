@@ -31,7 +31,7 @@ namespace
 
 Fence::Fence(GameObject* parent)
 	:GameObject(parent,"Fence"),hPillar_(-1), hFence_(-1),
-	Pillar_UpperLeft_({0,0,0}),Pillar_UpperRight_({0,0,0}),Pillar_LowerLeft_({0,0,0}),Pillar_LowerRight_({0,0,0})
+	PillarUpperLeft_({0,0,0}),PillarUpperRight_({0,0,0}),PillarLowerLeft_({0,0,0}),PillarLowerRight_({0,0,0})
 {
 }
 
@@ -155,16 +155,16 @@ void Fence::DrawImGui()
 #endif
 }
 
-void Fence::SetPillar(float upper, float lower, float left, float right, float height)
+void Fence::SetPillar(float _upper, float _lower, float _left, float _right, float _height)
 {
 	//柱の位置(左上,右上,左下,右下)を設定
-	Pillar_UpperLeft_ = { left,height,upper };
-	Pillar_UpperRight_ = { right,height,upper };
-	Pillar_LowerLeft_ = { left, height,lower };
-	Pillar_LowerRight_ = { right, height,lower };
+	PillarUpperLeft_ = { _left,_height,_upper };
+	PillarUpperRight_ = { _right,_height,_upper };
+	PillarLowerLeft_ = { _left, _height,_lower };
+	PillarLowerRight_ = { _right, _height,_lower };
 	
 	//この時点でPillarPosArrayの値を初期化
-	PillarPosArray = { Pillar_UpperLeft_, Pillar_UpperRight_,  Pillar_LowerLeft_, Pillar_LowerRight_ };
+	PillarPosArray = { PillarUpperLeft_, PillarUpperRight_,  PillarLowerLeft_, PillarLowerRight_ };
 
 	//PillarsTransformのサイズを柱の数分に変更
 	PillarsTransformArray.resize(PillarNum);
@@ -180,9 +180,9 @@ void Fence::SetPillar(float upper, float lower, float left, float right, float h
 	}
 }
 
-void Fence::SetPillarNum(int num)
+void Fence::SetPillarNum(int _num)
 {
-	PillarNum = num;
+	PillarNum = _num;
 }
 
 void Fence::InitWireTransform(Transform _t)
@@ -195,50 +195,50 @@ void Fence::InitPillarTransform(Transform _t)
 	PillarTransform = _t;
 }
 
-void Fence::SetWireCollisionUpper(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal)
+void Fence::SetWireCollisionUpper(XMFLOAT3 _pos, XMFLOAT3 _size, XMFLOAT3 _normal)
 {
 	//前方の柵の初期化
 	UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");
 
 	//当たり判定をセット
-	pUpperWire->InitCollision(pos,size);
+	pUpperWire->InitCollision(_pos, _size);
 
 	//法線をセット
-	pUpperWire->SetNormal(XMVECTOR({ normal.x,normal.y,normal.z }));
+	pUpperWire->SetNormal(XMVECTOR({ _normal.x,_normal.y,_normal.z }));
 }
 
-void Fence::SetWireCollisionLower(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal)
+void Fence::SetWireCollisionLower(XMFLOAT3 _pos, XMFLOAT3 _size, XMFLOAT3 _normal)
 {
 	//後方の柵の初期化
 	LowerWire* pLowerWire = (LowerWire*)FindObject("LowerWire");
 
 	//当たり判定をセット
-	pLowerWire->InitCollision(pos, size);
+	pLowerWire->InitCollision(_pos, _size);
 
 	//法線をセット
-	pLowerWire->SetNormal(XMVECTOR({ normal.x,normal.y,normal.z }));
+	pLowerWire->SetNormal(XMVECTOR({ _normal.x,_normal.y,_normal.z }));
 }
 
-void Fence::SetWireCollisionRight(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal)
+void Fence::SetWireCollisionRight(XMFLOAT3 _pos, XMFLOAT3 _size, XMFLOAT3 _normal)
 {
 	//右側の柵の初期化
 	RightWire* pRightWire = (RightWire*)FindObject("RightWire");
 
 	//当たり判定をセット
-	pRightWire->InitCollision(pos, size);
+	pRightWire->InitCollision(_pos, _size);
 
 	//法線をセット
-	pRightWire->SetNormal(XMVECTOR({ normal.x,normal.y,normal.z }));
+	pRightWire->SetNormal(XMVECTOR({ _normal.x,_normal.y,_normal.z }));
 }
 
-void Fence::SetWireCollisionLeft(XMFLOAT3 pos, XMFLOAT3 size, XMFLOAT3 normal)
+void Fence::SetWireCollisionLeft(XMFLOAT3 _pos, XMFLOAT3 _size, XMFLOAT3 _normal)
 {
 	//左側の柵の初期化
 	LeftWire* pLeftWire = (LeftWire*)FindObject("LeftWire");
 
 	//当たり判定をセット
-	pLeftWire->InitCollision(pos, size);
+	pLeftWire->InitCollision(_pos, _size);
 
 	//法線をセット
-	pLeftWire->SetNormal(XMVECTOR({ normal.x,normal.y,normal.z }));
+	pLeftWire->SetNormal(XMVECTOR({ _normal.x,_normal.y,_normal.z }));
 }

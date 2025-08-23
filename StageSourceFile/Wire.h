@@ -27,15 +27,12 @@ public:
 	//解放
 	void Release() override;
 
-	//当たり判定処理
-	void OnCollision(GameObject* pTarget) override;
-
 	/// <summary>
 	/// 当たり判定初期化
 	/// </summary>
 	/// <param name="pos">ボックスコライダーの位置</param>
 	/// <param name="size">ボックスコライダーのサイズ</param>
-	void InitCollision(XMFLOAT3 pos, XMFLOAT3 size);
+	void InitCollision(XMFLOAT3 _pos, XMFLOAT3 _size);
 
 	//----------セッター・ゲッター関数----------
 

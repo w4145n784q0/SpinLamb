@@ -169,6 +169,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//player1のカメラセット、その他のDrawSub行う
 				//player2のカメラセット、その他のDrawSub行う
 
+				//IsDual,IsSingleはBattle,Practiceシーンが該当
+				//それ以外はelse文に入る
 				if (GameView::IsDual())
 				{
 					//プレイヤー1用の画面セット
@@ -191,13 +193,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//エフェクトの描画
 					VFX::Draw();
 
-					//Imguiの表示(ImGuiの描画は一度だけ行う)
+					//Imguiの表示(ImGuiの描画は一度だけ行うので、player1,2の描画が終わった後に行う)
 					GameView::ViewImGui();
 
-					//HUDの描画
+					//HUDの描画(これらも一度だけ描画するので、player1,2の描画が終わった後に行う)
 					GameView::ViewHUDNormal();
 
-					//遷移演出の描画
+					//遷移演出の描画(これらも一度だけ描画するので、player1,2の描画が終わった後に行う)
+					//遷移演出は必ず最後に一度だけ行う
 					GameView::ViewTransitionEffect();
 				}
 				else if (GameView::IsSingle())
@@ -212,13 +215,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//エフェクトの描画
 					VFX::Draw();
 
-					//Imguiの表示
+					//Imguiの表示(一度だけ描画するので、player1の描画が終わった後に行う)
 					GameView::ViewImGui();
 
-					//HUDの描画
+					//HUDの描画(一度だけ描画するので、player1の描画が終わった後に行う)
 					GameView::ViewHUDNormal();
 
-					//遷移演出の描画
+					//遷移演出の描画(一度だけ描画するので、player1の描画が終わった後に行う)
+					//遷移演出は必ず最後に一度だけ行う
 					GameView::ViewTransitionEffect();
 				}
 				else
@@ -233,7 +237,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//エフェクトの描画
 					VFX::Draw();
 
-					//遷移演出の描画
+					//遷移演出の描画(一度だけ描画するので、すべての描画が終わった後に行う)
+					//遷移演出は必ず最後に一度だけ行う
 					GameView::ViewTransitionEffect();
 				}
 

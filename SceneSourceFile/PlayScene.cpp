@@ -15,13 +15,15 @@ namespace
 
 PlayScene::PlayScene(GameObject* parent)
 	:BaseScene(parent, "PlayScene"), hBackScreen_(-1), PauseSelect_(S_Continue),
-	TmpIconPosY_(0.0f), IconPosYArray({})
+	TmpIconPosY_(0.0f), IconPosYArray({}),
+	hSoundPause_(-1),hSoundSelect_(-1),hSoundExit_(-1)
 {
 }
 
 PlayScene::PlayScene(GameObject* parent, const std::string& name)
 	:BaseScene(parent, name), hBackScreen_(-1), PauseSelect_(S_Continue),
-	TmpIconPosY_(0.0f), IconPosYArray({})
+	TmpIconPosY_(0.0f), IconPosYArray({}),
+	hSoundPause_(-1), hSoundSelect_(-1), hSoundExit_(-1)
 {
 }
 

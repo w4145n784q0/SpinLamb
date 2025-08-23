@@ -31,18 +31,18 @@ namespace
 		i_ShakeTimeLong,	//振動時間(長)
 	};
 
-	float NearZ = 0.0f; //クリッピング面(ニア平面 カメラに最も近い)
-	float FarZ = 0.0f;//クリッピング面(ファー平面 カメラから最も遠い)
-	bool IsCameraShake;//カメラが振動してるか
-	float ShakeTimer;//カメラの振動カウント
-	float ShakeSpeed = 0.0f;//振動スピード
-	float ShakeWidth = 0.0f;//振動幅
-	float Frame = 0.0f;//1フレーム
-	XMFLOAT3 InitPosition = { 0,0,0 };//初期位置
-	XMFLOAT3 InitTarget = { 0,0,0 };//初期焦点
-	float ShakeTimeShort = 0.0f;//振動時間(短)
-	float ShakeTimeMiddle = 0.0f;//振動時間(中)
-	float ShakeTimeLong = 0.0f;//振動時間(長)
+	float NearZ = 0.0f;					//クリッピング面(ニア平面 カメラに最も近い)
+	float FarZ = 0.0f;					//クリッピング面(ファー平面 カメラから最も遠い)
+	bool IsCameraShake = false;			//カメラが振動してるか
+	float ShakeTimer = 0.0f;			//カメラの振動カウント
+	float ShakeSpeed = 0.0f;			//振動スピード
+	float ShakeWidth = 0.0f;			//振動幅
+	float Frame = 0.0f;					//1フレーム
+	XMFLOAT3 InitPosition = { 0,0,0 };	//初期位置
+	XMFLOAT3 InitTarget = { 0,0,0 };	//初期焦点
+	float ShakeTimeShort = 0.0f;		//振動時間(短)
+	float ShakeTimeMiddle = 0.0f;		//振動時間(中)
+	float ShakeTimeLong = 0.0f;			//振動時間(長)
 }
 
 //初期化（プロジェクション行列作成）

@@ -277,5 +277,7 @@ void StageManager::InitOutStageThingData()
 	pOutStageThing_->SetLogsTransform(LogsData_);
 	pOutStageThing_->SetStrawTransform(StrawData_);
 
+	//GameViewにステージ外オブジェクトのポインタを渡す
+	//ImGui描画用
 	GameView::SetOutStageThing(pOutStageThing_);
 }

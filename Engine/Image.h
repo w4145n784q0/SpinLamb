@@ -49,11 +49,11 @@ namespace Image
 	/// 左右上下の画像の端(x:-1.0~1.0 y:1.0~-1.0)
 	/// </summary>
 
-	extern float LeftEdge;
-	extern float RightEdge;
-	extern float UpEdge;
-	extern float DownEdge;
-	extern float Center;
+	extern float LeftEdge;	//左端
+	extern float RightEdge;	//右端
+	extern float UpEdge;	//上端
+	extern float DownEdge;	//下端
+	extern float Center;	//中央
 
 
 	//初期化

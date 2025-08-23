@@ -6,9 +6,9 @@ class Text
 	int hPict_;
 
 	unsigned int width_, height_;	//1文字分の幅と高さ
-	char fileName_[MAX_PATH];
-	unsigned int rowLength_;
-	float twoDivide_;
+	char fileName_[MAX_PATH];		//文字として表示する画像のファイル名
+	unsigned int rowLength_;		//画像の中に横に何文字並んでいるか
+	float twoDivide_;				//2 を表す /2したいときに用いる
 
 public:
 	Text();
