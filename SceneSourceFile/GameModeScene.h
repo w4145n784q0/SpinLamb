@@ -116,7 +116,7 @@ private:
 	Transform TransPlayer_;
 
 	//プレイ人数選択選択中のアイコンのトランスフォーム
-	Transform TransSelectPlayerNum_;
+	Transform TransSelectPlayerIcon_;
 
 	//各テキストの画像ハンドル配列
 	std::array<int, MaxMode> TextArray_;

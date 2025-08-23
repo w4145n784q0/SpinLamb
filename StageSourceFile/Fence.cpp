@@ -84,6 +84,8 @@ void Fence::Release()
 void Fence::DrawImGui()
 {
 #ifdef _DEBUG
+
+	//鉄線モデル
 	if (ImGui::TreeNode("Fence"))
 	{
 		if (ImGui::TreeNode("wire"))
@@ -115,6 +117,7 @@ void Fence::DrawImGui()
 			ImGui::TreePop();
 		}
 
+		//柱モデル
 		if (ImGui::TreeNode("Pillar"))
 		{
 			if (ImGui::TreeNode("PillerPosition"))
@@ -199,6 +202,7 @@ void Fence::SetWireCollisionUpper(XMFLOAT3 _pos, XMFLOAT3 _size, XMFLOAT3 _norma
 {
 	//前方の柵の初期化
 	UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");
+	assert(pUpperWire != nullptr);
 
 	//当たり判定をセット
 	pUpperWire->InitCollision(_pos, _size);
@@ -211,6 +215,7 @@ void Fence::SetWireCollisionLower(XMFLOAT3 _pos, XMFLOAT3 _size, XMFLOAT3 _norma
 {
 	//後方の柵の初期化
 	LowerWire* pLowerWire = (LowerWire*)FindObject("LowerWire");
+	assert(pLowerWire != nullptr);
 
 	//当たり判定をセット
 	pLowerWire->InitCollision(_pos, _size);
@@ -223,6 +228,7 @@ void Fence::SetWireCollisionRight(XMFLOAT3 _pos, XMFLOAT3 _size, XMFLOAT3 _norma
 {
 	//右側の柵の初期化
 	RightWire* pRightWire = (RightWire*)FindObject("RightWire");
+	assert(pRightWire != nullptr);
 
 	//当たり判定をセット
 	pRightWire->InitCollision(_pos, _size);
@@ -235,6 +241,7 @@ void Fence::SetWireCollisionLeft(XMFLOAT3 _pos, XMFLOAT3 _size, XMFLOAT3 _normal
 {
 	//左側の柵の初期化
 	LeftWire* pLeftWire = (LeftWire*)FindObject("LeftWire");
+	assert(pLeftWire != nullptr);
 
 	//当たり判定をセット
 	pLeftWire->InitCollision(_pos, _size);

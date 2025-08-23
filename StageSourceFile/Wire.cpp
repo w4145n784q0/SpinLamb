@@ -33,6 +33,7 @@ void Wire::Release()
 void Wire::InitCollision(XMFLOAT3 _pos, XMFLOAT3 _size)
 {
 	// ボックスコライダーの位置,サイズを設定し、当たり判定の追加
+	//継承先のポインタから呼び出す
 	BoxCollider* collision_wire = new BoxCollider(_pos, _size);
 	AddCollider(collision_wire);
 }

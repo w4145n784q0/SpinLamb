@@ -83,6 +83,8 @@ void BattleScene::Initialize()
 
 	//「ひとりで」か「ふたりで」のどちらかによって生成するキャラクターを変更
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+	assert(pSceneManager != nullptr);
+
 	if (pSceneManager->IsPlayerVSEnemy())
 	{
 		//事前に生成
@@ -376,6 +378,8 @@ void BattleScene::UpdateTransition()
 
 		//SceneManagerのインスタンスを取得
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		assert(pSceneManager != nullptr);
+
 		if (BattleState_ == S_After)
 		{
 			//バトル終了していたらリザルトシーンへ

@@ -276,15 +276,19 @@ void Character::GetWireNormal()
 {
 	//各インスタンスから柵の法線を取得
 	UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");
+	assert(pUpperWire != nullptr);
 	FenceHitParam_.UpperNormal_ = pUpperWire->GetNormal();
 
 	LowerWire* pLowerWire = (LowerWire*)FindObject("LowerWire");
+	assert(pLowerWire != nullptr);
 	FenceHitParam_.LowerNormal_ = pLowerWire->GetNormal();
 
 	RightWire* pRightWire = (RightWire*)FindObject("RightWire");
+	assert(pRightWire != nullptr);
 	FenceHitParam_.RightNormal_ = pRightWire->GetNormal();
 
 	LeftWire* pLeftWire = (LeftWire*)FindObject("LeftWire");
+	assert(pLeftWire != nullptr);
 	FenceHitParam_.LeftNormal_ = pLeftWire->GetNormal();
 
 	//取得した法線を配列に格納
@@ -384,6 +388,16 @@ void Character::DrawCharacterImGui()
 		ImGui::Text("ForwardX:%.3f", tmp.x);
 		ImGui::Text("ForwardY:%.3f", tmp.y);
 		ImGui::Text("ForwardZ:%.3f", tmp.z);
+		ImGui::TreePop();
+	}
+
+	//キャラクターID,初期位置
+	if (ImGui::TreeNode("Initialize"))
+	{
+		ImGui::Text("CharacterID:%.1d", InitParam_.CharacterID);
+		ImGui::Text("ForwardX:%.3f", InitParam_.StartPosition_.x);
+		ImGui::Text("ForwardY:%.3f", InitParam_.StartPosition_.y);
+		ImGui::Text("ForwardZ:%.3f", InitParam_.StartPosition_.z);
 		ImGui::TreePop();
 	}
 

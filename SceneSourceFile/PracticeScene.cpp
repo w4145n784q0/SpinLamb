@@ -68,6 +68,8 @@ void PracticeScene::Initialize()
 
 	//「ひとりで」か「ふたりで」かで生成するキャラクターを変更
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+	assert(pSceneManager != nullptr);
+
 	if (pSceneManager->IsPlayerVSEnemy())
 	{
 		//事前に生成
@@ -304,6 +306,8 @@ void PracticeScene::UpdateTransition()
 	{
 		//SceneManagerのインスタンスからタイトルシーンへ
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		assert(pSceneManager != nullptr);
+
 		pSceneManager->ChangeScene(SCENE_ID_TITLE);
 
 		//シーン遷移用タイマーをリセット

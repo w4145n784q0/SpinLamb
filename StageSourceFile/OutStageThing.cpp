@@ -65,7 +65,7 @@ void OutStageThing::DrawImGui()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("OutStageThings"))
 	{
-		//小屋
+		//小屋モデル
 		if (ImGui::TreeNode("Cabin"))
 		{
 			if (ImGui::TreeNode("CabinPosition"))
@@ -119,7 +119,7 @@ void OutStageThing::DrawImGui()
 			ImGui::TreePop();
 		}
 
-		//木
+		//木モデル
 		if (ImGui::TreeNode("Tree"))
 		{
 			if (ImGui::TreeNode("TreePosition"))
@@ -177,7 +177,7 @@ void OutStageThing::DrawImGui()
 			ImGui::TreePop();
 		}
 
-		//丸太
+		//丸太モデル
 		if (ImGui::TreeNode("Logs"))
 		{
 			if (ImGui::TreeNode("LogsPosition"))
@@ -233,7 +233,7 @@ void OutStageThing::DrawImGui()
 			ImGui::TreePop();
 		}
 
-		//藁束
+		//藁束モデル
 		if (ImGui::TreeNode("Straw"))
 		{
 			if (ImGui::TreeNode("StrawPosition"))

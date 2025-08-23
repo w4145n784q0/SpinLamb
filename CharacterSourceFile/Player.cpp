@@ -430,6 +430,7 @@ void Player::DrawImGui()
 #ifdef _DEBUG
 	if (ImGui::TreeNode((objectName_ + " Status").c_str()))
 	{
+		//キャラクタークラス共通のImGui情報
 		DrawCharacterImGui();
 	}
 
@@ -438,7 +439,7 @@ void Player::DrawImGui()
 		if (ImGui::TreeNode("PlayerInit"))
 		{
 			//コントローラーID
-			ImGui::Text("ControllerID:%2d", ControllerID_);
+			ImGui::Text("ControllerID:%1d", ControllerID_);
 			ImGui::TreePop();
 		}
 

@@ -76,6 +76,7 @@ void ResultScene::Initialize()
 
 	//SceneManagerインスタンスからBattleSceneから各スコアを取得
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+	assert(pSceneManager != nullptr);
 	FirstCharaScore =  pSceneManager->GetFirstCharaScore();
 	SecondCharaScore = pSceneManager->GetSecondCharaScore();
 
@@ -105,6 +106,7 @@ void ResultScene::Initialize()
 
 	//インスタンス生成
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
+	assert(pTransitionEffect_ != nullptr);
 
 	//GameViewにポインタを渡す
 	GameView::SetTransitionEffect(pTransitionEffect_);
@@ -143,8 +145,9 @@ void ResultScene::Draw()
 	
 
 #ifdef _DEBUG
-	if (ImGui::TreeNode("GameModeSelect"))
+	if (ImGui::TreeNode("ResultScene"))
 	{
+		//結果のテキスト
 		if (ImGui::TreeNode("Result"))
 		{
 			if (ImGui::TreeNode("ResultPosition"))
@@ -169,6 +172,7 @@ void ResultScene::Draw()
 			ImGui::TreePop();
 		}
 
+		//"Push Title"のテキスト
 		if (ImGui::TreeNode("PushTitle"))
 		{
 			if (ImGui::TreeNode("PushTitlePosition"))
@@ -238,7 +242,7 @@ void ResultScene::UpdateActive()
 		pTransitionEffect_->FadeOutStartBlack();
 		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
 
-		//決定音を再生
+		//タイトルに戻る音を再生
 		Audio::Play(hSoundBackTitle_);
 	}
 }
@@ -251,6 +255,8 @@ void ResultScene::UpdateTransition()
 	{
 		//SceneManagerのインスタンスからタイトルシーンへ
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		assert(pSceneManager != nullptr);
+
 		pSceneManager->ChangeScene(SCENE_ID_TITLE);
 
 		//シーン遷移用タイマーをリセット

@@ -131,6 +131,7 @@ void GameModeScene::Initialize()
 
 	//インスタンス生成
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
+	assert(pTransitionEffect_ != nullptr);
 
 	//GameViewにポインタを渡す
 	GameView::SetTransitionEffect(pTransitionEffect_);
@@ -190,7 +191,7 @@ void GameModeScene::Draw()
 		case GameModeScene::S_Practice:
 		{
 			Image::SetAndDraw(hPlayerNumSelect_, TransPlayer_);
-			Image::SetAndDraw(hPlayerSelectIcon_, TransSelectPlayerNum_);
+			Image::SetAndDraw(hPlayerSelectIcon_, TransSelectPlayerIcon_);
 			//選択している状態に合わせてアイコンつける
 		}
 			break;
@@ -203,8 +204,9 @@ void GameModeScene::Draw()
 
 #ifdef _DEBUG
 	//各画像のトランスフォームの位置変更
-	if (ImGui::TreeNode("GameModeSelect"))
+	if (ImGui::TreeNode("GameModeScene"))
 	{
+		//背景のキャラクター
 		if (ImGui::TreeNode("BackChara"))
 		{
 			if (ImGui::TreeNode("BackCharaPosition"))
@@ -229,6 +231,7 @@ void GameModeScene::Draw()
 			ImGui::TreePop();
 		}
 
+		//"モードセレクト"
 		if (ImGui::TreeNode("TransSelect"))
 		{
 			if (ImGui::TreeNode("TransSelectPosition"))
@@ -253,6 +256,7 @@ void GameModeScene::Draw()
 			ImGui::TreePop();
 		}
 
+		//画面下部の説明テキスト
 		if (ImGui::TreeNode("TransText"))
 		{
 			if (ImGui::TreeNode("TransTextPosition"))
@@ -277,6 +281,7 @@ void GameModeScene::Draw()
 			ImGui::TreePop();
 		}
 
+		//各モードのボタン
 		if (ImGui::TreeNode("ModeTransArray"))
 		{
 			if (ImGui::TreeNode("ModeTransArrayPosition"))
@@ -313,7 +318,7 @@ void GameModeScene::Draw()
 		ImGui::TreePop();
 	}
 	
-
+	//遊ぶ人数確認画面
 	if (ImGui::TreeNode("Confirmation"))
 	{
 		if (ImGui::TreeNode("TransPlayer"))
@@ -340,25 +345,26 @@ void GameModeScene::Draw()
 			ImGui::TreePop();
 		}
 
-		if (ImGui::TreeNode("TransSelectPlayerNum"))
+		//プレイ人数選択選択中のアイコン
+		if (ImGui::TreeNode("TransSelectPlayerIcon"))
 		{
 			if (ImGui::TreeNode("TransSelectPlayerPosition"))
 			{
-				ImGui::SliderFloat("TransSelectPlayerPositionX", &TransSelectPlayerNum_.position_.x, Image::LeftEdge, Image::RightEdge);
-				ImGui::SliderFloat("TransSelectPlayerPositionY", &TransSelectPlayerNum_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::SliderFloat("TransSelectPlayerPositionX", &TransSelectPlayerIcon_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("TransSelectPlayerPositionY", &TransSelectPlayerIcon_.position_.y, Image::UpEdge, Image::DownEdge);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("TransSelectPlayerRotate"))
 			{
-				ImGui::InputFloat("TransSelectPlayerRotateX", &TransSelectPlayerNum_.rotate_.x, ZeroPointOne);
-				ImGui::InputFloat("TransSelectPlayerRotateY", &TransSelectPlayerNum_.rotate_.y, ZeroPointOne);
-				ImGui::InputFloat("TransSelectPlayerRotateZ", &TransSelectPlayerNum_.rotate_.z, ZeroPointOne);
+				ImGui::InputFloat("TransSelectPlayerRotateX", &TransSelectPlayerIcon_.rotate_.x, ZeroPointOne);
+				ImGui::InputFloat("TransSelectPlayerRotateY", &TransSelectPlayerIcon_.rotate_.y, ZeroPointOne);
+				ImGui::InputFloat("TransSelectPlayerRotateZ", &TransSelectPlayerIcon_.rotate_.z, ZeroPointOne);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("TransSelectPlayerScale"))
 			{
-				ImGui::InputFloat("TransSelectPlayerScaleX", &TransSelectPlayerNum_.scale_.x, ZeroPointOne);
-				ImGui::InputFloat("TransSelectPlayerScaleY", &TransSelectPlayerNum_.scale_.y, ZeroPointOne);
+				ImGui::InputFloat("TransSelectPlayerScaleX", &TransSelectPlayerIcon_.scale_.x, ZeroPointOne);
+				ImGui::InputFloat("TransSelectPlayerScaleY", &TransSelectPlayerIcon_.scale_.y, ZeroPointOne);
 				ImGui::TreePop();
 			}
 			ImGui::TreePop();
@@ -534,10 +540,10 @@ void GameModeScene::UpdateConfirmation()
 	switch (PlayerNum_)
 	{
 	case GameModeScene::S_PvE:
-		TransSelectPlayerNum_.position_.x = PlayerTransArray_[S_PvE].position_.x;
+		TransSelectPlayerIcon_.position_.x = PlayerTransArray_[S_PvE].position_.x;
 		break;
 	case GameModeScene::S_PvP:
-		TransSelectPlayerNum_.position_.x = PlayerTransArray_[S_PvP].position_.x;
+		TransSelectPlayerIcon_.position_.x = PlayerTransArray_[S_PvP].position_.x;
 		break;
 	default:
 		break;
@@ -556,7 +562,9 @@ void GameModeScene::UpdateConfirmation()
 		pTransitionEffect_->ZoomInStart();
 		pTransitionEffect_->SetTransitionTime(SceneShortTransition);
 
+		//SceneManagerのポインタを取得し
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		assert(pSceneManager != nullptr);
 
 		//SceneManagerに遊ぶ人数を渡す
 		switch (PlayerNum_)
@@ -612,6 +620,8 @@ void GameModeScene::UpdateTransition()
 		//SceneManagerインスタンスから選択しているシーンへ遷移する
 
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		assert(pSceneManager != nullptr);
+
 		switch (SelectMode_)
 		{
 		case GameModeScene::S_Battle:

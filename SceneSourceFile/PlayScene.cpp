@@ -33,6 +33,7 @@ PlayScene::~PlayScene()
 
 void PlayScene::Initialize()
 {
+	//csvからパラメータ読み込み
 	SetPlaySceneCSV();
 
 	//各画像・サウンドの読み込み

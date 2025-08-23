@@ -218,6 +218,7 @@ void StageManager::InitGroundData()
 
 	//地面クラスのインスタンスを取得
 	pGround_ = (Ground*)FindObject("Ground");
+	assert(pGround_ != nullptr);
 
 	//CSVから読み込んだ拡大率,回転,位置を渡す
 	pGround_->SetScale(GroundData_.scale_);
@@ -235,6 +236,7 @@ void StageManager::InitFenceData()
 
 	//柵クラスのインスタンスを取得
 	pFence_ = (Fence*)FindObject("Fence");
+	assert(pFence_ != nullptr);
 
 	//CSVから読み込んだ柵,鉄線のトランスフォームを渡す
 	pFence_->InitWireTransform(WireData_);
@@ -251,6 +253,7 @@ void StageManager::InitEndData()
 
 	//柵クラスのインスタンスを取得
 	Fence* pFence = (Fence*)FindObject("Fence");
+	assert(pFence_ != nullptr);
 
 	//柱の数、柱の位置を初期化
 	pFence->SetPillarNum(PillarNum_);
@@ -270,6 +273,7 @@ void StageManager::InitOutStageThingData()
 
 	//OutStageThingのインスタンスを取得
 	pOutStageThing_ = (OutStageThing*)FindObject("OutStageThing");
+	assert(pOutStageThing_ != nullptr);
 
 	//CSVから読み込んだ小屋、木、丸太のトランスフォームを渡す
 	pOutStageThing_->SetCabinTransform(CabinData_);

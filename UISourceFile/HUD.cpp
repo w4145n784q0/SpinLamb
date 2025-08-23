@@ -143,9 +143,6 @@ void HUD::Initialize()
 
 
 	//各画像の読み込み
-//	hBackTitleLogo_ = Image::Load(Image + Practice + "BackTitleLogo.png");
-//	assert(hBackTitleLogo_ >= 0);
-
 	hPracticeNow_ = Image::Load(Image + Practice + "PracticeLogo.png");
 	assert(hPracticeNow_ >= 0);
 
@@ -363,10 +360,10 @@ void HUD::SetHUDCSV()
 
 	//csvファイル(HUDTransformData.csv)の各0列目の文字列の配列を取得
 	std::vector<std::string> ParamNames = {
-		"practice","explanation","start","finish","split",
-		"tentime","onetime","minimap","firsticon", "secondicon",
-		"firstscoreten","firstscoreone","secondscoreten","secondscoreone",
-		"pausemenu","pauseicon"
+		"Practice","Explanation","Start","Finish","Split",
+		"TenTime","OneTime","MiniMap","FirstIcon", "SecondIcon",
+		"FirstScoreTen","FirstScoreOne","SecondScoreTen","SecondScoreOne",
+		"PauseMenu","PauseIcon"
 	};
 
 	//まとめて初期化
@@ -471,7 +468,7 @@ void HUD::DrawExplanation()
 void HUD::DrawStartLogo()
 {
 	//DrawStartの状態によって描画するロゴを切り替える
-	//DrawStart_の状態はstart_ready->start_goの順に変化するが
+	//DrawStart_の状態はStartReady->StartGoの順に変化するが
 	//start_readyに戻る処理はBattleSceneから指示
 	switch (DrawStart_)
 	{
@@ -543,6 +540,8 @@ void HUD::DrawScore()
 void HUD::DrawImGuiExplanation()
 {
 #ifdef _DEBUG
+
+	//バトル開始前の説明
 	if (ImGui::TreeNode("Explanation"))
 	{
 		if (ImGui::TreeNode("ExplanationPosition"))
@@ -574,6 +573,8 @@ void HUD::DrawImGuiExplanation()
 void HUD::DrawImGuiStartLogo()
 {
 #ifdef _DEBUG
+
+	//"Ready"と"Go"の文字
 	if (ImGui::TreeNode("Start"))
 	{
 		if (ImGui::TreeNode("StartPosition"))
@@ -604,6 +605,8 @@ void HUD::DrawImGuiStartLogo()
 void HUD::DrawImGuiFinishLogo()
 {
 #ifdef _DEBUG
+
+	//"Finish!"の文字
 	if (ImGui::TreeNode("Finish"))
 	{
 		if (ImGui::TreeNode("FinishPosition"))
@@ -635,6 +638,8 @@ void HUD::DrawImGuiFinishLogo()
 void HUD::DrawImGuiPracticeLogo()
 {
 #ifdef _DEBUG
+
+	//"練習モード"の文字
 	if (ImGui::TreeNode("PracticeLogo"))
 	{
 		if (ImGui::TreeNode("PracticeLogoPosition"))
@@ -666,6 +671,8 @@ void HUD::DrawImGuiPracticeLogo()
 void HUD::DrawImGuiScore()
 {
 #ifdef _DEBUG
+
+	//画面上部のスコア(十の位・一の位)
 	if (ImGui::TreeNode("Score"))
 	{
 		if (ImGui::TreeNode("ScorePosition"))
@@ -729,6 +736,8 @@ void HUD::DrawImGuiScore()
 void HUD::DrawImGuiTimer()
 {
 #ifdef _DEBUG
+
+	//タイマー(十の位・一の位)
 	if (ImGui::TreeNode("Timer"))
 	{
 		if (ImGui::TreeNode("TimerPosition"))
@@ -771,6 +780,7 @@ void HUD::DrawImGuiMiniMap()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("MiniMap"))
 	{
+		//ミニマップ
 		if (ImGui::TreeNode("MiniMapPosition"))
 		{
 			ImGui::SliderFloat("MiniMapPositionX", &MapIcon.position_.x, Image::LeftEdge, Image::RightEdge);
@@ -792,9 +802,11 @@ void HUD::DrawImGuiMiniMap()
 			ImGui::TreePop();
 		}
 
+		//ミニマップのアイコン(Player1)
 		ImGui::Text("FirstIconX:%.3f", FirstIcon.position_.x);
 		ImGui::Text("FirstIconY:%.3f", FirstIcon.position_.y);
 
+		//ミニマップのアイコン(Player2・CPU)
 		ImGui::Text("SecondIconX:%.3f", SecondIcon.position_.x);
 		ImGui::Text("SecondIconY:%.3f", SecondIcon.position_.y);
 
@@ -808,6 +820,7 @@ void HUD::DrawImGuiPause()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Pause"))
 	{
+		//ポーズ画面
 		if (ImGui::TreeNode("PauseMenu"))
 		{
 			if (ImGui::TreeNode("PauseMenuPosition"))
@@ -835,6 +848,7 @@ void HUD::DrawImGuiPause()
 			ImGui::TreePop();
 		}
 
+		//ポーズ画面のアイコン
 		if (ImGui::TreeNode("PauseIcon"))
 		{
 			if (ImGui::TreeNode("PauseIconPosition"))
@@ -871,7 +885,7 @@ void HUD::DrawReady()
 {
 	if (++LogoChangeCount < ReadyTimer_)
 	{
-		//"Ready?"のロゴ描画
+		//タイマーが超えるまで"Ready?"のロゴ描画
 		Image::SetAndDraw(hReady_, LogoStart);
 	}
 	else

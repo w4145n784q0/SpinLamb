@@ -437,9 +437,8 @@ void Enemy::DrawImGui()
 #ifdef _DEBUG
 	if (ImGui::TreeNode("EnemyStatus"))
 	{
+		//キャラクタークラス共通のImGui情報
 		DrawCharacterImGui();
-
-
 	}
 
 	if (ImGui::TreeNode("EnemyOnlyStatus"))

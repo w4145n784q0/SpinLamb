@@ -36,6 +36,8 @@ void Ground::Release()
 void Ground::DrawImGui()
 {
 #ifdef _DEBUG
+
+	//’n–Êƒ‚ƒfƒ‹
 	if (ImGui::TreeNode("Ground"))
 	{
 		if (ImGui::TreeNode("GroundPosition"))

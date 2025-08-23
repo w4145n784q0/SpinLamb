@@ -57,6 +57,7 @@ void HowToPlayScene::Initialize()
 
 	//インスタンス生成
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
+	assert(pTransitionEffect_ != nullptr);
 
 	//GameViewにポインタを渡す
 	GameView::SetTransitionEffect(pTransitionEffect_);
@@ -163,6 +164,8 @@ void HowToPlayScene::UpdateTransition()
 	{
 		//SceneManagerのインスタンスからタイトルシーンへ
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
+		assert(pSceneManager != nullptr);
+
 		pSceneManager->ChangeScene(SCENE_ID_GAMEMODE);
 
 		//シーン遷移用タイマーをリセット
