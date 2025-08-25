@@ -23,7 +23,7 @@ namespace
 	};
 
 	//ヒットストップする時間
-	int HitStop = 0;
+	int HitStopValue = 0;
 
 	//追跡状態から攻撃準備に移る距離
 	float ChaseLength = 0.0f;
@@ -43,9 +43,9 @@ namespace
 
 Enemy::Enemy(GameObject* parent)
 	:Character(parent,"Enemy"), hEnemy_(-1),pPlayer_(nullptr),
-	EnemyState_(S_Stop),AimTimer_(0), 
+	EnemyState_(S_Stop),AimTimer_(0), RandomAim_(0),
 	TargetVec_({0,0,0}), TargetPosition_({0,0,0}), TargetAcceleration_(0.0f),
-	RandomAim_(0), HitStopTimer_(0)
+	HitStopTimer_(0)
 {
 }
 
@@ -154,6 +154,9 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 					//反射開始
 					FenceReflect(normal);
+
+					//接触時点で攻撃までのタイマーをリセット
+					AimTimer_ = 0;
 
 					//CPUの状態を柵に接触状態にする
 					EnemyState_ = S_FenceHit;
@@ -362,7 +365,7 @@ void Enemy::UpdateHitStop()
 	//ヒットストップ状態
 
 	//ヒットストップする時間を超えたら被弾状態へ
-	if (++HitStopTimer_ > HitStop)
+	if (++HitStopTimer_ > HitStopValue)
 	{
 		HitStopTimer_ = 0;
 		EnemyState_ = S_Hit;
@@ -596,11 +599,11 @@ void Enemy::SetCSVEnemy()
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	HitStop = static_cast<int>(OnlyData[i_HitStop]);
+	HitStopValue = static_cast<int>(OnlyData[i_HitStop]);
 	ChaseLength = OnlyData[i_ChaseLength];
 	LookRotateAngle = OnlyData[i_LookRotateAngle];
 	LookRotateValue = OnlyData[i_LookRotateValue];
-
+	
 	int arr[] = { static_cast<int>(OnlyData[i_EnemyAttackTime_1]), static_cast<int>(OnlyData[i_EnemyAttackTime_2]),
 			static_cast<int>(OnlyData[i_EnemyAttackTime_3]), static_cast<int>(OnlyData[i_EnemyAttackTime_4]) };
 	for (int i = 0; i < EnemyAttackTimeArray.size(); i++)

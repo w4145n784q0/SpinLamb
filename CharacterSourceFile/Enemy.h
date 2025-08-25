@@ -36,8 +36,11 @@ private:
 
 	//----------攻撃関係----------
 	
-	//狙ってから攻撃までのタイマー
+	//狙ってから攻撃までの計測タイマー
 	int AimTimer_;
+
+	//EnemyAttackTimeArrayの添え字
+	int RandomAim_;
 
 	//----------移動関係----------
 
@@ -50,16 +53,10 @@ private:
 	//プレイヤーの速度
 	float TargetAcceleration_;
 
-	//----------攻撃関係----------
-
-	//EnemyAttackTimeArrayの添え字
-	int RandomAim_; 
-
 	//----------ダメージ関係----------
 
 	//ヒットストップ時間
 	int HitStopTimer_;
-
 
 public:
 	Enemy(GameObject* parent);
@@ -124,7 +121,7 @@ public:
 	void LookPlayer();
 
 	/// <summary>
-	/// 自身のY軸回転量を指定された方向に合わせて更新
+	/// 自身のY軸回転量を指定された方向に合わせて更新し、前を向くようにする
 	/// </summary>
 	/// <param name="_direction">回転量を計算する際のベクトル</param>
 	void RotateFromDirection(XMVECTOR _direction);
