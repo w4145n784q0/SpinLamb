@@ -684,7 +684,8 @@ float Character::RotateDirectionVector(XMVECTOR _MoveVector)
 	return angleDeg;
 }
 
-void Character::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity)
+void Character::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity,
+	std::string _attackName)
 {
 	//無敵状態なら処理しない
 	if (this->FenceHitParam_.IsInvincibility_)
@@ -749,6 +750,9 @@ void Character::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVel
 
 	//ノックバック時のY軸回転角の固定
 	KnockBackAngleY(HitParam_.KnockBack_Direction_);
+
+	//攻撃相手の名前を取得
+	HitParam_.AttackedName_ = _attackName;
 }
 
 void Character::KnockBackAngleY(XMFLOAT3 _KnockBackVector)
@@ -844,6 +848,10 @@ void Character::FenceReflect(XMVECTOR _normal)
 
 	//ノックバック時のY軸回転角の固定
 	KnockBackAngleY(HitParam_.KnockBack_Direction_);
+
+	//攻撃相手の名前をリセット
+	//自分の名前を代入することで、自爆判定に使う
+	HitParam_.AttackedName_ = this->GetObjectName();
 }
 
 bool Character::IsKnockBackEnd()
@@ -884,9 +892,9 @@ void Character::NotifyFenceHit()
 	//InitParam_.observers自体が空なのでfor文がスルーされる)
 	for (IGameObserver* observer : InitParam_.observers) 
 	{
-
-		//監視者へ柵にヒットしたこと（当たったCharacterのID）を通知
-		observer->OnCharacterFenceHit(this->InitParam_.CharacterID);
+		//監視者へ柵にヒットしたこと（最後に当たった(攻撃した)キャラクターの名前）と
+		//柵に当たったキャラクターの名前(NotifyFenceHit()を呼び出した自分自身)を通知
+		observer->OnCharacterFenceHit(this->HitParam_.AttackedName_,this->GetObjectName());
 	}
 }
 

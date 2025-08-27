@@ -44,7 +44,7 @@ namespace
 Enemy::Enemy(GameObject* parent)
 	:Character(parent,"Enemy"), hEnemy_(-1),pPlayer_(nullptr),
 	EnemyState_(S_Stop),AimTimer_(0), RandomAim_(0),
-	TargetVec_({0,0,0}), TargetPosition_({0,0,0}), TargetAcceleration_(0.0f),
+	TargetVec_({0,0,0}), TargetPosition_({0,0,0}), TargetAcceleration_(0.0f),TargetName_(""),
 	HitStopTimer_(0)
 {
 }
@@ -114,7 +114,7 @@ void Enemy::Release()
 void Enemy::OnCollision(GameObject* pTarget)
 {
 	//プレイヤーと接触した時の処理
-	if (pTarget->GetObjectName() == "Player1")
+	if (pTarget->GetObjectName() == "Player1" || pTarget->GetObjectName() == "Player2")
 	{
 		//自身の位置をXMVECTOR型にする
 		XMVECTOR MyVector = XMLoadFloat3(&this->transform_.position_);
@@ -124,8 +124,8 @@ void Enemy::OnCollision(GameObject* pTarget)
 		XMVECTOR TargetVector = XMLoadFloat3(&TargetPosition_);
 
 		
-		//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度)
-		Reflect(MyVector, TargetVector, this->MoveParam_.Acceleration_, TargetAcceleration_);
+		//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度,接触相手の名前)
+		Reflect(MyVector, TargetVector, this->MoveParam_.Acceleration_, TargetAcceleration_, TargetName_);
 		
 		//接触時点で攻撃までのタイマーをリセット
 		AimTimer_ = 0;
@@ -183,6 +183,9 @@ void Enemy::EnemyRun()
 
 	//プレイヤーの加速度を取り続ける
 	TargetAcceleration_ = pPlayer_->GetAcceleration();
+
+	//プレイヤーのオブジェクト名を取り続ける
+	TargetName_ = pPlayer_->GetObjectName();
 
 	//Characterクラスの共通処理
 	Character::Update();

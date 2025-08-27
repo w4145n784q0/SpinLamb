@@ -86,6 +86,7 @@ protected:
         XMFLOAT3 KnockBack_Velocity_ = { 0,0,0 };   //ノックバックする速度
         float DecelerationRate_ = 0.0f;             //ノックバック時の1fごとの減速率
         float KnockBackEnd_ = 0.0f;                 //ノックバックを終了する値
+        std::string AttackedName_ = "";              //接触した相手の名前
     };
     HitParam HitParam_;
 
@@ -335,7 +336,9 @@ public:
     /// <param name="_targetVector">相手の位置ベクトル</param>
     /// <param name="_myVelocity">自身の加速度</param>
     /// <param name="_targetVelocity">相手の加速度</param>
-    void Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity);
+    /// <param name="_attackName">攻撃したキャラクターの名前</param>
+    void Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity, 
+        std::string _attackName);
 
     /// <summary>
     /// ノックバック中のY軸回転角の計算 ノックバック直前に行う
@@ -480,49 +483,52 @@ public:
 
     //空中
     void SetGravity(float _gravity) { JumpParam_.Gravity_ = _gravity; }
-    float GetGravity() { return JumpParam_.Gravity_ ; }
+    float GetGravity() const { return JumpParam_.Gravity_ ; }
 
     void SetJumpHeight(float _jumpHeight) { JumpParam_.JumpHeight = _jumpHeight; }
-    float GetJumpHeight() { return JumpParam_.JumpHeight; }
+    float GetJumpHeight() const { return JumpParam_.JumpHeight; }
 
     //被弾
     void SetOriginalRangeMin(float _originalRangeMin) { HitParam_.OriginalRangeMin_ = _originalRangeMin; }
-    float GetOriginalRangeMin() { return HitParam_.OriginalRangeMin_; }
+    float GetOriginalRangeMin() const { return HitParam_.OriginalRangeMin_; }
 
     void SetOriginalRangeMax(float _originalRangeMax) { HitParam_.OriginalRangeMax_ = _originalRangeMax; }
-    float GetOriginalRangeMax() { return HitParam_.OriginalRangeMax_; }
+    float GetOriginalRangeMax() const { return HitParam_.OriginalRangeMax_; }
 
     void SetConvertedRangeMin(float _convertedRangeMin) { HitParam_.ConvertedRangeMin_ = _convertedRangeMin; }
-    float GetConvertedRangeMin() { return  HitParam_.ConvertedRangeMin_; }
+    float GetConvertedRangeMin() const { return  HitParam_.ConvertedRangeMin_; }
 
     void SetConvertedRangeMax(float _convertedRangeMax) { HitParam_.ConvertedRangeMax_ = _convertedRangeMax; }
-    float GetConvertedRangeMax() { return  HitParam_.ConvertedRangeMax_; }
+    float GetConvertedRangeMax() const { return  HitParam_.ConvertedRangeMax_; }
 
     void SetKnockBackDirection(XMFLOAT3 _knockbackDirection) { HitParam_.KnockBack_Direction_ = _knockbackDirection; }
-    XMFLOAT3 GetKnockBackDirection() { return  HitParam_.KnockBack_Direction_; }
+    XMFLOAT3 GetKnockBackDirection()  const { return  HitParam_.KnockBack_Direction_; }
 
     void SetKnockBackVelocity(XMFLOAT3 _knockbackVelocity) { HitParam_.KnockBack_Velocity_ = _knockbackVelocity; }
-    XMFLOAT3 GetKnockBackVelocity() { return HitParam_.KnockBack_Velocity_; }
+    XMFLOAT3 GetKnockBackVelocity() const { return HitParam_.KnockBack_Velocity_; }
 
     void SetDecelerationRate(float _decelerationRate) { HitParam_.DecelerationRate_ = _decelerationRate; }
-    float GetDecelerationRate() { return  HitParam_.DecelerationRate_; }
+    float GetDecelerationRate()  const { return  HitParam_.DecelerationRate_; }
 
     void SetKnockBackEnd(float _knockbackEnd) { HitParam_.KnockBackEnd_ = _knockbackEnd; }
-    float GetKnockBackEnd() { return HitParam_.KnockBackEnd_; }
+    float GetKnockBackEnd() const { return HitParam_.KnockBackEnd_; }
+
+    void SetAttackedName(std::string _AttackedName) { HitParam_.AttackedName_ = _AttackedName; }
+    std::string GetAttackedName() const { return HitParam_.AttackedName_; }
 
     //柵の接触
     void SetKnockBackPower(float _knockbackPower) { FenceHitParam_.KnockBackPower_ = _knockbackPower; }
-    float GetKnockBackPower() { return FenceHitParam_.KnockBackPower_; }
+    float GetKnockBackPower() const { return FenceHitParam_.KnockBackPower_; }
 
     void SetInvincibilityTime(int _invincibilityTime) { FenceHitParam_.InvincibilityTime_ = _invincibilityTime; }
-    int GetInvincibilityTime() { return FenceHitParam_.InvincibilityTime_; }
+    int GetInvincibilityTime() const { return FenceHitParam_.InvincibilityTime_; }
 
     void SetInvincibilityValue(int _invincibilityValue) { FenceHitParam_.InvincibilityValue_ = _invincibilityValue; }
-    int GetInvincibilityValue() { return FenceHitParam_.InvincibilityValue_; }
+    int GetInvincibilityValue() const { return FenceHitParam_.InvincibilityValue_; }
 
     void SetBlinkTimer(int _blinkTimer) { FenceHitParam_.BlinkTimer_ = _blinkTimer; }
-    int GetBlinkTimer() { return  FenceHitParam_.BlinkTimer_; }
+    int GetBlinkTimer() const { return  FenceHitParam_.BlinkTimer_; }
 
     void SetBlinkValue(int _blinkValue) { FenceHitParam_.BlinkValue_ = _blinkValue; }
-    int GetBlinkValue() { return FenceHitParam_.BlinkValue_; }
+    int GetBlinkValue() const { return FenceHitParam_.BlinkValue_; }
 };

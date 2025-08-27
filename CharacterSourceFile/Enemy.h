@@ -53,6 +53,9 @@ private:
 	//プレイヤーの速度
 	float TargetAcceleration_;
 
+	//プレイヤーのオブジェクト名
+	std::string TargetName_;
+
 	//----------ダメージ関係----------
 
 	//ヒットストップ時間

@@ -51,11 +51,11 @@ private:
 	//そのほか描画指示にも使用する
 	enum BattleState
 	{
-		S_Before = 0,//開始前説明
-		S_Ready,     //開始直前
-		S_Now,       //バトル中
-		S_Pause,     //ポーズ中
-		S_After,     //終了後
+		S_Before = 0,	//開始前説明
+		S_Ready,		//開始直前
+		S_Now,			//バトル中
+		S_Pause,		//ポーズ中
+		S_After,		//終了後
 		MaxBattleMode
 	};
 	BattleState BattleState_;
@@ -67,6 +67,10 @@ private:
 
 	//敵(CPU)・プレイヤー2のスコア
 	int SecondScore_;
+
+	//スコアを参照型で格納したポインタ配列
+	//ActiveCharactersと同じ順番で追加する
+	std::vector<int*> ScoreArray_;
 
 public:
 	BattleScene(GameObject* parent);
@@ -132,10 +136,17 @@ public:
 	void PlusSecondScore() { SecondScore_++; }
 
 	/// <summary>
+	/// スコアの上昇・下降計算
+	/// </summary>
+	/// <param name="_score">変化させるスコア</param>
+	/// <param name="_IsSelfDestruction">自爆による柵の接触かどうか,指定がなければfalse</param>
+	void ScorePlus(int& _score, bool _IsSelfDestruction = false);
+
+	/// <summary>
 	/// 柵にヒットした際の処理
 	/// </summary>
-	/// <param name="HitCharaID">ヒットしたキャラクターのID</param>
-	void OnCharacterFenceHit(int _HitCharaID) override;
-
+	/// <param name="_AttackedName">柵にヒットしたキャラクターに、最後に触れたキャラクターの名前</param>
+	/// <param name="_HitName">柵にヒットしたキャラクターの名前</param>
+	void OnCharacterFenceHit(std::string _AttackedName, std::string _HitName) override;
 };
 

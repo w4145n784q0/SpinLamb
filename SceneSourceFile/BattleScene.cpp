@@ -29,6 +29,9 @@ namespace
 		i_GameTimeLimit,
 		i_EasingTime,
 	};
+
+	//生成したキャラクター継承クラスのポインタを格納する配列
+	std::vector<Character*> ActiveCharacters = {};
 }
 
 BattleScene::BattleScene(GameObject* parent)
@@ -39,7 +42,7 @@ BattleScene::BattleScene(GameObject* parent)
 	pGameTimer_(nullptr),pMiniMap_(nullptr),
 	ActivePlayers_({}), ActiveEnemys_({}),
 	BattleState_(S_Before),
-	FirstScore_(0),SecondScore_(0)
+	FirstScore_(0),SecondScore_(0),ScoreArray_({})
 {
 }
 
@@ -81,6 +84,12 @@ void BattleScene::Initialize()
 	InitPlayers.push_back(pPlayer1_);
 	InitCharacters.push_back(pPlayer1_);
 
+	//アクティブな配列に追加
+	ActiveCharacters.push_back(pPlayer1_);
+
+	//スコア配列に追加(1番目のキャラクターのスコア ActiveCharactersの追加とセットで行う)
+	ScoreArray_.push_back(&FirstScore_);
+
 	//「ひとりで」か「ふたりで」のどちらかによって生成するキャラクターを変更
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 	assert(pSceneManager != nullptr);
@@ -94,6 +103,12 @@ void BattleScene::Initialize()
 		//初期化配列に追加
 		InitCharacters.push_back(pEnemy_);
 		InitEnemys.push_back(pEnemy_);
+
+		//アクティブな配列に追加
+		ActiveCharacters.push_back(pEnemy_);
+
+		//スコア配列に追加(2番目のキャラクターのスコア ActiveCharactersの追加とセットで行う)
+		ScoreArray_.push_back(&SecondScore_);
 
 		//画面状態のセット(一人プレイ用)
 		GameView::SetGameViewMode(GameView::S_Single);
@@ -110,6 +125,12 @@ void BattleScene::Initialize()
 		//初期化配列に追加
 		InitPlayers.push_back(pPlayer2_);
 		InitCharacters.push_back(pPlayer2_);
+
+		//アクティブな配列に追加
+		ActiveCharacters.push_back(pPlayer2_);
+
+		//スコア配列に追加(2番目のキャラクターのスコア ActiveCharactersの追加とセットで行う)
+		ScoreArray_.push_back(&SecondScore_);
 
 		//画面状態のセット(二人プレイ用、左右分割する)
 		GameView::SetGameViewMode(GameView::S_Dual);
@@ -131,23 +152,28 @@ void BattleScene::Initialize()
 		InitCharacters[i]->AddObserver(this);
 	}
 
-	//Playerの初期化処理
-
-	//player初期化時の文字列配列
+	//player初期化時の文字列配列(追加する際はこの配列に文字列を追加)
 	std::string PlayerNames[] = { "Player1","Player2" };
 
+	//Enemy初期化時の文字列配列(今はCPUは一体のみ　追加する際はこの配列に文字列を追加)
+	std::string EnemyNames[] = { "Enemy1","Enemy2"};
+
 	//プレイヤー初期化時に読み込むcsvファイルのパス
-	std::string csvPath[] = { "CSVdata\\CharacterData\\PlayerData1.csv" ,
+	std::string csvPath[] = { "CSVdata\\CharacterData\\PlayerData1.csv",
 		"CSVdata\\CharacterData\\PlayerData2.csv" };
 
 	//プレイヤー初期化時に読み込むfbxモデルのパス
 	std::string modelPath[] = { "Model\\Character.fbx" ,"Model\\Character_black.fbx" };
 
+	//Playerの初期化処理
 	//InitPlayers分だけ初期化
 	for (int i = 0; i < InitPlayers.size(); i++)
 	{
 		//プレイヤーの名前を設定
 		InitPlayers[i]->SetObjectName(PlayerNames[i]);
+
+		//プレイヤーの名前を最後に接触したキャラクターとして初期化(名前が割り振られたタイミングで初期化)
+		InitPlayers[i]->SetAttackedName(InitPlayers[i]->GetObjectName());
 
 		//使うコントローラーのID設定
 		InitPlayers[i]->SetControllerID(i);
@@ -164,6 +190,12 @@ void BattleScene::Initialize()
 	{
 		if (!InitPlayers.empty()) 
 		{
+			//CPUの名前を登録
+			InitEnemys[i]->SetObjectName(EnemyNames[i]);
+
+			//CPUの名前を最後に接触したキャラクターとして初期化(名前が割り振られたタイミングで初期化)
+			InitEnemys[i]->SetAttackedName(InitEnemys[i]->GetObjectName());
+
 			//プレイヤーの初期化配列からランダムなインスタンスをセット
 			//(現状は敵と一対一なのでplayer1が選ばれる)
 			//BattleSceneから設定することで値の相違・結合度の上昇を防ぐ
@@ -592,29 +624,48 @@ void BattleScene::SetCSVBattle()
 	EasingTime = static_cast<int>(BattleData[i_EasingTime]);
 }
 
-void BattleScene::OnCharacterFenceHit(int _HitCharaID)
+void BattleScene::ScorePlus(int& _score, bool _IsSelfDestruction)
 {
-	//_HitCharaIDには柵に接触したキャラクターIDが入る
-	//それぞれ接触したキャラクターIDを確認し
-	//一致するなら相手側のスコアを加算する
-	//Enemy,Player2は必ずnullチェックする
-
-	if (pPlayer1_->GetID() == _HitCharaID)
+	//自爆判定ならスコアを減少
+	//その際は相手ではなく自分のスコアが参照渡しされる
+	if (_IsSelfDestruction)
 	{
-		PlusSecondScore();
-	}
-	else if (pEnemy_ != nullptr)
-	{
-		if (pEnemy_->GetID() == _HitCharaID)
+		if (_score > 0)
 		{
-			PlusFirstScore();
+			_score--;
 		}
 	}
-	else if (pPlayer2_ != nullptr)
+	else
 	{
-		if (pPlayer2_->GetID() == _HitCharaID)
+		//通常ならスコアを加算
+		_score++;
+	}
+}
+
+void BattleScene::OnCharacterFenceHit(std::string _AttackedName, std::string _HitName)
+{
+	for (int i = 0; i < ActiveCharacters.size(); i++)
+	{
+		//最後の攻撃を当てたキャラクターの名前の存在確認
+		if (ActiveCharacters[i]->GetObjectName() == _AttackedName)
 		{
-			PlusFirstScore();
+			//最後に攻撃したキャラクターの名前が、柵に接触した名前と同じ=自爆した場合は何もしない
+			//(例:Player1が最後に攻撃した名前になっているのに、柵に接触したのもPlayer1のとき
+			//柵に接触時、攻撃された相手の名前を自分のobjectName_にしているので、
+			//なにも触れずに被弾した場合自爆判定となる )
+			if (ActiveCharacters[i]->GetObjectName() == _HitName)
+			{
+				//自爆なので自分のスコアを減算
+				//スコアの計算関数には自分のスコアを参照
+				ScorePlus(*ScoreArray_[i],true);
+			}
+			else
+			{
+				//スコアを加算
+				//関数には攻撃した相手のスコアを参照
+				ScorePlus(*ScoreArray_[i]);
+			}
+			
 		}
 	}
 }

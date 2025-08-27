@@ -9,6 +9,6 @@ class IGameObserver {
 public:
 
     //ò‚Éƒqƒbƒg‚µ‚½Û‚Ìˆ—(Œp³æ‚ÅÀ‘•)
-    virtual void OnCharacterFenceHit(int HitCharacterId) = 0;
+    virtual void OnCharacterFenceHit(std::string _AttackedName, std::string _HitName) = 0;
     virtual ~IGameObserver() = default;
 };

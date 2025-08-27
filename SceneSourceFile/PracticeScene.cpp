@@ -113,23 +113,28 @@ void PracticeScene::Initialize()
 		InitCharacters[i]->SetID(i + CharacterAddID);
 	}
 
-	//Playerの初期化処理
-
-	//player初期化時の文字列配列
+	//player初期化時の文字列配列(追加する際はこの配列に文字列を追加)
 	std::string PlayerNames[] = { "Player1","Player2" };
 
+	//Enemy初期化時の文字列配列(今はCPUは一体のみ　追加する際はこの配列に文字列を追加)
+	std::string EnemyNames[] = { "Enemy1","Enemy2" };
+
 	//プレイヤー初期化時に読み込むcsvファイルのパス
-	std::string csvPath[] = { "CSVdata\\CharacterData\\PlayerData1.csv" ,
+	std::string csvPath[] = { "CSVdata\\CharacterData\\PlayerData1.csv",
 		"CSVdata\\CharacterData\\PlayerData2.csv" };
 
 	//プレイヤー初期化時に読み込むfbxモデルのパス
 	std::string modelPath[] = { "Model\\Character.fbx" ,"Model\\Character_black.fbx" };
 
+	//Playerの初期化処理
 	//InitPlayers分だけ初期化
 	for (int i = 0; i < InitPlayers.size(); i++)
 	{
 		//プレイヤーの名前を設定
 		InitPlayers[i]->SetObjectName(PlayerNames[i]);
+
+		//プレイヤーの名前を最後に接触したキャラクターとして初期化(名前が割り振られたタイミングで初期化)
+		InitPlayers[i]->SetAttackedName(InitPlayers[i]->GetObjectName());
 
 		//使うコントローラーのID設定
 		InitPlayers[i]->SetControllerID(i);
@@ -149,6 +154,12 @@ void PracticeScene::Initialize()
 	{
 		if (!InitPlayers.empty())
 		{
+			//CPUの名前を登録
+			InitEnemys[i]->SetObjectName(EnemyNames[i]);
+
+			//CPUの名前を最後に接触したキャラクターとして初期化(名前が割り振られたタイミングで初期化)
+			InitEnemys[i]->SetAttackedName(InitEnemys[i]->GetObjectName());
+
 			//プレイヤーの初期化配列からランダムなインスタンスをセット
 			//(現状は敵と一対一なのでplayer1が選ばれる)
 			//PracticeSceneから設定することで値の相違・結合度の上昇を防ぐ

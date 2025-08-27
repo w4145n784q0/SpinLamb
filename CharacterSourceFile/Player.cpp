@@ -99,8 +99,8 @@ void Player::Release()
 void Player::OnCollision(GameObject* pTarget)
 {
 	//敵クラス,プレイヤーと接触した時の処理
-	if (pTarget->GetObjectName() == "Enemy" || pTarget->GetObjectName() == "Player1"
-		|| pTarget->GetObjectName() == "Player2")
+	if (pTarget->GetObjectName() == "Enemy1" || pTarget->GetObjectName() == "Enemy2"
+		|| pTarget->GetObjectName() == "Player1" || pTarget->GetObjectName() == "Player2")
 	{
 		//接触したキャラクターの名前を取得
 		std::string targetName = pTarget->GetObjectName();
@@ -746,14 +746,20 @@ void Player::CollisionCharacter(std::string _name)
 	//自身の位置をXMVECTOR型として先に保管する
 	XMVECTOR PlayerVector = XMLoadFloat3(&this->transform_.position_);
 
+	//接触相手の加速量を保管する変数を用意
 	float TargetSpeed = 0.0f;
+
+	//接触相手の位置と変換用のXMVECTORを用意
 	XMFLOAT3 TargetPos = {};
 	XMVECTOR TargetVector = {};
 
-	if (_name == "Enemy")
+	//接触した相手の名前を取得する文字列を用意
+	std::string TargetName = "";
+
+	if (_name == "Enemy1" || _name == "Enemy2")
 	{
 		//敵クラスのインスタンスを取得
-		Enemy* pEnemy = (Enemy*)FindObject("Enemy");
+		Enemy* pEnemy = (Enemy*)FindObject(_name);
 		assert(pEnemy != nullptr);
 
 		//敵の位置を取りXMVECTOR型にする
@@ -762,6 +768,10 @@ void Player::CollisionCharacter(std::string _name)
 
 		//相手のスピードを取得
 		TargetSpeed = pEnemy->GetAcceleration();
+
+		//相手の名前を取得
+		TargetName = pEnemy->GetObjectName();
+	
 	}
 	else if (_name == "Player1" || _name == "Player2")
 	{
@@ -775,14 +785,17 @@ void Player::CollisionCharacter(std::string _name)
 
 		//相手のスピードを取得
 		TargetSpeed = pPlayer->GetAcceleration();
+
+		//相手の名前を取得
+		TargetName = _name;
 	}
 	else
 	{
 		return;
 	}
 
-	//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度)
-	Reflect(PlayerVector, TargetVector, this->MoveParam_.Acceleration_, TargetSpeed);
+	//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度,接触相手の名前)
+	Reflect(PlayerVector, TargetVector, this->MoveParam_.Acceleration_, TargetSpeed, TargetName);
 }
 
 void Player::SetCSVPlayer(std::string _path)
