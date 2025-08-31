@@ -236,7 +236,7 @@ void BattleScene::Initialize()
 	pHUD_->SetTimerPointer(pGameTimer_);
 	pHUD_->SetMiniMapPointer(pMiniMap_);
 
-	//GameViewにポインタを渡す
+	//GameViewにHUD,TransitionEffectのポインタを渡す(描画順番をずらすために使用)
 	GameView::SetHUD(pHUD_);
 	GameView::SetTransitionEffect(pTransitionEffect_);
 

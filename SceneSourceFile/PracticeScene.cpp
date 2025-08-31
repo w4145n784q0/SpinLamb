@@ -195,8 +195,7 @@ void PracticeScene::Initialize()
 	//HUDクラスと同じポインタを渡すことで値の相違を防ぐ
 	pHUD_->SetMiniMapPointer(pMiniMap_);
 
-	//GameViewにHUDのポインタを渡す
-
+	//GameViewにHUD,TransitionEffectのポインタを渡す(描画順番をずらすために使用)
 	GameView::SetHUD(pHUD_);
 	GameView::SetTransitionEffect(pTransitionEffect_);
 
