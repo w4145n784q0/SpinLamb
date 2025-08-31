@@ -140,7 +140,7 @@ public:
 	/// </summary>
 	/// <param name="_score">変化させるスコア</param>
 	/// <param name="_IsSelfDestruction">自爆による柵の接触かどうか,指定がなければfalse</param>
-	void ScorePlus(int& _score, bool _IsSelfDestruction = false);
+	void ScoreChange(int& _score, bool _IsSelfDestruction = false);
 
 	/// <summary>
 	/// 柵にヒットした際の処理

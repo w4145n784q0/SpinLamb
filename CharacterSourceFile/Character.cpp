@@ -466,6 +466,9 @@ void Character::DrawCharacterImGui()
 		ImGui::Text("KnockBack_VelocityY:%.3f", HitParam_.KnockBack_Velocity_.y);
 		ImGui::Text("KnockBack_VelocityZ:%.3f", HitParam_.KnockBack_Velocity_.z);
 
+		std::string attackedName = HitParam_.AttackedName_;
+		ImGui::Text("AttackedName_:%s", attackedName.c_str());
+
 		ImGui::TreePop();
 	}
 

@@ -55,8 +55,8 @@ protected:
     //----------回転----------
     struct RotateParam
     {
-        float MoveRotateX = 0.0f;//移動時の1fの回転量
-        float FastRotateX = 0.0f;//(チャージ中など)高速回転中の1fの回転量
+        float MoveRotateX = 0.0f;   //移動時の1fの回転量
+        float FastRotateX = 0.0f;   //(チャージ中など)高速回転中の1fの回転量
     };
     RotateParam RotateParam_;
 
@@ -86,7 +86,7 @@ protected:
         XMFLOAT3 KnockBack_Velocity_ = { 0,0,0 };   //ノックバックする速度
         float DecelerationRate_ = 0.0f;             //ノックバック時の1fごとの減速率
         float KnockBackEnd_ = 0.0f;                 //ノックバックを終了する値
-        std::string AttackedName_ = "";              //接触した相手の名前
+        std::string AttackedName_ = "";             //接触した相手の名前
     };
     HitParam HitParam_;
 

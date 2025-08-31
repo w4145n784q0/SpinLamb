@@ -624,7 +624,7 @@ void BattleScene::SetCSVBattle()
 	EasingTime = static_cast<int>(BattleData[i_EasingTime]);
 }
 
-void BattleScene::ScorePlus(int& _score, bool _IsSelfDestruction)
+void BattleScene::ScoreChange(int& _score, bool _IsSelfDestruction)
 {
 	//自爆判定ならスコアを減少
 	//その際は相手ではなく自分のスコアが参照渡しされる
@@ -649,7 +649,7 @@ void BattleScene::OnCharacterFenceHit(std::string _AttackedName, std::string _Hi
 		//最後の攻撃を当てたキャラクターの名前の存在確認
 		if (ActiveCharacters[i]->GetObjectName() == _AttackedName)
 		{
-			//最後に攻撃したキャラクターの名前が、柵に接触した名前と同じ=自爆した場合は何もしない
+			//最後に攻撃したキャラクターの名前が、柵に接触した名前と同じ=自爆した場合は減点
 			//(例:Player1が最後に攻撃した名前になっているのに、柵に接触したのもPlayer1のとき
 			//柵に接触時、攻撃された相手の名前を自分のobjectName_にしているので、
 			//なにも触れずに被弾した場合自爆判定となる )
@@ -657,13 +657,13 @@ void BattleScene::OnCharacterFenceHit(std::string _AttackedName, std::string _Hi
 			{
 				//自爆なので自分のスコアを減算
 				//スコアの計算関数には自分のスコアを参照
-				ScorePlus(*ScoreArray_[i],true);
+				ScoreChange(*ScoreArray_[i],true);
 			}
 			else
 			{
 				//スコアを加算
 				//関数には攻撃した相手のスコアを参照
-				ScorePlus(*ScoreArray_[i]);
+				ScoreChange(*ScoreArray_[i]);
 			}
 			
 		}
