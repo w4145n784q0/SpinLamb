@@ -188,7 +188,7 @@
     <ClCompile Include="StageSourceFile\RightWire.cpp" />
     <ClCompile Include="StageSourceFile\StageManager.cpp" />
     <ClCompile Include="StageSourceFile\UpperWire.cpp" />
-    <ClCompile Include="StageSourceFile\Wire.cpp" />
+    <ClCompile Include="StageSourceFile\BaseWire.cpp" />
     <ClCompile Include="UISourceFile\GameTimer.cpp" />
     <ClCompile Include="UISourceFile\HUD.cpp" />
     <ClCompile Include="UISourceFile\MiniMap.cpp" />
@@ -249,7 +249,7 @@
     <ClInclude Include="StageSourceFile\RightWire.h" />
     <ClInclude Include="StageSourceFile\StageManager.h" />
     <ClInclude Include="StageSourceFile\UpperWire.h" />
-    <ClInclude Include="StageSourceFile\Wire.h" />
+    <ClInclude Include="StageSourceFile\BaseWire.h" />
     <ClInclude Include="UISourceFile\GameTimer.h" />
     <ClInclude Include="UISourceFile\HUD.h" />
     <ClInclude Include="UISourceFile\MiniMap.h" />

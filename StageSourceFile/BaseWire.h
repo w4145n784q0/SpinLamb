@@ -3,7 +3,7 @@
 
 //柵の当たり判定・法線を扱う基底クラス
 //前後左右の鉄線クラスはこのクラスを継承し、各自で当たり判定と法線を持つ
-class Wire :
+class BaseWire :
     public GameObject
 {
 protected:
@@ -11,9 +11,9 @@ protected:
 	XMVECTOR Normal_;
 
 public:
-	Wire(GameObject* parent);
-	Wire(GameObject* parent, const std::string& name);
-	virtual ~Wire();
+	BaseWire(GameObject* parent);
+	BaseWire(GameObject* parent, const std::string& name);
+	virtual ~BaseWire();
 
 	//初期化
 	void Initialize() override;

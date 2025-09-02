@@ -1,10 +1,10 @@
 #pragma once
 #include "../Engine/GameObject.h"
-#include"Wire.h"
+#include"BaseWire.h"
 
 //前方の鉄線の当たり判定を行うクラス
 class UpperWire :
-    public Wire
+    public BaseWire
 {
 public:
 	UpperWire(GameObject* parent);

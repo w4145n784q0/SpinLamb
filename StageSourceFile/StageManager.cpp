@@ -252,18 +252,18 @@ void StageManager::InitEndData()
 	//Fenceクラスの柱の位置、法線の方向を初期化
 
 	//柵クラスのインスタンスを取得
-	Fence* pFence = (Fence*)FindObject("Fence");
+	pFence_ = (Fence*)FindObject("Fence");
 	assert(pFence_ != nullptr);
 
 	//柱の数、柱の位置を初期化
-	pFence->SetPillarNum(PillarNum_);
-	pFence->SetPillar(UpperEnd_,LowerEnd_,RightEnd_,LeftEnd_, PillarData_.position_.y);
+	pFence_->SetPillarNum(PillarNum_);
+	pFence_->SetPillar(UpperEnd_,LowerEnd_,RightEnd_,LeftEnd_, PillarData_.position_.y);
 
 	//各鉄線の衝突判定を初期化(当たり判定の位置,当たり判定のサイズ,鉄線が持つ法線)
-	pFence->SetWireCollisionUpper(WirePosUpper_, WireSizeUpper_, UpperNormal_);
-	pFence->SetWireCollisionLower(WirePosLower_, WireSizeLower_,LowerNormal_);
-	pFence->SetWireCollisionRight(WirePosRight_, WireSizeRight_, RightNormal_);
-	pFence->SetWireCollisionLeft(WirePosLeft_, WireSizeLeft_, LeftNormal_);
+	pFence_->SetWireCollisionUpper(WirePosUpper_, WireSizeUpper_, UpperNormal_);
+	pFence_->SetWireCollisionLower(WirePosLower_, WireSizeLower_,LowerNormal_);
+	pFence_->SetWireCollisionRight(WirePosRight_, WireSizeRight_, RightNormal_);
+	pFence_->SetWireCollisionLeft(WirePosLeft_, WireSizeLeft_, LeftNormal_);
 
 }
 

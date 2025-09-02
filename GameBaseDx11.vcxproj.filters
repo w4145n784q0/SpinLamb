@@ -167,7 +167,7 @@
     <ClCompile Include="StageSourceFile\UpperWire.cpp">
       <Filter>05Stage</Filter>
     </ClCompile>
-    <ClCompile Include="StageSourceFile\Wire.cpp">
+    <ClCompile Include="StageSourceFile\BaseWire.cpp">
       <Filter>05Stage</Filter>
     </ClCompile>
     <ClCompile Include="UISourceFile\GameTimer.cpp">
@@ -344,7 +344,7 @@
     <ClInclude Include="StageSourceFile\UpperWire.h">
       <Filter>05Stage</Filter>
     </ClInclude>
-    <ClInclude Include="StageSourceFile\Wire.h">
+    <ClInclude Include="StageSourceFile\BaseWire.h">
       <Filter>05Stage</Filter>
     </ClInclude>
     <ClInclude Include="UISourceFile\GameTimer.h">

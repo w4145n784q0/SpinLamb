@@ -1,7 +1,7 @@
 #include "LeftWire.h"
 
 LeftWire::LeftWire(GameObject* parent)
-	:Wire(parent, "LeftWire")
+	:BaseWire(parent, "LeftWire")
 {
 }
 

@@ -1,7 +1,7 @@
 #include "LowerWire.h"
 
 LowerWire::LowerWire(GameObject* parent)
-	:Wire(parent, "LowerWire")
+	:BaseWire(parent, "LowerWire")
 {
 }
 
