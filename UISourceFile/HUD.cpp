@@ -554,7 +554,7 @@ void HUD::DrawImGuiExplanation()
 		{
 			ImGui::InputFloat("ExplanationRotateX", &LogoExplanation.rotate_.x, ZeroPointOne);
 			ImGui::InputFloat("ExplanationRotateY", &LogoExplanation.rotate_.y, ZeroPointOne);
-			ImGui::InputFloat("ExplanationRotateY", &LogoExplanation.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("ExplanationRotateZ", &LogoExplanation.rotate_.y, ZeroPointOne);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("ExplanationScale"))
@@ -587,7 +587,7 @@ void HUD::DrawImGuiStartLogo()
 		{
 			ImGui::InputFloat("StartRotateX", &LogoStart.rotate_.x, ZeroPointOne);
 			ImGui::InputFloat("StartRotateY", &LogoStart.rotate_.y, ZeroPointOne);
-			ImGui::InputFloat("StartRotateY", &LogoStart.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("StartRotateZ", &LogoStart.rotate_.y, ZeroPointOne);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("StartScale"))
@@ -619,7 +619,7 @@ void HUD::DrawImGuiFinishLogo()
 		{
 			ImGui::InputFloat("FinishRotateX", &LogoFinish.rotate_.x, ZeroPointOne);
 			ImGui::InputFloat("FinishRotateY", &LogoFinish.rotate_.y, ZeroPointOne);
-			ImGui::InputFloat("FinishRotateY", &LogoFinish.rotate_.y, ZeroPointOne);
+			ImGui::InputFloat("FinishRotateZ", &LogoFinish.rotate_.y, ZeroPointOne);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("FinishScale"))

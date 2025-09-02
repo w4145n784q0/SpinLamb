@@ -206,7 +206,7 @@
     <ClCompile Include="SceneSourceFile\TitleScene.cpp">
       <Filter>03Scene</Filter>
     </ClCompile>
-    <ClCompile Include="SceneSourceFile\PlayScene.cpp">
+    <ClCompile Include="SceneSourceFile\PlayBaseScene.cpp">
       <Filter>03Scene</Filter>
     </ClCompile>
   </ItemGroup>
@@ -383,7 +383,7 @@
     <ClInclude Include="SceneSourceFile\TitleScene.h">
       <Filter>03Scene</Filter>
     </ClInclude>
-    <ClInclude Include="SceneSourceFile\PlayScene.h">
+    <ClInclude Include="SceneSourceFile\PlayBaseScene.h">
       <Filter>03Scene</Filter>
     </ClInclude>
   </ItemGroup>

@@ -35,7 +35,7 @@ namespace
 }
 
 BattleScene::BattleScene(GameObject* parent)
-	:PlayScene(parent,"BattleScene"),
+	:PlayBaseScene(parent,"BattleScene"),
 	hSoundBattle_(-1), hSoundWhistle_(-1),
 	pPlayer1_(nullptr), pPlayer2_(nullptr), pEnemy_(nullptr),
 	pHUD_(nullptr), pTransitionEffect_(nullptr),
@@ -52,8 +52,8 @@ BattleScene::~BattleScene()
 
 void BattleScene::Initialize()
 {
-	//プレイシーン(基底クラス)の初期化を行う
-	PlayScene::Initialize();
+	//プレイベースシーン(基底クラス)の初期化を行う
+	PlayBaseScene::Initialize();
 
 	//csvからパラメータ読み込み
 	SetCSVBattle();
@@ -279,7 +279,7 @@ void BattleScene::Update()
 void BattleScene::Draw()
 {	
 	//背景描画
-	PlayScene::DrawBackScreen();
+	PlayBaseScene::DrawBackScreen();
 
 	//今のBattleStateの状態から、HUDクラスに描画するものを指示
 	switch (BattleState_)
@@ -396,7 +396,7 @@ void BattleScene::UpdateInActive()
 	//画面を止めている状態
 
 	//Pause表示中の処理
-	PlayScene::UpdatePauseMenu();
+	PlayBaseScene::UpdatePauseMenu();
 }
 
 void BattleScene::UpdateTransition()
@@ -449,7 +449,7 @@ void BattleScene::UpdateTransition()
 
 void BattleScene::GotoPause()
 {
-	//ポーズ画面に向かう処理 PlaySceneから上書き
+	//ポーズ画面に向かう処理 PlayBaseSceneから上書き
 
 	//ポーズ画面状態へ移行
 	BattleState_ = S_Pause;
@@ -460,7 +460,7 @@ void BattleScene::GotoPause()
 
 void BattleScene::GotoPlay()
 {
-	//ゲーム画面に向かう処理 PlaySceneから上書き
+	//ゲーム画面に向かう処理 PlayBaseSceneから上書き
 
 	//バトル中状態へ移行
 	BattleState_ = S_Now;
@@ -471,7 +471,7 @@ void BattleScene::GotoPlay()
 
 void BattleScene::GotoTitle()
 {
-	//タイトルに向かう処理 PlaySceneから上書き
+	//タイトルに向かう処理 PlayBaseSceneから上書き
 
 	//シーン遷移エフェクト(黒くフェードアウト)を設定
 	if (pTransitionEffect_ != nullptr)
@@ -585,7 +585,7 @@ void BattleScene::UpdateBattle()
 	pHUD_->SetSecondScore(SecondScore_);
 
 	//escキーかstartボタンでポーズ画面へ
-	PlayScene::WaitGotoPause();
+	PlayBaseScene::WaitGotoPause();
 }
 
 void BattleScene::UpdateBattleAfter()

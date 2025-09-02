@@ -607,7 +607,7 @@ void Player::CameraControl()
 	}
 	else if (CameraState_ == S_DebugCamera)
 	{
-		//デバッグカメラ中はカメラの位置を固定し、操作しない
+		//デバッグカメラ中は操作しない
 	}
 }
 
@@ -684,7 +684,7 @@ void Player::KeyBoardMove()
 
 void Player::ControllerMove(int _PadID)
 {
-	//コントローラーIDが初期化されていないなら処理しない
+	//コントローラーIDがマイナス(初期化されていない)なら処理しない
 	if (_PadID < 0)
 	{
 		return;

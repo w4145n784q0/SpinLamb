@@ -5,7 +5,7 @@
 
 //Battle,Practiceシーンの基底クラス
 //これらのシーンで共通する処理を記述
-class PlayScene :
+class PlayBaseScene :
     public BaseScene
 {
 protected:
@@ -47,7 +47,7 @@ protected:
 	// PauseSelectList_のインデックスを指す値
 	std::list<PauseSelect>::iterator Pauseitr;
 
-	//ポーズ画面の選択アイコンの位置を仮に保管する
+	//ポーズ画面の選択アイコンの位置を保管する
 	float TmpIconPosY_;
 
 	//ポーズ画面の選択アイコンの位置配列
@@ -55,15 +55,15 @@ protected:
 	std::array<float, MaxPauseSelect> IconPosYArray;
 
 public:
-	PlayScene(GameObject* parent);
-	PlayScene(GameObject* parent, const std::string& name);
-	virtual ~PlayScene();
+	PlayBaseScene(GameObject* parent);
+	PlayBaseScene(GameObject* parent, const std::string& name);
+	virtual ~PlayBaseScene();
 
 	//初期化
 	void Initialize() override;
 
 	//CSVファイルから必要パラメータを読み込みする
-	void SetPlaySceneCSV();
+	void SetPlayBaseSceneCSV();
 
 	//BaseSceneの継承関数だが、さらにこの関数をBattle,Practiceが継承するので
 	//ここではBaseSceneの更新関数は継承しない（この時点ではまだ純粋仮想関数のまま）

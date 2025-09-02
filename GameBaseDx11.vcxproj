@@ -176,7 +176,7 @@
     <ClCompile Include="SceneSourceFile\BattleScene.cpp" />
     <ClCompile Include="SceneSourceFile\GameModeScene.cpp" />
     <ClCompile Include="SceneSourceFile\HowToPlayScene.cpp" />
-    <ClCompile Include="SceneSourceFile\PlayScene.cpp" />
+    <ClCompile Include="SceneSourceFile\PlayBaseScene.cpp" />
     <ClCompile Include="SceneSourceFile\PracticeScene.cpp" />
     <ClCompile Include="SceneSourceFile\ResultScene.cpp" />
     <ClCompile Include="SceneSourceFile\TitleScene.cpp" />
@@ -237,7 +237,7 @@
     <ClInclude Include="SceneSourceFile\BattleScene.h" />
     <ClInclude Include="SceneSourceFile\GameModeScene.h" />
     <ClInclude Include="SceneSourceFile\HowToPlayScene.h" />
-    <ClInclude Include="SceneSourceFile\PlayScene.h" />
+    <ClInclude Include="SceneSourceFile\PlayBaseScene.h" />
     <ClInclude Include="SceneSourceFile\PracticeScene.h" />
     <ClInclude Include="SceneSourceFile\ResultScene.h" />
     <ClInclude Include="SceneSourceFile\TitleScene.h" />

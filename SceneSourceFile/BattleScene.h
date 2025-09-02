@@ -7,11 +7,11 @@
 #include"../UISourceFile/MiniMap.h"
 #include"../UISourceFile/HUD.h"
 #include"../EffectSourceFile/TransitionEffect.h"
-#include"PlayScene.h"
+#include"PlayBaseScene.h"
 
 //"バトル"から始まるモードシーン
 class BattleScene :
-	public PlayScene, public IGameObserver
+	public PlayBaseScene, public IGameObserver
 {
 private:
 
@@ -98,7 +98,7 @@ public:
 	//シーン遷移中の処理
 	void UpdateTransition() override;
 
-	//----------PlaySceneの継承関数----------
+	//----------PlayBaseSceneの継承関数----------
 
 	//ポーズ画面に移動する
 	void GotoPause() override;

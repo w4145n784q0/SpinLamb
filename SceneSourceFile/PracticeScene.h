@@ -6,11 +6,11 @@
 #include"../UISourceFile/MiniMap.h"
 #include"../UISourceFile/HUD.h"
 #include"../EffectSourceFile/TransitionEffect.h"
-#include"PlayScene.h"
+#include"PlayBaseScene.h"
 
 //"フリープレイ"から始まる練習モードシーン
 class PracticeScene :
-    public PlayScene
+    public PlayBaseScene
 {
 private:
 
@@ -72,7 +72,7 @@ public:
 	//シーン遷移中の処理
 	void UpdateTransition() override;
 
-	//----------PlaySceneの継承関数----------
+	//----------PlayBaseSceneの継承関数----------
 
 	//ポーズ画面に移動する
 	void GotoPause() override;
@@ -89,4 +89,3 @@ public:
 	//CSVから必要パラメータを読み込みする
 	void SetCSVPractice();
 };
-

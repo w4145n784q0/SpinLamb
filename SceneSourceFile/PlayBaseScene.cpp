@@ -1,11 +1,11 @@
-#include "PlayScene.h"
+#include "PlayBaseScene.h"
 #include"../Engine/Image.h"
 #include"../Engine/Input.h"
 #include"../Engine/Audio.h"
 
 namespace
 {
-	//csv読み込み時のインデックス(プレイシーン用の変数)
+	//csv読み込み時のインデックス(プレイベースシーン用の変数)
 	enum EasingIndex
 	{
 		i_IconPosYContinue = 0,
@@ -13,28 +13,28 @@ namespace
 	};
 }
 
-PlayScene::PlayScene(GameObject* parent)
-	:BaseScene(parent, "PlayScene"), hBackScreen_(-1), PauseSelect_(S_Continue),
+PlayBaseScene::PlayBaseScene(GameObject* parent)
+	:BaseScene(parent, "PlayBaseScene"), hBackScreen_(-1), PauseSelect_(S_Continue),
 	TmpIconPosY_(0.0f), IconPosYArray({}),
 	hSoundPause_(-1),hSoundSelect_(-1),hSoundExit_(-1)
 {
 }
 
-PlayScene::PlayScene(GameObject* parent, const std::string& name)
+PlayBaseScene::PlayBaseScene(GameObject* parent, const std::string& name)
 	:BaseScene(parent, name), hBackScreen_(-1), PauseSelect_(S_Continue),
 	TmpIconPosY_(0.0f), IconPosYArray({}),
 	hSoundPause_(-1), hSoundSelect_(-1), hSoundExit_(-1)
 {
 }
 
-PlayScene::~PlayScene()
+PlayBaseScene::~PlayBaseScene()
 {
 }
 
-void PlayScene::Initialize()
+void PlayBaseScene::Initialize()
 {
 	//csvからパラメータ読み込み
-	SetPlaySceneCSV();
+	SetPlayBaseSceneCSV();
 
 	//各画像・サウンドの読み込み
 	//同じディレクトリ内からのパスは省略
@@ -63,7 +63,7 @@ void PlayScene::Initialize()
 
 }
 
-void PlayScene::SetPlaySceneCSV()
+void PlayBaseScene::SetPlayBaseSceneCSV()
 {
 	//csvファイルを読み込む
 	CsvReader csv;
@@ -80,13 +80,13 @@ void PlayScene::SetPlaySceneCSV()
 	IconPosYArray = { PlayData[i_IconPosYContinue], PlayData[i_IconPosYExit] };
 }
 
-void PlayScene::DrawBackScreen()
+void PlayBaseScene::DrawBackScreen()
 {
 	//背景描画
 	Image::SetAndDraw(hBackScreen_, TransBackScreen_);
 }
 
-void PlayScene::UpdatePauseMenu()
+void PlayBaseScene::UpdatePauseMenu()
 {
 	//ポーズ画面中の操作を行う
 	if (Input::IsKeyDown(DIK_UP) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP)
@@ -126,10 +126,10 @@ void PlayScene::UpdatePauseMenu()
 	//選択アイコンの位置を調整
 	switch (PauseSelect_)
 	{
-	case PlayScene::S_Continue:
+	case PlayBaseScene::S_Continue:
 		TmpIconPosY_ = IconPosYArray[S_Continue];
 		break;
-	case PlayScene::S_Exit:
+	case PlayBaseScene::S_Exit:
 		TmpIconPosY_ = IconPosYArray[S_Exit];
 		break;
 	default:
@@ -171,7 +171,7 @@ void PlayScene::UpdatePauseMenu()
 	WaitGotoPlay();
 }
 
-void PlayScene::WaitGotoPause()
+void PlayBaseScene::WaitGotoPause()
 {
 	//escキーかstartボタンでポーズ画面へ
 	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
@@ -187,7 +187,7 @@ void PlayScene::WaitGotoPause()
 	}
 }
 
-void PlayScene::WaitGotoPlay()
+void PlayBaseScene::WaitGotoPlay()
 {
 	//ESCキー・Startボタンを押したらActiveに戻る
 	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))

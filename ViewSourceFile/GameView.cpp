@@ -164,7 +164,7 @@ namespace GameView
 		Camera::Update();
 	}
 
-	void ViewImGui()
+	void GameView::ViewImGui()
 	{
 		//渡されたポインタからImGuiを描画
 		//ImGuiの描画は一度だけでいいので、各Draw関数ではなく
@@ -205,7 +205,7 @@ namespace GameView
 		}
 	}
 
-	void ViewHUDNormal()
+	void GameView::ViewHUDNormal()
 	{
 		//渡されたポインタからHUDを描画
 		//複数描画する必要が無い(画面に一つだけ描画する)ものを描画
@@ -235,7 +235,7 @@ namespace GameView
 		pHUD_->DrawFullScreen();
 	}
 
-	void ViewTransitionEffect()
+	void GameView::ViewTransitionEffect()
 	{
 		//渡されたポインタから遷移演出を描画
 		//最終的に画面全体を覆うのでDraw()とは切り離し、mainでこの関数を呼ぶ
@@ -282,7 +282,7 @@ namespace GameView
 		GameViewMode_ = mode;
 	}
 
-	void SetPlayers(std::vector<Player*> _players)
+	void GameView::SetPlayers(std::vector<Player*> _players)
 	{
 		//プレイヤー配列が空か最大プレイヤー数を超えたら処理しない
 		if (_players.empty() || _players.size() > MaxPlayersNum)
@@ -312,37 +312,37 @@ namespace GameView
 	}
 
 	//HUDのインスタンスを設定
-	void SetHUD(HUD* _HUD)
+	void GameView::SetHUD(HUD* _HUD)
 	{
 		pHUD_ = _HUD;
 	}
 
 	//Enemyのインスタンスを設定
-	void SetEnemy(Enemy* _enemy)
+	void GameView::SetEnemy(Enemy* _enemy)
 	{
 		pEnemy_ = _enemy;
 	}
 
 	//Groundのインスタンスを設定
-	void SetGround(Ground* _ground)
+	void GameView::SetGround(Ground* _ground)
 	{
 		pGround_ = _ground;
 	}
 
 	//Fenceのインスタンスを設定
-	void SetFence(Fence* _fence)
+	void GameView::SetFence(Fence* _fence)
 	{
 		pFence_ = _fence;
 	}
 
 	//OutStageThingのインスタンスを設定
-	void SetOutStageThing(OutStageThing* _stagething)
+	void GameView::SetOutStageThing(OutStageThing* _stagething)
 	{
 		pOutStageThing_ = _stagething;
 	}
 
 	//TransitionEffectのインスタンスを設定
-	void SetTransitionEffect(TransitionEffect* _transition)
+	void GameView::SetTransitionEffect(TransitionEffect* _transition)
 	{
 		pTransitionEffect_ = _transition;
 	}

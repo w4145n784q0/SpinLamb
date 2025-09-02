@@ -20,7 +20,7 @@ namespace
 }
 
 PracticeScene::PracticeScene(GameObject* parent)
-	:PlayScene(parent,"PracticeScene"),
+	:PlayBaseScene(parent,"PracticeScene"),
 	hSoundPractice_(-1),
 	pPlayer1_(nullptr), pPlayer2_(nullptr), pEnemy_(nullptr), pHUD_(nullptr),
 	pTransitionEffect_(nullptr), pMiniMap_(nullptr),
@@ -34,8 +34,8 @@ PracticeScene::~PracticeScene()
 
 void PracticeScene::Initialize()
 {
-	//プレイシーン(基底クラス)の初期化を行う
-	PlayScene::Initialize();
+	//プレイベースシーン(基底クラス)の初期化を行う
+	PlayBaseScene::Initialize();
 
 	//csvからパラメータ読み込み
 	SetCSVPractice();
@@ -223,7 +223,7 @@ void PracticeScene::Update()
 void PracticeScene::Draw()
 {
 	//背景描画
-	PlayScene::DrawBackScreen();
+	PlayBaseScene::DrawBackScreen();
 
 	//今のPracticeStateの状態から、HUDクラスに描画するものを指示
 	switch (PracticeState_)
@@ -297,7 +297,7 @@ void PracticeScene::UpdateActive()
 		pMiniMap_->SetOriginalSecondPos(pEnemy_->GetPosition());
 	}
 
-	PlayScene::WaitGotoPause();
+	PlayBaseScene::WaitGotoPause();
 }
 
 void PracticeScene::UpdateInActive()
@@ -305,7 +305,7 @@ void PracticeScene::UpdateInActive()
 	//画面を止めている状態
 
 	//Pause表示中の処理
-	PlayScene::UpdatePauseMenu();
+	PlayBaseScene::UpdatePauseMenu();
 }
 
 void PracticeScene::UpdateTransition()
@@ -342,7 +342,7 @@ void PracticeScene::UpdateTransition()
 
 void PracticeScene::GotoPause()
 {
-	//ポーズ画面に向かう処理 PlaySceneから上書き
+	//ポーズ画面に向かう処理 PlayBaseSceneから上書き
 
 	//ポーズ画面状態へ移行
 	PracticeState_ = S_Pause;
@@ -350,7 +350,7 @@ void PracticeScene::GotoPause()
 
 void PracticeScene::GotoPlay()
 {
-	//ゲーム画面に向かう処理 PlaySceneから上書き
+	//ゲーム画面に向かう処理 PlayBaseSceneから上書き
 
 	//練習中状態へ移行
 	PracticeState_ = S_Now;
@@ -358,7 +358,7 @@ void PracticeScene::GotoPlay()
 
 void PracticeScene::GotoTitle()
 {
-	//タイトルに向かう処理 PlaySceneから上書き
+	//タイトルに向かう処理 PlayBaseSceneから上書き
 
 	//シーン遷移エフェクト(黒くフェードアウト)を設定
 	if (pTransitionEffect_ != nullptr)

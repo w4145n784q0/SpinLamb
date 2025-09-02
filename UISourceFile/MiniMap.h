@@ -14,10 +14,10 @@ private:
 	//Player2,Enemyの位置
 	XMFLOAT3 SecondPos_;
 
-	//Player1の本来の位置 各プレイシーンから渡される
+	//Player1の本来の位置 Battle,Practiceから渡される
 	XMFLOAT3 OriginalFirstPos_;
 
-	//Player2,Enemyの本来の位置 各プレイシーンから渡される
+	//Player2,Enemyの本来の位置 各Battle,Practiceから渡される
 	XMFLOAT3 OriginalSecondPos_;
 
 public:
