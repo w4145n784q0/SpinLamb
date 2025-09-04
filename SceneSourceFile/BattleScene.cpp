@@ -544,11 +544,6 @@ void BattleScene::UpdateBattle()
 {
 	//ゲームプレイ中
 
-	//タイマーが止まっていたら再開 ポーズ画面から戻った際に使用
-	if (!pGameTimer_->IsCounting())
-	{
-		pGameTimer_->StartTimer();
-	}
 
 	//GameTimerから時間切れになったことを受け取ったら終了状態へ
 	if (pGameTimer_->GetCurrentGameTime() <= 0)

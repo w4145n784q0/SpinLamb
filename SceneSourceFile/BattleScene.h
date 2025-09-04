@@ -129,12 +129,6 @@ public:
 	//CSVから必要パラメータを読み込みする
 	void SetCSVBattle();
 
-	//プレイヤー1のスコア上昇
-	void PlusFirstScore() { FirstScore_++; }
-
-	//CPU・プレイヤー2のスコア上昇
-	void PlusSecondScore() { SecondScore_++; }
-
 	/// <summary>
 	/// スコアの上昇・下降計算
 	/// </summary>

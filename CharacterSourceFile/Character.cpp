@@ -752,14 +752,20 @@ void Character::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVel
 	ChargeReset();
 
 	//ノックバック時のY軸回転角の固定
-	KnockBackAngleY(HitParam_.KnockBack_Direction_);
+	KnockBackAngleY(HitParam_.KnockBack_Direction_,KnockBackValue);
 
 	//攻撃相手の名前を取得
 	HitParam_.AttackedName_ = _attackName;
 }
 
-void Character::KnockBackAngleY(XMFLOAT3 _KnockBackVector)
+void Character::KnockBackAngleY(XMFLOAT3 _KnockBackVector, float _KnockBackValue)
 {
+	if (_KnockBackValue <= 0.0f)
+	{
+		//ノックバック量が0以下なら処理しない(方向そのまま)
+		return;
+	}
+
 	//ノックバック中のY軸の回転角を求める
 	float angleY = static_cast<float>(atan2(_KnockBackVector.x, _KnockBackVector.z));
 
@@ -850,7 +856,7 @@ void Character::FenceReflect(XMVECTOR _normal)
 	NotifyFenceHit();
 
 	//ノックバック時のY軸回転角の固定
-	KnockBackAngleY(HitParam_.KnockBack_Direction_);
+	KnockBackAngleY(HitParam_.KnockBack_Direction_, FenceHitParam_.KnockBackPower_);
 
 	//攻撃相手の名前をリセット
 	//自分の名前を代入することで、自爆判定に使う

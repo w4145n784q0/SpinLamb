@@ -344,7 +344,8 @@ public:
     /// ノックバック中のY軸回転角の計算 ノックバック直前に行う
     /// </summary>
     /// <param name="_KnockBackVector">ノックバックする方向(正規化されていること前提)</param>
-    void KnockBackAngleY(XMFLOAT3 _KnockBackVector);
+    /// <param name="_KnockBackValue">ノックバックする量</param>
+    void KnockBackAngleY(XMFLOAT3 _KnockBackVector, float _KnockBackValue);
 
     /// <summary>
     /// ノックバック移動処理
