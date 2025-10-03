@@ -1,7 +1,9 @@
 ファイル構成は以下の通りです。
 
 SpinLamb
+
 ├─Assets
+
 ├─CharacterSourceFile
 
 ├─Documentation
