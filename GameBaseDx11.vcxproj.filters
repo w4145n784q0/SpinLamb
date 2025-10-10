@@ -209,6 +209,9 @@
     <ClCompile Include="SceneSourceFile\PlayBaseScene.cpp">
       <Filter>03Scene</Filter>
     </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterVFX.cpp">
+      <Filter>04Chara</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -385,6 +388,9 @@
     </ClInclude>
     <ClInclude Include="SceneSourceFile\PlayBaseScene.h">
       <Filter>03Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterVFX.h">
+      <Filter>04Chara</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
