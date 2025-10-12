@@ -138,6 +138,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CharacterSourceFile\Character.cpp" />
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterModelBlink.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterVFX.cpp" />
     <ClCompile Include="CharacterSourceFile\Enemy.cpp" />
     <ClCompile Include="CharacterSourceFile\Player.cpp" />
@@ -197,6 +198,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CharacterSourceFile\Character.h" />
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterModelBlink.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterVFX.h" />
     <ClInclude Include="CharacterSourceFile\Enemy.h" />
     <ClInclude Include="CharacterSourceFile\Player.h" />
