@@ -139,8 +139,15 @@
   <ItemGroup>
     <ClCompile Include="CharacterSourceFile\Character.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterAir.cpp" />
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterCharge.cpp" />
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterCsvLoader.cpp" />
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterFence.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterForward.cpp" />
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterHit.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterModelBlink.cpp" />
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterMovement.cpp" />
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterObserver.cpp" />
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterRotate.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterShadow.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterVFX.cpp" />
     <ClCompile Include="CharacterSourceFile\Enemy.cpp" />
@@ -202,8 +209,15 @@
   <ItemGroup>
     <ClInclude Include="CharacterSourceFile\Character.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterAir.h" />
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterCharge.h" />
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterCsvLoader.h" />
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterFence.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterForward.h" />
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterHit.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterModelBlink.h" />
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterMovement.h" />
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterObserver.h" />
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterRotate.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterShadow.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterVFX.h" />
     <ClInclude Include="CharacterSourceFile\Enemy.h" />

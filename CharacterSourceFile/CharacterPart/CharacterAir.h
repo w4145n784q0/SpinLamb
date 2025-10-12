@@ -4,6 +4,9 @@ class CharacterAir :
     public GameObject
 {
 public:
+
+    //----------‹ó’†----------
+
     /// <summary>
     /// d—Íˆ—
     /// </summary>
