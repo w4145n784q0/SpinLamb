@@ -1,4 +1,5 @@
 #pragma once
+#include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
 #include"../../InterfaceSourceFile/IGameObserver.h"
 

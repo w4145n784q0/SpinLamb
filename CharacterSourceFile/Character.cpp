@@ -118,7 +118,7 @@ Character::Character(GameObject* parent, const std::string& name)
 	{
 		Instantiate<CharacterCharge>(this);
 	}
-	/*if (hit_ == nullptr)
+	if (hit_ == nullptr)
 	{
 		Instantiate<CharacterHit>(this);
 	}
@@ -133,7 +133,7 @@ Character::Character(GameObject* parent, const std::string& name)
 	if (observer_ == nullptr)
 	{
 		Instantiate<CharacterObserver>(this);
-	}*/
+	}/**/
 
 	//csvからパラメータ読み込み
 	vfx_->InitCSVEffect();
@@ -156,7 +156,7 @@ Character::Character(GameObject* parent, const std::string& name)
 	assert(SoundParam_.hSoundJump_ >= 0);
 
 	//それぞれの柵の法線を取得
-	GetWireNormal();
+	fence_->GetWireNormal();
 
 	//影モデルを初期化
 	shadow_->InitShadow();
@@ -172,7 +172,7 @@ Character::~Character()
 			//監視対象の配列から削除
 			//通知者(Character)→監視者(BattleScene)の順に解放されるので、
 			//CharacterのデストラクタでRemoveObserverを呼ぶ
-			RemoveObserver(observer);
+			observer_->RemoveObserver(observer);
 
 			//安全策としてアドレスを無効化
 			observer = nullptr;
@@ -206,145 +206,145 @@ void Character::Draw()
 	shadow_->ShadowDraw();
 }
 
-void Character::SetCSVStatus(std::string _path)
-{
-	//csvファイルを読み込む
-	CsvReader csv;
-	csv.Load(_path);
+//void Character::SetCSVStatus(std::string _path)
+//{
+//	//csvファイルを読み込む
+//	CsvReader csv;
+//	csv.Load(_path);
+//
+//	//--------------------初期化関係のパラメータ(自身のtransform_,正面ベクトル)--------------------
+//
+//	//csvファイルの0列目の文字列を取得
+//	std::string p_init = "InitializeParam";
+//
+//	//0列目の文字列を渡し、その行のパラメータを取得
+//	std::vector<float> initData = GetCSVReadData(csv, p_init);
+//
+//	//自身のトランスフォームを初期化
+//	SetTransformPRS(this->transform_,initData);
+//
+//	//初期位置を保管する
+//	InitParam_.StartPosition_ = this->transform_.position_;
+//
+//	//--------------------移動関係のパラメータ--------------------
+//
+//	//csvファイルの0列目の文字列を取得
+//	std::string p_move = "MoveParam";
+//
+//	//0列目の文字列を渡し、その行のパラメータを取得
+//	std::vector<float> MoveData = GetCSVReadData(csv, p_move);
+//
+//	//初期化の順番はcsvの各行の順番に合わせる
+//	//vの添え字はnamespaceで宣言した列挙型を使用
+//	MoveParam_.Velocity_ = MoveData[i_Velocity];
+//	MoveParam_.AcceleValue_ = MoveData[i_AcceleValue];
+//	MoveParam_.FullAccelerate_ = MoveData[i_AcceleMax];
+//	MoveParam_.Friction_ = MoveData[i_Friction];
+//	MoveParam_.ArrowRotate_ = { MoveData[i_ArrowRotateX],MoveData[i_ArrowRotateY],MoveData[i_ArrowRotateZ] };
+//	MoveParam_.ArrowScale_ = { MoveData[i_ArrowScaleX],MoveData[i_ArrowScaleY],MoveData[i_ArrowScaleZ] };
+//	MoveParam_.AddArrowDepth_ = MoveData[i_AddArrowDepth];
+//
+//	//--------------------回転関係のパラメータ--------------------
+//
+//	//csvファイルの0列目の文字列を取得
+//	std::string p_rotate = "RotateParam";
+//
+//	//0列目の文字列を渡し、その行のパラメータを取得
+//	std::vector<float> RotData = GetCSVReadData(csv, p_rotate);
+//
+//	//初期化の順番はcsvの各行の順番に合わせる
+//	//vの添え字はnamespaceで宣言した列挙型を使用
+//	RotateParam_.MoveRotateX = RotData[i_MoveRotate];
+//	RotateParam_.FastRotateX = RotData[i_FastRotate];
+//
+//
+//	//--------------------空中関係のパラメータ--------------------
+//
+//	//csvファイルの0列目の文字列を取得	
+//	std::string p_jump = "JumpParam";
+//
+//	//0列目の文字列を渡し、その行のパラメータを取得
+//	std::vector<float> JumpData = GetCSVReadData(csv, p_jump);
+//
+//	//初期化の順番はcsvの各行の順番に合わせる
+//	//vの添え字はnamespaceで宣言した列挙型を使用
+//	JumpParam_.Gravity_ = JumpData[i_Gravity];
+//	JumpParam_.JumpHeight = JumpData[i_JumpHeight];
+//	JumpParam_.HeightLowerLimit_ = JumpData[i_UpperLimit];
+//	JumpParam_.HeightUpperLimit_ = JumpData[i_LowerLimit];
+//	JumpParam_.MinusLimit_ = JumpData[i_MinusLimit];
+//
+//	//--------------------被弾関係のパラメータ--------------------
+//
+//	//csvファイルの0列目の文字列を取得	
+//	std::string p_hit = "HitParam";
+//
+//	//0列目の文字列を渡し、その行のパラメータを取得
+//	std::vector<float> HitData = GetCSVReadData(csv, p_hit);
+//
+//	//初期化の順番はcsvの各行の順番に合わせる
+//	//vの添え字はnamespaceで宣言した列挙型を使用
+//	HitParam_.ColliderSize_ = HitData[i_Collider];
+//	HitParam_.OriginalRangeMin_ = HitData[i_OriginalRangeMin];
+//	HitParam_.OriginalRangeMax_ = HitData[i_OriginalRangeMax];
+//	HitParam_.ConvertedRangeMin_ = HitData[i_ConvertedRangeMin];
+//	HitParam_.ConvertedRangeMax_ = HitData[i_ConvertedRangeMax];
+//	HitParam_.DecelerationRate_ = HitData[i_DecelerationRate];
+//	HitParam_.KnockBackEnd_ = HitData[i_KnockBackEnd];
+//
+//	//--------------------柵に接触関係のパラメータ--------------------
+//
+//	//csvファイルの0列目の文字列を取得	
+//	std::string p_fencehit = "FenceHitParam";
+//
+//	//0列目の文字列を渡し、その行のパラメータを取得
+//	std::vector<float> FenceHitData = GetCSVReadData(csv, p_fencehit);
+//
+//	//初期化の順番はcsvの各行の順番に合わせる
+//	//vの添え字はnamespaceで宣言した列挙型を使用
+//	FenceHitParam_.KnockBackPower_ = FenceHitData[i_KnockBackPower];
+//	FenceHitParam_.InvincibilityValue_ = static_cast<int>(FenceHitData[i_InvincibilityValue]);
+//	FenceHitParam_.BlinkValue_ = static_cast<int>(FenceHitData[i_BlinkValue]);
+//	
+//
+//
+//	//--------------------影関係のパラメータ--------------------
+//
+//	//csvファイルの0列目の文字列を取得	
+//	std::string p_shadow = "ShadowParam";
+//
+//	//0列目の文字列を渡し、その行のパラメータを取得
+//	std::vector<float> ShadowData = GetCSVReadData(csv, p_shadow);
+//
+//	//初期化の順番はcsvの各行の順番に合わせる
+//	//vの添え字はnamespaceで宣言した列挙型を使用
+//	ShadowParam_.ShadowCorrection_ = ShadowData[i_ShadowCorrection];
+//}
 
-	//--------------------初期化関係のパラメータ(自身のtransform_,正面ベクトル)--------------------
-
-	//csvファイルの0列目の文字列を取得
-	std::string p_init = "InitializeParam";
-
-	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> initData = GetCSVReadData(csv, p_init);
-
-	//自身のトランスフォームを初期化
-	SetTransformPRS(this->transform_,initData);
-
-	//初期位置を保管する
-	InitParam_.StartPosition_ = this->transform_.position_;
-
-	//--------------------移動関係のパラメータ--------------------
-
-	//csvファイルの0列目の文字列を取得
-	std::string p_move = "MoveParam";
-
-	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> MoveData = GetCSVReadData(csv, p_move);
-
-	//初期化の順番はcsvの各行の順番に合わせる
-	//vの添え字はnamespaceで宣言した列挙型を使用
-	MoveParam_.Velocity_ = MoveData[i_Velocity];
-	MoveParam_.AcceleValue_ = MoveData[i_AcceleValue];
-	MoveParam_.FullAccelerate_ = MoveData[i_AcceleMax];
-	MoveParam_.Friction_ = MoveData[i_Friction];
-	MoveParam_.ArrowRotate_ = { MoveData[i_ArrowRotateX],MoveData[i_ArrowRotateY],MoveData[i_ArrowRotateZ] };
-	MoveParam_.ArrowScale_ = { MoveData[i_ArrowScaleX],MoveData[i_ArrowScaleY],MoveData[i_ArrowScaleZ] };
-	MoveParam_.AddArrowDepth_ = MoveData[i_AddArrowDepth];
-
-	//--------------------回転関係のパラメータ--------------------
-
-	//csvファイルの0列目の文字列を取得
-	std::string p_rotate = "RotateParam";
-
-	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> RotData = GetCSVReadData(csv, p_rotate);
-
-	//初期化の順番はcsvの各行の順番に合わせる
-	//vの添え字はnamespaceで宣言した列挙型を使用
-	RotateParam_.MoveRotateX = RotData[i_MoveRotate];
-	RotateParam_.FastRotateX = RotData[i_FastRotate];
-
-
-	//--------------------空中関係のパラメータ--------------------
-
-	//csvファイルの0列目の文字列を取得	
-	std::string p_jump = "JumpParam";
-
-	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> JumpData = GetCSVReadData(csv, p_jump);
-
-	//初期化の順番はcsvの各行の順番に合わせる
-	//vの添え字はnamespaceで宣言した列挙型を使用
-	JumpParam_.Gravity_ = JumpData[i_Gravity];
-	JumpParam_.JumpHeight = JumpData[i_JumpHeight];
-	JumpParam_.HeightLowerLimit_ = JumpData[i_UpperLimit];
-	JumpParam_.HeightUpperLimit_ = JumpData[i_LowerLimit];
-	JumpParam_.MinusLimit_ = JumpData[i_MinusLimit];
-
-	//--------------------被弾関係のパラメータ--------------------
-
-	//csvファイルの0列目の文字列を取得	
-	std::string p_hit = "HitParam";
-
-	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> HitData = GetCSVReadData(csv, p_hit);
-
-	//初期化の順番はcsvの各行の順番に合わせる
-	//vの添え字はnamespaceで宣言した列挙型を使用
-	HitParam_.ColliderSize_ = HitData[i_Collider];
-	HitParam_.OriginalRangeMin_ = HitData[i_OriginalRangeMin];
-	HitParam_.OriginalRangeMax_ = HitData[i_OriginalRangeMax];
-	HitParam_.ConvertedRangeMin_ = HitData[i_ConvertedRangeMin];
-	HitParam_.ConvertedRangeMax_ = HitData[i_ConvertedRangeMax];
-	HitParam_.DecelerationRate_ = HitData[i_DecelerationRate];
-	HitParam_.KnockBackEnd_ = HitData[i_KnockBackEnd];
-
-	//--------------------柵に接触関係のパラメータ--------------------
-
-	//csvファイルの0列目の文字列を取得	
-	std::string p_fencehit = "FenceHitParam";
-
-	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> FenceHitData = GetCSVReadData(csv, p_fencehit);
-
-	//初期化の順番はcsvの各行の順番に合わせる
-	//vの添え字はnamespaceで宣言した列挙型を使用
-	FenceHitParam_.KnockBackPower_ = FenceHitData[i_KnockBackPower];
-	FenceHitParam_.InvincibilityValue_ = static_cast<int>(FenceHitData[i_InvincibilityValue]);
-	FenceHitParam_.BlinkValue_ = static_cast<int>(FenceHitData[i_BlinkValue]);
-	
-
-
-	//--------------------影関係のパラメータ--------------------
-
-	//csvファイルの0列目の文字列を取得	
-	std::string p_shadow = "ShadowParam";
-
-	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> ShadowData = GetCSVReadData(csv, p_shadow);
-
-	//初期化の順番はcsvの各行の順番に合わせる
-	//vの添え字はnamespaceで宣言した列挙型を使用
-	ShadowParam_.ShadowCorrection_ = ShadowData[i_ShadowCorrection];
-}
-
-void Character::GetWireNormal()
-{
-	//各インスタンスから柵の法線を取得
-	UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");
-	assert(pUpperWire != nullptr);
-	FenceHitParam_.UpperNormal_ = pUpperWire->GetNormal();
-
-	LowerWire* pLowerWire = (LowerWire*)FindObject("LowerWire");
-	assert(pLowerWire != nullptr);
-	FenceHitParam_.LowerNormal_ = pLowerWire->GetNormal();
-
-	RightWire* pRightWire = (RightWire*)FindObject("RightWire");
-	assert(pRightWire != nullptr);
-	FenceHitParam_.RightNormal_ = pRightWire->GetNormal();
-
-	LeftWire* pLeftWire = (LeftWire*)FindObject("LeftWire");
-	assert(pLeftWire != nullptr);
-	FenceHitParam_.LeftNormal_ = pLeftWire->GetNormal();
-
-	//取得した法線を配列に格納
-	//これらが柵に接触した際の跳ね返る方向になる
-	FenceHitParam_.NormalArray_ = { FenceHitParam_.UpperNormal_,  FenceHitParam_.LowerNormal_,
-		 FenceHitParam_.RightNormal_, FenceHitParam_.LeftNormal_, };
-}
+//void Character::GetWireNormal()
+//{
+//	//各インスタンスから柵の法線を取得
+//	UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");
+//	assert(pUpperWire != nullptr);
+//	FenceHitParam_.UpperNormal_ = pUpperWire->GetNormal();
+//
+//	LowerWire* pLowerWire = (LowerWire*)FindObject("LowerWire");
+//	assert(pLowerWire != nullptr);
+//	FenceHitParam_.LowerNormal_ = pLowerWire->GetNormal();
+//
+//	RightWire* pRightWire = (RightWire*)FindObject("RightWire");
+//	assert(pRightWire != nullptr);
+//	FenceHitParam_.RightNormal_ = pRightWire->GetNormal();
+//
+//	LeftWire* pLeftWire = (LeftWire*)FindObject("LeftWire");
+//	assert(pLeftWire != nullptr);
+//	FenceHitParam_.LeftNormal_ = pLeftWire->GetNormal();
+//
+//	//取得した法線を配列に格納
+//	//これらが柵に接触した際の跳ね返る方向になる
+//	FenceHitParam_.NormalArray_ = { FenceHitParam_.UpperNormal_,  FenceHitParam_.LowerNormal_,
+//		 FenceHitParam_.RightNormal_, FenceHitParam_.LeftNormal_, };
+//}
 
 void Character::InitArrow()
 {
@@ -358,30 +358,30 @@ void Character::InitArrow()
 	assert(MoveParam_.hMoveArrow_ >= 0);
 }
 
-void Character::AddObserver(IGameObserver* _observer)
-{
-	//監視者を配列に追加する
-	InitParam_.observers.push_back(_observer);
-}
+//void Character::AddObserver(IGameObserver* _observer)
+//{
+//	//監視者を配列に追加する
+//	InitParam_.observers.push_back(_observer);
+//}
 
-void Character::RemoveObserver(IGameObserver* _observer)
-{
-	auto it = InitParam_.observers.begin();
-
-	while (it != InitParam_.observers.end())
-	{
-		if (*it == _observer)
-		{
-			//監視される対象の配列ループ内で、監視対象を見つけたら削除
-			//イテレータ削除後は次の要素を参照する
-			it = InitParam_.observers.erase(it);
-		}
-		else
-		{
-			++it;
-		}
-	}
-}
+//void Character::RemoveObserver(IGameObserver* _observer)
+//{
+//	auto it = InitParam_.observers.begin();
+//
+//	while (it != InitParam_.observers.end())
+//	{
+//		if (*it == _observer)
+//		{
+//			//監視される対象の配列ループ内で、監視対象を見つけたら削除
+//			//イテレータ削除後は次の要素を参照する
+//			it = InitParam_.observers.erase(it);
+//		}
+//		else
+//		{
+//			++it;
+//		}
+//	}
+//}
 
 //void Character::DrawCharacterModel(int _handle, Transform _transform)
 //{
@@ -500,12 +500,12 @@ void Character::DrawCharacterImGui()
 	//ノックバックする方向、ノックバックの速度
 	if (ImGui::TreeNode("Hit"))
 	{
-		ImGui::InputFloat("OriginalRangeMin", &this->HitParam_.OriginalRangeMin_, ZeroPointOne);
-		ImGui::InputFloat("OriginalRangeMax", &this->HitParam_.OriginalRangeMax_, ZeroPointOne);
-		ImGui::InputFloat("ConvertedRangeMin", &this->HitParam_.ConvertedRangeMin_, ZeroPointOne);
-		ImGui::InputFloat("ConvertedRangeMax", &this->HitParam_.ConvertedRangeMax_, ZeroPointOne);
-		ImGui::InputFloat("DecelerationRate", &this->HitParam_.DecelerationRate_, ZeroPointOne);
-		ImGui::InputFloat("KnockBackEnd", &this->HitParam_.KnockBackEnd_, ZeroPointOne);
+		ImGui::InputFloat("OriginalRangeMin", &HitParam_.OriginalRangeMin_, ZeroPointOne);
+		ImGui::InputFloat("OriginalRangeMax", &HitParam_.OriginalRangeMax_, ZeroPointOne);
+		ImGui::InputFloat("ConvertedRangeMin", &HitParam_.ConvertedRangeMin_, ZeroPointOne);
+		ImGui::InputFloat("ConvertedRangeMax", &HitParam_.ConvertedRangeMax_, ZeroPointOne);
+		ImGui::InputFloat("DecelerationRate", &HitParam_.DecelerationRate_, ZeroPointOne);
+		ImGui::InputFloat("KnockBackEnd", &HitParam_.KnockBackEnd_, ZeroPointOne);
 
 		ImGui::Text("KnockBack_DirectionX:%.3f", HitParam_.KnockBack_Direction_.x);
 		ImGui::Text("KnockBack_DirectionY:%.3f", HitParam_.KnockBack_Direction_.y);
@@ -525,11 +525,11 @@ void Character::DrawCharacterImGui()
 	// 無敵時間中の描画間隔,描画中に点滅表現をさせる値
 	if (ImGui::TreeNode("FenceHit"))
 	{
-		ImGui::InputFloat("KnockBackPower", &this->FenceHitParam_.KnockBackPower_, ZeroPointOne);
-		ImGui::InputInt("InvincibilityTime", &this->FenceHitParam_.InvincibilityTime_);
-		ImGui::InputInt("InvincibilityValue", &this->FenceHitParam_.InvincibilityValue_);
-		ImGui::InputInt("blinkTimer", &this->FenceHitParam_.BlinkTimer_);
-		ImGui::InputInt("blinkValue", &this->FenceHitParam_.BlinkValue_);
+		ImGui::InputFloat("KnockBackPower", &FenceHitParam_.KnockBackPower_, ZeroPointOne);
+		ImGui::InputInt("InvincibilityTime", &FenceHitParam_.InvincibilityTime_);
+		ImGui::InputInt("InvincibilityValue", &FenceHitParam_.InvincibilityValue_);
+		ImGui::InputInt("blinkTimer", &FenceHitParam_.BlinkTimer_);
+		ImGui::InputInt("blinkValue", &FenceHitParam_.BlinkValue_);
 
 		ImGui::TreePop();
 	}
@@ -736,225 +736,225 @@ void Character::DrawCharacterImGui()
 //	return angleDeg;
 //}
 
-void Character::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity,
-	std::string _attackName)
-{
-	//無敵状態なら処理しない
-	if (this->FenceHitParam_.IsInvincibility_)
-	{
-		return;
-	}
+//void Character::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity,
+//	std::string _attackName)
+//{
+//	//無敵状態なら処理しない
+//	if (this->FenceHitParam_.IsInvincibility_)
+//	{
+//		return;
+//	}
+//
+//	//接触相手のベクトルから自身のベクトルを引く
+//	XMVECTOR subVector = XMVectorSubtract(_targetVector, _myVector);
+//
+//	//引いたベクトルが0ならお互いの位置が同じなので処理しない(0ベクトルを正規化はできない)
+//	if (XMVector3Equal(subVector, XMVectorZero()))
+//	{
+//		return;
+//	}
+//
+//	//単位ベクトルに変換
+//	subVector = XMVector3Normalize(subVector);
+//	
+//	//逆ベクトルにして反射方向を決定
+//	subVector = XMVectorNegate(subVector);
+//	XMFLOAT3 tmp;
+//	XMStoreFloat3(&tmp,subVector);
+//
+//	//反射方向を設定
+//	HitParam_.KnockBack_Direction_ = tmp;
+//
+//	//自身の速度と相手の速度の差分をとる
+//	//速度の差分に応じてノックバック量を変化させる
+//	float subVelocity = _myVelocity - _targetVelocity;
+//
+//	//ノックバック量の初期化
+//	//毎回値が変化するのでローカル変数
+//	float KnockBackValue = 0.0f;
+//
+//	//速度差の判定は線形補完元の最大値を適用
+//	//速度差が自身の方が一定以上なら、自身のノックバック量は0
+//	if (subVelocity >= HitParam_.OriginalRangeMax_)
+//	{
+//		KnockBackValue = 0.0f;
+//	}
+//	else 
+//	{
+//		//値がマイナスならプラスに変更
+//		if (signbit(subVelocity)) 
+//		{
+//			subVelocity = -subVelocity;
+//		}
+//
+//		//ノックバック量の線形補完を行う
+//		KnockBackValue = LinearInterpolation(subVelocity,
+//			HitParam_.OriginalRangeMin_, HitParam_.OriginalRangeMax_,
+//			HitParam_.ConvertedRangeMin_, HitParam_.ConvertedRangeMax_);
+//	}
+//
+//	//変換したノックバック量をノックバック時の速度x,zに代入
+//	HitParam_.KnockBack_Velocity_.x = KnockBackValue;
+//	HitParam_.KnockBack_Velocity_.z = KnockBackValue;
+//
+//	//溜めている速度をリセット
+//	charge_->ChargeReset();
+//
+//	//ノックバック時のY軸回転角の固定
+//	KnockBackAngleY(HitParam_.KnockBack_Direction_,KnockBackValue);
+//
+//	//攻撃相手の名前を取得
+//	HitParam_.AttackedName_ = _attackName;
+//}
 
-	//接触相手のベクトルから自身のベクトルを引く
-	XMVECTOR subVector = XMVectorSubtract(_targetVector, _myVector);
+//void Character::KnockBackAngleY(XMFLOAT3 _KnockBackVector, float _KnockBackValue)
+//{
+//	if (_KnockBackValue <= 0.0f)
+//	{
+//		//ノックバック量が0以下なら処理しない(方向そのまま)
+//		return;
+//	}
+//
+//	//ノックバック中のY軸の回転角を求める
+//	float angleY = static_cast<float>(atan2(_KnockBackVector.x, _KnockBackVector.z));
+//
+//	//angleYはラジアン角なのでディグリー角に変換し、Y軸回転にセット
+//	this->transform_.rotate_.y = XMConvertToDegrees(angleY);
+//}
 
-	//引いたベクトルが0ならお互いの位置が同じなので処理しない(0ベクトルを正規化はできない)
-	if (XMVector3Equal(subVector, XMVectorZero()))
-	{
-		return;
-	}
+//void Character::KnockBack()
+//{
+//	//x軸の+回転を行う
+//	rotate_->MoveRotateX();
+//
+//	//毎フレームノックバック速度を減少
+//	HitParam_.KnockBack_Velocity_.x *= HitParam_.DecelerationRate_;
+//	HitParam_.KnockBack_Velocity_.z *= HitParam_.DecelerationRate_;
+//
+//	//ノックバック後の位置を計算
+//	//位置 = 位置 + 方向 * 速度
+//	XMFLOAT3 TmpPos = this->transform_.position_;
+//	TmpPos.x += HitParam_.KnockBack_Direction_.x * HitParam_.KnockBack_Velocity_.x;
+//	TmpPos.z += HitParam_.KnockBack_Direction_.z * HitParam_.KnockBack_Velocity_.z;
+//
+//	//この時点では変更せず、移動後の仮の位置に保管
+//	MoveParam_.NewPosition_ = XMLoadFloat3(&TmpPos);
+//
+//	//場外でなければ位置更新 
+//	XMFLOAT3 tmp;
+//	XMStoreFloat3(&tmp, MoveParam_. NewPosition_);
+//	if (!movement_->IsOutsideStage(tmp))
+//	{
+//		movement_->MoveConfirm();
+//	}
+//}
 
-	//単位ベクトルに変換
-	subVector = XMVector3Normalize(subVector);
-	
-	//逆ベクトルにして反射方向を決定
-	subVector = XMVectorNegate(subVector);
-	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp,subVector);
+//XMVECTOR Character::HitNormal(std::string _normal)
+//{
+//	
+//	//指定した名前の鉄線がWireArrayから見つかったら対応した法線を返す
+//	//返した方向が柵に接触した際のノックバック方向となる
+//	//見つからない場合は0を返す
+//	for (int i = 0; i < FenceHitParam_.WireArray_.size(); i++)
+//	{
+//		if (_normal == FenceHitParam_.WireArray_[i])
+//		{
+//			return FenceHitParam_.NormalArray_[i];
+//		}
+//	}
+//
+//	return { 0,0,0 };
+//}
 
-	//反射方向を設定
-	HitParam_.KnockBack_Direction_ = tmp;
+//void Character::FenceReflect(XMVECTOR _normal)
+//{
+//	//接触エフェクトを指定
+//	vfx_->SetFenceHitEffect();
+//
+//	//溜めている速度をリセット
+//	charge_->ChargeReset();
+//
+//	//ダッシュ中の速度リセット
+//	movement_->AccelerationStop();
+//
+//	//念のため正規化する
+//	//反射方向が0なら処理しない(0ベクトルを正規化はできない)
+//	if (XMVector3Equal(_normal, XMVectorZero()))
+//	{
+//		return;
+//	}
+//
+//	//単位ベクトルに変換
+//	_normal = XMVector3Normalize(_normal);
+//
+//	//XMFLOAT3型に変換
+//	XMFLOAT3 tmp;
+//	XMStoreFloat3(&tmp, _normal);
+//
+//	//受け取った法線をノックバック方向に代入
+//	HitParam_.KnockBack_Direction_ = { tmp };
+//
+//	//ノックバック量を速度に代入(一定値)
+//	HitParam_.KnockBack_Velocity_.x = FenceHitParam_.KnockBackPower_;
+//	HitParam_.KnockBack_Velocity_.z = FenceHitParam_.KnockBackPower_;
+//
+//	//無敵状態を設定
+//	FenceHitParam_.IsInvincibility_ = true;
+//
+//	//接触通知
+//	NotifyFenceHit();
+//
+//	//ノックバック時のY軸回転角の固定
+//	KnockBackAngleY(HitParam_.KnockBack_Direction_, FenceHitParam_.KnockBackPower_);
+//
+//	//攻撃相手の名前をリセット
+//	//自分の名前を代入することで、自爆判定に使う
+//	HitParam_.AttackedName_ = this->GetObjectName();
+//}
 
-	//自身の速度と相手の速度の差分をとる
-	//速度の差分に応じてノックバック量を変化させる
-	float subVelocity = _myVelocity - _targetVelocity;
+//bool Character::IsKnockBackEnd()
+//{
+//	//ノックバック速度が終了値に到達したか判定し、真偽を返す
+//
+//	if (HitParam_.KnockBack_Velocity_.x <= HitParam_.KnockBackEnd_ ||
+//		HitParam_.KnockBack_Velocity_.z <= HitParam_.KnockBackEnd_)
+//	{
+//		return true;
+//	}
+//	else
+//	{
+//		return false;
+//	}
+//}
 
-	//ノックバック量の初期化
-	//毎回値が変化するのでローカル変数
-	float KnockBackValue = 0.0f;
+//void Character::InvincibilityTimeCalculation()
+//{
+//	//無敵時間の計算
+//
+//	//無敵時間かどうか判定(この関数は毎フレーム呼ばれるため)
+//	if (FenceHitParam_.IsInvincibility_)
+//	{
+//		//タイマーが終了値を超えたら無敵時間を終わる
+//		if (++FenceHitParam_.InvincibilityTime_ > FenceHitParam_.InvincibilityValue_)
+//		{
+//			FenceHitParam_.InvincibilityTime_ = 0;
+//			FenceHitParam_.IsInvincibility_ = false;
+//		}
+//	}
+//}
 
-	//速度差の判定は線形補完元の最大値を適用
-	//速度差が自身の方が一定以上なら、自身のノックバック量は0
-	if (subVelocity >= HitParam_.OriginalRangeMax_)
-	{
-		KnockBackValue = 0.0f;
-	}
-	else 
-	{
-		//値がマイナスならプラスに変更
-		if (signbit(subVelocity)) 
-		{
-			subVelocity = -subVelocity;
-		}
-
-		//ノックバック量の線形補完を行う
-		KnockBackValue = LinearInterpolation(subVelocity,
-			HitParam_.OriginalRangeMin_, HitParam_.OriginalRangeMax_,
-			HitParam_.ConvertedRangeMin_, HitParam_.ConvertedRangeMax_);
-	}
-
-	//変換したノックバック量をノックバック時の速度x,zに代入
-	HitParam_.KnockBack_Velocity_.x = KnockBackValue;
-	HitParam_.KnockBack_Velocity_.z = KnockBackValue;
-
-	//溜めている速度をリセット
-	charge_->ChargeReset();
-
-	//ノックバック時のY軸回転角の固定
-	KnockBackAngleY(HitParam_.KnockBack_Direction_,KnockBackValue);
-
-	//攻撃相手の名前を取得
-	HitParam_.AttackedName_ = _attackName;
-}
-
-void Character::KnockBackAngleY(XMFLOAT3 _KnockBackVector, float _KnockBackValue)
-{
-	if (_KnockBackValue <= 0.0f)
-	{
-		//ノックバック量が0以下なら処理しない(方向そのまま)
-		return;
-	}
-
-	//ノックバック中のY軸の回転角を求める
-	float angleY = static_cast<float>(atan2(_KnockBackVector.x, _KnockBackVector.z));
-
-	//angleYはラジアン角なのでディグリー角に変換し、Y軸回転にセット
-	this->transform_.rotate_.y = XMConvertToDegrees(angleY);
-}
-
-void Character::KnockBack()
-{
-	//x軸の+回転を行う
-	rotate_->MoveRotateX();
-
-	//毎フレームノックバック速度を減少
-	HitParam_.KnockBack_Velocity_.x *= HitParam_.DecelerationRate_;
-	HitParam_.KnockBack_Velocity_.z *= HitParam_.DecelerationRate_;
-
-	//ノックバック後の位置を計算
-	//位置 = 位置 + 方向 * 速度
-	XMFLOAT3 TmpPos = this->transform_.position_;
-	TmpPos.x += HitParam_.KnockBack_Direction_.x * HitParam_.KnockBack_Velocity_.x;
-	TmpPos.z += HitParam_.KnockBack_Direction_.z * HitParam_.KnockBack_Velocity_.z;
-
-	//この時点では変更せず、移動後の仮の位置に保管
-	MoveParam_.NewPosition_ = XMLoadFloat3(&TmpPos);
-
-	//場外でなければ位置更新 
-	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, MoveParam_. NewPosition_);
-	if (!movement_->IsOutsideStage(tmp))
-	{
-		movement_->MoveConfirm();
-	}
-}
-
-XMVECTOR Character::HitNormal(std::string _normal)
-{
-	
-	//指定した名前の鉄線がWireArrayから見つかったら対応した法線を返す
-	//返した方向が柵に接触した際のノックバック方向となる
-	//見つからない場合は0を返す
-	for (int i = 0; i < FenceHitParam_.WireArray_.size(); i++)
-	{
-		if (_normal == FenceHitParam_.WireArray_[i])
-		{
-			return FenceHitParam_.NormalArray_[i];
-		}
-	}
-
-	return { 0,0,0 };
-}
-
-void Character::FenceReflect(XMVECTOR _normal)
-{
-	//接触エフェクトを指定
-	vfx_->SetFenceHitEffect();
-
-	//溜めている速度をリセット
-	charge_->ChargeReset();
-
-	//ダッシュ中の速度リセット
-	movement_->AccelerationStop();
-
-	//念のため正規化する
-	//反射方向が0なら処理しない(0ベクトルを正規化はできない)
-	if (XMVector3Equal(_normal, XMVectorZero()))
-	{
-		return;
-	}
-
-	//単位ベクトルに変換
-	_normal = XMVector3Normalize(_normal);
-
-	//XMFLOAT3型に変換
-	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, _normal);
-
-	//受け取った法線をノックバック方向に代入
-	HitParam_.KnockBack_Direction_ = { tmp };
-
-	//ノックバック量を速度に代入(一定値)
-	HitParam_.KnockBack_Velocity_.x = FenceHitParam_.KnockBackPower_;
-	HitParam_.KnockBack_Velocity_.z = FenceHitParam_.KnockBackPower_;
-
-	//無敵状態を設定
-	FenceHitParam_.IsInvincibility_ = true;
-
-	//接触通知
-	NotifyFenceHit();
-
-	//ノックバック時のY軸回転角の固定
-	KnockBackAngleY(HitParam_.KnockBack_Direction_, FenceHitParam_.KnockBackPower_);
-
-	//攻撃相手の名前をリセット
-	//自分の名前を代入することで、自爆判定に使う
-	HitParam_.AttackedName_ = this->GetObjectName();
-}
-
-bool Character::IsKnockBackEnd()
-{
-	//ノックバック速度が終了値に到達したか判定し、真偽を返す
-
-	if (HitParam_.KnockBack_Velocity_.x <= HitParam_.KnockBackEnd_ ||
-		HitParam_.KnockBack_Velocity_.z <= HitParam_.KnockBackEnd_)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
-void Character::InvincibilityTimeCalculation()
-{
-	//無敵時間の計算
-
-	//無敵時間かどうか判定(この関数は毎フレーム呼ばれるため)
-	if (FenceHitParam_.IsInvincibility_)
-	{
-		//タイマーが終了値を超えたら無敵時間を終わる
-		if (++FenceHitParam_.InvincibilityTime_ > FenceHitParam_.InvincibilityValue_)
-		{
-			FenceHitParam_.InvincibilityTime_ = 0;
-			FenceHitParam_.IsInvincibility_ = false;
-		}
-	}
-}
-
-void Character::NotifyFenceHit()
-{
-	//通知を受け取る側がoverrideしていなかった場合は何も起こらない
-	//BattleSceneでのみ有効(監視対象がない=AddObserverを呼ばない場合、
-	//InitParam_.observers自体が空なのでfor文がスルーされる)
-	for (IGameObserver* observer : InitParam_.observers) 
-	{
-		//監視者へ柵にヒットしたこと（最後に当たった(攻撃した)キャラクターの名前）と
-		//柵に当たったキャラクターの名前(NotifyFenceHit()を呼び出した自分自身)を通知
-		observer->OnCharacterFenceHit(this->HitParam_.AttackedName_,this->GetObjectName());
-	}
-}
+//void Character::NotifyFenceHit()
+//{
+//	//通知を受け取る側がoverrideしていなかった場合は何も起こらない
+//	//BattleSceneでのみ有効(監視対象がない=AddObserverを呼ばない場合、
+//	//InitParam_.observers自体が空なのでfor文がスルーされる)
+//	for (IGameObserver* observer : InitParam_.observers) 
+//	{
+//		//監視者へ柵にヒットしたこと（最後に当たった(攻撃した)キャラクターの名前）と
+//		//柵に当たったキャラクターの名前(NotifyFenceHit()を呼び出した自分自身)を通知
+//		observer->OnCharacterFenceHit(HitParam_.AttackedName_,this->GetObjectName());
+//	}
+//}
 
 //void Character::Charging()
 //{

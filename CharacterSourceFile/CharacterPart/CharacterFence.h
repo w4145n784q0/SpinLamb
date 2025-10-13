@@ -1,4 +1,5 @@
 #pragma once
+#include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
 class CharacterFence :
     public GameObject
@@ -21,5 +22,10 @@ public:
     /// 監視する対象(配列)に柵にヒットしたことを通知
     /// </summary>
     void NotifyFenceHit();
+
+    /// <summary>
+    /// ダメージ後の無敵時間の計算
+    /// </summary>
+    void InvincibilityTimeCalculation();
 };
 

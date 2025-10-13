@@ -1,4 +1,5 @@
 #pragma once
+#include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
 
 class CharacterHit :
@@ -47,11 +48,6 @@ public:
     /// ノックバック速度を0に戻す
     /// </summary>
     void KnockBackVelocityReset();
-
-    /// <summary>
-    /// ダメージ後の無敵時間の計算
-    /// </summary>
-    void InvincibilityTimeCalculation();
 
 };
 

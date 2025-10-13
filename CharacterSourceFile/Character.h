@@ -23,7 +23,8 @@ class Character :
     public GameObject
 {
 protected:
-    // ---- モジュール群 ----
+    //----------モジュール群----------
+
     CharacterModelBlink* blink_;
     CharacterVFX*        vfx_;
     CharacterShadow*     shadow_;
@@ -32,10 +33,10 @@ protected:
     CharacterMovement*   movement_;
     CharacterRotate*     rotate_;
     CharacterCharge*     charge_;
-    /*CharacterHit*        hit_;
+    CharacterHit*        hit_;
     CharacterFence*      fence_;
     CharacterCsvLoader*  csvload_;
-    CharacterObserver*   observer_;*/
+    CharacterObserver*   observer_;
 
 
 protected:
@@ -54,14 +55,14 @@ protected:
     //int hSoundJump_ = -1;       //ジャンプ音のハンドル
 
     //----------初期状態----------
-    struct InitializeParam
-    {
-        int CharacterID = -1;                   //ゲームに参加するキャラクターのid
-        //XMFLOAT3 StartPosition_ = { 0,0,0 };    //初期位置
-        XMVECTOR FrontDirection_ = { 0,0,1 };   //正面の初期値(ローカル座標系) ここからどれだけ回転したか
-        std::vector<IGameObserver*> observers;  //監視される対象の配列
-    };
-    InitializeParam InitParam_;
+    //struct InitializeParam
+    //{
+    //    int CharacterID = -1;                   //ゲームに参加するキャラクターのid
+    //    //XMFLOAT3 StartPosition_ = { 0,0,0 };    //初期位置
+    //    XMVECTOR FrontDirection_ = { 0,0,1 };   //正面の初期値(ローカル座標系) ここからどれだけ回転したか
+    //    std::vector<IGameObserver*> observers;  //監視される対象の配列
+    //};
+    //InitializeParam InitParam_;
 
     //----------移動----------
     //struct MoveParam
@@ -106,40 +107,40 @@ protected:
 
 
     //----------被弾----------
-    struct HitParam
-    {
-        float ColliderSize_ = 0.0f;                 //当たり判定(球体)のサイズ
-        float OriginalRangeMin_ = 0.0f;             //変換元のノックバック量の最小値
-        float OriginalRangeMax_ = 0.0f;             //変換元のノックバック量の最大値
-        float ConvertedRangeMin_ = 0.0f;            //変換後のノックバック量の最小値
-        float ConvertedRangeMax_ = 0.0f;            //変換後のノックバック量の最大値
-        XMFLOAT3 KnockBack_Direction_ = { 0,0,0 };  //ノックバックする方向
-        XMFLOAT3 KnockBack_Velocity_ = { 0,0,0 };   //ノックバックする速度
-        float DecelerationRate_ = 0.0f;             //ノックバック時の1fごとの減速率
-        float KnockBackEnd_ = 0.0f;                 //ノックバックを終了する値
-        std::string AttackedName_ = "";             //接触した相手の名前
-    };
-    HitParam HitParam_;
+    //struct HitParam
+    //{
+    //    float ColliderSize_ = 0.0f;                 //当たり判定(球体)のサイズ
+    //    float OriginalRangeMin_ = 0.0f;             //変換元のノックバック量の最小値
+    //    float OriginalRangeMax_ = 0.0f;             //変換元のノックバック量の最大値
+    //    float ConvertedRangeMin_ = 0.0f;            //変換後のノックバック量の最小値
+    //    float ConvertedRangeMax_ = 0.0f;            //変換後のノックバック量の最大値
+    //    XMFLOAT3 KnockBack_Direction_ = { 0,0,0 };  //ノックバックする方向
+    //    XMFLOAT3 KnockBack_Velocity_ = { 0,0,0 };   //ノックバックする速度
+    //    float DecelerationRate_ = 0.0f;             //ノックバック時の1fごとの減速率
+    //    float KnockBackEnd_ = 0.0f;                 //ノックバックを終了する値
+    //    std::string AttackedName_ = "";             //接触した相手の名前
+    //};
+    //HitParam HitParam_;
 
     //----------柵の接触----------
-    struct FenceHitParam
-    {
-        XMVECTOR UpperNormal_ = { 0,0,0 };                      //ステージ北端(前方)の法線ベクトル
-        XMVECTOR LowerNormal_ = { 0,0,0 };                      //ステージ南端(後方)の法線ベクトル
-        XMVECTOR RightNormal_ = { 0,0,0 };                      //ステージ東端(右側)の法線ベクトル
-        XMVECTOR LeftNormal_ = { 0,0,0 };                       //ステージ西端(左側)の法線ベクトル
-        std::vector<XMVECTOR> NormalArray_ = {};                //各法線ベクトルを格納した配列
-        std::vector<std::string> WireArray_ =
-        { "UpperWire", "LowerWire", "RightWire" ,"LeftWire" };  //各鉄線の名前の配列
+    //struct FenceHitParam
+    //{
+    //    XMVECTOR UpperNormal_ = { 0,0,0 };                      //ステージ北端(前方)の法線ベクトル
+    //    XMVECTOR LowerNormal_ = { 0,0,0 };                      //ステージ南端(後方)の法線ベクトル
+    //    XMVECTOR RightNormal_ = { 0,0,0 };                      //ステージ東端(右側)の法線ベクトル
+    //    XMVECTOR LeftNormal_ = { 0,0,0 };                       //ステージ西端(左側)の法線ベクトル
+    //    std::vector<XMVECTOR> NormalArray_ = {};                //各法線ベクトルを格納した配列
+    //    std::vector<std::string> WireArray_ =
+    //    { "UpperWire", "LowerWire", "RightWire" ,"LeftWire" };  //各鉄線の名前の配列
 
-        float KnockBackPower_ = 0.0f;                           //柵ヒットでノックバックする強さ（変化なし）
-        int InvincibilityTime_ = 0;                             //ダメージ後の無敵時間 1fごとに上昇
-        bool IsInvincibility_ = false;                          //無敵時間か
-        int InvincibilityValue_ = 0;                            //無敵時間の値　この値を超えると無敵時間終了
-        int BlinkTimer_ = 0;                                    //ダメージ後の点滅カウント
-        int BlinkValue_ = 0;                                    //この値にblinkTimerが到達すると通常描画する(それまでは点滅)
-    };
-    FenceHitParam FenceHitParam_;
+    //    float KnockBackPower_ = 0.0f;                           //柵ヒットでノックバックする強さ（変化なし）
+    //    int InvincibilityTime_ = 0;                             //ダメージ後の無敵時間 1fごとに上昇
+    //    bool IsInvincibility_ = false;                          //無敵時間か
+    //    int InvincibilityValue_ = 0;                            //無敵時間の値　この値を超えると無敵時間終了
+    //    int BlinkTimer_ = 0;                                    //ダメージ後の点滅カウント
+    //    int BlinkValue_ = 0;                                    //この値にblinkTimerが到達すると通常描画する(それまでは点滅)
+    //};
+    //FenceHitParam FenceHitParam_;
 
     //----------影付け----------
     //struct ShadowParam
@@ -179,12 +180,12 @@ public:
     /// Characterクラス限定
     /// </summary>
     /// <param name="_path">csvファイルのパス</param>
-    void SetCSVStatus(std::string _path);
+    //void SetCSVStatus(std::string _path);
 
     /// <summary>
     /// 各方向の柵から法線ベクトルを取得しNormalArrayを初期化
     /// </summary>
-    void GetWireNormal();
+    /// void GetWireNormal();
 
     /// <summary>
     /// 自身の位置を初期位置に設定
@@ -201,13 +202,13 @@ public:
     /// BattleSceneでのみ行われる
     /// </summary>
     /// <param name="_observer">追加する監視対象</param>
-    void AddObserver(IGameObserver* _observer);
+    //void AddObserver(IGameObserver* _observer);
 
     /// <summary>
     /// 自身を監視する対象を配列から削除
     /// </summary>
     /// <param name="_observer">削除する監視対象</param>
-    void RemoveObserver(IGameObserver* _observer);
+    //void RemoveObserver(IGameObserver* _observer);
 
     //----------描画----------
 
@@ -368,54 +369,54 @@ public:
     /// <param name="_myVelocity">自身の加速度</param>
     /// <param name="_targetVelocity">相手の加速度</param>
     /// <param name="_attackName">攻撃したキャラクターの名前</param>
-    void Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity, 
-        std::string _attackName);
+    //void Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity, 
+    //    std::string _attackName);
 
-    /// <summary>
-    /// ノックバック中のY軸回転角の計算 ノックバック直前に行う
-    /// </summary>
-    /// <param name="_KnockBackVector">ノックバックする方向(正規化されていること前提)</param>
-    /// <param name="_KnockBackValue">ノックバックする量</param>
-    void KnockBackAngleY(XMFLOAT3 _KnockBackVector, float _KnockBackValue);
+    ///// <summary>
+    ///// ノックバック中のY軸回転角の計算 ノックバック直前に行う
+    ///// </summary>
+    ///// <param name="_KnockBackVector">ノックバックする方向(正規化されていること前提)</param>
+    ///// <param name="_KnockBackValue">ノックバックする量</param>
+    //void KnockBackAngleY(XMFLOAT3 _KnockBackVector, float _KnockBackValue);
 
-    /// <summary>
-    /// ノックバック移動処理
-    /// </summary>
-    void KnockBack();
+    ///// <summary>
+    ///// ノックバック移動処理
+    ///// </summary>
+    //void KnockBack();
 
-    /// <summary>
-    /// 指定された鉄線の名前に応じた各法線ベクトルを取得する
-    /// </summary>
-    /// <param name="_normal">キャラクターが接触した鉄線の名前</param>
-    /// <returns>鉄線の名前に対応した法線ベクトル</returns>
-    XMVECTOR HitNormal(std::string _normal);
+    ///// <summary>
+    ///// 指定された鉄線の名前に応じた各法線ベクトルを取得する
+    ///// </summary>
+    ///// <param name="_normal">キャラクターが接触した鉄線の名前</param>
+    ///// <returns>鉄線の名前に対応した法線ベクトル</returns>
+    //XMVECTOR HitNormal(std::string _normal);
 
     /// <summary>
     /// 柵に接触した際の計算処理　柵の法線で計算
     /// </summary>
     /// <param name="_normal">反射される方向(接触した柵の法線ベクトル)</param>
-    void FenceReflect(XMVECTOR _normal);
+    //void FenceReflect(XMVECTOR _normal);
 
     /// <summary>
     /// ノックバック終了判定
     /// </summary>
     /// <returns>ノックバック速度が終了値以下か</returns>
-    bool IsKnockBackEnd();
+    ///bool IsKnockBackEnd();
 
     /// <summary>
     /// ノックバック速度を0に戻す
     /// </summary>
-    void KnockBackVelocityReset() { HitParam_.KnockBack_Velocity_ = { 0,0,0 };}
+    /// void KnockBackVelocityReset() { HitParam_.KnockBack_Velocity_ = { 0,0,0 };}
 
     /// <summary>
     /// ダメージ後の無敵時間の計算
     /// </summary>
-    void InvincibilityTimeCalculation();
+    //void InvincibilityTimeCalculation();
 
     /// <summary>
     /// 監視する対象(配列)に柵にヒットしたことを通知
     /// </summary>
-    void NotifyFenceHit();
+    //void NotifyFenceHit();
 
     //----------影付け----------
 

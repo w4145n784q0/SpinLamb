@@ -1,4 +1,5 @@
 #pragma once
+#include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
 class CharacterCsvLoader :
     public GameObject
