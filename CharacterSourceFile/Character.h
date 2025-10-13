@@ -26,10 +26,10 @@ protected:
     // ---- モジュール群 ----
     CharacterModelBlink* blink_;
     CharacterVFX*        vfx_;
-    /*CharacterShadow*     shadow_;
+    CharacterShadow*     shadow_;
     CharacterAir*        air_;
     CharacterForward*    forward_;
-    CharacterMovement*   movement_;
+    /*CharacterMovement*   movement_;
     CharacterRotate*     rotate_;
     CharacterCharge*     charge_;
     CharacterHit*        hit_;
@@ -73,7 +73,7 @@ protected:
         float FullAccelerate_ = 0.0f;           //加速度の最大
         float Friction_ = 0.0f;                 //摩擦係数(減速率) 1fあたりの減速量
         int hMoveArrow_ = -1;                   //チャージ中に表示する矢印モデル
-        XMVECTOR ForwardVector_ = { 0,0,0 };    //キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算 正規化した値を入れる
+       // XMVECTOR ForwardVector_ = { 0,0,0 };    //キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算 正規化した値を入れる
         XMVECTOR MoveDirection_ = { 0,0,0 };    //移動方向 この値に速さの要素をかけて移動ベクトル化する
         XMVECTOR NewPosition_ = { 0,0,0 };      //移動後の位置ベクトル
         Transform ArrowTransform_;              //チャージ/攻撃準備中の矢印のトランスフォーム
@@ -92,17 +92,17 @@ protected:
     RotateParam RotateParam_;
 
     //----------空中----------
-    struct JumpParam
-    {
-        float Gravity_ = 0.0f;          //重力 キャラクターの下方向にかかる力 実際の重力より(9.8/60 m/s)より軽くしている
-        bool IsOnGround_ = false;       //地面にいるか
-        float JumpSpeed_ = 0.0f;        //キャラクターの上方向に向く力 +ならジャンプしている状態 -なら下降～地面にいる状態
-        float JumpHeight = 0.0f;        //ジャンプ時の一時的に代入する値(=ジャンプの高さ)
-        float HeightLowerLimit_ = 0.0f; //高さの下限
-        float HeightUpperLimit_ = 0.0f; //高さの上限
-        float MinusLimit_ = 0.0f;       //JumpSpeedの最低値(念のためオーバーフローを防止する)
-    };
-    JumpParam JumpParam_;
+    //struct JumpParam
+    //{
+    //    float Gravity_ = 0.0f;          //重力 キャラクターの下方向にかかる力 実際の重力より(9.8/60 m/s)より軽くしている
+    //    bool IsOnGround_ = false;       //地面にいるか
+    //    float JumpSpeed_ = 0.0f;        //キャラクターの上方向に向く力 +ならジャンプしている状態 -なら下降～地面にいる状態
+    //    float JumpHeight = 0.0f;        //ジャンプ時の一時的に代入する値(=ジャンプの高さ)
+    //    float HeightLowerLimit_ = 0.0f; //高さの下限
+    //    float HeightUpperLimit_ = 0.0f; //高さの上限
+    //    float MinusLimit_ = 0.0f;       //JumpSpeedの最低値(念のためオーバーフローを防止する)
+    //};
+    //JumpParam JumpParam_;
 
 
     //----------被弾----------
@@ -142,15 +142,15 @@ protected:
     FenceHitParam FenceHitParam_;
 
     //----------影付け----------
-    struct ShadowParam
-    {
-        int hShadow_ = -1;                  //影のモデルハンドル
-        float ShadowHeight_ = 0.0f;         //影をつける高さ
-        float ShadowCorrection_ = 0.0f;     //影の位置の調整値
-        Transform ShadowTrans_;             //影の描画トランスフォーム
-        Ground* pGround_ = nullptr;         //地面のインスタンス
-    };
-    ShadowParam ShadowParam_;
+    //struct ShadowParam
+    //{
+    //    int hShadow_ = -1;                  //影のモデルハンドル
+    //    float ShadowHeight_ = 0.0f;         //影をつける高さ
+    //    float ShadowCorrection_ = 0.0f;     //影の位置の調整値
+    //    Transform ShadowTrans_;             //影の描画トランスフォーム
+    //    Ground* pGround_ = nullptr;         //地面のインスタンス
+    //};
+    //ShadowParam ShadowParam_;
 
     //----------エフェクト関連----------
 
@@ -254,12 +254,12 @@ public:
     /// <param name="_rotY">Y軸に回転したい角度（Degree）</param>
     /// <param name="_front">正面ベクトル(ローカル空間)</param>
     /// <returns>変形したベクトル（ワールド空間）</returns>
-    XMVECTOR RotateVecFront(float _rotY, XMVECTOR _front);
+    /// XMVECTOR RotateVecFront(float _rotY, XMVECTOR _front);
 
     /// <summary>
     /// 正面ベクトルを更新
     /// </summary>
-    void FrontVectorConfirm();
+    // void FrontVectorConfirm();
 
     /// <summary>
     /// 受け取ったベクトルからキャラクターの回転量を計算
@@ -321,7 +321,7 @@ public:
 
     //----------空中----------
 
-    /// <summary>
+ /*   /// <summary>
     /// 重力処理
     /// </summary>
     void CharacterGravity();
@@ -329,7 +329,7 @@ public:
     /// <summary>
     /// ジャンプ開始
     /// </summary>
-    void SetJump();
+    void SetJump();*/
 
     //----------回転----------
 
@@ -419,20 +419,20 @@ public:
 
     //----------影付け----------
 
-    /// <summary>
-    /// 影モデルの初期化
-    /// </summary>
-    void InitShadow();
+    ///// <summary>
+    ///// 影モデルの初期化
+    ///// </summary>
+    //void InitShadow();
 
-    /// <summary>
-    /// 影付け（毎フレーム更新）
-    /// </summary>
-    void ShadowSet();
+    ///// <summary>
+    ///// 影付け（毎フレーム更新）
+    ///// </summary>
+    //void ShadowSet();
 
-    /// <summary>
-    /// 影モデル描画
-    /// </summary>
-    void ShadowDraw();
+    ///// <summary>
+    ///// 影モデル描画
+    ///// </summary>
+    //void ShadowDraw();
 
 
     //----------エフェクト処理----------

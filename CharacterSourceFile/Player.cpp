@@ -264,7 +264,7 @@ void Player::UpdateIdle()
 		if (JumpParam_.IsOnGround_)
 		{
 			//地上にいるならジャンプ開始
-			SetJump();
+			air_->SetJump();
 		}
 	}
 
@@ -297,7 +297,7 @@ void Player::UpdateCharge()
 			ChargeReset();
 
 			//ジャンプ開始
-			SetJump();
+			air_->SetJump();
 
 			//通常状態へ戻る
 			PlayerState_ = S_Idle;

@@ -94,7 +94,7 @@ Character::Character(GameObject* parent, const std::string& name)
 	{
 		Instantiate<CharacterVFX>(this);
 	}
-	/*if (shadow_ == nullptr)
+	if (shadow_ == nullptr)
 	{
 		Instantiate<CharacterShadow>(this);
 	}
@@ -106,7 +106,7 @@ Character::Character(GameObject* parent, const std::string& name)
 	{
 		Instantiate<CharacterForward>(this);
 	}
-	if (movement_ == nullptr)
+	/*if (movement_ == nullptr)
 	{
 		Instantiate<CharacterMovement>(this);
 	}
@@ -159,7 +159,7 @@ Character::Character(GameObject* parent, const std::string& name)
 	GetWireNormal();
 
 	//影モデルを初期化
-	InitShadow();
+	shadow_->InitShadow();
 }
 
 Character::~Character()
@@ -190,20 +190,20 @@ void Character::Update()
 	//Characterクラスを継承するクラスで呼ぶ共通更新
 
 	//毎フレーム影の位置を更新
-	ShadowSet();
+	shadow_->ShadowSet();
 
 	//毎フレーム重力をかけ続ける
-	CharacterGravity();
+	air_->CharacterGravity();
 
 	//自分の前方ベクトル(回転した分も含む)を更新
-	FrontVectorConfirm();
+	forward_->FrontVectorConfirm();
 }
 
 void Character::Draw()
 {
 	//Characterクラスを継承するクラスで呼ぶ共通描画
 
-	ShadowDraw();
+	shadow_->ShadowDraw();
 }
 
 void Character::SetCSVStatus(std::string _path)
@@ -489,11 +489,11 @@ void Character::DrawCharacterImGui()
 	// 高さの上限,下限
 	if (ImGui::TreeNode("Jump"))
 	{
-		ImGui::InputFloat("Gravity", &this->JumpParam_.Gravity_, ZeroPointOne);
-		ImGui::InputFloat("JumpSpeed", &this->JumpParam_.JumpSpeed_, ZeroPointOne);
-		ImGui::InputFloat("JumpHeight", &this->JumpParam_.JumpHeight, ZeroPointOne);
-		ImGui::InputFloat("HeightLowerLimit", &this->JumpParam_.HeightLowerLimit_, ZeroPointOne);
-		ImGui::InputFloat("HeightUpperLimit", &this->JumpParam_.HeightUpperLimit_, ZeroPointOne);
+		ImGui::InputFloat("Gravity", &JumpParam_.Gravity_, ZeroPointOne);
+		ImGui::InputFloat("JumpSpeed", &JumpParam_.JumpSpeed_, ZeroPointOne);
+		ImGui::InputFloat("JumpHeight", &JumpParam_.JumpHeight, ZeroPointOne);
+		ImGui::InputFloat("HeightLowerLimit", &JumpParam_.HeightLowerLimit_, ZeroPointOne);
+		ImGui::InputFloat("HeightUpperLimit", &JumpParam_.HeightUpperLimit_, ZeroPointOne);
 		ImGui::TreePop();
 	}
 
@@ -538,8 +538,8 @@ void Character::DrawCharacterImGui()
 	//影の位置の補正
 	if (ImGui::TreeNode("Shadow"))
 	{
-		ImGui::InputFloat("ShadowHeight", &this->ShadowParam_.ShadowHeight_, ZeroPointOne);
-		ImGui::InputFloat("ShadowCorrection", &this->ShadowParam_.ShadowCorrection_, ZeroPointOne);
+		ImGui::InputFloat("ShadowHeight", &ShadowParam_.ShadowHeight_, ZeroPointOne);
+		ImGui::InputFloat("ShadowCorrection", &ShadowParam_.ShadowCorrection_, ZeroPointOne);
 		ImGui::TreePop();
 	}
 
@@ -566,93 +566,93 @@ void Character::DrawCharacterImGui()
 	ImGui::TreePop();
 }
 
-void Character::CharacterGravity()
-{
-	//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
-	JumpParam_.JumpSpeed_ -= JumpParam_.Gravity_;
+//void Character::CharacterGravity()
+//{
+//	//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
+//	JumpParam_.JumpSpeed_ -= JumpParam_.Gravity_;
+//
+//	//フィールドに乗っているかは関係なく重力はかかり続ける
+//	this->transform_.position_.y += JumpParam_.JumpSpeed_;
+//
+//	//プレイヤーめりこみ防止に一定以下のy座標になったら値を固定する
+//	if (this->transform_.position_.y <= JumpParam_.HeightLowerLimit_)
+//	{
+//		this->transform_.position_.y = JumpParam_.HeightLowerLimit_;
+//
+//		//一定以下のy座標になった場合,着地している判定にする
+//		JumpParam_.IsOnGround_ = true;
+//	}
+//
+//	//マイナスし続けるので、念のためオーバーフロー防止
+//	//JumpSpeedが最低値以下になったら最低値の値で固定
+//	if (JumpParam_.JumpSpeed_ <= JumpParam_.MinusLimit_)
+//	{
+//		JumpParam_.JumpSpeed_ = JumpParam_.MinusLimit_;
+//	}
+//}
+//
+//void Character::SetJump()
+//{
+//	//ジャンプを開始する処理
+//
+//	//地上判定をfalseにする
+//	JumpParam_.IsOnGround_ = false;
+//
+//	//一時的にy方向にマイナスされている値を大きくすることで、キャラクターが飛び上がる
+//	JumpParam_.JumpSpeed_ = JumpParam_.JumpHeight;
+//
+//	//チャージ中のSE再生
+//	Audio::Play(hSoundJump_);
+//}
 
-	//フィールドに乗っているかは関係なく重力はかかり続ける
-	this->transform_.position_.y += JumpParam_.JumpSpeed_;
-
-	//プレイヤーめりこみ防止に一定以下のy座標になったら値を固定する
-	if (this->transform_.position_.y <= JumpParam_.HeightLowerLimit_)
-	{
-		this->transform_.position_.y = JumpParam_.HeightLowerLimit_;
-
-		//一定以下のy座標になった場合,着地している判定にする
-		JumpParam_.IsOnGround_ = true;
-	}
-
-	//マイナスし続けるので、念のためオーバーフロー防止
-	//JumpSpeedが最低値以下になったら最低値の値で固定
-	if (JumpParam_.JumpSpeed_ <= JumpParam_.MinusLimit_)
-	{
-		JumpParam_.JumpSpeed_ = JumpParam_.MinusLimit_;
-	}
-}
-
-void Character::SetJump()
-{
-	//ジャンプを開始する処理
-
-	//地上判定をfalseにする
-	JumpParam_.IsOnGround_ = false;
-
-	//一時的にy方向にマイナスされている値を大きくすることで、キャラクターが飛び上がる
-	JumpParam_.JumpSpeed_ = JumpParam_.JumpHeight;
-
-	//チャージ中のSE再生
-	Audio::Play(hSoundJump_);
-}
-
-void Character::InitShadow()
-{
-	//初期化の時点でステージクラスのインスタンスを取得
-	ShadowParam_.pGround_ = (Ground*)FindObject("Ground");
-	assert(ShadowParam_.pGround_ != nullptr);
-
-	//影モデル読み込み
-	ShadowParam_.hShadow_ = Model::Load("Model\\ShadowPoint.fbx");
-	assert(ShadowParam_.hShadow_ >= 0);
-}
-
-void Character::ShadowSet()
-{
-	//ステージのモデル番号を取得
-	int hGroundModel = ShadowParam_.pGround_->GetModelHandle();
-
-	//ステージに向かってレイを飛ばす設定をする
-	RayCastData data;
-	
-	//レイの発射位置を設定
-	data.start = this->transform_.position_;
-
-	//レイの方向を設定(0, -1, 0なので下向き)
-	data.dir = XMFLOAT3(0, -1, 0);
-
-	//レイを発射
-	Model::RayCast(hGroundModel, &data);
-
-	//レイが当たったら
-	if (data.hit)
-	{
-		//現在位置-衝突点までの距離 + 補正値で影の高さを設定
-		ShadowParam_.ShadowHeight_ = (this->transform_.position_.y - data.dist) + ShadowParam_.ShadowCorrection_;
-	}
-
-	//y座標以外はキャラクターと同じ位置に設定
-	this->ShadowParam_.ShadowTrans_.position_.x = this->transform_.position_.x;
-	this->ShadowParam_.ShadowTrans_.position_.z = this->transform_.position_.z;
-
-	//影の高さをトランスフォームに設定する
-	this->ShadowParam_.ShadowTrans_.position_.y = ShadowParam_.ShadowHeight_;
-}
-
-void Character::ShadowDraw()
-{
-	//ShadowSetで位置を設定した影を描画
-	Model::SetAndDraw(ShadowParam_.hShadow_, this->ShadowParam_.ShadowTrans_);
-}
+//void Character::InitShadow()
+//{
+//	//初期化の時点でステージクラスのインスタンスを取得
+//	ShadowParam_.pGround_ = (Ground*)FindObject("Ground");
+//	assert(ShadowParam_.pGround_ != nullptr);
+//
+//	//影モデル読み込み
+//	ShadowParam_.hShadow_ = Model::Load("Model\\ShadowPoint.fbx");
+//	assert(ShadowParam_.hShadow_ >= 0);
+//}
+//
+//void Character::ShadowSet()
+//{
+//	//ステージのモデル番号を取得
+//	int hGroundModel = ShadowParam_.pGround_->GetModelHandle();
+//
+//	//ステージに向かってレイを飛ばす設定をする
+//	RayCastData data;
+//	
+//	//レイの発射位置を設定
+//	data.start = this->transform_.position_;
+//
+//	//レイの方向を設定(0, -1, 0なので下向き)
+//	data.dir = XMFLOAT3(0, -1, 0);
+//
+//	//レイを発射
+//	Model::RayCast(hGroundModel, &data);
+//
+//	//レイが当たったら
+//	if (data.hit)
+//	{
+//		//現在位置-衝突点までの距離 + 補正値で影の高さを設定
+//		ShadowParam_.ShadowHeight_ = (this->transform_.position_.y - data.dist) + ShadowParam_.ShadowCorrection_;
+//	}
+//
+//	//y座標以外はキャラクターと同じ位置に設定
+//	this->ShadowParam_.ShadowTrans_.position_.x = this->transform_.position_.x;
+//	this->ShadowParam_.ShadowTrans_.position_.z = this->transform_.position_.z;
+//
+//	//影の高さをトランスフォームに設定する
+//	this->ShadowParam_.ShadowTrans_.position_.y = ShadowParam_.ShadowHeight_;
+//}
+//
+//void Character::ShadowDraw()
+//{
+//	//ShadowSetで位置を設定した影を描画
+//	Model::SetAndDraw(ShadowParam_.hShadow_, this->ShadowParam_.ShadowTrans_);
+//}
 
 void Character::CharacterMove(XMVECTOR _direction)
 {
@@ -1010,27 +1010,27 @@ void Character::DrawArrow()
 	Model::SetAndDraw(MoveParam_.hMoveArrow_, this->MoveParam_.ArrowTransform_);
 }
 
-XMVECTOR Character::RotateVecFront(float _rotY, XMVECTOR _front)
-{
-	//回転させたいベクトル（方向）を代入
-	//基本はローカル正面ベクトル
-	XMVECTOR v = _front;
+//XMVECTOR Character::RotateVecFront(float _rotY, XMVECTOR _front)
+//{
+//	//回転させたいベクトル（方向）を代入
+//	//基本はローカル正面ベクトル
+//	XMVECTOR v = _front;
+//
+//	//Y回転をラジアンにし、回転行列を作成
+//	XMMATRIX m = XMMatrixRotationY(XMConvertToRadians(_rotY));
+//
+//	//方向ベクトルを回転行列で変換し、ワールド座標での向いている方向が出る
+//	v = XMVector3TransformCoord(v, m);
+//
+//	return v;
+//}
 
-	//Y回転をラジアンにし、回転行列を作成
-	XMMATRIX m = XMMatrixRotationY(XMConvertToRadians(_rotY));
-
-	//方向ベクトルを回転行列で変換し、ワールド座標での向いている方向が出る
-	v = XMVector3TransformCoord(v, m);
-
-	return v;
-}
-
-void Character::FrontVectorConfirm()
-{
-	//ローカル正面ベクトルを現在のy軸回転量で変形すると、正面からどれだけ回転したかが計算される
-	//その値がワールド正面ベクトルとなる
-	MoveParam_.ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, InitParam_.FrontDirection_);
-}
+//void Character::FrontVectorConfirm()
+//{
+//	//ローカル正面ベクトルを現在のy軸回転量で変形すると、正面からどれだけ回転したかが計算される
+//	//その値がワールド正面ベクトルとなる
+//	MoveParam_.ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, InitParam_.FrontDirection_);
+//}
 
 //void Character::InitCSVEffect()
 //{
