@@ -2,6 +2,7 @@
 
 float CharacterRotate::RotateDirectionVector(XMVECTOR _MoveVector)
 {
+	return 0.0f;//‰¼
 }
 
 void CharacterRotate::MoveRotateX()

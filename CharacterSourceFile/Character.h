@@ -3,10 +3,41 @@
 #include "../StageSourceFile/Ground.h"
 #include"../InterfaceSourceFile/IGameObserver.h"
 
+//部品分けしたヘッダファイル
+#include "CharacterPart/CharacterParams.h"
+#include "CharacterPart/CharacterModelBlink.h"
+#include "CharacterPart/CharacterVfx.h"
+#include "CharacterPart/CharacterShadow.h"
+#include "CharacterPart/CharacterAir.h"
+#include "CharacterPart/CharacterForward.h"
+#include "CharacterPart/CharacterMovement.h"
+#include "CharacterPart/CharacterRotate.h"
+#include "CharacterPart/CharacterCharge.h"
+#include "CharacterPart/CharacterHit.h"
+#include "CharacterPart/CharacterFence.h"
+#include "CharacterPart/CharacterCsvLoader.h"
+#include "CharacterPart/CharacterObserver.h"
+
 //プレイヤー,敵クラスの共通事項クラス
 class Character :
     public GameObject
 {
+protected:
+    // ---- モジュール群 ----
+    /*CharacterModelBlink* blink_;*/
+    /*CharacterVFX*        vfx_;*/
+    /*CharacterShadow*     shadow_;
+    CharacterAir*        air_;
+    CharacterForward*    forward_;
+    CharacterMovement*   movement_;
+    CharacterRotate*     rotate_;
+    CharacterCharge*     charge_;
+    CharacterHit*        hit_;
+    CharacterFence*      fence_;
+    CharacterCsvLoader*  csvload_;
+    CharacterObserver*   observer_;*/
+
+
 protected:
 
     //----------ステージの端----------

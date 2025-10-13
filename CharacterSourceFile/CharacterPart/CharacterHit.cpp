@@ -15,10 +15,12 @@ void CharacterHit::KnockBack()
 
 XMVECTOR CharacterHit::HitNormal(std::string _normal)
 {
+    return XMVectorZero();//‰¼
 }
 
 bool CharacterHit::IsKnockBackEnd()
 {
+    return false;//‰¼
 }
 
 void CharacterHit::KnockBackVelocityReset()

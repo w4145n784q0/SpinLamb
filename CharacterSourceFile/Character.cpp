@@ -85,6 +85,56 @@ Character::Character(GameObject* parent)
 Character::Character(GameObject* parent, const std::string& name)
 	:GameObject(parent, name)
 {
+
+	/*if (blink_ == nullptr)
+	{
+		Instantiate<CharacterModelBlink>(this);
+	}*/
+	/*if (vfx_ == nullptr)
+	{
+		Instantiate<CharacterVFX>(this);
+	}*/
+	/*if (shadow_ == nullptr)
+	{
+		Instantiate<CharacterShadow>(this);
+	}
+	if (air_ == nullptr)
+	{
+		Instantiate<CharacterAir>(this);
+	}
+	if (forward_ == nullptr)
+	{
+		Instantiate<CharacterForward>(this);
+	}
+	if (movement_ == nullptr)
+	{
+		Instantiate<CharacterMovement>(this);
+	}
+	if (rotate_ == nullptr)
+	{
+		Instantiate<CharacterRotate>(this);
+	}
+	if (charge_ == nullptr)
+	{
+		Instantiate<CharacterCharge>(this);
+	}
+	if (hit_ == nullptr)
+	{
+		Instantiate<CharacterHit>(this);
+	}
+	if (fence_ == nullptr)
+	{
+		Instantiate<CharacterFence>(this);
+	}
+	if(csvload_ == nullptr)
+	{
+		Instantiate<CharacterCsvLoader>(this);
+	}
+	if (observer_ == nullptr)
+	{
+		Instantiate<CharacterObserver>(this);
+	}*/
+
 	//csv‚©‚çƒpƒ‰ƒ[ƒ^“Ç‚İ‚İ
 	InitCSVEffect();
 

@@ -1,10 +1,18 @@
 #pragma once
-
+#include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
 class CharacterVFX :
     public GameObject
 {
 public:
+    CharacterVFX(GameObject* parent);
+	virtual ~CharacterVFX() = default;
+
+    void Initialize() override {};
+	void Update() override {};
+    void Draw() override {};
+    void Release() override {};
+
     //----------エフェクト処理----------
 
     /// <summary>

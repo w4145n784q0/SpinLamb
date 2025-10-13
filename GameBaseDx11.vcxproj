@@ -217,6 +217,7 @@
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterModelBlink.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterMovement.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterObserver.h" />
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterParams.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterRotate.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterShadow.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterVFX.h" />
