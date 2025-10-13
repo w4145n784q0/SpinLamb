@@ -1,4 +1,5 @@
 #pragma once
+#include"CharacterParams.h"
 #include "../../Engine/GameObject.h"
 class CharacterMovement :
     public GameObject
@@ -9,7 +10,7 @@ public:
     /// <summary>
     /// 自身の位置を初期位置に設定
     /// </summary>
-    void SetStartPosition();
+    void InitStartPosition();
 
     /// <summary>
     /// キャラクターの移動処理

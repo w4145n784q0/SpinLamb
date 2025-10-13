@@ -106,7 +106,7 @@ Character::Character(GameObject* parent, const std::string& name)
 	{
 		Instantiate<CharacterForward>(this);
 	}
-	/*if (movement_ == nullptr)
+	if (movement_ == nullptr)
 	{
 		Instantiate<CharacterMovement>(this);
 	}
@@ -118,7 +118,7 @@ Character::Character(GameObject* parent, const std::string& name)
 	{
 		Instantiate<CharacterCharge>(this);
 	}
-	if (hit_ == nullptr)
+	/*if (hit_ == nullptr)
 	{
 		Instantiate<CharacterHit>(this);
 	}
@@ -143,17 +143,17 @@ Character::Character(GameObject* parent, const std::string& name)
 	//パスの一部を文字列にし、結合させる
 	std::string SoundSE = "Sound\\SE\\";
 
-	hSoundcharge_ = Audio::Load(SoundSE + "Charge.wav",false, Audio::GetChargeNum());
-	assert(hSoundcharge_ >= 0);
+	SoundParam_.hSoundcharge_ = Audio::Load(SoundSE + "Charge.wav",false, Audio::GetChargeNum());
+	assert(SoundParam_.hSoundcharge_ >= 0);
 
-	hSoundattack_ = Audio::Load(SoundSE + "Attack.wav", false, Audio::GetAttackNum());
-	assert(hSoundattack_ >= 0);
+	SoundParam_.hSoundattack_ = Audio::Load(SoundSE + "Attack.wav", false, Audio::GetAttackNum());
+	assert(SoundParam_.hSoundattack_ >= 0);
 
-	hSoundCollision_ = Audio::Load(SoundSE + "Collision.wav",false, Audio::GetCollisionNum());
-	assert(hSoundCollision_ >= 0);
+	SoundParam_.hSoundCollision_ = Audio::Load(SoundSE + "Collision.wav",false, Audio::GetCollisionNum());
+	assert(SoundParam_.hSoundCollision_ >= 0);
 
-	hSoundJump_ = Audio::Load(SoundSE + "Jump.wav", false, Audio::GetJumpNum());
-	assert(hSoundJump_ >= 0);
+	SoundParam_.hSoundJump_ = Audio::Load(SoundSE + "Jump.wav", false, Audio::GetJumpNum());
+	assert(SoundParam_.hSoundJump_ >= 0);
 
 	//それぞれの柵の法線を取得
 	GetWireNormal();
@@ -225,7 +225,6 @@ void Character::SetCSVStatus(std::string _path)
 
 	//初期位置を保管する
 	InitParam_.StartPosition_ = this->transform_.position_;
-
 
 	//--------------------移動関係のパラメータ--------------------
 
@@ -414,10 +413,10 @@ void Character::DrawCharacterImGui()
 	//キャラクターの位置(position_.x,y,z)
 	if (ImGui::TreeNode("Transform.Position"))
 	{
-		ImGui::SliderFloat("PositionX", &this->transform_.position_.x, WestEnd_, EastEnd_);
+		ImGui::SliderFloat("PositionX", &this->transform_.position_.x, EndParam_.WestEnd_, EndParam_.EastEnd_);
 		ImGui::SliderFloat("PositionY", &this->transform_.position_.y, JumpParam_.HeightLowerLimit_,
 			JumpParam_.HeightUpperLimit_);
-		ImGui::SliderFloat("PositionZ", &this->transform_.position_.z, SouthEnd_, NorthEnd_);
+		ImGui::SliderFloat("PositionZ", &this->transform_.position_.z, EndParam_.SouthEnd_, EndParam_.NorthEnd_);
 		ImGui::TreePop();
 	}
 
@@ -455,12 +454,12 @@ void Character::DrawCharacterImGui()
 	//移動方向、移動後の更新位置
 	if (ImGui::TreeNode("Move"))
 	{
-		ImGui::InputFloat("Velocity", &this->MoveParam_.Velocity_, ZeroPointOne);
-		ImGui::InputFloat("Acceleration", &this->MoveParam_.Acceleration_, ZeroPointOne);
-		ImGui::InputFloat("TmpAccele", &this->MoveParam_.TmpAccele_, ZeroPointOne);
-		ImGui::InputFloat("AcceleValue", &this->MoveParam_.AcceleValue_, ZeroPointOne);
-		ImGui::InputFloat("FullAccelerate", &this->MoveParam_.FullAccelerate_, ZeroPointOne);
-		ImGui::InputFloat("Friction", &this->MoveParam_.Friction_, ZeroPointOne);
+		ImGui::InputFloat("Velocity", &MoveParam_.Velocity_, ZeroPointOne);
+		ImGui::InputFloat("Acceleration", &MoveParam_.Acceleration_, ZeroPointOne);
+		ImGui::InputFloat("TmpAccele", &MoveParam_.TmpAccele_, ZeroPointOne);
+		ImGui::InputFloat("AcceleValue", &MoveParam_.AcceleValue_, ZeroPointOne);
+		ImGui::InputFloat("FullAccelerate", &MoveParam_.FullAccelerate_, ZeroPointOne);
+		ImGui::InputFloat("Friction", &MoveParam_.Friction_, ZeroPointOne);
 
 		XMFLOAT3 move;
 		XMStoreFloat3(&move, MoveParam_.MoveDirection_);
@@ -480,8 +479,8 @@ void Character::DrawCharacterImGui()
 	//キャラクター移動時の通常の回転量、チャージ中の回転量
 	if (ImGui::TreeNode("Rotate"))
 	{
-		ImGui::InputFloat("NormalRotate", &this->RotateParam_.MoveRotateX, ZeroPointOne);
-		ImGui::InputFloat("FastRotate", &this->RotateParam_.FastRotateX, ZeroPointOne);
+		ImGui::InputFloat("NormalRotate", &RotateParam_.MoveRotateX, ZeroPointOne);
+		ImGui::InputFloat("FastRotate", &RotateParam_.FastRotateX, ZeroPointOne);
 		ImGui::TreePop();
 	}
 
@@ -546,19 +545,19 @@ void Character::DrawCharacterImGui()
 	//矢印モデルの位置・回転・拡大率、位置の補正
 	if (ImGui::TreeNode("Arrow"))
 	{
-		ImGui::InputFloat("ArrowTransform.PositionX", &this->MoveParam_.ArrowTransform_.position_.x, ZeroPointOne);
-		ImGui::InputFloat("ArrowTransform.PositionY", &this->MoveParam_.ArrowTransform_.position_.y, ZeroPointOne);
-		ImGui::InputFloat("ArrowTransform.PositionZ", &this->MoveParam_.ArrowTransform_.position_.z, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.PositionX", &MoveParam_.ArrowTransform_.position_.x, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.PositionY", &MoveParam_.ArrowTransform_.position_.y, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.PositionZ", &MoveParam_.ArrowTransform_.position_.z, ZeroPointOne);
 
-		ImGui::InputFloat("ArrowTransform.RotateX", &this->MoveParam_.ArrowTransform_.rotate_.x, ZeroPointOne);
-		ImGui::InputFloat("ArrowTransform.RotateY", &this->MoveParam_.ArrowTransform_.rotate_.y, ZeroPointOne);
-		ImGui::InputFloat("ArrowTransform.RotateZ", &this->MoveParam_.ArrowTransform_.rotate_.z, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.RotateX", &MoveParam_.ArrowTransform_.rotate_.x, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.RotateY", &MoveParam_.ArrowTransform_.rotate_.y, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.RotateZ", &MoveParam_.ArrowTransform_.rotate_.z, ZeroPointOne);
 
-		ImGui::InputFloat("ArrowTransform.ScaleX", &this->MoveParam_.ArrowTransform_.scale_.x, ZeroPointOne);
-		ImGui::InputFloat("ArrowTransform.ScaleY", &this->MoveParam_.ArrowTransform_.scale_.y, ZeroPointOne);
-		ImGui::InputFloat("ArrowTransform.ScaleZ", &this->MoveParam_.ArrowTransform_.scale_.z, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.ScaleX", &MoveParam_.ArrowTransform_.scale_.x, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.ScaleY", &MoveParam_.ArrowTransform_.scale_.y, ZeroPointOne);
+		ImGui::InputFloat("ArrowTransform.ScaleZ", &MoveParam_.ArrowTransform_.scale_.z, ZeroPointOne);
 
-		ImGui::InputFloat("AddArrowDepth", &this->MoveParam_.AddArrowDepth_, ZeroPointOne);
+		ImGui::InputFloat("AddArrowDepth", &MoveParam_.AddArrowDepth_, ZeroPointOne);
 
 		ImGui::TreePop();
 	}
@@ -654,88 +653,88 @@ void Character::DrawCharacterImGui()
 //	Model::SetAndDraw(ShadowParam_.hShadow_, this->ShadowParam_.ShadowTrans_);
 //}
 
-void Character::CharacterMove(XMVECTOR _direction)
-{
-	//受け取った方向が0ベクトルなら処理しない(0ベクトルを正規化はできない)
-	if (XMVector3Equal(_direction, XMVectorZero()))
-	{
-		return;
-	}
+//void Character::CharacterMove(XMVECTOR _direction)
+//{
+//	//受け取った方向が0ベクトルなら処理しない(0ベクトルを正規化はできない)
+//	if (XMVector3Equal(_direction, XMVectorZero()))
+//	{
+//		return;
+//	}
+//
+//	//単位ベクトル化し、移動方向を確定
+//	MoveParam_.MoveDirection_ = XMVector3Normalize(_direction);
+//
+//	//移動ベクトルを作成
+//	CreateMoveVector();
+//
+//	//場外でなければ位置更新 
+//	XMFLOAT3 tmp;
+//	XMStoreFloat3(&tmp, MoveParam_.NewPosition_);
+//	if (!IsOutsideStage(tmp))
+//	{
+//		MoveConfirm();
+//	}
+//}
 
-	//単位ベクトル化し、移動方向を確定
-	MoveParam_.MoveDirection_ = XMVector3Normalize(_direction);
+//void Character::CreateMoveVector()
+//{
+//	//移動ベクトル = 移動方向 * ((初速度 + 加速度) * 1fの移動量のスケーリング)
+//	//移動ベクトル化する
+//	XMVECTOR MoveVector = XMVectorScale(MoveParam_.MoveDirection_, (MoveParam_.Velocity_ + MoveParam_.Acceleration_) * DeltaTime);
+//
+//	//現在位置と移動ベクトルを加算し
+//	//移動後のベクトルを作成(この時点では移動確定していない)
+//	XMVECTOR PrevPos = XMLoadFloat3(&this->transform_.position_);
+//	MoveParam_.NewPosition_ = PrevPos + MoveVector;
+//}
 
-	//移動ベクトルを作成
-	CreateMoveVector();
+//bool Character::IsOutsideStage(XMFLOAT3 _position)
+//{
+//	//指定位置が一つでもステージ端を超えるかどうか判定し、真偽を返す
+//	//ステージ外判定をする際に使用
+//
+//	if (_position.x > EastEnd_ || _position.x < WestEnd_ || _position.z > NorthEnd_ || _position.z < SouthEnd_)
+//	{
+//			return true;
+//	}
+//	else 
+//	{
+//		return false;
+//	}
+//}
 
-	//場外でなければ位置更新 
-	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, MoveParam_.NewPosition_);
-	if (!IsOutsideStage(tmp))
-	{
-		MoveConfirm();
-	}
-}
+//void Character::MoveConfirm()
+//{
+//	//移動後のベクトルをtransform_.positionに代入し、移動を確定する
+//	XMStoreFloat3(&this->transform_.position_, MoveParam_.NewPosition_);
+//}
 
-void Character::CreateMoveVector()
-{
-	//移動ベクトル = 移動方向 * ((初速度 + 加速度) * 1fの移動量のスケーリング)
-	//移動ベクトル化する
-	XMVECTOR MoveVector = XMVectorScale(MoveParam_.MoveDirection_, (MoveParam_.Velocity_ + MoveParam_.Acceleration_) * DeltaTime);
-
-	//現在位置と移動ベクトルを加算し
-	//移動後のベクトルを作成(この時点では移動確定していない)
-	XMVECTOR PrevPos = XMLoadFloat3(&this->transform_.position_);
-	MoveParam_.NewPosition_ = PrevPos + MoveVector;
-}
-
-bool Character::IsOutsideStage(XMFLOAT3 _position)
-{
-	//指定位置が一つでもステージ端を超えるかどうか判定し、真偽を返す
-	//ステージ外判定をする際に使用
-
-	if (_position.x > EastEnd_ || _position.x < WestEnd_ || _position.z > NorthEnd_ || _position.z < SouthEnd_)
-	{
-			return true;
-	}
-	else 
-	{
-		return false;
-	}
-}
-
-void Character::MoveConfirm()
-{
-	//移動後のベクトルをtransform_.positionに代入し、移動を確定する
-	XMStoreFloat3(&this->transform_.position_, MoveParam_.NewPosition_);
-}
-
-float Character::RotateDirectionVector(XMVECTOR _MoveVector)
-{
-	//主にコントローラー・キーボードの入力に使う
-	//受け取った方向ベクトルと前向きベクトルの外積求める
-	XMVECTOR cross = XMVector3Cross(_MoveVector, InitParam_.FrontDirection_);
-
-	//Y外積をとり+か-かで倒し回転方向を求める
-	float crossY = XMVectorGetY(cross);
-
-	//正面ベクトルとのラジアン角をとる
-	XMVECTOR r = XMVector3AngleBetweenVectors(_MoveVector, InitParam_.FrontDirection_);
-
-	//ラジアン角度を取得
-	float angle = XMVectorGetX(r);
-
-	//ディグリー角に直す
-	float angleDeg = XMConvertToDegrees(angle);
-
-	// crossYの正負に応じて回転角度の符号を変える
-	if (crossY > 0)
-	{
-		angleDeg = -angleDeg;
-	}
-
-	return angleDeg;
-}
+//float Character::RotateDirectionVector(XMVECTOR _MoveVector)
+//{
+//	//主にコントローラー・キーボードの入力に使う
+//	//受け取った方向ベクトルと前向きベクトルの外積求める
+//	XMVECTOR cross = XMVector3Cross(_MoveVector, InitParam_.FrontDirection_);
+//
+//	//Y外積をとり+か-かで倒し回転方向を求める
+//	float crossY = XMVectorGetY(cross);
+//
+//	//正面ベクトルとのラジアン角をとる
+//	XMVECTOR r = XMVector3AngleBetweenVectors(_MoveVector, InitParam_.FrontDirection_);
+//
+//	//ラジアン角度を取得
+//	float angle = XMVectorGetX(r);
+//
+//	//ディグリー角に直す
+//	float angleDeg = XMConvertToDegrees(angle);
+//
+//	// crossYの正負に応じて回転角度の符号を変える
+//	if (crossY > 0)
+//	{
+//		angleDeg = -angleDeg;
+//	}
+//
+//	return angleDeg;
+//}
 
 void Character::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity,
 	std::string _attackName)
@@ -799,7 +798,7 @@ void Character::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVel
 	HitParam_.KnockBack_Velocity_.z = KnockBackValue;
 
 	//溜めている速度をリセット
-	ChargeReset();
+	charge_->ChargeReset();
 
 	//ノックバック時のY軸回転角の固定
 	KnockBackAngleY(HitParam_.KnockBack_Direction_,KnockBackValue);
@@ -826,7 +825,7 @@ void Character::KnockBackAngleY(XMFLOAT3 _KnockBackVector, float _KnockBackValue
 void Character::KnockBack()
 {
 	//x軸の+回転を行う
-	MoveRotateX();
+	rotate_->MoveRotateX();
 
 	//毎フレームノックバック速度を減少
 	HitParam_.KnockBack_Velocity_.x *= HitParam_.DecelerationRate_;
@@ -844,9 +843,9 @@ void Character::KnockBack()
 	//場外でなければ位置更新 
 	XMFLOAT3 tmp;
 	XMStoreFloat3(&tmp, MoveParam_. NewPosition_);
-	if (!IsOutsideStage(tmp))
+	if (!movement_->IsOutsideStage(tmp))
 	{
-		MoveConfirm();
+		movement_->MoveConfirm();
 	}
 }
 
@@ -873,10 +872,10 @@ void Character::FenceReflect(XMVECTOR _normal)
 	vfx_->SetFenceHitEffect();
 
 	//溜めている速度をリセット
-	ChargeReset();
+	charge_->ChargeReset();
 
 	//ダッシュ中の速度リセット
-	AccelerationStop();
+	movement_->AccelerationStop();
 
 	//念のため正規化する
 	//反射方向が0なら処理しない(0ベクトルを正規化はできない)
@@ -957,58 +956,58 @@ void Character::NotifyFenceHit()
 	}
 }
 
-void Character::Charging()
-{
-	//チャージ中のSE再生
-	Audio::Play(hSoundcharge_);
+//void Character::Charging()
+//{
+//	//チャージ中のSE再生
+//	Audio::Play(hSoundcharge_);
+//
+//	//チャージ中,仮の値に一定の加速量を加算し続ける
+//	//チャージ解放時に実際にAcceleration_に代入する
+//	if (MoveParam_.TmpAccele_ < MoveParam_.FullAccelerate_)
+//	{
+//		MoveParam_.TmpAccele_ += MoveParam_.AcceleValue_;
+//	}
+//	else
+//	{
+//		vfx_->SetFullChargeEffect();
+//		MoveParam_.TmpAccele_ = MoveParam_.FullAccelerate_;
+//	}
+//}
 
-	//チャージ中,仮の値に一定の加速量を加算し続ける
-	//チャージ解放時に実際にAcceleration_に代入する
-	if (MoveParam_.TmpAccele_ < MoveParam_.FullAccelerate_)
-	{
-		MoveParam_.TmpAccele_ += MoveParam_.AcceleValue_;
-	}
-	else
-	{
-		vfx_->SetFullChargeEffect();
-		MoveParam_.TmpAccele_ = MoveParam_.FullAccelerate_;
-	}
-}
-
-void Character::ChargeRelease()
-{
-	//実際の加速度に溜めた仮の値を代入
-	MoveParam_.Acceleration_ = MoveParam_.TmpAccele_;
-
-	//溜めている速度をリセット
-	ChargeReset();
-}
-
-void Character::ChargeReset()
-{
-	MoveParam_.TmpAccele_ = 0.0f;
-}
-
-void Character::SetArrow()
-{
-	//正面ベクトルに前方向の調整値を乗算し、矢印の正面位置を計算
-	XMVECTOR FrontArrow = XMVectorScale(this->MoveParam_.ForwardVector_, this->MoveParam_.AddArrowDepth_);
-	
-	//現在位置を取得
-	XMVECTOR PosVec = XMLoadFloat3(&this->transform_.position_);
-
-	//矢印の正面位置と現在位置を加算
-	XMVECTOR arrowPosVec = XMVectorAdd(PosVec, FrontArrow);
-
-	//矢印のトランスフォームに代入
-	XMStoreFloat3(&this->MoveParam_.ArrowTransform_.position_, arrowPosVec);
-}
-
-void Character::DrawArrow()
-{
-	//矢印モデルを描画
-	Model::SetAndDraw(MoveParam_.hMoveArrow_, this->MoveParam_.ArrowTransform_);
-}
+//void Character::ChargeRelease()
+//{
+//	//実際の加速度に溜めた仮の値を代入
+//	MoveParam_.Acceleration_ = MoveParam_.TmpAccele_;
+//
+//	//溜めている速度をリセット
+//	ChargeReset();
+//}
+//
+//void Character::ChargeReset()
+//{
+//	MoveParam_.TmpAccele_ = 0.0f;
+//}
+//
+//void Character::SetArrow()
+//{
+//	//正面ベクトルに前方向の調整値を乗算し、矢印の正面位置を計算
+//	XMVECTOR FrontArrow = XMVectorScale(MoveParam_.ForwardVector_, MoveParam_.AddArrowDepth_);
+//	
+//	//現在位置を取得
+//	XMVECTOR PosVec = XMLoadFloat3(&this->transform_.position_);
+//
+//	//矢印の正面位置と現在位置を加算
+//	XMVECTOR arrowPosVec = XMVectorAdd(PosVec, FrontArrow);
+//
+//	//矢印のトランスフォームに代入
+//	XMStoreFloat3(&MoveParam_.ArrowTransform_.position_, arrowPosVec);
+//}
+//
+//void Character::DrawArrow()
+//{
+//	//矢印モデルを描画
+//	Model::SetAndDraw(MoveParam_.hMoveArrow_, MoveParam_.ArrowTransform_);
+//}
 
 //XMVECTOR Character::RotateVecFront(float _rotY, XMVECTOR _front)
 //{

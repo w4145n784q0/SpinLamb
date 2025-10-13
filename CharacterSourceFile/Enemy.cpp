@@ -71,7 +71,7 @@ void Enemy::Initialize()
 	InitArrow();
 
 	//初期位置にキャラクターをセット
-	SetStartPosition();
+	movement_->InitStartPosition();
 
 	//当たり判定付ける
 	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), HitParam_.ColliderSize_);
@@ -98,7 +98,7 @@ void Enemy::Draw()
 	//チャージ中のみ矢印モデル描画
 	if (EnemyState_ == S_Aim)
 	{
-		DrawArrow();
+		charge_->DrawArrow();
 	}
 }
 
@@ -125,7 +125,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 		
 		//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度,接触相手の名前)
-		Reflect(MyVector, TargetVector, this->MoveParam_.Acceleration_, TargetAcceleration_, TargetName_);
+		Reflect(MyVector, TargetVector, MoveParam_.Acceleration_, TargetAcceleration_, TargetName_);
 		
 		//接触時点で攻撃までのタイマーをリセット
 		AimTimer_ = 0;
@@ -134,7 +134,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 		EnemyState_ = S_Hit;
 
 		//状態遷移の際は一度回転をストップ
-		RotateXStop();
+		rotate_->RotateXStop();
 	}
 
 	//各柵に接触した時の処理
@@ -165,7 +165,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
 
 					//状態遷移の際は一度回転をストップ
-					RotateXStop();
+					rotate_->RotateXStop();
 
 				}
 			}
@@ -242,14 +242,14 @@ void Enemy::UpdateRoot()
 		EnemyState_ = S_Chase;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateXStop();
+		rotate_->RotateXStop();
 	}
 	else//接近しているなら攻撃準備
 	{
 		EnemyState_ = S_Aim;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateXStop();
+		rotate_->RotateXStop();
 	}
 }
 
@@ -261,7 +261,7 @@ void Enemy::UpdateChase()
 	LookPlayer();
 	
 	//更新した方向へ移動
-	CharacterMove(AutoAttackDirection);
+	movement_->CharacterMove(AutoAttackDirection);
 
 	//進行方向に合わせてY軸を回転
 	RotateFromDirection(AutoAttackDirection);
@@ -274,11 +274,11 @@ void Enemy::UpdateChase()
 		EnemyState_ = S_Aim;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateXStop();
+		rotate_->RotateXStop();
 	}
 
 	//通常X回転
-	MoveRotateX();
+	rotate_->MoveRotateX();
 }
 
 void Enemy::UpdateAim()
@@ -292,19 +292,19 @@ void Enemy::UpdateAim()
 	RotateFromDirection(AutoAttackDirection);
 
 	//加速度を溜める
-	Charging();
+	charge_->Charging();
 
 	//矢印モデルをセット
-	SetArrow();
+	charge_->SetArrow();
 
 	//矢印モデルの位置を自身の回転と合わせる
-	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
+	MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
 
 	//チャージ中のエフェクトを出す
 	vfx_->SetChargingEffect("ParticleAssets\\circle_R.png");
 
 	//高速X回転
-	FastRotateX();
+	rotate_->FastRotateX();
 
 	//時間経過で攻撃状態へ（配列中のランダムな時間）
 	if (++AimTimer_ > EnemyAttackTimeArray[RandomAim_])
@@ -313,13 +313,13 @@ void Enemy::UpdateAim()
 		AimTimer_ = 0;
 
 		//チャージ解放
-		ChargeRelease();
+		charge_->ChargeRelease();
 
 		//攻撃状態へ移行
 		EnemyState_ = S_Attack;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateXStop();
+		rotate_->RotateXStop();
 	}
 
 }
@@ -332,22 +332,22 @@ void Enemy::UpdateAttack()
 	vfx_->SetAttackLocusEffect();
 
 	//正面ベクトルの方向に移動
-	CharacterMove(AutoAttackDirection);
+	movement_->CharacterMove(AutoAttackDirection);
 
 	//進行方向に合わせてY軸を回転
 	RotateFromDirection(AutoAttackDirection);
 
 	//摩擦量分速度を減少
-	FrictionDeceleration();
+	movement_->FrictionDeceleration();
 
 	//高速X回転
-	FastRotateX();
+	rotate_->FastRotateX();
 
 	//加速量が0になったら
-	if (IsDashStop())
+	if (movement_->IsDashStop())
 	{
 		//明示的に加速量を0にする
-		AccelerationStop();
+		movement_->AccelerationStop();
 
 		//ルートへ戻る
 		EnemyState_ = S_Root;
@@ -356,11 +356,11 @@ void Enemy::UpdateAttack()
 		RandomAim_ = rand() % EnemyAttackTimeArray.size();
 
 		//状態遷移の際は一度x回転をストップ
-		RotateXStop();
+		rotate_->RotateXStop();
 	}
 
 	//攻撃SE再生
-	Audio::Play(hSoundattack_);
+	Audio::Play(SoundParam_.hSoundattack_);
 }
 
 void Enemy::UpdateHitStop()
@@ -374,7 +374,7 @@ void Enemy::UpdateHitStop()
 		EnemyState_ = S_Hit;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateXStop();
+		rotate_->RotateXStop();
 	}
 }
 
@@ -398,10 +398,10 @@ void Enemy::UpdateHit()
 		RandomAim_ = rand() % EnemyAttackTimeArray.size();
 
 		//状態遷移の際は一度x回転をストップ
-		RotateXStop();
+		rotate_->RotateXStop();
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
-		AccelerationStop();
+		movement_->AccelerationStop();
 	}
 }
 
@@ -425,10 +425,10 @@ void Enemy::UpdateFenceHit()
 		RandomAim_ = rand() % EnemyAttackTimeArray.size();
 
 		//状態遷移の際は一度x回転をストップ
-		RotateXStop();
+		rotate_->RotateXStop();
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
-		AccelerationStop();
+		movement_->AccelerationStop();
 	}
 }
 

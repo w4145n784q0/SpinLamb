@@ -87,7 +87,7 @@ void Player::Draw()
 	//チャージ中のみ矢印モデル描画
 	if (PlayerState_ == S_Charge)
 	{
-		DrawArrow();
+		charge_->DrawArrow();
 	}
 
 }
@@ -118,10 +118,10 @@ void Player::OnCollision(GameObject* pTarget)
 		Camera::CameraShakeStart(Camera::GetShakeTimeShort());
 
 		//衝撃音
-		Audio::Play(hSoundCollision_);
+		Audio::Play(SoundParam_.hSoundCollision_);
 
 		//状態遷移の際は一度x回転をストップ
-		RotateXStop();
+		rotate_->RotateXStop();
 
 	}
 
@@ -150,7 +150,7 @@ void Player::OnCollision(GameObject* pTarget)
 					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
 
 					//状態遷移の際は一度x回転をストップ
-					RotateXStop();
+					rotate_->RotateXStop();
 				}
 			}
 		}
@@ -202,7 +202,7 @@ void Player::PlayerRun()
 	//デバッグ中のみEnterキーで初期位置に戻る
 	if (Input::IsKeyDown(DIK_RETURN))
 	{
-		SetStartPosition();
+		SetStartPosition({0.0f, 0.0f, 0.0f});
 	}
 #endif
 
@@ -252,7 +252,7 @@ void Player::UpdateIdle()
 			PlayerState_ = S_Charge;
 
 			//状態遷移の際は一度x回転をストップ
-			RotateXStop();
+			rotate_->RotateXStop();
 		}
 	}
 
@@ -277,13 +277,13 @@ void Player::UpdateCharge()
 	//チャージ中(TmpAcceleを溜めている状態) その場で左右回転できるが動けない
 
 	//加速度を溜める
-	Charging();
+	charge_->Charging();
 
 	//矢印モデルをセット
-	SetArrow();
+	charge_->SetArrow();
 
 	//矢印モデルの位置を自身の回転と合わせる
-	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
+	MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
 	
 	//チャージ中のエフェクトを出す
 	vfx_->SetChargingEffect("ParticleAssets\\circle_B.png");
@@ -294,7 +294,7 @@ void Player::UpdateCharge()
 		if (JumpParam_.IsOnGround_)
 		{
 			//溜めたチャージを0にする
-			ChargeReset();
+			charge_->ChargeReset();
 
 			//ジャンプ開始
 			air_->SetJump();
@@ -303,7 +303,7 @@ void Player::UpdateCharge()
 			PlayerState_ = S_Idle;
 
 			//状態遷移の際は一度x回転をストップ
-			RotateXStop();
+			rotate_->RotateXStop();
 		}
 	}
 
@@ -322,17 +322,17 @@ void Player::UpdateCharge()
 		|| Input::IsPadButtonUp(XINPUT_GAMEPAD_B, ControllerID_))
 	{
 		//チャージ解放
-		ChargeRelease();
+		charge_->ChargeRelease();
 
 		//攻撃状態へ移行
 		PlayerState_ = S_Attack;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateXStop();
+		rotate_->RotateXStop();
 	}
 
 	//高速X回転
-	FastRotateX();
+	rotate_->FastRotateX();
 
 	//カメラ操作
 	CameraControl();
@@ -346,29 +346,29 @@ void Player::UpdateAttack()
 	vfx_->SetAttackLocusEffect();
 
 	//正面ベクトルの方向に移動
-	CharacterMove(MoveParam_.ForwardVector_);
+	movement_->CharacterMove(MoveParam_.ForwardVector_);
 
 	//摩擦量分速度を減少
-	FrictionDeceleration();
+	movement_->FrictionDeceleration();
 
 	//高速X回転
-	FastRotateX();
+	rotate_->FastRotateX();
 
 	//加速量が0になったら
-	if (IsDashStop())
+	if (movement_->IsDashStop())
 	{
 		//明示的に加速量を0にする
-		AccelerationStop();
+		movement_->AccelerationStop();
 
 		//通常状態へ戻る
 		PlayerState_ = S_Idle;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateXStop();
+		rotate_->RotateXStop();
 	}
 
 	//攻撃SE再生
-	Audio::Play(hSoundattack_);
+	Audio::Play(SoundParam_.hSoundattack_);
 }
 
 void Player::UpdateHit()
@@ -388,10 +388,10 @@ void Player::UpdateHit()
 		PlayerState_ = S_Idle;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateXStop();
+		rotate_->RotateXStop();
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
-		AccelerationStop();
+		movement_->AccelerationStop();
 	}
 }
 
@@ -412,10 +412,10 @@ void Player::UpdateFenceHit()
 		PlayerState_ = S_Idle;
 
 		//状態遷移の際は一度x回転をストップ
-		RotateXStop();
+		rotate_->RotateXStop();
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
-		AccelerationStop();
+		movement_->AccelerationStop();
 	}
 }
 
@@ -507,7 +507,7 @@ void Player::PlayerInit(std::string _CSVpath, std::string _Modelpath)
 	InitArrow();
 
 	//初期位置にキャラクターをセット
-	SetStartPosition();
+	movement_->InitStartPosition();
 
 	//当たり判定付ける
 	SphereCollider* collider = new SphereCollider(XMFLOAT3(0, 0, 0), HitParam_.ColliderSize_);
@@ -732,13 +732,13 @@ void Player::PlayerMove(XMVECTOR _move)
 	_move = XMVector3TransformCoord(_move, rotY);
 
 	//コントローラー入力ベクトルからy軸回転量を計算
-	this->transform_.rotate_.y = RotateDirectionVector(_move);
+	this->transform_.rotate_.y = rotate_->RotateDirectionVector(_move);
 
 	//コントローラー入力ベクトルを渡し、実際に移動する
-	CharacterMove(_move);
+	movement_->CharacterMove(_move);
 
 	//キャラクターをX回転
-	MoveRotateX();
+	rotate_->MoveRotateX();
 }
 
 void Player::CollisionCharacter(std::string _name)
@@ -795,7 +795,7 @@ void Player::CollisionCharacter(std::string _name)
 	}
 
 	//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度,接触相手の名前)
-	Reflect(PlayerVector, TargetVector, this->MoveParam_.Acceleration_, TargetSpeed, TargetName);
+	Reflect(PlayerVector, TargetVector, MoveParam_.Acceleration_, TargetSpeed, TargetName);
 }
 
 void Player::SetCSVPlayer(std::string _path)

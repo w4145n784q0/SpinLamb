@@ -1,4 +1,5 @@
 #pragma once
+#include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
 
 class CharacterRotate :
@@ -13,7 +14,6 @@ public:
     /// <param name="_MoveVector">進行したい方向ベクトル</param>
     /// <returns>回転する角度(Y軸回転)</returns>
     float RotateDirectionVector(XMVECTOR _MoveVector);
-
 
     /// <summary>
     /// 通常X軸回転

@@ -29,10 +29,10 @@ protected:
     CharacterShadow*     shadow_;
     CharacterAir*        air_;
     CharacterForward*    forward_;
-    /*CharacterMovement*   movement_;
+    CharacterMovement*   movement_;
     CharacterRotate*     rotate_;
     CharacterCharge*     charge_;
-    CharacterHit*        hit_;
+    /*CharacterHit*        hit_;
     CharacterFence*      fence_;
     CharacterCsvLoader*  csvload_;
     CharacterObserver*   observer_;*/
@@ -42,54 +42,54 @@ protected:
 
     //----------ステージの端----------
     //キャラクターが持つ移動制限の値
-    float NorthEnd_ = 0.0f;     //ステージ北端(前方)の位置
-    float SouthEnd_ = 0.0f;     //ステージ南端(後方)の位置
-    float EastEnd_ = 0.0f;      //ステージ東端(右側)の位置
-    float WestEnd_ = 0.0f;      //ステージ西端(左側)の位置
+    //float NorthEnd_ = 0.0f;     //ステージ北端(前方)の位置
+    //float SouthEnd_ = 0.0f;     //ステージ南端(後方)の位置
+    //float EastEnd_ = 0.0f;      //ステージ東端(右側)の位置
+    //float WestEnd_ = 0.0f;      //ステージ西端(左側)の位置
 
-    //----------サウンドハンドル----------
-    int hSoundcharge_ = -1;     //チャージ音のハンドル
-    int hSoundattack_ = -1;     //突撃音のハンドル
-    int hSoundCollision_ = -1;  //接触音のハンドル
-    int hSoundJump_ = -1;       //ジャンプ音のハンドル
+    ////----------サウンドハンドル----------
+    //int hSoundcharge_ = -1;     //チャージ音のハンドル
+    //int hSoundattack_ = -1;     //突撃音のハンドル
+    //int hSoundCollision_ = -1;  //接触音のハンドル
+    //int hSoundJump_ = -1;       //ジャンプ音のハンドル
 
     //----------初期状態----------
     struct InitializeParam
     {
         int CharacterID = -1;                   //ゲームに参加するキャラクターのid
-        XMFLOAT3 StartPosition_ = { 0,0,0 };    //初期位置
+        //XMFLOAT3 StartPosition_ = { 0,0,0 };    //初期位置
         XMVECTOR FrontDirection_ = { 0,0,1 };   //正面の初期値(ローカル座標系) ここからどれだけ回転したか
         std::vector<IGameObserver*> observers;  //監視される対象の配列
     };
     InitializeParam InitParam_;
 
     //----------移動----------
-    struct MoveParam
-    {
-        float Velocity_ = 0.0f;                 //初速度 この速度に加速度が加算される
-        float Acceleration_ = 0.0f;             //加速度 ダッシュ攻撃中に使用する値
-        float TmpAccele_ = 0.0f;                //加速度上昇時に使う仮の値
-        float AcceleValue_ = 0.0f;              //Acceleration_上昇時、1fあたりの増加量
-        float FullAccelerate_ = 0.0f;           //加速度の最大
-        float Friction_ = 0.0f;                 //摩擦係数(減速率) 1fあたりの減速量
-        int hMoveArrow_ = -1;                   //チャージ中に表示する矢印モデル
-       // XMVECTOR ForwardVector_ = { 0,0,0 };    //キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算 正規化した値を入れる
-        XMVECTOR MoveDirection_ = { 0,0,0 };    //移動方向 この値に速さの要素をかけて移動ベクトル化する
-        XMVECTOR NewPosition_ = { 0,0,0 };      //移動後の位置ベクトル
-        Transform ArrowTransform_;              //チャージ/攻撃準備中の矢印のトランスフォーム
-        XMFLOAT3 ArrowRotate_ = { 0,0,0 };      //矢印の初期回転
-        XMFLOAT3 ArrowScale_ = { 0,0,0 };       //矢印の大きさ
-        float AddArrowDepth_ = 0.0f;            //矢印の奥行き(前方向)の調整値
-    };
-    MoveParam MoveParam_;
+    //struct MoveParam
+    //{
+    //    float Velocity_ = 0.0f;                 //初速度 この速度に加速度が加算される
+    //    float Acceleration_ = 0.0f;             //加速度 ダッシュ攻撃中に使用する値
+    //    float TmpAccele_ = 0.0f;                //加速度上昇時に使う仮の値
+    //    float AcceleValue_ = 0.0f;              //Acceleration_上昇時、1fあたりの増加量
+    //    float FullAccelerate_ = 0.0f;           //加速度の最大
+    //    float Friction_ = 0.0f;                 //摩擦係数(減速率) 1fあたりの減速量
+    //    int hMoveArrow_ = -1;                   //チャージ中に表示する矢印モデル
+    //   // XMVECTOR ForwardVector_ = { 0,0,0 };    //キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算 正規化した値を入れる
+    //    XMVECTOR MoveDirection_ = { 0,0,0 };    //移動方向 この値に速さの要素をかけて移動ベクトル化する
+    //    XMVECTOR NewPosition_ = { 0,0,0 };      //移動後の位置ベクトル
+    //    Transform ArrowTransform_;              //チャージ/攻撃準備中の矢印のトランスフォーム
+    //    XMFLOAT3 ArrowRotate_ = { 0,0,0 };      //矢印の初期回転
+    //    XMFLOAT3 ArrowScale_ = { 0,0,0 };       //矢印の大きさ
+    //    float AddArrowDepth_ = 0.0f;            //矢印の奥行き(前方向)の調整値
+    //};
+    //MoveParam MoveParam_;
 
     //----------回転----------
-    struct RotateParam
-    {
-        float MoveRotateX = 0.0f;   //移動時の1fの回転量
-        float FastRotateX = 0.0f;   //(チャージ中など)高速回転中の1fの回転量
-    };
-    RotateParam RotateParam_;
+    //struct RotateParam
+    //{
+    //    float MoveRotateX = 0.0f;   //移動時の1fの回転量
+    //    float FastRotateX = 0.0f;   //(チャージ中など)高速回転中の1fの回転量
+    //};
+    //RotateParam RotateParam_;
 
     //----------空中----------
     //struct JumpParam
@@ -189,7 +189,7 @@ public:
     /// <summary>
     /// 自身の位置を初期位置に設定
     /// </summary>
-    void SetStartPosition() { this->transform_.position_ = InitParam_.StartPosition_; }
+    //void SetStartPosition() { this->transform_.position_ = InitParam_.StartPosition_; }
 
     /// <summary>
     /// 矢印トランスフォームの初期化
@@ -225,28 +225,28 @@ public:
 
     //----------移動----------
 
-    /// <summary>
-    /// キャラクターの移動処理
-    /// </summary>
-    /// <param name="_direction">動かす方向</param>
-    void CharacterMove(XMVECTOR _direction);
+    ///// <summary>
+    ///// キャラクターの移動処理
+    ///// </summary>
+    ///// <param name="_direction">動かす方向</param>
+    //void CharacterMove(XMVECTOR _direction);
 
-    /// <summary>
-    /// 移動ベクトルをつくる(方向ベクトルが必要)
-    /// </summary>
-    void CreateMoveVector();
+    ///// <summary>
+    ///// 移動ベクトルをつくる(方向ベクトルが必要)
+    ///// </summary>
+    //void CreateMoveVector();
 
-    /// <summary>
-    /// 場外判定
-    /// </summary>
-    /// <param name="_position">更新予定の位置</param>
-    /// <returns>移動可能か</returns>
-    bool IsOutsideStage(XMFLOAT3 _position);
+    ///// <summary>
+    ///// 場外判定
+    ///// </summary>
+    ///// <param name="_position">更新予定の位置</param>
+    ///// <returns>移動可能か</returns>
+    //bool IsOutsideStage(XMFLOAT3 _position);
 
-    /// <summary>
-    /// 移動確定処理
-    /// </summary>
-    void MoveConfirm();
+    ///// <summary>
+    ///// 移動確定処理
+    ///// </summary>
+    //void MoveConfirm();
 
     /// <summary>
     /// Y軸の回転行列をベクトルに変換
@@ -266,38 +266,38 @@ public:
     /// </summary>
     /// <param name="_MoveVector">進行したい方向ベクトル</param>
     /// <returns>回転する角度(Y軸回転)</returns>
-    float RotateDirectionVector(XMVECTOR _MoveVector);
+    /// float RotateDirectionVector(XMVECTOR _MoveVector);
 
     //----------チャージ----------
 
-    /// <summary>
-    /// 加速度の加算
-    /// </summary>
-    void Charging();
+    ///// <summary>
+    ///// 加速度の加算
+    ///// </summary>
+    //void Charging();
 
-    /// <summary>
-    /// 蓄積したTmpAccele_を実際に加速度に代入
-    /// </summary>
-    void ChargeRelease();
+    ///// <summary>
+    ///// 蓄積したTmpAccele_を実際に加速度に代入
+    ///// </summary>
+    //void ChargeRelease();
 
-    /// <summary>
-    /// TmpAccele_を0にする
-    /// </summary>
-    void ChargeReset();
+    ///// <summary>
+    ///// TmpAccele_を0にする
+    ///// </summary>
+    //void ChargeReset();
 
-    /// <summary>
-    /// チャージ中の矢印位置をセット
-    /// </summary>
-    void SetArrow();
+    ///// <summary>
+    ///// チャージ中の矢印位置をセット
+    ///// </summary>
+    //void SetArrow();
 
-    /// <summary>
-    /// 矢印モデルの描画
-    /// </summary>
-    void DrawArrow();
+    ///// <summary>
+    ///// 矢印モデルの描画
+    ///// </summary>
+    //void DrawArrow();
 
     //----------攻撃----------
 
-    /// <summary>
+ /*   /// <summary>
     /// 減速処理(加速時の増加量使用)
     /// </summary>
     void Deceleration() { MoveParam_.Acceleration_ -= MoveParam_.AcceleValue_; }
@@ -316,7 +316,7 @@ public:
     /// 停止判定
     /// </summary>
     /// <returns>加速量が0.0以下かどうか</returns>
-    bool IsDashStop() { if (MoveParam_.Acceleration_ <= 0.0f) return true; else return false; }
+    bool IsDashStop() { if (MoveParam_.Acceleration_ <= 0.0f) return true; else return false; }*/
 
 
     //----------空中----------
@@ -333,30 +333,30 @@ public:
 
     //----------回転----------
 
-    /// <summary>
-    /// 通常X軸回転
-    /// </summary>
-    void MoveRotateX() { this->transform_.rotate_.x += RotateParam_.MoveRotateX; }
+    ///// <summary>
+    ///// 通常X軸回転
+    ///// </summary>
+    //void MoveRotateX() { this->transform_.rotate_.x += RotateParam_.MoveRotateX; }
 
-    /// <summary>
-    /// 通常X軸回転(-x回転)
-    /// </summary>
-    void MoveRotateXReverse() { this->transform_.rotate_.x -= RotateParam_.MoveRotateX; }
+    ///// <summary>
+    ///// 通常X軸回転(-x回転)
+    ///// </summary>
+    //void MoveRotateXReverse() { this->transform_.rotate_.x -= RotateParam_.MoveRotateX; }
 
-    /// <summary>
-    /// 高速X軸回転
-    /// </summary>
-    void FastRotateX() { this->transform_.rotate_.x += RotateParam_.FastRotateX; }
+    ///// <summary>
+    ///// 高速X軸回転
+    ///// </summary>
+    //void FastRotateX() { this->transform_.rotate_.x += RotateParam_.FastRotateX; }
 
-    /// <summary>
-    /// 高速X軸回転(-x回転)
-    /// </summary>
-    void FastRotateReverse() { this->transform_.rotate_.x -= RotateParam_.FastRotateX; }
+    ///// <summary>
+    ///// 高速X軸回転(-x回転)
+    ///// </summary>
+    //void FastRotateReverse() { this->transform_.rotate_.x -= RotateParam_.FastRotateX; }
 
-    /// <summary>
-    /// X回転を止める
-    /// </summary>
-    void RotateXStop() { this->transform_.rotate_.x = 0.0f; }
+    ///// <summary>
+    ///// X回転を止める
+    ///// </summary>
+    //void RotateXStop() { this->transform_.rotate_.x = 0.0f; }
 
     //----------被弾----------
 
@@ -472,10 +472,10 @@ public:
 
     //キャラクターの移動制限をセット
     void SetEnd(float _upper, float _lower, float _left, float _right) {
-        NorthEnd_ = _upper;
-        SouthEnd_ = _lower;
-        WestEnd_ = _left;
-        EastEnd_ = _right;
+        EndParam_.NorthEnd_ = _upper;
+        EndParam_.SouthEnd_ = _lower;
+        EndParam_.WestEnd_ = _left;
+        EndParam_.EastEnd_ = _right;
     }
 
     //初期状態
