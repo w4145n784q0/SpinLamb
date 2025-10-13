@@ -1,7 +1,5 @@
 #pragma once
 #include "../Engine/GameObject.h"
-#include "../StageSourceFile/Ground.h"
-#include"../InterfaceSourceFile/IGameObserver.h"
 
 //部品分けしたヘッダファイル
 #include "CharacterPart/CharacterParams.h"
@@ -22,7 +20,7 @@
 class Character :
     public GameObject
 {
-protected:
+public:
     //----------モジュール群----------
 
     CharacterModelBlink* blink_;
@@ -154,7 +152,6 @@ protected:
     //ShadowParam ShadowParam_;
 
     //----------エフェクト関連----------
-
     //std::vector<float> ChargeParam_ = {};        //チャージ状態エフェクトのパラメータ
     //std::vector<float> FullChargeParam = {};     //最大チャージ状態エフェクトのパラメータ
     //std::vector<float> AttackLocusParam_ = {};   //突撃エフェクトのパラメータ
@@ -195,7 +192,7 @@ public:
     /// <summary>
     /// 矢印トランスフォームの初期化
     /// </summary>
-    void InitArrow();
+    // void InitArrow();
 
     /// <summary>
     /// 自身を監視する対象を配列に追加
@@ -222,7 +219,7 @@ public:
     /// <summary>
     /// キャラクター共通のImGuiを描画 個別要素は派生先で記述
     /// </summary>
-    void DrawCharacterImGui();
+    ///void DrawCharacterImGui();
 
     //----------移動----------
 

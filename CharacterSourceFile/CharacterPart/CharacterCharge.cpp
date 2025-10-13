@@ -1,6 +1,26 @@
 #include "CharacterCharge.h"
 #include"../../Engine/Audio.h"
 #include"../../Engine/Model.h"
+#include "../Character.h" 
+
+CharacterCharge::CharacterCharge(GameObject* parent)
+	:GameObject(parent, "CharacterCharge"),owner_(nullptr)
+{
+	owner_ = (Character*)GetParent();
+}
+
+void CharacterCharge::InitArrow()
+{
+	//矢印モデルのトランスフォームを初期化
+	MoveParam_.ArrowTransform_.position_ = { 0.0f,0.0f, 0.0f };
+	MoveParam_.ArrowTransform_.rotate_ = MoveParam_.ArrowRotate_;
+	MoveParam_.ArrowTransform_.scale_ = MoveParam_.ArrowScale_;
+
+	//矢印モデル読み込み
+	MoveParam_.hMoveArrow_ = Model::Load("Model\\AttackArrow.fbx");
+	assert(MoveParam_.hMoveArrow_ >= 0);
+}
+
 
 void CharacterCharge::Charging()
 {
@@ -15,7 +35,7 @@ void CharacterCharge::Charging()
 	}
 	else
 	{
-		vfx_->SetFullChargeEffect();
+		owner_->vfx_->SetFullChargeEffect();
 		MoveParam_.TmpAccele_ = MoveParam_.FullAccelerate_;
 	}
 }

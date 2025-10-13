@@ -1,12 +1,29 @@
 #pragma once
 #include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
+
+class Character;
+
 class CharacterCharge :
     public GameObject
 {
+private:
+    Character* owner_;
 public:
  
     //----------チャージ----------
+    CharacterCharge(GameObject* parent);
+    virtual ~CharacterCharge() = default;
+
+    void Initialize() override {};
+    void Update() override {};
+    void Draw() override {};
+    void Release() override {};
+
+    /// <summary>
+    /// 矢印トランスフォームの初期化
+    /// </summary>
+    void InitArrow();
 
     /// <summary>
     /// 加速度の加算
