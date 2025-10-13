@@ -86,14 +86,14 @@ Character::Character(GameObject* parent, const std::string& name)
 	:GameObject(parent, name)
 {
 
-	/*if (blink_ == nullptr)
+	if (blink_ == nullptr)
 	{
 		Instantiate<CharacterModelBlink>(this);
-	}*/
-	/*if (vfx_ == nullptr)
+	}
+	if (vfx_ == nullptr)
 	{
 		Instantiate<CharacterVFX>(this);
-	}*/
+	}
 	/*if (shadow_ == nullptr)
 	{
 		Instantiate<CharacterShadow>(this);
@@ -136,7 +136,7 @@ Character::Character(GameObject* parent, const std::string& name)
 	}*/
 
 	//csvからパラメータ読み込み
-	InitCSVEffect();
+	vfx_->InitCSVEffect();
 
 	//サウンドの読み込み
 	//同じディレクトリ内からのパスは省略
@@ -384,25 +384,25 @@ void Character::RemoveObserver(IGameObserver* _observer)
 	}
 }
 
-void Character::DrawCharacterModel(int _handle, Transform _transform)
-{
-	//無敵時間中かどうかでモデルの点滅表現を行う
-
-	if (FenceHitParam_.IsInvincibility_)
-	{
-		//無敵時間中ならタイマーを使い、一定フレームおきにモデルを描画
-		if (++FenceHitParam_.BlinkTimer_ > FenceHitParam_.BlinkValue_) {
-
-			FenceHitParam_.BlinkTimer_ = 0;
-			Model::SetAndDraw(_handle, _transform);
-		}
-	}
-	else
-	{
-		//無敵時間でないなら通常の描画
-		Model::SetAndDraw(_handle, _transform);
-	}
-}
+//void Character::DrawCharacterModel(int _handle, Transform _transform)
+//{
+//	//無敵時間中かどうかでモデルの点滅表現を行う
+//
+//	if (FenceHitParam_.IsInvincibility_)
+//	{
+//		//無敵時間中ならタイマーを使い、一定フレームおきにモデルを描画
+//		if (++FenceHitParam_.BlinkTimer_ > FenceHitParam_.BlinkValue_) {
+//
+//			FenceHitParam_.BlinkTimer_ = 0;
+//			Model::SetAndDraw(_handle, _transform);
+//		}
+//	}
+//	else
+//	{
+//		//無敵時間でないなら通常の描画
+//		Model::SetAndDraw(_handle, _transform);
+//	}
+//}
 
 void Character::DrawCharacterImGui()
 {
@@ -870,7 +870,7 @@ XMVECTOR Character::HitNormal(std::string _normal)
 void Character::FenceReflect(XMVECTOR _normal)
 {
 	//接触エフェクトを指定
-	SetFenceHitEffect();
+	vfx_->SetFenceHitEffect();
 
 	//溜めている速度をリセット
 	ChargeReset();
@@ -970,7 +970,7 @@ void Character::Charging()
 	}
 	else
 	{
-		SetFullChargeEffect();
+		vfx_->SetFullChargeEffect();
 		MoveParam_.TmpAccele_ = MoveParam_.FullAccelerate_;
 	}
 }
@@ -1032,109 +1032,109 @@ void Character::FrontVectorConfirm()
 	MoveParam_.ForwardVector_ = RotateVecFront(this->transform_.rotate_.y, InitParam_.FrontDirection_);
 }
 
-void Character::InitCSVEffect()
-{
-	//csvファイルを読み込む
-	CsvReader csv;
-	csv.Load("CSVData\\EffectData\\VFXData.csv");
-
-	//csvファイルの各0列目の文字列の配列を取得
-	std::string Effects[] = { "Charge","FullCharge" ,"Locus" , "Hit" , "FenceHit" };
-  
-	//ChargeParam_から始まるVFXのパラメータ(vector<float>型の配列)の参照を
-	//ポインタ配列に格納
-	std::vector<float>* Param[] = { &ChargeParam_,&FullChargeParam,
-		&AttackLocusParam_, &HitEffectParam_, &FenceHitEffectParam_ };  
-
-
-    for (int i = 0; i < sizeof(Effects) / sizeof(Effects[0]); i++)  
-    {  
-		//0列目の文字列を渡し、その行のパラメータを取得
-		std::vector<float> v = GetCSVReadData(csv, Effects[i]);
-
-		//この時点では代入のみ行われる
-		// SetEmitterで実際にVFXのパラメータにセットされる 
-		*Param[i] = v;  
-            
-    }
-}
-
-void Character::SetChargingEffect(std::string _path)
-{
-	//csvから読み込んだ,チャージ中エフェクトのパラメータを実際にセットする
-	EmitterData charge;
-	VFX::SetEmitter(charge, ChargeParam_);
-
-	//使用する画像のパスをセットする
-	charge.textureFileName = _path;
-
-	//発射位置をセット
-	charge.position = this->transform_.position_;
-
-	//エフェクトを開始
-	VFX::Start(charge);
-}
-
-void Character::SetFullChargeEffect()
-{
-	//csvから読み込んだ,最大チャージエフェクトのパラメータを実際にセットする
-	EmitterData fullcharge;
-	VFX::SetEmitter(fullcharge, FullChargeParam);
-
-	//使用する画像のパスをセットする
-	fullcharge.textureFileName = "ParticleAssets\\circle_W.png";
-
-	//発射位置をセット
-	fullcharge.position = this->transform_.position_;
-
-	//エフェクトを開始
-	VFX::Start(fullcharge);
-}
-
-void Character::SetAttackLocusEffect()
-{
-	//csvから読み込んだ,攻撃中の軌跡エフェクトのパラメータを実際にセットする
-	EmitterData locus;
-	VFX::SetEmitter(locus, AttackLocusParam_);
-
-	//使用する画像のパスをセットする
-	locus.textureFileName = "ParticleAssets\\flashB_Y.png";
-
-	//発射位置をセット
-	locus.position = this->transform_.position_;
-
-	//エフェクトを開始
-	VFX::Start(locus);
-}
-
-void Character::SetHitEffect()
-{
-	//csvから読み込んだ,被弾エフェクトのパラメータを実際にセットする
-	EmitterData hit;
-	VFX::SetEmitter(hit, HitEffectParam_);
-
-	//使用する画像のパスをセットする
-	hit.textureFileName = "ParticleAssets\\flashB_W.png";
-
-	//発射位置をセット
-	hit.position = this->transform_.position_;
-
-	//エフェクトを開始
-	VFX::Start(hit);
-}
-
-void Character::SetFenceHitEffect()
-{
-	//csvから読み込んだ,柵に接触時エフェクトのパラメータを実際にセットする
-	EmitterData  fencehit;
-	VFX::SetEmitter(fencehit, FenceHitEffectParam_);
-
-	//使用する画像のパスをセットする
-	fencehit.textureFileName = "ParticleAssets\\flashB_W.png";
-
-	//発射位置をセット
-	fencehit.position = this->transform_.position_;
-
-	//エフェクトを開始
-	VFX::Start(fencehit);
-}
+//void Character::InitCSVEffect()
+//{
+//	//csvファイルを読み込む
+//	CsvReader csv;
+//	csv.Load("CSVData\\EffectData\\VFXData.csv");
+//
+//	//csvファイルの各0列目の文字列の配列を取得
+//	std::string Effects[] = { "Charge","FullCharge" ,"Locus" , "Hit" , "FenceHit" };
+//  
+//	//ChargeParam_から始まるVFXのパラメータ(vector<float>型の配列)の参照を
+//	//ポインタ配列に格納
+//	std::vector<float>* Param[] = { &ChargeParam_,&FullChargeParam,
+//		&AttackLocusParam_, &HitEffectParam_, &FenceHitEffectParam_ };  
+//
+//
+//    for (int i = 0; i < sizeof(Effects) / sizeof(Effects[0]); i++)  
+//    {  
+//		//0列目の文字列を渡し、その行のパラメータを取得
+//		std::vector<float> v = GetCSVReadData(csv, Effects[i]);
+//
+//		//この時点では代入のみ行われる
+//		// SetEmitterで実際にVFXのパラメータにセットされる 
+//		*Param[i] = v;  
+//            
+//    }
+//}
+//
+//void Character::SetChargingEffect(std::string _path)
+//{
+//	//csvから読み込んだ,チャージ中エフェクトのパラメータを実際にセットする
+//	EmitterData charge;
+//	VFX::SetEmitter(charge, ChargeParam_);
+//
+//	//使用する画像のパスをセットする
+//	charge.textureFileName = _path;
+//
+//	//発射位置をセット
+//	charge.position = this->transform_.position_;
+//
+//	//エフェクトを開始
+//	VFX::Start(charge);
+//}
+//
+//void Character::SetFullChargeEffect()
+//{
+//	//csvから読み込んだ,最大チャージエフェクトのパラメータを実際にセットする
+//	EmitterData fullcharge;
+//	VFX::SetEmitter(fullcharge, FullChargeParam);
+//
+//	//使用する画像のパスをセットする
+//	fullcharge.textureFileName = "ParticleAssets\\circle_W.png";
+//
+//	//発射位置をセット
+//	fullcharge.position = this->transform_.position_;
+//
+//	//エフェクトを開始
+//	VFX::Start(fullcharge);
+//}
+//
+//void Character::SetAttackLocusEffect()
+//{
+//	//csvから読み込んだ,攻撃中の軌跡エフェクトのパラメータを実際にセットする
+//	EmitterData locus;
+//	VFX::SetEmitter(locus, AttackLocusParam_);
+//
+//	//使用する画像のパスをセットする
+//	locus.textureFileName = "ParticleAssets\\flashB_Y.png";
+//
+//	//発射位置をセット
+//	locus.position = this->transform_.position_;
+//
+//	//エフェクトを開始
+//	VFX::Start(locus);
+//}
+//
+//void Character::SetHitEffect()
+//{
+//	//csvから読み込んだ,被弾エフェクトのパラメータを実際にセットする
+//	EmitterData hit;
+//	VFX::SetEmitter(hit, HitEffectParam_);
+//
+//	//使用する画像のパスをセットする
+//	hit.textureFileName = "ParticleAssets\\flashB_W.png";
+//
+//	//発射位置をセット
+//	hit.position = this->transform_.position_;
+//
+//	//エフェクトを開始
+//	VFX::Start(hit);
+//}
+//
+//void Character::SetFenceHitEffect()
+//{
+//	//csvから読み込んだ,柵に接触時エフェクトのパラメータを実際にセットする
+//	EmitterData  fencehit;
+//	VFX::SetEmitter(fencehit, FenceHitEffectParam_);
+//
+//	//使用する画像のパスをセットする
+//	fencehit.textureFileName = "ParticleAssets\\flashB_W.png";
+//
+//	//発射位置をセット
+//	fencehit.position = this->transform_.position_;
+//
+//	//エフェクトを開始
+//	VFX::Start(fencehit);
+//}

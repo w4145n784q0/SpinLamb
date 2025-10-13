@@ -24,8 +24,8 @@ class Character :
 {
 protected:
     // ---- モジュール群 ----
-    /*CharacterModelBlink* blink_;*/
-    /*CharacterVFX*        vfx_;*/
+    CharacterModelBlink* blink_;
+    CharacterVFX*        vfx_;
     /*CharacterShadow*     shadow_;
     CharacterAir*        air_;
     CharacterForward*    forward_;
@@ -154,11 +154,11 @@ protected:
 
     //----------エフェクト関連----------
 
-    std::vector<float> ChargeParam_ = {};        //チャージ状態エフェクトのパラメータ
-    std::vector<float> FullChargeParam = {};     //最大チャージ状態エフェクトのパラメータ
-    std::vector<float> AttackLocusParam_ = {};   //突撃エフェクトのパラメータ
-    std::vector<float> HitEffectParam_ = {};     //接触時の衝撃エフェクトのパラメータ
-    std::vector<float> FenceHitEffectParam_ = {};//柵に接触時の衝撃エフェクトのパラメータ
+    //std::vector<float> ChargeParam_ = {};        //チャージ状態エフェクトのパラメータ
+    //std::vector<float> FullChargeParam = {};     //最大チャージ状態エフェクトのパラメータ
+    //std::vector<float> AttackLocusParam_ = {};   //突撃エフェクトのパラメータ
+    //std::vector<float> HitEffectParam_ = {};     //接触時の衝撃エフェクトのパラメータ
+    //std::vector<float> FenceHitEffectParam_ = {};//柵に接触時の衝撃エフェクトのパラメータ
 
 public:
     Character(GameObject* parent);
@@ -216,7 +216,7 @@ public:
     /// </summary>
     /// <param name="_handle">モデルハンドル</param>
     /// <param name="_transform">描画位置のトランスフォーム</param>
-    void DrawCharacterModel(int _handle, Transform _transform);
+    /// void DrawCharacterModel(int _handle, Transform _transform);
 
     /// <summary>
     /// キャラクター共通のImGuiを描画 個別要素は派生先で記述
@@ -437,7 +437,7 @@ public:
 
     //----------エフェクト処理----------
 
-    /// <summary>
+  /*  /// <summary>
     /// CSV用データの初期化
     /// </summary>
     void InitCSVEffect();
@@ -466,7 +466,7 @@ public:
     /// <summary>
     /// 柵に接触時の衝撃エフェクトつける
     /// </summary>
-    void SetFenceHitEffect();
+    void SetFenceHitEffect();*/
 
     //----------セッター・ゲッター関数----------
 

@@ -93,7 +93,7 @@ void Enemy::Draw()
 	Character::Draw();
 
 	//動かすキャラクターの描画
-	DrawCharacterModel(hEnemy_, this->transform_);
+	blink_->DrawCharacterModel(hEnemy_, this->transform_);
 
 	//チャージ中のみ矢印モデル描画
 	if (EnemyState_ == S_Aim)
@@ -301,7 +301,7 @@ void Enemy::UpdateAim()
 	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
 
 	//チャージ中のエフェクトを出す
-	SetChargingEffect("ParticleAssets\\circle_R.png");
+	vfx_->SetChargingEffect("ParticleAssets\\circle_R.png");
 
 	//高速X回転
 	FastRotateX();
@@ -329,7 +329,7 @@ void Enemy::UpdateAttack()
 	//攻撃状態 正面の方向に移動
 
 	//攻撃中のエフェクトを出す
-	SetAttackLocusEffect();
+	vfx_->SetAttackLocusEffect();
 
 	//正面ベクトルの方向に移動
 	CharacterMove(AutoAttackDirection);

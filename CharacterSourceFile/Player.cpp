@@ -82,7 +82,7 @@ void Player::Draw()
 	Character::Draw();
 
 	//動かすキャラクターの描画
-	DrawCharacterModel(hPlayer_, this->transform_);
+	blink_->DrawCharacterModel(hPlayer_, this->transform_);
 
 	//チャージ中のみ矢印モデル描画
 	if (PlayerState_ == S_Charge)
@@ -112,7 +112,7 @@ void Player::OnCollision(GameObject* pTarget)
 		PlayerState_ = S_Hit;
 
 		//接触エフェクト
-		SetHitEffect();
+		vfx_->SetHitEffect();
 
 		//カメラ振動(短く)
 		Camera::CameraShakeStart(Camera::GetShakeTimeShort());
@@ -286,7 +286,7 @@ void Player::UpdateCharge()
 	this->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
 	
 	//チャージ中のエフェクトを出す
-	SetChargingEffect("ParticleAssets\\circle_B.png");
+	vfx_->SetChargingEffect("ParticleAssets\\circle_B.png");
 
 	//SPACEキー/Aボタンが押され,地上にいるなら
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A, ControllerID_))
@@ -343,7 +343,7 @@ void Player::UpdateAttack()
 	//攻撃状態 正面の方向に移動し操作不可
 
 	//攻撃中のエフェクトを出す
-	SetAttackLocusEffect();
+	vfx_->SetAttackLocusEffect();
 
 	//正面ベクトルの方向に移動
 	CharacterMove(MoveParam_.ForwardVector_);

@@ -6,17 +6,26 @@
 //プレイヤー,敵クラスの共通パラメータのみを扱うファイル
 
     //----------ステージの端----------
-    //キャラクターが持つ移動制限の値
-    float NorthEnd_ = 0.0f;     //ステージ北端(前方)の位置
-    float SouthEnd_ = 0.0f;     //ステージ南端(後方)の位置
-    float EastEnd_ = 0.0f;      //ステージ東端(右側)の位置
-    float WestEnd_ = 0.0f;      //ステージ西端(左側)の位置
+    struct EndParam 
+    {
+        //キャラクターが持つ移動制限の値
+        float NorthEnd_ = 0.0f;     //ステージ北端(前方)の位置
+        float SouthEnd_ = 0.0f;     //ステージ南端(後方)の位置
+        float EastEnd_ = 0.0f;      //ステージ東端(右側)の位置
+        float WestEnd_ = 0.0f;      //ステージ西端(左側)の位置
+    };
+    EndParam EndParam_;
 
     //----------サウンドハンドル----------
-    int hSoundcharge_ = -1;     //チャージ音のハンドル
-    int hSoundattack_ = -1;     //突撃音のハンドル
-    int hSoundCollision_ = -1;  //接触音のハンドル
-    int hSoundJump_ = -1;       //ジャンプ音のハンドル
+    struct SoundParam
+    {
+
+        int hSoundcharge_ = -1;     //チャージ音のハンドル
+        int hSoundattack_ = -1;     //突撃音のハンドル
+        int hSoundCollision_ = -1;  //接触音のハンドル
+        int hSoundJump_ = -1;       //ジャンプ音のハンドル
+    };
+    SoundParam SoundParam_;
 
     //----------初期状態----------
     struct InitializeParam
