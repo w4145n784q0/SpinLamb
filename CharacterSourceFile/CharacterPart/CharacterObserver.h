@@ -7,6 +7,15 @@ class CharacterObserver :
     public GameObject
 {
 public:
+    CharacterObserver(GameObject* parent);
+    virtual ~CharacterObserver() = default;
+
+    void Initialize() override {};
+    void Update() override {};
+    void Draw() override {};
+    void Release() override {};
+
+
     //----------監視(オブザーバーパターン)処理----------
 
     /// <summary>

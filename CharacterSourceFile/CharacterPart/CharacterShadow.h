@@ -5,6 +5,15 @@ class CharacterShadow :
     public GameObject
 {
 public:
+    CharacterShadow(GameObject* parent);
+    virtual ~CharacterShadow() = default;
+
+    void Initialize() override {};
+    void Update() override {};
+    void Draw() override {};
+    void Release() override {};
+
+
     //----------‰e•t‚¯----------
 
    /// <summary>

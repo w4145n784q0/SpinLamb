@@ -16,9 +16,11 @@
 #include "CharacterPart/CharacterCsvLoader.h"
 #include "CharacterPart/CharacterObserver.h"
 
+#include"../InterfaceSourceFile/IChargeEventListener.h"
+
 //プレイヤー,敵クラスの共通事項クラス
 class Character :
-    public GameObject
+    public GameObject, public IChargeEventListener
 {
 public:
     //----------モジュール群----------
@@ -169,6 +171,12 @@ public:
 
     //描画(継承先の共通描画のみ行う)
     void Draw() override;
+
+    void OnChargeEffect() override
+    {
+        vfx_->SetFullChargeEffect();  //CharacterVFXの利用はここだけ
+    }
+
 
     //----------初期化----------
 

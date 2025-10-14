@@ -6,6 +6,14 @@ class CharacterHit :
     public GameObject
 {
 public:
+    CharacterHit(GameObject* parent);
+    virtual ~CharacterHit() = default;
+
+    void Initialize() override {};
+    void Update() override {};
+    void Draw() override {};
+    void Release() override {};
+
     //----------”í’e----------
 
     /// <summary>

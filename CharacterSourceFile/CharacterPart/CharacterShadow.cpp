@@ -1,6 +1,11 @@
 #include "CharacterShadow.h"
 #include"../../Engine/Model.h"
 
+CharacterShadow::CharacterShadow(GameObject* parent)
+	:GameObject(parent, "CharacterShadow")
+{
+}
+
 void CharacterShadow::InitShadow()
 {
 	//初期化の時点でステージクラスのインスタンスを取得

@@ -1,5 +1,10 @@
 #include "CharacterDebugPanel.h"
 
+CharacterDebugPanel::CharacterDebugPanel(GameObject* parent)
+	:GameObject(parent, "CharacterDebugPanel")
+{
+}
+
 void CharacterDebugPanel::DrawCharacterImGui()
 {
 	//ImGui‚Ì•`‰æ

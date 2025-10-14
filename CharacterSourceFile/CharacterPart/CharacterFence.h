@@ -5,6 +5,14 @@ class CharacterFence :
     public GameObject
 {    
 public:
+    CharacterFence(GameObject* parent);
+    virtual ~CharacterFence() = default;
+
+    void Initialize() override {};
+    void Update() override {};
+    void Draw() override {};
+    void Release() override {};
+
     //----------òŠÖŒW----------
 
     /// <summary>

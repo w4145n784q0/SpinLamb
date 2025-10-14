@@ -5,6 +5,14 @@ class CharacterCsvLoader :
     public GameObject
 {
 public:
+    CharacterCsvLoader(GameObject* parent);
+    virtual ~CharacterCsvLoader() = default;
+
+    void Initialize() override {};
+    void Update() override {};
+    void Draw() override {};
+    void Release() override {};
+
     //----------CSV“Ç‚İ‚İˆ—----------
 
     /// <summary>

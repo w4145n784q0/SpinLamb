@@ -117,6 +117,7 @@ Character::Character(GameObject* parent, const std::string& name)
 	if (charge_ == nullptr)
 	{
 		Instantiate<CharacterCharge>(this);
+		charge_->SetEventListener(this);
 	}
 	if (hit_ == nullptr)
 	{

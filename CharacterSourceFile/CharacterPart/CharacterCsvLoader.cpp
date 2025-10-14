@@ -67,6 +67,11 @@ namespace {
 
 }
 
+CharacterCsvLoader::CharacterCsvLoader(GameObject* parent)
+	:GameObject(parent, "CharacterCsvLoader")
+{
+}
+
 void CharacterCsvLoader::SetCSVStatus(std::string _path)
 {
 	//csvƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş

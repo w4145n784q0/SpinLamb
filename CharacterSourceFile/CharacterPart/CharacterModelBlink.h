@@ -5,6 +5,13 @@ class CharacterModelBlink :
     public GameObject
 {
 public:
+    CharacterModelBlink(GameObject* parent);
+    virtual ~CharacterModelBlink() = default;
+
+    void Initialize() override {};
+    void Update() override {};
+    void Draw() override {};
+    void Release() override {};
 
     //----------•`‰æ----------
 

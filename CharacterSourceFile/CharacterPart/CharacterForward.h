@@ -5,6 +5,15 @@ class CharacterForward :
     public GameObject
 {
 public:
+    CharacterForward(GameObject* parent);
+    virtual ~CharacterForward() = default;
+
+    void Initialize() override {};
+    void Update() override {};
+    void Draw() override {};
+    void Release() override {};
+
+
     /// <summary>
     /// Y軸の回転行列をベクトルに変換
     /// </summary>

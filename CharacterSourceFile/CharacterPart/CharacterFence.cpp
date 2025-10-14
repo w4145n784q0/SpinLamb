@@ -1,5 +1,10 @@
 #include "CharacterFence.h"
 
+CharacterFence::CharacterFence(GameObject* parent)
+	:GameObject(parent, "CharacterFence")
+{
+}
+
 void CharacterFence::GetWireNormal()
 {
 	//各インスタンスから柵の法線を取得

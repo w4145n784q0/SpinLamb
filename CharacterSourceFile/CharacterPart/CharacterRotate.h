@@ -6,6 +6,14 @@ class CharacterRotate :
     public GameObject
 {
 public:
+    CharacterRotate(GameObject* parent);
+    virtual ~CharacterRotate() = default;
+
+    void Initialize() override {};
+    void Update() override {};
+    void Draw() override {};
+    void Release() override {};
+
     //----------‰ñ“]----------
 
     /// <summary>

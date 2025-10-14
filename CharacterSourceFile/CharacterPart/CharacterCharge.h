@@ -1,6 +1,7 @@
 #pragma once
 #include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
+#include "../../InterfaceSourceFile/IChargeEventListener.h"
 
 class Character;
 
@@ -8,7 +9,9 @@ class CharacterCharge :
     public GameObject
 {
 private:
-    Character* owner_;
+    //Character* owner_;
+
+    IChargeEventListener* ChargeListener_;
 public:
  
     //----------チャージ----------
@@ -19,6 +22,9 @@ public:
     void Update() override {};
     void Draw() override {};
     void Release() override {};
+
+    // リスナーを後から設定する
+    void SetEventListener(IChargeEventListener* listener);
 
     /// <summary>
     /// 矢印トランスフォームの初期化

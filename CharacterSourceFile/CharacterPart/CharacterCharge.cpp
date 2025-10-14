@@ -4,9 +4,13 @@
 #include "../Character.h" 
 
 CharacterCharge::CharacterCharge(GameObject* parent)
-	:GameObject(parent, "CharacterCharge"),owner_(nullptr)
+	:GameObject(parent, "CharacterCharge"), ChargeListener_(nullptr)
 {
-	owner_ = (Character*)GetParent();
+}
+
+void CharacterCharge::SetEventListener(IChargeEventListener* listener)
+{
+	ChargeListener_ = listener;
 }
 
 void CharacterCharge::InitArrow()
@@ -35,7 +39,8 @@ void CharacterCharge::Charging()
 	}
 	else
 	{
-		owner_->vfx_->SetFullChargeEffect();
+		//チャージ中エフェクトをリスナークラスから呼び出す
+		ChargeListener_->OnChargeEffect();
 		MoveParam_.TmpAccele_ = MoveParam_.FullAccelerate_;
 	}
 }

@@ -1,5 +1,10 @@
 #include "CharacterHit.h"
 
+CharacterHit::CharacterHit(GameObject* parent)
+	:GameObject(parent, "CharacterHit")
+{
+}
+
 void CharacterHit::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity,
     std::string _attackName)
 {

@@ -5,6 +5,14 @@ class CharacterMovement :
     public GameObject
 {
 public:
+    CharacterMovement(GameObject* parent);
+    virtual ~CharacterMovement() = default;
+
+    void Initialize() override {};
+    void Update() override {};
+    void Draw() override {};
+    void Release() override {};
+
     //----------ˆÚ“®----------
 
     /// <summary>

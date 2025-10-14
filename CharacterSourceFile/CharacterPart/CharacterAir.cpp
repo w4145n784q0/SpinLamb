@@ -1,6 +1,11 @@
 #include "CharacterAir.h"
 #include"../../Engine/Audio.h"
 
+CharacterAir::CharacterAir(GameObject* parent)
+	:GameObject(parent, "CharacterAir")
+{
+}
+
 void CharacterAir::CharacterGravity()
 {
 	//重力分の値を引き、プレイヤーは常に下方向に力がかかっている

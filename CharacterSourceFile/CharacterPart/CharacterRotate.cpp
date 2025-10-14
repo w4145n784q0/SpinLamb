@@ -1,5 +1,10 @@
 #include "CharacterRotate.h"
 
+CharacterRotate::CharacterRotate(GameObject* parent)
+	:GameObject(parent, "CharacterRotate")
+{
+}
+
 float CharacterRotate::RotateDirectionVector(XMVECTOR _MoveVector)
 {
 	//主にコントローラー・キーボードの入力に使う

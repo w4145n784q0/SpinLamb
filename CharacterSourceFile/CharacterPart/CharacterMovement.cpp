@@ -1,5 +1,10 @@
 #include "CharacterMovement.h"
 
+CharacterMovement::CharacterMovement(GameObject* parent)
+	:GameObject(parent, "CharacterMovement")
+{
+}
+
 void CharacterMovement::InitStartPosition()
 {
 	//‰ŠúˆÊ’u‚É–ß‚·

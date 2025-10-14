@@ -1,6 +1,11 @@
 #include "CharacterModelBlink.h"
 #include"../../Engine/Model.h"
 
+CharacterModelBlink::CharacterModelBlink(GameObject* parent)
+	:GameObject(parent, "CharacterBlink")
+{
+}
+
 void CharacterModelBlink::DrawCharacterModel(int _handle, Transform _transform)
 {
 	//無敵時間中かどうかでモデルの点滅表現を行う

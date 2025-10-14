@@ -4,6 +4,14 @@
 class CharacterDebugPanel :
     public GameObject
 {
+    CharacterDebugPanel(GameObject* parent);
+    virtual ~CharacterDebugPanel() = default;
+
+    void Initialize() override {};
+    void Update() override {};
+    void Draw() override {};
+    void Release() override {};
+
     //----------デバッグ情報----------
 
     /// <summary>

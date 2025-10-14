@@ -1,5 +1,10 @@
 #include "CharacterObserver.h"
 
+CharacterObserver::CharacterObserver(GameObject* parent)
+	:GameObject(parent, "CharacterObserver")
+{
+}
+
 void CharacterObserver::AddObserver(IGameObserver* _observer)
 {
 	//ŠÄŽ‹ŽÒ‚ð”z—ñ‚É’Ç‰Á‚·‚é

@@ -1,5 +1,10 @@
 #include "CharacterForward.h"
 
+CharacterForward::CharacterForward(GameObject* parent)
+	:GameObject(parent, "CharacterForward")
+{
+}
+
 XMVECTOR CharacterForward::RotateVecFront(float _rotY, XMVECTOR _front)
 {
 	//回転させたいベクトル（方向）を代入
