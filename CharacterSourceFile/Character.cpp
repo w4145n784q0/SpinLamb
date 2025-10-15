@@ -3,10 +3,6 @@
 #include"../Engine/Model.h"
 #include"../Engine/Audio.h"
 #include"../Engine/CsvReader.h"
-#include"../StageSourceFile/UpperWire.h"
-#include"../StageSourceFile/LowerWire.h"
-#include"../StageSourceFile/LeftWire.h"
-#include"../StageSourceFile/RightWire.h"
 
 
 namespace {

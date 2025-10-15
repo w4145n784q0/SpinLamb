@@ -1,7 +1,7 @@
 #pragma once
 #include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
-#include "../../InterfaceSourceFile/IChargeEventListener.h"
+#include "../../InterfaceSourceFile/IVFXEventListener.h"
 
 class Character;
 
@@ -9,9 +9,8 @@ class CharacterCharge :
     public GameObject
 {
 private:
-    //Character* owner_;
 
-    IChargeEventListener* ChargeListener_;
+    IVFXEventListener* ChargeListener_;
 public:
  
     //----------チャージ----------
@@ -24,7 +23,7 @@ public:
     void Release() override {};
 
     // リスナーを後から設定する
-    void SetEventListener(IChargeEventListener* listener);
+    void SetEventListener(IVFXEventListener* listener);
 
     /// <summary>
     /// 矢印トランスフォームの初期化

@@ -39,6 +39,12 @@
     <Filter Include="01Engine\Collider">
       <UniqueIdentifier>{7f19ecfb-5d70-4d31-a1f7-c9dd14bad324}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04Chara\CharacterParts">
+      <UniqueIdentifier>{7517fab3-6b3e-4e2a-a908-91a92ef9e4f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="07Interface">
+      <UniqueIdentifier>{2ba0c85f-a4e0-4541-8df0-ad7b490e158a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -209,8 +215,44 @@
     <ClCompile Include="SceneSourceFile\PlayBaseScene.cpp">
       <Filter>03Scene</Filter>
     </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterAir.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterCharge.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterCsvLoader.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterDebugPanel.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterFence.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterForward.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterHit.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterModelBlink.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterMovement.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterObserver.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterRotate.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterShadow.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterVFX.cpp">
-      <Filter>04Chara</Filter>
+      <Filter>04Chara\CharacterParts</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -320,9 +362,6 @@
     <ClInclude Include="CharacterSourceFile\Player.h">
       <Filter>04Chara</Filter>
     </ClInclude>
-    <ClInclude Include="InterfaceSourceFile\IGameObserver.h">
-      <Filter>04Chara</Filter>
-    </ClInclude>
     <ClInclude Include="StageSourceFile\Fence.h">
       <Filter>05Stage</Filter>
     </ClInclude>
@@ -389,8 +428,53 @@
     <ClInclude Include="SceneSourceFile\PlayBaseScene.h">
       <Filter>03Scene</Filter>
     </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterShadow.h">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterAir.h">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterCharge.h">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterCsvLoader.h">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterDebugPanel.h">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterFence.h">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterForward.h">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterHit.h">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterModelBlink.h">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterMovement.h">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterObserver.h">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterParams.h">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterRotate.h">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClInclude>
+    <ClInclude Include="InterfaceSourceFile\IVFXEventListener.h">
+      <Filter>07Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="InterfaceSourceFile\IGameObserver.h">
+      <Filter>07Interface</Filter>
+    </ClInclude>
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterVFX.h">
-      <Filter>04Chara</Filter>
+      <Filter>04Chara\CharacterParts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,7 +8,7 @@ CharacterCharge::CharacterCharge(GameObject* parent)
 {
 }
 
-void CharacterCharge::SetEventListener(IChargeEventListener* listener)
+void CharacterCharge::SetEventListener(IVFXEventListener* listener)
 {
 	ChargeListener_ = listener;
 }
@@ -40,7 +40,9 @@ void CharacterCharge::Charging()
 	else
 	{
 		//チャージ中エフェクトをリスナークラスから呼び出す
-		ChargeListener_->OnChargeEffect();
+		ChargeListener_->OnFullChargeVFX();
+
+		//加速度が最大を超えないようにする
 		MoveParam_.TmpAccele_ = MoveParam_.FullAccelerate_;
 	}
 }

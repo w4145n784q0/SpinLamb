@@ -1,10 +1,17 @@
 #pragma once
 #include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
+#include "../../InterfaceSourceFile/IVFXEventListener.h"
+
 class CharacterFence :
     public GameObject
 {    
+private:
+
+    IVFXEventListener* ChargeListener_;
 public:
+
+    //----------柵関係----------
     CharacterFence(GameObject* parent);
     virtual ~CharacterFence() = default;
 
@@ -13,7 +20,8 @@ public:
     void Draw() override {};
     void Release() override {};
 
-    //----------柵関係----------
+    // リスナーを後から設定する
+    void SetEventListener(IVFXEventListener* listener);
 
     /// <summary>
     /// 各方向の柵から法線ベクトルを取得しNormalArrayを初期化

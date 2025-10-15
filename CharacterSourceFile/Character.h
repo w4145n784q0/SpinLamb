@@ -16,11 +16,11 @@
 #include "CharacterPart/CharacterCsvLoader.h"
 #include "CharacterPart/CharacterObserver.h"
 
-#include"../InterfaceSourceFile/IChargeEventListener.h"
+#include"../InterfaceSourceFile/IVFXEventListener.h"
 
 //プレイヤー,敵クラスの共通事項クラス
 class Character :
-    public GameObject, public IChargeEventListener
+    public GameObject, public IVFXEventListener
 {
 public:
     //----------モジュール群----------
@@ -172,11 +172,35 @@ public:
     //描画(継承先の共通描画のみ行う)
     void Draw() override;
 
-    void OnChargeEffect() override
+    //チャージ中エフェクトを出すイベント
+    void OnChargeVFX() override
     {
-        vfx_->SetFullChargeEffect();  //CharacterVFXの利用はここだけ
+        vfx_->SetFullChargeEffect(); 
     }
 
+    //最大チャージエフェクトを出すイベント
+    void OnFullChargeVFX() override
+    {
+        vfx_->SetFullChargeEffect();
+    }
+
+    //軌跡エフェクトを出すイベント
+    void OnAttackLocusVFX() override
+    {
+        vfx_->SetAttackLocusEffect();
+    }
+
+    //接触エフェクトを出すイベント
+    void OnHitVFX() override
+    {
+        vfx_->SetHitEffect();
+    }
+
+    //柵接触エフェクトを出すイベント
+    void OnFenceHitVFX() override
+    {
+        vfx_->SetFenceHitEffect();
+    }
 
     //----------初期化----------
 

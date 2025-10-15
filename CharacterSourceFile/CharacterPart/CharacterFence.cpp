@@ -1,8 +1,17 @@
 #include "CharacterFence.h"
+#include"../../StageSourceFile/UpperWire.h"
+#include"../../StageSourceFile/LowerWire.h"
+#include"../../StageSourceFile/LeftWire.h"
+#include"../../StageSourceFile/RightWire.h"
 
 CharacterFence::CharacterFence(GameObject* parent)
 	:GameObject(parent, "CharacterFence")
 {
+}
+
+void CharacterFence::SetEventListener(IVFXEventListener* listener)
+{
+	ChargeListener_ = listener;
 }
 
 void CharacterFence::GetWireNormal()
@@ -33,8 +42,8 @@ void CharacterFence::GetWireNormal()
 
 void CharacterFence::FenceReflect(XMVECTOR _normal)
 {
-	//接触エフェクトを指定
-	vfx_->SetFenceHitEffect();
+	//接触エフェクトを指定リスナークラスから呼び出す
+	ChargeListener_->OnHitVFX();
 
 	//溜めている速度をリセット
 	charge_->ChargeReset();
