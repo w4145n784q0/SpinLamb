@@ -42,7 +42,7 @@ void CharacterFence::GetWireNormal()
 
 void CharacterFence::FenceReflect(XMVECTOR _normal)
 {
-	//接触エフェクトを指定リスナークラスから呼び出す
+	//接触エフェクトを通知
 	ChargeListener_->OnHitVFX();
 
 	//溜めている速度をリセット
