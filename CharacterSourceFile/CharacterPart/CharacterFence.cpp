@@ -9,9 +9,12 @@ CharacterFence::CharacterFence(GameObject* parent)
 {
 }
 
-void CharacterFence::SetEventListener(IVFXEventListener* listener)
+void CharacterFence::SetEventListener(IVFXEventListener* _VfxListener,
+	IChargeEventListener* _ChargeListener, IMovementEventListener* _MovementListener)
 {
-	ChargeListener_ = listener;
+	VFXListener_ = _VfxListener;
+	ChargeListener_ = _ChargeListener;
+	MovementListener_ = _MovementListener;
 }
 
 void CharacterFence::GetWireNormal()
@@ -43,13 +46,13 @@ void CharacterFence::GetWireNormal()
 void CharacterFence::FenceReflect(XMVECTOR _normal)
 {
 	//接触エフェクトを通知
-	ChargeListener_->OnHitVFX();
+	VFXListener_->OnHitVFX();
 
 	//溜めている速度をリセット
-	charge_->ChargeReset();
+	ChargeListener_->OnChargeReset();
 
 	//ダッシュ中の速度リセット
-	movement_->AccelerationStop();
+	MovementListener_->OnAccelerationStop();
 
 	//念のため正規化する
 	//反射方向が0なら処理しない(0ベクトルを正規化はできない)
@@ -79,7 +82,7 @@ void CharacterFence::FenceReflect(XMVECTOR _normal)
 	NotifyFenceHit();
 
 	//ノックバック時のY軸回転角の固定
-	KnockBackAngleY(HitParam_.KnockBack_Direction_, FenceHitParam_.KnockBackPower_);
+	//KnockBackAngleY(HitParam_.KnockBack_Direction_, FenceHitParam_.KnockBackPower_);
 
 	//攻撃相手の名前をリセット
 	//自分の名前を代入することで、自爆判定に使う

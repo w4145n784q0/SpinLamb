@@ -476,6 +476,15 @@
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterVFX.h">
       <Filter>04Chara\CharacterParts</Filter>
     </ClInclude>
+    <ClInclude Include="InterfaceSourceFile\IChargeEventListner.h">
+      <Filter>07Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="InterfaceSourceFile\IMovementEventListener.h">
+      <Filter>07Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="InterfaceSourceFile\IRotateEventListner.h">
+      <Filter>07Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Assets\Shader\Simple2D.hlsl">

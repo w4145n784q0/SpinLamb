@@ -138,10 +138,13 @@ void Player::OnCollision(GameObject* pTarget)
 				if (pTarget->GetObjectName() == arr)
 				{
 					//接触している柵の法線(反射される方向)を取得
-					XMVECTOR normal = HitNormal(arr);
+					XMVECTOR normal = hit_->HitNormal(arr);
 
 					//反射開始
-					FenceReflect(normal);
+					fence_->FenceReflect(normal);
+
+					//自身のノックバック時のY軸回転角を固定させる
+					hit_->KnockBackAngleY(HitParam_.KnockBack_Direction_, FenceHitParam_.KnockBackPower_);
 
 					//プレイヤーの状態を柵に接触状態にする
 					PlayerState_ = S_FenceHit;
@@ -191,7 +194,7 @@ void Player::PlayerRun()
 	//柵に接触状態でなければ無敵時間を更新
 	if (!(PlayerState_ == S_FenceHit))
 	{
-		InvincibilityTimeCalculation();
+		fence_->InvincibilityTimeCalculation();
 	}
 
 	//毎フレームカメラの更新
@@ -376,13 +379,13 @@ void Player::UpdateHit()
 	//相手と接触した状態 操作不可
 
 	//ノックバックする
-	KnockBack();
+	hit_->KnockBack();
 
 	//ノックバックする速度が一定以下なら通常状態へ戻る
-	if (IsKnockBackEnd())
+	if (hit_->IsKnockBackEnd())
 	{
 		//ノックバック速度を0に戻しておく
-		KnockBackVelocityReset();
+		hit_->KnockBackVelocityReset();
 
 		//通常状態へ戻る
 		PlayerState_ = S_Idle;
@@ -400,13 +403,13 @@ void Player::UpdateFenceHit()
 	//ダメージを受ける柵と接触した状態 操作不可
 
 	//ノックバックする
-	KnockBack();
+	hit_->KnockBack();
 
 	//ノックバックする速度が一定以下なら通常状態へ戻る
-	if (IsKnockBackEnd())
+	if (hit_->IsKnockBackEnd())
 	{
 		//ノックバック速度を0に戻しておく
-		KnockBackVelocityReset();
+		hit_->KnockBackVelocityReset();
 
 		//通常状態へ戻る
 		PlayerState_ = S_Idle;
@@ -498,13 +501,13 @@ void Player::DrawImGui()
 void Player::PlayerInit(std::string _CSVpath, std::string _Modelpath)
 {
 	//csvからパラメータ読み込み
-	SetCSVStatus(_CSVpath);
+	csvload_->SetCSVStatus(_CSVpath);
 
 	//csvからパラメータ読み込み(Playerのみ使う情報)
 	SetCSVPlayer(_CSVpath);
 
 	//矢印のトランスフォームの初期化
-	InitArrow();
+	charge_->InitArrow();
 
 	//初期位置にキャラクターをセット
 	movement_->InitStartPosition();
@@ -795,7 +798,7 @@ void Player::CollisionCharacter(std::string _name)
 	}
 
 	//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度,接触相手の名前)
-	Reflect(PlayerVector, TargetVector, MoveParam_.Acceleration_, TargetSpeed, TargetName);
+	hit_->Reflect(PlayerVector, TargetVector, MoveParam_.Acceleration_, TargetSpeed, TargetName);
 }
 
 void Player::SetCSVPlayer(std::string _path)

@@ -1,10 +1,18 @@
 #pragma once
 #include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
+#include"../../InterfaceSourceFile/IChargeEventListner.h"
+#include"../../InterfaceSourceFile/IRotateEventListner.h"
+#include"../../InterfaceSourceFile/IMovementEventListener.h"
 
 class CharacterHit :
     public GameObject
 {
+private:
+
+    IChargeEventListener* ChargeListener_;
+    IRotateEventListener* RotateListener_;
+    IMovementEventListener* MovementListener_;
 public:
 
     //----------被弾----------
@@ -17,6 +25,9 @@ public:
     void Draw() override {};
     void Release() override {};
 
+    // リスナーを後から設定する
+    void SetEventListener(IChargeEventListener* _ChargeListener, 
+        IRotateEventListener* _RotateListener, IMovementEventListener* _MovementListener);
 
     /// <summary>
     /// キャラクター同士の反射処理

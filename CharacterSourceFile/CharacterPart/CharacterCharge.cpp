@@ -4,13 +4,13 @@
 #include "../Character.h" 
 
 CharacterCharge::CharacterCharge(GameObject* parent)
-	:GameObject(parent, "CharacterCharge"), ChargeListener_(nullptr)
+	:GameObject(parent, "CharacterCharge"), VFXListener_(nullptr)
 {
 }
 
 void CharacterCharge::SetEventListener(IVFXEventListener* listener)
 {
-	ChargeListener_ = listener;
+	VFXListener_ = listener;
 }
 
 void CharacterCharge::InitArrow()
@@ -40,7 +40,7 @@ void CharacterCharge::Charging()
 	else
 	{
 		//チャージ中エフェクトをリスナークラスから呼び出す
-		ChargeListener_->OnFullChargeVFX();
+		VFXListener_->OnFullChargeVFX();
 
 		//加速度が最大を超えないようにする
 		MoveParam_.TmpAccele_ = MoveParam_.FullAccelerate_;

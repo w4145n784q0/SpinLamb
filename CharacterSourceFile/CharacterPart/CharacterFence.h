@@ -2,13 +2,17 @@
 #include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
 #include "../../InterfaceSourceFile/IVFXEventListener.h"
+#include"../../InterfaceSourceFile/IChargeEventListner.h"
+#include"../../InterfaceSourceFile/IMovementEventListener.h"
 
 class CharacterFence :
     public GameObject
 {    
 private:
 
-    IVFXEventListener* ChargeListener_;
+    IVFXEventListener* VFXListener_;
+    IChargeEventListener* ChargeListener_;
+    IMovementEventListener* MovementListener_;
 public:
 
     //----------柵関係----------
@@ -21,7 +25,8 @@ public:
     void Release() override {};
 
     // リスナーを後から設定する
-    void SetEventListener(IVFXEventListener* listener);
+    void SetEventListener(IVFXEventListener* _VfxListener, 
+        IChargeEventListener* _ChargeListener, IMovementEventListener* _MovementListener);
 
     /// <summary>
     /// 各方向の柵から法線ベクトルを取得しNormalArrayを初期化

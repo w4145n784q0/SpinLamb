@@ -10,7 +10,7 @@ class CharacterCharge :
 {
 private:
 
-    IVFXEventListener* ChargeListener_;
+    IVFXEventListener* VFXListener_;
 public:
  
     //----------ƒ`ƒƒ[ƒW----------

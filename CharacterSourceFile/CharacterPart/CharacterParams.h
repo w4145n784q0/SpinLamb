@@ -1,5 +1,4 @@
 #pragma once
-#include"../../Engine/GameObject.h"
 #include"../../InterfaceSourceFile/IGameObserver.h"
 #include"../../StageSourceFile/Ground.h"
 
@@ -14,7 +13,7 @@
         float EastEnd_ = 0.0f;      //ステージ東端(右側)の位置
         float WestEnd_ = 0.0f;      //ステージ西端(左側)の位置
     };
-    EndParam EndParam_;
+    //EndParam EndParam_;
 
     //----------サウンドハンドル----------
     struct SoundParam
@@ -25,7 +24,7 @@
         int hSoundCollision_ = -1;  //接触音のハンドル
         int hSoundJump_ = -1;       //ジャンプ音のハンドル
     };
-    SoundParam SoundParam_;
+    //SoundParam SoundParam_;
 
     //----------初期状態----------
     struct InitializeParam
@@ -35,7 +34,7 @@
         XMVECTOR FrontDirection_ = { 0,0,1 };   //正面の初期値(ローカル座標系) ここからどれだけ回転したか
         std::vector<IGameObserver*> observers;  //監視される対象の配列
     };
-    InitializeParam InitParam_;
+    //InitializeParam InitParam_;
 
     //----------移動----------
     struct MoveParam
@@ -55,7 +54,7 @@
         XMFLOAT3 ArrowScale_ = { 0,0,0 };       //矢印の大きさ
         float AddArrowDepth_ = 0.0f;            //矢印の奥行き(前方向)の調整値
     };
-    MoveParam MoveParam_;
+   // MoveParam MoveParam_;
 
     //----------回転----------
     struct RotateParam
@@ -63,7 +62,7 @@
         float MoveRotateX = 0.0f;   //移動時の1fの回転量
         float FastRotateX = 0.0f;   //(チャージ中など)高速回転中の1fの回転量
     };
-    RotateParam RotateParam_;
+    //RotateParam RotateParam_;
 
     //----------空中----------
     struct JumpParam
@@ -76,7 +75,7 @@
         float HeightUpperLimit_ = 0.0f; //高さの上限
         float MinusLimit_ = 0.0f;       //JumpSpeedの最低値(念のためオーバーフローを防止する)
     };
-    JumpParam JumpParam_;
+    //JumpParam JumpParam_;
 
 
     //----------被弾----------
@@ -93,7 +92,7 @@
         float KnockBackEnd_ = 0.0f;                 //ノックバックを終了する値
         std::string AttackedName_ = "";             //接触した相手の名前
     };
-    HitParam HitParam_;
+    //HitParam HitParam_;
 
     //----------柵の接触----------
     struct FenceHitParam
@@ -113,7 +112,7 @@
         int BlinkTimer_ = 0;                                    //ダメージ後の点滅カウント
         int BlinkValue_ = 0;                                    //この値にblinkTimerが到達すると通常描画する(それまでは点滅)
     };
-    FenceHitParam FenceHitParam_;
+    //FenceHitParam FenceHitParam_;
 
     //----------影付け----------
     struct ShadowParam
@@ -124,7 +123,7 @@
         Transform ShadowTrans_;             //影の描画トランスフォーム
         Ground* pGround_ = nullptr;         //地面のインスタンス
     };
-    ShadowParam ShadowParam_;
+    //ShadowParam ShadowParam_;
 
     //----------エフェクト関連----------
 
@@ -136,4 +135,4 @@
         std::vector<float> HitEffectParam_ = {};     //接触時の衝撃エフェクトのパラメータ
         std::vector<float> FenceHitEffectParam_ = {};//柵に接触時の衝撃エフェクトのパラメータ
     };
-    EffectParam EffectParam_;
+   // EffectParam EffectParam_;

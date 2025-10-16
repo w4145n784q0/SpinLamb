@@ -37,19 +37,9 @@ void CharacterRotate::MoveRotateX()
 	this->transform_.rotate_.x += RotateParam_.MoveRotateX;
 }
 
-void CharacterRotate::MoveRotateXReverse()
-{
-	this->transform_.rotate_.x -= RotateParam_.MoveRotateX;
-}
-
 void CharacterRotate::FastRotateX()
 {
 	this->transform_.rotate_.x += RotateParam_.FastRotateX;
-}
-
-void CharacterRotate::FastRotateReverse()
-{
-	this->transform_.rotate_.x -= RotateParam_.FastRotateX;
 }
 
 void CharacterRotate::RotateXStop()

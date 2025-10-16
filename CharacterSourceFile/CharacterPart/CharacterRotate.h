@@ -29,24 +29,13 @@ public:
     void MoveRotateX();
 
     /// <summary>
-    /// ’ÊíX²‰ñ“](-x‰ñ“])
-    /// </summary>
-    void MoveRotateXReverse();
-
-    /// <summary>
     /// ‚‘¬X²‰ñ“]
     /// </summary>
     void FastRotateX();
 
     /// <summary>
-    /// ‚‘¬X²‰ñ“](-x‰ñ“])
-    /// </summary>
-    void FastRotateReverse();
-
-    /// <summary>
     /// X‰ñ“]‚ğ~‚ß‚é
     /// </summary>
     void RotateXStop();
-
 };
 

@@ -5,6 +5,14 @@ CharacterHit::CharacterHit(GameObject* parent)
 {
 }
 
+void CharacterHit::SetEventListener(IChargeEventListener* _ChargeListener, 
+	IRotateEventListener* _RotateListener, IMovementEventListener* _MovementListener)
+{
+	ChargeListener_ = _ChargeListener;
+	RotateListener_ = _RotateListener;
+	MovementListener_ = _MovementListener;
+}
+
 void CharacterHit::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity,
     std::string _attackName)
 {
@@ -67,7 +75,7 @@ void CharacterHit::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _my
 	HitParam_.KnockBack_Velocity_.z = KnockBackValue;
 
 	//溜めている速度をリセット
-	charge_->ChargeReset();
+	ChargeListener_->OnChargeReset();
 
 	//ノックバック時のY軸回転角の固定
 	KnockBackAngleY(HitParam_.KnockBack_Direction_, KnockBackValue);
@@ -94,7 +102,7 @@ void CharacterHit::KnockBackAngleY(XMFLOAT3 _KnockBackVector, float _KnockBackVa
 void CharacterHit::KnockBack()
 {
 	//x軸の+回転を行う
-	rotate_->MoveRotateX();
+	RotateListener_->OnMoveRotateX();
 
 	//毎フレームノックバック速度を減少
 	HitParam_.KnockBack_Velocity_.x *= HitParam_.DecelerationRate_;
@@ -112,9 +120,11 @@ void CharacterHit::KnockBack()
 	//場外でなければ位置更新 
 	XMFLOAT3 tmp;
 	XMStoreFloat3(&tmp, MoveParam_.NewPosition_);
-	if (!movement_->IsOutsideStage(tmp))
+
+	bool IsOutSide = MovementListener_->OnIsOutsideStage(tmp);
+	if (!IsOutSide)
 	{
-		movement_->MoveConfirm();
+		MovementListener_->OnMoveConfirm();
 	}
 }
 
