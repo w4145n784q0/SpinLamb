@@ -4,8 +4,10 @@
 
 //プレイヤー,敵クラスの共通パラメータのみを扱うファイル
 
+class CharacterParams {
+
     //----------ステージの端----------
-    struct EndParam 
+    struct EndParam
     {
         //キャラクターが持つ移動制限の値
         float NorthEnd_ = 0.0f;     //ステージ北端(前方)の位置
@@ -54,9 +56,9 @@
         XMFLOAT3 ArrowScale_ = { 0,0,0 };       //矢印の大きさ
         float AddArrowDepth_ = 0.0f;            //矢印の奥行き(前方向)の調整値
     };
-   // MoveParam MoveParam_;
+    // MoveParam MoveParam_;
 
-    //----------回転----------
+     //----------回転----------
     struct RotateParam
     {
         float MoveRotateX = 0.0f;   //移動時の1fの回転量
@@ -135,4 +137,5 @@
         std::vector<float> HitEffectParam_ = {};     //接触時の衝撃エフェクトのパラメータ
         std::vector<float> FenceHitEffectParam_ = {};//柵に接触時の衝撃エフェクトのパラメータ
     };
-   // EffectParam EffectParam_;
+    // EffectParam EffectParam_;
+};
