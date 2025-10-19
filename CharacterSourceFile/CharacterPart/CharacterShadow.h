@@ -4,6 +4,9 @@
 class CharacterShadow :
     public GameObject
 {
+private:
+    CharacterParams* params_;
+
 public:
     CharacterShadow(GameObject* parent);
     virtual ~CharacterShadow() = default;
@@ -13,6 +16,9 @@ public:
     void Draw() override {};
     void Release() override {};
 
+    void SetParams(CharacterParams* _params) {
+        params_ = _params;
+    }
 
     //----------‰e•t‚¯----------
 

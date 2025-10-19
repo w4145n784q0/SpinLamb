@@ -9,7 +9,7 @@ class CharacterCharge :
     public GameObject
 {
 private:
-
+    CharacterParams* params_;
     IVFXEventListener* VFXListener_;
 public:
  
@@ -21,6 +21,10 @@ public:
     void Update() override {};
     void Draw() override {};
     void Release() override {};
+
+    void SetParams(CharacterParams* _params) {
+        params_ = _params;
+    }
 
     // ƒŠƒXƒi[‚ğŒã‚©‚çİ’è‚·‚é
     void SetEventListener(IVFXEventListener* listener);

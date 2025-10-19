@@ -1,7 +1,7 @@
 #include "CharacterRotate.h"
 
 CharacterRotate::CharacterRotate(GameObject* parent)
-	:GameObject(parent, "CharacterRotate")
+	:GameObject(parent, "CharacterRotate"), params_(nullptr)
 {
 }
 
@@ -9,13 +9,13 @@ float CharacterRotate::RotateDirectionVector(XMVECTOR _MoveVector)
 {
 	//主にコントローラー・キーボードの入力に使う
 	//受け取った方向ベクトルと前向きベクトルの外積求める
-	XMVECTOR cross = XMVector3Cross(_MoveVector, InitParam_.FrontDirection_);
+	XMVECTOR cross = XMVector3Cross(_MoveVector, params_->InitParam_.FrontDirection_);
 
 	//Y外積をとり+か-かで倒し回転方向を求める
 	float crossY = XMVectorGetY(cross);
 
 	//正面ベクトルとのラジアン角をとる
-	XMVECTOR r = XMVector3AngleBetweenVectors(_MoveVector, InitParam_.FrontDirection_);
+	XMVECTOR r = XMVector3AngleBetweenVectors(_MoveVector, params_->InitParam_.FrontDirection_);
 
 	//ラジアン角度を取得
 	float angle = XMVectorGetX(r);
@@ -34,12 +34,12 @@ float CharacterRotate::RotateDirectionVector(XMVECTOR _MoveVector)
 
 void CharacterRotate::MoveRotateX()
 {
-	this->transform_.rotate_.x += RotateParam_.MoveRotateX;
+	this->transform_.rotate_.x += params_->RotateParam_.MoveRotateX;
 }
 
 void CharacterRotate::FastRotateX()
 {
-	this->transform_.rotate_.x += RotateParam_.FastRotateX;
+	this->transform_.rotate_.x += params_->RotateParam_.FastRotateX;
 }
 
 void CharacterRotate::RotateXStop()

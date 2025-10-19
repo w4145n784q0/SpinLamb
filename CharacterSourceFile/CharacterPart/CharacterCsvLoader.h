@@ -4,6 +4,9 @@
 class CharacterCsvLoader :
     public GameObject
 {
+private:
+    CharacterParams* params_;
+
 public:
     CharacterCsvLoader(GameObject* parent);
     virtual ~CharacterCsvLoader() = default;
@@ -12,6 +15,10 @@ public:
     void Update() override {};
     void Draw() override {};
     void Release() override {};
+
+    void SetParams(CharacterParams* _params) {
+        params_ = _params;
+    }
 
     //----------CSV“Ç‚İ‚İˆ—----------
 

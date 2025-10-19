@@ -4,6 +4,9 @@
 class CharacterAir :
     public GameObject
 {
+private:
+    CharacterParams* params_;
+
 public:
     CharacterAir(GameObject* parent);
     virtual ~CharacterAir() = default;
@@ -12,6 +15,10 @@ public:
     void Update() override {};
     void Draw() override {};
     void Release() override {};
+
+    void SetParams(CharacterParams* _params) {
+        params_ = _params;
+    }
 
     //----------‹ó’†----------
 

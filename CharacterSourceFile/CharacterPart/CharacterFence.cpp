@@ -5,7 +5,8 @@
 #include"../../StageSourceFile/RightWire.h"
 
 CharacterFence::CharacterFence(GameObject* parent)
-	:GameObject(parent, "CharacterFence")
+	:GameObject(parent, "CharacterFence"), params_(nullptr),
+	VFXListener_(nullptr), ChargeListener_(nullptr), MovementListener_(nullptr)
 {
 }
 
@@ -22,24 +23,28 @@ void CharacterFence::GetWireNormal()
 	//各インスタンスから柵の法線を取得
 	UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");
 	assert(pUpperWire != nullptr);
-	FenceHitParam_.UpperNormal_ = pUpperWire->GetNormal();
+	params_->FenceHitParam_.UpperNormal_ = pUpperWire->GetNormal();
 
 	LowerWire* pLowerWire = (LowerWire*)FindObject("LowerWire");
 	assert(pLowerWire != nullptr);
-	FenceHitParam_.LowerNormal_ = pLowerWire->GetNormal();
+	params_->FenceHitParam_.LowerNormal_ = pLowerWire->GetNormal();
 
 	RightWire* pRightWire = (RightWire*)FindObject("RightWire");
 	assert(pRightWire != nullptr);
-	FenceHitParam_.RightNormal_ = pRightWire->GetNormal();
+	params_->FenceHitParam_.RightNormal_ = pRightWire->GetNormal();
 
 	LeftWire* pLeftWire = (LeftWire*)FindObject("LeftWire");
 	assert(pLeftWire != nullptr);
-	FenceHitParam_.LeftNormal_ = pLeftWire->GetNormal();
+	params_->FenceHitParam_.LeftNormal_ = pLeftWire->GetNormal();
 
 	//取得した法線を配列に格納
 	//これらが柵に接触した際の跳ね返る方向になる
-	FenceHitParam_.NormalArray_ = { FenceHitParam_.UpperNormal_,  FenceHitParam_.LowerNormal_,
-		 FenceHitParam_.RightNormal_, FenceHitParam_.LeftNormal_, };
+	params_->FenceHitParam_.NormalArray_ = {
+		params_->FenceHitParam_.UpperNormal_, 
+		params_->FenceHitParam_.LowerNormal_,
+		params_->FenceHitParam_.RightNormal_, 
+		params_->FenceHitParam_.LeftNormal_, 
+	};
 }
 
 
@@ -69,14 +74,14 @@ void CharacterFence::FenceReflect(XMVECTOR _normal)
 	XMStoreFloat3(&tmp, _normal);
 
 	//受け取った法線をノックバック方向に代入
-	HitParam_.KnockBack_Direction_ = { tmp };
+	params_->HitParam_.KnockBack_Direction_ = { tmp };
 
 	//ノックバック量を速度に代入(一定値)
-	HitParam_.KnockBack_Velocity_.x = FenceHitParam_.KnockBackPower_;
-	HitParam_.KnockBack_Velocity_.z = FenceHitParam_.KnockBackPower_;
+	params_->HitParam_.KnockBack_Velocity_.x = params_->FenceHitParam_.KnockBackPower_;
+	params_->HitParam_.KnockBack_Velocity_.z = params_->FenceHitParam_.KnockBackPower_;
 
 	//無敵状態を設定
-	FenceHitParam_.IsInvincibility_ = true;
+	params_->FenceHitParam_.IsInvincibility_ = true;
 
 	//接触通知
 	NotifyFenceHit();
@@ -86,7 +91,7 @@ void CharacterFence::FenceReflect(XMVECTOR _normal)
 
 	//攻撃相手の名前をリセット
 	//自分の名前を代入することで、自爆判定に使う
-	HitParam_.AttackedName_ = this->GetObjectName();
+	params_->HitParam_.AttackedName_ = this->GetObjectName();
 }
 
 void CharacterFence::NotifyFenceHit()
@@ -94,11 +99,11 @@ void CharacterFence::NotifyFenceHit()
 	//通知を受け取る側がoverrideしていなかった場合は何も起こらない
 	//BattleSceneでのみ有効(監視対象がない=AddObserverを呼ばない場合、
 	//InitParam_.observers自体が空なのでfor文がスルーされる)
-	for (IGameObserver* observer : InitParam_.observers)
+	for (IGameObserver* observer : params_->InitParam_.observers)
 	{
 		//監視者へ柵にヒットしたこと（最後に当たった(攻撃した)キャラクターの名前）と
 		//柵に当たったキャラクターの名前(NotifyFenceHit()を呼び出した自分自身)を通知
-		observer->OnCharacterFenceHit(HitParam_.AttackedName_, this->GetObjectName());
+		observer->OnCharacterFenceHit(params_->HitParam_.AttackedName_, this->GetObjectName());
 	}
 }
 
@@ -107,13 +112,13 @@ void CharacterFence::InvincibilityTimeCalculation()
 	//無敵時間の計算
 
 	//無敵時間かどうか判定(この関数は毎フレーム呼ばれるため)
-	if (FenceHitParam_.IsInvincibility_)
+	if (params_->FenceHitParam_.IsInvincibility_)
 	{
 		//タイマーが終了値を超えたら無敵時間を終わる
-		if (++FenceHitParam_.InvincibilityTime_ > FenceHitParam_.InvincibilityValue_)
+		if (++params_->FenceHitParam_.InvincibilityTime_ > params_->FenceHitParam_.InvincibilityValue_)
 		{
-			FenceHitParam_.InvincibilityTime_ = 0;
-			FenceHitParam_.IsInvincibility_ = false;
+			params_->FenceHitParam_.InvincibilityTime_ = 0;
+			params_->FenceHitParam_.IsInvincibility_ = false;
 		}
 	}
 }

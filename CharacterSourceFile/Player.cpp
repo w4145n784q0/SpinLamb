@@ -118,7 +118,7 @@ void Player::OnCollision(GameObject* pTarget)
 		Camera::CameraShakeStart(Camera::GetShakeTimeShort());
 
 		//衝撃音
-		Audio::Play(SoundParam_.hSoundCollision_);
+		Audio::Play(params_->SoundParam_.hSoundCollision_);
 
 		//状態遷移の際は一度x回転をストップ
 		rotate_->RotateXStop();
@@ -130,10 +130,10 @@ void Player::OnCollision(GameObject* pTarget)
 		pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
 	{
 		//自身が柵に接触状態ではない かつ無敵状態でないなら続ける
-		if (!FenceHitParam_.IsInvincibility_ && !(PlayerState_ == S_FenceHit))
+		if (!params_->FenceHitParam_.IsInvincibility_ && !(PlayerState_ == S_FenceHit))
 		{
 			//柵の名前のいずれかに接触しているなら
-            for (const std::string& arr : FenceHitParam_.WireArray_)
+            for (const std::string& arr : params_->FenceHitParam_.WireArray_)
 			{
 				if (pTarget->GetObjectName() == arr)
 				{
@@ -144,7 +144,7 @@ void Player::OnCollision(GameObject* pTarget)
 					fence_->FenceReflect(normal);
 
 					//自身のノックバック時のY軸回転角を固定させる
-					hit_->KnockBackAngleY(HitParam_.KnockBack_Direction_, FenceHitParam_.KnockBackPower_);
+					hit_->KnockBackAngleY(params_->HitParam_.KnockBack_Direction_, params_->FenceHitParam_.KnockBackPower_);
 
 					//プレイヤーの状態を柵に接触状態にする
 					PlayerState_ = S_FenceHit;
@@ -205,7 +205,7 @@ void Player::PlayerRun()
 	//デバッグ中のみEnterキーで初期位置に戻る
 	if (Input::IsKeyDown(DIK_RETURN))
 	{
-		SetStartPosition({0.0f, 0.0f, 0.0f});
+		params_->SetStartPosition({0.0f, 0.0f, 0.0f});
 	}
 #endif
 
@@ -249,7 +249,7 @@ void Player::UpdateIdle()
 	if (Input::IsKeyDown(DIK_LSHIFT) || Input::IsKeyDown(DIK_RSHIFT)
 		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_B, ControllerID_))
 	{
-		if (JumpParam_.IsOnGround_)
+		if (params_->JumpParam_.IsOnGround_)
 		{
 			//地上にいるならチャージ状態へ移行
 			PlayerState_ = S_Charge;
@@ -264,7 +264,7 @@ void Player::UpdateIdle()
 	//SPACEキー/Aボタンが押されたら
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A,ControllerID_))
 	{
-		if (JumpParam_.IsOnGround_)
+		if (params_->JumpParam_.IsOnGround_)
 		{
 			//地上にいるならジャンプ開始
 			air_->SetJump();
@@ -286,7 +286,7 @@ void Player::UpdateCharge()
 	charge_->SetArrow();
 
 	//矢印モデルの位置を自身の回転と合わせる
-	MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
+	params_->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
 	
 	//チャージ中のエフェクトを出す
 	vfx_->SetChargingEffect("ParticleAssets\\circle_B.png");
@@ -294,7 +294,7 @@ void Player::UpdateCharge()
 	//SPACEキー/Aボタンが押され,地上にいるなら
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A, ControllerID_))
 	{
-		if (JumpParam_.IsOnGround_)
+		if (params_->JumpParam_.IsOnGround_)
 		{
 			//溜めたチャージを0にする
 			charge_->ChargeReset();
@@ -349,7 +349,7 @@ void Player::UpdateAttack()
 	vfx_->SetAttackLocusEffect();
 
 	//正面ベクトルの方向に移動
-	movement_->CharacterMove(MoveParam_.ForwardVector_);
+	movement_->CharacterMove(params_->MoveParam_.ForwardVector_);
 
 	//摩擦量分速度を減少
 	movement_->FrictionDeceleration();
@@ -371,7 +371,7 @@ void Player::UpdateAttack()
 	}
 
 	//攻撃SE再生
-	Audio::Play(SoundParam_.hSoundattack_);
+	Audio::Play(params_->SoundParam_.hSoundattack_);
 }
 
 void Player::UpdateHit()
@@ -434,7 +434,7 @@ void Player::DrawImGui()
 	if (ImGui::TreeNode((objectName_ + " Status").c_str()))
 	{
 		//キャラクタークラス共通のImGui情報
-		DrawCharacterImGui();
+		debugpanel_->DrawCharacterImGui();
 	}
 
 	if (ImGui::TreeNode((objectName_ + " OnlyStatus").c_str()))
@@ -513,7 +513,7 @@ void Player::PlayerInit(std::string _CSVpath, std::string _Modelpath)
 	movement_->InitStartPosition();
 
 	//当たり判定付ける
-	SphereCollider* collider = new SphereCollider(XMFLOAT3(0, 0, 0), HitParam_.ColliderSize_);
+	SphereCollider* collider = new SphereCollider(XMFLOAT3(0, 0, 0), params_->HitParam_.ColliderSize_);
 	this->AddCollider(collider);
 
 	//バックカメラの初期値をセット 自分の位置に固定値を足す
@@ -770,7 +770,7 @@ void Player::CollisionCharacter(std::string _name)
 		TargetVector = XMLoadFloat3(&TargetPos);
 
 		//相手のスピードを取得
-		TargetSpeed = pEnemy->GetAcceleration();
+		TargetSpeed = pEnemy->GetParams().GetAcceleration();
 
 		//相手の名前を取得
 		TargetName = pEnemy->GetObjectName();
@@ -787,7 +787,7 @@ void Player::CollisionCharacter(std::string _name)
 		TargetVector = XMLoadFloat3(&TargetPos);
 
 		//相手のスピードを取得
-		TargetSpeed = pPlayer->GetAcceleration();
+		TargetSpeed = pPlayer->GetParams().GetAcceleration();
 
 		//相手の名前を取得
 		TargetName = _name;
@@ -798,7 +798,7 @@ void Player::CollisionCharacter(std::string _name)
 	}
 
 	//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度,接触相手の名前)
-	hit_->Reflect(PlayerVector, TargetVector, MoveParam_.Acceleration_, TargetSpeed, TargetName);
+	hit_->Reflect(PlayerVector, TargetVector, params_->MoveParam_.Acceleration_, TargetSpeed, TargetName);
 }
 
 void Player::SetCSVPlayer(std::string _path)

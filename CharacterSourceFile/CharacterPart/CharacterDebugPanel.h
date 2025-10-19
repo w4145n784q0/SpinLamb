@@ -4,6 +4,10 @@
 class CharacterDebugPanel :
     public GameObject
 {
+private:
+    CharacterParams* params_;
+
+public:
     CharacterDebugPanel(GameObject* parent);
     virtual ~CharacterDebugPanel() = default;
 
@@ -11,6 +15,10 @@ class CharacterDebugPanel :
     void Update() override {};
     void Draw() override {};
     void Release() override {};
+
+    void SetParams(CharacterParams* _params) {
+        params_ = _params;
+    }
 
     //----------デバッグ情報----------
 

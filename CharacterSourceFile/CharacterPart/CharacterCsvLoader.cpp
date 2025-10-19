@@ -68,7 +68,7 @@ namespace {
 }
 
 CharacterCsvLoader::CharacterCsvLoader(GameObject* parent)
-	:GameObject(parent, "CharacterCsvLoader")
+	:GameObject(parent, "CharacterCsvLoader"), params_(nullptr)
 {
 }
 
@@ -90,7 +90,7 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 	SetTransformPRS(this->transform_, initData);
 
 	//初期位置を保管する
-	InitParam_.StartPosition_ = this->transform_.position_;
+	params_->InitParam_.StartPosition_ = this->transform_.position_;
 
 	//--------------------移動関係のパラメータ--------------------
 
@@ -102,13 +102,13 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	MoveParam_.Velocity_ = MoveData[i_Velocity];
-	MoveParam_.AcceleValue_ = MoveData[i_AcceleValue];
-	MoveParam_.FullAccelerate_ = MoveData[i_AcceleMax];
-	MoveParam_.Friction_ = MoveData[i_Friction];
-	MoveParam_.ArrowRotate_ = { MoveData[i_ArrowRotateX],MoveData[i_ArrowRotateY],MoveData[i_ArrowRotateZ] };
-	MoveParam_.ArrowScale_ = { MoveData[i_ArrowScaleX],MoveData[i_ArrowScaleY],MoveData[i_ArrowScaleZ] };
-	MoveParam_.AddArrowDepth_ = MoveData[i_AddArrowDepth];
+	params_->MoveParam_.Velocity_ = MoveData[i_Velocity];
+	params_->MoveParam_.AcceleValue_ = MoveData[i_AcceleValue];
+	params_->MoveParam_.FullAccelerate_ = MoveData[i_AcceleMax];
+	params_->MoveParam_.Friction_ = MoveData[i_Friction];
+	params_->MoveParam_.ArrowRotate_ = { MoveData[i_ArrowRotateX],MoveData[i_ArrowRotateY],MoveData[i_ArrowRotateZ] };
+	params_->MoveParam_.ArrowScale_ = { MoveData[i_ArrowScaleX],MoveData[i_ArrowScaleY],MoveData[i_ArrowScaleZ] };
+	params_->MoveParam_.AddArrowDepth_ = MoveData[i_AddArrowDepth];
 
 	//--------------------回転関係のパラメータ--------------------
 
@@ -120,8 +120,8 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	RotateParam_.MoveRotateX = RotData[i_MoveRotate];
-	RotateParam_.FastRotateX = RotData[i_FastRotate];
+	params_->RotateParam_.MoveRotateX = RotData[i_MoveRotate];
+	params_->RotateParam_.FastRotateX = RotData[i_FastRotate];
 
 
 	//--------------------空中関係のパラメータ--------------------
@@ -134,11 +134,11 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	JumpParam_.Gravity_ = JumpData[i_Gravity];
-	JumpParam_.JumpHeight = JumpData[i_JumpHeight];
-	JumpParam_.HeightLowerLimit_ = JumpData[i_UpperLimit];
-	JumpParam_.HeightUpperLimit_ = JumpData[i_LowerLimit];
-	JumpParam_.MinusLimit_ = JumpData[i_MinusLimit];
+	params_->JumpParam_.Gravity_ = JumpData[i_Gravity];
+	params_->JumpParam_.JumpHeight = JumpData[i_JumpHeight];
+	params_->JumpParam_.HeightLowerLimit_ = JumpData[i_UpperLimit];
+	params_->JumpParam_.HeightUpperLimit_ = JumpData[i_LowerLimit];
+	params_->JumpParam_.MinusLimit_ = JumpData[i_MinusLimit];
 
 	//--------------------被弾関係のパラメータ--------------------
 
@@ -150,13 +150,13 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	HitParam_.ColliderSize_ = HitData[i_Collider];
-	HitParam_.OriginalRangeMin_ = HitData[i_OriginalRangeMin];
-	HitParam_.OriginalRangeMax_ = HitData[i_OriginalRangeMax];
-	HitParam_.ConvertedRangeMin_ = HitData[i_ConvertedRangeMin];
-	HitParam_.ConvertedRangeMax_ = HitData[i_ConvertedRangeMax];
-	HitParam_.DecelerationRate_ = HitData[i_DecelerationRate];
-	HitParam_.KnockBackEnd_ = HitData[i_KnockBackEnd];
+	params_->HitParam_.ColliderSize_ = HitData[i_Collider];
+	params_->HitParam_.OriginalRangeMin_ = HitData[i_OriginalRangeMin];
+	params_->HitParam_.OriginalRangeMax_ = HitData[i_OriginalRangeMax];
+	params_->HitParam_.ConvertedRangeMin_ = HitData[i_ConvertedRangeMin];
+	params_->HitParam_.ConvertedRangeMax_ = HitData[i_ConvertedRangeMax];
+	params_->HitParam_.DecelerationRate_ = HitData[i_DecelerationRate];
+	params_->HitParam_.KnockBackEnd_ = HitData[i_KnockBackEnd];
 
 	//--------------------柵に接触関係のパラメータ--------------------
 
@@ -168,9 +168,9 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	FenceHitParam_.KnockBackPower_ = FenceHitData[i_KnockBackPower];
-	FenceHitParam_.InvincibilityValue_ = static_cast<int>(FenceHitData[i_InvincibilityValue]);
-	FenceHitParam_.BlinkValue_ = static_cast<int>(FenceHitData[i_BlinkValue]);
+	params_->FenceHitParam_.KnockBackPower_ = FenceHitData[i_KnockBackPower];
+	params_->FenceHitParam_.InvincibilityValue_ = static_cast<int>(FenceHitData[i_InvincibilityValue]);
+	params_->FenceHitParam_.BlinkValue_ = static_cast<int>(FenceHitData[i_BlinkValue]);
 
 
 
@@ -184,5 +184,5 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	ShadowParam_.ShadowCorrection_ = ShadowData[i_ShadowCorrection];
+	params_->ShadowParam_.ShadowCorrection_ = ShadowData[i_ShadowCorrection];
 }

@@ -74,63 +74,92 @@ namespace {
 
 
 Character::Character(GameObject* parent)
-	:GameObject(parent,"Character")
+	:GameObject(parent,"Character"),
+	blink_(nullptr), vfx_(nullptr), shadow_(nullptr), air_(nullptr),
+	forward_(nullptr), movement_(nullptr),rotate_(nullptr),charge_(nullptr),
+    hit_(nullptr),fence_(nullptr),csvload_(nullptr),observer_(nullptr),debugpanel_(nullptr)
 {
 }
 
 Character::Character(GameObject* parent, const std::string& name)
-	:GameObject(parent, name)
+	:GameObject(parent, name),
+	blink_(nullptr), vfx_(nullptr), shadow_(nullptr), air_(nullptr),
+	forward_(nullptr), movement_(nullptr), rotate_(nullptr), charge_(nullptr),
+	hit_(nullptr), fence_(nullptr), csvload_(nullptr), observer_(nullptr), debugpanel_(nullptr)
 {
+	if(params_ != nullptr)
+	{
+		Instantiate<CharacterParams>(this);
+	}
 
 	if (blink_ == nullptr)
 	{
 		Instantiate<CharacterModelBlink>(this);
+		blink_->SetParams(params_);
 	}
 	if (vfx_ == nullptr)
 	{
 		Instantiate<CharacterVFX>(this);
+		vfx_->SetParams(params_);
 	}
 	if (shadow_ == nullptr)
 	{
 		Instantiate<CharacterShadow>(this);
+		shadow_->SetParams(params_);
 	}
 	if (air_ == nullptr)
 	{
 		Instantiate<CharacterAir>(this);
+		air_->SetParams(params_);
 	}
 	if (forward_ == nullptr)
 	{
 		Instantiate<CharacterForward>(this);
+		forward_->SetParams(params_);
 	}
 	if (movement_ == nullptr)
 	{
 		Instantiate<CharacterMovement>(this);
+		movement_->SetParams(params_);
 	}
 	if (rotate_ == nullptr)
 	{
 		Instantiate<CharacterRotate>(this);
+		rotate_->SetParams(params_);
 	}
 	if (charge_ == nullptr)
 	{
 		Instantiate<CharacterCharge>(this);
+		charge_->SetParams(params_);
 		charge_->SetEventListener(this);
 	}
 	if (hit_ == nullptr)
 	{
 		Instantiate<CharacterHit>(this);
+		hit_->SetParams(params_);
+		hit_->SetEventListener(this, this, this);
 	}
 	if (fence_ == nullptr)
 	{
 		Instantiate<CharacterFence>(this);
+		fence_->SetParams(params_);
+		fence_->SetEventListener(this, this, this);
 	}
 	if(csvload_ == nullptr)
 	{
 		Instantiate<CharacterCsvLoader>(this);
+		csvload_->SetParams(params_);
 	}
 	if (observer_ == nullptr)
 	{
 		Instantiate<CharacterObserver>(this);
-	}/**/
+		observer_->SetParams(params_);
+	}
+	if (debugpanel_ == nullptr)
+	{
+		Instantiate<CharacterDebugPanel>(this);
+		debugpanel_->SetParams(params_);
+	}
 
 	//csvからパラメータ読み込み
 	vfx_->InitCSVEffect();
@@ -140,17 +169,17 @@ Character::Character(GameObject* parent, const std::string& name)
 	//パスの一部を文字列にし、結合させる
 	std::string SoundSE = "Sound\\SE\\";
 
-	SoundParam_.hSoundcharge_ = Audio::Load(SoundSE + "Charge.wav",false, Audio::GetChargeNum());
-	assert(SoundParam_.hSoundcharge_ >= 0);
+	params_->SoundParam_.hSoundcharge_ = Audio::Load(SoundSE + "Charge.wav",false, Audio::GetChargeNum());
+	assert(params_->SoundParam_.hSoundcharge_ >= 0);
 
-	SoundParam_.hSoundattack_ = Audio::Load(SoundSE + "Attack.wav", false, Audio::GetAttackNum());
-	assert(SoundParam_.hSoundattack_ >= 0);
+	params_->SoundParam_.hSoundattack_ = Audio::Load(SoundSE + "Attack.wav", false, Audio::GetAttackNum());
+	assert(params_->SoundParam_.hSoundattack_ >= 0);
 
-	SoundParam_.hSoundCollision_ = Audio::Load(SoundSE + "Collision.wav",false, Audio::GetCollisionNum());
-	assert(SoundParam_.hSoundCollision_ >= 0);
+	params_->SoundParam_.hSoundCollision_ = Audio::Load(SoundSE + "Collision.wav",false, Audio::GetCollisionNum());
+	assert(params_->SoundParam_.hSoundCollision_ >= 0);
 
-	SoundParam_.hSoundJump_ = Audio::Load(SoundSE + "Jump.wav", false, Audio::GetJumpNum());
-	assert(SoundParam_.hSoundJump_ >= 0);
+	params_->SoundParam_.hSoundJump_ = Audio::Load(SoundSE + "Jump.wav", false, Audio::GetJumpNum());
+	assert(params_->SoundParam_.hSoundJump_ >= 0);
 
 	//それぞれの柵の法線を取得
 	fence_->GetWireNormal();
@@ -162,7 +191,7 @@ Character::Character(GameObject* parent, const std::string& name)
 Character::~Character()
 {
 	//実体は消さず、アドレスのみ無効化する
-	for (auto& observer : InitParam_.observers)
+	for (auto& observer : params_->InitParam_.observers)
 	{
 		if(observer != nullptr)
 		{
@@ -176,9 +205,9 @@ Character::~Character()
 		}
 	}
 
-	if(ShadowParam_.pGround_ != nullptr)
+	if(params_->ShadowParam_.pGround_ != nullptr)
 	{
-		ShadowParam_.pGround_ = nullptr;
+		params_->ShadowParam_.pGround_ = nullptr;
 	}
 }
 

@@ -4,6 +4,9 @@
 class CharacterMovement :
     public GameObject
 {
+private:
+    CharacterParams* params_;
+
 public:
     CharacterMovement(GameObject* parent);
     virtual ~CharacterMovement() = default;
@@ -12,6 +15,10 @@ public:
     void Update() override {};
     void Draw() override {};
     void Release() override {};
+
+    void SetParams(CharacterParams* _params) {
+        params_ = _params;
+    }
 
     //----------ˆÚ“®----------
 

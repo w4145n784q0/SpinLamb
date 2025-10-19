@@ -2,7 +2,7 @@
 #include"../../Engine/Model.h"
 
 CharacterModelBlink::CharacterModelBlink(GameObject* parent)
-	:GameObject(parent, "CharacterBlink")
+	:GameObject(parent, "CharacterBlink"), params_(nullptr)
 {
 }
 
@@ -10,12 +10,12 @@ void CharacterModelBlink::DrawCharacterModel(int _handle, Transform _transform)
 {
 	//無敵時間中かどうかでモデルの点滅表現を行う
 
-	if (FenceHitParam_.IsInvincibility_)
+	if (params_->FenceHitParam_.IsInvincibility_)
 	{
 		//無敵時間中ならタイマーを使い、一定フレームおきにモデルを描画
-		if (++FenceHitParam_.BlinkTimer_ > FenceHitParam_.BlinkValue_) {
+		if (++params_->FenceHitParam_.BlinkTimer_ > params_->FenceHitParam_.BlinkValue_) {
 
-			FenceHitParam_.BlinkTimer_ = 0;
+			params_->FenceHitParam_.BlinkTimer_ = 0;
 			Model::SetAndDraw(_handle, _transform);
 		}
 	}

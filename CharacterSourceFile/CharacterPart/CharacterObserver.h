@@ -6,6 +6,9 @@
 class CharacterObserver :
     public GameObject
 {
+private:
+    CharacterParams* params_;
+
 public:
     CharacterObserver(GameObject* parent);
     virtual ~CharacterObserver() = default;
@@ -15,6 +18,9 @@ public:
     void Draw() override {};
     void Release() override {};
 
+    void SetParams(CharacterParams* _params) {
+        params_ = _params;
+    }
 
     //----------監視(オブザーバーパターン)処理----------
 

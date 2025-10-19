@@ -74,7 +74,7 @@ void Enemy::Initialize()
 	movement_->InitStartPosition();
 
 	//当たり判定付ける
-	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), HitParam_.ColliderSize_);
+	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), params_->HitParam_.ColliderSize_);
 	this->AddCollider(collision);
 
 	
@@ -125,7 +125,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 		
 		//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度,接触相手の名前)
-		hit_->Reflect(MyVector, TargetVector, MoveParam_.Acceleration_, TargetAcceleration_, TargetName_);
+		hit_->Reflect(MyVector, TargetVector, params_->MoveParam_.Acceleration_, TargetAcceleration_, TargetName_);
 		
 		//接触時点で攻撃までのタイマーをリセット
 		AimTimer_ = 0;
@@ -142,10 +142,10 @@ void Enemy::OnCollision(GameObject* pTarget)
 		pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
 	{
 		//自身が柵に接触状態ではない かつ無敵状態でないなら続ける
-		if (!FenceHitParam_.IsInvincibility_ && !(EnemyState_ == S_FenceHit))
+		if (!params_->FenceHitParam_.IsInvincibility_ && !(EnemyState_ == S_FenceHit))
 		{
 			//柵の名前のいずれかに接触しているなら
-			for (const std::string& arr : FenceHitParam_.WireArray_)
+			for (const std::string& arr : params_->FenceHitParam_.WireArray_)
 			{
 				if (pTarget->GetObjectName() == arr)
 				{
@@ -156,7 +156,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 					fence_->FenceReflect(normal);
 
 					//自身のノックバック時のY軸回転角を固定させる
-					hit_->KnockBackAngleY(HitParam_.KnockBack_Direction_, FenceHitParam_.KnockBackPower_);
+					hit_->KnockBackAngleY(params_->HitParam_.KnockBack_Direction_, params_->FenceHitParam_.KnockBackPower_);
 
 					//接触時点で攻撃までのタイマーをリセット
 					AimTimer_ = 0;
@@ -185,7 +185,7 @@ void Enemy::EnemyRun()
 	TargetVec_ = XMLoadFloat3(&TargetPosition_);
 
 	//プレイヤーの加速度を取り続ける
-	TargetAcceleration_ = pPlayer_->GetAcceleration();
+	TargetAcceleration_ = pPlayer_->GetParams().GetAcceleration();
 
 	//プレイヤーのオブジェクト名を取り続ける
 	TargetName_ = pPlayer_->GetObjectName();
@@ -301,7 +301,7 @@ void Enemy::UpdateAim()
 	charge_->SetArrow();
 
 	//矢印モデルの位置を自身の回転と合わせる
-	MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
+	params_->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
 
 	//チャージ中のエフェクトを出す
 	vfx_->SetChargingEffect("ParticleAssets\\circle_R.png");
@@ -363,7 +363,7 @@ void Enemy::UpdateAttack()
 	}
 
 	//攻撃SE再生
-	Audio::Play(SoundParam_.hSoundattack_);
+	Audio::Play(params_->SoundParam_.hSoundattack_);
 }
 
 void Enemy::UpdateHitStop()
@@ -447,7 +447,7 @@ void Enemy::DrawImGui()
 	if (ImGui::TreeNode("EnemyStatus"))
 	{
 		//キャラクタークラス共通のImGui情報
-		DrawCharacterImGui();
+		debugpanel_->DrawCharacterImGui();
 	}
 
 	if (ImGui::TreeNode("EnemyOnlyStatus"))
@@ -524,10 +524,10 @@ void Enemy::LookPlayer()
 	//------------角度に応じて回転------------
 
 	//二つのベクトル間のラジアン角を求める
-	XMVECTOR angle = XMVector3AngleBetweenVectors(RotateDirection, MoveParam_.ForwardVector_);
+	XMVECTOR angle = XMVector3AngleBetweenVectors(RotateDirection, params_->MoveParam_.ForwardVector_);
 
 	//前向きベクトルとプレイヤーのいる方向のベクトルの外積を求める
-	XMVECTOR cross = XMVector3Cross(MoveParam_.ForwardVector_, RotateDirection);
+	XMVECTOR cross = XMVector3Cross(params_->MoveParam_.ForwardVector_, RotateDirection);
 
 	//前向きベクトルとプレイヤー方向ベクトルはXZに伸びるベクトルなので
 	//外積のY軸（+か-で左右どちらにいるか判断）を求める

@@ -148,6 +148,7 @@
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterModelBlink.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterMovement.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterObserver.cpp" />
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterParams.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterRotate.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterShadow.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterVFX.cpp" />

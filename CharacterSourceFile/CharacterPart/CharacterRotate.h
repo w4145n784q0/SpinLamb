@@ -5,6 +5,9 @@
 class CharacterRotate :
     public GameObject
 {
+private:
+    CharacterParams* params_;
+
 public:
     CharacterRotate(GameObject* parent);
     virtual ~CharacterRotate() = default;
@@ -13,6 +16,10 @@ public:
     void Update() override {};
     void Draw() override {};
     void Release() override {};
+
+    void SetParams(CharacterParams* _params) {
+        params_ = _params;
+    }
 
     //----------‰ñ“]----------
 

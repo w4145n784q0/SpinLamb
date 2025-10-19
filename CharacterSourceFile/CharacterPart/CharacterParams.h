@@ -4,7 +4,17 @@
 
 //プレイヤー,敵クラスの共通パラメータのみを扱うファイル
 
-class CharacterParams {
+class CharacterParams :
+    public GameObject 
+{
+public:
+    CharacterParams(GameObject* parent);
+    virtual ~CharacterParams() = default;
+
+    void Initialize() override {};
+    void Update() override {};
+    void Draw() override {};
+    void Release() override {};
 
     //----------ステージの端----------
     struct EndParam
@@ -15,7 +25,7 @@ class CharacterParams {
         float EastEnd_ = 0.0f;      //ステージ東端(右側)の位置
         float WestEnd_ = 0.0f;      //ステージ西端(左側)の位置
     };
-    //EndParam EndParam_;
+    EndParam EndParam_;
 
     //----------サウンドハンドル----------
     struct SoundParam
@@ -26,7 +36,7 @@ class CharacterParams {
         int hSoundCollision_ = -1;  //接触音のハンドル
         int hSoundJump_ = -1;       //ジャンプ音のハンドル
     };
-    //SoundParam SoundParam_;
+    SoundParam SoundParam_;
 
     //----------初期状態----------
     struct InitializeParam
@@ -36,7 +46,7 @@ class CharacterParams {
         XMVECTOR FrontDirection_ = { 0,0,1 };   //正面の初期値(ローカル座標系) ここからどれだけ回転したか
         std::vector<IGameObserver*> observers;  //監視される対象の配列
     };
-    //InitializeParam InitParam_;
+    InitializeParam InitParam_;
 
     //----------移動----------
     struct MoveParam
@@ -56,7 +66,7 @@ class CharacterParams {
         XMFLOAT3 ArrowScale_ = { 0,0,0 };       //矢印の大きさ
         float AddArrowDepth_ = 0.0f;            //矢印の奥行き(前方向)の調整値
     };
-    // MoveParam MoveParam_;
+    MoveParam MoveParam_;
 
      //----------回転----------
     struct RotateParam
@@ -64,7 +74,7 @@ class CharacterParams {
         float MoveRotateX = 0.0f;   //移動時の1fの回転量
         float FastRotateX = 0.0f;   //(チャージ中など)高速回転中の1fの回転量
     };
-    //RotateParam RotateParam_;
+    RotateParam RotateParam_;
 
     //----------空中----------
     struct JumpParam
@@ -77,7 +87,7 @@ class CharacterParams {
         float HeightUpperLimit_ = 0.0f; //高さの上限
         float MinusLimit_ = 0.0f;       //JumpSpeedの最低値(念のためオーバーフローを防止する)
     };
-    //JumpParam JumpParam_;
+    JumpParam JumpParam_;
 
 
     //----------被弾----------
@@ -94,7 +104,7 @@ class CharacterParams {
         float KnockBackEnd_ = 0.0f;                 //ノックバックを終了する値
         std::string AttackedName_ = "";             //接触した相手の名前
     };
-    //HitParam HitParam_;
+    HitParam HitParam_;
 
     //----------柵の接触----------
     struct FenceHitParam
@@ -114,7 +124,7 @@ class CharacterParams {
         int BlinkTimer_ = 0;                                    //ダメージ後の点滅カウント
         int BlinkValue_ = 0;                                    //この値にblinkTimerが到達すると通常描画する(それまでは点滅)
     };
-    //FenceHitParam FenceHitParam_;
+    FenceHitParam FenceHitParam_;
 
     //----------影付け----------
     struct ShadowParam
@@ -125,7 +135,7 @@ class CharacterParams {
         Transform ShadowTrans_;             //影の描画トランスフォーム
         Ground* pGround_ = nullptr;         //地面のインスタンス
     };
-    //ShadowParam ShadowParam_;
+    ShadowParam ShadowParam_;
 
     //----------エフェクト関連----------
 
@@ -137,5 +147,101 @@ class CharacterParams {
         std::vector<float> HitEffectParam_ = {};     //接触時の衝撃エフェクトのパラメータ
         std::vector<float> FenceHitEffectParam_ = {};//柵に接触時の衝撃エフェクトのパラメータ
     };
-    // EffectParam EffectParam_;
+    EffectParam EffectParam_;
+
+    //----------セッター・ゲッター関数----------
+
+    //キャラクターの移動制限をセット
+    void SetEnd(float _upper, float _lower, float _left, float _right) {
+        EndParam_.NorthEnd_ = _upper;
+        EndParam_.SouthEnd_ = _lower;
+        EndParam_.WestEnd_ = _left;
+        EndParam_.EastEnd_ = _right;
+    }
+
+    //初期状態
+
+    void SetID(int _id) { InitParam_.CharacterID = _id; }
+    int GetID() const { return InitParam_.CharacterID; }
+
+    void SetStartPosition(XMFLOAT3 _pos) { InitParam_.StartPosition_ = _pos; }
+    XMFLOAT3 GetStartPosition() const { return InitParam_.StartPosition_; }
+
+    //移動
+
+    void SetVelocity(float _velocity) { MoveParam_.Velocity_ = _velocity; }
+    float GetVelocity() const { return MoveParam_.Velocity_; }
+
+    void SetAcceleration(float _acceleration) { MoveParam_.Acceleration_ = _acceleration; }
+    float GetAcceleration() const { return MoveParam_.Acceleration_; }
+
+    void SetTmpAccele(float _tmpAccele) { MoveParam_.TmpAccele_ = _tmpAccele; }
+    float GetTmpAccele() const { return MoveParam_.TmpAccele_; }
+
+    void SetAcceleValue(float _acceleValue) { MoveParam_.AcceleValue_ = _acceleValue; }
+    float GetAcceleValue() const { return MoveParam_.AcceleValue_; }
+
+    void SetFullAccelerate(float _fullAccelerate) { MoveParam_.FullAccelerate_; }
+    float GetFullAccelerate() { return MoveParam_.FullAccelerate_; }
+
+    void SetFriction(float _friction) { MoveParam_.Friction_; }
+    float GetFriction() { return  MoveParam_.Friction_; }
+
+    //回転
+    void SetMoveRotateX(float _moveRotate) { RotateParam_.MoveRotateX = _moveRotate; }
+    float GetMoveRotateX() const { return RotateParam_.MoveRotateX; }
+
+    void SetFastRotateX(float _fastRotate) { RotateParam_.FastRotateX = _fastRotate; }
+    float GetFastRotateX() const { return RotateParam_.FastRotateX; }
+
+    //空中
+    void SetGravity(float _gravity) { JumpParam_.Gravity_ = _gravity; }
+    float GetGravity() const { return JumpParam_.Gravity_; }
+
+    void SetJumpHeight(float _jumpHeight) { JumpParam_.JumpHeight = _jumpHeight; }
+    float GetJumpHeight() const { return JumpParam_.JumpHeight; }
+
+    //被弾
+    void SetOriginalRangeMin(float _originalRangeMin) { HitParam_.OriginalRangeMin_ = _originalRangeMin; }
+    float GetOriginalRangeMin() const { return HitParam_.OriginalRangeMin_; }
+
+    void SetOriginalRangeMax(float _originalRangeMax) { HitParam_.OriginalRangeMax_ = _originalRangeMax; }
+    float GetOriginalRangeMax() const { return HitParam_.OriginalRangeMax_; }
+
+    void SetConvertedRangeMin(float _convertedRangeMin) { HitParam_.ConvertedRangeMin_ = _convertedRangeMin; }
+    float GetConvertedRangeMin() const { return  HitParam_.ConvertedRangeMin_; }
+
+    void SetConvertedRangeMax(float _convertedRangeMax) { HitParam_.ConvertedRangeMax_ = _convertedRangeMax; }
+    float GetConvertedRangeMax() const { return  HitParam_.ConvertedRangeMax_; }
+
+    void SetKnockBackDirection(XMFLOAT3 _knockbackDirection) { HitParam_.KnockBack_Direction_ = _knockbackDirection; }
+    XMFLOAT3 GetKnockBackDirection()  const { return  HitParam_.KnockBack_Direction_; }
+
+    void SetKnockBackVelocity(XMFLOAT3 _knockbackVelocity) { HitParam_.KnockBack_Velocity_ = _knockbackVelocity; }
+    XMFLOAT3 GetKnockBackVelocity() const { return HitParam_.KnockBack_Velocity_; }
+
+    void SetDecelerationRate(float _decelerationRate) { HitParam_.DecelerationRate_ = _decelerationRate; }
+    float GetDecelerationRate()  const { return  HitParam_.DecelerationRate_; }
+
+    void SetKnockBackEnd(float _knockbackEnd) { HitParam_.KnockBackEnd_ = _knockbackEnd; }
+    float GetKnockBackEnd() const { return HitParam_.KnockBackEnd_; }
+
+    void SetAttackedName(std::string _AttackedName) { HitParam_.AttackedName_ = _AttackedName; }
+    std::string GetAttackedName() const { return HitParam_.AttackedName_; }
+
+    //柵の接触
+    void SetKnockBackPower(float _knockbackPower) { FenceHitParam_.KnockBackPower_ = _knockbackPower; }
+    float GetKnockBackPower() const { return FenceHitParam_.KnockBackPower_; }
+
+    void SetInvincibilityTime(int _invincibilityTime) { FenceHitParam_.InvincibilityTime_ = _invincibilityTime; }
+    int GetInvincibilityTime() const { return FenceHitParam_.InvincibilityTime_; }
+
+    void SetInvincibilityValue(int _invincibilityValue) { FenceHitParam_.InvincibilityValue_ = _invincibilityValue; }
+    int GetInvincibilityValue() const { return FenceHitParam_.InvincibilityValue_; }
+
+    void SetBlinkTimer(int _blinkTimer) { FenceHitParam_.BlinkTimer_ = _blinkTimer; }
+    int GetBlinkTimer() const { return  FenceHitParam_.BlinkTimer_; }
+
+    void SetBlinkValue(int _blinkValue) { FenceHitParam_.BlinkValue_ = _blinkValue; }
+    int GetBlinkValue() const { return FenceHitParam_.BlinkValue_; }
 };

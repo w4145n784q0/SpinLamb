@@ -4,6 +4,9 @@
 class CharacterModelBlink :
     public GameObject
 {
+private:
+    CharacterParams* params_;
+
 public:
     CharacterModelBlink(GameObject* parent);
     virtual ~CharacterModelBlink() = default;
@@ -12,6 +15,10 @@ public:
     void Update() override {};
     void Draw() override {};
     void Release() override {};
+
+    void SetParams(CharacterParams* _params) {
+        params_ = _params;
+    }
 
     //----------•`‰æ----------
 

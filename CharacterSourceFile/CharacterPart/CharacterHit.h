@@ -9,7 +9,7 @@ class CharacterHit :
     public GameObject
 {
 private:
-
+    CharacterParams* params_;
     IChargeEventListener* ChargeListener_;
     IRotateEventListener* RotateListener_;
     IMovementEventListener* MovementListener_;
@@ -24,6 +24,10 @@ public:
     void Update() override {};
     void Draw() override {};
     void Release() override {};
+
+    void SetParams(CharacterParams* _params) {
+        params_ = _params;
+    }
 
     // ƒŠƒXƒi[‚ğŒã‚©‚çİ’è‚·‚é
     void SetEventListener(IChargeEventListener* _ChargeListener, 

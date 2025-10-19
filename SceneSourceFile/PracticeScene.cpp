@@ -107,10 +107,10 @@ void PracticeScene::Initialize()
 	for (int i = 0; i < InitCharacters.size(); i++)
 	{
 		//移動制限(各ステージの端)を渡す
-		InitCharacters[i]->SetEnd(North, South, West, East);
+		InitCharacters[i]->GetParams().SetEnd(North, South, West, East);
 
 		//IDを割り振る
-		InitCharacters[i]->SetID(i + CharacterAddID);
+		InitCharacters[i]->GetParams().SetID(i + CharacterAddID);
 	}
 
 	//player初期化時の文字列配列(追加する際はこの配列に文字列を追加)
@@ -134,7 +134,7 @@ void PracticeScene::Initialize()
 		InitPlayers[i]->SetObjectName(PlayerNames[i]);
 
 		//プレイヤーの名前を最後に接触したキャラクターとして初期化(名前が割り振られたタイミングで初期化)
-		InitPlayers[i]->SetAttackedName(InitPlayers[i]->GetObjectName());
+		InitPlayers[i]->GetParams().SetAttackedName(InitPlayers[i]->GetObjectName());
 
 		//使うコントローラーのID設定
 		InitPlayers[i]->SetControllerID(i);
@@ -158,7 +158,7 @@ void PracticeScene::Initialize()
 			InitEnemys[i]->SetObjectName(EnemyNames[i]);
 
 			//CPUの名前を最後に接触したキャラクターとして初期化(名前が割り振られたタイミングで初期化)
-			InitEnemys[i]->SetAttackedName(InitEnemys[i]->GetObjectName());
+			InitEnemys[i]->GetParams().SetAttackedName(InitEnemys[i]->GetObjectName());
 
 			//プレイヤーの初期化配列からランダムなインスタンスをセット
 			//(現状は敵と一対一なのでplayer1が選ばれる)

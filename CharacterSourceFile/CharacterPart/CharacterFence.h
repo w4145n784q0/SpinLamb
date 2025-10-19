@@ -9,7 +9,7 @@ class CharacterFence :
     public GameObject
 {    
 private:
-
+    CharacterParams* params_;
     IVFXEventListener* VFXListener_;
     IChargeEventListener* ChargeListener_;
     IMovementEventListener* MovementListener_;
@@ -23,6 +23,10 @@ public:
     void Update() override {};
     void Draw() override {};
     void Release() override {};
+
+    void SetParams(CharacterParams* _params) {
+        params_ = _params;
+    }
 
     // ƒŠƒXƒi[‚ğŒã‚©‚çİ’è‚·‚é
     void SetEventListener(IVFXEventListener* _VfxListener, 

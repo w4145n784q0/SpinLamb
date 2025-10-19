@@ -1,5 +1,5 @@
 #pragma once
-
+#include<string>
 //オブザーバーインターフェース
 //BattleSceneのみこのインターフェースを継承
 

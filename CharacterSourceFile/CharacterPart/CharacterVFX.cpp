@@ -2,7 +2,7 @@
 #include"../../Engine/VFX.h"
 
 CharacterVFX::CharacterVFX(GameObject* parent)
-	:GameObject(parent, "CharacterVFX")
+	:GameObject(parent, "CharacterVFX"), params_(nullptr)
 {
 }
 
@@ -19,11 +19,11 @@ void CharacterVFX::InitCSVEffect()
 	//ポインタ配列に格納
 	std::vector<float>* Param[] = { 
 		
-		&EffectParam_.ChargeParam_,
-		&EffectParam_.FullChargeParam,
-		&EffectParam_.AttackLocusParam_, 
-		&EffectParam_.HitEffectParam_, 
-		&EffectParam_.FenceHitEffectParam_ 
+		&params_->EffectParam_.ChargeParam_,
+		&params_->EffectParam_.FullChargeParam,
+		&params_->EffectParam_.AttackLocusParam_,
+		&params_->EffectParam_.HitEffectParam_,
+		&params_->EffectParam_.FenceHitEffectParam_
 	};
 
 
@@ -43,7 +43,7 @@ void CharacterVFX::SetChargingEffect(std::string _path)
 {
 	//csvから読み込んだ,チャージ中エフェクトのパラメータを実際にセットする
 	EmitterData charge;
-	VFX::SetEmitter(charge, EffectParam_.ChargeParam_);
+	VFX::SetEmitter(charge, params_->EffectParam_.ChargeParam_);
 
 	//使用する画像のパスをセットする
 	charge.textureFileName = _path;
@@ -59,7 +59,7 @@ void CharacterVFX::SetFullChargeEffect()
 {
 	//csvから読み込んだ,最大チャージエフェクトのパラメータを実際にセットする
 	EmitterData fullcharge;
-	VFX::SetEmitter(fullcharge, EffectParam_.FullChargeParam);
+	VFX::SetEmitter(fullcharge, params_->EffectParam_.FullChargeParam);
 
 	//使用する画像のパスをセットする
 	fullcharge.textureFileName = "ParticleAssets\\circle_W.png";
@@ -75,7 +75,7 @@ void CharacterVFX::SetAttackLocusEffect()
 {
 	//csvから読み込んだ,攻撃中の軌跡エフェクトのパラメータを実際にセットする
 	EmitterData locus;
-	VFX::SetEmitter(locus, EffectParam_.AttackLocusParam_);
+	VFX::SetEmitter(locus, params_->EffectParam_.AttackLocusParam_);
 
 	//使用する画像のパスをセットする
 	locus.textureFileName = "ParticleAssets\\flashB_Y.png";
@@ -91,7 +91,7 @@ void CharacterVFX::SetHitEffect()
 {
 	//csvから読み込んだ,被弾エフェクトのパラメータを実際にセットする
 	EmitterData hit;
-	VFX::SetEmitter(hit, EffectParam_.HitEffectParam_);
+	VFX::SetEmitter(hit, params_->EffectParam_.HitEffectParam_);
 
 	//使用する画像のパスをセットする
 	hit.textureFileName = "ParticleAssets\\flashB_W.png";
@@ -107,7 +107,7 @@ void CharacterVFX::SetFenceHitEffect()
 {
 	//csvから読み込んだ,柵に接触時エフェクトのパラメータを実際にセットする
 	EmitterData  fencehit;
-	VFX::SetEmitter(fencehit, EffectParam_.FenceHitEffectParam_);
+	VFX::SetEmitter(fencehit, params_->EffectParam_.FenceHitEffectParam_);
 
 	//使用する画像のパスをセットする
 	fencehit.textureFileName = "ParticleAssets\\flashB_W.png";

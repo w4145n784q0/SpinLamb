@@ -1,7 +1,8 @@
 #include "CharacterHit.h"
 
 CharacterHit::CharacterHit(GameObject* parent)
-	:GameObject(parent, "CharacterHit")
+	:GameObject(parent, "CharacterHit"), params_(nullptr),
+	ChargeListener_(nullptr), RotateListener_(nullptr), MovementListener_(nullptr)
 {
 }
 
@@ -17,7 +18,7 @@ void CharacterHit::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _my
     std::string _attackName)
 {
 	//無敵状態なら処理しない
-	if (FenceHitParam_.IsInvincibility_)
+	if (params_->FenceHitParam_.IsInvincibility_)
 	{
 		return;
 	}
@@ -40,7 +41,7 @@ void CharacterHit::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _my
 	XMStoreFloat3(&tmp, subVector);
 
 	//反射方向を設定
-	HitParam_.KnockBack_Direction_ = tmp;
+	params_->HitParam_.KnockBack_Direction_ = tmp;
 
 	//自身の速度と相手の速度の差分をとる
 	//速度の差分に応じてノックバック量を変化させる
@@ -52,7 +53,7 @@ void CharacterHit::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _my
 
 	//速度差の判定は線形補完元の最大値を適用
 	//速度差が自身の方が一定以上なら、自身のノックバック量は0
-	if (subVelocity >= HitParam_.OriginalRangeMax_)
+	if (subVelocity >= params_->HitParam_.OriginalRangeMax_)
 	{
 		KnockBackValue = 0.0f;
 	}
@@ -66,22 +67,24 @@ void CharacterHit::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _my
 
 		//ノックバック量の線形補完を行う
 		KnockBackValue = LinearInterpolation(subVelocity,
-			HitParam_.OriginalRangeMin_, HitParam_.OriginalRangeMax_,
-			HitParam_.ConvertedRangeMin_, HitParam_.ConvertedRangeMax_);
+			params_->HitParam_.OriginalRangeMin_, 
+			params_->HitParam_.OriginalRangeMax_,
+			params_->HitParam_.ConvertedRangeMin_,
+			params_->HitParam_.ConvertedRangeMax_);
 	}
 
 	//変換したノックバック量をノックバック時の速度x,zに代入
-	HitParam_.KnockBack_Velocity_.x = KnockBackValue;
-	HitParam_.KnockBack_Velocity_.z = KnockBackValue;
+	params_->HitParam_.KnockBack_Velocity_.x = KnockBackValue;
+	params_->HitParam_.KnockBack_Velocity_.z = KnockBackValue;
 
 	//溜めている速度をリセット
 	ChargeListener_->OnChargeReset();
 
 	//ノックバック時のY軸回転角の固定
-	KnockBackAngleY(HitParam_.KnockBack_Direction_, KnockBackValue);
+	KnockBackAngleY(params_->HitParam_.KnockBack_Direction_, KnockBackValue);
 
 	//攻撃相手の名前を取得
-	HitParam_.AttackedName_ = _attackName;
+	params_->HitParam_.AttackedName_ = _attackName;
 }
 
 void CharacterHit::KnockBackAngleY(XMFLOAT3 _KnockBackVector, float _KnockBackValue)
@@ -105,21 +108,21 @@ void CharacterHit::KnockBack()
 	RotateListener_->OnMoveRotateX();
 
 	//毎フレームノックバック速度を減少
-	HitParam_.KnockBack_Velocity_.x *= HitParam_.DecelerationRate_;
-	HitParam_.KnockBack_Velocity_.z *= HitParam_.DecelerationRate_;
+	params_->HitParam_.KnockBack_Velocity_.x *= params_->HitParam_.DecelerationRate_;
+	params_->HitParam_.KnockBack_Velocity_.z *= params_->HitParam_.DecelerationRate_;
 
 	//ノックバック後の位置を計算
 	//位置 = 位置 + 方向 * 速度
 	XMFLOAT3 TmpPos = this->transform_.position_;
-	TmpPos.x += HitParam_.KnockBack_Direction_.x * HitParam_.KnockBack_Velocity_.x;
-	TmpPos.z += HitParam_.KnockBack_Direction_.z * HitParam_.KnockBack_Velocity_.z;
+	TmpPos.x += params_->HitParam_.KnockBack_Direction_.x * params_->HitParam_.KnockBack_Velocity_.x;
+	TmpPos.z += params_->HitParam_.KnockBack_Direction_.z * params_->HitParam_.KnockBack_Velocity_.z;
 
 	//この時点では変更せず、移動後の仮の位置に保管
-	MoveParam_.NewPosition_ = XMLoadFloat3(&TmpPos);
+	params_->MoveParam_.NewPosition_ = XMLoadFloat3(&TmpPos);
 
 	//場外でなければ位置更新 
 	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, MoveParam_.NewPosition_);
+	XMStoreFloat3(&tmp, params_->MoveParam_.NewPosition_);
 
 	bool IsOutSide = MovementListener_->OnIsOutsideStage(tmp);
 	if (!IsOutSide)
@@ -133,11 +136,11 @@ XMVECTOR CharacterHit::HitNormal(std::string _normal)
 	//指定した名前の鉄線がWireArrayから見つかったら対応した法線を返す
 	//返した方向が柵に接触した際のノックバック方向となる
 	//見つからない場合は0を返す
-	for (int i = 0; i < FenceHitParam_.WireArray_.size(); i++)
+	for (int i = 0; i < params_->FenceHitParam_.WireArray_.size(); i++)
 	{
-		if (_normal == FenceHitParam_.WireArray_[i])
+		if (_normal == params_->FenceHitParam_.WireArray_[i])
 		{
-			return FenceHitParam_.NormalArray_[i];
+			return params_->FenceHitParam_.NormalArray_[i];
 		}
 	}
 
@@ -148,8 +151,8 @@ bool CharacterHit::IsKnockBackEnd()
 {
 	//ノックバック速度が終了値に到達したか判定し、真偽を返す
 
-	if (HitParam_.KnockBack_Velocity_.x <= HitParam_.KnockBackEnd_ ||
-		HitParam_.KnockBack_Velocity_.z <= HitParam_.KnockBackEnd_)
+	if (params_->HitParam_.KnockBack_Velocity_.x <= params_->HitParam_.KnockBackEnd_ ||
+		params_->HitParam_.KnockBack_Velocity_.z <= params_->HitParam_.KnockBackEnd_)
 	{
 		return true;
 	}
@@ -161,5 +164,5 @@ bool CharacterHit::IsKnockBackEnd()
 
 void CharacterHit::KnockBackVelocityReset()
 {
-	HitParam_.KnockBack_Velocity_ = { 0,0,0 };
+	params_->HitParam_.KnockBack_Velocity_ = { 0,0,0 };
 }

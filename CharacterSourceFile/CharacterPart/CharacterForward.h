@@ -4,6 +4,9 @@
 class CharacterForward :
     public GameObject
 {
+private:
+    CharacterParams* params_;
+
 public:
     CharacterForward(GameObject* parent);
     virtual ~CharacterForward() = default;
@@ -13,6 +16,9 @@ public:
     void Draw() override {};
     void Release() override {};
 
+    void SetParams(CharacterParams* _params) {
+        params_ = _params;
+    }
 
     /// <summary>
     /// Y軸の回転行列をベクトルに変換
