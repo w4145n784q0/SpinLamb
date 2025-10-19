@@ -89,6 +89,7 @@ Character::Character(GameObject* parent, const std::string& name)
 	{
 		csvload_ = Instantiate<CharacterCsvLoader>(this);
 		csvload_->SetParams(params_);
+		csvload_->SetCharacter(this);
 	}
 	if (observer_ == nullptr)
 	{

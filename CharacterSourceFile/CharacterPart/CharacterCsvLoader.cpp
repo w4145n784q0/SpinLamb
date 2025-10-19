@@ -1,4 +1,5 @@
 #include "CharacterCsvLoader.h"
+#include "../Character.h" 
 
 namespace {
 
@@ -68,7 +69,7 @@ namespace {
 }
 
 CharacterCsvLoader::CharacterCsvLoader(GameObject* parent)
-	:GameObject(parent, "CharacterCsvLoader"), params_(nullptr)
+	:GameObject(parent, "CharacterCsvLoader"), params_(nullptr), character_(nullptr)
 {
 }
 
@@ -89,6 +90,11 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 	//自身のトランスフォームを初期化
 	Transform tmp;
 	SetTransformPRS(tmp, initData);
+
+	//親クラスのトランスフォームに反映
+	character_->SetPosition(tmp.position_);
+	character_->SetRotate(tmp.rotate_);
+	character_->SetScale(tmp.scale_);
 
 	//初期位置を保管する
 	params_->InitParam_.StartPosition_ = tmp.position_;
