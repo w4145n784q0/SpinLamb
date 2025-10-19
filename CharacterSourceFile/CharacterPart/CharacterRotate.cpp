@@ -1,7 +1,8 @@
 #include "CharacterRotate.h"
+#include"../Character.h"
 
 CharacterRotate::CharacterRotate(GameObject* parent)
-	:GameObject(parent, "CharacterRotate"), params_(nullptr)
+	:GameObject(parent, "CharacterRotate"), params_(nullptr), character_(nullptr)
 {
 }
 
@@ -34,15 +35,19 @@ float CharacterRotate::RotateDirectionVector(XMVECTOR _MoveVector)
 
 void CharacterRotate::MoveRotateX()
 {
-	this->transform_.rotate_.x += params_->RotateParam_.MoveRotateX;
+	float x = character_->GetRotate().x;
+	x += params_->RotateParam_.MoveRotateX;
+	character_->SetRotateX(x);
 }
 
 void CharacterRotate::FastRotateX()
 {
-	this->transform_.rotate_.x += params_->RotateParam_.FastRotateX;
+	float x = character_->GetRotate().x;
+	x += params_->RotateParam_.FastRotateX;
+	character_->SetRotateX(x);
 }
 
 void CharacterRotate::RotateXStop()
 {
-	this->transform_.rotate_.x = 0.0f;
+	character_->SetRotateX(0.0f);
 }

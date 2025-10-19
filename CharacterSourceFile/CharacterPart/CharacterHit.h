@@ -5,11 +5,14 @@
 #include"../../InterfaceSourceFile/IRotateEventListner.h"
 #include"../../InterfaceSourceFile/IMovementEventListener.h"
 
+class Character;
+
 class CharacterHit :
     public GameObject
 {
 private:
     CharacterParams* params_;
+    Character* character_;
     IChargeEventListener* ChargeListener_;
     IRotateEventListener* RotateListener_;
     IMovementEventListener* MovementListener_;
@@ -27,6 +30,10 @@ public:
 
     void SetParams(CharacterParams* _params) {
         params_ = _params;
+    }
+
+    void SetCharacter(Character* _character) {
+        character_ = _character;
     }
 
     // ƒŠƒXƒi[‚ğŒã‚©‚çİ’è‚·‚é

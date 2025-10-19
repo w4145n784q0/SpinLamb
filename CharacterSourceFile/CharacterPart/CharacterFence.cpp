@@ -1,11 +1,12 @@
 #include "CharacterFence.h"
+#include"../Character.h"
 #include"../../StageSourceFile/UpperWire.h"
 #include"../../StageSourceFile/LowerWire.h"
 #include"../../StageSourceFile/LeftWire.h"
 #include"../../StageSourceFile/RightWire.h"
 
 CharacterFence::CharacterFence(GameObject* parent)
-	:GameObject(parent, "CharacterFence"), params_(nullptr),
+	:GameObject(parent, "CharacterFence"), params_(nullptr), character_(nullptr),
 	VFXListener_(nullptr), ChargeListener_(nullptr), MovementListener_(nullptr)
 {
 }
@@ -91,7 +92,7 @@ void CharacterFence::FenceReflect(XMVECTOR _normal)
 
 	//攻撃相手の名前をリセット
 	//自分の名前を代入することで、自爆判定に使う
-	params_->HitParam_.AttackedName_ = this->GetObjectName();
+	params_->HitParam_.AttackedName_ = character_->GetObjectName();
 }
 
 void CharacterFence::NotifyFenceHit()
@@ -103,7 +104,7 @@ void CharacterFence::NotifyFenceHit()
 	{
 		//監視者へ柵にヒットしたこと（最後に当たった(攻撃した)キャラクターの名前）と
 		//柵に当たったキャラクターの名前(NotifyFenceHit()を呼び出した自分自身)を通知
-		observer->OnCharacterFenceHit(params_->HitParam_.AttackedName_, this->GetObjectName());
+		observer->OnCharacterFenceHit(params_->HitParam_.AttackedName_, character_->GetObjectName());
 	}
 }
 

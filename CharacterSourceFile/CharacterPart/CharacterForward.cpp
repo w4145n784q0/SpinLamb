@@ -1,7 +1,8 @@
 #include "CharacterForward.h"
+#include"../Character.h"
 
 CharacterForward::CharacterForward(GameObject* parent)
-	:GameObject(parent, "CharacterForward"),params_(nullptr)
+	:GameObject(parent, "CharacterForward"),params_(nullptr), character_(nullptr)
 {
 }
 
@@ -26,5 +27,5 @@ void CharacterForward::FrontVectorConfirm()
 	//ローカル正面ベクトルを現在のy軸回転量で変形すると、正面からどれだけ回転したかが計算される
 	//その値がワールド正面ベクトルとなる
 	params_->MoveParam_.ForwardVector_ = 
-		RotateVecFront(this->transform_.rotate_.y, params_->InitParam_.FrontDirection_);
+		RotateVecFront(character_->GetRotate().y, params_->InitParam_.FrontDirection_);
 }

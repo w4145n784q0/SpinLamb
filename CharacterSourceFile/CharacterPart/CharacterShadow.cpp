@@ -1,8 +1,9 @@
 #include "CharacterShadow.h"
+#include"../Character.h"
 #include"../../Engine/Model.h"
 
 CharacterShadow::CharacterShadow(GameObject* parent)
-	:GameObject(parent, "CharacterShadow"), params_(nullptr)
+	:GameObject(parent, "CharacterShadow"), params_(nullptr), character_(nullptr)
 {
 }
 
@@ -20,6 +21,9 @@ void CharacterShadow::InitShadow()
 
 void CharacterShadow::ShadowSet()
 {
+	//自身の位置を取得
+	XMFLOAT3 tmp = character_->GetPosition();
+
 	//ステージのモデル番号を取得
 	int hGroundModel = params_->ShadowParam_.pGround_->GetModelHandle();
 
@@ -27,7 +31,7 @@ void CharacterShadow::ShadowSet()
 	RayCastData data;
 
 	//レイの発射位置を設定
-	data.start = this->transform_.position_;
+	data.start = character_->GetPosition();
 
 	//レイの方向を設定(0, -1, 0なので下向き)
 	data.dir = XMFLOAT3(0, -1, 0);
@@ -40,12 +44,12 @@ void CharacterShadow::ShadowSet()
 	{
 		//現在位置-衝突点までの距離 + 補正値で影の高さを設定
 		params_->ShadowParam_.ShadowHeight_ = 
-			(this->transform_.position_.y - data.dist) + params_->ShadowParam_.ShadowCorrection_;
+			(tmp.y - data.dist) + params_->ShadowParam_.ShadowCorrection_;
 	}
 
 	//y座標以外はキャラクターと同じ位置に設定
-	params_->ShadowParam_.ShadowTrans_.position_.x = this->transform_.position_.x;
-	params_->ShadowParam_.ShadowTrans_.position_.z = this->transform_.position_.z;
+	params_->ShadowParam_.ShadowTrans_.position_.x = tmp.x;
+	params_->ShadowParam_.ShadowTrans_.position_.z = tmp.z;
 
 	//影の高さをトランスフォームに設定する
 	params_->ShadowParam_.ShadowTrans_.position_.y = params_->ShadowParam_.ShadowHeight_;

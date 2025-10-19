@@ -1,14 +1,23 @@
 #include "CharacterMovement.h"
+#include"../Character.h"
 
 CharacterMovement::CharacterMovement(GameObject* parent)
-	:GameObject(parent, "CharacterMovement"), params_(nullptr)
+	:GameObject(parent, "CharacterMovement"), params_(nullptr),character_(nullptr)
 {
 }
 
 void CharacterMovement::InitStartPosition()
 {
-	//初期位置に戻す
-	this->transform_.position_ = params_->InitParam_.StartPosition_;
+	// 初期位置を親（Character）のtransformに設定する
+	if (character_ != nullptr)
+	{
+		character_->SetPosition(params_->InitParam_.StartPosition_);
+	}
+	else
+	{
+		//親がなければ自分のtransformにセット(安全策)
+		this->transform_.position_ = params_->InitParam_.StartPosition_;
+	}
 }
 
 void CharacterMovement::CharacterMove(XMVECTOR _direction)
@@ -44,7 +53,8 @@ void CharacterMovement::CreateMoveVector()
 
 	//現在位置と移動ベクトルを加算し
 	//移動後のベクトルを作成(この時点では移動確定していない)
-	XMVECTOR PrevPos = XMLoadFloat3(&this->transform_.position_);
+	XMFLOAT3 tmp = character_->GetPosition();
+	XMVECTOR PrevPos = XMLoadFloat3(&tmp);
 	params_->MoveParam_.NewPosition_ = PrevPos + MoveVector;
 }
 
@@ -67,7 +77,9 @@ bool CharacterMovement::IsOutsideStage(XMFLOAT3 _position)
 void CharacterMovement::MoveConfirm()
 {
 	//移動後のベクトルをtransform_.positionに代入し、移動を確定する
-	XMStoreFloat3(&this->transform_.position_, params_->MoveParam_.NewPosition_);
+	XMFLOAT3 tmp = character_->GetPosition();
+	XMStoreFloat3(&tmp, params_->MoveParam_.NewPosition_);
+	character_->SetPosition(tmp);
 }
 
 void CharacterMovement::Deceleration()
@@ -89,7 +101,7 @@ bool CharacterMovement::IsDashStop()
 {
 	if (params_->MoveParam_.Acceleration_ <= 0.0f)
 	{
-		return true; 
+		return true;
 	}
 	else
 	{

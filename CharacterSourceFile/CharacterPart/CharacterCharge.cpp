@@ -1,10 +1,11 @@
 #include "CharacterCharge.h"
+#include "../Character.h" 
 #include"../../Engine/Audio.h"
 #include"../../Engine/Model.h"
-#include "../Character.h" 
+
 
 CharacterCharge::CharacterCharge(GameObject* parent)
-	:GameObject(parent, "CharacterCharge"), params_(nullptr), VFXListener_(nullptr)
+	:GameObject(parent, "CharacterCharge"), character_(nullptr), params_(nullptr), VFXListener_(nullptr)
 {
 }
 
@@ -67,7 +68,8 @@ void CharacterCharge::SetArrow()
 	XMVECTOR FrontArrow = XMVectorScale(params_->MoveParam_.ForwardVector_, params_->MoveParam_.AddArrowDepth_);
 
 	//Œ»İˆÊ’u‚ğæ“¾
-	XMVECTOR PosVec = XMLoadFloat3(&this->transform_.position_);
+	XMFLOAT3 tmp = character_->GetPosition();
+	XMVECTOR PosVec = XMLoadFloat3(&tmp);
 
 	//–îˆó‚Ì³–ÊˆÊ’u‚ÆŒ»İˆÊ’u‚ğ‰ÁZ
 	XMVECTOR arrowPosVec = XMVectorAdd(PosVec, FrontArrow);

@@ -87,10 +87,11 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 	std::vector<float> initData = GetCSVReadData(csv, p_init);
 
 	//自身のトランスフォームを初期化
-	SetTransformPRS(this->transform_, initData);
+	Transform tmp;
+	SetTransformPRS(tmp, initData);
 
 	//初期位置を保管する
-	params_->InitParam_.StartPosition_ = this->transform_.position_;
+	params_->InitParam_.StartPosition_ = tmp.position_;
 
 	//--------------------移動関係のパラメータ--------------------
 

@@ -1,8 +1,9 @@
 #include "CharacterAir.h"
+#include"../Character.h"
 #include"../../Engine/Audio.h"
 
 CharacterAir::CharacterAir(GameObject* parent)
-	:GameObject(parent, "CharacterAir"), params_(nullptr)
+	:GameObject(parent, "CharacterAir"), params_(nullptr),character_(nullptr)
 {
 }
 
@@ -12,15 +13,32 @@ void CharacterAir::CharacterGravity()
 	params_->JumpParam_.JumpSpeed_ -= params_->JumpParam_.Gravity_;
 
 	//フィールドに乗っているかは関係なく重力はかかり続ける
-	this->transform_.position_.y += params_->JumpParam_.JumpSpeed_;
-
-	//プレイヤーめりこみ防止に一定以下のy座標になったら値を固定する
-	if (this->transform_.position_.y <= params_->JumpParam_.HeightLowerLimit_)
+	//親の位置を取得してyを更新する（コンポーネント自身のtransform_ではなく親を更新）
+	if (character_ != nullptr)
 	{
-		this->transform_.position_.y = params_->JumpParam_.HeightLowerLimit_;
+		XMFLOAT3 parentPos = character_->GetPosition();
+		parentPos.y += params_->JumpParam_.JumpSpeed_;
 
-		//一定以下のy座標になった場合,着地している判定にする
-		params_->JumpParam_.IsOnGround_ = true;
+		//プレイヤーめりこみ防止に一定以下のy座標になったら値を固定する
+		if (parentPos.y <= params_->JumpParam_.HeightLowerLimit_)
+		{
+			parentPos.y = params_->JumpParam_.HeightLowerLimit_;
+
+			//一定以下のy座標になった場合,着地している判定にする
+			params_->JumpParam_.IsOnGround_ = true;
+		}
+
+		character_->SetPosition(parentPos);
+	}
+	else
+	{
+		//万一親がなければ従来の挙動
+		this->transform_.position_.y += params_->JumpParam_.JumpSpeed_;
+		if (this->transform_.position_.y <= params_->JumpParam_.HeightLowerLimit_)
+		{
+			this->transform_.position_.y = params_->JumpParam_.HeightLowerLimit_;
+			params_->JumpParam_.IsOnGround_ = true;
+		}
 	}
 
 	//マイナスし続けるので、念のためオーバーフロー防止

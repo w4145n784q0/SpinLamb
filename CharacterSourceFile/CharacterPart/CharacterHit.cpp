@@ -1,7 +1,8 @@
 #include "CharacterHit.h"
+#include "../Character.h"
 
 CharacterHit::CharacterHit(GameObject* parent)
-	:GameObject(parent, "CharacterHit"), params_(nullptr),
+	:GameObject(parent, "CharacterHit"), params_(nullptr), character_(nullptr),
 	ChargeListener_(nullptr), RotateListener_(nullptr), MovementListener_(nullptr)
 {
 }
@@ -99,7 +100,7 @@ void CharacterHit::KnockBackAngleY(XMFLOAT3 _KnockBackVector, float _KnockBackVa
 	float angleY = static_cast<float>(atan2(_KnockBackVector.x, _KnockBackVector.z));
 
 	//angleYはラジアン角なのでディグリー角に変換し、Y軸回転にセット
-	this->transform_.rotate_.y = XMConvertToDegrees(angleY);
+	character_->SetRotateY(XMConvertToDegrees(angleY));
 }
 
 void CharacterHit::KnockBack()
@@ -113,7 +114,7 @@ void CharacterHit::KnockBack()
 
 	//ノックバック後の位置を計算
 	//位置 = 位置 + 方向 * 速度
-	XMFLOAT3 TmpPos = this->transform_.position_;
+	XMFLOAT3 TmpPos = character_->GetPosition();
 	TmpPos.x += params_->HitParam_.KnockBack_Direction_.x * params_->HitParam_.KnockBack_Velocity_.x;
 	TmpPos.z += params_->HitParam_.KnockBack_Direction_.z * params_->HitParam_.KnockBack_Velocity_.z;
 

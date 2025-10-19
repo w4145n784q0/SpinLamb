@@ -1,7 +1,8 @@
 #include "CharacterDebugPanel.h"
+#include"../Character.h"
 
 CharacterDebugPanel::CharacterDebugPanel(GameObject* parent)
-	:GameObject(parent, "CharacterDebugPanel"), params_(nullptr)
+	:GameObject(parent, "CharacterDebugPanel"), params_(nullptr), character_(nullptr)
 {
 }
 
@@ -12,14 +13,17 @@ void CharacterDebugPanel::DrawCharacterImGui()
 	//Input:値を直接入力 +-による調整も可能
 	//Text:記述のみ
 
+	//親クラスのposition
+	XMFLOAT3 tmp = character_->GetPosition();
+
 //キャラクターの位置(position_.x,y,z)
 	if (ImGui::TreeNode("Transform.Position"))
 	{
-		ImGui::SliderFloat("PositionX", &this->transform_.position_.x, 
+		ImGui::SliderFloat("PositionX", &tmp.x, 
 			params_->EndParam_.WestEnd_, params_->EndParam_.EastEnd_);
-		ImGui::SliderFloat("PositionY", &this->transform_.position_.y,
+		ImGui::SliderFloat("PositionY", &tmp.y,
 			params_->JumpParam_.HeightLowerLimit_, params_->JumpParam_.HeightUpperLimit_);
-		ImGui::SliderFloat("PositionZ", &this->transform_.position_.z,
+		ImGui::SliderFloat("PositionZ", &tmp.z,
 			params_->EndParam_.SouthEnd_, params_->EndParam_.NorthEnd_);
 		ImGui::TreePop();
 	}
@@ -27,9 +31,9 @@ void CharacterDebugPanel::DrawCharacterImGui()
 	//キャラクターの回転量(rotate_.x,y,z)
 	if (ImGui::TreeNode("Transform.Rotate"))
 	{
-		ImGui::InputFloat("RotateX", &this->transform_.rotate_.x, ZeroPointOne);
-		ImGui::InputFloat("RotateY", &this->transform_.rotate_.y, ZeroPointOne);
-		ImGui::InputFloat("RotateZ", &this->transform_.rotate_.z, ZeroPointOne);
+		ImGui::InputFloat("RotateX", &tmp.x, ZeroPointOne);
+		ImGui::InputFloat("RotateY", &tmp.y, ZeroPointOne);
+		ImGui::InputFloat("RotateZ", &tmp.z, ZeroPointOne);
 		ImGui::TreePop();
 	}
 

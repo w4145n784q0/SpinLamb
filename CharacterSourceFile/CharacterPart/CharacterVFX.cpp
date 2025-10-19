@@ -1,8 +1,9 @@
 #include "CharacterVFX.h"
+#include"../Character.h"
 #include"../../Engine/VFX.h"
 
 CharacterVFX::CharacterVFX(GameObject* parent)
-	:GameObject(parent, "CharacterVFX"), params_(nullptr)
+	:GameObject(parent, "CharacterVFX"), params_(nullptr), character_(nullptr)
 {
 }
 
@@ -49,7 +50,7 @@ void CharacterVFX::SetChargingEffect(std::string _path)
 	charge.textureFileName = _path;
 
 	//発射位置をセット
-	charge.position = this->transform_.position_;
+	charge.position = character_->GetPosition();
 
 	//エフェクトを開始
 	VFX::Start(charge);
@@ -65,7 +66,7 @@ void CharacterVFX::SetFullChargeEffect()
 	fullcharge.textureFileName = "ParticleAssets\\circle_W.png";
 
 	//発射位置をセット
-	fullcharge.position = this->transform_.position_;
+	fullcharge.position = character_->GetPosition();
 
 	//エフェクトを開始
 	VFX::Start(fullcharge);
@@ -81,7 +82,7 @@ void CharacterVFX::SetAttackLocusEffect()
 	locus.textureFileName = "ParticleAssets\\flashB_Y.png";
 
 	//発射位置をセット
-	locus.position = this->transform_.position_;
+	locus.position = character_->GetPosition();
 
 	//エフェクトを開始
 	VFX::Start(locus);
@@ -97,7 +98,7 @@ void CharacterVFX::SetHitEffect()
 	hit.textureFileName = "ParticleAssets\\flashB_W.png";
 
 	//発射位置をセット
-	hit.position = this->transform_.position_;
+	hit.position = character_->GetPosition();
 
 	//エフェクトを開始
 	VFX::Start(hit);
@@ -113,7 +114,7 @@ void CharacterVFX::SetFenceHitEffect()
 	fencehit.textureFileName = "ParticleAssets\\flashB_W.png";
 
 	//発射位置をセット
-	fencehit.position = this->transform_.position_;
+	fencehit.position = character_->GetPosition();
 
 	//エフェクトを開始
 	VFX::Start(fencehit);

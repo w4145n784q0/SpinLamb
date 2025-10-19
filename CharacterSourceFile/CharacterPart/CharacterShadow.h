@@ -1,10 +1,14 @@
 #pragma once
 #include"CharacterParams.h"
 #include "../../Engine/GameObject.h"
+
+class Character;
+
 class CharacterShadow :
     public GameObject
 {
 private:
+    Character* character_;
     CharacterParams* params_;
 
 public:
@@ -18,6 +22,10 @@ public:
 
     void SetParams(CharacterParams* _params) {
         params_ = _params;
+    }
+
+    void SetCharacter(Character* _character) {
+        character_ = _character;
     }
 
     //----------‰e•t‚¯----------

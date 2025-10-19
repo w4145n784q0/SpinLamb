@@ -9,6 +9,7 @@ class CharacterCharge :
     public GameObject
 {
 private:
+    Character* character_;
     CharacterParams* params_;
     IVFXEventListener* VFXListener_;
 public:
@@ -24,6 +25,10 @@ public:
 
     void SetParams(CharacterParams* _params) {
         params_ = _params;
+    }
+
+    void SetCharacter(Character* _character) {
+        character_ = _character;
     }
 
     // ƒŠƒXƒi[‚ğŒã‚©‚çİ’è‚·‚é

@@ -5,10 +5,13 @@
 #include"../../InterfaceSourceFile/IChargeEventListner.h"
 #include"../../InterfaceSourceFile/IMovementEventListener.h"
 
+class Character;
+
 class CharacterFence :
     public GameObject
 {    
 private:
+    Character* character_;
     CharacterParams* params_;
     IVFXEventListener* VFXListener_;
     IChargeEventListener* ChargeListener_;
@@ -26,6 +29,10 @@ public:
 
     void SetParams(CharacterParams* _params) {
         params_ = _params;
+    }
+
+    void SetCharacter(Character* _character) {
+        character_ = _character;
     }
 
     // ƒŠƒXƒi[‚ğŒã‚©‚çİ’è‚·‚é
