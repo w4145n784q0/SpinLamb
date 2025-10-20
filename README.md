@@ -6,7 +6,7 @@ SpinLamb
 
 ├─CharacterSourceFile
 
-  └─CharacterPart
+    └─CharacterPart
 
 ├─Documentation
 
