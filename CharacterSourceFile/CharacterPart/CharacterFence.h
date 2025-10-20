@@ -5,20 +5,30 @@
 #include"../../InterfaceSourceFile/IChargeEventListner.h"
 #include"../../InterfaceSourceFile/IMovementEventListener.h"
 
+//Characterクラスの柵関係の処理を行うモジュール
+
 class Character;
 
 class CharacterFence :
     public GameObject
 {    
 private:
+    //親クラス(Character)のポインタ
     Character* character_;
+
+    //使用するパラメータ(CharacterParams)のポインタ
     CharacterParams* params_;
+
+    //VFXイベントを通知するリスナー
     IVFXEventListener* VFXListener_;
+
+    //チャージ関連イベントを通知するリスナー
     IChargeEventListener* ChargeListener_;
+  
+    //移動関連イベントを通知するリスナー
     IMovementEventListener* MovementListener_;
 public:
 
-    //----------柵関係----------
     CharacterFence(GameObject* parent);
     virtual ~CharacterFence() = default;
 
@@ -27,15 +37,17 @@ public:
     void Draw() override {};
     void Release() override {};
 
+    //CharacterParamsのセッター関数
     void SetParams(CharacterParams* _params) {
         params_ = _params;
     }
 
+    //親クラス(Character)のセッター関数
     void SetCharacter(Character* _character) {
         character_ = _character;
     }
 
-    // リスナーを後から設定する
+    //リスナーのセッター関数
     void SetEventListener(IVFXEventListener* _VfxListener, 
         IChargeEventListener* _ChargeListener, IMovementEventListener* _MovementListener);
 

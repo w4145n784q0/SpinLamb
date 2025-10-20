@@ -2,13 +2,18 @@
 #include"CharacterParams.h"
 #include "../../Engine/GameObject.h"
 
+//Characterクラスの移動関係の処理を行うモジュール
+
 class Character;
 
 class CharacterMovement :
     public GameObject
 {
 private:
+    //親クラス(Character)のポインタ
     Character* character_;
+
+    //使用するパラメータ(CharacterParams)のポインタ
     CharacterParams* params_;
 
 public:
@@ -20,15 +25,15 @@ public:
     void Draw() override {};
     void Release() override {};
 
+    //CharacterParamsのセッター関数
     void SetParams(CharacterParams* _params) {
         params_ = _params;
     }
 
+    //親クラス(Character)のセッター関数
     void SetCharacter(Character* _character) {
         character_ = _character;
     }
-
-    //----------移動----------
 
     /// <summary>
     /// 自身の位置を初期位置に設定

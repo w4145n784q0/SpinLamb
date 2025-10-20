@@ -13,9 +13,9 @@ void CharacterAir::CharacterGravity()
 	params_->JumpParam_.JumpSpeed_ -= params_->JumpParam_.Gravity_;
 
 	//フィールドに乗っているかは関係なく重力はかかり続ける
-	//親の位置を取得してyを更新する（コンポーネント自身のtransform_ではなく親を更新）
 	if (character_ != nullptr)
 	{
+		//親の位置を取得してy座標を更新する（コンポーネント自身のtransform_ではなく親を更新）
 		XMFLOAT3 parentPos = character_->GetPosition();
 		parentPos.y += params_->JumpParam_.JumpSpeed_;
 
@@ -28,17 +28,8 @@ void CharacterAir::CharacterGravity()
 			params_->JumpParam_.IsOnGround_ = true;
 		}
 
+		//親の位置を更新
 		character_->SetPosition(parentPos);
-	}
-	else
-	{
-		//万一親がなければ従来の挙動
-		this->transform_.position_.y += params_->JumpParam_.JumpSpeed_;
-		if (this->transform_.position_.y <= params_->JumpParam_.HeightLowerLimit_)
-		{
-			this->transform_.position_.y = params_->JumpParam_.HeightLowerLimit_;
-			params_->JumpParam_.IsOnGround_ = true;
-		}
 	}
 
 	//マイナスし続けるので、念のためオーバーフロー防止

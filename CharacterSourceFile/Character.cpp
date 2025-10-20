@@ -18,6 +18,11 @@ Character::Character(GameObject* parent, const std::string& name)
 	forward_(nullptr), movement_(nullptr), rotate_(nullptr), charge_(nullptr),
 	hit_(nullptr), fence_(nullptr), csvload_(nullptr), observer_(nullptr), debugpanel_(nullptr)
 {
+	//各モジュールの生成・初期化(Instantiate)
+	//必要に応じてパラメータのセット(SetParams)
+	//必要に応じて親クラス（自身）のセット(SetCharacter)
+	//必要に応じてイベントリスナーのセット(SetEventListener)
+
 	if (params_ == nullptr)
 	{
 		params_ = Instantiate<CharacterParams>(this);
@@ -147,6 +152,7 @@ Character::~Character()
 		}
 	}
 
+	//影に使用する地面クラスのポインタを空にする
 	if(params_->ShadowParam_.pGround_ != nullptr)
 	{
 		params_->ShadowParam_.pGround_ = nullptr;
@@ -171,5 +177,6 @@ void Character::Draw()
 {
 	//Characterクラスを継承するクラスで呼ぶ共通描画
 
+	//キャラクターの丸影を描画
 	shadow_->ShadowDraw();
 }

@@ -1,10 +1,14 @@
 #pragma once
 #include"CharacterParams.h"
 #include "../../Engine/GameObject.h"
+
+//Characterクラスのモデル描画関係の処理を行うモジュール
+
 class CharacterModelBlink :
     public GameObject
 {
 private:
+    //使用するパラメータ(CharacterParams)のポインタ
     CharacterParams* params_;
 
 public:
@@ -16,11 +20,10 @@ public:
     void Draw() override {};
     void Release() override {};
 
+    //CharacterParamsのセッター関数
     void SetParams(CharacterParams* _params) {
         params_ = _params;
     }
-
-    //----------描画----------
 
     /// <summary>
     /// キャラクターモデル描画(ダメージ時の点滅表現等行う)

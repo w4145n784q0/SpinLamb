@@ -3,10 +3,13 @@
 #include"../../Engine/GameObject.h"
 #include"../../InterfaceSourceFile/IGameObserver.h"
 
+//Characterクラスの監視(オブザーバーパターン)処理を行うモジュール
+
 class CharacterObserver :
     public GameObject
 {
 private:
+    //使用するパラメータ(CharacterParams)のポインタ
     CharacterParams* params_;
 
 public:
@@ -18,11 +21,10 @@ public:
     void Draw() override {};
     void Release() override {};
 
+    //CharacterParamsのセッター関数
     void SetParams(CharacterParams* _params) {
         params_ = _params;
     }
-
-    //----------監視(オブザーバーパターン)処理----------
 
     /// <summary>
     /// 自身を監視する対象を配列に追加

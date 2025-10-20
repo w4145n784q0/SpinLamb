@@ -3,18 +3,24 @@
 #include"../../Engine/GameObject.h"
 #include "../../InterfaceSourceFile/IVFXEventListener.h"
 
+//Characterクラスのチャージ関係の処理を行うモジュール
+
 class Character;
 
 class CharacterCharge :
     public GameObject
 {
 private:
+    //親クラス(Character)のポインタ
     Character* character_;
+
+    //使用するパラメータ(CharacterParams)のポインタ
     CharacterParams* params_;
+
+    //VFXイベントを通知するリスナー
     IVFXEventListener* VFXListener_;
 public:
  
-    //----------チャージ----------
     CharacterCharge(GameObject* parent);
     virtual ~CharacterCharge() = default;
 
@@ -23,15 +29,17 @@ public:
     void Draw() override {};
     void Release() override {};
 
+    //CharacterParamsのセッター関数
     void SetParams(CharacterParams* _params) {
         params_ = _params;
     }
 
+    //親クラス(Character)のセッター関数
     void SetCharacter(Character* _character) {
         character_ = _character;
     }
 
-    // リスナーを後から設定する
+    //リスナーのセッター関数
     void SetEventListener(IVFXEventListener* listener);
 
     /// <summary>

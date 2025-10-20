@@ -254,6 +254,9 @@
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterVFX.cpp">
       <Filter>04Chara\CharacterParts</Filter>
     </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterParams.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">

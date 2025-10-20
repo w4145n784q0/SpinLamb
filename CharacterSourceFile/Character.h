@@ -50,8 +50,7 @@ public:
 
 protected:
 
-    //----------共通パラメータ----------
-
+    //使用するパラメータ(CharacterParams)のポインタ
     CharacterParams* params_;
 
 public:
