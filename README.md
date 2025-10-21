@@ -6,6 +6,8 @@ SpinLamb
 
 ├─CharacterSourceFile
 
+    └─CharacterPart
+
 ├─Documentation
 
 ├─EffectSourceFile
