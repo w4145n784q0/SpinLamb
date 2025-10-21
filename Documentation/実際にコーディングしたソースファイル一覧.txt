@@ -1,7 +1,11 @@
 実際にコーディングしたソースファイルは以下のようになっています。
 
 ●インターフェース関係(InterfaceSourceFileに格納)
+IChargeEventListner.h
 IGameObserver.h
+IMovementEventListener.h
+IRotateEventListner.h
+IVFXEventListener.h
 
 ●描画関係(ViewSourceFileに格納)
 GameView.h
@@ -32,6 +36,36 @@ Enemy.h
 Enemy.cpp
 Player.h
 Player.cpp
+
+●キャラクター関係のモジュール(CharacterSourceFile内のCharacterPartに格納)
+CharacterAir.cpp
+CharacterAir.h
+CharacterCharge.cpp
+CharacterCharge.h
+CharacterCsvLoader.cpp
+CharacterCsvLoader.h
+CharacterDebugPanel.cpp
+CharacterDebugPanel.h
+CharacterFence.cpp
+CharacterFence.h
+CharacterForward.cpp
+CharacterForward.h
+CharacterHit.cpp
+CharacterHit.h
+CharacterModelBlink.cpp
+CharacterModelBlink.h
+CharacterMovement.cpp
+CharacterMovement.h
+CharacterObserver.cpp
+CharacterObserver.h
+CharacterParams.cpp
+CharacterParams.h
+CharacterRotate.cpp
+CharacterRotate.h
+CharacterShadow.cpp
+CharacterShadow.h
+CharacterVFX.cpp
+CharacterVFX.h
 
 
 ●ステージ関係(StageSourceFileに格納)
