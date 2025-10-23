@@ -25,6 +25,7 @@ private:
 		S_Root = 0,		//判断用
 		S_Chase,		//追いかける
 		S_Aim,			//プレイヤーを狙う(攻撃準備)
+		S_WrapAround,   //回り込み
 		S_Attack,		//攻撃
 		S_HitStop,		//ヒットストップ
 		S_Hit,			//弾かれる
@@ -90,6 +91,9 @@ public:
 
 	//追跡
 	void UpdateChase();
+
+	//回り込み
+	void UpdateWrapAround();
 
 	//攻撃準備
 	void UpdateAim();

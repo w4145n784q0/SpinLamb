@@ -205,6 +205,9 @@ void Enemy::EnemyRun()
 	case Enemy::S_Aim:
 		UpdateAim();
 		break;
+	case Enemy::S_WrapAround:
+		UpdateWrapAround();
+		break;
 	case Enemy::S_Attack:
 		UpdateAttack();
 		break;
@@ -282,6 +285,41 @@ void Enemy::UpdateChase()
 
 	//通常X回転
 	rotate_->MoveRotateX();
+}
+
+void Enemy::UpdateWrapAround()
+{
+	//Playerを回り込んで追跡している状態
+	
+	//プレイヤーと敵の位置
+	XMVECTOR PlayerPos = XMLoadFloat3(&TargetPosition_);
+	XMVECTOR EnemyPos = XMLoadFloat3(&this->transform_.position_);
+
+	//プレイヤーの前方ベクトル（ワールド空間）
+	XMVECTOR PlayerForward = pPlayer_->GetParams().GetForwardVector();
+
+	//プレイヤーの背後方向ベクトル
+	XMVECTOR BehindVec = XMVectorScale(PlayerForward, -1.0f);
+
+	//プレイヤーの背後に目標位置を設定 5.0は仮
+	XMVECTOR TargetBehindPos = XMVectorAdd(PlayerPos, XMVectorScale(BehindVec, 5.0f));
+
+	//敵の移動方向を計算
+	XMVECTOR MoveDir = XMVectorSubtract(TargetBehindPos, EnemyPos);
+	MoveDir = XMVector3Normalize(MoveDir);
+
+	//移動と回転
+	movement_->CharacterMove(MoveDir);
+	RotateFromDirection(MoveDir);
+
+	//プレイヤーに近づいたら攻撃準備へ
+	float dist = PlayerEnemyDistanceX();
+	if (dist < ChaseLength)
+	{
+		EnemyState_ = S_Aim;
+		rotate_->RotateXStop();
+	}
+
 }
 
 void Enemy::UpdateAim()

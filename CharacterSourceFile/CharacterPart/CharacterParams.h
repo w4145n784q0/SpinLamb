@@ -187,6 +187,9 @@ public:
     void SetFriction(float _friction) { MoveParam_.Friction_; }
     float GetFriction() { return  MoveParam_.Friction_; }
 
+    void SetForwardVector(XMVECTOR _forward) { MoveParam_.ForwardVector_ = _forward; }
+    XMVECTOR GetForwardVector() const { return MoveParam_.ForwardVector_; }
+
     //‰ñ“]
     void SetMoveRotateX(float _moveRotate) { RotateParam_.MoveRotateX = _moveRotate; }
     float GetMoveRotateX() const { return RotateParam_.MoveRotateX; }
