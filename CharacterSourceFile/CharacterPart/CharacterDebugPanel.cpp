@@ -62,11 +62,13 @@ void CharacterDebugPanel::DrawCharacterImGui()
 	//移動方向、移動後の更新位置
 	if (ImGui::TreeNode("Move"))
 	{
-		ImGui::InputFloat("Velocity", &params_->MoveParam_.Velocity_, ZeroPointOne);
-		ImGui::InputFloat("Acceleration", &params_->MoveParam_.Acceleration_, ZeroPointOne);
+		ImGui::InputFloat("NormalVelocity", &params_->MoveParam_.NormalVelocity_, ZeroPointOne);
+		ImGui::InputFloat("CommonAcceleration", &params_->MoveParam_.CommonAcceleration_, ZeroPointOne);
+		ImGui::InputFloat("NormalAcceleValue", &params_->MoveParam_.NormalAcceleValue_, ZeroPointOne);
+		ImGui::InputFloat("NormalFullAccelerate", &params_->MoveParam_.NormalFullAccelerate_, ZeroPointOne);
 		ImGui::InputFloat("TmpAccele", &params_->MoveParam_.TmpAccele_, ZeroPointOne);
-		ImGui::InputFloat("AcceleValue", &params_->MoveParam_.AcceleValue_, ZeroPointOne);
-		ImGui::InputFloat("FullAccelerate", &params_->MoveParam_.FullAccelerate_, ZeroPointOne);
+		ImGui::InputFloat("AttackAcceleValue", &params_->MoveParam_.AttackAcceleValue_, ZeroPointOne);
+		ImGui::InputFloat("AttackFullAccelerate", &params_->MoveParam_.AttackFullAccelerate_, ZeroPointOne);
 		ImGui::InputFloat("Friction", &params_->MoveParam_.Friction_, ZeroPointOne);
 
 		XMFLOAT3 move;

@@ -41,6 +41,16 @@ public:
     void InitStartPosition();
 
     /// <summary>
+    /// 毎フレーム呼ばれる移動更新処理
+    /// </summary>
+    void MoveUpdate();
+
+    /// <summary>
+    /// 加速度の追加
+    /// </summary>
+    void AddAcceleration();
+
+    /// <summary>
     /// キャラクターの移動処理
     /// </summary>
     /// <param name="_direction">動かす方向</param>
@@ -84,7 +94,7 @@ public:
     /// 停止判定
     /// </summary>
     /// <returns>加速量が0.0以下かどうか</returns>
-    bool IsDashStop();
+    bool IsAcceleStop();
 
 };
 

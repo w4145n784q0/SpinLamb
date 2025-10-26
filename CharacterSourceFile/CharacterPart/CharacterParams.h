@@ -51,20 +51,32 @@ public:
     //----------移動----------
     struct MoveParam
     {
-        float Velocity_ = 0.0f;                 //初速度 この速度に加速度が加算される
-        float Acceleration_ = 0.0f;             //加速度 ダッシュ攻撃中に使用する値
-        float TmpAccele_ = 0.0f;                //加速度上昇時に使う仮の値
-        float AcceleValue_ = 0.0f;              //Acceleration_上昇時、1fあたりの増加量
-        float FullAccelerate_ = 0.0f;           //加速度の最大
-        float Friction_ = 0.0f;                 //摩擦係数(減速率) 1fあたりの減速量
+        //通常の移動に使用
+		float NormalAcceleValue_ = 0.0f;        //通常移動時、加速度の1fあたりの増加量
+        float NormalFullAccelerate_ = 0.0f;     //通常移動時の加速度の増加量の最大(これとNormalVelocity_の合計が通常時の最高速にあたる)
+
+        //チャージ・ダッシュ攻撃中に使用
+        float TmpAccele_ = 0.0f;                //チャージ中の加速度上昇時に使う仮の値 チャージ中はこれが上昇する
+        float AttackAcceleValue_ = 0.0f;        //チャージ中の加速度上昇時、1fあたりの増加量
+        float AttackFullAccelerate_ = 0.0f;     //チャージ中の加速度の増加量の最大
+
+        //チャージ中の矢印関連
         int hMoveArrow_ = -1;                   //チャージ中に表示する矢印モデル
+        Transform ArrowTransform_;              //チャージ/攻撃準備中の矢印のトランスフォーム
+        XMFLOAT3 ArrowRotate_ = { 0,0,0 };      //矢印の初期回転 csvから初期値を読み込む際に使用
+        XMFLOAT3 ArrowScale_ = { 0,0,0 };       //矢印の大きさ csvから初期値を読み込む際に使用
+        float AddArrowDepth_ = 0.0f;            //矢印の奥行き(前方向)の調整値
+
+        //共通
+		XMVECTOR Velocity_ = { 0,0,0 };         //速度ベクトル キャラクターの移動速度をベクトル化したもの
+        float NormalVelocity_ = 0.0f;           //初速度 この速度に加速度が加算される
+        float CommonAcceleration_ = 0.0f;       //全ステート共通の加速度
+        float Friction_ = 0.0f;                 //摩擦係数(減速率) 1fあたりの減速量
+
         XMVECTOR ForwardVector_ = { 0,0,0 };    //キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算 正規化した値を入れる
         XMVECTOR MoveDirection_ = { 0,0,0 };    //移動方向 この値に速さの要素をかけて移動ベクトル化する
         XMVECTOR NewPosition_ = { 0,0,0 };      //移動後の位置ベクトル
-        Transform ArrowTransform_;              //チャージ/攻撃準備中の矢印のトランスフォーム
-        XMFLOAT3 ArrowRotate_ = { 0,0,0 };      //矢印の初期回転
-        XMFLOAT3 ArrowScale_ = { 0,0,0 };       //矢印の大きさ
-        float AddArrowDepth_ = 0.0f;            //矢印の奥行き(前方向)の調整値
+
     };
     MoveParam MoveParam_;
 
@@ -169,20 +181,26 @@ public:
 
     //移動
 
-    void SetVelocity(float _velocity) { MoveParam_.Velocity_ = _velocity; }
-    float GetVelocity() const { return MoveParam_.Velocity_; }
+    void SetNormalVelocity(float _velocity) { MoveParam_.NormalVelocity_ = _velocity; }
+    float GetNormalVelocity() const { return MoveParam_.NormalVelocity_; }
 
-    void SetAcceleration(float _acceleration) { MoveParam_.Acceleration_ = _acceleration; }
-    float GetAcceleration() const { return MoveParam_.Acceleration_; }
+    void SetAcceleration(float _acceleration) { MoveParam_.CommonAcceleration_ = _acceleration; }
+    float GetAcceleration() const { return MoveParam_.CommonAcceleration_; }
+
+	void SetNormalAcceleValue(float _acceleValue) { MoveParam_.NormalAcceleValue_ = _acceleValue; }
+	float GetNormalAcceleValue() const { return MoveParam_.NormalAcceleValue_; }
+
+	void SetFullNormalAccelerate(float _fullNormalAccelerate) { MoveParam_.NormalFullAccelerate_ = _fullNormalAccelerate; }
+	float GetFullNormalAccelerate() { return MoveParam_.NormalFullAccelerate_; }
 
     void SetTmpAccele(float _tmpAccele) { MoveParam_.TmpAccele_ = _tmpAccele; }
     float GetTmpAccele() const { return MoveParam_.TmpAccele_; }
 
-    void SetAcceleValue(float _acceleValue) { MoveParam_.AcceleValue_ = _acceleValue; }
-    float GetAcceleValue() const { return MoveParam_.AcceleValue_; }
+	void SetAttackAcceleValue(float _acceleValue) { MoveParam_.AttackAcceleValue_ = _acceleValue; }
+	float GetAttackAcceleValue() const { return MoveParam_.AttackAcceleValue_; }
 
-    void SetFullAccelerate(float _fullAccelerate) { MoveParam_.FullAccelerate_; }
-    float GetFullAccelerate() { return MoveParam_.FullAccelerate_; }
+	void SetFullAttackAccelerate(float _fullAttackAccelerate) { MoveParam_.AttackFullAccelerate_ = _fullAttackAccelerate; }
+	float GetFullAttackAccelerate() { return MoveParam_.AttackFullAccelerate_; }
 
     void SetFriction(float _friction) { MoveParam_.Friction_; }
     float GetFriction() { return  MoveParam_.Friction_; }

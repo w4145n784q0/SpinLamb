@@ -20,6 +20,44 @@ void CharacterMovement::InitStartPosition()
 	}
 }
 
+void CharacterMovement::MoveUpdate()
+{
+	//摩擦による減速
+	FrictionDeceleration();
+
+	//加速度が0以下なら停止
+	if (IsAcceleStop())
+	{
+		AccelerationStop();
+	}
+
+	//移動ベクトルを作成
+	CreateMoveVector();
+
+	//場外でなければ位置更新 
+	XMFLOAT3 tmp;
+	XMStoreFloat3(&tmp, params_->MoveParam_.NewPosition_);
+	if (!IsOutsideStage(tmp))
+	{
+		MoveConfirm();
+	}
+
+}
+
+void CharacterMovement::AddAcceleration()
+{
+	//一定の加速量を加算し続ける
+	if (params_->MoveParam_.CommonAcceleration_ < params_->MoveParam_.NormalFullAccelerate_)
+	{
+		params_->MoveParam_.CommonAcceleration_ += params_->MoveParam_.NormalAcceleValue_;
+	}
+	else
+	{
+		//最大加速度を超えないようにする
+		params_->MoveParam_.CommonAcceleration_ = params_->MoveParam_.NormalFullAccelerate_;
+	}
+}
+
 void CharacterMovement::CharacterMove(XMVECTOR _direction)
 {
 	//受け取った方向が0ベクトルなら処理しない(0ベクトルを正規化はできない)
@@ -49,7 +87,7 @@ void CharacterMovement::CreateMoveVector()
 	//移動ベクトル化する
 	XMVECTOR MoveVector = XMVectorScale(
 		params_->MoveParam_.MoveDirection_, (
-			params_->MoveParam_.Velocity_ + params_->MoveParam_.Acceleration_) * DeltaTime);
+			params_->MoveParam_.NormalVelocity_ + params_->MoveParam_.CommonAcceleration_) * DeltaTime);
 
 	//現在位置と移動ベクトルを加算し
 	//移動後のベクトルを作成(この時点では移動確定していない)
@@ -84,22 +122,22 @@ void CharacterMovement::MoveConfirm()
 
 void CharacterMovement::Deceleration()
 {
-	params_->MoveParam_.Acceleration_ -= params_->MoveParam_.AcceleValue_;
+	params_->MoveParam_.CommonAcceleration_ -= params_->MoveParam_.NormalAcceleValue_;
 }
 
 void CharacterMovement::FrictionDeceleration()
 {
-	params_->MoveParam_.Acceleration_ -= params_->MoveParam_.Friction_;
+	params_->MoveParam_.CommonAcceleration_ -= params_->MoveParam_.Friction_;
 }
 
 void CharacterMovement::AccelerationStop()
 {
-	params_->MoveParam_.Acceleration_ = 0.0f;
+	params_->MoveParam_.CommonAcceleration_ = 0.0f;
 }
 
-bool CharacterMovement::IsDashStop()
+bool CharacterMovement::IsAcceleStop()
 {
-	if (params_->MoveParam_.Acceleration_ <= 0.0f)
+	if (params_->MoveParam_.CommonAcceleration_ <= 0.0f)
 	{
 		return true;
 	}

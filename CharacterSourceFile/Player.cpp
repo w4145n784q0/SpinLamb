@@ -254,6 +254,9 @@ void Player::UpdateIdle()
 			//地上にいるならチャージ状態へ移行
 			PlayerState_ = S_Charge;
 
+			//加速度をリセット
+			movement_->AccelerationStop();
+
 			//状態遷移の際は一度x回転をストップ
 			rotate_->RotateXStop();
 		}
@@ -270,6 +273,9 @@ void Player::UpdateIdle()
 			air_->SetJump();
 		}
 	}
+
+	//慣性処理のための移動処理
+	//movement_->MoveUpdate();
 
 	//カメラ操作
 	CameraControl();
@@ -358,7 +364,7 @@ void Player::UpdateAttack()
 	rotate_->FastRotateX();
 
 	//加速量が0になったら
-	if (movement_->IsDashStop())
+	if (movement_->IsAcceleStop())
 	{
 		//明示的に加速量を0にする
 		movement_->AccelerationStop();
@@ -737,6 +743,9 @@ void Player::PlayerMove(XMVECTOR _move)
 	//コントローラー入力ベクトルからy軸回転量を計算
 	this->transform_.rotate_.y = rotate_->RotateDirectionVector(_move);
 
+	//加速度を加算
+	movement_->AddAcceleration();
+
 	//コントローラー入力ベクトルを渡し、実際に移動する
 	movement_->CharacterMove(_move);
 
@@ -798,7 +807,7 @@ void Player::CollisionCharacter(std::string _name)
 	}
 
 	//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度,接触相手の名前)
-	hit_->Reflect(PlayerVector, TargetVector, params_->MoveParam_.Acceleration_, TargetSpeed, TargetName);
+	hit_->Reflect(PlayerVector, TargetVector, params_->MoveParam_.CommonAcceleration_, TargetSpeed, TargetName);
 }
 
 void Player::SetCSVPlayer(std::string _path)

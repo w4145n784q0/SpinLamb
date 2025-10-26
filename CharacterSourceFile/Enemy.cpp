@@ -125,7 +125,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 		
 		//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度,接触相手の名前)
-		hit_->Reflect(MyVector, TargetVector, params_->MoveParam_.Acceleration_, TargetAcceleration_, TargetName_);
+		hit_->Reflect(MyVector, TargetVector, params_->MoveParam_.CommonAcceleration_, TargetAcceleration_, TargetName_);
 		
 		//接触時点で攻撃までのタイマーをリセット
 		AimTimer_ = 0;
@@ -385,7 +385,7 @@ void Enemy::UpdateAttack()
 	rotate_->FastRotateX();
 
 	//加速量が0になったら
-	if (movement_->IsDashStop())
+	if (movement_->IsAcceleStop())
 	{
 		//明示的に加速量を0にする
 		movement_->AccelerationStop();

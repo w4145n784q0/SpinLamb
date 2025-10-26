@@ -33,25 +33,25 @@ void CharacterCharge::Charging()
 	Audio::Play(params_->SoundParam_.hSoundcharge_);
 
 	//チャージ中,仮の値に一定の加速量を加算し続ける
-	//チャージ解放時に実際にAcceleration_に代入する
-	if (params_->MoveParam_.TmpAccele_ < params_->MoveParam_.FullAccelerate_)
+	//チャージ解放時に実際にCommonAcceleration_に代入する
+	if (params_->MoveParam_.TmpAccele_ < params_->MoveParam_.AttackFullAccelerate_)
 	{
-		params_->MoveParam_.TmpAccele_ += params_->MoveParam_.AcceleValue_;
+		params_->MoveParam_.TmpAccele_ += params_->MoveParam_.AttackAcceleValue_;
 	}
 	else
 	{
-		//チャージ中エフェクトをリスナークラスから呼び出す
+		//最大チャージエフェクトをリスナークラスから呼び出す
 		VFXListener_->OnFullChargeVFX();
 
 		//加速度が最大を超えないようにする
-		params_->MoveParam_.TmpAccele_ = params_->MoveParam_.FullAccelerate_;
+		params_->MoveParam_.TmpAccele_ = params_->MoveParam_.AttackFullAccelerate_;
 	}
 }
 
 void CharacterCharge::ChargeRelease()
 {
 	//実際の加速度に溜めた仮の値を代入
-	params_->MoveParam_.Acceleration_ = params_->MoveParam_.TmpAccele_;
+	params_->MoveParam_.CommonAcceleration_ = params_->MoveParam_.TmpAccele_;
 
 	//溜めている速度をリセット
 	ChargeReset();
