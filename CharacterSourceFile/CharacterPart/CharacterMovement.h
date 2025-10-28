@@ -42,8 +42,9 @@ public:
 
     /// <summary>
     /// 毎フレーム呼ばれる移動更新処理
+    /// dir:移動量ベクトル
     /// </summary>
-    void MoveUpdate();
+    void MoveUpdate(XMVECTOR _dir);
 
     /// <summary>
     /// 加速度の追加

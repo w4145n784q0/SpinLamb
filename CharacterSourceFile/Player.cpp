@@ -275,7 +275,7 @@ void Player::UpdateIdle()
 	}
 
 	//慣性処理のための移動処理
-	//movement_->MoveUpdate();
+	movement_->MoveUpdate(params_->MoveParam_.Velocity_);
 
 	//カメラ操作
 	CameraControl();
@@ -743,11 +743,8 @@ void Player::PlayerMove(XMVECTOR _move)
 	//コントローラー入力ベクトルからy軸回転量を計算
 	this->transform_.rotate_.y = rotate_->RotateDirectionVector(_move);
 
-	//加速度を加算
-	movement_->AddAcceleration();
-
 	//コントローラー入力ベクトルを渡し、実際に移動する
-	movement_->CharacterMove(_move);
+	//movement_->CharacterMove(_move);
 
 	//キャラクターをX回転
 	rotate_->MoveRotateX();

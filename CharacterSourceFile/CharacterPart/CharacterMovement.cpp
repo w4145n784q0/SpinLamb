@@ -20,10 +20,18 @@ void CharacterMovement::InitStartPosition()
 	}
 }
 
-void CharacterMovement::MoveUpdate()
+void CharacterMovement::MoveUpdate(XMVECTOR _dir)
 {
-	//摩擦による減速
-	FrictionDeceleration();
+	//受け取った移動量が0でなければ（わずかでも入力されていたら0ではない）加速度上昇
+	if (!XMVector3Equal(_dir, XMVectorZero()))
+	{
+		AddAcceleration();
+	}
+	else
+	{
+		//摩擦による減速
+		FrictionDeceleration();
+	}
 
 	//加速度が0以下なら停止
 	if (IsAcceleStop())
@@ -31,16 +39,8 @@ void CharacterMovement::MoveUpdate()
 		AccelerationStop();
 	}
 
-	//移動ベクトルを作成
-	CreateMoveVector();
-
-	//場外でなければ位置更新 
-	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, params_->MoveParam_.NewPosition_);
-	if (!IsOutsideStage(tmp))
-	{
-		MoveConfirm();
-	}
+	//移動する
+	CharacterMove(_dir);
 
 }
 
@@ -83,11 +83,11 @@ void CharacterMovement::CharacterMove(XMVECTOR _direction)
 
 void CharacterMovement::CreateMoveVector()
 {
-	//移動ベクトル = 移動方向 * ((初速度 + 加速度) * 1fの移動量のスケーリング)
+	//移動ベクトル = 移動方向 * ( 加速度 * 1fの移動量のスケーリング )
 	//移動ベクトル化する
 	XMVECTOR MoveVector = XMVectorScale(
-		params_->MoveParam_.MoveDirection_, (
-			params_->MoveParam_.NormalVelocity_ + params_->MoveParam_.CommonAcceleration_) * DeltaTime);
+		params_->MoveParam_.MoveDirection_, 
+			 params_->MoveParam_.CommonAcceleration_ * DeltaTime);
 
 	//現在位置と移動ベクトルを加算し
 	//移動後のベクトルを作成(この時点では移動確定していない)
