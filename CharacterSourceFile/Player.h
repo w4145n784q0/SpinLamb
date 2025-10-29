@@ -12,6 +12,8 @@ private:
 	//プレイヤーモデル
 	int hPlayer_;
 
+	XMVECTOR PlayerInput_;
+
 	//----------状態遷移----------
 	
 	//プレイヤーの状態遷移
@@ -137,11 +139,27 @@ public:
 	/// <param name="_PadID">使用しているゲームパッドのID(接続順)</param>
 	void ControllerMove(int _PadID);
 
+
+	void InputKeyBoard();
+
+	/// <summary>
+	/// コントローラーの処理を受け取る
+	/// </summary>
+	/// <param name="_PadID"></param>
+	void InputCotroller(int _PadID);
+
 	/// <summary>
 	/// プレイヤー専用移動処理
 	/// </summary>
 	/// <param name="_move">移動する方向</param>
 	void PlayerMove(XMVECTOR _move);
+
+	
+	/// <summary>
+	/// プレイヤー専用回転処理
+	/// </summary>
+	/// <param name="_move">移動方向 回転処理の基準となるベクトル</param>
+	void PlayerRotate(XMVECTOR _move);
 
 	/// <summary>
 	/// 受け取った名前に応じて要素を受け取り、反射処理をする

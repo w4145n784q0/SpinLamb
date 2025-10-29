@@ -39,12 +39,12 @@ public:
     /// 自身の位置を初期位置に設定
     /// </summary>
     void InitStartPosition();
-
+    
     /// <summary>
-    /// 毎フレーム呼ばれる移動更新処理
-    /// dir:移動量ベクトル
+    /// 入力ベクトルを受け取り更新する
     /// </summary>
-    void MoveUpdate(XMVECTOR _dir);
+    /// <param name="_input">入力された方向ベクトル</param>
+    void MoveUpdate(XMVECTOR _input);
 
     /// <summary>
     /// 加速度の追加

@@ -55,7 +55,7 @@ namespace {
 
 Player::Player(GameObject* parent) 
 	: Character(parent,"Player"),
-	hPlayer_(-1), 
+	hPlayer_(-1), PlayerInput_({ 0,0,0 }),
 	PlayerState_(S_Stop),CameraState_(S_NormalCamera),
 	ControllerID_(-1),Direction_({ 0,0,0 }),
 	CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 }),BackCamera_({ 0,0,0 })
@@ -236,12 +236,14 @@ void Player::UpdateIdle()
 	}
 
 	//キーボードの入力した分を実際に移動
-	KeyBoardMove();
+	//KeyBoardMove();
+	InputKeyBoard();
 
 	//------------------ゲームパッドスティックの移動------------------//
 
 	//コントローラー操作
-	ControllerMove(ControllerID_);
+	//ControllerMove(ControllerID_);
+	//InputCotroller(ControllerID_);
 
 	//------------------チャージ状態へ移行------------------//
 
@@ -274,8 +276,11 @@ void Player::UpdateIdle()
 		}
 	}
 
+	//プレイヤーの移動方向に即した回転
+	PlayerRotate(PlayerInput_);
+
 	//慣性処理のための移動処理
-	movement_->MoveUpdate(params_->MoveParam_.Velocity_);
+	movement_->MoveUpdate(PlayerInput_);
 
 	//カメラ操作
 	CameraControl();
@@ -719,6 +724,64 @@ void Player::ControllerMove(int _PadID)
 	}
 }
 
+void Player::InputKeyBoard()
+{
+	//キーボード入力時の移動・回転計算
+
+	//キーボードを押した量を1つの仮の移動ベクトルに変換
+	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);
+
+	//キーを押した(押してない状態は0ベクトルなので処理しない)
+	if (!XMVector3Equal(move, XMVectorZero()))
+	{
+		//入力された分移動する
+		//PlayerMove(move);
+		//単位ベクトル化し、移動方向を確定
+		params_->MoveParam_.MoveDirection_ = XMVector3Normalize(move);
+	}
+
+	PlayerInput_ = XMVector3Normalize(move);
+
+	//最後に進行方向のリセット毎フレーム行う
+	Direction_ = { 0,0,0 };
+
+	//キャラクターをX回転
+	rotate_->MoveRotateX();
+}
+
+void Player::InputCotroller(int _PadID)
+{
+	//コントローラーIDが0以下(シーン生成時に初期化されていない)なら処理しない
+	if (_PadID < 0)
+	{
+		return;
+	}
+
+	//コントローラーを倒した方向・角度を取得
+	XMVECTOR controller = XMVectorSet(Input::GetPadStickL(_PadID).x,
+		Input::GetPadStickL(_PadID).y, Input::GetPadStickL(_PadID).z, 0.0f);
+
+	//コントローラで受けとったベクトルはXYなので
+	//XZ方向のベクトルに直す
+	XMFLOAT3 controllfloat = { XMVectorGetX(controller) , 0.0f, XMVectorGetY(controller) };
+	XMVECTOR SetController = { controllfloat.x, controllfloat.y , controllfloat.z };
+
+	//コントローラーを倒した(倒してない状態は0ベクトルなので処理しない)
+	if (!XMVector3Equal(SetController, XMVectorZero()))
+	{
+		//入力された分移動する
+		//PlayerMove(move);
+		//単位ベクトル化し、移動方向を確定
+		params_->MoveParam_.MoveDirection_ = XMVector3Normalize(SetController);
+		PlayerInput_ = XMVector3Normalize(SetController);
+	}
+
+	PlayerInput_ = SetController;
+
+	//キャラクターをX回転
+	rotate_->MoveRotateX();
+}
+
 void Player::PlayerMove(XMVECTOR _move)
 {
 	//キーボード・コントローラー入力時の移動・回転計算
@@ -748,6 +811,29 @@ void Player::PlayerMove(XMVECTOR _move)
 
 	//キャラクターをX回転
 	rotate_->MoveRotateX();
+}
+
+void Player::PlayerRotate(XMVECTOR _move)
+{
+	//キーボード・コントローラー入力時の回転計算
+
+	//移動方向ベクトルが0なら何もしない(0ベクトルを正規化はできない)
+	if (!XMVector3Equal(_move, XMVectorZero()))
+	{
+		//移動方向ベクトルを正規化
+		_move = XMVector3Normalize(_move);
+	}
+
+	//カメラのY回転分だけ移動ベクトルを回転 
+	//カメラのY軸回転量を行列にする
+	float cameraY = cameraTransform_.rotate_.y;
+	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraY));
+
+	//仮の移動ベクトルをカメラのY軸回転量で変形
+	_move = XMVector3TransformCoord(_move, rotY);
+
+	//コントローラー入力ベクトルからy軸回転量を計算
+	this->transform_.rotate_.y = rotate_->RotateDirectionVector(_move);
 }
 
 void Player::CollisionCharacter(std::string _name)
