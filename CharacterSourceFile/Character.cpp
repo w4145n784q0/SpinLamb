@@ -62,6 +62,7 @@ Character::Character(GameObject* parent, const std::string& name)
 		movement_ = Instantiate<CharacterMovement>(this);
 		movement_->SetParams(params_);
 		movement_->SetCharacter(this);
+		movement_->SetEventListener(this);
 	}
 	if (rotate_ == nullptr)
 	{

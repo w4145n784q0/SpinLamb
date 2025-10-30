@@ -13,17 +13,19 @@ void CharacterDebugPanel::DrawCharacterImGui()
 	//Input:値を直接入力 +-による調整も可能
 	//Text:記述のみ
 
-	//親クラスのposition
-	XMFLOAT3 tmp = character_->GetPosition();
+	//親クラスのTransform
+	XMFLOAT3 pos = character_->GetPosition();
+	XMFLOAT3 rot = character_->GetRotate();
+	XMFLOAT3 sca = character_->GetScale();
 
-//キャラクターの位置(position_.x,y,z)
+	//キャラクターの位置(position_.x,y,z)
 	if (ImGui::TreeNode("Transform.Position"))
 	{
-		ImGui::SliderFloat("PositionX", &tmp.x, 
+		ImGui::SliderFloat("PositionX", &pos.x, 
 			params_->EndParam_.WestEnd_, params_->EndParam_.EastEnd_);
-		ImGui::SliderFloat("PositionY", &tmp.y,
+		ImGui::SliderFloat("PositionY", &pos.y,
 			params_->JumpParam_.HeightLowerLimit_, params_->JumpParam_.HeightUpperLimit_);
-		ImGui::SliderFloat("PositionZ", &tmp.z,
+		ImGui::SliderFloat("PositionZ", &pos.z,
 			params_->EndParam_.SouthEnd_, params_->EndParam_.NorthEnd_);
 		ImGui::TreePop();
 	}
@@ -31,9 +33,20 @@ void CharacterDebugPanel::DrawCharacterImGui()
 	//キャラクターの回転量(rotate_.x,y,z)
 	if (ImGui::TreeNode("Transform.Rotate"))
 	{
-		ImGui::InputFloat("RotateX", &tmp.x, ZeroPointOne);
-		ImGui::InputFloat("RotateY", &tmp.y, ZeroPointOne);
-		ImGui::InputFloat("RotateZ", &tmp.z, ZeroPointOne);
+		ImGui::InputFloat("RotateX", &rot.x, ZeroPointOne);
+		ImGui::InputFloat("RotateY", &rot.y, ZeroPointOne);
+		ImGui::InputFloat("RotateZ", &rot.z, ZeroPointOne);
+
+		ImGui::TreePop();
+	}
+
+	//キャラクターの拡大率(scale_.x,y,z)
+	if (ImGui::TreeNode("Transform.Scale"))
+	{
+		ImGui::InputFloat("ScaleX", &sca.x, ZeroPointOne);
+		ImGui::InputFloat("ScaleY", &sca.y, ZeroPointOne);
+		ImGui::InputFloat("ScaleZ", &sca.z, ZeroPointOne);
+
 		ImGui::TreePop();
 	}
 

@@ -746,7 +746,7 @@ void Player::InputKeyBoard()
 	Direction_ = { 0,0,0 };
 
 	//キャラクターをX回転
-	rotate_->MoveRotateX();
+	//rotate_->MoveRotateX();
 }
 
 void Player::InputCotroller(int _PadID)
@@ -779,7 +779,7 @@ void Player::InputCotroller(int _PadID)
 	PlayerInput_ = SetController;
 
 	//キャラクターをX回転
-	rotate_->MoveRotateX();
+	//rotate_->MoveRotateX();
 }
 
 void Player::PlayerMove(XMVECTOR _move)
@@ -832,8 +832,12 @@ void Player::PlayerRotate(XMVECTOR _move)
 	//仮の移動ベクトルをカメラのY軸回転量で変形
 	_move = XMVector3TransformCoord(_move, rotY);
 
-	//コントローラー入力ベクトルからy軸回転量を計算
-	this->transform_.rotate_.y = rotate_->RotateDirectionVector(_move);
+	if (!XMVector3Equal(_move, XMVectorZero()))
+	{
+		//コントローラー入力ベクトルからy軸回転量を計算
+		this->transform_.rotate_.y = rotate_->RotateDirectionVector(_move);
+	}
+
 }
 
 void Player::CollisionCharacter(std::string _name)

@@ -6,6 +6,11 @@ CharacterMovement::CharacterMovement(GameObject* parent)
 {
 }
 
+void CharacterMovement::SetEventListener(IRotateEventListener* _RotateListener)
+{
+	RotateListener_ = _RotateListener;
+}
+
 void CharacterMovement::InitStartPosition()
 {
 	// 初期位置を親（Character）のtransformに設定する
@@ -38,6 +43,11 @@ void CharacterMovement::MoveUpdate(XMVECTOR _input)
 	if (IsAcceleStop())
 	{
 		AccelerationStop();
+	}
+	else
+	{
+		//加速度が0以上ならX回転する
+		RotateListener_->OnMoveRotateX();
 	}
 
 	//受け取った方向が0ベクトルなら
