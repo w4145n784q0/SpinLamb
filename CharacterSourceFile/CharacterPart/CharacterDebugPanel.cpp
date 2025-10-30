@@ -75,13 +75,6 @@ void CharacterDebugPanel::DrawCharacterImGui()
 	//移動方向、移動後の更新位置
 	if (ImGui::TreeNode("Move"))
 	{
-		/*XMFLOAT3 tmp;
-		XMStoreFloat3(&tmp ,params_->MoveParam_.Velocity_);
-		ImGui::Text("VelocityX:", &tmp.x);
-		ImGui::Text("VelocityY:", &tmp.y);
-		ImGui::Text("VelocityZ:", &tmp.z);*/
-
-		ImGui::InputFloat("NormalVelocity", &params_->MoveParam_.NormalVelocity_, ZeroPointOne);
 		ImGui::InputFloat("CommonAcceleration", &params_->MoveParam_.CommonAcceleration_, ZeroPointOne);
 		ImGui::InputFloat("NormalAcceleValue", &params_->MoveParam_.NormalAcceleValue_, ZeroPointOne);
 		ImGui::InputFloat("NormalFullAccelerate", &params_->MoveParam_.NormalFullAccelerate_, ZeroPointOne);

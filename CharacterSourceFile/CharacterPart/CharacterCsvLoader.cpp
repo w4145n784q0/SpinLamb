@@ -118,7 +118,6 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 
 	//‰Šú‰»‚Ì‡”Ô‚Ícsv‚ÌŠes‚Ì‡”Ô‚É‡‚í‚¹‚é
 	//v‚Ì“Y‚¦Žš‚Ínamespace‚ÅéŒ¾‚µ‚½—ñ‹“Œ^‚ðŽg—p
-	params_->MoveParam_.NormalVelocity_ = MoveData[i_NormalVelocity];
 	params_->MoveParam_.NormalAcceleValue_ = MoveData[i_NormalAcceleValue];
 	params_->MoveParam_.NormalFullAccelerate_ = MoveData[i_NormalFullAccelerate_];
 	params_->MoveParam_.AttackAcceleValue_ = MoveData[i_AttackAcceleValue_];

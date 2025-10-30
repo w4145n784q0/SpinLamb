@@ -68,8 +68,6 @@ public:
         float AddArrowDepth_ = 0.0f;            //矢印の奥行き(前方向)の調整値
 
         //共通
-		XMVECTOR Velocity_ = { 0,0,0 };         //速度ベクトル キャラクターの移動速度をベクトル化したもの
-        float NormalVelocity_ = 0.0f;           //初速度 この速度に加速度が加算される
         float CommonAcceleration_ = 0.0f;       //全ステート共通の加速度
         float Friction_ = 0.0f;                 //摩擦係数(減速率) 1fあたりの減速量
 
@@ -180,9 +178,6 @@ public:
     XMFLOAT3 GetStartPosition() const { return InitParam_.StartPosition_; }
 
     //移動
-
-    void SetNormalVelocity(float _velocity) { MoveParam_.NormalVelocity_ = _velocity; }
-    float GetNormalVelocity() const { return MoveParam_.NormalVelocity_; }
 
     void SetAcceleration(float _acceleration) { MoveParam_.CommonAcceleration_ = _acceleration; }
     float GetAcceleration() const { return MoveParam_.CommonAcceleration_; }

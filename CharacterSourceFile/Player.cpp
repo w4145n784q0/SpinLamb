@@ -236,14 +236,12 @@ void Player::UpdateIdle()
 	}
 
 	//キーボードの入力した分を実際に移動
-	//KeyBoardMove();
 	InputKeyBoard();
 
 	//------------------ゲームパッドスティックの移動------------------//
 
 	//コントローラー操作
-	//ControllerMove(ControllerID_);
-	//InputCotroller(ControllerID_);
+	InputCotroller(ControllerID_);
 
 	//------------------チャージ状態へ移行------------------//
 
@@ -776,10 +774,6 @@ void Player::InputCotroller(int _PadID)
 		PlayerInput_ = XMVector3Normalize(SetController);
 	}
 
-	PlayerInput_ = SetController;
-
-	//キャラクターをX回転
-	//rotate_->MoveRotateX();
 }
 
 void Player::PlayerMove(XMVECTOR _move)
