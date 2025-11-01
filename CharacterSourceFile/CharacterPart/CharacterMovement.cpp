@@ -2,7 +2,8 @@
 #include"../Character.h"
 
 CharacterMovement::CharacterMovement(GameObject* parent)
-	:GameObject(parent, "CharacterMovement"), params_(nullptr),character_(nullptr)
+	:GameObject(parent, "CharacterMovement"), params_(nullptr),character_(nullptr),
+	RotateListener_(nullptr)
 {
 }
 

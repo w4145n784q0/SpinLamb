@@ -267,7 +267,8 @@ void Enemy::UpdateChase()
 	LookPlayer();
 	
 	//更新した方向へ移動
-	movement_->CharacterMove(AutoAttackDirection);
+	//movement_->CharacterMove(AutoAttackDirection);
+	movement_->MoveUpdate(AutoAttackDirection);
 
 	//進行方向に合わせてY軸を回転
 	RotateFromDirection(AutoAttackDirection);
@@ -282,9 +283,6 @@ void Enemy::UpdateChase()
 		//状態遷移の際は一度x回転をストップ
 		rotate_->RotateXStop();
 	}
-
-	//通常X回転
-	rotate_->MoveRotateX();
 }
 
 void Enemy::UpdateWrapAround()

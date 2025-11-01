@@ -10,8 +10,7 @@ namespace {
 	enum MoveIndex
 	{
 		//’ÊíˆÚ“®
-		i_NormalVelocity = 0,
-		i_NormalAcceleValue,
+		i_NormalAcceleValue = 0,
 		i_NormalFullAccelerate_,
 
 		//ƒ_ƒbƒVƒ…UŒ‚

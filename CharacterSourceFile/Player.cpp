@@ -262,7 +262,7 @@ void Player::UpdateIdle()
 		}
 	}
 
-	//------------------ジャンプ------------------
+	//------------------ジャンプ------------------//
 
 	//SPACEキー/Aボタンが押されたら
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A,ControllerID_))
