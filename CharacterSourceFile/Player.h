@@ -12,8 +12,6 @@ private:
 	//プレイヤーモデル
 	int hPlayer_;
 
-	XMVECTOR PlayerInput_;
-
 	//----------状態遷移----------
 	
 	//プレイヤーの状態遷移
@@ -21,6 +19,8 @@ private:
 	enum State
 	{
 		S_Idle,		//通常
+		S_Jump,     //ジャンプ
+		S_Land,     //着地
 		S_Charge,	//チャージ中
 		S_Attack,	//攻撃
 		S_Hit,		//弾かれる
@@ -49,6 +49,9 @@ private:
 
 	//キーボード使用時、プレイヤーの操作方向(xzどこに進むか)
 	XMFLOAT3 Direction_;
+
+	//受け取った入力方向ベクトル(カメラ等を考慮しない)
+	XMVECTOR PlayerInput_;
 	
 	//----------カメラ関係----------
 
@@ -90,6 +93,11 @@ public:
 
 	//通常状態
 	void UpdateIdle();
+
+	//
+	void UpdateJump();
+
+	void UpdateLand();
 
 	//チャージ状態
 	void UpdateCharge();
@@ -160,6 +168,13 @@ public:
 	/// </summary>
 	/// <param name="_move">移動方向 回転処理の基準となるベクトル</param>
 	void PlayerRotate(XMVECTOR _move);
+	
+	/// <summary>
+	/// カメラのY軸回転を使用し入力ベクトルをカメラ基準の方向に変換する
+	/// </summary>
+	/// <param name="input">プレイヤーの入力ベクトル</param>
+	/// <returns>カメラのY軸回転を反映した移動ベクトル</returns>
+	XMVECTOR ConvertCameraDirection(XMVECTOR _input);
 
 	/// <summary>
 	/// 受け取った名前に応じて要素を受け取り、反射処理をする

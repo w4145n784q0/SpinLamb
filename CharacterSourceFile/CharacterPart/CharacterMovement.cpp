@@ -51,7 +51,7 @@ void CharacterMovement::MoveUpdate(XMVECTOR _input)
 		RotateListener_->OnMoveRotateX();
 	}
 
-	//受け取った方向が0ベクトルなら
+	//受け取った方向が0ベクトルでないなら
 	if (!XMVector3Equal(_input, XMVectorZero()))
 	{
 		//単位ベクトル化し、移動方向を確定

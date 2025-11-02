@@ -5,6 +5,7 @@
 #include"../Engine/Camera.h"
 #include"../Engine/SphereCollider.h"
 #include"Enemy.h"
+#include"../EffectSourceFile/Easing.h"
 
 namespace {
 
@@ -51,16 +52,19 @@ namespace {
 
 	//デバッグカメラ状態時のカメラの位置
 	XMFLOAT3 CameraDebugPos = { 0,0,0 };
+
+	//着地硬直時間
+	int JumpLandingTimer_ = 0;
 }
 
-Player::Player(GameObject* parent) 
-	: Character(parent,"Player"),
+Player::Player(GameObject* parent)
+	: Character(parent, "Player"),
 	hPlayer_(-1), PlayerInput_({ 0,0,0 }),
-	PlayerState_(S_Stop),CameraState_(S_NormalCamera),
-	ControllerID_(-1),Direction_({ 0,0,0 }),
-	CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 }),BackCamera_({ 0,0,0 })
+	PlayerState_(S_Stop), CameraState_(S_NormalCamera),
+	ControllerID_(-1), Direction_({ 0,0,0 }),
+	CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 }), BackCamera_({ 0,0,0 })
 {
-	
+
 }
 
 Player::~Player()
@@ -133,7 +137,7 @@ void Player::OnCollision(GameObject* pTarget)
 		if (!params_->FenceHitParam_.IsInvincibility_ && !(PlayerState_ == S_FenceHit))
 		{
 			//柵の名前のいずれかに接触しているなら
-            for (const std::string& arr : params_->FenceHitParam_.WireArray_)
+			for (const std::string& arr : params_->FenceHitParam_.WireArray_)
 			{
 				if (pTarget->GetObjectName() == arr)
 				{
@@ -171,6 +175,12 @@ void Player::PlayerRun()
 	{
 	case Player::S_Idle:
 		UpdateIdle();
+		break;
+	case Player::S_Jump:
+		UpdateJump();
+		break;
+	case Player::S_Land:
+		UpdateLand();
 		break;
 	case Player::S_Charge:
 		UpdateCharge();
@@ -265,23 +275,68 @@ void Player::UpdateIdle()
 	//------------------ジャンプ------------------//
 
 	//SPACEキー/Aボタンが押されたら
-	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A,ControllerID_))
+	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A, ControllerID_))
 	{
 		if (params_->JumpParam_.IsOnGround_)
 		{
 			//地上にいるならジャンプ開始
 			air_->SetJump();
+			//PlayerState_ = S_Jump;
 		}
 	}
 
-	//プレイヤーの移動方向に即した回転
+	//プレイヤーの入力方向に即した回転
 	PlayerRotate(PlayerInput_);
 
-	//慣性処理のための移動処理
-	movement_->MoveUpdate(PlayerInput_);
+	//実際の移動にはcameraTransform_.rotate_.yを適用したベクトルを使う
+	XMVECTOR moveForCamera = ConvertCameraDirection(PlayerInput_);
+
+	//慣性処理のための移動処理（カメラ回転を反映したベクトルを渡す）
+	movement_->MoveUpdate(moveForCamera);
 
 	//カメラ操作
 	CameraControl();
+}
+
+void Player::UpdateJump()
+{
+
+	// 着地判定
+	if (params_->JumpParam_.IsOnGround_) {
+
+		// 硬直時間を設定（例：フレーム数で管理）
+		JumpLandingTimer_ = 7;
+		PlayerState_ = S_Land;
+	}
+
+}
+
+void Player::UpdateLand()
+{
+	if (--JumpLandingTimer_ <= 0)
+	{
+		this->transform_.scale_ = { 1.0f, 1.0f, 1.0f }; //元に戻す
+		PlayerState_ = S_Idle;
+		movement_->AccelerationStop();
+	}
+	else
+	{
+		//正規化する
+		double ratio = static_cast<double>(Normalize(static_cast<float>(JumpLandingTimer_)));
+
+		//拡大率をイージング計算
+		double easedXZ = Easing::EaseOutElastic(ratio);
+		double easedY = Easing::EaseOutBack(ratio);
+
+		//拡大率を最小値~最大値の間で補完する
+		double scaXZ = Easing::Complement(1.0, 1.5, easedXZ);
+		double scaY = Easing::Complement(1.0, 0.5, easedY);
+
+		//トランスフォームの拡大量に代入
+		this->transform_.scale_.x = this->transform_.scale_.z = static_cast<float>(scaXZ);
+		this->transform_.scale_.y = static_cast<float>(scaY);
+	}
+
 }
 
 void Player::UpdateCharge()
@@ -296,7 +351,7 @@ void Player::UpdateCharge()
 
 	//矢印モデルの位置を自身の回転と合わせる
 	params_->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
-	
+
 	//チャージ中のエフェクトを出す
 	vfx_->SetChargingEffect("ParticleAssets\\circle_B.png");
 
@@ -818,19 +873,31 @@ void Player::PlayerRotate(XMVECTOR _move)
 		_move = XMVector3Normalize(_move);
 	}
 
-	//カメラのY回転分だけ移動ベクトルを回転 
-	//カメラのY軸回転量を行列にする
-	float cameraY = cameraTransform_.rotate_.y;
-	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraY));
-
-	//仮の移動ベクトルをカメラのY軸回転量で変形
-	_move = XMVector3TransformCoord(_move, rotY);
+	//カメラのY回転分だけ移動ベクトルを回転
+	_move = ConvertCameraDirection(_move);
 
 	if (!XMVector3Equal(_move, XMVectorZero()))
 	{
 		//コントローラー入力ベクトルからy軸回転量を計算
 		this->transform_.rotate_.y = rotate_->RotateDirectionVector(_move);
 	}
+
+}
+
+XMVECTOR Player::ConvertCameraDirection(XMVECTOR _input)
+{
+	//入力がゼロベクトルなら変換せずそのまま返す
+	if (XMVector3Equal(_input, XMVectorZero()))
+	{
+		return XMVectorZero();
+	}
+
+	//カメラのY軸回転を取得し、回転行列を作成
+	float cameraY = cameraTransform_.rotate_.y;
+	XMMATRIX rotY = XMMatrixRotationY(XMConvertToRadians(cameraY));
+
+	//入力ベクトルをカメラのY軸回転で変換
+	return XMVector3TransformCoord(_input, rotY);
 
 }
 
