@@ -307,7 +307,7 @@ void Enemy::UpdateWrapAround()
 	MoveDir = XMVector3Normalize(MoveDir);
 
 	//移動と回転
-	movement_->CharacterMove(MoveDir);
+	movement_->MoveUpdate(MoveDir);
 	RotateFromDirection(MoveDir);
 
 	//プレイヤーに近づいたら攻撃準備へ
@@ -371,7 +371,7 @@ void Enemy::UpdateAttack()
 	vfx_->SetAttackLocusEffect();
 
 	//正面ベクトルの方向に移動
-	movement_->CharacterMove(AutoAttackDirection);
+	movement_->CharacterAttackMove(AutoAttackDirection);
 
 	//進行方向に合わせてY軸を回転
 	RotateFromDirection(AutoAttackDirection);

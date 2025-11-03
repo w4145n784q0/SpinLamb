@@ -51,32 +51,20 @@ void CharacterMovement::MoveUpdate(XMVECTOR _input)
 		RotateListener_->OnMoveRotateX();
 	}
 
-	//受け取った方向が0ベクトルでないなら
+	//受け取った方向が0ベクトルでないなら移動方向を確定
+	//0ベクトルの場合(入力をしていない)は現在の移動方向を維持し
+	//その方向のまま移動～停止することで慣性移動を再現する
 	if (!XMVector3Equal(_input, XMVectorZero()))
 	{
-		//単位ベクトル化し、移動方向を確定
+		//単位ベクトル化し方向として使えるようにする
 		params_->MoveParam_.MoveDirection_ = XMVector3Normalize(_input);
 	}
 
-	//移動ベクトル = 移動方向 * ( 加速度 * 1fの移動量のスケーリング )
-	//移動ベクトル化する
-	XMVECTOR MoveVector = XMVectorScale(
-		params_->MoveParam_.MoveDirection_,
-		params_->MoveParam_.CommonAcceleration_ * DeltaTime);
-
-	//現在位置と移動ベクトルを加算し
-	//移動後のベクトルを作成(この時点では移動確定していない)
-	XMFLOAT3 currentPos = character_->GetPosition();
-	XMVECTOR PrevPos = XMLoadFloat3(&currentPos);
-	params_->MoveParam_.NewPosition_ = PrevPos + MoveVector;
+	//移動ベクトルを作成
+	CreateMoveVector();
 
 	//場外でなければ位置更新 
-	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, params_->MoveParam_.NewPosition_);
-	if (!IsOutsideStage(tmp))
-	{
-		MoveConfirm();
-	}
+	NewPositionConfirm();
 
 }
 
@@ -94,7 +82,7 @@ void CharacterMovement::AddAcceleration()
 	}
 }
 
-void CharacterMovement::CharacterMove(XMVECTOR _direction)
+void CharacterMovement::CharacterAttackMove(XMVECTOR _direction)
 {
 	//受け取った方向が0ベクトルなら処理しない(0ベクトルを正規化はできない)
 	if (XMVector3Equal(_direction, XMVectorZero()))
@@ -109,12 +97,7 @@ void CharacterMovement::CharacterMove(XMVECTOR _direction)
 	CreateMoveVector();
 
 	//場外でなければ位置更新 
-	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, params_->MoveParam_.NewPosition_);
-	if (!IsOutsideStage(tmp))
-	{
-		MoveConfirm();
-	}
+	NewPositionConfirm();
 }
 
 void CharacterMovement::CreateMoveVector()
@@ -150,10 +133,23 @@ bool CharacterMovement::IsOutsideStage(XMFLOAT3 _position)
 
 void CharacterMovement::MoveConfirm()
 {
-	//移動後のベクトルをtransform_.positionに代入し、移動を確定する
+	//移動後のベクトル(NewPosition_)をtransform_.positionに代入し、移動を確定する
 	XMFLOAT3 tmp = character_->GetPosition();
 	XMStoreFloat3(&tmp, params_->MoveParam_.NewPosition_);
 	character_->SetPosition(tmp);
+}
+
+void CharacterMovement::NewPositionConfirm()
+{
+	//移動後のベクトルをXMFLOAT3型に変換
+	XMFLOAT3 tmp;
+	XMStoreFloat3(&tmp, params_->MoveParam_.NewPosition_);
+
+	//移動後の位置が場外でなければ移動を確定する
+	if (!IsOutsideStage(tmp))
+	{
+		MoveConfirm();
+	}
 }
 
 void CharacterMovement::Deceleration()

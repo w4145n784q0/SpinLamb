@@ -413,7 +413,7 @@ void Player::UpdateAttack()
 	vfx_->SetAttackLocusEffect();
 
 	//正面ベクトルの方向に移動
-	movement_->CharacterMove(params_->MoveParam_.ForwardVector_);
+	movement_->CharacterAttackMove(params_->MoveParam_.ForwardVector_);
 
 	//摩擦量分速度を減少
 	movement_->FrictionDeceleration();

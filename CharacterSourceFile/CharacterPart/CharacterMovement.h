@@ -59,10 +59,10 @@ public:
     void AddAcceleration();
 
     /// <summary>
-    /// キャラクターの移動処理
+    /// キャラクターのダッシュ攻撃処理
     /// </summary>
     /// <param name="_direction">動かす方向</param>
-    void CharacterMove(XMVECTOR _direction);
+    void CharacterAttackMove(XMVECTOR _direction);
 
     /// <summary>
     /// 移動ベクトルをつくる(方向ベクトルが必要)
@@ -81,6 +81,11 @@ public:
     /// </summary>
     void MoveConfirm();
 
+    /// <summary>
+    /// 移動後の位置ベクトルを作り更新判定を行う
+    /// </summary>
+    void NewPositionConfirm();
+
     //----------攻撃----------
 
     /// <summary>
@@ -89,7 +94,7 @@ public:
     void Deceleration();
 
     /// <summary>
-    /// 摩擦による減速処理
+    /// 通常時の摩擦による減速処理
     /// </summary>
     void FrictionDeceleration();
 
