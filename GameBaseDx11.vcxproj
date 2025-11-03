@@ -154,6 +154,8 @@
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterVFX.cpp" />
     <ClCompile Include="CharacterSourceFile\Enemy.cpp" />
     <ClCompile Include="CharacterSourceFile\Player.cpp" />
+    <ClCompile Include="CharacterSourceFile\PlayerState\BasePlayerState.cpp" />
+    <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateIdle.cpp" />
     <ClCompile Include="EffectSourceFile\Easing.cpp" />
     <ClCompile Include="EffectSourceFile\TransitionEffect.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
@@ -226,6 +228,8 @@
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterVFX.h" />
     <ClInclude Include="CharacterSourceFile\Enemy.h" />
     <ClInclude Include="CharacterSourceFile\Player.h" />
+    <ClInclude Include="CharacterSourceFile\PlayerState\BasePlayerState.h" />
+    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateIdle.h" />
     <ClInclude Include="EffectSourceFile\Easing.h" />
     <ClInclude Include="EffectSourceFile\TransitionEffect.h" />
     <ClInclude Include="Engine\Audio.h" />

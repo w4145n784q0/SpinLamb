@@ -45,6 +45,9 @@
     <Filter Include="07Interface">
       <UniqueIdentifier>{2ba0c85f-a4e0-4541-8df0-ad7b490e158a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04Chara\PlayerState">
+      <UniqueIdentifier>{6f44072b-4a07-4c99-a60e-b075363b4641}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -256,6 +259,12 @@
     </ClCompile>
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterParams.cpp">
       <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\PlayerState\BasePlayerState.cpp">
+      <Filter>04Chara\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateIdle.cpp">
+      <Filter>04Chara\PlayerState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -487,6 +496,12 @@
     </ClInclude>
     <ClInclude Include="InterfaceSourceFile\IRotateEventListner.h">
       <Filter>07Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\PlayerState\BasePlayerState.h">
+      <Filter>04Chara\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateIdle.h">
+      <Filter>04Chara\PlayerState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

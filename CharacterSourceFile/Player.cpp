@@ -221,36 +221,42 @@ void Player::PlayerRun()
 
 }
 
+void Player::ChangeState(State newState)
+{
+	////現在のステートを終了させる
+	//if (currentState_) 
+	//{ 
+	//	currentState_->Exit(this); 
+	//}
+
+	////新しいステートに変更
+	//auto it = stateTable_.find(newState);
+	//if (it != stateTable_.end()) 
+	//{
+	//	currentState_ = it->second.get();  //unique_ptrの中身の生ポインタを取得
+	//}
+	//else
+	//{
+	//	//存在しないステート指定なら何もしない
+	//	currentState_ = nullptr;
+	//	return; 
+	//}
+
+	////新しいステートを開始
+	//if (currentState_) 
+	//{
+	//	currentState_->Enter(this);
+	//}
+}
+
 void Player::UpdateIdle()
 {
 	//通常状態 移動・ジャンプなどをしている状態
 
-	//------------------キーボード入力の移動------------------//
-
-	//上下左右キーが押されたら各方向に移動量を加算
-	if (Input::IsKey(DIK_UP))
-	{
-		Direction_.z += MoveValue;
-	}
-	if (Input::IsKey(DIK_DOWN))
-	{
-		Direction_.z -= MoveValue;
-	}
-	if (Input::IsKey(DIK_LEFT))
-	{
-		Direction_.x -= MoveValue;
-	}
-	if (Input::IsKey(DIK_RIGHT))
-	{
-		Direction_.x += MoveValue;
-	}
-
 	//キーボードの入力した分を実際に移動
 	InputKeyBoard();
 
-	//------------------ゲームパッドスティックの移動------------------//
-
-	//コントローラー操作
+	//コントローラー操作による移動
 	InputCotroller(ControllerID_);
 
 	//------------------チャージ状態へ移行------------------//
@@ -780,6 +786,23 @@ void Player::ControllerMove(int _PadID)
 void Player::InputKeyBoard()
 {
 	//キーボード入力時の移動・回転計算
+	//上下左右キーが押されたら各方向に移動量を加算
+	if (Input::IsKey(DIK_UP))
+	{
+		Direction_.z += MoveValue;
+	}
+	if (Input::IsKey(DIK_DOWN))
+	{
+		Direction_.z -= MoveValue;
+	}
+	if (Input::IsKey(DIK_LEFT))
+	{
+		Direction_.x -= MoveValue;
+	}
+	if (Input::IsKey(DIK_RIGHT))
+	{
+		Direction_.x += MoveValue;
+	}
 
 	//キーボードを押した量を1つの仮の移動ベクトルに変換
 	XMVECTOR move = XMVectorSet(Direction_.x, Direction_.y, Direction_.z, 0.0f);

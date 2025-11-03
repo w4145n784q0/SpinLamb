@@ -2,6 +2,10 @@
 #include "../Engine/GameObject.h"
 #include"Character.h"
 
+#include <memory>
+#include <unordered_map>
+#include"../CharacterSourceFile/PlayerState/BasePlayerState.h"
+
 //プレイヤーキャラクターの処理を行うクラス
 class Player :
     public Character
@@ -67,6 +71,12 @@ private:
 	//プレイヤーの後ろに置くカメラの位置
 	XMVECTOR BackCamera_;
 
+	//各ステートの実体を格納するテーブル(連想配列)
+	std::unordered_map<State, std::unique_ptr<BasePlayerState>> stateTable_;
+
+	//現在アクティブな状態
+	BasePlayerState* currentState_ = nullptr;
+
 public:
 	Player(GameObject* parent);
 	~Player();
@@ -88,6 +98,9 @@ public:
 
 	//動的に呼び出す更新処理
 	void PlayerRun();
+
+	//状態遷移を行う(ステートマシン)
+	void ChangeState(State newState);
 
 	//----------PlayerState_に応じて内容が変わるUpdate関数----------
 
@@ -197,5 +210,8 @@ public:
 
 	void SetControllerID(int _controllerID) { ControllerID_ = _controllerID; }
 	int GetControllerID() const { return ControllerID_; }
+
+	void SetPlayerInput(XMVECTOR _input) { PlayerInput_ = _input; }
+	XMVECTOR GetPlayerInput() const { return PlayerInput_; }
 };
 
