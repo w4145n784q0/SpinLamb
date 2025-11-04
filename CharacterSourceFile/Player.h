@@ -136,7 +136,13 @@ public:
 
 	//プレイヤーを止める
 	void PlayerStop() { PlayerState_ = S_Stop; }
+
+	//プレイヤーに移動を許可(ステートマシン)
+	void PlayerStartState() { ChangeState(Player::S_Idle); }
 	
+	//プレイヤーを止める(ステートマシン)
+	void PlayerStopState() { ChangeState(Player::S_Stop); }
+
 	/// <summary>
 	/// プレイヤーの初期化(別関数から呼ぶ用)
 	/// </summary>

@@ -7,6 +7,11 @@
 #include"Enemy.h"
 #include"../EffectSourceFile/Easing.h"
 #include"../CharacterSourceFile/PlayerState/PlayerStateIdle.h"
+#include"../CharacterSourceFile/PlayerState/PlayerStateCharge.h"
+#include"../CharacterSourceFile/PlayerState/PlayerStateAttack.h"
+#include"../CharacterSourceFile/PlayerState/PlayerStateHit.h"
+#include"../CharacterSourceFile/PlayerState/PlayerStateFenceHit.h"
+#include"../CharacterSourceFile/PlayerState/PlayerStateStop.h"
 
 namespace {
 
@@ -77,9 +82,14 @@ void Player::Initialize()
 {
 	//テーブルに各ステートを登録
 	stateTable_[S_Idle] = std::make_unique<PlayerStateIdle>();
+	stateTable_[S_Charge] = std::make_unique<PlayerStateCharge>();
+	stateTable_[S_Attack] = std::make_unique<PlayerStateAttack>();
+	stateTable_[S_Hit] = std::make_unique<PlayerStateHit>();
+	stateTable_[S_FenceHit] = std::make_unique<PlayerStateFenceHit>();
+	stateTable_[S_Stop] = std::make_unique<PlayerStateStop>();
 
 	//最初のステートを登録
-	//ChangeState(S_Idle);
+	ChangeState(S_Stop);
 }
 
 void Player::Update()

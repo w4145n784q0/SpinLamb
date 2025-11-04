@@ -15,7 +15,7 @@ Ground::~Ground()
 void Ground::Initialize()
 {
 	//ƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý
-	hGrass_ = Model::Load("Model\\GrassField.fbx");
+	hGrass_ = Model::Load("Model\\GrassField_2.fbx");
 	assert(hGrass_ >= 0);
 }
 
