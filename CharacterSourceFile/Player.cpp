@@ -182,12 +182,12 @@ void Player::PlayerRun()
 	case Player::S_Idle:
 		UpdateIdle();
 		break;
-	case Player::S_Jump:
+	/*case Player::S_Jump:
 		UpdateJump();
 		break;
 	case Player::S_Land:
 		UpdateLand();
-		break;
+		break;*/
 	case Player::S_Charge:
 		UpdateCharge();
 		break;
@@ -218,8 +218,8 @@ void Player::PlayerRun()
 
 #ifdef _DEBUG
 
-	//デバッグ中のみEnterキーで初期位置に戻る
-	if (Input::IsKeyDown(DIK_RETURN))
+	//デバッグ中のみ0キーで初期位置に戻る
+	if (Input::IsKeyDown(DIK_0))
 	{
 		params_->SetStartPosition({0.0f, 0.0f, 0.0f});
 	}
@@ -310,46 +310,46 @@ void Player::UpdateIdle()
 	CameraControl();
 }
 
-void Player::UpdateJump()
-{
+//void Player::UpdateJump()
+//{
+//
+//	// 着地判定
+//	if (params_->JumpParam_.IsOnGround_) {
+//
+//		// 硬直時間を設定（例：フレーム数で管理）
+//		JumpLandingTimer_ = 7;
+//		PlayerState_ = S_Land;
+//	}
+//
+//}
 
-	// 着地判定
-	if (params_->JumpParam_.IsOnGround_) {
-
-		// 硬直時間を設定（例：フレーム数で管理）
-		JumpLandingTimer_ = 7;
-		PlayerState_ = S_Land;
-	}
-
-}
-
-void Player::UpdateLand()
-{
-	if (--JumpLandingTimer_ <= 0)
-	{
-		this->transform_.scale_ = { 1.0f, 1.0f, 1.0f }; //元に戻す
-		PlayerState_ = S_Idle;
-		movement_->AccelerationStop();
-	}
-	else
-	{
-		//正規化する
-		double ratio = static_cast<double>(Normalize(static_cast<float>(JumpLandingTimer_)));
-
-		//拡大率をイージング計算
-		double easedXZ = Easing::EaseOutElastic(ratio);
-		double easedY = Easing::EaseOutBack(ratio);
-
-		//拡大率を最小値~最大値の間で補完する
-		double scaXZ = Easing::Complement(1.0, 1.5, easedXZ);
-		double scaY = Easing::Complement(1.0, 0.5, easedY);
-
-		//トランスフォームの拡大量に代入
-		this->transform_.scale_.x = this->transform_.scale_.z = static_cast<float>(scaXZ);
-		this->transform_.scale_.y = static_cast<float>(scaY);
-	}
-
-}
+//void Player::UpdateLand()
+//{
+//	if (--JumpLandingTimer_ <= 0)
+//	{
+//		this->transform_.scale_ = { 1.0f, 1.0f, 1.0f }; //元に戻す
+//		PlayerState_ = S_Idle;
+//		movement_->AccelerationStop();
+//	}
+//	else
+//	{
+//		//正規化する
+//		double ratio = static_cast<double>(Normalize(static_cast<float>(JumpLandingTimer_)));
+//
+//		//拡大率をイージング計算
+//		double easedXZ = Easing::EaseOutElastic(ratio);
+//		double easedY = Easing::EaseOutBack(ratio);
+//
+//		//拡大率を最小値~最大値の間で補完する
+//		double scaXZ = Easing::Complement(1.0, 1.5, easedXZ);
+//		double scaY = Easing::Complement(1.0, 0.5, easedY);
+//
+//		//トランスフォームの拡大量に代入
+//		this->transform_.scale_.x = this->transform_.scale_.z = static_cast<float>(scaXZ);
+//		this->transform_.scale_.y = static_cast<float>(scaY);
+//	}
+//
+//}
 
 void Player::UpdateCharge()
 {

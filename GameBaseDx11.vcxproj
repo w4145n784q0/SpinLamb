@@ -157,7 +157,10 @@
     <ClCompile Include="CharacterSourceFile\PlayerState\BasePlayerState.cpp" />
     <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateAttack.cpp" />
     <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateCharge.cpp" />
+    <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateFenceHit.cpp" />
+    <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateHit.cpp" />
     <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateIdle.cpp" />
+    <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateStop.cpp" />
     <ClCompile Include="EffectSourceFile\Easing.cpp" />
     <ClCompile Include="EffectSourceFile\TransitionEffect.cpp" />
     <ClCompile Include="Engine\Audio.cpp" />
@@ -233,7 +236,10 @@
     <ClInclude Include="CharacterSourceFile\PlayerState\BasePlayerState.h" />
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateAttack.h" />
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateCharge.h" />
+    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateFenceHit.h" />
+    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateHit.h" />
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateIdle.h" />
+    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateStop.h" />
     <ClInclude Include="EffectSourceFile\Easing.h" />
     <ClInclude Include="EffectSourceFile\TransitionEffect.h" />
     <ClInclude Include="Engine\Audio.h" />

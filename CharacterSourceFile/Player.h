@@ -18,8 +18,8 @@ public:
 	enum State
 	{
 		S_Idle,		//通常
-		S_Jump,     //ジャンプ
-		S_Land,     //着地
+		//S_Jump,     //ジャンプ
+		//S_Land,     //着地
 		S_Charge,	//チャージ中
 		S_Attack,	//攻撃
 		S_Hit,		//弾かれる
@@ -107,10 +107,9 @@ public:
 	//通常状態
 	void UpdateIdle();
 
-	//
-	void UpdateJump();
+	//void UpdateJump();
 
-	void UpdateLand();
+	//void UpdateLand();
 
 	//チャージ状態
 	void UpdateCharge();
