@@ -6,6 +6,7 @@
 #include"../Engine/SphereCollider.h"
 #include"Enemy.h"
 #include"../EffectSourceFile/Easing.h"
+#include"../CharacterSourceFile/PlayerState/PlayerStateIdle.h"
 
 namespace {
 
@@ -74,6 +75,11 @@ Player::~Player()
 
 void Player::Initialize()
 {
+	//テーブルに各ステートを登録
+	stateTable_[S_Idle] = std::make_unique<PlayerStateIdle>();
+
+	//最初のステートを登録
+	//ChangeState(S_Idle);
 }
 
 void Player::Update()
@@ -224,29 +230,29 @@ void Player::PlayerRun()
 void Player::ChangeState(State newState)
 {
 	////現在のステートを終了させる
-	//if (currentState_) 
-	//{ 
-	//	currentState_->Exit(this); 
-	//}
+	if (currentState_) 
+	{ 
+		currentState_->Exit(this); 
+	}
 
-	////新しいステートに変更
-	//auto it = stateTable_.find(newState);
-	//if (it != stateTable_.end()) 
-	//{
-	//	currentState_ = it->second.get();  //unique_ptrの中身の生ポインタを取得
-	//}
-	//else
-	//{
-	//	//存在しないステート指定なら何もしない
-	//	currentState_ = nullptr;
-	//	return; 
-	//}
+	//新しいステートに変更
+	auto it = stateTable_.find(newState);
+	if (it != stateTable_.end()) 
+	{
+		currentState_ = it->second.get();  //unique_ptrの中身の生ポインタを取得
+	}
+	else
+	{
+		//存在しないステート指定なら何もしない
+		currentState_ = nullptr;
+		return; 
+	}
 
-	////新しいステートを開始
-	//if (currentState_) 
-	//{
-	//	currentState_->Enter(this);
-	//}
+	//新しいステートを開始
+	if (currentState_) 
+	{
+		currentState_->Enter(this);
+	}
 }
 
 void Player::UpdateIdle()
@@ -1003,4 +1009,14 @@ void Player::SetCSVPlayer(std::string _path)
 	CameraUpperLimit = OnlyData[i_CameraUpperlimit];
 	CameraLowerLimit = OnlyData[i_CameraLowerlimit];
 	CameraDebugPos = { OnlyData[i_CameraDebugWidth],OnlyData[i_CameraDebugHeight],OnlyData[i_CameraDebugDepth] };
+}
+
+void Player::SetChargeRotateY(float _rotate)
+{
+	ChargeRotateY = _rotate;
+}
+
+float Player::GetChargeRotateY() const
+{
+	return ChargeRotateY;
 }

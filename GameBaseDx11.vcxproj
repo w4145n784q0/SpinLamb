@@ -155,6 +155,8 @@
     <ClCompile Include="CharacterSourceFile\Enemy.cpp" />
     <ClCompile Include="CharacterSourceFile\Player.cpp" />
     <ClCompile Include="CharacterSourceFile\PlayerState\BasePlayerState.cpp" />
+    <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateAttack.cpp" />
+    <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateCharge.cpp" />
     <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateIdle.cpp" />
     <ClCompile Include="EffectSourceFile\Easing.cpp" />
     <ClCompile Include="EffectSourceFile\TransitionEffect.cpp" />
@@ -229,6 +231,8 @@
     <ClInclude Include="CharacterSourceFile\Enemy.h" />
     <ClInclude Include="CharacterSourceFile\Player.h" />
     <ClInclude Include="CharacterSourceFile\PlayerState\BasePlayerState.h" />
+    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateAttack.h" />
+    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateCharge.h" />
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateIdle.h" />
     <ClInclude Include="EffectSourceFile\Easing.h" />
     <ClInclude Include="EffectSourceFile\TransitionEffect.h" />

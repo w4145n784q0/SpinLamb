@@ -1,6 +1,6 @@
 #pragma once
 #include "BasePlayerState.h"
-class PlayerStateIdle :
+class PlayerStateAttack :
     public BasePlayerState
 {
 public:

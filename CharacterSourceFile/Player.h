@@ -10,14 +10,9 @@
 class Player :
     public Character
 {
-private:
-	//----------モデルハンドル----------
-
-	//プレイヤーモデル
-	int hPlayer_;
-
+public:
 	//----------状態遷移----------
-	
+
 	//プレイヤーの状態遷移
 	//これらの値に応じて各Update関数を呼び出す
 	enum State
@@ -33,6 +28,11 @@ private:
 		S_MaxState,
 	};
 	State PlayerState_;
+private:
+	//----------モデルハンドル----------
+
+	//プレイヤーモデル
+	int hPlayer_;
 
 	//カメラの状態
 	//これらの値に応じてカメラの位置・回転量を変化させる
@@ -160,13 +160,13 @@ public:
 	/// <param name="_PadID">使用しているゲームパッドのID(接続順)</param>
 	void ControllerMove(int _PadID);
 
-
+	//キーボードの移動処理を受け取る
 	void InputKeyBoard();
 
 	/// <summary>
 	/// コントローラーの処理を受け取る
 	/// </summary>
-	/// <param name="_PadID"></param>
+	/// <param name="_PadID">使用しているゲームパッドのID(接続順)</param>
 	void InputCotroller(int _PadID);
 
 	/// <summary>
@@ -213,5 +213,8 @@ public:
 
 	void SetPlayerInput(XMVECTOR _input) { PlayerInput_ = _input; }
 	XMVECTOR GetPlayerInput() const { return PlayerInput_; }
+
+	void SetChargeRotateY(float _rotate);
+	float GetChargeRotateY() const;
 };
 

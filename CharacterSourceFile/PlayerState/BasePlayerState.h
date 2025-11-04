@@ -9,12 +9,12 @@ public:
     virtual ~BasePlayerState() = default;
 
     //状態に入った瞬間に呼ばれる
-    virtual void Enter(Player* player) {}
+    virtual void Enter(Player* _player) {}
 
     //毎フレームの更新
-    virtual void Update(Player* player) = 0;
+    virtual void Update(Player* _player) = 0;
 
     //状態から抜ける瞬間に呼ばれる
-    virtual void Exit(Player* player) {}
+    virtual void Exit(Player* _player) {}
 };
 
