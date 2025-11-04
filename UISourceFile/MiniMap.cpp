@@ -27,7 +27,8 @@ namespace
 MiniMap::MiniMap(GameObject* parent)
 	:GameObject(parent,"MiniMap"),
 	FirstPos_({ 0,0,0 }), SecondPos_({ 0,0,0 }),
-	OriginalFirstPos_({ 0,0,0 }), OriginalSecondPos_({ 0,0,0 })
+	OriginalFirstPos_({ 0,0,0 }), OriginalSecondPos_({ 0,0,0 }),
+	FirstRot_({ 0,0,0 }), SecondRot_({ 0,0,0 })
 {
 }
 
@@ -51,6 +52,8 @@ void MiniMap::Update()
 
 	SecondPos_.x = (OriginalSecondPos_.x * ReductionX) + CorrectionValueX;
 	SecondPos_.y = (OriginalSecondPos_.z * ReductionY) - CorrectionValueY;
+
+	//FirstRot_.z = 180.0f;
 }
 
 void MiniMap::Draw()

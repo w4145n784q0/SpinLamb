@@ -266,6 +266,21 @@
     <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateIdle.cpp">
       <Filter>04Chara\PlayerState</Filter>
     </ClCompile>
+    <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateAttack.cpp">
+      <Filter>04Chara\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateCharge.cpp">
+      <Filter>04Chara\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateFenceHit.cpp">
+      <Filter>04Chara\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateHit.cpp">
+      <Filter>04Chara\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateStop.cpp">
+      <Filter>04Chara\PlayerState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -501,6 +516,19 @@
       <Filter>04Chara\PlayerState</Filter>
     </ClInclude>
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateIdle.h">
+      <Filter>04Chara\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateStop.h" />
+    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateAttack.h">
+      <Filter>04Chara\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateCharge.h">
+      <Filter>04Chara\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateFenceHit.h">
+      <Filter>04Chara\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateHit.h">
       <Filter>04Chara\PlayerState</Filter>
     </ClInclude>
   </ItemGroup>

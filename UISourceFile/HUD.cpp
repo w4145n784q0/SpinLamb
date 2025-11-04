@@ -197,10 +197,10 @@ void HUD::Initialize()
 	hMap_ = Image::Load(Image + MiniMap + "MiniMap.png");
 	assert(hMap_ >= 0);
 
-	hFirstIcon_ = Image::Load(Image + MiniMap + "BlueIcon.png");
+	hFirstIcon_ = Image::Load(Image + MiniMap + "blue.png");
 	assert(hFirstIcon_ >= 0);
 
-	hSecondIcon_ = Image::Load(Image + MiniMap + "RedIcon.png");
+	hSecondIcon_ = Image::Load(Image + MiniMap + "red.png");
 	assert(hSecondIcon_ >= 0);
 
 	hPauseMenu_ = Image::Load(Image + "Play\\Pause.png");
@@ -509,7 +509,10 @@ void HUD::DrawMiniMap()
 	if (pMiniMap_ != nullptr) 
 	{
 		FirstIcon.position_ = pMiniMap_->GetFirstPos();
+		FirstIcon.rotate_ = pMiniMap_->GetFirstRot();
+
 		SecondIcon.position_ = pMiniMap_->GetSecondPos();
+		SecondIcon.rotate_ = pMiniMap_->GetSecondRot();
 	}
 
 	//マップ画像,Player1,Player2・敵(CPU)のアイコン描画

@@ -20,6 +20,12 @@ private:
 	//Player2,Enemy‚Ì–{—ˆ‚ÌˆÊ’u ŠeBattle,Practice‚©‚ç“n‚³‚ê‚é
 	XMFLOAT3 OriginalSecondPos_;
 
+	//Player1‚Ì‰ñ“]—Ê
+	XMFLOAT3 FirstRot_;
+
+	//Player2,Enemy‚Ì‰ñ“]—Ê
+	XMFLOAT3 SecondRot_;
+
 public:
 	MiniMap(GameObject* parent);
 	~MiniMap();
@@ -50,5 +56,10 @@ public:
 	void SetOriginalSecondPos(XMFLOAT3 _pos) { OriginalSecondPos_ = _pos; }
 	XMFLOAT3 GetOriginalFirstPos() const { return OriginalFirstPos_; }
 	XMFLOAT3 GetOriginalSecondPos() const { return OriginalSecondPos_; }
+
+	void SetFirstRot(XMFLOAT3 _rot) { FirstRot_ = _rot; }
+	void SetSecondRot(XMFLOAT3 _rot) { SecondRot_ = _rot; }
+	XMFLOAT3 GetFirstRot() const { return FirstRot_; }
+	XMFLOAT3 GetSecondRot() const { return SecondRot_; }
 
 };
