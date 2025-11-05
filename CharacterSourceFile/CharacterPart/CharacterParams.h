@@ -68,7 +68,7 @@ public:
         float AddArrowDepth_ = 0.0f;            //矢印の奥行き(前方向)の調整値
 
         //共通
-        float CommonAcceleration_ = 0.0f;       //全ステート共通の加速度
+        float CommonAcceleration_ = 0.0f;       //通常・ダッシュ共通の加速度
         float Friction_ = 0.0f;                 //摩擦係数(減速率) 1fあたりの減速量
 
         XMVECTOR ForwardVector_ = { 0,0,0 };    //キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算 正規化した値を入れる
@@ -89,7 +89,7 @@ public:
     //----------空中----------
     struct JumpParam
     {
-        float Gravity_ = 0.0f;          //重力 キャラクターの下方向にかかる力 実際の重力より(9.8/60 m/s)より軽くしている
+        float Gravity_ = 0.0f;          //重力 キャラクターの下方向にかかる力 実際の重力(9.8/60 m/s)より軽くしている
         bool IsOnGround_ = false;       //地面にいるか
         float JumpSpeed_ = 0.0f;        //キャラクターの上方向に向く力 +ならジャンプしている状態 -なら下降～地面にいる状態
         float JumpHeight = 0.0f;        //ジャンプ時の一時的に代入する値(=ジャンプの高さ)

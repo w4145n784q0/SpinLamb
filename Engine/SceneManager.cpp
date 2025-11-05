@@ -50,13 +50,14 @@ void SceneManager::Update()
 		//éüÇÃÉVÅ[ÉìÇçÏê¨
 		switch (nextSceneID_)
 		{
-		case SCENE_ID_TITLE: Instantiate<TitleScene>(this); break;
-		case SCENE_ID_GAMEMODE: Instantiate<GameModeScene>(this); break;
-		case SCENE_ID_BATTLE: Instantiate<BattleScene>(this); break;
-		case SCENE_ID_PRACTICE: Instantiate<PracticeScene>(this); break;
-		case SCENE_ID_HOWTOPLAY: Instantiate<HowToPlayScene>(this); break;
-		case SCENE_ID_RESULT: Instantiate<ResultScene>(this); break;
+		case SCENE_ID_TITLE:		Instantiate<TitleScene>(this);		break;
+		case SCENE_ID_GAMEMODE:		Instantiate<GameModeScene>(this);	break;
+		case SCENE_ID_BATTLE:		Instantiate<BattleScene>(this);		break;
+		case SCENE_ID_PRACTICE:		Instantiate<PracticeScene>(this);	break;
+		case SCENE_ID_HOWTOPLAY:	Instantiate<HowToPlayScene>(this);	break;
+		case SCENE_ID_RESULT:		Instantiate<ResultScene>(this);		break;
 		}
+
 		Audio::Initialize();
 		currentSceneID_ = nextSceneID_;
 	}
