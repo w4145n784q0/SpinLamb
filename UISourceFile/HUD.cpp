@@ -197,10 +197,10 @@ void HUD::Initialize()
 	hMap_ = Image::Load(Image + MiniMap + "MiniMap.png");
 	assert(hMap_ >= 0);
 
-	hFirstIcon_ = Image::Load(Image + MiniMap + "blue.png");
+	hFirstIcon_ = Image::Load(Image + MiniMap + "FirstCharaArrow.png");
 	assert(hFirstIcon_ >= 0);
 
-	hSecondIcon_ = Image::Load(Image + MiniMap + "red.png");
+	hSecondIcon_ = Image::Load(Image + MiniMap + "SecondCharaArrow.png");
 	assert(hSecondIcon_ >= 0);
 
 	hPauseMenu_ = Image::Load(Image + "Play\\Pause.png");

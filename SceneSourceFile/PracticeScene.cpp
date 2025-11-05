@@ -286,17 +286,24 @@ void PracticeScene::UpdateActive()
 		enemy->EnemyRun();
 	}
 
-	//ミニマップの位置を更新
+	//ミニマップの位置・回転を更新
+	//Enemy,Player2のnullチェックを行い,存在するならデータを渡す
+	//回転Z軸はキャラクターのY軸回転の逆向き(-にする)
 	pMiniMap_->SetOriginalFirstPos(pPlayer1_->GetPosition());
+	pMiniMap_->SetFirstRotZ(-pPlayer1_->GetRotate().y);
+
 	if (pPlayer2_ != nullptr)
 	{
-		pMiniMap_->SetOriginalSecondPos(pPlayer2_->GetPosition());
+	 	pMiniMap_->SetOriginalSecondPos(pPlayer2_->GetPosition());
+		pMiniMap_->SetSecondRotZ(-pPlayer2_->GetRotate().y);
 	}
 	else if (pEnemy_ != nullptr)
 	{
 		pMiniMap_->SetOriginalSecondPos(pEnemy_->GetPosition());
+		pMiniMap_->SetSecondRotZ(-pEnemy_->GetRotate().y);
 	}
 
+	//escキーかstartボタンでポーズ画面へ
 	PlayBaseScene::WaitGotoPause();
 }
 

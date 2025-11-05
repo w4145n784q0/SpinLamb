@@ -59,6 +59,8 @@ public:
 
 	void SetFirstRot(XMFLOAT3 _rot) { FirstRot_ = _rot; }
 	void SetSecondRot(XMFLOAT3 _rot) { SecondRot_ = _rot; }
+	void SetFirstRotZ(float _rot) { FirstRot_.z = _rot; }
+	void SetSecondRotZ(float _rot) { SecondRot_.z = _rot; }
 	XMFLOAT3 GetFirstRot() const { return FirstRot_; }
 	XMFLOAT3 GetSecondRot() const { return SecondRot_; }
 
