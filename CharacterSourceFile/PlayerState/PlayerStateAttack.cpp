@@ -14,7 +14,7 @@ void PlayerStateAttack::Update(Player* _player)
 	_player->vfx_->SetAttackLocusEffect();
 
 	//³–ÊƒxƒNƒgƒ‹‚Ì•ûŒü‚ÉˆÚ“®
-	_player->movement_->CharacterAttackMove(_player->GetParams().MoveParam_.ForwardVector_);
+	_player->movement_->CharacterAttackMove(_player->GetParams()->MoveParam_.ForwardVector_);
 
 	//–€ŽC—Ê•ª‘¬“x‚ðŒ¸­
 	_player->movement_->FrictionDeceleration();
@@ -37,7 +37,7 @@ void PlayerStateAttack::Update(Player* _player)
 	}
 
 	//UŒ‚SEÄ¶
-	Audio::Play(_player->GetParams().SoundParam_.hSoundattack_);
+	Audio::Play(_player->GetParams()->SoundParam_.hSoundattack_);
 }
 
 void PlayerStateAttack::Exit(Player* _player)

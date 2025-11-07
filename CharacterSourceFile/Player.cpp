@@ -102,7 +102,7 @@ void Player::Draw()
 	Character::Draw();
 
 	//動かすキャラクターの描画
-	blink_->DrawCharacterModel(hPlayer_, this->transform_);
+	modeldraw_->DrawCharacterModel(hPlayer_, this->transform_);
 
 	//チャージ中のみ矢印モデル描画
 	if (PlayerState_ == S_Charge)
@@ -966,7 +966,7 @@ void Player::CollisionCharacter(std::string _name)
 		TargetVector = XMLoadFloat3(&TargetPos);
 
 		//相手のスピードを取得
-		TargetSpeed = pEnemy->GetParams().GetAcceleration();
+		TargetSpeed = pEnemy->GetParams()->GetAcceleration();
 
 		//相手の名前を取得
 		TargetName = pEnemy->GetObjectName();
@@ -983,7 +983,7 @@ void Player::CollisionCharacter(std::string _name)
 		TargetVector = XMLoadFloat3(&TargetPos);
 
 		//相手のスピードを取得
-		TargetSpeed = pPlayer->GetParams().GetAcceleration();
+		TargetSpeed = pPlayer->GetParams()->GetAcceleration();
 
 		//相手の名前を取得
 		TargetName = _name;

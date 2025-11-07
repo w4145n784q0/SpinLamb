@@ -6,7 +6,7 @@
 
 Character::Character(GameObject* parent)
 	:GameObject(parent,"Character"),
-	params_(nullptr), blink_(nullptr), vfx_(nullptr), shadow_(nullptr), air_(nullptr),
+	params_(nullptr), modeldraw_(nullptr), vfx_(nullptr), shadow_(nullptr), air_(nullptr),
 	forward_(nullptr), movement_(nullptr),rotate_(nullptr),charge_(nullptr),
     hit_(nullptr),fence_(nullptr),csvload_(nullptr),observer_(nullptr),debugpanel_(nullptr)
 {
@@ -14,7 +14,7 @@ Character::Character(GameObject* parent)
 
 Character::Character(GameObject* parent, const std::string& name)
 	:GameObject(parent, name),
-	params_(nullptr), blink_(nullptr), vfx_(nullptr), shadow_(nullptr), air_(nullptr),
+	params_(nullptr), modeldraw_(nullptr), vfx_(nullptr), shadow_(nullptr), air_(nullptr),
 	forward_(nullptr), movement_(nullptr), rotate_(nullptr), charge_(nullptr),
 	hit_(nullptr), fence_(nullptr), csvload_(nullptr), observer_(nullptr), debugpanel_(nullptr)
 {
@@ -25,87 +25,87 @@ Character::Character(GameObject* parent, const std::string& name)
 
 	if (params_ == nullptr)
 	{
-		params_ = Instantiate<CharacterParams>(this);
+		params_ = std::make_unique<CharacterParams>(this);
 	}
 
-	if (blink_ == nullptr)
+	if (modeldraw_ == nullptr)
 	{
-		blink_ = Instantiate<CharacterModelBlink>(this);
-		blink_->SetParams(params_);
+		modeldraw_ = std::make_unique<CharacterModelBlink>(this);
+		modeldraw_->SetParams(params_.get());
 	}
 	if (vfx_ == nullptr)
 	{
-		vfx_ = Instantiate<CharacterVFX>(this);
-		vfx_->SetParams(params_);
+		vfx_ = std::make_unique<CharacterVFX>(this);
+		vfx_->SetParams(params_.get());
 		vfx_->SetCharacter(this);
 	}
 	if (shadow_ == nullptr)
 	{
-		shadow_ = Instantiate<CharacterShadow>(this);
-		shadow_->SetParams(params_);
+		shadow_ = std::make_unique<CharacterShadow>(this);
+		shadow_->SetParams(params_.get());
 		shadow_->SetCharacter(this);
 	}
 	if (air_ == nullptr)
 	{
-		air_ = Instantiate<CharacterAir>(this);
-		air_->SetParams(params_);
+		air_ = std::make_unique<CharacterAir>(this);
+		air_->SetParams(params_.get());
 		air_->SetCharacter(this);
 	}
 	if (forward_ == nullptr)
 	{
-		forward_ = Instantiate<CharacterForward>(this);
-		forward_->SetParams(params_);
+		forward_ = std::make_unique<CharacterForward>(this);
+		forward_->SetParams(params_.get());
 		forward_->SetCharacter(this);
 	}
 	if (movement_ == nullptr)
 	{
-		movement_ = Instantiate<CharacterMovement>(this);
-		movement_->SetParams(params_);
+		movement_ = std::make_unique<CharacterMovement>(this);
+		movement_->SetParams(params_.get());
 		movement_->SetCharacter(this);
 		movement_->SetEventListener(this);
 	}
 	if (rotate_ == nullptr)
 	{
-		rotate_ = Instantiate<CharacterRotate>(this);
-		rotate_->SetParams(params_);
+		rotate_ = std::make_unique<CharacterRotate>(this);
+		rotate_->SetParams(params_.get());
 		rotate_->SetCharacter(this);
 	}
 	if (charge_ == nullptr)
 	{
-		charge_ = Instantiate<CharacterCharge>(this);
-		charge_->SetParams(params_);
+		charge_ = std::make_unique<CharacterCharge>(this);
+		charge_->SetParams(params_.get());
 		charge_->SetCharacter(this);
 		charge_->SetEventListener(this);
 	}
 	if (hit_ == nullptr)
 	{
-		hit_ = Instantiate<CharacterHit>(this);
-		hit_->SetParams(params_);
+		hit_ = std::make_unique<CharacterHit>(this);
+		hit_->SetParams(params_.get());
 		hit_->SetCharacter(this);
 		hit_->SetEventListener(this, this, this);
 	}
 	if (fence_ == nullptr)
 	{
-		fence_ = Instantiate<CharacterFence>(this);
-		fence_->SetParams(params_);
+		fence_ = std::make_unique<CharacterFence>(this);
+		fence_->SetParams(params_.get());
 		fence_->SetCharacter(this);
 		fence_->SetEventListener(this, this, this);
 	}
 	if(csvload_ == nullptr)
 	{
-		csvload_ = Instantiate<CharacterCsvLoader>(this);
-		csvload_->SetParams(params_);
+		csvload_ = std::make_unique<CharacterCsvLoader>(this);
+		csvload_->SetParams(params_.get());
 		csvload_->SetCharacter(this);
 	}
 	if (observer_ == nullptr)
 	{
-		observer_ = Instantiate<CharacterObserver>(this);
-		observer_->SetParams(params_);
+		observer_ = std::make_unique<CharacterObserver>(this);
+		observer_->SetParams(params_.get());
 	}
 	if (debugpanel_ == nullptr)
 	{
-		debugpanel_ = Instantiate<CharacterDebugPanel>(this);
-		debugpanel_->SetParams(params_);
+		debugpanel_ = std::make_unique<CharacterDebugPanel>(this);
+		debugpanel_->SetParams(params_.get());
 		debugpanel_->SetCharacter(this);
 	}
 
@@ -139,6 +139,8 @@ Character::Character(GameObject* parent, const std::string& name)
 Character::~Character()
 {
 	//実体は消さず、アドレスのみ無効化する
+	//スマートポインタにし、params_解放前にobserver配列から削除し
+	//その後自動で解放されるようにする
 	for (auto& observer : params_->InitParam_.observers)
 	{
 		if(observer != nullptr)

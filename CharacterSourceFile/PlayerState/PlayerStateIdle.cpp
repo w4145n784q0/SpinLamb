@@ -23,7 +23,7 @@ void PlayerStateIdle::Update(Player* _player)
 	if (Input::IsKeyDown(DIK_LSHIFT) || Input::IsKeyDown(DIK_RSHIFT)
 		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_B, _player->GetControllerID()))
 	{
-		if (_player->GetParams().JumpParam_.IsOnGround_)
+		if (_player->GetParams()->JumpParam_.IsOnGround_)
 		{
 			//地上にいるならチャージ状態へ移行
 			//PlayerState_ = S_Charge;
@@ -42,7 +42,7 @@ void PlayerStateIdle::Update(Player* _player)
 	//SPACEキー/Aボタンが押されたら
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A, _player->GetControllerID()))
 	{
-		if (_player->GetParams().JumpParam_.IsOnGround_)
+		if (_player->GetParams()->JumpParam_.IsOnGround_)
 		{
 			//地上にいるならジャンプ開始
 			_player->air_->SetJump();

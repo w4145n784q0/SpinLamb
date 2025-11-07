@@ -93,7 +93,7 @@ void Enemy::Draw()
 	Character::Draw();
 
 	//動かすキャラクターの描画
-	blink_->DrawCharacterModel(hEnemy_, this->transform_);
+	modeldraw_->DrawCharacterModel(hEnemy_, this->transform_);
 
 	//チャージ中のみ矢印モデル描画
 	if (EnemyState_ == S_Aim)
@@ -185,7 +185,7 @@ void Enemy::EnemyRun()
 	TargetVec_ = XMLoadFloat3(&TargetPosition_);
 
 	//プレイヤーの加速度を取り続ける
-	TargetAcceleration_ = pPlayer_->GetParams().GetAcceleration();
+	TargetAcceleration_ = pPlayer_->GetParams()->GetAcceleration();
 
 	//プレイヤーのオブジェクト名を取り続ける
 	TargetName_ = pPlayer_->GetObjectName();
@@ -294,7 +294,7 @@ void Enemy::UpdateWrapAround()
 	XMVECTOR EnemyPos = XMLoadFloat3(&this->transform_.position_);
 
 	//プレイヤーの前方ベクトル（ワールド空間）
-	XMVECTOR PlayerForward = pPlayer_->GetParams().GetForwardVector();
+	XMVECTOR PlayerForward = pPlayer_->GetParams()->GetForwardVector();
 
 	//プレイヤーの背後方向ベクトル
 	XMVECTOR BehindVec = XMVectorScale(PlayerForward, -1.0f);

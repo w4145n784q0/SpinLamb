@@ -18,7 +18,7 @@ void PlayerStateCharge::Update(Player* _player)
 	_player->charge_->SetArrow();
 
 	//矢印モデルの位置を自身の回転と合わせる
-	_player->GetParams().MoveParam_.ArrowTransform_.rotate_.y = _player->GetRotate().y;
+	_player->GetParams()->MoveParam_.ArrowTransform_.rotate_.y = _player->GetRotate().y;
 
 	//チャージ中のエフェクトを出す
 	_player->vfx_->SetChargingEffect("ParticleAssets\\circle_B.png");
@@ -27,7 +27,7 @@ void PlayerStateCharge::Update(Player* _player)
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 
 		_player->GetControllerID()))
 	{
-		if (_player->GetParams().JumpParam_.IsOnGround_)
+		if (_player->GetParams()->JumpParam_.IsOnGround_)
 		{
 			//溜めたチャージを0にする
 			_player->charge_->ChargeReset();

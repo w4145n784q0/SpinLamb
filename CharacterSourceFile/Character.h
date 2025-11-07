@@ -1,5 +1,6 @@
 #pragma once
 #include "../Engine/GameObject.h"
+#include <memory>
 
 //部品分けしたヘッダファイル
 #include "CharacterPart/CharacterParams.h"
@@ -34,24 +35,24 @@ class Character :
 public:
     //----------モジュール群----------
 
-    CharacterModelBlink* blink_;
-    CharacterVFX*        vfx_;
-    CharacterShadow*     shadow_;
-    CharacterAir*        air_;
-    CharacterForward*    forward_;
-    CharacterMovement*   movement_;
-    CharacterRotate*     rotate_;
-    CharacterCharge*     charge_;
-    CharacterHit*        hit_;
-    CharacterFence*      fence_;
-    CharacterCsvLoader*  csvload_;
-    CharacterObserver*   observer_;
-    CharacterDebugPanel* debugpanel_;
+    std::unique_ptr<CharacterModelBlink>    modeldraw_;
+    std::unique_ptr<CharacterVFX>           vfx_;
+    std::unique_ptr<CharacterShadow>        shadow_;
+    std::unique_ptr<CharacterAir>           air_;
+    std::unique_ptr<CharacterForward>       forward_;
+    std::unique_ptr<CharacterMovement>      movement_;
+    std::unique_ptr<CharacterRotate>        rotate_;
+    std::unique_ptr<CharacterCharge>        charge_;
+    std::unique_ptr<CharacterHit>           hit_;
+    std::unique_ptr<CharacterFence>         fence_;
+    std::unique_ptr<CharacterCsvLoader>     csvload_;
+    std::unique_ptr<CharacterObserver>      observer_;
+    std::unique_ptr<CharacterDebugPanel>    debugpanel_;
 
 protected:
 
     //使用するパラメータ(CharacterParams)のポインタ
-    CharacterParams* params_;
+    std::unique_ptr<CharacterParams> params_;
 
 public:
     Character(GameObject* parent);
@@ -138,8 +139,8 @@ public:
     }
 
     //共通パラメータ群のゲッター関数
-    CharacterParams& GetParams() {
-        return *params_;
+    CharacterParams* GetParams() const {
+        return params_.get();
     }
 
 };
