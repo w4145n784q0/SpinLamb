@@ -15,7 +15,7 @@ public:
 
 	//プレイヤーの状態遷移
 	//これらの値に応じて各Update関数を呼び出す
-	enum State
+	enum PlayerState
 	{
 		S_Idle,		//通常
 		//S_Jump,     //ジャンプ
@@ -27,7 +27,7 @@ public:
 		S_Stop,		//プレイヤーを止める状態
 		S_MaxState,
 	};
-	State PlayerState_;
+	PlayerState PlayerState_;
 private:
 	//----------モデルハンドル----------
 
@@ -72,7 +72,7 @@ private:
 	XMVECTOR BackCamera_;
 
 	//各ステートの実体を格納するテーブル(連想配列)
-	std::unordered_map<State, std::unique_ptr<BasePlayerState>> stateTable_;
+	std::unordered_map<PlayerState, std::unique_ptr<BasePlayerState>> stateTable_;
 
 	//現在アクティブな状態
 	BasePlayerState* currentState_ = nullptr;
@@ -100,42 +100,36 @@ public:
 	void PlayerRun();
 
 	//状態遷移を行う(ステートマシン)
-	void ChangeState(State newState);
+	void ChangeState(PlayerState newState);
 
 	//----------PlayerState_に応じて内容が変わるUpdate関数----------
 
 	//通常状態
-	void UpdateIdle();
+	//void UpdateIdle();
 
 	//void UpdateJump();
 
 	//void UpdateLand();
 
 	//チャージ状態
-	void UpdateCharge();
+	//void UpdateCharge();
 
 	//攻撃状態
-	void UpdateAttack();
+	//void UpdateAttack();
 
 	//弾かれた状態
-	void UpdateHit();
+	//void UpdateHit();
 
 	//柵に接触した状態
-	void UpdateFenceHit();
+	//void UpdateFenceHit();
 
 	//プレイヤーを止める状態
-	void UpdateStop();
+	//void UpdateStop();
 
 	//----------Player処理関数----------
 
 	//ImGuiの描画
 	void DrawImGui();
-
-	//プレイヤーに移動を許可
-	void PlayerStart() { PlayerState_ = S_Idle; }
-
-	//プレイヤーを止める
-	void PlayerStop() { PlayerState_ = S_Stop; }
 
 	//プレイヤーに移動を許可(ステートマシン)
 	void PlayerStartState() { ChangeState(Player::S_Idle); }

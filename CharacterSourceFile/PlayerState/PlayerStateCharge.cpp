@@ -36,11 +36,8 @@ void PlayerStateCharge::Update(Player* _player)
 			_player->air_->SetJump();
 
 			//通常状態へ戻る
-			//PlayerState_ = S_Idle;
-			//_player->ChangeState(Player::S_Idle);
+			_player->ChangeState(Player::S_Idle);
 
-			//状態遷移の際は一度x回転をストップ
-			_player->rotate_->RotateXStop();
 		}
 	}
 
@@ -66,11 +63,8 @@ void PlayerStateCharge::Update(Player* _player)
 		_player->charge_->ChargeRelease();
 
 		//攻撃状態へ移行
-		//PlayerState_ = S_Attack;
-		//_player->ChangeState(Player::S_Attack);
+		_player->ChangeState(Player::S_Attack);
 
-		//状態遷移の際は一度x回転をストップ
-		_player->rotate_->RotateXStop();
 	}
 
 	//高速X回転

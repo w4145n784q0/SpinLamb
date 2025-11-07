@@ -26,14 +26,10 @@ void PlayerStateIdle::Update(Player* _player)
 		if (_player->GetParams()->JumpParam_.IsOnGround_)
 		{
 			//地上にいるならチャージ状態へ移行
-			//PlayerState_ = S_Charge;
-			//_player->ChangeState(Player::S_Charge);
+			_player->ChangeState(Player::S_Charge);
 
 			//加速度をリセット
 			_player->movement_->AccelerationStop();
-
-			//状態遷移の際は一度x回転をストップ
-			_player->rotate_->RotateXStop();
 		}
 	}
 

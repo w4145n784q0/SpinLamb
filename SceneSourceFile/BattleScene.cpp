@@ -1,5 +1,4 @@
 #include "BattleScene.h"
-#include"../Engine/Image.h"
 #include"../Engine/Input.h"
 #include"../Engine/Audio.h"
 #include"../Engine/SceneManager.h"
@@ -526,11 +525,11 @@ void BattleScene::UpdateBattleReady()
 
 		//時間経過でPlayer,Enemyに移動許可を出す
 		//Enemy,Player2のnullチェックを行い、存在するなら実行
-		pPlayer1_->PlayerStart();
+		pPlayer1_->PlayerStartState();
 
 		if (pPlayer2_ != nullptr)
 		{
-			pPlayer2_->PlayerStart();
+			pPlayer2_->PlayerStartState();
 		}
 		else if (pEnemy_ != nullptr)
 		{
@@ -562,11 +561,11 @@ void BattleScene::UpdateBattle()
 		//player,Enemyの動きを止める
 		//Enemy,Player2のnullチェックを行い、存在するなら実行
 
-		pPlayer1_->PlayerStop();
+		pPlayer1_->PlayerStopState();
 
 		if (pPlayer2_ != nullptr)
 		{
-			pPlayer2_->PlayerStop();
+			pPlayer2_->PlayerStopState();
 		}
 		else if (pEnemy_ != nullptr)
 		{

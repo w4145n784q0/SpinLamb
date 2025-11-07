@@ -146,7 +146,7 @@ void PracticeScene::Initialize()
 		ActivePlayers_.push_back(InitPlayers[i]);
 
 		//ƒvƒŒƒCƒ„[‚ÉˆÚ“®‚ğ‹–‰Â
-		InitPlayers[i]->PlayerStart();
+		InitPlayers[i]->PlayerStartState();
 	}
 	
 	//Enemy‚Ì‰Šú‰»ˆ—

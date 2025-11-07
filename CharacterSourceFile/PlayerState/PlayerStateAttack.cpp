@@ -29,11 +29,7 @@ void PlayerStateAttack::Update(Player* _player)
 		_player->movement_->AccelerationStop();
 
 		//’Êíó‘Ô‚Ö–ß‚é
-		//PlayerState_ = S_Idle;
-		//_player->ChangeState(Player::S_Idle);
-
-		//ó‘Ô‘JˆÚ‚ÌÛ‚Íˆê“xx‰ñ“]‚ðƒXƒgƒbƒv
-		_player->rotate_->RotateXStop();
+		_player->ChangeState(Player::S_Idle);
 	}
 
 	//UŒ‚SEÄ¶
@@ -42,4 +38,6 @@ void PlayerStateAttack::Update(Player* _player)
 
 void PlayerStateAttack::Exit(Player* _player)
 {
+	//ó‘Ô‘JˆÚ‚ÌÛ‚Íˆê“xx‰ñ“]‚ðƒXƒgƒbƒv
+	_player->rotate_->RotateXStop();
 }

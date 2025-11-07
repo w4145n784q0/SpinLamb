@@ -81,12 +81,12 @@ Player::~Player()
 void Player::Initialize()
 {
 	//テーブルに各ステートを登録
-	stateTable_[S_Idle] = std::make_unique<PlayerStateIdle>();
-	stateTable_[S_Charge] = std::make_unique<PlayerStateCharge>();
-	stateTable_[S_Attack] = std::make_unique<PlayerStateAttack>();
-	stateTable_[S_Hit] = std::make_unique<PlayerStateHit>();
+	stateTable_[S_Idle]		= std::make_unique<PlayerStateIdle>();
+	stateTable_[S_Charge]	= std::make_unique<PlayerStateCharge>();
+	stateTable_[S_Attack]	= std::make_unique<PlayerStateAttack>();
+	stateTable_[S_Hit]		= std::make_unique<PlayerStateHit>();
 	stateTable_[S_FenceHit] = std::make_unique<PlayerStateFenceHit>();
-	stateTable_[S_Stop] = std::make_unique<PlayerStateStop>();
+	stateTable_[S_Stop]		= std::make_unique<PlayerStateStop>();
 
 	//最初のステートを登録
 	ChangeState(S_Stop);
@@ -129,7 +129,7 @@ void Player::OnCollision(GameObject* pTarget)
 		CollisionCharacter(targetName);
 
 		//被弾状態になる
-		PlayerState_ = S_Hit;
+		ChangeState(S_Hit);
 
 		//接触エフェクト
 		vfx_->SetHitEffect();
@@ -167,7 +167,7 @@ void Player::OnCollision(GameObject* pTarget)
 					hit_->KnockBackAngleY(params_->HitParam_.KnockBack_Direction_, params_->FenceHitParam_.KnockBackPower_);
 
 					//プレイヤーの状態を柵に接触状態にする
-					PlayerState_ = S_FenceHit;
+					ChangeState(S_FenceHit);
 
 					//カメラ振動(中くらいの長さ)
 					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
@@ -186,36 +186,42 @@ void Player::PlayerRun()
 	//Characterクラスの共通処理
 	Character::Update();
 
-	//現在の状態によって更新を分ける
-	switch (PlayerState_)
+	//現在の状態によって更新を分ける(ステートパターン使用)
+	if (currentState_) 
 	{
-	case Player::S_Idle:
-		UpdateIdle();
-		break;
-	/*case Player::S_Jump:
-		UpdateJump();
-		break;
-	case Player::S_Land:
-		UpdateLand();
-		break;*/
-	case Player::S_Charge:
-		UpdateCharge();
-		break;
-	case Player::S_Attack:
-		UpdateAttack();
-		break;
-	case Player::S_Hit:
-		UpdateHit();
-		break;
-	case Player::S_FenceHit:
-		UpdateFenceHit();
-		break;
-	case Player::S_Stop:
-		UpdateStop();
-		break;
-	default:
-		break;
+		currentState_->Update(this);
 	}
+
+	//現在の状態によって更新を分ける
+	//switch (PlayerState_)
+	//{
+	//case Player::S_Idle:
+	//	UpdateIdle();
+	//	break;
+	///*case Player::S_Jump:
+	//	UpdateJump();
+	//	break;
+	//case Player::S_Land:
+	//	UpdateLand();
+	//	break;*/
+	//case Player::S_Charge:
+	//	UpdateCharge();
+	//	break;
+	//case Player::S_Attack:
+	//	UpdateAttack();
+	//	break;
+	//case Player::S_Hit:
+	//	UpdateHit();
+	//	break;
+	//case Player::S_FenceHit:
+	//	UpdateFenceHit();
+	//	break;
+	//case Player::S_Stop:
+	//	UpdateStop();
+	//	break;
+	//default:
+	//	break;
+	//}
 
 	//柵に接触状態でなければ無敵時間を更新
 	if (!(PlayerState_ == S_FenceHit))
@@ -231,13 +237,13 @@ void Player::PlayerRun()
 	//デバッグ中のみ0キーで初期位置に戻る
 	if (Input::IsKeyDown(DIK_0))
 	{
-		params_->SetStartPosition({0.0f, 0.0f, 0.0f});
+		this->SetPosition(params_->InitParam_.StartPosition_);
 	}
 #endif
 
 }
 
-void Player::ChangeState(State newState)
+void Player::ChangeState(PlayerState newState)
 {
 	////現在のステートを終了させる
 	if (currentState_) 
@@ -265,60 +271,60 @@ void Player::ChangeState(State newState)
 	}
 }
 
-void Player::UpdateIdle()
-{
-	//通常状態 移動・ジャンプなどをしている状態
-
-	//キーボードの入力した分を実際に移動
-	InputKeyBoard();
-
-	//コントローラー操作による移動
-	InputCotroller(ControllerID_);
-
-	//------------------チャージ状態へ移行------------------//
-
-	//SHIFTキー/Bボタンが押されたら
-	if (Input::IsKeyDown(DIK_LSHIFT) || Input::IsKeyDown(DIK_RSHIFT)
-		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_B, ControllerID_))
-	{
-		if (params_->JumpParam_.IsOnGround_)
-		{
-			//地上にいるならチャージ状態へ移行
-			PlayerState_ = S_Charge;
-
-			//加速度をリセット
-			movement_->AccelerationStop();
-
-			//状態遷移の際は一度x回転をストップ
-			rotate_->RotateXStop();
-		}
-	}
-
-	//------------------ジャンプ------------------//
-
-	//SPACEキー/Aボタンが押されたら
-	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A, ControllerID_))
-	{
-		if (params_->JumpParam_.IsOnGround_)
-		{
-			//地上にいるならジャンプ開始
-			air_->SetJump();
-			//PlayerState_ = S_Jump;
-		}
-	}
-
-	//プレイヤーの入力方向に即した回転
-	PlayerRotate(PlayerInput_);
-
-	//実際の移動にはcameraTransform_.rotate_.yを適用したベクトルを使う
-	XMVECTOR moveForCamera = ConvertCameraDirection(PlayerInput_);
-
-	//慣性処理のための移動処理（カメラ回転を反映したベクトルを渡す）
-	movement_->MoveUpdate(moveForCamera);
-
-	//カメラ操作
-	CameraControl();
-}
+//void Player::UpdateIdle()
+//{
+//	//通常状態 移動・ジャンプなどをしている状態
+//
+//	//キーボードの入力した分を実際に移動
+//	InputKeyBoard();
+//
+//	//コントローラー操作による移動
+//	InputCotroller(ControllerID_);
+//
+//	//------------------チャージ状態へ移行------------------//
+//
+//	//SHIFTキー/Bボタンが押されたら
+//	if (Input::IsKeyDown(DIK_LSHIFT) || Input::IsKeyDown(DIK_RSHIFT)
+//		|| Input::IsPadButtonDown(XINPUT_GAMEPAD_B, ControllerID_))
+//	{
+//		if (params_->JumpParam_.IsOnGround_)
+//		{
+//			//地上にいるならチャージ状態へ移行
+//			PlayerState_ = S_Charge;
+//
+//			//加速度をリセット
+//			movement_->AccelerationStop();
+//
+//			//状態遷移の際は一度x回転をストップ
+//			rotate_->RotateXStop();
+//		}
+//	}
+//
+//	//------------------ジャンプ------------------//
+//
+//	//SPACEキー/Aボタンが押されたら
+//	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A, ControllerID_))
+//	{
+//		if (params_->JumpParam_.IsOnGround_)
+//		{
+//			//地上にいるならジャンプ開始
+//			air_->SetJump();
+//			//PlayerState_ = S_Jump;
+//		}
+//	}
+//
+//	//プレイヤーの入力方向に即した回転
+//	PlayerRotate(PlayerInput_);
+//
+//	//実際の移動にはcameraTransform_.rotate_.yを適用したベクトルを使う
+//	XMVECTOR moveForCamera = ConvertCameraDirection(PlayerInput_);
+//
+//	//慣性処理のための移動処理（カメラ回転を反映したベクトルを渡す）
+//	movement_->MoveUpdate(moveForCamera);
+//
+//	//カメラ操作
+//	CameraControl();
+//}
 
 //void Player::UpdateJump()
 //{
@@ -361,157 +367,162 @@ void Player::UpdateIdle()
 //
 //}
 
-void Player::UpdateCharge()
-{
-	//チャージ中(TmpAcceleを溜めている状態) その場で左右回転できるが動けない
+//void Player::UpdateCharge()
+//{
+//	//チャージ中(TmpAcceleを溜めている状態) その場で左右回転できるが動けない
+//
+//	//加速度を溜める
+//	charge_->Charging();
+//
+//	//矢印モデルをセット
+//	charge_->SetArrow();
+//
+//	//矢印モデルの位置を自身の回転と合わせる
+//	params_->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
+//
+//	//チャージ中のエフェクトを出す
+//	vfx_->SetChargingEffect("ParticleAssets\\circle_B.png");
+//
+//	//SPACEキー/Aボタンが押され,地上にいるなら
+//	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A, ControllerID_))
+//	{
+//		if (params_->JumpParam_.IsOnGround_)
+//		{
+//			//溜めたチャージを0にする
+//			charge_->ChargeReset();
+//
+//			//ジャンプ開始
+//			air_->SetJump();
+//
+//			//通常状態へ戻る
+////			PlayerState_ = S_Idle;
+//			ChangeState(S_Idle);
+//
+//			//状態遷移の際は一度x回転をストップ
+//			rotate_->RotateXStop();
+//		}
+//	}
+//
+//	//左右キー/スティックが倒されたら回転
+//	if (Input::IsKey(DIK_LEFT) || Input::GetPadStickL(ControllerID_).x < -Input::StickTilt)
+//	{
+//		this->transform_.rotate_.y -= ChargeRotateY;
+//	}
+//	if (Input::IsKey(DIK_RIGHT) || Input::GetPadStickL(ControllerID_).x > Input::StickTilt)
+//	{
+//		this->transform_.rotate_.y += ChargeRotateY;
+//	}
+//
+//	//SHIFTキー/Bボタンを離したら
+//	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT)
+//		|| Input::IsPadButtonUp(XINPUT_GAMEPAD_B, ControllerID_))
+//	{
+//		//チャージ解放
+//		charge_->ChargeRelease();
+//
+//		//攻撃状態へ移行
+//		ChangeState(S_Attack);
+//		//PlayerState_ = S_Attack;
+//
+//		//状態遷移の際は一度x回転をストップ
+//		rotate_->RotateXStop();
+//	}
+//
+//	//高速X回転
+//	rotate_->FastRotateX();
+//
+//	//カメラ操作
+//	CameraControl();
+//}
 
-	//加速度を溜める
-	charge_->Charging();
+//void Player::UpdateAttack()
+//{
+//	//攻撃状態 正面の方向に移動し操作不可
+//
+//	//攻撃中のエフェクトを出す
+//	vfx_->SetAttackLocusEffect();
+//
+//	//正面ベクトルの方向に移動
+//	movement_->CharacterAttackMove(params_->MoveParam_.ForwardVector_);
+//
+//	//摩擦量分速度を減少
+//	movement_->FrictionDeceleration();
+//
+//	//高速X回転
+//	rotate_->FastRotateX();
+//
+//	//加速量が0になったら
+//	if (movement_->IsAcceleStop())
+//	{
+//		//明示的に加速量を0にする
+//		movement_->AccelerationStop();
+//
+//		//通常状態へ戻る
+//		//PlayerState_ = S_Idle;
+//		ChangeState(S_Idle);
+//
+//		//状態遷移の際は一度x回転をストップ
+//		rotate_->RotateXStop();
+//	}
+//
+//	//攻撃SE再生
+//	Audio::Play(params_->SoundParam_.hSoundattack_);
+//}
 
-	//矢印モデルをセット
-	charge_->SetArrow();
+//void Player::UpdateHit()
+//{
+//	//相手と接触した状態 操作不可
+//
+//	//ノックバックする
+//	hit_->KnockBack();
+//
+//	//ノックバックする速度が一定以下なら通常状態へ戻る
+//	if (hit_->IsKnockBackEnd())
+//	{
+//		//ノックバック速度を0に戻しておく
+//		hit_->KnockBackVelocityReset();
+//
+//		//通常状態へ戻る
+//		//PlayerState_ = S_Idle;
+//		ChangeState(S_Idle);
+//
+//		//状態遷移の際は一度x回転をストップ
+//		rotate_->RotateXStop();
+//
+//		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
+//		movement_->AccelerationStop();
+//	}
+//}
 
-	//矢印モデルの位置を自身の回転と合わせる
-	params_->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
+//void Player::UpdateFenceHit()
+//{	
+//	//ダメージを受ける柵と接触した状態 操作不可
+//
+//	//ノックバックする
+//	hit_->KnockBack();
+//
+//	//ノックバックする速度が一定以下なら通常状態へ戻る
+//	if (hit_->IsKnockBackEnd())
+//	{
+//		//ノックバック速度を0に戻しておく
+//		hit_->KnockBackVelocityReset();
+//
+//		//通常状態へ戻る
+//		//PlayerState_ = S_Idle;
+//		ChangeState(S_Idle);
+//
+//		//状態遷移の際は一度x回転をストップ
+//		rotate_->RotateXStop();
+//
+//		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
+//		movement_->AccelerationStop();
+//	}
+//}
 
-	//チャージ中のエフェクトを出す
-	vfx_->SetChargingEffect("ParticleAssets\\circle_B.png");
-
-	//SPACEキー/Aボタンが押され,地上にいるなら
-	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A, ControllerID_))
-	{
-		if (params_->JumpParam_.IsOnGround_)
-		{
-			//溜めたチャージを0にする
-			charge_->ChargeReset();
-
-			//ジャンプ開始
-			air_->SetJump();
-
-			//通常状態へ戻る
-			PlayerState_ = S_Idle;
-
-			//状態遷移の際は一度x回転をストップ
-			rotate_->RotateXStop();
-		}
-	}
-
-	//左右キー/スティックが倒されたら回転
-	if (Input::IsKey(DIK_LEFT) || Input::GetPadStickL(ControllerID_).x < -Input::StickTilt)
-	{
-		this->transform_.rotate_.y -= ChargeRotateY;
-	}
-	if (Input::IsKey(DIK_RIGHT) || Input::GetPadStickL(ControllerID_).x > Input::StickTilt)
-	{
-		this->transform_.rotate_.y += ChargeRotateY;
-	}
-
-	//SHIFTキー/Bボタンを離したら
-	if (Input::IsKeyUp(DIK_LSHIFT) || Input::IsKeyUp(DIK_RSHIFT)
-		|| Input::IsPadButtonUp(XINPUT_GAMEPAD_B, ControllerID_))
-	{
-		//チャージ解放
-		charge_->ChargeRelease();
-
-		//攻撃状態へ移行
-		PlayerState_ = S_Attack;
-
-		//状態遷移の際は一度x回転をストップ
-		rotate_->RotateXStop();
-	}
-
-	//高速X回転
-	rotate_->FastRotateX();
-
-	//カメラ操作
-	CameraControl();
-}
-
-void Player::UpdateAttack()
-{
-	//攻撃状態 正面の方向に移動し操作不可
-
-	//攻撃中のエフェクトを出す
-	vfx_->SetAttackLocusEffect();
-
-	//正面ベクトルの方向に移動
-	movement_->CharacterAttackMove(params_->MoveParam_.ForwardVector_);
-
-	//摩擦量分速度を減少
-	movement_->FrictionDeceleration();
-
-	//高速X回転
-	rotate_->FastRotateX();
-
-	//加速量が0になったら
-	if (movement_->IsAcceleStop())
-	{
-		//明示的に加速量を0にする
-		movement_->AccelerationStop();
-
-		//通常状態へ戻る
-		PlayerState_ = S_Idle;
-
-		//状態遷移の際は一度x回転をストップ
-		rotate_->RotateXStop();
-	}
-
-	//攻撃SE再生
-	Audio::Play(params_->SoundParam_.hSoundattack_);
-}
-
-void Player::UpdateHit()
-{
-	//相手と接触した状態 操作不可
-
-	//ノックバックする
-	hit_->KnockBack();
-
-	//ノックバックする速度が一定以下なら通常状態へ戻る
-	if (hit_->IsKnockBackEnd())
-	{
-		//ノックバック速度を0に戻しておく
-		hit_->KnockBackVelocityReset();
-
-		//通常状態へ戻る
-		PlayerState_ = S_Idle;
-
-		//状態遷移の際は一度x回転をストップ
-		rotate_->RotateXStop();
-
-		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
-		movement_->AccelerationStop();
-	}
-}
-
-void Player::UpdateFenceHit()
-{	
-	//ダメージを受ける柵と接触した状態 操作不可
-
-	//ノックバックする
-	hit_->KnockBack();
-
-	//ノックバックする速度が一定以下なら通常状態へ戻る
-	if (hit_->IsKnockBackEnd())
-	{
-		//ノックバック速度を0に戻しておく
-		hit_->KnockBackVelocityReset();
-
-		//通常状態へ戻る
-		PlayerState_ = S_Idle;
-
-		//状態遷移の際は一度x回転をストップ
-		rotate_->RotateXStop();
-
-		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
-		movement_->AccelerationStop();
-	}
-}
-
-void Player::UpdateStop()
-{
-	//何も処理をしない
-}
+//void Player::UpdateStop()
+//{
+//	//何も処理をしない
+//}
 
 void Player::DrawImGui()
 {
@@ -525,6 +536,14 @@ void Player::DrawImGui()
 
 	if (ImGui::TreeNode((objectName_ + " OnlyStatus").c_str()))
 	{
+		if (ImGui::TreeNode("State"))
+		{
+			//コントローラーID
+			std::string state = currentState_->GetStateName();
+			ImGui::Text("ControllerID:%s", state.c_str());
+			ImGui::TreePop();
+		}
+
 		if (ImGui::TreeNode("PlayerInit"))
 		{
 			//コントローラーID

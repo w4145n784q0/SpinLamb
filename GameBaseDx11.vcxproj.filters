@@ -518,7 +518,6 @@
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateIdle.h">
       <Filter>04Chara\PlayerState</Filter>
     </ClInclude>
-    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateStop.h" />
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateAttack.h">
       <Filter>04Chara\PlayerState</Filter>
     </ClInclude>
@@ -529,6 +528,9 @@
       <Filter>04Chara\PlayerState</Filter>
     </ClInclude>
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateHit.h">
+      <Filter>04Chara\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateStop.h">
       <Filter>04Chara\PlayerState</Filter>
     </ClInclude>
   </ItemGroup>

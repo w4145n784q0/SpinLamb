@@ -19,11 +19,7 @@ void PlayerStateFenceHit::Update(Player* _player)
 		_player->hit_->KnockBackVelocityReset();
 
 		//通常状態へ戻る
-		//PlayerState_ = S_Idle;
-		//_player->ChangeState(Player::S_Idle);
-
-		//状態遷移の際は一度x回転をストップ
-		_player->rotate_->RotateXStop();
+		_player->ChangeState(Player::S_Idle);
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
 		_player->movement_->AccelerationStop();
@@ -32,4 +28,6 @@ void PlayerStateFenceHit::Update(Player* _player)
 
 void PlayerStateFenceHit::Exit(Player* _player)
 {
+	//状態遷移の際は一度x回転をストップ
+	_player->rotate_->RotateXStop();
 }
