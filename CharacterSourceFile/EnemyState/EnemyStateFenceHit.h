@@ -8,5 +8,7 @@ public:
     void Update(Enemy* _enemy) override;
     void Exit(Enemy* _enemy) override;
     std::string GetStateName() override { return "FenceHit"; }
+    bool IsUpdateInvincibility() const override;
+    bool IsFenceHitState() const override;
 };
 

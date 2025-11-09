@@ -533,7 +533,7 @@ void BattleScene::UpdateBattleReady()
 		}
 		else if (pEnemy_ != nullptr)
 		{
-			pEnemy_->EnemyStart();
+			pEnemy_->EnemyStartState();
 		}
 
 		//タイマーを起動
@@ -569,7 +569,7 @@ void BattleScene::UpdateBattle()
 		}
 		else if (pEnemy_ != nullptr)
 		{
-			pEnemy_->EnemyStop();
+			pEnemy_->EnemyStopState();
 		}
 
 		//ホイッスルSE再生

@@ -76,6 +76,7 @@ void PlayerStateCharge::Update(Player* _player)
 
 void PlayerStateCharge::Exit(Player* _player)
 {
+	//状態遷移の際は一度x回転をストップ
 	_player->rotate_->RotateXStop();
 }
 

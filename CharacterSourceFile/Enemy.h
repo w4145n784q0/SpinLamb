@@ -1,23 +1,16 @@
 #pragma once
 #include "../Engine/GameObject.h"
+#include"Character.h"
 #include"Player.h"
+#include <memory>
+#include <unordered_map>
 #include"../CharacterSourceFile/EnemyState/BaseEnemyState.h"
 
 //敵(CPU)キャラクターの処理を行うクラス
 class Enemy :
     public Character
 {
-private:
-	//----------モデルハンドル----------
-
-	//敵モデル
-    int hEnemy_;
-
-	//----------インスタンス----------
-
-	//プレイヤーのインスタンス(Enemyからは取らず、上位シーンから設定)
-	Player* pPlayer_;
-
+public:
 	//----------状態遷移----------
 
 	//敵(CPU)の状態遷移
@@ -34,7 +27,17 @@ private:
 		S_Stop,			//敵を止める
 		S_MaxState
 	};
-	EnemyState EnemyState_;
+	
+private:
+	//----------モデルハンドル----------
+
+	//敵モデル
+    int hEnemy_;
+
+	//----------インスタンス----------
+
+	//プレイヤーのインスタンス(Enemyからは取らず、上位シーンから設定)
+	Player* pPlayer_;
 
 	//----------攻撃関係----------
 	
@@ -97,48 +100,42 @@ public:
 	//----------EnemyState_に応じて内容が変わるUpdate関数----------
 
 	//ここから次のUpdateに移る判断をする
-	void UpdateRoot();
+	//void UpdateRoot();
 
 	//追跡
-	void UpdateChase();
+	//void UpdateChase();
 
 	//回り込み
 	void UpdateWrapAround();
 
 	//攻撃準備
-	void UpdateAim();
+	//void UpdateAim();
 
 	//攻撃
-	void UpdateAttack();
+	//void UpdateAttack();
 
 	//ヒットストップ
 	void UpdateHitStop();
 
 	//弾かれた状態
-	void UpdateHit();
+	//void UpdateHit();
 
 	//柵に接触した状態
-	void UpdateFenceHit();
+	//void UpdateFenceHit();
 	
 	//敵を止める
-	void UpdateStop();
+	//void UpdateStop();
 	
 	//----------Enemy処理関数----------
 
 	//ImGuiの描画
 	void DrawImGui();
 
-	//敵に移動を許可
-	void EnemyStart() { EnemyState_ = S_Root; }
-
-	//敵を止める
-	void EnemyStop() { EnemyState_ = S_Stop; }
-
 	//敵に移動を許可(ステートマシン)
-	void PlayerStartState() { ChangeState(Enemy::S_Root); }
+	void EnemyStartState() { ChangeState(Enemy::S_Root); }
 
 	//敵を止める(ステートマシン)
-	void PlayerStopState() { ChangeState(Enemy::S_Stop); }
+	void EnemyStopState() { ChangeState(Enemy::S_Stop); }
 	
 	//プレイヤーの方向に回転する
 	void LookPlayer();
@@ -152,6 +149,18 @@ public:
 	//敵とプレイヤーの距離を返す
 	float PlayerEnemyDistanceX();
 
+	//AimTimerを増加
+	void AimTimerAdd();
+
+	//AimTimerをリセット
+	void AimTimerReset();
+
+	//攻撃するまでの時間を過ぎたか
+	bool IsTimeOverAttackTime();
+
+	//攻撃までの時間を再抽選する
+	void RandomAimReLottery();
+
 	//Enemy限定のデータをCSV読み込み
 	void SetCSVEnemy();
 
@@ -163,4 +172,11 @@ public:
 
 	void SetTargetAcceleration(float _acceleration) { TargetAcceleration_ = _acceleration; }
 	float GetTargetAcceleration() const { return TargetAcceleration_; }
+
+	void SetChaseLength(float _chaselength);
+	float GetChaseLength() const;
+
+	void SetAutoAttackDirection(XMVECTOR _AutoAttackDirection);
+	XMVECTOR GetAutoAttackDirection() const;
+
 };
