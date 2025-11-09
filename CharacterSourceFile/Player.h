@@ -27,7 +27,7 @@ public:
 		S_Stop,		//プレイヤーを止める状態
 		S_MaxState,
 	};
-	PlayerState PlayerState_;
+	
 private:
 	//----------モデルハンドル----------
 
@@ -102,30 +102,6 @@ public:
 	//状態遷移を行う(ステートマシン)
 	void ChangeState(PlayerState newState);
 
-	//----------PlayerState_に応じて内容が変わるUpdate関数----------
-
-	//通常状態
-	//void UpdateIdle();
-
-	//void UpdateJump();
-
-	//void UpdateLand();
-
-	//チャージ状態
-	//void UpdateCharge();
-
-	//攻撃状態
-	//void UpdateAttack();
-
-	//弾かれた状態
-	//void UpdateHit();
-
-	//柵に接触した状態
-	//void UpdateFenceHit();
-
-	//プレイヤーを止める状態
-	//void UpdateStop();
-
 	//----------Player処理関数----------
 
 	//ImGuiの描画
@@ -150,15 +126,6 @@ public:
 	//カメラの設定(毎フレーム呼び出す)
 	void CameraUpdate();
 
-	//キーボード移動操作
-	void KeyBoardMove();
-
-	/// <summary>
-	/// コントローラ移動操作
-	/// </summary>
-	/// <param name="_PadID">使用しているゲームパッドのID(接続順)</param>
-	void ControllerMove(int _PadID);
-
 	//キーボードの移動処理を受け取る
 	void InputKeyBoard();
 
@@ -167,13 +134,6 @@ public:
 	/// </summary>
 	/// <param name="_PadID">使用しているゲームパッドのID(接続順)</param>
 	void InputCotroller(int _PadID);
-
-	/// <summary>
-	/// プレイヤー専用移動処理
-	/// </summary>
-	/// <param name="_move">移動する方向</param>
-	void PlayerMove(XMVECTOR _move);
-
 	
 	/// <summary>
 	/// プレイヤー専用回転処理

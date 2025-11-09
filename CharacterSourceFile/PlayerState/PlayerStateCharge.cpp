@@ -78,3 +78,9 @@ void PlayerStateCharge::Exit(Player* _player)
 {
 	_player->rotate_->RotateXStop();
 }
+
+void PlayerStateCharge::Draw(Player* player)
+{
+	//–îˆóƒ‚ƒfƒ‹‚Ì•`‰æ
+	player->charge_->DrawArrow();
+}

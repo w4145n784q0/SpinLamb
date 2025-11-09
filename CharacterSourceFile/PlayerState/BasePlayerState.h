@@ -17,7 +17,16 @@ public:
     //状態から抜ける瞬間に呼ばれる
     virtual void Exit(Player* _player) {}
 
+    //ステートごとの描画処理
+    virtual void Draw(Player* player) {}
+
     //状態名を取得(デバッグ用)
     virtual std::string GetStateName() { return ""; }
+
+    //無敵時間の更新を行うかどうか返す
+    virtual bool IsUpdateInvincibility() const { return true; }
+
+	//柵に接触状態かどうか返す
+    virtual bool IsFenceHitState() const { return false; }
 };
 

@@ -165,6 +165,7 @@ Character::~Character()
 void Character::Update()
 {
 	//Characterクラスを継承するクラスで呼ぶ共通更新
+	//この関数は明示的に呼び出す(継承先でもUpdateはoverrideされるため)
 
 	//毎フレーム影の位置を更新
 	shadow_->ShadowSet();

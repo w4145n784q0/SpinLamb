@@ -31,3 +31,15 @@ void PlayerStateFenceHit::Exit(Player* _player)
 	//状態遷移の際は一度x回転をストップ
 	_player->rotate_->RotateXStop();
 }
+
+bool PlayerStateFenceHit::IsUpdateInvincibility() const
+{
+	//柵に接触している状態は無敵時間の更新を行わない
+	return false;
+}
+
+bool PlayerStateFenceHit::IsFenceHitState() const
+{
+	//柵に接触している状態であることを返す
+	return true;
+}
