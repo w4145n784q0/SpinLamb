@@ -245,7 +245,7 @@ void Player::PlayerRun()
 
 void Player::ChangeState(PlayerState newState)
 {
-	////現在のステートを終了させる
+	//現在のステートを終了させる
 	if (currentState_) 
 	{ 
 		currentState_->Exit(this); 

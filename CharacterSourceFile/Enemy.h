@@ -1,6 +1,7 @@
 #pragma once
 #include "../Engine/GameObject.h"
 #include"Player.h"
+#include"../CharacterSourceFile/EnemyState/BaseEnemyState.h"
 
 //敵(CPU)キャラクターの処理を行うクラス
 class Enemy :
@@ -62,6 +63,12 @@ private:
 	//ヒットストップ時間
 	int HitStopTimer_;
 
+	//各ステートの実体を格納するテーブル(連想配列)
+	std::unordered_map<EnemyState, std::unique_ptr<BaseEnemyState>> stateTable_;
+
+	//現在アクティブな状態
+	BaseEnemyState* currentState_ = nullptr;
+
 public:
 	Enemy(GameObject* parent);
 	~Enemy();
@@ -83,6 +90,9 @@ public:
 
 	//動的に呼び出す更新処理
 	void EnemyRun();
+
+	//状態遷移を行う(ステートマシン)
+	void ChangeState(EnemyState newState);
 
 	//----------EnemyState_に応じて内容が変わるUpdate関数----------
 
@@ -123,6 +133,12 @@ public:
 
 	//敵を止める
 	void EnemyStop() { EnemyState_ = S_Stop; }
+
+	//敵に移動を許可(ステートマシン)
+	void PlayerStartState() { ChangeState(Enemy::S_Root); }
+
+	//敵を止める(ステートマシン)
+	void PlayerStopState() { ChangeState(Enemy::S_Stop); }
 	
 	//プレイヤーの方向に回転する
 	void LookPlayer();

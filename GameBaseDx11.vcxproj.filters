@@ -48,6 +48,9 @@
     <Filter Include="04Chara\PlayerState">
       <UniqueIdentifier>{6f44072b-4a07-4c99-a60e-b075363b4641}</UniqueIdentifier>
     </Filter>
+    <Filter Include="04Chara\EnemyState">
+      <UniqueIdentifier>{1c4c73fe-8d7f-4905-bd53-cc42fee0d3e8}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -280,6 +283,30 @@
     </ClCompile>
     <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateStop.cpp">
       <Filter>04Chara\PlayerState</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\EnemyState\BaseEnemyState.cpp">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateRoot.cpp">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateApproach.cpp">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateAim.cpp">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateAttack.cpp">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateHit.cpp">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateFenceHit.cpp">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateStop.cpp">
+      <Filter>04Chara\EnemyState</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -532,6 +559,30 @@
     </ClInclude>
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateStop.h">
       <Filter>04Chara\PlayerState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\EnemyState\BaseEnemyState.h">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateRoot.h">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateApproach.h">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateAim.h">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateAttack.h">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateHit.h">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateFenceHit.h">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateStop.h">
+      <Filter>04Chara\EnemyState</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

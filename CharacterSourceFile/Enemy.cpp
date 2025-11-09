@@ -234,6 +234,34 @@ void Enemy::EnemyRun()
 	}
 }
 
+void Enemy::ChangeState(EnemyState newState)
+{
+	//現在のステートを終了させる
+	if (currentState_)
+	{
+		currentState_->Exit(this);
+	}
+
+	//新しいステートに変更
+	auto it = stateTable_.find(newState);
+	if (it != stateTable_.end())
+	{
+		currentState_ = it->second.get();  //unique_ptrの中身の生ポインタを取得
+	}
+	else
+	{
+		//存在しないステート指定なら何もしない
+		currentState_ = nullptr;
+		return;
+	}
+
+	//新しいステートを開始
+	if (currentState_)
+	{
+		currentState_->Enter(this);
+	}
+}
+
 void Enemy::UpdateRoot()
 {
 	//敵の状態遷移の最上位 攻撃や被弾状態が終わったらここに戻る
