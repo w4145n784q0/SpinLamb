@@ -1,5 +1,7 @@
 #pragma once
 #include "BasePlayerState.h"
+
+//ダッシュ攻撃前のチャージを行っている状態クラス
 class PlayerStateCharge :
     public BasePlayerState
 {

@@ -1,6 +1,7 @@
 #pragma once
 #include "BaseEnemyState.h"
 
+//’ÇÕ‚ğs‚¤ó‘ÔƒNƒ‰ƒX
 class EnemyStateApproach :
     public BaseEnemyState
 {

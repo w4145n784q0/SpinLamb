@@ -17,9 +17,8 @@ public:
 	//これらの値に応じて各Update関数を呼び出す
 	enum EnemyState {
 		S_Root = 0,		//判断用
-		S_Chase,		//追いかける
+		S_Approach,		//追いかける
 		S_Aim,			//プレイヤーを狙う(攻撃準備)
-		S_WrapAround,   //回り込み
 		S_Attack,		//攻撃
 		S_HitStop,		//ヒットストップ
 		S_Hit,			//弾かれる
@@ -96,35 +95,6 @@ public:
 
 	//状態遷移を行う(ステートマシン)
 	void ChangeState(EnemyState newState);
-
-	//----------EnemyState_に応じて内容が変わるUpdate関数----------
-
-	//ここから次のUpdateに移る判断をする
-	//void UpdateRoot();
-
-	//追跡
-	//void UpdateChase();
-
-	//回り込み
-	void UpdateWrapAround();
-
-	//攻撃準備
-	//void UpdateAim();
-
-	//攻撃
-	//void UpdateAttack();
-
-	//ヒットストップ
-	void UpdateHitStop();
-
-	//弾かれた状態
-	//void UpdateHit();
-
-	//柵に接触した状態
-	//void UpdateFenceHit();
-	
-	//敵を止める
-	//void UpdateStop();
 	
 	//----------Enemy処理関数----------
 
@@ -157,6 +127,15 @@ public:
 
 	//攻撃するまでの時間を過ぎたか
 	bool IsTimeOverAttackTime();
+
+	//HitStopTimerを増加
+	void HitStopTimerAdd();
+
+	//HitStopTimerをリセット
+	void HitStopTimerReset();
+
+	//ヒットストップ時間を過ぎたか
+	bool IsTimeOverHitStopTime();
 
 	//攻撃までの時間を再抽選する
 	void RandomAimReLottery();

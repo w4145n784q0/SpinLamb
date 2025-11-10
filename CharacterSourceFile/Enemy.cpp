@@ -8,6 +8,7 @@
 #include"../CharacterSourceFile/EnemyState/EnemyStateApproach.h"
 #include"../CharacterSourceFile/EnemyState/EnemyStateAim.h"
 #include"../CharacterSourceFile/EnemyState/EnemyStateAttack.h"
+#include"../CharacterSourceFile/EnemyState/EnemyStateHitStop.h"
 #include"../CharacterSourceFile/EnemyState/EnemyStateHit.h"
 #include"../CharacterSourceFile/EnemyState/EnemyStateFenceHit.h"
 #include"../CharacterSourceFile/EnemyState/EnemyStateStop.h"
@@ -63,9 +64,10 @@ void Enemy::Initialize()
 {
 	//テーブルに各ステートを登録
 	stateTable_[S_Root]		= std::make_unique<EnemyStateRoot>();
-	stateTable_[S_Chase]	= std::make_unique<EnemyStateApproach>();
+	stateTable_[S_Approach]	= std::make_unique<EnemyStateApproach>();
 	stateTable_[S_Aim]		= std::make_unique<EnemyStateAim>();
 	stateTable_[S_Attack]	= std::make_unique<EnemyStateAttack>();
+	stateTable_[S_HitStop]  = std::make_unique<EnemyStateHitStop>();
 	stateTable_[S_Hit]		= std::make_unique<EnemyStateHit>();
 	stateTable_[S_FenceHit] = std::make_unique<EnemyStateFenceHit>();
 	stateTable_[S_Stop]		= std::make_unique<EnemyStateStop>();
@@ -148,7 +150,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 		AimTimer_ = 0;
 
 		//被弾状態になる
-		ChangeState(S_Hit);
+		ChangeState(S_HitStop);
 
 		//状態遷移の際は一度回転をストップ
 		rotate_->RotateXStop();
@@ -251,248 +253,6 @@ void Enemy::ChangeState(EnemyState newState)
 	}
 }
 
-//void Enemy::UpdateRoot()
-//{
-//	//敵の状態遷移の最上位 攻撃や被弾状態が終わったらここに戻る
-//	//ここから次の状態へ遷移する
-//
-//	//自身とPlayerの距離を測る
-//	float dist = PlayerEnemyDistanceX();
-//
-//	//一定距離以上離れているなら追跡
-//	if (dist > ChaseLength)
-//	{
-//		EnemyState_ = S_Chase;
-//
-//		//状態遷移の際は一度x回転をストップ
-//		rotate_->RotateXStop();
-//	}
-//	else//接近しているなら攻撃準備
-//	{
-//		EnemyState_ = S_Aim;
-//
-//		//状態遷移の際は一度x回転をストップ
-//		rotate_->RotateXStop();
-//	}
-//}
-
-//void Enemy::UpdateChase()
-//{
-//	//Playerを追跡している状態
-//
-//	//プレイヤーのいる方向へY回転する
-//	LookPlayer();
-//	
-//	//更新した方向へ移動
-//	//movement_->CharacterMove(AutoAttackDirection);
-//	movement_->MoveUpdate(AutoAttackDirection);
-//
-//	//進行方向に合わせてY軸を回転
-//	RotateFromDirection(AutoAttackDirection);
-//
-//	//自身とPlayerの距離を測る 
-//	float dist = PlayerEnemyDistanceX();
-//	if (dist < ChaseLength)
-//	{
-//		//一定以下なら攻撃準備状態へ
-//		EnemyState_ = S_Aim;
-//
-//		//状態遷移の際は一度x回転をストップ
-//		rotate_->RotateXStop();
-//	}
-//}
-
-void Enemy::UpdateWrapAround()
-{
-	//Playerを回り込んで追跡している状態
-	
-	//プレイヤーと敵の位置
-	XMVECTOR PlayerPos = XMLoadFloat3(&TargetPosition_);
-	XMVECTOR EnemyPos = XMLoadFloat3(&this->transform_.position_);
-
-	//プレイヤーの前方ベクトル（ワールド空間）
-	XMVECTOR PlayerForward = pPlayer_->GetParams()->GetForwardVector();
-
-	//プレイヤーの背後方向ベクトル
-	XMVECTOR BehindVec = XMVectorScale(PlayerForward, -1.0f);
-
-	//プレイヤーの背後に目標位置を設定 5.0は仮
-	XMVECTOR TargetBehindPos = XMVectorAdd(PlayerPos, XMVectorScale(BehindVec, 5.0f));
-
-	//敵の移動方向を計算
-	XMVECTOR MoveDir = XMVectorSubtract(TargetBehindPos, EnemyPos);
-	MoveDir = XMVector3Normalize(MoveDir);
-
-	//移動と回転
-	movement_->MoveUpdate(MoveDir);
-	RotateFromDirection(MoveDir);
-
-	//プレイヤーに近づいたら攻撃準備へ
-	float dist = PlayerEnemyDistanceX();
-	if (dist < ChaseLength)
-	{
-		//EnemyState_ = S_Aim;
-		rotate_->RotateXStop();
-	}
-
-}
-
-//void Enemy::UpdateAim()
-//{
-//	//チャージ(TmpAcceleを溜めている状態) しながらPlayerを狙う状態
-//
-//	//プレイヤーのいる方向へY回転する
-//	LookPlayer();
-//
-//	//進行方向に合わせてY軸を回転
-//	RotateFromDirection(AutoAttackDirection);
-//
-//	//加速度を溜める
-//	charge_->Charging();
-//
-//	//矢印モデルをセット
-//	charge_->SetArrow();
-//
-//	//矢印モデルの位置を自身の回転と合わせる
-//	params_->MoveParam_.ArrowTransform_.rotate_.y = this->transform_.rotate_.y;
-//
-//	//チャージ中のエフェクトを出す
-//	vfx_->SetChargingEffect("ParticleAssets\\circle_R.png");
-//
-//	//高速X回転
-//	rotate_->FastRotateX();
-//
-//	//時間経過で攻撃状態へ（配列中のランダムな時間）
-//	if (++AimTimer_ > EnemyAttackTimeArray[RandomAim_])
-//	{
-//		//攻撃までのタイマーをリセット
-//		AimTimer_ = 0;
-//
-//		//チャージ解放
-//		charge_->ChargeRelease();
-//
-//		//攻撃状態へ移行
-//		EnemyState_ = S_Attack;
-//
-//		//状態遷移の際は一度x回転をストップ
-//		rotate_->RotateXStop();
-//	}
-//
-//}
-
-//void Enemy::UpdateAttack()
-//{
-//	//攻撃状態 正面の方向に移動
-//
-//	//攻撃中のエフェクトを出す
-//	vfx_->SetAttackLocusEffect();
-//
-//	//正面ベクトルの方向に移動
-//	movement_->CharacterAttackMove(AutoAttackDirection);
-//
-//	//進行方向に合わせてY軸を回転
-//	RotateFromDirection(AutoAttackDirection);
-//
-//	//摩擦量分速度を減少
-//	movement_->FrictionDeceleration();
-//
-//	//高速X回転
-//	rotate_->FastRotateX();
-//
-//	//加速量が0になったら
-//	if (movement_->IsAcceleStop())
-//	{
-//		//明示的に加速量を0にする
-//		movement_->AccelerationStop();
-//
-//		//ルートへ戻る
-//		EnemyState_ = S_Root;
-//
-//		//攻撃までの時間を再抽選
-//		RandomAim_ = rand() % EnemyAttackTimeArray.size();
-//
-//		//状態遷移の際は一度x回転をストップ
-//		rotate_->RotateXStop();
-//	}
-//
-//	//攻撃SE再生
-//	Audio::Play(params_->SoundParam_.hSoundattack_);
-//}
-
-void Enemy::UpdateHitStop()
-{
-	//ヒットストップ状態
-
-	//ヒットストップする時間を超えたら被弾状態へ
-	if (++HitStopTimer_ > HitStopValue)
-	{
-		HitStopTimer_ = 0;
-		//EnemyState_ = S_Hit;
-
-		//状態遷移の際は一度x回転をストップ
-		rotate_->RotateXStop();
-	}
-}
-
-//void Enemy::UpdateHit()
-//{
-//	//相手と接触した状態
-//
-//	//ノックバックする
-//	hit_->KnockBack();
-//
-//	//ノックバックする速度が一定以下なら通常状態へ戻る
-//	if (hit_->IsKnockBackEnd())
-//	{
-//		//ノックバック速度を0に戻しておく
-//		hit_->KnockBackVelocityReset();
-//
-//		//ルートへ戻る
-//		EnemyState_ = S_Root;
-//
-//		//攻撃までの時間を再抽選(ノックバックした際も抽選し、頻繁に変わるようにする)
-//		RandomAim_ = rand() % EnemyAttackTimeArray.size();
-//
-//		//状態遷移の際は一度x回転をストップ
-//		rotate_->RotateXStop();
-//
-//		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
-//		movement_->AccelerationStop();
-//	}
-//}
-
-//void Enemy::UpdateFenceHit()
-//{
-//	//ダメージを受ける柵と接触した状態 
-//
-//	//ノックバックする
-//	hit_->KnockBack();
-//
-//	//ノックバックする速度が一定以下なら通常状態へ戻る
-//	if (hit_->IsKnockBackEnd())
-//	{
-//		//ノックバック速度を0に戻しておく
-//		hit_->KnockBackVelocityReset();
-//
-//		//ルートへ戻る
-//		EnemyState_ = S_Root;
-//
-//		//攻撃までの時間を再抽選(ノックバックした際も抽選し、頻繁に変わるようにする)
-//		RandomAim_ = rand() % EnemyAttackTimeArray.size();
-//
-//		//状態遷移の際は一度x回転をストップ
-//		rotate_->RotateXStop();
-//
-//		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
-//		movement_->AccelerationStop();
-//	}
-//}
-
-//void Enemy::UpdateStop()
-//{
-//	//何も処理をしない
-//}
-
 void Enemy::DrawImGui()
 {
 	//Debug中はImGuiを設定
@@ -507,9 +267,9 @@ void Enemy::DrawImGui()
 	{
 		if (ImGui::TreeNode("State"))
 		{
-			//コントローラーID
+			//現在のステート
 			std::string state = currentState_->GetStateName();
-			ImGui::Text("ControllerID:%s", state.c_str());
+			ImGui::Text("EnemyState:%s", state.c_str());
 			ImGui::TreePop();
 		}
 
@@ -669,6 +429,32 @@ bool Enemy::IsTimeOverAttackTime()
 {
 	//AimTimer_が攻撃までの時間を経過したか返す（配列中のランダムな時間）
 	if (AimTimer_ > EnemyAttackTimeArray[RandomAim_])
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
+void Enemy::HitStopTimerAdd()
+{
+	//ヒットストップを行うタイマーを増加
+	HitStopTimer_++;
+}
+
+void Enemy::HitStopTimerReset()
+{
+	//ヒットストップを行うタイマーをリセット
+	HitStopTimer_ = 0;
+}
+
+bool Enemy::IsTimeOverHitStopTime()
+{
+	//HitStopTimer_がヒットストップする時間を経過したか
+	//(ヒットストップを終了するかどうか)返す
+	if (HitStopTimer_ > HitStopValue)
 	{
 		return true;
 	}

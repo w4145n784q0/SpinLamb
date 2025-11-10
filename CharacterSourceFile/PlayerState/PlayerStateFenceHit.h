@@ -1,5 +1,7 @@
 #pragma once
 #include "BasePlayerState.h"
+
+//ò‚ÉÚG‚µ‚½ó‘ÔƒNƒ‰ƒX
 class PlayerStateFenceHit :
     public BasePlayerState
 {

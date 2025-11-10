@@ -308,6 +308,9 @@
     <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateStop.cpp">
       <Filter>04Chara\EnemyState</Filter>
     </ClCompile>
+    <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateHitStop.cpp">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -582,6 +585,9 @@
       <Filter>04Chara\EnemyState</Filter>
     </ClInclude>
     <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateStop.h">
+      <Filter>04Chara\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateHitStop.h">
       <Filter>04Chara\EnemyState</Filter>
     </ClInclude>
   </ItemGroup>

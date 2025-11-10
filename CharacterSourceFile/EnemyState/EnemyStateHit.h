@@ -1,5 +1,7 @@
 #pragma once
 #include "BaseEnemyState.h"
+
+//キャラクターと接触し弾かれた状態クラス
 class EnemyStateHit :
     public BaseEnemyState
 {

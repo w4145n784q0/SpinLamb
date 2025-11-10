@@ -1,5 +1,7 @@
 #pragma once
 #include "BasePlayerState.h"
+
+//ダッシュ攻撃を行う状態クラス
 class PlayerStateAttack :
     public BasePlayerState
 {

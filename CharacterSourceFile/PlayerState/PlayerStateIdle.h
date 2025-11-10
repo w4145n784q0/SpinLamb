@@ -1,5 +1,7 @@
 #pragma once
 #include "BasePlayerState.h"
+
+//ˆÚ“®‚È‚Ç‚ğs‚¤’Êí‚Ìó‘ÔƒNƒ‰ƒX
 class PlayerStateIdle :
     public BasePlayerState
 {

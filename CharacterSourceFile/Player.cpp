@@ -255,9 +255,9 @@ void Player::DrawImGui()
 	{
 		if (ImGui::TreeNode("State"))
 		{
-			//コントローラーID
+			//現在のステート
 			std::string state = currentState_->GetStateName();
-			ImGui::Text("ControllerID:%s", state.c_str());
+			ImGui::Text("PlayerState:%s", state.c_str());
 			ImGui::TreePop();
 		}
 

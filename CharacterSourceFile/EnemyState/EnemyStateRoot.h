@@ -1,5 +1,7 @@
 #pragma once
 #include "BaseEnemyState.h"
+
+//ここから次のステートに移る判断をする状態クラス
 class EnemyStateRoot :
     public BaseEnemyState
 {
