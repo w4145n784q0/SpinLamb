@@ -60,11 +60,6 @@ private:
 	//プレイヤーのオブジェクト名
 	std::string TargetName_;
 
-	//----------ダメージ関係----------
-
-	//ヒットストップ時間
-	int HitStopTimer_;
-
 	//各ステートの実体を格納するテーブル(連想配列)
 	std::unordered_map<EnemyState, std::unique_ptr<BaseEnemyState>> stateTable_;
 

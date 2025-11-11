@@ -34,3 +34,9 @@ void EnemyStateHit::Exit(Enemy* _enemy)
 	//状態遷移の際は一度x回転をストップ
 	_enemy->rotate_->RotateXStop();
 }
+
+bool EnemyStateHit::isHitState() const
+{
+	//被弾状態であることを返す
+	return true;
+}

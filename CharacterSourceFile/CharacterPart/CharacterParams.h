@@ -104,6 +104,8 @@ public:
     struct HitParam
     {
         float ColliderSize_ = 0.0f;                 //当たり判定(球体)のサイズ
+        int HitStopTimer_ = 0;                      //ヒットストップ時間を計測するタイマー
+        int HitStopValue_ = 0;                       //ヒットストップする時間 この値を超えるとヒットストップ時間終了
         float OriginalRangeMin_ = 0.0f;             //変換元のノックバック量の最小値
         float OriginalRangeMax_ = 0.0f;             //変換元のノックバック量の最大値
         float ConvertedRangeMin_ = 0.0f;            //変換後のノックバック量の最小値
@@ -218,6 +220,12 @@ public:
     float GetJumpHeight() const { return JumpParam_.JumpHeight; }
 
     //被弾
+	void SetHitStopTimer_(int _hitStopTimer) { HitParam_.HitStopTimer_ = _hitStopTimer; }
+	int GetHitStopTimer_() const { return HitParam_.HitStopTimer_; }
+
+	void SetHitStopValue(int _hitStopValue) { HitParam_.HitStopValue_ = _hitStopValue; }
+	int GetHitStopValue() const { return HitParam_.HitStopValue_; }
+
     void SetOriginalRangeMin(float _originalRangeMin) { HitParam_.OriginalRangeMin_ = _originalRangeMin; }
     float GetOriginalRangeMin() const { return HitParam_.OriginalRangeMin_; }
 

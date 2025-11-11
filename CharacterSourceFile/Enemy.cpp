@@ -19,8 +19,7 @@ namespace
 	//csv読み込み時のインデックス(Enemyクラスの固有の変数)
 	enum EnemyOnlyIndex
 	{
-		i_HitStop = 0,
-		i_ChaseLength,
+		i_ChaseLength= 0,
 		i_LookRotateAngle,
 		i_LookRotateValue,
 		i_EnemyAttackTime_1,
@@ -28,9 +27,6 @@ namespace
 		i_EnemyAttackTime_3,
 		i_EnemyAttackTime_4,
 	};
-
-	//ヒットストップする時間
-	int HitStopValue = 0;
 
 	//追跡状態から攻撃準備に移る距離
 	float ChaseLength = 0.0f;
@@ -51,8 +47,7 @@ namespace
 Enemy::Enemy(GameObject* parent)
 	:Character(parent,"Enemy"), hEnemy_(-1),pPlayer_(nullptr),
 	AimTimer_(0), RandomAim_(0),
-	TargetVec_({0,0,0}), TargetPosition_({0,0,0}), TargetAcceleration_(0.0f),TargetName_(""),
-	HitStopTimer_(0)
+	TargetVec_({0,0,0}), TargetPosition_({0,0,0}), TargetAcceleration_(0.0f),TargetName_("")
 {
 }
 
@@ -136,6 +131,12 @@ void Enemy::OnCollision(GameObject* pTarget)
 	//プレイヤーと接触した時の処理
 	if (pTarget->GetObjectName() == "Player1" || pTarget->GetObjectName() == "Player2")
 	{
+		if (currentState_->IsHitStopState() || currentState_->isHitState())
+		{
+			//ヒットストップ状態または被弾状態なら何もしない
+			return;
+		}
+
 		//自身の位置をXMVECTOR型にする
 		XMVECTOR MyVector = XMLoadFloat3(&this->transform_.position_);
 
@@ -438,32 +439,6 @@ bool Enemy::IsTimeOverAttackTime()
 	}
 }
 
-void Enemy::HitStopTimerAdd()
-{
-	//ヒットストップを行うタイマーを増加
-	HitStopTimer_++;
-}
-
-void Enemy::HitStopTimerReset()
-{
-	//ヒットストップを行うタイマーをリセット
-	HitStopTimer_ = 0;
-}
-
-bool Enemy::IsTimeOverHitStopTime()
-{
-	//HitStopTimer_がヒットストップする時間を経過したか
-	//(ヒットストップを終了するかどうか)返す
-	if (HitStopTimer_ > HitStopValue)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
-}
-
 void Enemy::RandomAimReLottery()
 {
 	//攻撃までの時間を再抽選
@@ -485,7 +460,6 @@ void Enemy::SetCSVEnemy()
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	HitStopValue = static_cast<int>(OnlyData[i_HitStop]);
 	ChaseLength = OnlyData[i_ChaseLength];
 	LookRotateAngle = OnlyData[i_LookRotateAngle];
 	LookRotateValue = OnlyData[i_LookRotateValue];

@@ -1,13 +1,10 @@
 #include "Character.h"
-#include"../Engine/VFX.h"
-#include"../Engine/Model.h"
 #include"../Engine/Audio.h"
-#include"../Engine/CsvReader.h"
 
 Character::Character(GameObject* parent)
 	:GameObject(parent,"Character"),
 	params_(nullptr), modeldraw_(nullptr), vfx_(nullptr), shadow_(nullptr), air_(nullptr),
-	forward_(nullptr), movement_(nullptr),rotate_(nullptr),charge_(nullptr),
+	forward_(nullptr), movement_(nullptr),rotate_(nullptr),charge_(nullptr),hitstop_(nullptr),
     hit_(nullptr),fence_(nullptr),csvload_(nullptr),observer_(nullptr),debugpanel_(nullptr)
 {
 }
@@ -15,7 +12,7 @@ Character::Character(GameObject* parent)
 Character::Character(GameObject* parent, const std::string& name)
 	:GameObject(parent, name),
 	params_(nullptr), modeldraw_(nullptr), vfx_(nullptr), shadow_(nullptr), air_(nullptr),
-	forward_(nullptr), movement_(nullptr), rotate_(nullptr), charge_(nullptr),
+	forward_(nullptr), movement_(nullptr), rotate_(nullptr), charge_(nullptr), hitstop_(nullptr),
 	hit_(nullptr), fence_(nullptr), csvload_(nullptr), observer_(nullptr), debugpanel_(nullptr)
 {
 	//各モジュールの生成・初期化(Instantiate)
@@ -76,6 +73,11 @@ Character::Character(GameObject* parent, const std::string& name)
 		charge_->SetParams(params_.get());
 		charge_->SetCharacter(this);
 		charge_->SetEventListener(this);
+	}
+	if (hitstop_ == nullptr)
+	{
+		hitstop_ = std::make_unique<CharacterHitStop>(this);
+		hitstop_->SetParams(params_.get());
 	}
 	if (hit_ == nullptr)
 	{

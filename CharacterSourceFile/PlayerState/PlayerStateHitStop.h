@@ -1,15 +1,15 @@
 #pragma once
 #include "BasePlayerState.h"
 
-//キャラクターと接触し弾かれた状態クラス
-class PlayerStateHit :
+//ヒットストップを行う状態クラス
+class PlayerStateHitStop :
     public BasePlayerState
 {
 public:
     void Enter(Player* _player) override;
     void Update(Player* _player) override;
     void Exit(Player* _player) override;
-    std::string GetStateName() override { return "Hit"; }
-    bool isHitState() const override;
+    std::string GetStateName() override { return "HitStop"; }
+    bool IsHitStopState() const override;
 };
 

@@ -12,6 +12,7 @@
 #include "CharacterPart/CharacterMovement.h"
 #include "CharacterPart/CharacterRotate.h"
 #include "CharacterPart/CharacterCharge.h"
+#include"CharacterPart/CharacterHitStop.h"
 #include "CharacterPart/CharacterHit.h"
 #include "CharacterPart/CharacterFence.h"
 #include "CharacterPart/CharacterCsvLoader.h"
@@ -43,6 +44,7 @@ public:
     std::unique_ptr<CharacterMovement>      movement_;
     std::unique_ptr<CharacterRotate>        rotate_;
     std::unique_ptr<CharacterCharge>        charge_;
+    std::unique_ptr<CharacterHitStop>       hitstop_;
     std::unique_ptr<CharacterHit>           hit_;
     std::unique_ptr<CharacterFence>         fence_;
     std::unique_ptr<CharacterCsvLoader>     csvload_;

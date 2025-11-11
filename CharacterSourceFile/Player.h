@@ -22,6 +22,7 @@ public:
 		//S_Land,     //着地
 		S_Charge,	//チャージ中
 		S_Attack,	//攻撃
+		S_HitStop,  //ヒットストップ
 		S_Hit,		//弾かれる
 		S_FenceHit,	//柵にヒット
 		S_Stop,		//プレイヤーを止める状態

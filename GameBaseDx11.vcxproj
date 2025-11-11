@@ -145,6 +145,7 @@
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterFence.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterForward.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterHit.cpp" />
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterHitStop.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterModelBlink.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterMovement.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterObserver.cpp" />
@@ -168,6 +169,7 @@
     <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateCharge.cpp" />
     <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateFenceHit.cpp" />
     <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateHit.cpp" />
+    <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateHitStop.cpp" />
     <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateIdle.cpp" />
     <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateStop.cpp" />
     <ClCompile Include="EffectSourceFile\Easing.cpp" />
@@ -233,6 +235,7 @@
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterFence.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterForward.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterHit.h" />
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterHitStop.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterModelBlink.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterMovement.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterObserver.h" />
@@ -256,6 +259,7 @@
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateCharge.h" />
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateFenceHit.h" />
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateHit.h" />
+    <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateHitStop.h" />
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateIdle.h" />
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateStop.h" />
     <ClInclude Include="EffectSourceFile\Easing.h" />

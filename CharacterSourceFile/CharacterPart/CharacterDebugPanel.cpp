@@ -122,6 +122,7 @@ void CharacterDebugPanel::DrawCharacterImGui()
 	//ノックバックする方向、ノックバックの速度
 	if (ImGui::TreeNode("Hit"))
 	{
+		ImGui::InputInt("HitStopValue", &params_->HitParam_.HitStopValue_);
 		ImGui::InputFloat("OriginalRangeMin", &params_->HitParam_.OriginalRangeMin_, ZeroPointOne);
 		ImGui::InputFloat("OriginalRangeMax", &params_->HitParam_.OriginalRangeMax_, ZeroPointOne);
 		ImGui::InputFloat("ConvertedRangeMin", &params_->HitParam_.ConvertedRangeMin_, ZeroPointOne);

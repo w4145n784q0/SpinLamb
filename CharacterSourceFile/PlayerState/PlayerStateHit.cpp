@@ -29,3 +29,9 @@ void PlayerStateHit::Exit(Player* _player)
 	//状態遷移の際は一度x回転をストップ
 	_player->rotate_->RotateXStop();
 }
+
+bool PlayerStateHit::isHitState() const
+{
+	//被弾状態であることを返す
+	return true;
+}

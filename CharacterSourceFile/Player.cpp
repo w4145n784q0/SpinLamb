@@ -5,10 +5,10 @@
 #include"../Engine/Camera.h"
 #include"../Engine/SphereCollider.h"
 #include"Enemy.h"
-#include"../EffectSourceFile/Easing.h"
 #include"../CharacterSourceFile/PlayerState/PlayerStateIdle.h"
 #include"../CharacterSourceFile/PlayerState/PlayerStateCharge.h"
 #include"../CharacterSourceFile/PlayerState/PlayerStateAttack.h"
+#include"../CharacterSourceFile/PlayerState/PlayerStateHitStop.h"
 #include"../CharacterSourceFile/PlayerState/PlayerStateHit.h"
 #include"../CharacterSourceFile/PlayerState/PlayerStateFenceHit.h"
 #include"../CharacterSourceFile/PlayerState/PlayerStateStop.h"
@@ -84,6 +84,7 @@ void Player::Initialize()
 	stateTable_[S_Idle]		= std::make_unique<PlayerStateIdle>();
 	stateTable_[S_Charge]	= std::make_unique<PlayerStateCharge>();
 	stateTable_[S_Attack]	= std::make_unique<PlayerStateAttack>();
+	stateTable_[S_HitStop] = std::make_unique<PlayerStateHitStop>();
 	stateTable_[S_Hit]		= std::make_unique<PlayerStateHit>();
 	stateTable_[S_FenceHit] = std::make_unique<PlayerStateFenceHit>();
 	stateTable_[S_Stop]		= std::make_unique<PlayerStateStop>();
@@ -123,6 +124,12 @@ void Player::OnCollision(GameObject* pTarget)
 	if (pTarget->GetObjectName() == "Enemy1" || pTarget->GetObjectName() == "Enemy2"
 		|| pTarget->GetObjectName() == "Player1" || pTarget->GetObjectName() == "Player2")
 	{
+		if (currentState_->IsHitStopState() || currentState_->isHitState())
+		{
+			//ヒットストップ状態または被弾状態なら何もしない
+			return;
+		}
+
 		//接触したキャラクターの名前を取得
 		std::string targetName = pTarget->GetObjectName();
 
@@ -130,7 +137,7 @@ void Player::OnCollision(GameObject* pTarget)
 		CollisionCharacter(targetName);
 
 		//被弾状態になる
-		ChangeState(S_Hit);
+		ChangeState(S_HitStop);
 
 		//接触エフェクト
 		vfx_->SetHitEffect();
