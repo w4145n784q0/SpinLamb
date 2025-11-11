@@ -168,7 +168,7 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 	//‰Šú‰»‚Ì‡”Ô‚Ícsv‚ÌŠes‚Ì‡”Ô‚É‡‚í‚¹‚é
 	//v‚Ì“Y‚¦Žš‚Ínamespace‚ÅéŒ¾‚µ‚½—ñ‹“Œ^‚ðŽg—p
 	params_->HitParam_.ColliderSize_ = HitData[i_Collider];
-	params_->HitParam_.HitStopValue_ = HitData[i_HitStopValue];
+	params_->HitParam_.HitStopValue_ = static_cast<int>(HitData[i_HitStopValue]);
 	params_->HitParam_.OriginalRangeMin_ = HitData[i_OriginalRangeMin];
 	params_->HitParam_.OriginalRangeMax_ = HitData[i_OriginalRangeMax];
 	params_->HitParam_.ConvertedRangeMin_ = HitData[i_ConvertedRangeMin];

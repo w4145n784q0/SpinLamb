@@ -95,7 +95,7 @@ void CharacterVFX::SetHitEffect()
 	VFX::SetEmitter(hit, params_->EffectParam_.HitEffectParam_);
 
 	//使用する画像のパスをセットする
-	hit.textureFileName = "ParticleAssets\\flashB_W.png";
+	hit.textureFileName = "ParticleAssets\\star.png";
 
 	//発射位置をセット
 	hit.position = character_->GetPosition();
@@ -111,7 +111,7 @@ void CharacterVFX::SetFenceHitEffect()
 	VFX::SetEmitter(fencehit, params_->EffectParam_.FenceHitEffectParam_);
 
 	//使用する画像のパスをセットする
-	fencehit.textureFileName = "ParticleAssets\\flashB_W.png";
+	fencehit.textureFileName = "ParticleAssets\\flashB_Y.png";
 
 	//発射位置をセット
 	fencehit.position = character_->GetPosition();
