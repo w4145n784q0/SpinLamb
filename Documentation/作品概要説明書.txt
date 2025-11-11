@@ -7,7 +7,7 @@
 開発環境　　　　： VisualStudio2022,DirectX11
 必要ライブラリ　： FBX SDK
 作品リンク　　　： https://github.com/w4145n784q0/SpinLamb
-制作期間　　　　： 6か月
+制作期間　　　　： 7か月
 動作環境　　　　： PC
 制作人数　　　　： 1名(個人製作)
 
