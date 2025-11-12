@@ -46,6 +46,9 @@ private:
 	//EnemyAttackTimeArrayの添え字
 	int RandomAim_;
 
+	//攻撃後のクールタイム
+	int WaitTime_;
+
 	//----------移動関係----------
 
 	//プレイヤーの位置ベクトルを保管
@@ -134,6 +137,18 @@ public:
 
 	//攻撃までの時間を再抽選する
 	void RandomAimReLottery();
+
+	void WaitTimerAdd() {
+		WaitTime_++;
+	}
+
+	bool IsTimeOverWaitTime() {
+		if (WaitTime_ >= 10) {
+			WaitTime_ = 0;
+			return true;
+		}
+		return false;
+	}
 
 	//Enemy限定のデータをCSV読み込み
 	void SetCSVEnemy();

@@ -161,8 +161,10 @@
     <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateFenceHit.cpp" />
     <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateHit.cpp" />
     <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateHitStop.cpp" />
+    <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateLook.cpp" />
     <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateRoot.cpp" />
     <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateStop.cpp" />
+    <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateWait.cpp" />
     <ClCompile Include="CharacterSourceFile\Player.cpp" />
     <ClCompile Include="CharacterSourceFile\PlayerState\BasePlayerState.cpp" />
     <ClCompile Include="CharacterSourceFile\PlayerState\PlayerStateAttack.cpp" />
@@ -251,8 +253,10 @@
     <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateFenceHit.h" />
     <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateHit.h" />
     <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateHitStop.h" />
+    <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateLook.h" />
     <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateRoot.h" />
     <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateStop.h" />
+    <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateWait.h" />
     <ClInclude Include="CharacterSourceFile\Player.h" />
     <ClInclude Include="CharacterSourceFile\PlayerState\BasePlayerState.h" />
     <ClInclude Include="CharacterSourceFile\PlayerState\PlayerStateAttack.h" />
