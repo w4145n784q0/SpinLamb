@@ -54,11 +54,13 @@ public:
         //通常の移動に使用
 		float NormalAcceleValue_ = 0.0f;        //通常移動時、加速度の1fあたりの増加量
         float NormalFullAccelerate_ = 0.0f;     //通常移動時の加速度の増加量の最大(これとNormalVelocity_の合計が通常時の最高速にあたる)
+        float NormalFriction_ = 0.0f;           //通常移動の摩擦係数(減速率) 1fあたりの減速量
 
         //チャージ・ダッシュ攻撃中に使用
         float TmpAccele_ = 0.0f;                //チャージ中の加速度上昇時に使う仮の値 チャージ中はこれが上昇する
         float AttackAcceleValue_ = 0.0f;        //チャージ中の加速度上昇時、1fあたりの増加量
         float AttackFullAccelerate_ = 0.0f;     //チャージ中の加速度の増加量の最大
+        float AttackFriction_ = 0.0f;           //ダッシュ移動の摩擦係数(減速率) 1fあたりの減速量
 
         //チャージ中の矢印関連
         int hMoveArrow_ = -1;                   //チャージ中に表示する矢印モデル
@@ -69,7 +71,6 @@ public:
 
         //共通
         float CommonAcceleration_ = 0.0f;       //通常・ダッシュ共通の加速度
-        float Friction_ = 0.0f;                 //摩擦係数(減速率) 1fあたりの減速量
 
         XMVECTOR ForwardVector_ = { 0,0,0 };    //キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算 正規化した値を入れる
         XMVECTOR MoveDirection_ = { 0,0,0 };    //移動方向 この値に速さの要素をかけて移動ベクトル化する
@@ -190,6 +191,9 @@ public:
 	void SetFullNormalAccelerate(float _fullNormalAccelerate) { MoveParam_.NormalFullAccelerate_ = _fullNormalAccelerate; }
 	float GetFullNormalAccelerate() { return MoveParam_.NormalFullAccelerate_; }
 
+    void SetNormalFriction(float _friction) { MoveParam_.NormalFriction_; }
+    float GetNormalFriction() { return  MoveParam_.NormalFriction_; }
+
     void SetTmpAccele(float _tmpAccele) { MoveParam_.TmpAccele_ = _tmpAccele; }
     float GetTmpAccele() const { return MoveParam_.TmpAccele_; }
 
@@ -199,8 +203,8 @@ public:
 	void SetFullAttackAccelerate(float _fullAttackAccelerate) { MoveParam_.AttackFullAccelerate_ = _fullAttackAccelerate; }
 	float GetFullAttackAccelerate() { return MoveParam_.AttackFullAccelerate_; }
 
-    void SetFriction(float _friction) { MoveParam_.Friction_; }
-    float GetFriction() { return  MoveParam_.Friction_; }
+    void SetAttackFriction(float _friction) { MoveParam_.AttackFriction_; }
+    float GetAttackFriction() { return  MoveParam_.AttackFriction_; }
 
     void SetForwardVector(XMVECTOR _forward) { MoveParam_.ForwardVector_ = _forward; }
     XMVECTOR GetForwardVector() const { return MoveParam_.ForwardVector_; }

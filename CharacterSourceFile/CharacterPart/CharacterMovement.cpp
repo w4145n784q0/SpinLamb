@@ -37,7 +37,7 @@ void CharacterMovement::MoveUpdate(XMVECTOR _input)
 	else
 	{
 		//–€ŽC‚É‚æ‚éŒ¸‘¬
-		FrictionDeceleration();
+		FrictionNormalDeceleration();
 	}
 
 	//‰Á‘¬“x‚ª0ˆÈ‰º‚È‚ç’âŽ~
@@ -157,9 +157,14 @@ void CharacterMovement::Deceleration()
 	params_->MoveParam_.CommonAcceleration_ -= params_->MoveParam_.NormalAcceleValue_;
 }
 
-void CharacterMovement::FrictionDeceleration()
+void CharacterMovement::FrictionNormalDeceleration()
 {
-	params_->MoveParam_.CommonAcceleration_ -= params_->MoveParam_.Friction_;
+	params_->MoveParam_.CommonAcceleration_ -= params_->MoveParam_.NormalFriction_;
+}
+
+void CharacterMovement::FrictionAttackDeceleration()
+{
+	params_->MoveParam_.CommonAcceleration_ -= params_->MoveParam_.AttackFriction_;
 }
 
 void CharacterMovement::AccelerationStop()

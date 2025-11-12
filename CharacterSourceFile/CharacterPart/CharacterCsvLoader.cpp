@@ -11,11 +11,13 @@ namespace {
 	{
 		//通常移動
 		i_NormalAcceleValue = 0,
-		i_NormalFullAccelerate_,
+		i_NormalFullAccelerate,
+		i_NormalFriction,
 
 		//ダッシュ攻撃
-		i_AttackAcceleValue_,
-		i_AttackFullAccelerate_,
+		i_AttackAcceleValue,
+		i_AttackFullAccelerate,
+		i_AttackFriction,
 
 		//矢印関係
 		i_ArrowRotateX,
@@ -25,9 +27,6 @@ namespace {
 		i_ArrowScaleY,
 		i_ArrowScaleZ,
 		i_AddArrowDepth,
-
-		//共通
-		i_Friction,
 	};	
 
 	//回転関係
@@ -119,13 +118,17 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
 	params_->MoveParam_.NormalAcceleValue_ = MoveData[i_NormalAcceleValue];
-	params_->MoveParam_.NormalFullAccelerate_ = MoveData[i_NormalFullAccelerate_];
-	params_->MoveParam_.AttackAcceleValue_ = MoveData[i_AttackAcceleValue_];
-	params_->MoveParam_.AttackFullAccelerate_ = MoveData[i_AttackFullAccelerate_];
+	params_->MoveParam_.NormalFullAccelerate_ = MoveData[i_NormalFullAccelerate];
+	params_->MoveParam_.NormalFriction_ = MoveData[i_NormalFriction];
+
+	params_->MoveParam_.AttackAcceleValue_ = MoveData[i_AttackAcceleValue];
+	params_->MoveParam_.AttackFullAccelerate_ = MoveData[i_AttackFullAccelerate];
+	params_->MoveParam_.AttackFriction_ = MoveData[i_AttackFriction];
+
 	params_->MoveParam_.ArrowRotate_ = { MoveData[i_ArrowRotateX],MoveData[i_ArrowRotateY],MoveData[i_ArrowRotateZ] };
 	params_->MoveParam_.ArrowScale_ = { MoveData[i_ArrowScaleX],MoveData[i_ArrowScaleY],MoveData[i_ArrowScaleZ] };
+	
 	params_->MoveParam_.AddArrowDepth_ = MoveData[i_AddArrowDepth];
-	params_->MoveParam_.Friction_ = MoveData[i_Friction];
 
 	//--------------------回転関係のパラメータ--------------------
 

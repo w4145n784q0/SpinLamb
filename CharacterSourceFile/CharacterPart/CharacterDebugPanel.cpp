@@ -78,10 +78,12 @@ void CharacterDebugPanel::DrawCharacterImGui()
 		ImGui::InputFloat("CommonAcceleration", &params_->MoveParam_.CommonAcceleration_, ZeroPointOne);
 		ImGui::InputFloat("NormalAcceleValue", &params_->MoveParam_.NormalAcceleValue_, ZeroPointOne);
 		ImGui::InputFloat("NormalFullAccelerate", &params_->MoveParam_.NormalFullAccelerate_, ZeroPointOne);
+		ImGui::InputFloat("NormalFriction", &params_->MoveParam_.NormalFriction_, ZeroPointOne);
+
 		ImGui::InputFloat("TmpAccele", &params_->MoveParam_.TmpAccele_, ZeroPointOne);
 		ImGui::InputFloat("AttackAcceleValue", &params_->MoveParam_.AttackAcceleValue_, ZeroPointOne);
 		ImGui::InputFloat("AttackFullAccelerate", &params_->MoveParam_.AttackFullAccelerate_, ZeroPointOne);
-		ImGui::InputFloat("Friction", &params_->MoveParam_.Friction_, ZeroPointOne);
+		ImGui::InputFloat("AttackFriction", &params_->MoveParam_.AttackFriction_, ZeroPointOne);
 
 		XMFLOAT3 move;
 		XMStoreFloat3(&move, params_->MoveParam_.MoveDirection_);

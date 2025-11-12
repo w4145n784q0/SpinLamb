@@ -20,7 +20,7 @@ void EnemyStateAttack::Update(Enemy* _enemy)
 	_enemy->RotateFromDirection(_enemy->GetAutoAttackDirection());
 
 	//–€ŽC—Ê•ª‘¬“x‚ðŒ¸­
-	_enemy->movement_->FrictionDeceleration();
+	_enemy->movement_->FrictionAttackDeceleration();
 
 	//‚‘¬X‰ñ“]
 	_enemy->rotate_->FastRotateX();

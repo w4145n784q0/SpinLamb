@@ -124,9 +124,10 @@ void Player::OnCollision(GameObject* pTarget)
 	if (pTarget->GetObjectName() == "Enemy1" || pTarget->GetObjectName() == "Enemy2"
 		|| pTarget->GetObjectName() == "Player1" || pTarget->GetObjectName() == "Player2")
 	{
-		if (currentState_->IsHitStopState() || currentState_->isHitState())
+		//ヒットストップ・被弾・柵に接触状態・無敵時間なら何もしない
+		if (currentState_->IsHitStopState() || currentState_->isHitState() 
+			|| currentState_->IsFenceHitState())
 		{
-			//ヒットストップ状態または被弾状態なら何もしない
 			return;
 		}
 

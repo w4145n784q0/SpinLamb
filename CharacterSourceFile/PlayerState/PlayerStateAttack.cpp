@@ -16,8 +16,8 @@ void PlayerStateAttack::Update(Player* _player)
 	//³–ÊƒxƒNƒgƒ‹‚Ì•ûŒü‚ÉˆÚ“®
 	_player->movement_->CharacterAttackMove(_player->GetParams()->MoveParam_.ForwardVector_);
 
-	//–€ŽC—Ê•ª‘¬“x‚ðŒ¸­
-	_player->movement_->FrictionDeceleration();
+	//–€ŽC—Ê(UŒ‚—p‚Ì–€ŽC—Ê)•ª‘¬“x‚ðŒ¸­
+	_player->movement_->FrictionAttackDeceleration();
 
 	//‚‘¬X‰ñ“]
 	_player->rotate_->FastRotateX();

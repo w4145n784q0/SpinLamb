@@ -96,7 +96,12 @@ public:
     /// <summary>
     /// 通常時の摩擦による減速処理
     /// </summary>
-    void FrictionDeceleration();
+    void FrictionNormalDeceleration();
+
+    /// <summary>
+    /// 
+    /// </summary>
+    void FrictionAttackDeceleration();
 
     /// <summary>
     /// 加速度リセット

@@ -23,6 +23,8 @@ public:
     //状態名を取得(デバッグ用)
     virtual std::string GetStateName() { return ""; }
 
+    //-----以下は専用の状態でオーバーライド-----
+
     //ヒットストップ状態かどうか返す
     virtual bool IsHitStopState() const { return false; }
 
