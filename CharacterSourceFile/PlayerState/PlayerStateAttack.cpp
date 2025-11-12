@@ -16,7 +16,7 @@ void PlayerStateAttack::Update(Player* _player)
 	//正面ベクトルの方向に移動
 	_player->movement_->CharacterAttackMove(_player->GetParams()->MoveParam_.ForwardVector_);
 
-	//摩擦量(攻撃用の摩擦量)分速度を減少
+	//摩擦量(攻撃摩擦量)分速度を減少
 	_player->movement_->FrictionAttackDeceleration();
 
 	//高速X回転

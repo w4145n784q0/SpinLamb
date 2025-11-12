@@ -60,7 +60,7 @@ public:
         float TmpAccele_ = 0.0f;                //チャージ中の加速度上昇時に使う仮の値 チャージ中はこれが上昇する
         float AttackAcceleValue_ = 0.0f;        //チャージ中の加速度上昇時、1fあたりの増加量
         float AttackFullAccelerate_ = 0.0f;     //チャージ中の加速度の増加量の最大
-        float AttackFriction_ = 0.0f;           //ダッシュ移動の摩擦係数(減速率) 1fあたりの減速量
+        float AttackFriction_ = 0.0f;           //ダッシュ攻撃の摩擦係数(減速率) 1fあたりの減速量
 
         //チャージ中の矢印関連
         int hMoveArrow_ = -1;                   //チャージ中に表示する矢印モデル

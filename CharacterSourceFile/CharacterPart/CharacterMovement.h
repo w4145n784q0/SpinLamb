@@ -94,12 +94,12 @@ public:
     void Deceleration();
 
     /// <summary>
-    /// ’Êí‚Ì–€C‚É‚æ‚éŒ¸‘¬ˆ—
+    /// ’Êí–€C‚É‚æ‚éŒ¸‘¬ˆ—
     /// </summary>
     void FrictionNormalDeceleration();
 
     /// <summary>
-    /// 
+    /// UŒ‚–€C‚É‚æ‚éŒ¸‘¬ˆ—
     /// </summary>
     void FrictionAttackDeceleration();
 

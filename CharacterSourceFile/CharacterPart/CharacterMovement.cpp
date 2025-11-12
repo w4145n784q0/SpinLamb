@@ -36,7 +36,7 @@ void CharacterMovement::MoveUpdate(XMVECTOR _input)
 	//“ü—Í‚ª‚È‚¢‚È‚çŒ¸‘¬
 	else
 	{
-		//–€C‚É‚æ‚éŒ¸‘¬
+		//’Êí–€C—Í‚É‚æ‚éŒ¸‘¬
 		FrictionNormalDeceleration();
 	}
 
