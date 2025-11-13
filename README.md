@@ -7,6 +7,10 @@ SpinLamb
 ├─CharacterSourceFile
 
     └─CharacterPart
+    
+    └─EnemyState
+    
+    └─PlayerState
 
 ├─Documentation
 
