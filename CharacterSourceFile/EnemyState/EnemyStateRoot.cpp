@@ -13,14 +13,25 @@ void EnemyStateRoot::Update(Enemy* _enemy)
 	//Ž©g‚ÆPlayer‚Ì‹——£‚ð‘ª‚é
 	float dist = _enemy->PlayerEnemyDistanceX();
 
-	//ˆê’è‹——£ˆÈã—£‚ê‚Ä‚¢‚é‚È‚ç’ÇÕ
-	if (dist > _enemy->GetChaseLength())
-	{
-		_enemy->ChangeState(Enemy::S_Approach);
-	}
-	else//Ú‹ß‚µ‚Ä‚¢‚é‚È‚çUŒ‚€”õ
+	////ˆê’è‹——£ˆÈã—£‚ê‚Ä‚¢‚é‚È‚ç’ÇÕ
+	//if (dist > _enemy->GetChaseLength())
+	//{
+	//	_enemy->ChangeState(Enemy::S_Approach);
+	//}
+	//else//Ú‹ß‚µ‚Ä‚¢‚é‚È‚çUŒ‚€”õ
+	//{
+	//	_enemy->ChangeState(Enemy::S_Aim);
+	//}
+
+	//‘ŠŽè‚ÆŽ©g‚ª‹ß‚¢‚È‚çUŒ‚€”õ
+	if (_enemy->IsNearChaseLength(dist))
 	{
 		_enemy->ChangeState(Enemy::S_Aim);
+
+	}
+	else//—£‚ê‚Ä‚¢‚é‚È‚ç’ÇÕ
+	{
+		_enemy->ChangeState(Enemy::S_Approach);
 	}
 }
 
@@ -28,4 +39,30 @@ void EnemyStateRoot::Exit(Enemy* _enemy)
 {
 	//ó‘Ô‘JˆÚ‚ÌÛ‚Íˆê“xx‰ñ“]‚ðƒXƒgƒbƒv
 	_enemy->rotate_->RotateXStop();
+}
+
+bool EnemyStateRoot::TryApproach(Enemy* _enemy)
+{
+	//Ž©g‚ÆPlayer‚Ì‹——£‚ð‘ª‚é
+	float dist = _enemy->PlayerEnemyDistanceX();
+
+	if (_enemy->IsNearChaseLength(dist))
+	{
+		_enemy->ChangeState(Enemy::S_Aim);
+		return true;
+	}
+	return false;
+}
+
+bool EnemyStateRoot::TryAttack(Enemy* _enemy)
+{
+	//Ž©g‚ÆPlayer‚Ì‹——£‚ð‘ª‚é
+	float dist = _enemy->PlayerEnemyDistanceX();
+
+	if (!_enemy->IsNearChaseLength(dist))
+	{
+		_enemy->ChangeState(Enemy::S_Approach);
+		return true;
+	}
+	return false;
 }

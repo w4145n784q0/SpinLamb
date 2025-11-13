@@ -45,8 +45,8 @@ namespace
 }
 
 Enemy::Enemy(GameObject* parent)
-	:Character(parent,"Enemy"), hEnemy_(-1),pPlayer_(nullptr),
-	AimTimer_(0), RandomAim_(0),
+	:Character(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr),
+	AimTimer_(0), RandomAim_(0), WaitTime_(0),
 	TargetVec_({0,0,0}), TargetPosition_({0,0,0}), TargetAcceleration_(0.0f),TargetName_("")
 {
 }
@@ -413,6 +413,19 @@ float Enemy::PlayerEnemyDistanceX()
 	//’·‚³‚ğæ“¾‚µ•Ô‚·
 	float tmp = XMVectorGetX(XMVector3Length(DistVec));
 	return tmp;
+}
+
+bool Enemy::IsNearChaseLength(float _length)
+{
+	//’ÇÕ‹——£‚É‹ß‚¢‚©”»’è
+	if (_length < ChaseLength) 
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
 }
 
 void Enemy::AimTimerAdd()

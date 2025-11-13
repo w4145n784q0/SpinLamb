@@ -117,6 +117,13 @@ public:
 	//敵とプレイヤーの距離を返す
 	float PlayerEnemyDistanceX();
 
+	/// <summary>
+	/// 追跡判定距離より近いかどうか返す
+	/// </summary>
+	/// <param name="_length">相手と自身の距離</param>
+	/// <returns>相手と自身の距離の方が近いかどうか</returns>
+	bool IsNearChaseLength(float _length);
+
 	//AimTimerを増加
 	void AimTimerAdd();
 
@@ -125,15 +132,6 @@ public:
 
 	//攻撃するまでの時間を過ぎたか
 	bool IsTimeOverAttackTime();
-
-	//HitStopTimerを増加
-	void HitStopTimerAdd();
-
-	//HitStopTimerをリセット
-	void HitStopTimerReset();
-
-	//ヒットストップ時間を過ぎたか
-	bool IsTimeOverHitStopTime();
 
 	//攻撃までの時間を再抽選する
 	void RandomAimReLottery();
