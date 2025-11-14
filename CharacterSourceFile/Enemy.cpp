@@ -479,6 +479,7 @@ bool Enemy::IsAttackDecision()
 			return true;
 		}
 	}
+	return false;
 }
 
 void Enemy::SetCSVEnemy()

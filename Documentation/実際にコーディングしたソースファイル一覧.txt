@@ -52,6 +52,8 @@ CharacterForward.cpp
 CharacterForward.h
 CharacterHit.cpp
 CharacterHit.h
+CharacterHitStop.cpp
+CharacterHitStop.h
 CharacterModelBlink.cpp
 CharacterModelBlink.h
 CharacterMovement.cpp
@@ -66,6 +68,8 @@ CharacterShadow.cpp
 CharacterShadow.h
 CharacterVFX.cpp
 CharacterVFX.h
+CharacterWait.cpp
+CharacterWait.h
 
 ●Playerのステートクラス(CharacterSourceFile内のPlayerStateに格納)
 BasePlayerState.cpp
@@ -78,6 +82,8 @@ PlayerStateFenceHit.cpp
 PlayerStateFenceHit.h
 PlayerStateHit.cpp
 PlayerStateHit.h
+PlayerStateHitStop.cpp
+PlayerStateHitStop.h
 PlayerStateIdle.cpp
 PlayerStateIdle.h
 PlayerStateStop.cpp
@@ -98,10 +104,14 @@ EnemyStateHit.cpp
 EnemyStateHit.h
 EnemyStateHitStop.cpp
 EnemyStateHitStop.h
+EnemyStateLook.cpp
+EnemyStateLook.h
 EnemyStateRoot.cpp
 EnemyStateRoot.h
 EnemyStateStop.cpp
 EnemyStateStop.h
+EnemyStateWait.cpp
+EnemyStateWait.h
 
 
 ●ステージ関係(StageSourceFileに格納)

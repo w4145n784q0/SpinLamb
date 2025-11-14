@@ -17,7 +17,7 @@ void EnemyStateLook::Update(Enemy* _enemy)
 
 	if (_enemy->IsAttackDecision())
 	{
-		//–³“GŽžŠÔ‚â”í’eó‘Ô‚ªI‚í‚Á‚½‚çƒ‹[ƒgó‘Ô‚Ö–ß‚é
+		//–³“GŽžŠÔ‚â”í’eEò‚ÖÚGó‘Ô‚ªI‚í‚Á‚½‚çƒ‹[ƒgó‘Ô‚Ö–ß‚é
 		_enemy->ChangeState(Enemy::S_Root);
 	}
 }
