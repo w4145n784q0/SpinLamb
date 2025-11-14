@@ -272,6 +272,8 @@ public:
     void SetInvincibilityTime(int _invincibilityTime) { FenceHitParam_.InvincibilityTime_ = _invincibilityTime; }
     int GetInvincibilityTime() const { return FenceHitParam_.InvincibilityTime_; }
 
+	bool GetIsInvincibility() const { return FenceHitParam_.IsInvincibility_; }
+
     void SetInvincibilityValue(int _invincibilityValue) { FenceHitParam_.InvincibilityValue_ = _invincibilityValue; }
     int GetInvincibilityValue() const { return FenceHitParam_.InvincibilityValue_; }
 

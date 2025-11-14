@@ -24,6 +24,7 @@ public:
 		S_Hit,			//弾かれる
 		S_FenceHit,		//柵にヒット
 		S_Wait,         //待機時間 攻撃後のクールタイム
+		S_Look,         //プレイヤーを見るだけ
 		S_Stop,			//敵を止める
 		S_MaxState
 	};
@@ -133,6 +134,9 @@ public:
 
 	//攻撃までの時間を再抽選する
 	void RandomAimReLottery();
+
+	//敵がプレイヤーに対して攻撃を行うか返す
+	bool IsAttackDecision();
 
 	//Enemy限定のデータをCSV読み込み
 	void SetCSVEnemy();

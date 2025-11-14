@@ -25,4 +25,6 @@ void EnemyStateWait::Update(Enemy* _enemy)
 
 void EnemyStateWait::Exit(Enemy* _enemy)
 {
+	//状態遷移の際は一度x回転をストップ
+	_enemy->rotate_->RotateXStop();
 }

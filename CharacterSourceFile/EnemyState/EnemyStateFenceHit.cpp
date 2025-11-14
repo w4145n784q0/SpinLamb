@@ -19,7 +19,7 @@ void EnemyStateFenceHit::Update(Enemy* _enemy)
 		_enemy->hit_->KnockBackVelocityReset();
 
 		//ルートへ戻る
-		_enemy->ChangeState(Enemy::S_Root);
+		_enemy->ChangeState(Enemy::S_Wait);
 
 		//攻撃までの時間を再抽選(ノックバックした際も抽選し、頻繁に変わるようにする)
 		_enemy->RandomAimReLottery();

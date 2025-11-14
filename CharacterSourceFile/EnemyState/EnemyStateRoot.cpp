@@ -10,18 +10,28 @@ void EnemyStateRoot::Update(Enemy* _enemy)
 	//“G‚Ìó‘Ô‘JˆÚ‚ÌÅãˆÊ UŒ‚‚â”í’eó‘Ô‚ªI‚í‚Á‚½‚ç‚±‚±‚É–ß‚é
 	//‚±‚±‚©‚çŽŸ‚Ìó‘Ô‚Ö‘JˆÚ‚·‚é
 
-	//Ž©g‚ÆPlayer‚Ì‹——£‚ð‘ª‚é
-	float dist = _enemy->PlayerEnemyDistanceX();
-
-	//‘ŠŽè‚ÆŽ©g‚ª‹ß‚¢‚È‚çUŒ‚€”õ
-	if (_enemy->IsNearChaseLength(dist))
+	//ƒvƒŒƒCƒ„[‚ªƒqƒbƒgƒXƒgƒbƒvE”í’eEò‚ÉÚGó‘ÔE–³“GŽžŠÔ‚È‚çŒ©‚é‚¾‚¯
+	if (!_enemy->IsAttackDecision())
 	{
-		_enemy->ChangeState(Enemy::S_Aim);
-
+		_enemy->ChangeState(Enemy::S_Look);
 	}
-	else//—£‚ê‚Ä‚¢‚é‚È‚ç’ÇÕ
+	else
 	{
-		_enemy->ChangeState(Enemy::S_Approach);
+		//‚»‚¤‚Å‚È‚¢‚È‚çUŒ‚‚©’ÇÕ‚Ì€”õ
+
+		//Ž©g‚ÆPlayer‚Ì‹——£‚ð‘ª‚é
+		float dist = _enemy->PlayerEnemyDistanceX();
+
+		//‘ŠŽè‚ÆŽ©g‚ª‹ß‚¢‚È‚çUŒ‚€”õ
+		if (_enemy->IsNearChaseLength(dist))
+		{
+			_enemy->ChangeState(Enemy::S_Aim);
+
+		}
+		else//—£‚ê‚Ä‚¢‚é‚È‚ç’ÇÕ
+		{
+			_enemy->ChangeState(Enemy::S_Approach);
+		}
 	}
 }
 

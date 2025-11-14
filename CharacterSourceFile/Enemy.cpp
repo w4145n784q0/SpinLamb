@@ -12,6 +12,7 @@
 #include"../CharacterSourceFile/EnemyState/EnemyStateHit.h"
 #include"../CharacterSourceFile/EnemyState/EnemyStateFenceHit.h"
 #include"../CharacterSourceFile/EnemyState/EnemyStateWait.h"
+#include"../CharacterSourceFile/EnemyState/EnemyStateLook.h"
 #include"../CharacterSourceFile/EnemyState/EnemyStateStop.h"
 
 
@@ -66,7 +67,8 @@ void Enemy::Initialize()
 	stateTable_[S_HitStop]  = std::make_unique<EnemyStateHitStop>();
 	stateTable_[S_Hit]		= std::make_unique<EnemyStateHit>();
 	stateTable_[S_FenceHit] = std::make_unique<EnemyStateFenceHit>();
-	stateTable_[S_Wait] = std::make_unique<EnemyStateWait>();
+	stateTable_[S_Wait]     = std::make_unique<EnemyStateWait>();
+	stateTable_[S_Look]     = std::make_unique<EnemyStateLook>();
 	stateTable_[S_Stop]		= std::make_unique<EnemyStateStop>();
 
 	//Å‰‚ÌƒXƒe[ƒg‚ð“o˜^
@@ -460,6 +462,23 @@ void Enemy::RandomAimReLottery()
 	//UŒ‚‚Ü‚Å‚ÌŽžŠÔ‚ðÄ’Š‘I
 	//UŒ‚I—¹Œã‚È‚Ç‚ÉŒÄ‚Ño‚·
 	RandomAim_ = rand() % EnemyAttackTimeArray.size();
+}
+
+bool Enemy::IsAttackDecision()
+{
+	//ƒvƒŒƒCƒ„[‚ªƒ_ƒ[ƒWó‘Ô(”í’eEò‚ÉÕ“ËE–³“GŽžŠÔ‚©‚Ç‚¤‚©)‚ðŽæ“¾
+	//‚¢‚¸‚ê‚©‚ÉŠY“–‚·‚é‚È‚çfalse(UŒ‚‚ð‚µ‚È‚¢)
+	if (pPlayer_ != nullptr)
+	{
+		if (pPlayer_->IsDamage())
+		{
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 }
 
 void Enemy::SetCSVEnemy()

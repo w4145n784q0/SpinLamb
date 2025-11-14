@@ -14,6 +14,12 @@ void EnemyStateLook::Update(Enemy* _enemy)
 
 	//is•ûŒü‚É‡‚í‚¹‚ÄYŽ²‚ð‰ñ“]
 	_enemy->RotateFromDirection(_enemy->GetAutoAttackDirection());
+
+	if (_enemy->IsAttackDecision())
+	{
+		//–³“GŽžŠÔ‚â”í’eó‘Ô‚ªI‚í‚Á‚½‚çƒ‹[ƒgó‘Ô‚Ö–ß‚é
+		_enemy->ChangeState(Enemy::S_Root);
+	}
 }
 
 void EnemyStateLook::Exit(Enemy* _enemy)

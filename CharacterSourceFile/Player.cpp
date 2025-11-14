@@ -660,6 +660,20 @@ void Player::CollisionCharacter(std::string _name)
 	hit_->Reflect(PlayerVector, TargetVector, params_->MoveParam_.CommonAcceleration_, TargetSpeed, TargetName);
 }
 
+bool Player::IsDamage()
+{
+	//ヒットストップ・被弾・柵に接触状態・無敵時間なら何もしない
+	if (currentState_->IsHitStopState() || currentState_->isHitState()
+		|| currentState_->IsFenceHitState() || params_->GetIsInvincibility())
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void Player::SetCSVPlayer(std::string _path)
 {
 	//csvファイルを読み込む

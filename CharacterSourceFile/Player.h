@@ -18,8 +18,6 @@ public:
 	enum PlayerState
 	{
 		S_Idle,		//通常
-		//S_Jump,     //ジャンプ
-		//S_Land,     //着地
 		S_Charge,	//チャージ中
 		S_Attack,	//攻撃
 		S_HitStop,  //ヒットストップ
@@ -154,6 +152,9 @@ public:
 	/// </summary>
 	/// <param name="_name">接触したオブジェクト名</param>
 	void CollisionCharacter(std::string _name);
+
+	//被弾・柵に衝突・無敵時間かどうかを取得
+	bool IsDamage();
 
 	/// <summary>
 	/// Player限定のデータをCSV読み込み
