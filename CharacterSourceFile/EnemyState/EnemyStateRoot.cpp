@@ -13,16 +13,6 @@ void EnemyStateRoot::Update(Enemy* _enemy)
 	//Ž©g‚ÆPlayer‚Ì‹——£‚ð‘ª‚é
 	float dist = _enemy->PlayerEnemyDistanceX();
 
-	////ˆê’è‹——£ˆÈã—£‚ê‚Ä‚¢‚é‚È‚ç’ÇÕ
-	//if (dist > _enemy->GetChaseLength())
-	//{
-	//	_enemy->ChangeState(Enemy::S_Approach);
-	//}
-	//else//Ú‹ß‚µ‚Ä‚¢‚é‚È‚çUŒ‚€”õ
-	//{
-	//	_enemy->ChangeState(Enemy::S_Aim);
-	//}
-
 	//‘ŠŽè‚ÆŽ©g‚ª‹ß‚¢‚È‚çUŒ‚€”õ
 	if (_enemy->IsNearChaseLength(dist))
 	{

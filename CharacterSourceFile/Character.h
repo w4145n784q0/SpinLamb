@@ -15,6 +15,7 @@
 #include"CharacterPart/CharacterHitStop.h"
 #include "CharacterPart/CharacterHit.h"
 #include "CharacterPart/CharacterFence.h"
+#include"CharacterPart/CharacterWait.h"
 #include "CharacterPart/CharacterCsvLoader.h"
 #include "CharacterPart/CharacterObserver.h"
 #include"CharacterPart/CharacterDebugPanel.h"
@@ -47,6 +48,7 @@ public:
     std::unique_ptr<CharacterHitStop>       hitstop_;
     std::unique_ptr<CharacterHit>           hit_;
     std::unique_ptr<CharacterFence>         fence_;
+	std::unique_ptr<CharacterWait>          wait_;
     std::unique_ptr<CharacterCsvLoader>     csvload_;
     std::unique_ptr<CharacterObserver>      observer_;
     std::unique_ptr<CharacterDebugPanel>    debugpanel_;

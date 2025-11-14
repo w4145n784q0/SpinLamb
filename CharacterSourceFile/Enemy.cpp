@@ -11,6 +11,7 @@
 #include"../CharacterSourceFile/EnemyState/EnemyStateHitStop.h"
 #include"../CharacterSourceFile/EnemyState/EnemyStateHit.h"
 #include"../CharacterSourceFile/EnemyState/EnemyStateFenceHit.h"
+#include"../CharacterSourceFile/EnemyState/EnemyStateWait.h"
 #include"../CharacterSourceFile/EnemyState/EnemyStateStop.h"
 
 
@@ -46,7 +47,7 @@ namespace
 
 Enemy::Enemy(GameObject* parent)
 	:Character(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr),
-	AimTimer_(0), RandomAim_(0), WaitTime_(0),
+	AimTimer_(0), RandomAim_(0), 
 	TargetVec_({0,0,0}), TargetPosition_({0,0,0}), TargetAcceleration_(0.0f),TargetName_("")
 {
 }
@@ -65,6 +66,7 @@ void Enemy::Initialize()
 	stateTable_[S_HitStop]  = std::make_unique<EnemyStateHitStop>();
 	stateTable_[S_Hit]		= std::make_unique<EnemyStateHit>();
 	stateTable_[S_FenceHit] = std::make_unique<EnemyStateFenceHit>();
+	stateTable_[S_Wait] = std::make_unique<EnemyStateWait>();
 	stateTable_[S_Stop]		= std::make_unique<EnemyStateStop>();
 
 	//最初のステートを登録

@@ -159,6 +159,14 @@ void CharacterDebugPanel::DrawCharacterImGui()
 		ImGui::TreePop();
 	}
 
+	//‘Ò‹@ŠÔ‚Ì•â³
+	if (ImGui::TreeNode("Wait"))
+	{
+		ImGui::InputInt("WaitTimer", &params_->WaitParams_.WaitTimer_);
+		ImGui::InputInt("WaitValue", &params_->WaitParams_.WaitValue_);
+		ImGui::TreePop();
+	}
+
 	//‰e‚ÌˆÊ’u‚Ì•â³
 	if (ImGui::TreeNode("Shadow"))
 	{

@@ -5,7 +5,8 @@ Character::Character(GameObject* parent)
 	:GameObject(parent,"Character"),
 	params_(nullptr), modeldraw_(nullptr), vfx_(nullptr), shadow_(nullptr), air_(nullptr),
 	forward_(nullptr), movement_(nullptr),rotate_(nullptr),charge_(nullptr),hitstop_(nullptr),
-    hit_(nullptr),fence_(nullptr),csvload_(nullptr),observer_(nullptr),debugpanel_(nullptr)
+    hit_(nullptr),fence_(nullptr),wait_(nullptr),
+	csvload_(nullptr),observer_(nullptr),debugpanel_(nullptr)
 {
 }
 
@@ -13,7 +14,8 @@ Character::Character(GameObject* parent, const std::string& name)
 	:GameObject(parent, name),
 	params_(nullptr), modeldraw_(nullptr), vfx_(nullptr), shadow_(nullptr), air_(nullptr),
 	forward_(nullptr), movement_(nullptr), rotate_(nullptr), charge_(nullptr), hitstop_(nullptr),
-	hit_(nullptr), fence_(nullptr), csvload_(nullptr), observer_(nullptr), debugpanel_(nullptr)
+	hit_(nullptr), fence_(nullptr), wait_(nullptr),
+	csvload_(nullptr), observer_(nullptr), debugpanel_(nullptr)
 {
 	//各モジュールの生成・初期化(Instantiate)
 	//必要に応じてパラメータのセット(SetParams)
@@ -92,6 +94,11 @@ Character::Character(GameObject* parent, const std::string& name)
 		fence_->SetParams(params_.get());
 		fence_->SetCharacter(this);
 		fence_->SetEventListener(this, this, this);
+	}
+	if (wait_ == nullptr)
+	{
+		wait_ = std::make_unique<CharacterWait>(this);
+		wait_->SetParams(params_.get());
 	}
 	if(csvload_ == nullptr)
 	{

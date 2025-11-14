@@ -69,6 +69,12 @@ namespace {
 	};
 
 	//影付け関係
+	enum WaitIndex
+	{
+		i_WaitValue = 0,
+	};
+
+	//影付け関係
 	enum ShadowIndex
 	{
 		i_ShadowCorrection = 0,
@@ -193,7 +199,17 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 	params_->FenceHitParam_.InvincibilityValue_ = static_cast<int>(FenceHitData[i_InvincibilityValue]);
 	params_->FenceHitParam_.BlinkValue_ = static_cast<int>(FenceHitData[i_BlinkValue]);
 
+	//--------------------待機時間関係のパラメータ--------------------
 
+	//csvファイルの0列目の文字列を取得	
+	std::string p_wait = "WaitParam";
+
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> WaitData = GetCSVReadData(csv, p_wait);
+
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	params_->WaitParams_.WaitValue_ = static_cast<int>(WaitData[i_WaitValue]);
 
 	//--------------------影関係のパラメータ--------------------
 

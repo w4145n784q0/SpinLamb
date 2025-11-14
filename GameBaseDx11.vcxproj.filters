@@ -323,6 +323,9 @@
     <ClCompile Include="CharacterSourceFile\EnemyState\EnemyStateWait.cpp">
       <Filter>04Chara\EnemyState</Filter>
     </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterWait.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -613,6 +616,9 @@
     </ClInclude>
     <ClInclude Include="CharacterSourceFile\EnemyState\EnemyStateWait.h">
       <Filter>04Chara\EnemyState</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterWait.h">
+      <Filter>04Chara\CharacterParts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

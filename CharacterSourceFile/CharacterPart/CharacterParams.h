@@ -106,7 +106,7 @@ public:
     {
         float ColliderSize_ = 0.0f;                 //当たり判定(球体)のサイズ
         int HitStopTimer_ = 0;                      //ヒットストップ時間を計測するタイマー
-        int HitStopValue_ = 0;                       //ヒットストップする時間 この値を超えるとヒットストップ時間終了
+        int HitStopValue_ = 0;                      //ヒットストップする時間 この値を超えるとヒットストップ時間終了
         float OriginalRangeMin_ = 0.0f;             //変換元のノックバック量の最小値
         float OriginalRangeMax_ = 0.0f;             //変換元のノックバック量の最大値
         float ConvertedRangeMin_ = 0.0f;            //変換後のノックバック量の最小値
@@ -138,6 +138,14 @@ public:
         int BlinkValue_ = 0;                                    //この値にblinkTimerが到達すると通常描画する(それまでは点滅)
     };
     FenceHitParam FenceHitParam_;
+
+    //----------待機----------
+    struct WatiParam
+    {
+        int WaitTimer_ = 0;  //待機時間タイマー
+		int WaitValue_ = 0;  //待機時間 この値を超えると待機終了
+    };
+    WatiParam WaitParams_;
 
     //----------影付け----------
     struct ShadowParam

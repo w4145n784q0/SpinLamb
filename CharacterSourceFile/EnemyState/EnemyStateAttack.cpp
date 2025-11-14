@@ -31,8 +31,8 @@ void EnemyStateAttack::Update(Enemy* _enemy)
 		//明示的に加速量を0にする
 		_enemy->movement_->AccelerationStop();
 
-		//ルートへ戻る
-		_enemy->ChangeState(Enemy::S_Root);
+		//攻撃終了後は待機状態にする
+		_enemy->ChangeState(Enemy::S_Wait);
 
 		//攻撃までの時間を再抽選
 		_enemy->RandomAimReLottery();
