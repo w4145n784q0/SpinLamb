@@ -221,10 +221,10 @@ namespace Image
 
 		//csvファイルの各0列目の文字列を取得
 		std::string ImageName = "Image";
-		
+
 		//0列目の文字列を渡し、その行のパラメータを取得
 		std::vector<float> ImageData = GameObject::GetCSVReadData(csv, ImageName);
-			
+
 		//初期化の順番はcsvの各行の順番に合わせる
 		//vの添え字はnamespaceで宣言した列挙型を使用
 		LeftEdge = ImageData[i_LeftEdge];
@@ -249,5 +249,36 @@ namespace Image
 		SetAlpha(handle, alpha);
 		Draw(handle);
 	}
-}
 
+	void DrawSprite(int handle, int frameIndex, int frameWidth, int frameHeight, int sheetWidth)
+	{
+		//横方向の総コマ数
+		//シート全体の幅 / フレームの幅
+		int columns = sheetWidth / frameWidth;
+
+		//切り抜き左上座標
+		int x1 = (frameIndex % columns) * frameWidth;
+		int y1 = (frameIndex / columns) * frameHeight;
+
+		//切り抜き範囲を設定(第3,4引数は切り抜く幅と高さ 切り抜くサイズが一緒なら変化なし)
+		Image::SetRect(handle, x1, y1, frameWidth, frameHeight);
+		Draw(handle);
+	}
+
+	//スプライトアニメーションを更新する
+	void SpriteUpdate(int& frameCount, int& animeFrame, int addFrameNum, int maxFrameNum)
+	{
+		//フレーム計測用カウンターをインクリメントし、一定数を超えたら
+		if (++frameCount >= addFrameNum)
+		{
+			//アニメーション用フレームを+1して次のコマへ進める
+			//animeFrameをmaxFrameNumで割った余りを代入することで
+			//最後のフレームまで来たら最初のフレームに戻るようにする
+			//例えばmaxFrameNumが4なら,0,1,2,3,0…を繰り返す
+			animeFrame = (animeFrame + 1) % (maxFrameNum);
+
+			//計測リセット
+			frameCount = 0;
+		}
+	}
+}

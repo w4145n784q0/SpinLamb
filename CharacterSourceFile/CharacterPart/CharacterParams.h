@@ -30,7 +30,6 @@ public:
     //----------サウンドハンドル----------
     struct SoundParam
     {
-
         int hSoundcharge_ = -1;     //チャージ音のハンドル
         int hSoundattack_ = -1;     //突撃音のハンドル
         int hSoundCollision_ = -1;  //接触音のハンドル
@@ -68,6 +67,11 @@ public:
         XMFLOAT3 ArrowRotate_ = { 0,0,0 };      //矢印の初期回転 csvから初期値を読み込む際に使用
         XMFLOAT3 ArrowScale_ = { 0,0,0 };       //矢印の大きさ csvから初期値を読み込む際に使用
         float AddArrowDepth_ = 0.0f;            //矢印の奥行き(前方向)の調整値
+
+        //ダッシュ中の画像関連
+        int hDashImage_ = -1;                   //ダッシュ攻撃時に使用するスプライト画像
+		int FrameCount_ = 0;                    //ダッシュ攻撃時,スプライトが次のコマに行くまでのカウンター
+        int AnimeFrame_ = 0;                    //ダッシュ攻撃時,スプライトのどのコマを描画するかを示す
 
         //共通
         float CommonAcceleration_ = 0.0f;       //通常・ダッシュ共通の加速度

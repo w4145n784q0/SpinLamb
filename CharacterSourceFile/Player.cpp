@@ -362,6 +362,9 @@ void Player::PlayerInit(std::string _CSVpath, std::string _Modelpath)
 	//キャラクターモデルの読み込み
 	hPlayer_ = Model::Load(_Modelpath);
 	assert(hPlayer_ >= 0);
+
+	//ダッシュ用スプライト初期化
+	movement_->InitImage();
 }
 
 void Player::CameraControl()

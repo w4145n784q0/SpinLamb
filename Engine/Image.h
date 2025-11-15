@@ -118,4 +118,19 @@ namespace Image
 	//引数：alpha	透明度(0~255)
 	//引数：transfrom	ワールド行列
 	void SetAlphaAndDraw(int handle, int alpha, Transform transform);
+
+	///スプライト画像をアニメーションで描画
+	///引数：handle	設定したいモデルの番号
+	///引数：frameIndex	表示したいコマ数
+	///引数：frameWidth	表示したい1コマの幅
+	///引数：frameHeight	表示したい1コマの高さ
+	///引数：sheetWidth	スプライトシート全体の幅
+	void DrawSprite(int handle, int frameIndex, int frameWidth, int frameHeight, int sheetWidth);
+
+	///スプライト画像のアニメーション更新
+	///引数：frameCount 次のコマに進むまでのカウンター
+	///引数：animeFrame 現在のコマ番号
+	///引数：addFrameNum 次のコマに進むまでのフレーム数
+	///引数：maxFrameNum スプライトのコマの最大数
+	void SpriteUpdate(int& frameCount, int& animeFrame, int addFrameNum, int maxFrameNum);
 }

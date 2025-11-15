@@ -56,6 +56,7 @@ public:
 protected:
 
     //使用するパラメータ(CharacterParams)のポインタ
+    //protectedにして継承先のみアクセス可能にする(モジュールのparams_と混ざらないように)
     std::unique_ptr<CharacterParams> params_;
 
 public:

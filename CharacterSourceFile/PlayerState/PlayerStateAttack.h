@@ -9,6 +9,7 @@ public:
     void Enter(Player* _player) override;
     void Update(Player* _player) override;
     void Exit(Player* _player) override;
+    void Draw(Player* _player) override;
 	std::string GetStateName() override { return "Attack"; }
 };
 

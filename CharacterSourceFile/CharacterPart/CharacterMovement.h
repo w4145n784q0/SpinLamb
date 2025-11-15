@@ -114,5 +114,19 @@ public:
     /// <returns>加速量が0.0以下かどうか</returns>
     bool IsAcceleStop();
 
+    /// <summary>
+    /// 使用する画像の初期化
+    /// </summary>
+    void InitImage();
+
+    /// <summary>
+    /// 攻撃時のアニメーション更新
+    /// </summary>
+    void UpdateDashImage();
+
+    /// <summary>
+    /// 攻撃時のアニメーション描画
+    /// </summary>
+    void DrawDashImage();
 };
 

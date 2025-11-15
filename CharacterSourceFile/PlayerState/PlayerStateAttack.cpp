@@ -10,6 +10,9 @@ void PlayerStateAttack::Update(Player* _player)
 {
 	//攻撃状態 正面の方向に移動し操作不可
 
+	//ダッシュ画像の更新
+	_player->movement_->UpdateDashImage();
+
 	//攻撃中のエフェクトを出す
 	_player->vfx_->SetAttackLocusEffect();
 
@@ -40,4 +43,14 @@ void PlayerStateAttack::Exit(Player* _player)
 {
 	//状態遷移の際は一度x回転をストップ
 	_player->rotate_->RotateXStop();
+
+	//ダッシュ攻撃画像のアニメーション関連の変数をリセット
+	_player->GetParams()->MoveParam_.AnimeFrame_ = 0;
+	_player->GetParams()->MoveParam_.FrameCount_ = 0;
+}
+
+void PlayerStateAttack::Draw(Player* _player)
+{
+	//ダッシュ攻撃スプライト描画
+	_player->movement_->DrawDashImage();
 }
