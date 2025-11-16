@@ -10,13 +10,13 @@ void EnemyStateFenceHit::Update(Enemy* _enemy)
 	//ダメージを受ける柵と接触した状態 
 
 	//ノックバックする
-	_enemy->hit_->KnockBack();
+	_enemy->GetModuleHit()->KnockBack();
 
 	//ノックバックする速度が一定以下なら通常状態へ戻る
-	if (_enemy->hit_->IsKnockBackEnd())
+	if (_enemy->GetModuleHit()->IsKnockBackEnd())
 	{
 		//ノックバック速度を0に戻しておく
-		_enemy->hit_->KnockBackVelocityReset();
+		_enemy->GetModuleHit()->KnockBackVelocityReset();
 
 		//ルートへ戻る
 		_enemy->ChangeState(Enemy::S_Wait);
@@ -25,14 +25,14 @@ void EnemyStateFenceHit::Update(Enemy* _enemy)
 		_enemy->RandomAimReLottery();
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
-		_enemy->movement_->AccelerationStop();
+		_enemy->GetModuleMovement()->AccelerationStop();
 	}
 }
 
 void EnemyStateFenceHit::Exit(Enemy* _enemy)
 {
     //状態遷移の際は一度x回転をストップ
-    _enemy->rotate_->RotateXStop();
+    _enemy->GetModuleRotate()->RotateXStop();
 }
 
 bool EnemyStateFenceHit::IsUpdateInvincibility() const

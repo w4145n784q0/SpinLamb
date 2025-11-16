@@ -2,9 +2,14 @@
 #include "../Player.h"
 #include "../../Engine/Input.h"
 
+namespace
+{
+	std::string PlayerChargeEffectPath = "ParticleAssets\\circle_B.png";
+}
+
 void PlayerStateCharge::Enter(Player* _player)
 {
-	_player->charge_->ChargeReset();
+	_player->GetModuleCharge()->ChargeReset();
 }
 
 void PlayerStateCharge::Update(Player* _player)
@@ -12,16 +17,16 @@ void PlayerStateCharge::Update(Player* _player)
 	//チャージ中(TmpAcceleを溜めている状態) その場で左右回転できるが動けない
 
 	//加速度を溜める
-	_player->charge_->Charging();
+	_player->GetModuleCharge()->Charging();
 
 	//矢印モデルをセット
-	_player->charge_->SetArrow();
+	_player->GetModuleCharge()->SetArrow();
 
 	//矢印モデルの位置を自身の回転と合わせる
 	_player->GetParams()->MoveParam_.ArrowTransform_.rotate_.y = _player->GetRotate().y;
 
 	//チャージ中のエフェクトを出す
-	_player->vfx_->SetChargingEffect("ParticleAssets\\circle_B.png");
+	_player->GetModuleVFX()->SetChargingEffect(PlayerChargeEffectPath, _player->GetPosition());
 
 	//SPACEキー/Aボタンが押され,地上にいるなら
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 
@@ -30,10 +35,10 @@ void PlayerStateCharge::Update(Player* _player)
 		if (_player->GetParams()->JumpParam_.IsOnGround_)
 		{
 			//溜めたチャージを0にする
-			_player->charge_->ChargeReset();
+			_player->GetModuleCharge()->ChargeReset();
 
 			//ジャンプ開始
-			_player->air_->SetJump();
+			_player->GetModuleAir()->SetJump();
 
 			//通常状態へ戻る
 			_player->ChangeState(Player::S_Idle);
@@ -60,7 +65,7 @@ void PlayerStateCharge::Update(Player* _player)
 		|| Input::IsPadButtonUp(XINPUT_GAMEPAD_B, _player->GetControllerID()))
 	{
 		//チャージ解放
-		_player->charge_->ChargeRelease();
+		_player->GetModuleCharge()->ChargeRelease();
 
 		//攻撃状態へ移行
 		_player->ChangeState(Player::S_Attack);
@@ -68,7 +73,7 @@ void PlayerStateCharge::Update(Player* _player)
 	}
 
 	//高速X回転
-	_player->rotate_->FastRotateX();
+	_player->GetModuleRotate()->FastRotateX();
 
 	//カメラ操作
 	_player->CameraControl();
@@ -77,11 +82,11 @@ void PlayerStateCharge::Update(Player* _player)
 void PlayerStateCharge::Exit(Player* _player)
 {
 	//状態遷移の際は一度x回転をストップ
-	_player->rotate_->RotateXStop();
+	_player->GetModuleRotate()->RotateXStop();
 }
 
 void PlayerStateCharge::Draw(Player* player)
 {
 	//矢印モデルの描画
-	player->charge_->DrawArrow();
+	player->GetModuleCharge()->DrawArrow();
 }

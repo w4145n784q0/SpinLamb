@@ -35,6 +35,7 @@ class Character :
     public IRotateEventListener, public IMovementEventListener
 {
 public:
+protected:
     //----------モジュール群----------
 
     std::unique_ptr<CharacterModelBlink>    modeldraw_;
@@ -56,7 +57,7 @@ public:
 protected:
 
     //使用するパラメータ(CharacterParams)のポインタ
-    //protectedにして継承先のみアクセス可能にする(モジュールのparams_と混ざらないように)
+    //protectedにして自身か継承先のみアクセス可能にする(モジュールのparams_と混ざらないように)
     std::unique_ptr<CharacterParams> params_;
 
 public:
@@ -71,34 +72,29 @@ public:
     //描画(継承先の共通描画のみ行う)
     void Draw() override;
 
-    //チャージ中エフェクトを出すイベント
-    void OnChargeVFX() override
-    {
-        vfx_->SetFullChargeEffect(); 
-    }
-
+    //以下のイベントリスナーはモジュール内で別モジュールの処理を呼び出すために使う
     //最大チャージエフェクトを出すイベント
-    void OnFullChargeVFX() override
+    void OnFullChargeVFX(XMFLOAT3 _pos) override
     {
-        vfx_->SetFullChargeEffect();
+        vfx_->SetFullChargeEffect(_pos);
     }
 
     //軌跡エフェクトを出すイベント
-    void OnAttackLocusVFX() override
+    void OnAttackLocusVFX(XMFLOAT3 _pos) override
     {
-        vfx_->SetAttackLocusEffect();
+        vfx_->SetAttackLocusEffect(_pos);
     }
 
     //接触エフェクトを出すイベント
-    void OnHitVFX() override
+    void OnHitVFX(XMFLOAT3 _pos) override
     {
-        vfx_->SetHitEffect();
+        vfx_->SetHitEffect(_pos);
     }
 
     //柵接触エフェクトを出すイベント
-    void OnFenceHitVFX() override
+    void OnFenceHitVFX(XMFLOAT3 _pos) override
     {
-        vfx_->SetFenceHitEffect();
+        vfx_->SetFenceHitEffect(_pos);
     }
 
     //チャージ量(TmpAccele_)を0にするイベント
@@ -144,8 +140,19 @@ public:
     }
 
     //共通パラメータ群のゲッター関数
-    CharacterParams* GetParams() const {
-        return params_.get();
-    }
+    CharacterParams* GetParams() const { return params_.get(); }
+
+    //各モジュールのゲッター関数
+    CharacterMovement* GetModuleMovement() const { return movement_.get(); }
+    CharacterVFX* GetModuleVFX() const { return vfx_.get(); }
+    CharacterAir* GetModuleAir() const { return air_.get(); }
+    CharacterCharge* GetModuleCharge() const { return charge_.get(); }
+    CharacterRotate* GetModuleRotate() const { return rotate_.get(); }
+    CharacterHitStop* GetModuleHitStop() const { return hitstop_.get(); }
+    CharacterHit* GetModuleHit() const { return hit_.get(); }
+    CharacterFence* GetModuleFence() const { return fence_.get(); }
+    CharacterWait* GetModuleWait() const { return wait_.get(); }
+    CharacterModelBlink* GetModuleModelBlink() const { return modeldraw_.get(); }
+    CharacterObserver* GetModuleObserver() const { return observer_.get(); }
 
 };

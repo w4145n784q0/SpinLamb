@@ -10,13 +10,13 @@ void EnemyStateHitStop::Update(Enemy* _enemy)
 	//ヒットストップ状態
 
 	//タイマーを増加
-	_enemy->hitstop_->HitStopTimerAdd();
+	_enemy->GetModuleHitStop()->HitStopTimerAdd();
 
 	//ヒットストップする時間を超えたら被弾状態へ
-	if (_enemy->hitstop_->IsTimeOverHitStopTime())
+	if (_enemy->GetModuleHitStop()->IsTimeOverHitStopTime())
 	{
 		//タイマーをリセット
-		_enemy->hitstop_->HitStopTimerReset();
+		_enemy->GetModuleHitStop()->HitStopTimerReset();
 
 		//被弾状態へ移行
 		_enemy->ChangeState(Enemy::S_Hit);
@@ -26,7 +26,7 @@ void EnemyStateHitStop::Update(Enemy* _enemy)
 void EnemyStateHitStop::Exit(Enemy* _enemy)
 {
 	//状態遷移の際は一度x回転をストップ
-	_enemy->rotate_->RotateXStop();
+	_enemy->GetModuleRotate()->RotateXStop();
 }
 
 bool EnemyStateHitStop::IsHitStopState() const

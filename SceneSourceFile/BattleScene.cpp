@@ -148,7 +148,7 @@ void BattleScene::Initialize()
 		InitCharacters[i]->GetParams()->SetID(i + CharacterAddID);
 
 		//ŠÄ‹‘ÎÛ‚É’Ç‰Á
-		InitCharacters[i]->observer_->AddObserver(this);
+		InitCharacters[i]->GetModuleObserver()->AddObserver(this);
 	}
 
 	//player‰Šú‰»‚Ì•¶š—ñ”z—ñ(’Ç‰Á‚·‚éÛ‚Í‚±‚Ì”z—ñ‚É•¶š—ñ‚ğ’Ç‰Á)

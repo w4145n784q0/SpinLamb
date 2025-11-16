@@ -36,7 +36,6 @@ Character::Character(GameObject* parent, const std::string& name)
 	{
 		vfx_ = std::make_unique<CharacterVFX>(this);
 		vfx_->SetParams(params_.get());
-		vfx_->SetCharacter(this);
 	}
 	if (shadow_ == nullptr)
 	{

@@ -3,7 +3,7 @@
 #include"../../Engine/VFX.h"
 
 CharacterVFX::CharacterVFX(GameObject* parent)
-	:GameObject(parent, "CharacterVFX"), params_(nullptr), character_(nullptr)
+	:GameObject(parent, "CharacterVFX"), params_(nullptr)
 {
 }
 
@@ -40,7 +40,7 @@ void CharacterVFX::InitCSVEffect()
 	}
 }
 
-void CharacterVFX::SetChargingEffect(std::string _path)
+void CharacterVFX::SetChargingEffect(std::string _path, XMFLOAT3 _pos)
 {
 	//csvから読み込んだ,チャージ中エフェクトのパラメータを実際にセットする
 	EmitterData charge;
@@ -50,13 +50,13 @@ void CharacterVFX::SetChargingEffect(std::string _path)
 	charge.textureFileName = _path;
 
 	//発射位置をセット
-	charge.position = character_->GetPosition();
+	charge.position = _pos;
 
 	//エフェクトを開始
 	VFX::Start(charge);
 }
 
-void CharacterVFX::SetFullChargeEffect()
+void CharacterVFX::SetFullChargeEffect(XMFLOAT3 _pos)
 {
 	//csvから読み込んだ,最大チャージエフェクトのパラメータを実際にセットする
 	EmitterData fullcharge;
@@ -66,13 +66,13 @@ void CharacterVFX::SetFullChargeEffect()
 	fullcharge.textureFileName = "ParticleAssets\\circle_W.png";
 
 	//発射位置をセット
-	fullcharge.position = character_->GetPosition();
+	fullcharge.position = _pos;
 
 	//エフェクトを開始
 	VFX::Start(fullcharge);
 }
 
-void CharacterVFX::SetAttackLocusEffect()
+void CharacterVFX::SetAttackLocusEffect(XMFLOAT3 _pos)
 {
 	//csvから読み込んだ,攻撃中の軌跡エフェクトのパラメータを実際にセットする
 	EmitterData locus;
@@ -82,13 +82,13 @@ void CharacterVFX::SetAttackLocusEffect()
 	locus.textureFileName = "ParticleAssets\\flashB_Y.png";
 
 	//発射位置をセット
-	locus.position = character_->GetPosition();
+	locus.position = _pos;
 
 	//エフェクトを開始
 	VFX::Start(locus);
 }
 
-void CharacterVFX::SetHitEffect()
+void CharacterVFX::SetHitEffect(XMFLOAT3 _pos)
 {
 	//csvから読み込んだ,被弾エフェクトのパラメータを実際にセットする
 	EmitterData hit;
@@ -98,13 +98,13 @@ void CharacterVFX::SetHitEffect()
 	hit.textureFileName = "ParticleAssets\\star.png";
 
 	//発射位置をセット
-	hit.position = character_->GetPosition();
+	hit.position = _pos;
 
 	//エフェクトを開始
 	VFX::Start(hit);
 }
 
-void CharacterVFX::SetFenceHitEffect()
+void CharacterVFX::SetFenceHitEffect(XMFLOAT3 _pos)
 {
 	//csvから読み込んだ,柵に接触時エフェクトのパラメータを実際にセットする
 	EmitterData  fencehit;
@@ -114,7 +114,7 @@ void CharacterVFX::SetFenceHitEffect()
 	fencehit.textureFileName = "ParticleAssets\\flashB_Y.png";
 
 	//発射位置をセット
-	fencehit.position = character_->GetPosition();
+	fencehit.position = _pos;
 
 	//エフェクトを開始
 	VFX::Start(fencehit);

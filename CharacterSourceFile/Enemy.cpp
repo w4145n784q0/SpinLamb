@@ -94,7 +94,6 @@ void Enemy::Initialize()
 	//当たり判定付ける
 	SphereCollider* collision = new SphereCollider(XMFLOAT3(0, 0, 0), params_->HitParam_.ColliderSize_);
 	this->AddCollider(collision);
-
 	
 	//敵の攻撃時間配列の添え字をランダムに設定
 	RandomAimReLottery();
@@ -114,7 +113,7 @@ void Enemy::Draw()
 	modeldraw_->DrawCharacterModel(hEnemy_, this->transform_);
 
 	//現在の状態によって描画を分ける(ステートパターン使用)
-	//現状はチャージ中のみ使用(追加する場合は各ステートからDrawをoverrideする)
+	//基底クラスのDrawは空なので、overrideしたステートのみDrawが呼ばれる
 	if (currentState_)
 	{
 		currentState_->Draw(this);

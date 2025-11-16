@@ -41,7 +41,8 @@ void CharacterCharge::Charging()
 	else
 	{
 		//最大チャージエフェクトをリスナークラスから呼び出す
-		VFXListener_->OnFullChargeVFX();
+		character_->GetModuleVFX()->SetFullChargeEffect(character_->GetPosition());
+//		VFXListener_->OnFullChargeVFX();
 
 		//加速度が最大を超えないようにする
 		params_->MoveParam_.TmpAccele_ = params_->MoveParam_.AttackFullAccelerate_;

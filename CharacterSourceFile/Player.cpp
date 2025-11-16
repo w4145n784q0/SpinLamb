@@ -106,7 +106,7 @@ void Player::Draw()
 	modeldraw_->DrawCharacterModel(hPlayer_, this->transform_);
 
 	//現在の状態によって描画を分ける(ステートパターン使用)
-	//現状はチャージ中のみ使用(追加する場合は各ステートからDrawをoverrideする)
+	//基底クラスのDrawは空なので、overrideしたステートのみDrawが呼ばれる
 	if (currentState_) 
 	{
 		currentState_->Draw(this);
@@ -141,7 +141,7 @@ void Player::OnCollision(GameObject* pTarget)
 		ChangeState(S_HitStop);
 
 		//接触エフェクト
-		vfx_->SetHitEffect();
+		vfx_->SetHitEffect(this->GetPosition());
 
 		//カメラ振動(短く)
 		Camera::CameraShakeStart(Camera::GetShakeTimeLong());

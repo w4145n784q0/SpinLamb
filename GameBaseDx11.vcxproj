@@ -226,6 +226,7 @@
     <ClCompile Include="StageSourceFile\BaseWire.cpp" />
     <ClCompile Include="UISourceFile\GameTimer.cpp" />
     <ClCompile Include="UISourceFile\HUD.cpp" />
+    <ClCompile Include="UISourceFile\HUDPart\HUDDebugPanel.cpp" />
     <ClCompile Include="UISourceFile\MiniMap.cpp" />
     <ClCompile Include="ViewSourceFile\GameView.cpp" />
   </ItemGroup>
@@ -326,6 +327,7 @@
     <ClInclude Include="StageSourceFile\BaseWire.h" />
     <ClInclude Include="UISourceFile\GameTimer.h" />
     <ClInclude Include="UISourceFile\HUD.h" />
+    <ClInclude Include="UISourceFile\HUDPart\HUDDebugPanel.h" />
     <ClInclude Include="UISourceFile\MiniMap.h" />
     <ClInclude Include="ViewSourceFile\GameView.h" />
   </ItemGroup>

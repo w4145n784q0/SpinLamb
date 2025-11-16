@@ -52,7 +52,7 @@ void CharacterFence::GetWireNormal()
 void CharacterFence::FenceReflect(XMVECTOR _normal)
 {
 	//接触エフェクトを通知
-	VFXListener_->OnFenceHitVFX();
+	VFXListener_->OnFenceHitVFX(character_->GetPosition());
 
 	//溜めている速度をリセット
 	ChargeListener_->OnChargeReset();

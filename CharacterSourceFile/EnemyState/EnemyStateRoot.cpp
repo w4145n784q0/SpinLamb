@@ -38,7 +38,7 @@ void EnemyStateRoot::Update(Enemy* _enemy)
 void EnemyStateRoot::Exit(Enemy* _enemy)
 {
 	//状態遷移の際は一度x回転をストップ
-	_enemy->rotate_->RotateXStop();
+	_enemy->GetModuleRotate()->RotateXStop();
 }
 
 bool EnemyStateRoot::TryApproach(Enemy* _enemy)

@@ -10,9 +10,6 @@ class CharacterVFX :
     public GameObject
 {
 private:
-    //親クラス(Character)のポインタ
-    Character* character_;
-
     //使用するパラメータ(CharacterParams)のポインタ
     CharacterParams* params_;
 
@@ -30,11 +27,6 @@ public:
         params_ = _params;
     }
 
-    //親クラス(Character)のセッター関数
-    void SetCharacter(Character* _character) {
-        character_ = _character;
-    }
-
     /// <summary>
     /// CSV用データの初期化
     /// </summary>
@@ -44,26 +36,25 @@ public:
     /// チャージ状態エフェクトをつける
     /// </summary>
     /// <param name="_path">csvを読み込むパス</param>
-    void SetChargingEffect(std::string _path);
+    void SetChargingEffect(std::string _path, XMFLOAT3 _pos);
 
     /// <summary>
     /// 最大チャージ状態エフェクト(光の拡散)をつける
     /// </summary>
-    void SetFullChargeEffect();
+    void SetFullChargeEffect(XMFLOAT3 _pos);
 
     /// <summary>
     /// 突撃エフェクトつける(プレイヤーの背後に光の粒子)
     /// </summary>
-    void SetAttackLocusEffect();
+    void SetAttackLocusEffect(XMFLOAT3 _pos);
 
     /// <summary>
     /// 相手と接触時の衝撃エフェクトつける
     /// </summary>
-    void SetHitEffect();
+    void SetHitEffect(XMFLOAT3 _pos);
 
     /// <summary>
     /// 柵に接触時の衝撃エフェクトつける
     /// </summary>
-    void SetFenceHitEffect();
+    void SetFenceHitEffect(XMFLOAT3 _pos);
 };
-

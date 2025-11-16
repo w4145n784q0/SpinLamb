@@ -51,6 +51,9 @@
     <Filter Include="04Chara\EnemyState">
       <UniqueIdentifier>{1c4c73fe-8d7f-4905-bd53-cc42fee0d3e8}</UniqueIdentifier>
     </Filter>
+    <Filter Include="06UI\HUDPart">
+      <UniqueIdentifier>{cb961b40-6008-4b01-a81f-79ffcbb337fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine\BoxCollider.cpp">
@@ -325,6 +328,9 @@
     </ClCompile>
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterWait.cpp">
       <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
+    <ClCompile Include="UISourceFile\HUDPart\HUDDebugPanel.cpp">
+      <Filter>06UI\HUDPart</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -619,6 +625,9 @@
     </ClInclude>
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterWait.h">
       <Filter>04Chara\CharacterParts</Filter>
+    </ClInclude>
+    <ClInclude Include="UISourceFile\HUDPart\HUDDebugPanel.h">
+      <Filter>06UI\HUDPart</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
