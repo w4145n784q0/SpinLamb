@@ -14,28 +14,30 @@ public:
     HUDDebugPanel(GameObject* parent);
     virtual ~HUDDebugPanel() = default;
 
+    void ImGuiDrawer(HUD* _hud);
+
     //操作説明のImGui描画
-    void ImGuiExplanationDraw();
+    void ImGuiExplanationDraw(HUD* _hud);
 
     //開始時のロゴのImGui描画
-    void ImGuiStartLogoDraw();
+    void ImGuiStartLogoDraw(HUD* _hud);
 
     //終了時のロゴのImGui描画
-    void ImGuiFinishLogoDraw();
+    void ImGuiFinishLogoDraw(HUD* _hud);
 
     //練習モードのロゴのImGui描画
-    void ImGuiPracticeLogoDraw();
+    void ImGuiPracticeLogoDraw(HUD* _hud);
 
     //スコア表示のImGui描画
-    void ImGuiScoreDraw();
+    void ImGuiScoreDraw(HUD* _hud);
 
     //タイマー表示のImGui描画
-    void ImGuiTimerDraw();
+    void ImGuiTimerDraw(HUD* _hud);
 
     //ミニマップ表示のImGui描画
-    void ImGuiMiniMapDraw();
+    void ImGuiMiniMapDraw(HUD* _hud);
 
     //ポーズ画面のUIのImGui描画
-    void ImGuiPauseDraw();
+    void ImGuiPauseDraw(HUD* _hud);
 };
 

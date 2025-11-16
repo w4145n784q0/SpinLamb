@@ -884,6 +884,81 @@ void HUD::DrawImGuiPause()
 #endif
 }
 
+Transform& HUD::GetLogoExplanation() const
+{
+	return LogoExplanation;
+}
+
+Transform& HUD::GetLogoStart() const
+{
+	return LogoStart;
+}
+
+Transform& HUD::GetLogoFinish() const
+{
+	return LogoFinish;
+}
+
+Transform& HUD::GetLogoPractice() const
+{
+	return LogoPractice;
+}
+
+Transform& HUD::GetFirstScoreTen() const
+{
+	return FirstScoreTen;//プレイヤー1の10の位
+}
+
+Transform& HUD::GetFirstScoreOne() const
+{
+	return FirstScoreOne;//プレイヤー1の1の位
+}
+
+Transform& HUD::GetSecondScoreTen() const
+{
+	return SecondScoreTen;//プレイヤー2・Enemyの1の位
+}
+
+Transform& HUD::GetSecondScoreOne() const
+{
+	return SecondScoreOne;//プレイヤー2・Enemyの1の位
+}
+
+Transform& HUD::GetTenTime() const
+{
+	return TenTime; 
+}
+
+Transform& HUD::GetOneTime() const
+{
+	return OneTime;
+}
+
+Transform& HUD::GetMapIcon() const
+{
+	return MapIcon;
+}
+
+Transform& HUD::GetFirstIcon() const
+{
+	return FirstIcon;
+}
+
+Transform& HUD::GetSecondIcon() const
+{
+	return SecondIcon;
+}
+
+Transform& HUD::GetPauseMenu() const
+{
+	return TransPauseMenu;
+}
+
+Transform& HUD::GetPauseIcon() const
+{
+	return TransPauseIcon;
+}
+
 void HUD::DrawReady()
 {
 	if (++LogoChangeCount < ReadyTimer_)

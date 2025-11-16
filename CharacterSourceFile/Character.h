@@ -63,6 +63,8 @@ public:
 
     //以下の関数はモジュール内で別モジュールの処理を呼び出すために使う
     //最大チャージエフェクトを出すイベント
+
+    //-----VFX関連-----
     void OnFullChargeVFX(XMFLOAT3 _pos) 
     {
         vfx_->SetFullChargeEffect(_pos);
@@ -86,12 +88,14 @@ public:
         vfx_->SetFenceHitEffect(_pos);
     }
 
+    //-----チャージ関連-----
     //チャージ量(TmpAccele_)を0にするイベント
     void OnChargeReset() 
     {
         charge_->ChargeReset();
     }
 
+    //-----回転関連-----
     //X軸回転を行うイベント
     void OnMoveRotateX() 
     {
@@ -110,6 +114,7 @@ public:
         rotate_->RotateXStop();
     }
 
+    //-----移動関連-----
     //移動確定判定を行うイベント
     bool OnIsOutsideStage(DirectX::XMFLOAT3 _position) 
     {

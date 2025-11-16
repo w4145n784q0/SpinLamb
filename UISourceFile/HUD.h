@@ -155,6 +155,9 @@ public:
 	//描画モードを変更 ここで指定した_drawmodeがDraw()にて呼ばれる
 	void SetDrawMode(DrawMode _drawmode) { DrawMode_ = _drawmode; }
 
+	//描画モードを渡す 主にImGuiで使用
+	DrawMode GetDrawMode() { return DrawMode_; }
+
 	//DrawReady()からDrawGo()に遷る時間設定
 	//バラバラに持つことを防ぐため,BattleSceneから指示して設定
 	void SetReadyTimer(int _timer) { ReadyTimer_ = _timer; }
@@ -212,6 +215,23 @@ public:
 	void DrawImGuiTimer();
 	void DrawImGuiMiniMap();
 	void DrawImGuiPause();
+
+	//ゲッター関数
+	Transform& GetLogoExplanation() const;
+	Transform& GetLogoStart() const;
+	Transform& GetLogoFinish() const;
+	Transform& GetLogoPractice() const;
+	Transform& GetFirstScoreTen() const;
+	Transform& GetFirstScoreOne() const;
+	Transform& GetSecondScoreTen() const;
+	Transform& GetSecondScoreOne() const;
+	Transform& GetTenTime() const;
+	Transform& GetOneTime() const;
+	Transform& GetMapIcon() const;
+	Transform& GetFirstIcon() const;
+	Transform& GetSecondIcon() const;
+	Transform& GetPauseMenu() const;
+	Transform& GetPauseIcon() const;
 
 private:
 	//以下の描画関数は他クラスから呼ばず、上記の描画関数から呼ぶ
