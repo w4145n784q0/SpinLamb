@@ -20,24 +20,15 @@
 #include "CharacterPart/CharacterObserver.h"
 #include"CharacterPart/CharacterDebugPanel.h"
 
-//インターフェース
-
-#include"../InterfaceSourceFile/IVFXEventListener.h"
-#include"../InterfaceSourceFile/IChargeEventListner.h"
-#include"../InterfaceSourceFile/IRotateEventListner.h"
-#include"../InterfaceSourceFile/IMovementEventListener.h"
-
 
 //プレイヤー,敵クラスの共通事項クラス
 class Character :
-    public GameObject, 
-    public IVFXEventListener, public IChargeEventListener,
-    public IRotateEventListener, public IMovementEventListener
+    public GameObject
 {
-public:
 protected:
     //----------モジュール群----------
 
+    //各モジュールのポインタ 処理ごとに分割
     std::unique_ptr<CharacterModelBlink>    modeldraw_;
     std::unique_ptr<CharacterVFX>           vfx_;
     std::unique_ptr<CharacterShadow>        shadow_;
@@ -53,8 +44,6 @@ protected:
     std::unique_ptr<CharacterCsvLoader>     csvload_;
     std::unique_ptr<CharacterObserver>      observer_;
     std::unique_ptr<CharacterDebugPanel>    debugpanel_;
-
-protected:
 
     //使用するパラメータ(CharacterParams)のポインタ
     //protectedにして自身か継承先のみアクセス可能にする(モジュールのparams_と混ざらないように)
@@ -72,69 +61,69 @@ public:
     //描画(継承先の共通描画のみ行う)
     void Draw() override;
 
-    //以下のイベントリスナーはモジュール内で別モジュールの処理を呼び出すために使う
+    //以下の関数はモジュール内で別モジュールの処理を呼び出すために使う
     //最大チャージエフェクトを出すイベント
-    void OnFullChargeVFX(XMFLOAT3 _pos) override
+    void OnFullChargeVFX(XMFLOAT3 _pos) 
     {
         vfx_->SetFullChargeEffect(_pos);
     }
 
     //軌跡エフェクトを出すイベント
-    void OnAttackLocusVFX(XMFLOAT3 _pos) override
+    void OnAttackLocusVFX(XMFLOAT3 _pos) 
     {
         vfx_->SetAttackLocusEffect(_pos);
     }
 
     //接触エフェクトを出すイベント
-    void OnHitVFX(XMFLOAT3 _pos) override
+    void OnHitVFX(XMFLOAT3 _pos) 
     {
         vfx_->SetHitEffect(_pos);
     }
 
     //柵接触エフェクトを出すイベント
-    void OnFenceHitVFX(XMFLOAT3 _pos) override
+    void OnFenceHitVFX(XMFLOAT3 _pos) 
     {
         vfx_->SetFenceHitEffect(_pos);
     }
 
     //チャージ量(TmpAccele_)を0にするイベント
-    void OnChargeReset() override
+    void OnChargeReset() 
     {
         charge_->ChargeReset();
     }
 
     //X軸回転を行うイベント
-    void OnMoveRotateX() override
+    void OnMoveRotateX() 
     {
         rotate_->MoveRotateX();
     }
 
     //高速X軸回転を行うイベント
-    void OnFastRotateX() override
+    void OnFastRotateX() 
     {
         rotate_->FastRotateX();
     }
 
     //X軸回転停止を行うイベント
-    void OnRotateXStop() override
+    void OnRotateXStop() 
     {
         rotate_->RotateXStop();
     }
 
     //移動確定判定を行うイベント
-    bool OnIsOutsideStage(DirectX::XMFLOAT3 _position) override
+    bool OnIsOutsideStage(DirectX::XMFLOAT3 _position) 
     {
         return movement_->IsOutsideStage(_position);
     }
 
     //加速度を0にするイベント
-    void OnAccelerationStop() override
+    void OnAccelerationStop() 
     {
         movement_->AccelerationStop();
     }
 
     //移動確定処理を行うイベント
-    void OnMoveConfirm() override
+    void OnMoveConfirm() 
     {
 		movement_->MoveConfirm();
     }

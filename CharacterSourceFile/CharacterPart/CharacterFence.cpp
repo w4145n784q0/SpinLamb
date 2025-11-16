@@ -6,17 +6,8 @@
 #include"../../StageSourceFile/RightWire.h"
 
 CharacterFence::CharacterFence(GameObject* parent)
-	:GameObject(parent, "CharacterFence"), params_(nullptr), character_(nullptr),
-	VFXListener_(nullptr), ChargeListener_(nullptr), MovementListener_(nullptr)
+	:GameObject(parent, "CharacterFence"), params_(nullptr), character_(nullptr)
 {
-}
-
-void CharacterFence::SetEventListener(IVFXEventListener* _VfxListener,
-	IChargeEventListener* _ChargeListener, IMovementEventListener* _MovementListener)
-{
-	VFXListener_ = _VfxListener;
-	ChargeListener_ = _ChargeListener;
-	MovementListener_ = _MovementListener;
 }
 
 void CharacterFence::GetWireNormal()
@@ -52,13 +43,13 @@ void CharacterFence::GetWireNormal()
 void CharacterFence::FenceReflect(XMVECTOR _normal)
 {
 	//接触エフェクトを通知
-	VFXListener_->OnFenceHitVFX(character_->GetPosition());
+	character_->OnFenceHitVFX(character_->GetPosition());
 
 	//溜めている速度をリセット
-	ChargeListener_->OnChargeReset();
+	character_->OnChargeReset();
 
 	//ダッシュ中の速度リセット
-	MovementListener_->OnAccelerationStop();
+	character_->OnAccelerationStop();
 
 	//念のため正規化する
 	//反射方向が0なら処理しない(0ベクトルを正規化はできない)

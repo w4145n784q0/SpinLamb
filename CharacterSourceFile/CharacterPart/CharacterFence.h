@@ -1,9 +1,6 @@
 #pragma once
 #include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
-#include "../../InterfaceSourceFile/IVFXEventListener.h"
-#include"../../InterfaceSourceFile/IChargeEventListner.h"
-#include"../../InterfaceSourceFile/IMovementEventListener.h"
 
 //Characterクラスの柵関係の処理を行うモジュール
 
@@ -19,14 +16,6 @@ private:
     //使用するパラメータ(CharacterParams)のポインタ
     CharacterParams* params_;
 
-    //VFXイベントを通知するリスナー
-    IVFXEventListener* VFXListener_;
-
-    //チャージ関連イベントを通知するリスナー
-    IChargeEventListener* ChargeListener_;
-  
-    //移動関連イベントを通知するリスナー
-    IMovementEventListener* MovementListener_;
 public:
 
     CharacterFence(GameObject* parent);
@@ -46,10 +35,6 @@ public:
     void SetCharacter(Character* _character) {
         character_ = _character;
     }
-
-    //リスナーのセッター関数
-    void SetEventListener(IVFXEventListener* _VfxListener, 
-        IChargeEventListener* _ChargeListener, IMovementEventListener* _MovementListener);
 
     /// <summary>
     /// 各方向の柵から法線ベクトルを取得しNormalArrayを初期化

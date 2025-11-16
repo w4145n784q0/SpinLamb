@@ -545,23 +545,11 @@
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterRotate.h">
       <Filter>04Chara\CharacterParts</Filter>
     </ClInclude>
-    <ClInclude Include="InterfaceSourceFile\IVFXEventListener.h">
-      <Filter>07Interface</Filter>
-    </ClInclude>
     <ClInclude Include="InterfaceSourceFile\IGameObserver.h">
       <Filter>07Interface</Filter>
     </ClInclude>
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterVFX.h">
       <Filter>04Chara\CharacterParts</Filter>
-    </ClInclude>
-    <ClInclude Include="InterfaceSourceFile\IChargeEventListner.h">
-      <Filter>07Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="InterfaceSourceFile\IMovementEventListener.h">
-      <Filter>07Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="InterfaceSourceFile\IRotateEventListner.h">
-      <Filter>07Interface</Filter>
     </ClInclude>
     <ClInclude Include="CharacterSourceFile\PlayerState\BasePlayerState.h">
       <Filter>04Chara\PlayerState</Filter>

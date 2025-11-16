@@ -2,17 +2,8 @@
 #include "../Character.h"
 
 CharacterHit::CharacterHit(GameObject* parent)
-	:GameObject(parent, "CharacterHit"), params_(nullptr), character_(nullptr),
-	ChargeListener_(nullptr), RotateListener_(nullptr), MovementListener_(nullptr)
+	:GameObject(parent, "CharacterHit"), params_(nullptr), character_(nullptr)
 {
-}
-
-void CharacterHit::SetEventListener(IChargeEventListener* _ChargeListener, 
-	IRotateEventListener* _RotateListener, IMovementEventListener* _MovementListener)
-{
-	ChargeListener_ = _ChargeListener;
-	RotateListener_ = _RotateListener;
-	MovementListener_ = _MovementListener;
 }
 
 void CharacterHit::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity,
@@ -79,7 +70,7 @@ void CharacterHit::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _my
 	params_->HitParam_.KnockBack_Velocity_.z = KnockBackValue;
 
 	//溜めている速度をリセット
-	ChargeListener_->OnChargeReset();
+	character_->OnChargeReset();
 
 	//ノックバック時のY軸回転角の固定
 	KnockBackAngleY(params_->HitParam_.KnockBack_Direction_, KnockBackValue);
@@ -106,7 +97,7 @@ void CharacterHit::KnockBackAngleY(XMFLOAT3 _KnockBackVector, float _KnockBackVa
 void CharacterHit::KnockBack()
 {
 	//x軸の+回転を行う
-	RotateListener_->OnMoveRotateX();
+	character_->OnMoveRotateX();
 
 	//毎フレームノックバック速度を減少
 	params_->HitParam_.KnockBack_Velocity_.x *= params_->HitParam_.DecelerationRate_;
@@ -125,10 +116,10 @@ void CharacterHit::KnockBack()
 	XMFLOAT3 tmp;
 	XMStoreFloat3(&tmp, params_->MoveParam_.NewPosition_);
 
-	bool IsOutSide = MovementListener_->OnIsOutsideStage(tmp);
+	bool IsOutSide = character_->OnIsOutsideStage(tmp);
 	if (!IsOutSide)
 	{
-		MovementListener_->OnMoveConfirm();
+		character_->OnMoveConfirm();
 	}
 }
 

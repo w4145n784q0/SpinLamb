@@ -1,7 +1,6 @@
 #pragma once
 #include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
-#include "../../InterfaceSourceFile/IVFXEventListener.h"
 
 //Characterクラスのチャージ関係の処理を行うモジュール
 
@@ -17,8 +16,6 @@ private:
     //使用するパラメータ(CharacterParams)のポインタ
     CharacterParams* params_;
 
-    //VFXイベントを通知するリスナー
-    IVFXEventListener* VFXListener_;
 public:
  
     CharacterCharge(GameObject* parent);
@@ -38,9 +35,6 @@ public:
     void SetCharacter(Character* _character) {
         character_ = _character;
     }
-
-    //リスナーのセッター関数
-    void SetEventListener(IVFXEventListener* listener);
 
     /// <summary>
     /// 矢印トランスフォームの初期化

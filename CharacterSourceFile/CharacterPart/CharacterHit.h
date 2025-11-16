@@ -1,9 +1,6 @@
 #pragma once
 #include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
-#include"../../InterfaceSourceFile/IChargeEventListner.h"
-#include"../../InterfaceSourceFile/IRotateEventListner.h"
-#include"../../InterfaceSourceFile/IMovementEventListener.h"
 
 //Characterクラスの被弾関係の処理を行うモジュール
 
@@ -19,14 +16,6 @@ private:
     //使用するパラメータ(CharacterParams)のポインタ
     CharacterParams* params_;
 
-    //チャージ関連イベントを通知するリスナー
-    IChargeEventListener* ChargeListener_;
-    
-    //回転関連イベントを通知するリスナー
-    IRotateEventListener* RotateListener_;
-    
-    //移動関連イベントを通知するリスナー
-    IMovementEventListener* MovementListener_;
 public:
 
     CharacterHit(GameObject* parent);
@@ -46,10 +35,6 @@ public:
     void SetCharacter(Character* _character) {
         character_ = _character;
     }
-
-    // リスナーを後から設定する
-    void SetEventListener(IChargeEventListener* _ChargeListener, 
-        IRotateEventListener* _RotateListener, IMovementEventListener* _MovementListener);
 
     /// <summary>
     /// キャラクター同士の反射処理

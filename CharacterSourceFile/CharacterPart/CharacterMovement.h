@@ -1,7 +1,6 @@
 #pragma once
 #include"CharacterParams.h"
 #include "../../Engine/GameObject.h"
-#include"../../InterfaceSourceFile/IRotateEventListner.h"
 
 //Characterクラスの移動関係の処理を行うモジュール
 
@@ -16,9 +15,6 @@ private:
 
     //使用するパラメータ(CharacterParams)のポインタ
     CharacterParams* params_;
-
-    //回転関連イベントを通知するリスナー
-    IRotateEventListener* RotateListener_;
 
 public:
     CharacterMovement(GameObject* parent);
@@ -38,9 +34,6 @@ public:
     void SetCharacter(Character* _character) {
         character_ = _character;
     }
-
-    // リスナーを後から設定する
-    void SetEventListener(IRotateEventListener* _RotateListener);
 
     /// <summary>
     /// 自身の位置を初期位置に設定

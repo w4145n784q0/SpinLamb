@@ -5,13 +5,8 @@
 
 
 CharacterCharge::CharacterCharge(GameObject* parent)
-	:GameObject(parent, "CharacterCharge"), character_(nullptr), params_(nullptr), VFXListener_(nullptr)
+	:GameObject(parent, "CharacterCharge"), character_(nullptr), params_(nullptr)
 {
-}
-
-void CharacterCharge::SetEventListener(IVFXEventListener* listener)
-{
-	VFXListener_ = listener;
 }
 
 void CharacterCharge::InitArrow()
@@ -41,8 +36,7 @@ void CharacterCharge::Charging()
 	else
 	{
 		//最大チャージエフェクトをリスナークラスから呼び出す
-		character_->GetModuleVFX()->SetFullChargeEffect(character_->GetPosition());
-//		VFXListener_->OnFullChargeVFX();
+		character_->OnFullChargeVFX(character_->GetPosition());
 
 		//加速度が最大を超えないようにする
 		params_->MoveParam_.TmpAccele_ = params_->MoveParam_.AttackFullAccelerate_;

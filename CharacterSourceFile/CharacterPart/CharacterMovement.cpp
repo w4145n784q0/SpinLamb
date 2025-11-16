@@ -3,14 +3,8 @@
 #include"../../Engine/Image.h"
 
 CharacterMovement::CharacterMovement(GameObject* parent)
-	:GameObject(parent, "CharacterMovement"), params_(nullptr),character_(nullptr),
-	RotateListener_(nullptr)
+	:GameObject(parent, "CharacterMovement"), params_(nullptr),character_(nullptr)
 {
-}
-
-void CharacterMovement::SetEventListener(IRotateEventListener* _RotateListener)
-{
-	RotateListener_ = _RotateListener;
 }
 
 void CharacterMovement::InitStartPosition()
@@ -49,7 +43,7 @@ void CharacterMovement::MoveUpdate(XMVECTOR _input)
 	else
 	{
 		//加速度が0以上ならX回転する
-		RotateListener_->OnMoveRotateX();
+		character_->OnMoveRotateX();
 	}
 
 	//受け取った方向が0ベクトルでないなら移動方向を確定
