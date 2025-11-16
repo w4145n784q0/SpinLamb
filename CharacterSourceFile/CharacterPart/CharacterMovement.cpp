@@ -2,15 +2,6 @@
 #include"../Character.h"
 #include"../../Engine/Image.h"
 
-namespace
-{
-	const int ONE_FRAME_SIZE = 2048; //切り抜き後の画像1個のサイズ
-	const int SHEET_SIZE = 4096;//スプライトシートのサイズ
-	const int FRAME_COUNT_MAX = 4;//描画をする画像の番号(何番目か)の最大
-	const int ONE_FRAME_NUM = 4; //60fpsのうち描画するフレーム数
-
-}
-
 CharacterMovement::CharacterMovement(GameObject* parent)
 	:GameObject(parent, "CharacterMovement"), params_(nullptr),character_(nullptr),
 	RotateListener_(nullptr)
@@ -197,17 +188,17 @@ bool CharacterMovement::IsAcceleStop()
 void CharacterMovement::InitImage()
 {
 	//ダッシュ攻撃画像を読み込み
-	params_->MoveParam_.hDashImage_ = Image::Load("Image\\Play\\AttackEffect.png");
-	assert(params_->MoveParam_.hDashImage_ >= 0);
+	params_->AnimeParam_.hDashImage_ = Image::Load("Image\\Play\\AttackEffect.png");
+	assert(params_->AnimeParam_.hDashImage_ >= 0);
 }
 
 void CharacterMovement::UpdateDashImage()
 {
 	//スプライトによるアニメーション更新
-	Image::SpriteUpdate(params_->MoveParam_.FrameCount_,
-		params_->MoveParam_.AnimeFrame_,
-		ONE_FRAME_NUM,
-		FRAME_COUNT_MAX);
+	Image::SpriteUpdate(params_->AnimeParam_.DashFrameCount_,
+		params_->AnimeParam_.DashAnimeFrame_,
+		params_->AnimeParam_.DashOneFrameNum_,
+		params_->AnimeParam_.DashFrameCountMax_);
 
 }
 
@@ -215,8 +206,10 @@ void CharacterMovement::DrawDashImage()
 {
 	//スプライトによるアニメーション描画
 	//UpdateDashImageで更新したAnimeFrame_を使用する
-	Image::DrawSprite(params_->MoveParam_.hDashImage_,
-		params_->MoveParam_.AnimeFrame_, 
-		ONE_FRAME_SIZE, ONE_FRAME_SIZE, SHEET_SIZE);
+	Image::DrawSprite(params_->AnimeParam_.hDashImage_,
+		params_->AnimeParam_.DashAnimeFrame_,
+		params_->AnimeParam_.DashOneAnimeSize_,
+		params_->AnimeParam_.DashOneAnimeSize_,
+		params_->AnimeParam_.DashSheetSize_);
 
 }

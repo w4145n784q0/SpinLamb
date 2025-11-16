@@ -45,8 +45,8 @@ void PlayerStateAttack::Exit(Player* _player)
 	_player->rotate_->RotateXStop();
 
 	//ダッシュ攻撃画像のアニメーション関連の変数をリセット
-	_player->GetParams()->MoveParam_.AnimeFrame_ = 0;
-	_player->GetParams()->MoveParam_.FrameCount_ = 0;
+	_player->GetParams()->AnimeParam_.DashAnimeFrame_ = 0;
+	_player->GetParams()->AnimeParam_.DashFrameCount_ = 0;
 }
 
 void PlayerStateAttack::Draw(Player* _player)

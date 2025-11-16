@@ -68,14 +68,8 @@ public:
         XMFLOAT3 ArrowScale_ = { 0,0,0 };       //矢印の大きさ csvから初期値を読み込む際に使用
         float AddArrowDepth_ = 0.0f;            //矢印の奥行き(前方向)の調整値
 
-        //ダッシュ中の画像関連
-        int hDashImage_ = -1;                   //ダッシュ攻撃時に使用するスプライト画像
-		int FrameCount_ = 0;                    //ダッシュ攻撃時,スプライトが次のコマに行くまでのカウンター
-        int AnimeFrame_ = 0;                    //ダッシュ攻撃時,スプライトのどのコマを描画するかを示す
-
         //共通
         float CommonAcceleration_ = 0.0f;       //通常・ダッシュ共通の加速度
-
         XMVECTOR ForwardVector_ = { 0,0,0 };    //キャラクターから見た正面の方向(ワールド座標系) 自身のy軸回転量とかけて計算 正規化した値を入れる
         XMVECTOR MoveDirection_ = { 0,0,0 };    //移動方向 この値に速さの要素をかけて移動ベクトル化する
         XMVECTOR NewPosition_ = { 0,0,0 };      //移動後の位置ベクトル
@@ -173,6 +167,20 @@ public:
         std::vector<float> FenceHitEffectParam_ = {};//柵に接触時の衝撃エフェクトのパラメータ
     };
     EffectParam EffectParam_;
+
+    //----------アニメーション関連----------
+    struct AnimeParam
+    {
+        //ダッシュ中のスプライト関連
+        int hDashImage_ = -1;           //ダッシュ攻撃時に使用するスプライト画像
+        int DashFrameCount_ = 0;        //ダッシュ攻撃時,スプライトが次のコマに行くまでのカウンター
+        int DashAnimeFrame_ = 0;        //ダッシュ攻撃時,スプライトのどのコマを描画するかを示す
+        int DashOneAnimeSize_ = 0;      //切り抜き後の画像1個のサイズ
+        int DashSheetSize_ = 0;         //スプライトシートのサイズ
+        int DashFrameCountMax_ = 0;     //描画をする画像のコマ番号の最大
+        int DashOneFrameNum_ = 0;       //60fpsのうち描画するフレーム数
+    };
+    AnimeParam AnimeParam_;
 
     //----------セッター・ゲッター関数----------
 

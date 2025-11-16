@@ -68,7 +68,7 @@ namespace {
 
 	};
 
-	//影付け関係
+	//待機関係
 	enum WaitIndex
 	{
 		i_WaitValue = 0,
@@ -78,6 +78,15 @@ namespace {
 	enum ShadowIndex
 	{
 		i_ShadowCorrection = 0,
+	};
+
+	//アニメーション関連
+	enum AnimeIndex
+	{
+		i_DashOneAnimeSize = 0,
+		i_DashSheetSize,
+		i_DashFrameCountMax,
+		i_DashOneFrameNum,
 	};
 
 }
@@ -222,4 +231,19 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
 	params_->ShadowParam_.ShadowCorrection_ = ShadowData[i_ShadowCorrection];
+
+	//--------------------アニメーション関係のパラメータ--------------------
+
+	//csvファイルの0列目の文字列を取得	
+	std::string p_anime = "AnimeParam";
+
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> AnimeData = GetCSVReadData(csv, p_anime);
+
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	params_->AnimeParam_.DashOneAnimeSize_ = static_cast<int>(AnimeData[i_DashOneAnimeSize]);
+	params_->AnimeParam_.DashSheetSize_ = static_cast<int>(AnimeData[i_DashSheetSize]);
+	params_->AnimeParam_.DashFrameCountMax_ = static_cast<int>(AnimeData[i_DashFrameCountMax]);
+	params_->AnimeParam_.DashOneFrameNum_ = static_cast<int>(AnimeData[i_DashOneFrameNum]);
 }
