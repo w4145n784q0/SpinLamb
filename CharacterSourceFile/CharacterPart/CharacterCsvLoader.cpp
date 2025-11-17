@@ -41,8 +41,8 @@ namespace {
 	{
 		i_Gravity = 0,
 		i_JumpHeight,
-		i_UpperLimit,
 		i_LowerLimit,
+		i_UpperLimit,
 		i_MinusLimit,
 	};
 
@@ -171,8 +171,8 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 	//v‚Ì“Y‚¦š‚Ínamespace‚ÅéŒ¾‚µ‚½—ñ‹“Œ^‚ğg—p
 	params_->JumpParam_.Gravity_ = JumpData[i_Gravity];
 	params_->JumpParam_.JumpHeight = JumpData[i_JumpHeight];
-	params_->JumpParam_.HeightLowerLimit_ = JumpData[i_UpperLimit];
-	params_->JumpParam_.HeightUpperLimit_ = JumpData[i_LowerLimit];
+	params_->JumpParam_.HeightLowerLimit_ = JumpData[i_LowerLimit];
+	params_->JumpParam_.HeightUpperLimit_ = JumpData[i_UpperLimit];
 	params_->JumpParam_.MinusLimit_ = JumpData[i_MinusLimit];
 
 	//--------------------”í’eŠÖŒW‚Ìƒpƒ‰ƒ[ƒ^--------------------

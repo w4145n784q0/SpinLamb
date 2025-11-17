@@ -9,6 +9,9 @@ CharacterAir::CharacterAir(GameObject* parent)
 
 void CharacterAir::CharacterGravity()
 {
+	//前フレームの着地状態を保存
+	bool prevOnGround = params_->JumpParam_.PrevOnGround_;
+
 	//重力分の値を引き、プレイヤーは常に下方向に力がかかっている
 	params_->JumpParam_.JumpSpeed_ -= params_->JumpParam_.Gravity_;
 
@@ -26,7 +29,23 @@ void CharacterAir::CharacterGravity()
 
 			//一定以下のy座標になった場合,着地している判定にする
 			params_->JumpParam_.IsOnGround_ = true;
+
+			//前回は着地していなかった かつ 今着地している
+			//false → true の瞬間だけ実行
+			if (!prevOnGround && params_->JumpParam_.IsOnGround_)
+			{
+				//着地した瞬間にエフェクトを出す
+				character_->OnLandingVFX(parentPos);
+			}
 		}
+		else
+		{
+			//空中判定
+			params_->JumpParam_.IsOnGround_ = false;
+		}
+
+		//次フレームのために現在の着地状態を保存
+		params_->JumpParam_.PrevOnGround_ = params_->JumpParam_.IsOnGround_;
 
 		//親の位置を更新
 		character_->SetPosition(parentPos);

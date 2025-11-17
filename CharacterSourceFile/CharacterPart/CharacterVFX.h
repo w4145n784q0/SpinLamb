@@ -36,25 +36,36 @@ public:
     /// チャージ状態エフェクトをつける
     /// </summary>
     /// <param name="_path">csvを読み込むパス</param>
+    /// <param name="_pos">VFX発生位置</param>
     void SetChargingEffect(std::string _path, XMFLOAT3 _pos);
 
     /// <summary>
     /// 最大チャージ状態エフェクト(光の拡散)をつける
     /// </summary>
+    /// <param name="_pos">VFX発生位置</param>
     void SetFullChargeEffect(XMFLOAT3 _pos);
 
     /// <summary>
     /// 突撃エフェクトつける(プレイヤーの背後に光の粒子)
     /// </summary>
+    /// <param name="_pos">VFX発生位置</param>
     void SetAttackLocusEffect(XMFLOAT3 _pos);
 
     /// <summary>
     /// 相手と接触時の衝撃エフェクトつける
     /// </summary>
+    /// <param name="_pos">VFX発生位置</param>
     void SetHitEffect(XMFLOAT3 _pos);
 
     /// <summary>
     /// 柵に接触時の衝撃エフェクトつける
     /// </summary>
+    /// <param name="_pos">VFX発生位置</param>
     void SetFenceHitEffect(XMFLOAT3 _pos);
+
+    /// <summary>
+    /// 着地エフェクトつける
+    /// </summary>
+    /// <param name="_pos">VFX発生位置</param>
+    void SetLandingEffect(XMFLOAT3 _pos);
 };

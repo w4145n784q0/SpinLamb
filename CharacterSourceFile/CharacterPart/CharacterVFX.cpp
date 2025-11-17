@@ -14,12 +14,13 @@ void CharacterVFX::InitCSVEffect()
 	csv.Load("CSVData\\EffectData\\VFXData.csv");
 
 	//csvファイルの各0列目の文字列の配列を取得
-	std::string Effects[] = { "Charge","FullCharge" ,"Locus" , "Hit" , "FenceHit" };
+	std::string Effects[] = { "Landing", "Charge", "FullCharge", "Locus", "Hit" ,"FenceHit" };
 
 	//ChargeParam_から始まるVFXのパラメータ(vector<float>型の配列)の参照を
 	//ポインタ配列に格納
 	std::vector<float>* Param[] = { 
 		
+		&params_->EffectParam_.LandingParam_,
 		&params_->EffectParam_.ChargeParam_,
 		&params_->EffectParam_.FullChargeParam,
 		&params_->EffectParam_.AttackLocusParam_,
@@ -34,7 +35,7 @@ void CharacterVFX::InitCSVEffect()
 		std::vector<float> v = GetCSVReadData(csv, Effects[i]);
 
 		//この時点では代入のみ行われる
-		// SetEmitterで実際にVFXのパラメータにセットされる 
+		//SetEmitterで実際にVFXのパラメータにセットされる 
 		*Param[i] = v;
 
 	}
@@ -118,4 +119,20 @@ void CharacterVFX::SetFenceHitEffect(XMFLOAT3 _pos)
 
 	//エフェクトを開始
 	VFX::Start(fencehit);
+}
+
+void CharacterVFX::SetLandingEffect(XMFLOAT3 _pos)
+{
+	//csvから読み込んだ,柵に接触時エフェクトのパラメータを実際にセットする
+	EmitterData landing;
+	VFX::SetEmitter(landing, params_->EffectParam_.LandingParam_);
+
+	//使用する画像のパスをセットする
+	landing.textureFileName = "ParticleAssets\\cloudA.png";
+
+	//発射位置をセット
+	landing.position = _pos;
+
+	//エフェクトを開始
+	VFX::Start(landing);
 }

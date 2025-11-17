@@ -98,6 +98,12 @@ public:
         vfx_->SetFenceHitEffect(_pos);
     }
 
+    //着地エフェクトを出すイベント
+    void OnLandingVFX(XMFLOAT3 _pos)
+    {
+        vfx_->SetLandingEffect(_pos);
+    }
+
     //-----チャージ関連-----
     //チャージ量(TmpAccele_)を0にするイベント
 
