@@ -4,7 +4,7 @@
 
 void PlayerStateIdle::Enter(Player* _player)
 {
-	_player->GetModuleMovement()->AccelerationStop();
+	_player->OnAccelerationStop();
 }
 
 void PlayerStateIdle::Update(Player* _player)
@@ -29,7 +29,7 @@ void PlayerStateIdle::Update(Player* _player)
 			_player->ChangeState(Player::S_Charge);
 
 			//加速度をリセット
-			_player->GetModuleMovement()->AccelerationStop();
+			_player->OnAccelerationStop();
 		}
 	}
 
@@ -41,7 +41,7 @@ void PlayerStateIdle::Update(Player* _player)
 		if (_player->GetParams()->JumpParam_.IsOnGround_)
 		{
 			//地上にいるならジャンプ開始
-			_player->GetModuleAir()->SetJump();
+			_player->OnSetJump();
 		}
 	}
 
@@ -52,7 +52,7 @@ void PlayerStateIdle::Update(Player* _player)
 	XMVECTOR moveForCamera = _player->ConvertCameraDirection(_player->GetPlayerInput());
 
 	//慣性処理のための移動処理（カメラ回転を反映したベクトルを渡す）
-	_player->GetModuleMovement()->MoveUpdate(moveForCamera);
+	_player->OnMoveUpdate(moveForCamera);
 
 	//カメラ操作
 	_player->CameraControl();
@@ -60,5 +60,5 @@ void PlayerStateIdle::Update(Player* _player)
 
 void PlayerStateIdle::Exit(Player* _player)
 {
-	_player->GetModuleRotate()->RotateXStop();
+	_player->OnRotateXStop();
 }

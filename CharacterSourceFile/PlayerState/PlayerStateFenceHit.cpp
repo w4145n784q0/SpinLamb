@@ -10,26 +10,26 @@ void PlayerStateFenceHit::Update(Player* _player)
 	//ダメージを受ける柵と接触した状態 操作不可
 
 	//ノックバックする
-	_player->GetModuleHit()->KnockBack();
+	_player->OnKnockBack();
 
 	//ノックバックする速度が一定以下なら通常状態へ戻る
-	if (_player->GetModuleHit()->IsKnockBackEnd())
+	if (_player->OnIsKnockBackEnd())
 	{
 		//ノックバック速度を0に戻しておく
-		_player->GetModuleHit()->KnockBackVelocityReset();
+		_player->OnKnockBackVelocityReset();
 
 		//通常状態へ戻る
 		_player->ChangeState(Player::S_Idle);
 
 		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
-		_player->GetModuleMovement()->AccelerationStop();
+		_player->OnAccelerationStop();
 	}
 }
 
 void PlayerStateFenceHit::Exit(Player* _player)
 {
 	//状態遷移の際は一度x回転をストップ
-	_player->GetModuleRotate()->RotateXStop();
+	_player->OnRotateXStop();
 }
 
 bool PlayerStateFenceHit::IsUpdateInvincibility() const

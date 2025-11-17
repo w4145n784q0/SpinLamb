@@ -10,13 +10,13 @@ void PlayerStateHitStop::Update(Player* _player)
 	//ヒットストップ状態
 
 	//タイマーを増加
-	_player->GetModuleHitStop()->HitStopTimerAdd();
+	_player->OnHitStopTimerAdd();
 
 	//ヒットストップする時間を超えたら被弾状態へ
-	if (_player->GetModuleHitStop()->IsTimeOverHitStopTime())
+	if (_player->OnIsTimeOverHitStopTime())
 	{
 		//タイマーをリセット
-		_player->GetModuleHitStop()->HitStopTimerReset();
+		_player->OnHitStopTimerReset();
 
 		//被弾状態へ移行
 		_player->ChangeState(Player::S_Hit);
@@ -26,7 +26,7 @@ void PlayerStateHitStop::Update(Player* _player)
 void PlayerStateHitStop::Exit(Player* _player)
 {
 	//状態遷移の際は一度x回転をストップ
-	_player->GetModuleRotate()->RotateXStop();
+	_player->OnRotateXStop();
 }
 
 bool PlayerStateHitStop::IsHitStopState() const

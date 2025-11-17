@@ -9,7 +9,7 @@ namespace
 
 void PlayerStateCharge::Enter(Player* _player)
 {
-	_player->GetModuleCharge()->ChargeReset();
+	_player->OnChargeReset();
 }
 
 void PlayerStateCharge::Update(Player* _player)
@@ -17,16 +17,16 @@ void PlayerStateCharge::Update(Player* _player)
 	//チャージ中(TmpAcceleを溜めている状態) その場で左右回転できるが動けない
 
 	//加速度を溜める
-	_player->GetModuleCharge()->Charging();
+	_player->OnCharging();
 
 	//矢印モデルをセット
-	_player->GetModuleCharge()->SetArrow();
+	_player->OnSetArrow();
 
 	//矢印モデルの位置を自身の回転と合わせる
 	_player->GetParams()->MoveParam_.ArrowTransform_.rotate_.y = _player->GetRotate().y;
 
 	//チャージ中のエフェクトを出す
-	_player->GetModuleVFX()->SetChargingEffect(PlayerChargeEffectPath, _player->GetPosition());
+	_player->OnChargingEffect(PlayerChargeEffectPath, _player->GetPosition());
 
 	//SPACEキー/Aボタンが押され,地上にいるなら
 	if (Input::IsKeyDown(DIK_SPACE) || Input::IsPadButtonDown(XINPUT_GAMEPAD_A, 
@@ -35,10 +35,10 @@ void PlayerStateCharge::Update(Player* _player)
 		if (_player->GetParams()->JumpParam_.IsOnGround_)
 		{
 			//溜めたチャージを0にする
-			_player->GetModuleCharge()->ChargeReset();
+			_player->OnChargeReset();
 
 			//ジャンプ開始
-			_player->GetModuleAir()->SetJump();
+			_player->OnSetJump();
 
 			//通常状態へ戻る
 			_player->ChangeState(Player::S_Idle);
@@ -65,7 +65,7 @@ void PlayerStateCharge::Update(Player* _player)
 		|| Input::IsPadButtonUp(XINPUT_GAMEPAD_B, _player->GetControllerID()))
 	{
 		//チャージ解放
-		_player->GetModuleCharge()->ChargeRelease();
+		_player->OnChargeRelease();
 
 		//攻撃状態へ移行
 		_player->ChangeState(Player::S_Attack);
@@ -73,7 +73,7 @@ void PlayerStateCharge::Update(Player* _player)
 	}
 
 	//高速X回転
-	_player->GetModuleRotate()->FastRotateX();
+	_player->OnFastRotateX();
 
 	//カメラ操作
 	_player->CameraControl();
@@ -82,11 +82,11 @@ void PlayerStateCharge::Update(Player* _player)
 void PlayerStateCharge::Exit(Player* _player)
 {
 	//状態遷移の際は一度x回転をストップ
-	_player->GetModuleRotate()->RotateXStop();
+	_player->OnRotateXStop();
 }
 
 void PlayerStateCharge::Draw(Player* player)
 {
 	//矢印モデルの描画
-	player->GetModuleCharge()->DrawArrow();
+	player->OnDrawArrow();
 }

@@ -25,5 +25,5 @@ void EnemyStateLook::Update(Enemy* _enemy)
 void EnemyStateLook::Exit(Enemy* _enemy)
 {	
 	//状態遷移の際は一度x回転をストップ
-	_enemy->GetModuleRotate()->RotateXStop();
+	_enemy->OnRotateXStop();
 }

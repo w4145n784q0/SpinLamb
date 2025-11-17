@@ -13,7 +13,7 @@ void EnemyStateApproach::Update(Enemy* _enemy)
 	_enemy->LookPlayer();
 
 	//更新した方向へ移動
-	_enemy->GetModuleMovement()->MoveUpdate(_enemy->GetAutoAttackDirection());
+	_enemy->OnMoveUpdate(_enemy->GetAutoAttackDirection());
 
 	//進行方向に合わせてY軸を回転
 	_enemy->RotateFromDirection(_enemy->GetAutoAttackDirection());
@@ -31,5 +31,5 @@ void EnemyStateApproach::Update(Enemy* _enemy)
 void EnemyStateApproach::Exit(Enemy* _enemy)
 {
 	//状態遷移の際は一度x回転をストップ
-	_enemy->GetModuleRotate()->RotateXStop();
+	_enemy->OnRotateXStop();
 }

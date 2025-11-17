@@ -61,10 +61,20 @@ public:
     //描画(継承先の共通描画のみ行う)
     void Draw() override;
 
-    //以下の関数はモジュール内で別モジュールの処理を呼び出すために使う
-    //最大チャージエフェクトを出すイベント
+    //以下の関数はステートクラス内やモジュール内から別モジュールの処理を呼び出すために使う
+    //関数全部は記述せず使用する関数のみ記述
+    //GetModuleからでも可能だが、ステートクラスやモジュール側が他モジュールの存在を
+    //知らなくても使えるようにして、結合度を下げるためここに記述
 
     //-----VFX関連-----
+
+    //チャージ中エフェクトを出すイベント
+    void OnChargingEffect(std::string _path, XMFLOAT3 _pos)
+    {
+        vfx_->SetChargingEffect(_path, _pos);
+    }
+
+    //最大チャージエフェクトを出すイベント
     void OnFullChargeVFX(XMFLOAT3 _pos) 
     {
         vfx_->SetFullChargeEffect(_pos);
@@ -90,9 +100,42 @@ public:
 
     //-----チャージ関連-----
     //チャージ量(TmpAccele_)を0にするイベント
+
+    //攻撃加速度の上昇イベント
+    void OnCharging()
+    {
+        charge_->Charging();
+    }
+
+    //チャージ量解放イベント
+    void OnChargeRelease()
+    {
+        charge_->ChargeRelease();
+    }
+
+    //チャージ量(TmpAccele)のリセットイベント
     void OnChargeReset() 
     {
         charge_->ChargeReset();
+    }
+
+    //チャージ用矢印モデルの位置をセットするイベント
+    void OnSetArrow()
+    {
+        charge_->SetArrow();
+    }
+
+    //矢印モデルの描画イベント
+    void OnDrawArrow()
+    {
+        charge_->DrawArrow();
+    }
+
+    //-----空中関連-----
+    //ジャンプ開始イベント
+    void OnSetJump()
+    {
+        air_->SetJump();
     }
 
     //-----回転関連-----
@@ -115,10 +158,46 @@ public:
     }
 
     //-----移動関連-----
+    //通常移動イベント
+    void OnMoveUpdate(XMVECTOR _input)
+    {
+        movement_->MoveUpdate(_input);
+    }
+
+    //ダッシュ攻撃を行うイベント
+    void OnCharacterAttackMove(XMVECTOR _direction)
+    {
+        movement_->CharacterAttackMove(_direction);
+    }
+
+    //通常時の摩擦減速処理イベント
+    void OnFrictionNormalDeceleration()
+    {
+        movement_->FrictionNormalDeceleration();
+    }
+
+    //ダッシュ攻撃時の摩擦減速処理イベント
+    void OnFrictionAttackDeceleration()
+    {
+        movement_->FrictionAttackDeceleration();
+    }
+
     //移動確定判定を行うイベント
-    bool OnIsOutsideStage(DirectX::XMFLOAT3 _position) 
+    bool OnIsOutsideStage(DirectX::XMFLOAT3 _position)
     {
         return movement_->IsOutsideStage(_position);
+    }
+
+    //移動確定処理を行うイベント
+    void OnMoveConfirm()
+    {
+        movement_->MoveConfirm();
+    }
+
+    //加速度が0.0以下か判定するイベント
+    bool OnIsAcceleStop()
+    {
+        return movement_->IsAcceleStop();
     }
 
     //加速度を0にするイベント
@@ -127,10 +206,73 @@ public:
         movement_->AccelerationStop();
     }
 
-    //移動確定処理を行うイベント
-    void OnMoveConfirm() 
+    //攻撃時のアニメーション更新イベント
+    void OnUpdateDashImage()
     {
-		movement_->MoveConfirm();
+        movement_->UpdateDashImage();
+    }
+
+    //攻撃時のアニメーション更新イベント
+    void OnDrawDashImage()
+    {
+        movement_->DrawDashImage();
+    }
+
+    //-----ヒットストップ関連-----
+    //ヒットストップ時間の加算イベント
+    void OnHitStopTimerAdd()
+    {
+        hitstop_->HitStopTimerAdd();
+    }
+
+    //ヒットストップ時間終了判定イベント
+    bool OnIsTimeOverHitStopTime()
+    {
+        return hitstop_->IsTimeOverHitStopTime();
+    }
+
+    //ヒットストップ時間のリセットイベント
+    void OnHitStopTimerReset()
+    {
+        hitstop_->HitStopTimerReset();
+    }
+
+    //-----被弾関連-----
+    //ノックバックイベント
+    void OnKnockBack()
+    {
+        hit_->KnockBack();
+    }
+
+    //ノックバック終了判定イベント
+    bool OnIsKnockBackEnd()
+    {
+        return hit_->IsKnockBackEnd();
+    }
+
+    //ノックバック量のリセットイベント
+    void OnKnockBackVelocityReset()
+    {
+        hit_->KnockBackVelocityReset();
+    }
+
+    //-----待機関連-----
+    //待機時間の加算イベント
+    void OnWaitTimerAdd()
+    {
+        wait_->WaitTimerAdd();
+    }
+
+    //待機終了判定イベント
+    bool OnIsTimeOverWaitTime()
+    {
+        return wait_->IsTimeOverWaitTime();
+    }
+
+    //待機時間のリセットイベント
+    void OnWaitTimeReset()
+    {
+        wait_->WaitTimeReset();
     }
 
     //共通パラメータ群のゲッター関数

@@ -21,19 +21,19 @@ void EnemyStateAim::Update(Enemy* _enemy)
 	_enemy->RotateFromDirection(_enemy->GetAutoAttackDirection());
 
 	//加速度を溜める
-	_enemy->GetModuleCharge()->Charging();
+	_enemy->OnCharging();
 
 	//矢印モデルをセット
-	_enemy->GetModuleCharge()->SetArrow();
+	_enemy->OnSetArrow();
 
 	//矢印モデルの位置を自身の回転と合わせる
 	_enemy->GetParams()->MoveParam_.ArrowTransform_.rotate_.y = _enemy->GetRotate().y;
 
 	//チャージ中のエフェクトを出す
-	_enemy->GetModuleVFX()->SetChargingEffect(EnemyChargeEffectPath, _enemy->GetPosition());
+	_enemy->OnChargingEffect(EnemyChargeEffectPath, _enemy->GetPosition());
 
 	//高速X回転
-	_enemy->GetModuleRotate()->FastRotateX();
+	_enemy->OnFastRotateX();
 
 	//攻撃までのタイマーを進める
 	_enemy->AimTimerAdd();
@@ -45,7 +45,7 @@ void EnemyStateAim::Update(Enemy* _enemy)
 		_enemy->AimTimerReset();
 
 		//チャージ解放
-		_enemy->GetModuleCharge()->ChargeRelease();
+		_enemy->OnChargeRelease();
 
 		//攻撃状態へ移行
 		_enemy->ChangeState(Enemy::S_Attack);
@@ -55,11 +55,11 @@ void EnemyStateAim::Update(Enemy* _enemy)
 void EnemyStateAim::Exit(Enemy* _enemy)
 {
 	//状態遷移の際は一度x回転をストップ
-	_enemy->GetModuleRotate()->RotateXStop();
+	_enemy->OnRotateXStop();
 }
 
 void EnemyStateAim::Draw(Enemy* _enemy)
 {
 	//矢印モデルの描画
-	_enemy->GetModuleCharge()->DrawArrow();
+	_enemy->OnDrawArrow();
 }

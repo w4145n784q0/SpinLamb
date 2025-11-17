@@ -10,8 +10,5 @@ public:
     void Update(Enemy* _enemy) override;
     void Exit(Enemy* _enemy) override;
     std::string GetStateName() override { return "Root"; }
-
-    bool TryApproach(Enemy* _enemy);
-    bool TryAttack(Enemy* _enemy);
 };
 

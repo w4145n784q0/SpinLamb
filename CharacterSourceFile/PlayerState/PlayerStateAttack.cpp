@@ -11,25 +11,25 @@ void PlayerStateAttack::Update(Player* _player)
 	//攻撃状態 正面の方向に移動し操作不可
 
 	//ダッシュ画像の更新
-	_player->GetModuleMovement()->UpdateDashImage();
+	_player->OnUpdateDashImage();
 
 	//攻撃中のエフェクトを出す
-	_player->GetModuleVFX()->SetAttackLocusEffect(_player->GetPosition());
+	_player->OnAttackLocusVFX(_player->GetPosition());
 
 	//正面ベクトルの方向に移動
-	_player->GetModuleMovement()->CharacterAttackMove(_player->GetParams()->MoveParam_.ForwardVector_);
+	_player->OnCharacterAttackMove(_player->GetParams()->MoveParam_.ForwardVector_);
 
 	//摩擦量(攻撃摩擦量)分速度を減少
-	_player->GetModuleMovement()->FrictionAttackDeceleration();
+	_player->OnFrictionAttackDeceleration();
 
 	//高速X回転
-	_player->GetModuleRotate()->FastRotateX();
+	_player->OnFastRotateX();
 
 	//加速量が0になったら
-	if (_player->GetModuleMovement()->IsAcceleStop())
+	if (_player->OnIsAcceleStop())
 	{
 		//明示的に加速量を0にする
-		_player->GetModuleMovement()->AccelerationStop();
+		_player->OnAccelerationStop();
 
 		//通常状態へ戻る
 		_player->ChangeState(Player::S_Idle);
@@ -42,7 +42,7 @@ void PlayerStateAttack::Update(Player* _player)
 void PlayerStateAttack::Exit(Player* _player)
 {
 	//状態遷移の際は一度x回転をストップ
-	_player->GetModuleRotate()->RotateXStop();
+	_player->OnRotateXStop();
 
 	//ダッシュ攻撃画像のアニメーション関連の変数をリセット
 	_player->GetParams()->AnimeParam_.DashAnimeFrame_ = 0;
@@ -52,5 +52,5 @@ void PlayerStateAttack::Exit(Player* _player)
 void PlayerStateAttack::Draw(Player* _player)
 {
 	//ダッシュ攻撃スプライト描画
-	_player->GetModuleMovement()->DrawDashImage();
+	_player->OnDrawDashImage();
 }

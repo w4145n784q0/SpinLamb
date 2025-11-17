@@ -11,25 +11,25 @@ void EnemyStateAttack::Update(Enemy* _enemy)
 	//UŒ‚ó‘Ô ³–Ê‚Ì•ûŒü‚ÉˆÚ“®
 
 	//UŒ‚’†‚ÌƒGƒtƒFƒNƒg‚ðo‚·
-	_enemy->GetModuleVFX()->SetAttackLocusEffect(_enemy->GetPosition());
+	_enemy->OnAttackLocusVFX(_enemy->GetPosition());
 
 	//³–ÊƒxƒNƒgƒ‹‚Ì•ûŒü‚ÉˆÚ“®
-	_enemy->GetModuleMovement()->CharacterAttackMove(_enemy->GetAutoAttackDirection());
+	_enemy->OnCharacterAttackMove(_enemy->GetAutoAttackDirection());
 
 	//is•ûŒü‚É‡‚í‚¹‚ÄYŽ²‚ð‰ñ“]
 	_enemy->RotateFromDirection(_enemy->GetAutoAttackDirection());
 
 	//–€ŽC—Ê(UŒ‚–€ŽC—Ê)•ª‘¬“x‚ðŒ¸­
-	_enemy->GetModuleMovement()->FrictionAttackDeceleration();
+	_enemy->OnFrictionAttackDeceleration();
 
 	//‚‘¬X‰ñ“]
-	_enemy->GetModuleRotate()->FastRotateX();
+	_enemy->OnFastRotateX();
 
 	//‰Á‘¬—Ê‚ª0‚É‚È‚Á‚½‚ç
-	if (_enemy->GetModuleMovement()->IsAcceleStop())
+	if (_enemy->OnIsAcceleStop())
 	{
 		//–¾Ž¦“I‚É‰Á‘¬—Ê‚ð0‚É‚·‚é
-		_enemy->GetModuleMovement()->AccelerationStop();
+		_enemy->OnAccelerationStop();
 
 		//UŒ‚I—¹Œã‚Í‘Ò‹@ó‘Ô‚É‚·‚é
 		_enemy->ChangeState(Enemy::S_Wait);
@@ -45,5 +45,5 @@ void EnemyStateAttack::Update(Enemy* _enemy)
 void EnemyStateAttack::Exit(Enemy* _enemy)
 {
 	//ó‘Ô‘JˆÚ‚ÌÛ‚Íˆê“xx‰ñ“]‚ðƒXƒgƒbƒv
-	_enemy->GetModuleRotate()->RotateXStop();
+	_enemy->OnRotateXStop();
 }

@@ -38,31 +38,5 @@ void EnemyStateRoot::Update(Enemy* _enemy)
 void EnemyStateRoot::Exit(Enemy* _enemy)
 {
 	//状態遷移の際は一度x回転をストップ
-	_enemy->GetModuleRotate()->RotateXStop();
-}
-
-bool EnemyStateRoot::TryApproach(Enemy* _enemy)
-{
-	//自身とPlayerの距離を測る
-	float dist = _enemy->PlayerEnemyDistanceX();
-
-	if (_enemy->IsNearChaseLength(dist))
-	{
-		_enemy->ChangeState(Enemy::S_Aim);
-		return true;
-	}
-	return false;
-}
-
-bool EnemyStateRoot::TryAttack(Enemy* _enemy)
-{
-	//自身とPlayerの距離を測る
-	float dist = _enemy->PlayerEnemyDistanceX();
-
-	if (!_enemy->IsNearChaseLength(dist))
-	{
-		_enemy->ChangeState(Enemy::S_Approach);
-		return true;
-	}
-	return false;
+	_enemy->OnRotateXStop();
 }

@@ -35,7 +35,7 @@ void CharacterCharge::Charging()
 	}
 	else
 	{
-		//最大チャージエフェクトをリスナークラスから呼び出す
+		//最大チャージエフェクトを出す
 		character_->OnFullChargeVFX(character_->GetPosition());
 
 		//加速度が最大を超えないようにする
