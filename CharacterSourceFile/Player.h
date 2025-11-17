@@ -70,11 +70,13 @@ private:
 	//プレイヤーの後ろに置くカメラの位置
 	XMVECTOR BackCamera_;
 
+	//----------ステートクラス関係----------
+
 	//各ステートの実体を格納するテーブル(連想配列)
-	std::unordered_map<PlayerState, std::unique_ptr<BasePlayerState>> stateTable_;
+	std::unordered_map<PlayerState, std::unique_ptr<BasePlayerState>> StateTable_;
 
 	//現在アクティブな状態
-	BasePlayerState* currentState_ = nullptr;
+	BasePlayerState* CurrentState_;
 
 public:
 	Player(GameObject* parent);
@@ -99,7 +101,7 @@ public:
 	void PlayerRun();
 
 	//状態遷移を行う(ステートマシン)
-	void ChangeState(PlayerState newState);
+	void ChangeState(PlayerState _newState);
 
 	//----------Player処理関数----------
 

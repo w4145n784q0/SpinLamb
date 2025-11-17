@@ -49,7 +49,8 @@ namespace
 Enemy::Enemy(GameObject* parent)
 	:Character(parent, "Enemy"), hEnemy_(-1), pPlayer_(nullptr),
 	AimTimer_(0), RandomAim_(0), 
-	TargetVec_({0,0,0}), TargetPosition_({0,0,0}), TargetAcceleration_(0.0f),TargetName_("")
+	TargetVec_({0,0,0}), TargetPosition_({0,0,0}), TargetAcceleration_(0.0f),TargetName_(""),
+	CurrentState_(nullptr)
 {
 }
 
@@ -60,16 +61,16 @@ Enemy::~Enemy()
 void Enemy::Initialize()
 {
 	//テーブルに各ステートを登録
-	stateTable_[S_Root]		= std::make_unique<EnemyStateRoot>();
-	stateTable_[S_Approach]	= std::make_unique<EnemyStateApproach>();
-	stateTable_[S_Aim]		= std::make_unique<EnemyStateAim>();
-	stateTable_[S_Attack]	= std::make_unique<EnemyStateAttack>();
-	stateTable_[S_HitStop]  = std::make_unique<EnemyStateHitStop>();
-	stateTable_[S_Hit]		= std::make_unique<EnemyStateHit>();
-	stateTable_[S_FenceHit] = std::make_unique<EnemyStateFenceHit>();
-	stateTable_[S_Wait]     = std::make_unique<EnemyStateWait>();
-	stateTable_[S_Look]     = std::make_unique<EnemyStateLook>();
-	stateTable_[S_Stop]		= std::make_unique<EnemyStateStop>();
+	StateTable_[S_Root]		= std::make_unique<EnemyStateRoot>();
+	StateTable_[S_Approach]	= std::make_unique<EnemyStateApproach>();
+	StateTable_[S_Aim]		= std::make_unique<EnemyStateAim>();
+	StateTable_[S_Attack]	= std::make_unique<EnemyStateAttack>();
+	StateTable_[S_HitStop]  = std::make_unique<EnemyStateHitStop>();
+	StateTable_[S_Hit]		= std::make_unique<EnemyStateHit>();
+	StateTable_[S_FenceHit] = std::make_unique<EnemyStateFenceHit>();
+	StateTable_[S_Wait]     = std::make_unique<EnemyStateWait>();
+	StateTable_[S_Look]     = std::make_unique<EnemyStateLook>();
+	StateTable_[S_Stop]		= std::make_unique<EnemyStateStop>();
 
 	//最初のステートを登録
 	ChangeState(S_Stop);
@@ -81,7 +82,7 @@ void Enemy::Initialize()
 	//csvからパラメータ読み込み(Enemyのみ使う情報)
 	SetCSVEnemy();
 
-	//各モデルの読み込み
+	//キャラクターモデルの読み込み
 	hEnemy_ = Model::Load("Model\\Character_black.fbx");
 	assert(hEnemy_ >= 0);
 
@@ -114,9 +115,9 @@ void Enemy::Draw()
 
 	//現在の状態によって描画を分ける(ステートパターン使用)
 	//基底クラスのDrawは空なので、overrideしたステートのみDrawが呼ばれる
-	if (currentState_)
+	if (CurrentState_)
 	{
-		currentState_->Draw(this);
+		CurrentState_->Draw(this);
 	}
 }
 
@@ -135,8 +136,8 @@ void Enemy::OnCollision(GameObject* pTarget)
 	if (pTarget->GetObjectName() == "Player1" || pTarget->GetObjectName() == "Player2")
 	{
 		//ヒットストップ・被弾・柵に接触状態・無敵時間なら何もしない
-		if (currentState_->IsHitStopState() || currentState_->isHitState()
-			|| currentState_->IsFenceHitState()) 
+		if (CurrentState_->IsHitStopState() || CurrentState_->isHitState()
+			|| CurrentState_->IsFenceHitState()) 
 		{
 			return;
 		}
@@ -166,7 +167,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 		pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
 	{
 		//自身が柵に接触状態ではない かつ無敵状態でないなら続ける
-		if (!params_->FenceHitParam_.IsInvincibility_ && !currentState_->IsFenceHitState())
+		if (!params_->FenceHitParam_.IsInvincibility_ && !CurrentState_->IsFenceHitState())
 		{
 			//柵の名前のいずれかに接触しているなら
 			for (const std::string& arr : params_->FenceHitParam_.WireArray_)
@@ -218,43 +219,43 @@ void Enemy::EnemyRun()
 	Character::Update();
 
 	//現在の状態によって更新を分ける(ステートパターン使用)
-	if (currentState_)
+	if (CurrentState_)
 	{
-		currentState_->Update(this);
+		CurrentState_->Update(this);
 	}
 
 	//柵に接触状態でなければ無敵時間を更新
-	if (currentState_ && currentState_->IsUpdateInvincibility())
+	if (CurrentState_ && CurrentState_->IsUpdateInvincibility())
 	{
 		fence_->InvincibilityTimeCalculation();
 	}
 }
 
-void Enemy::ChangeState(EnemyState newState)
+void Enemy::ChangeState(EnemyState _newState)
 {
 	//現在のステートを終了させる
-	if (currentState_)
+	if (CurrentState_)
 	{
-		currentState_->Exit(this);
+		CurrentState_->Exit(this);
 	}
 
 	//新しいステートに変更
-	auto it = stateTable_.find(newState);
-	if (it != stateTable_.end())
+	auto it = StateTable_.find(_newState);
+	if (it != StateTable_.end())
 	{
-		currentState_ = it->second.get();  //unique_ptrの中身の生ポインタを取得
+		CurrentState_ = it->second.get();  //unique_ptrの中身の生ポインタを取得
 	}
 	else
 	{
 		//存在しないステート指定なら何もしない
-		currentState_ = nullptr;
+		CurrentState_ = nullptr;
 		return;
 	}
 
 	//新しいステートを開始
-	if (currentState_)
+	if (CurrentState_)
 	{
-		currentState_->Enter(this);
+		CurrentState_->Enter(this);
 	}
 }
 
@@ -273,7 +274,7 @@ void Enemy::DrawImGui()
 		if (ImGui::TreeNode("State"))
 		{
 			//現在のステート
-			std::string state = currentState_->GetStateName();
+			std::string state = CurrentState_->GetStateName();
 			ImGui::Text("EnemyState:%s", state.c_str());
 			ImGui::TreePop();
 		}
@@ -465,7 +466,7 @@ void Enemy::RandomAimReLottery()
 
 bool Enemy::IsAttackDecision()
 {
-	//プレイヤーがダメージ状態(被弾・柵に衝突・無敵時間かどうか)を取得
+	//プレイヤーがダメージ状態(ヒットストップ・被弾・柵に衝突・無敵時間かどうか)を取得
 	//いずれかに該当するならfalse(攻撃をしない)
 	if (pPlayer_ != nullptr)
 	{

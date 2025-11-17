@@ -24,7 +24,7 @@ public:
 		S_Hit,			//弾かれる
 		S_FenceHit,		//柵にヒット
 		S_Wait,         //待機時間 攻撃後のクールタイム
-		S_Look,         //プレイヤーを見るだけ
+		S_Look,         //様子見(プレイヤーを見るだけ)
 		S_Stop,			//敵を止める
 		S_MaxState
 	};
@@ -62,11 +62,13 @@ private:
 	//プレイヤーのオブジェクト名
 	std::string TargetName_;
 
+	//----------ステートクラス関係----------
+
 	//各ステートの実体を格納するテーブル(連想配列)
-	std::unordered_map<EnemyState, std::unique_ptr<BaseEnemyState>> stateTable_;
+	std::unordered_map<EnemyState, std::unique_ptr<BaseEnemyState>> StateTable_;
 
 	//現在アクティブな状態
-	BaseEnemyState* currentState_ = nullptr;
+	BaseEnemyState* CurrentState_;
 
 public:
 	Enemy(GameObject* parent);
@@ -91,7 +93,7 @@ public:
 	void EnemyRun();
 
 	//状態遷移を行う(ステートマシン)
-	void ChangeState(EnemyState newState);
+	void ChangeState(EnemyState _newState);
 	
 	//----------Enemy処理関数----------
 
@@ -136,6 +138,7 @@ public:
 	void RandomAimReLottery();
 
 	//敵がプレイヤーに対して攻撃を行うか返す
+	//trueなら「攻撃しろ」、falseなら「攻撃するな」 を指示
 	bool IsAttackDecision();
 
 	//Enemy限定のデータをCSV読み込み

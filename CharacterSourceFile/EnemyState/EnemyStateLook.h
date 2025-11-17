@@ -1,5 +1,7 @@
 #pragma once
 #include "BaseEnemyState.h"
+
+//相手を様子見する状態クラス
 class EnemyStateLook :
     public BaseEnemyState
 {

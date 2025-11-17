@@ -1,7 +1,7 @@
 #pragma once
 #include "BaseEnemyState.h"
-//待機状態 攻撃後のクールタイムなどに使用
 
+//待機状態 攻撃後のクールタイムなどに使用
 class EnemyStateWait :
     public BaseEnemyState
 {

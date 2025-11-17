@@ -68,7 +68,8 @@ Player::Player(GameObject* parent)
 	hPlayer_(-1), PlayerInput_({ 0,0,0 }),
 	CameraState_(S_NormalCamera),
 	ControllerID_(-1), Direction_({ 0,0,0 }),
-	CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 }), BackCamera_({ 0,0,0 })
+	CameraPosition_({ 0,0,0 }), CameraTarget_({ 0,0,0 }), BackCamera_({ 0,0,0 }),
+	CurrentState_(nullptr)
 {
 
 }
@@ -81,13 +82,13 @@ Player::~Player()
 void Player::Initialize()
 {
 	//テーブルに各ステートを登録
-	stateTable_[S_Idle]		= std::make_unique<PlayerStateIdle>();
-	stateTable_[S_Charge]	= std::make_unique<PlayerStateCharge>();
-	stateTable_[S_Attack]	= std::make_unique<PlayerStateAttack>();
-	stateTable_[S_HitStop] = std::make_unique<PlayerStateHitStop>();
-	stateTable_[S_Hit]		= std::make_unique<PlayerStateHit>();
-	stateTable_[S_FenceHit] = std::make_unique<PlayerStateFenceHit>();
-	stateTable_[S_Stop]		= std::make_unique<PlayerStateStop>();
+	StateTable_[S_Idle]		= std::make_unique<PlayerStateIdle>();
+	StateTable_[S_Charge]	= std::make_unique<PlayerStateCharge>();
+	StateTable_[S_Attack]	= std::make_unique<PlayerStateAttack>();
+	StateTable_[S_HitStop]  = std::make_unique<PlayerStateHitStop>();
+	StateTable_[S_Hit]		= std::make_unique<PlayerStateHit>();
+	StateTable_[S_FenceHit] = std::make_unique<PlayerStateFenceHit>();
+	StateTable_[S_Stop]		= std::make_unique<PlayerStateStop>();
 
 	//最初のステートを登録
 	ChangeState(S_Stop);
@@ -107,9 +108,9 @@ void Player::Draw()
 
 	//現在の状態によって描画を分ける(ステートパターン使用)
 	//基底クラスのDrawは空なので、overrideしたステートのみDrawが呼ばれる
-	if (currentState_) 
+	if (CurrentState_) 
 	{
-		currentState_->Draw(this);
+		CurrentState_->Draw(this);
 	}
 
 }
@@ -124,9 +125,9 @@ void Player::OnCollision(GameObject* pTarget)
 	if (pTarget->GetObjectName() == "Enemy1" || pTarget->GetObjectName() == "Enemy2"
 		|| pTarget->GetObjectName() == "Player1" || pTarget->GetObjectName() == "Player2")
 	{
-		//ヒットストップ・被弾・柵に接触状態・無敵時間なら何もしない
-		if (currentState_->IsHitStopState() || currentState_->isHitState() 
-			|| currentState_->IsFenceHitState())
+		//ヒットストップ・被弾・柵に接触状態なら何もしない
+		if (CurrentState_->IsHitStopState() || CurrentState_->isHitState() 
+			|| CurrentState_->IsFenceHitState())
 		{
 			return;
 		}
@@ -159,7 +160,7 @@ void Player::OnCollision(GameObject* pTarget)
 		pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
 	{
 		//自身が柵に接触状態ではない かつ無敵状態でないなら続ける
-		if (!params_->FenceHitParam_.IsInvincibility_ && !currentState_->IsFenceHitState())
+		if (!params_->FenceHitParam_.IsInvincibility_ && !CurrentState_->IsFenceHitState())
 		{
 			//柵の名前のいずれかに接触しているなら
 			for (const std::string& arr : params_->FenceHitParam_.WireArray_)
@@ -196,13 +197,13 @@ void Player::PlayerRun()
 	Character::Update();
 
 	//現在の状態によって更新を分ける(ステートパターン使用)
-	if (currentState_) 
+	if (CurrentState_) 
 	{
-		currentState_->Update(this);
+		CurrentState_->Update(this);
 	}
 
 	//柵に接触状態でなければ無敵時間を更新
-	if (currentState_ && currentState_->IsUpdateInvincibility())
+	if (CurrentState_ && CurrentState_->IsUpdateInvincibility())
 	{
 		fence_->InvincibilityTimeCalculation();
 	}
@@ -221,31 +222,31 @@ void Player::PlayerRun()
 
 }
 
-void Player::ChangeState(PlayerState newState)
+void Player::ChangeState(PlayerState _newState)
 {
 	//現在のステートを終了させる
-	if (currentState_) 
+	if (CurrentState_) 
 	{ 
-		currentState_->Exit(this); 
+		CurrentState_->Exit(this); 
 	}
 
 	//新しいステートに変更
-	auto it = stateTable_.find(newState);
-	if (it != stateTable_.end()) 
+	auto it = StateTable_.find(_newState);
+	if (it != StateTable_.end()) 
 	{
-		currentState_ = it->second.get();  //unique_ptrの中身の生ポインタを取得
+		CurrentState_ = it->second.get();  //unique_ptrの中身の生ポインタを取得
 	}
 	else
 	{
 		//存在しないステート指定なら何もしない
-		currentState_ = nullptr;
+		CurrentState_ = nullptr;
 		return; 
 	}
 
 	//新しいステートを開始
-	if (currentState_) 
+	if (CurrentState_) 
 	{
-		currentState_->Enter(this);
+		CurrentState_->Enter(this);
 	}
 }
 
@@ -264,7 +265,7 @@ void Player::DrawImGui()
 		if (ImGui::TreeNode("State"))
 		{
 			//現在のステート
-			std::string state = currentState_->GetStateName();
+			std::string state = CurrentState_->GetStateName();
 			ImGui::Text("PlayerState:%s", state.c_str());
 			ImGui::TreePop();
 		}
@@ -666,8 +667,8 @@ void Player::CollisionCharacter(std::string _name)
 bool Player::IsDamage()
 {
 	//ヒットストップ・被弾・柵に接触状態・無敵時間なら何もしない
-	if (currentState_->IsHitStopState() || currentState_->isHitState()
-		|| currentState_->IsFenceHitState() || params_->GetIsInvincibility())
+	if (CurrentState_->IsHitStopState() || CurrentState_->isHitState()
+		|| CurrentState_->IsFenceHitState() || params_->GetIsInvincibility())
 	{
 		return true;
 	}

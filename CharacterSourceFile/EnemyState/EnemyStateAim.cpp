@@ -14,6 +14,12 @@ void EnemyStateAim::Update(Enemy* _enemy)
 {
 	//ƒ`ƒƒ[ƒW(TmpAccele‚ð—­‚ß‚Ä‚¢‚éó‘Ô) ‚µ‚È‚ª‚çPlayer‚ð‘_‚¤ó‘Ô
 
+	//UŒ‚‘O‚É‘ŠŽè‚ª–³“GŽžŠÔ‚É“ü‚Á‚½E”í’eE•Ç‚ÉÚG‚µ‚½‚ç—lŽqŒ©ó‘Ô‚Ö
+	if (!_enemy->IsAttackDecision())
+	{
+		_enemy->ChangeState(Enemy::S_Look);
+	}
+
 	//ƒvƒŒƒCƒ„[‚Ì‚¢‚é•ûŒü‚ÖY‰ñ“]‚·‚é
 	_enemy->LookPlayer();
 
