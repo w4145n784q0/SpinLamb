@@ -1,7 +1,10 @@
 #pragma once
+#include <memory>
+
 #include "../Engine/GameObject.h"
 #include"../UISourceFile/GameTimer.h"
 #include"../UISourceFile/MiniMap.h"
+#include"HUDPart/HUDDebugPanel.h"
 
 //時間表示・ロゴ・モード表示などのUIを描画するクラス
 //座標などを初期化時に読みこみ、指示されたら表示する
@@ -93,6 +96,10 @@ private:
 
 	//hud側から操作する場合のミニマップクラスポインタ
 	MiniMap* pMiniMap_;
+
+	//モジュール群
+	//ImGui関連
+	std::unique_ptr<HUDDebugPanel> HUDDebug_;
 
 	//----------状態遷移----------
 
@@ -204,17 +211,6 @@ public:
 
 	//タイマーのイージング処理
 	void DrawTimerEasing();
-
-	//----------ImGui描画関数(Imguiを外部から呼ぶ)----------
-	void DrawImGuiExplanation();
-	void DrawImGuiStartLogo();
-	void DrawImGuiFinishLogo();
-	void DrawImGuiPracticeLogo();
-
-	void DrawImGuiScore();
-	void DrawImGuiTimer();
-	void DrawImGuiMiniMap();
-	void DrawImGuiPause();
 
 	//ゲッター関数
 	Transform& GetLogoExplanation() const;

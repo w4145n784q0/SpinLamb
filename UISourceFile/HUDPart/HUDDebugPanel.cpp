@@ -3,7 +3,7 @@
 #include"../../Engine/Image.h"
 
 HUDDebugPanel::HUDDebugPanel(GameObject* parent)
-	:GameObject(parent, "HUDDebugPanel"), pHUD_(nullptr)
+	:GameObject(parent, "HUDDebugPanel")
 {
 }
 
@@ -282,7 +282,7 @@ void HUDDebugPanel::ImGuiTimerDraw(HUD* _hud)
 	auto& tenTime = _hud->GetTenTime();
 	auto& oneTime = _hud->GetOneTime();
 
-	// タイマー(十の位・一の位)
+	//タイマー(十の位・一の位)
 	if (ImGui::TreeNode("Timer"))
 	{
 		if (ImGui::TreeNode("TimerPosition"))
@@ -331,7 +331,7 @@ void HUDDebugPanel::ImGuiMiniMapDraw(HUD* _hud)
 
 	if (ImGui::TreeNode("MiniMap"))
 	{
-		// ミニマップ
+		//ミニマップ
 		if (ImGui::TreeNode("MiniMapPosition"))
 		{
 			ImGui::SliderFloat("MiniMapPositionX", &mapIcon.position_.x, Image::LeftEdge, Image::RightEdge);
@@ -354,7 +354,10 @@ void HUDDebugPanel::ImGuiMiniMapDraw(HUD* _hud)
 			ImGui::TreePop();
 		}
 
+		//Player1アイコン
 		ImGui::Text("FirstIcon: (%.3f, %.3f)", firstIcon.position_.x, firstIcon.position_.y);
+
+		//Player2,Enemyアイコン
 		ImGui::Text("SecondIcon: (%.3f, %.3f)", secondIcon.position_.x, secondIcon.position_.y);
 
 		ImGui::TreePop();
@@ -368,11 +371,10 @@ void HUDDebugPanel::ImGuiPauseDraw(HUD* _hud)
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Pause"))
 	{
-		// GetterでTransformを取得
 		auto& pauseMenu = _hud->GetPauseMenu();
 		auto& pauseIcon = _hud->GetPauseIcon();
 
-		// ポーズメニュー
+		//ポーズメニュー
 		if (ImGui::TreeNode("PauseMenu"))
 		{
 			if (ImGui::TreeNode("PauseMenuPosition"))
@@ -397,7 +399,7 @@ void HUDDebugPanel::ImGuiPauseDraw(HUD* _hud)
 			ImGui::TreePop();
 		}
 
-		// ポーズアイコン
+		//ポーズアイコン
 		if (ImGui::TreeNode("PauseIcon"))
 		{
 			if (ImGui::TreeNode("PauseIconPosition"))

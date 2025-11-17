@@ -9,11 +9,18 @@ class HUDDebugPanel :
 {
 private:
     //親クラス(HUD)のポインタ
-    HUD* pHUD_;
+
 public:
+    HUDDebugPanel() = default;
     HUDDebugPanel(GameObject* parent);
     virtual ~HUDDebugPanel() = default;
 
+    void Initialize() override {};
+    void Update() override {};
+    void Draw() override {};
+    void Release() override {};
+
+    //ImGui描画全体を管理
     void ImGuiDrawer(HUD* _hud);
 
     //操作説明のImGui描画
