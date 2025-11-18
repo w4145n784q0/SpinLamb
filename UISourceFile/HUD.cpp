@@ -342,7 +342,7 @@ void HUD::SetHUDCSV()
 	TimeDuration = EasingData[i_TimeDuration];
 }
 
-void HUD::SetPauseIcon(float	_posY)
+void HUD::SetPauseIcon(float _posY)
 {
 	//Y座標だけをトランスフォームに渡す(変わるのはY座標の位置のみ)
 	TransPauseIcon.position_.y = _posY;

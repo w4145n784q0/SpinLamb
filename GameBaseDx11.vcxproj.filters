@@ -332,6 +332,9 @@
     <ClCompile Include="UISourceFile\HUDPart\HUDDebugPanel.cpp">
       <Filter>06UI\HUDPart</Filter>
     </ClCompile>
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterCollision.cpp">
+      <Filter>04Chara\CharacterParts</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine\BoxCollider.h">
@@ -616,6 +619,9 @@
     </ClInclude>
     <ClInclude Include="UISourceFile\HUDPart\HUDDebugPanel.h">
       <Filter>06UI\HUDPart</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterCollision.h">
+      <Filter>04Chara\CharacterParts</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

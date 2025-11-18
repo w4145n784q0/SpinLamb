@@ -144,9 +144,9 @@ void Player::OnCollision(GameObject* pTarget)
 		//ÚGƒGƒtƒFƒNƒg
 		vfx_->SetHitEffect(this->GetPosition());
 
-		//ƒJƒƒ‰U“®(’Z‚­)
+		//ƒJƒƒ‰U“®(’·‚­)
 		Camera::CameraShakeStart(Camera::GetShakeTimeLong());
-
+		
 		//ÕŒ‚‰¹
 		Audio::Play(params_->SoundParam_.hSoundCollision_);
 
