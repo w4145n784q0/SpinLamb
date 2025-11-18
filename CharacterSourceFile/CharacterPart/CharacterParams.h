@@ -1,6 +1,7 @@
 #pragma once
 #include"../../InterfaceSourceFile/IGameObserver.h"
 #include"../../StageSourceFile/Ground.h"
+#include"../../Engine/VFX.h"
 
 //プレイヤー,敵クラスの共通パラメータのみを扱うファイル
 
@@ -164,9 +165,16 @@ public:
         std::vector<float> ChargeParam_ = {};        //チャージ状態エフェクトのパラメータ
         std::vector<float> FullChargeParam = {};     //最大チャージ状態エフェクトのパラメータ
         std::vector<float> AttackLocusParam_ = {};   //突撃エフェクトのパラメータ
+        std::vector<float> LandingParam_ = {};       //着地時のエフェクトのパラメータ
         std::vector<float> HitEffectParam_ = {};     //接触時の衝撃エフェクトのパラメータ
         std::vector<float> FenceHitEffectParam_ = {};//柵に接触時の衝撃エフェクトのパラメータ
-        std::vector<float> LandingParam_ = {};       //着地時のエフェクトのパラメータ
+
+        EmitterData ChargeData_;                     //チャージ中のエフェクトのデータを格納する
+        EmitterData FullChargeData_;                 //最大チャージエフェクトのデータを格納する
+        EmitterData LocusData_;                      //突撃エフェクトのデータを格納する
+        EmitterData LandingData_;                    //着地時のエフェクトのデータを格納する
+        EmitterData HitData_;                        //接触時の衝撃エフェクトのデータを格納する
+        EmitterData FenceHitData_;                   //柵に接触時の衝撃エフェクトのデータを格納する
     };
     EffectParam EffectParam_;
 

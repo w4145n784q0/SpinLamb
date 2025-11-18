@@ -52,6 +52,12 @@ public:
     void SetAttackLocusEffect(XMFLOAT3 _pos);
 
     /// <summary>
+    /// 着地エフェクトつける
+    /// </summary>
+    /// <param name="_pos">VFX発生位置</param>
+    void SetLandingEffect(XMFLOAT3 _pos);
+
+    /// <summary>
     /// 相手と接触時の衝撃エフェクトつける
     /// </summary>
     /// <param name="_pos">VFX発生位置</param>
@@ -62,10 +68,4 @@ public:
     /// </summary>
     /// <param name="_pos">VFX発生位置</param>
     void SetFenceHitEffect(XMFLOAT3 _pos);
-
-    /// <summary>
-    /// 着地エフェクトつける
-    /// </summary>
-    /// <param name="_pos">VFX発生位置</param>
-    void SetLandingEffect(XMFLOAT3 _pos);
 };
