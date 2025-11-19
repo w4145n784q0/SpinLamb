@@ -89,6 +89,11 @@ public:
 	//当たり判定処理
 	void OnCollision(GameObject* pTarget) override;
 
+	//Characterの仮想関数継承
+	bool IsCharacterStateHitStop() override { return CurrentState_->IsHitStopState(); }
+	bool IsCharacterStateHit() override { return CurrentState_->isHitState(); }
+	bool IsCharacterStateFenceHit() override { return CurrentState_->IsFenceHitState(); }
+
 	//動的に呼び出す更新処理
 	void EnemyRun();
 

@@ -60,7 +60,6 @@ Character::Character(GameObject* parent, const std::string& name)
 		movement_ = std::make_unique<CharacterMovement>(this);
 		movement_->SetParams(params_.get());
 		movement_->SetCharacter(this);
-		//movement_->SetEventListener(this);
 	}
 	if (rotate_ == nullptr)
 	{
@@ -73,7 +72,12 @@ Character::Character(GameObject* parent, const std::string& name)
 		charge_ = std::make_unique<CharacterCharge>(this);
 		charge_->SetParams(params_.get());
 		charge_->SetCharacter(this);
-		//charge_->SetEventListener(this);
+	}
+	if (collision_ == nullptr)
+	{
+		collision_ = std::make_unique<CharacterCollision>(this);
+		collision_->SetParams(params_.get());
+		collision_->SetCharacter(this);
 	}
 	if (hitstop_ == nullptr)
 	{
@@ -85,14 +89,12 @@ Character::Character(GameObject* parent, const std::string& name)
 		hit_ = std::make_unique<CharacterHit>(this);
 		hit_->SetParams(params_.get());
 		hit_->SetCharacter(this);
-		//hit_->SetEventListener(this, this, this);
 	}
 	if (fence_ == nullptr)
 	{
 		fence_ = std::make_unique<CharacterFence>(this);
 		fence_->SetParams(params_.get());
 		fence_->SetCharacter(this);
-		//fence_->SetEventListener(this, this, this);
 	}
 	if (wait_ == nullptr)
 	{

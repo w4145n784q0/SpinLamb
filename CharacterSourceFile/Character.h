@@ -12,6 +12,7 @@
 #include "CharacterPart/CharacterMovement.h"
 #include "CharacterPart/CharacterRotate.h"
 #include "CharacterPart/CharacterCharge.h"
+#include"CharacterPart/CharacterCollision.h"
 #include"CharacterPart/CharacterHitStop.h"
 #include "CharacterPart/CharacterHit.h"
 #include "CharacterPart/CharacterFence.h"
@@ -37,6 +38,7 @@ protected:
     std::unique_ptr<CharacterMovement>      movement_;
     std::unique_ptr<CharacterRotate>        rotate_;
     std::unique_ptr<CharacterCharge>        charge_;
+    std::unique_ptr<CharacterCollision>     collision_;
     std::unique_ptr<CharacterHitStop>       hitstop_;
     std::unique_ptr<CharacterHit>           hit_;
     std::unique_ptr<CharacterFence>         fence_;
@@ -60,6 +62,12 @@ public:
 
     //描画(継承先の共通描画のみ行う)
     void Draw() override;
+
+    //----------継承先で使用する仮想関数----------
+    virtual bool IsCharacterStateHitStop() { return false; };
+    virtual bool IsCharacterStateHit() { return false; };
+    virtual bool IsCharacterStateFenceHit() { return false; };
+
 
     //以下の関数はステートクラス内やモジュール内から別モジュールの処理を呼び出すために使う
     //関数全部は記述せず使用する関数のみ記述

@@ -133,72 +133,95 @@ void Enemy::Release()
 void Enemy::OnCollision(GameObject* pTarget)
 {
 	//プレイヤーと接触した時の処理
-	if (pTarget->GetObjectName() == "Player1" || pTarget->GetObjectName() == "Player2")
+	//if (pTarget->GetObjectName() == "Player1" || pTarget->GetObjectName() == "Player2")
+	//{
+	//	//ヒットストップ・被弾・柵に接触状態・無敵時間なら何もしない
+	//	if (CurrentState_->IsHitStopState() || CurrentState_->isHitState()
+	//		|| CurrentState_->IsFenceHitState()) 
+	//	{
+	//		return;
+	//	}
+
+	//	//自身の位置をXMVECTOR型にする
+	//	XMVECTOR MyVector = XMLoadFloat3(&this->transform_.position_);
+
+	//	//相手の位置を取得、XMVECTOR型にする
+	//	XMFLOAT3 TargetPos = TargetPosition_;
+	//	XMVECTOR TargetVector = XMLoadFloat3(&TargetPosition_);
+
+	//	//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度,接触相手の名前)
+	//	hit_->Reflect(MyVector, TargetVector, params_->MoveParam_.CommonAcceleration_, TargetAcceleration_, TargetName_);
+	//	
+	//	//接触時点で攻撃までのタイマーをリセット
+	//	AimTimer_ = 0;
+
+	//	//被弾状態になる
+	//	ChangeState(S_HitStop);
+
+	//	//状態遷移の際は一度回転をストップ
+	//	rotate_->RotateXStop();
+	//}
+
+	//共通の当たり判定処理
+	collision_->CommonCollision(pTarget);
+
+	//キャラクター関係の固有処理
+	if (collision_->IsHitCharacter(pTarget->GetObjectName()))
 	{
-		//ヒットストップ・被弾・柵に接触状態・無敵時間なら何もしない
-		if (CurrentState_->IsHitStopState() || CurrentState_->isHitState()
-			|| CurrentState_->IsFenceHitState()) 
-		{
-			return;
-		}
-
-		//自身の位置をXMVECTOR型にする
-		XMVECTOR MyVector = XMLoadFloat3(&this->transform_.position_);
-
-		//相手の位置を取得、XMVECTOR型にする
-		XMFLOAT3 TargetPos = TargetPosition_;
-		XMVECTOR TargetVector = XMLoadFloat3(&TargetPosition_);
-
-		//反射処理を行う(自分の位置ベクトル,相手の位置ベクトル,自分の加速度,相手の加速度,接触相手の名前)
-		hit_->Reflect(MyVector, TargetVector, params_->MoveParam_.CommonAcceleration_, TargetAcceleration_, TargetName_);
-		
-		//接触時点で攻撃までのタイマーをリセット
-		AimTimer_ = 0;
 
 		//被弾状態になる
 		ChangeState(S_HitStop);
 
-		//状態遷移の際は一度回転をストップ
-		rotate_->RotateXStop();
+		//接触時点で攻撃までのタイマーをリセット
+		AimTimer_ = 0;
+	}
+
+	if (collision_->IsHitFence(pTarget->GetObjectName()))
+	{
+		//プレイヤーの状態を柵に接触状態にする
+		ChangeState(S_FenceHit);
+
+		//接触時点で攻撃までのタイマーをリセット
+		AimTimer_ = 0;
 	}
 
 	//各柵に接触した時の処理
-	if (pTarget->GetObjectName() == "UpperWire" || pTarget->GetObjectName() == "LowerWire" ||
-		pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
-	{
-		//自身が柵に接触状態ではない かつ無敵状態でないなら続ける
-		if (!params_->FenceHitParam_.IsInvincibility_ && !CurrentState_->IsFenceHitState())
-		{
-			//柵の名前のいずれかに接触しているなら
-			for (const std::string& arr : params_->FenceHitParam_.WireArray_)
-			{
-				if (pTarget->GetObjectName() == arr)
-				{
-					//接触している柵の法線(反射される方向)を取得
-					XMVECTOR normal = hit_->HitNormal(arr);
+	//if (pTarget->GetObjectName() == "UpperWire" || pTarget->GetObjectName() == "LowerWire" ||
+	//	pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
+	//{
+	//	//自身が柵に接触状態ではない かつ無敵状態でないなら続ける
+	//	if (!params_->FenceHitParam_.IsInvincibility_ && !CurrentState_->IsFenceHitState())
+	//	{
+	//		//柵の名前のいずれかに接触しているなら
+	//		for (const std::string& arr : params_->FenceHitParam_.WireArray_)
+	//		{
+	//			if (pTarget->GetObjectName() == arr)
+	//			{
+	//				//接触している柵の法線(反射される方向)を取得
+	//				XMVECTOR normal = hit_->HitNormal(arr);
 
-					//反射開始
-					fence_->FenceReflect(normal);
+	//				//反射開始
+	//				fence_->FenceReflect(normal);
 
-					//自身のノックバック時のY軸回転角を固定させる
-					hit_->KnockBackAngleY(params_->HitParam_.KnockBack_Direction_, params_->FenceHitParam_.KnockBackPower_);
+	//				//自身のノックバック時のY軸回転角を固定させる
+	//				hit_->KnockBackAngleY(params_->HitParam_.KnockBack_Direction_, params_->FenceHitParam_.KnockBackPower_);
 
-					//接触時点で攻撃までのタイマーをリセット
-					AimTimer_ = 0;
+	//				//接触時点で攻撃までのタイマーをリセット
+	//				AimTimer_ = 0;
 
-					//CPUの状態を柵に接触状態にする
-					ChangeState(S_FenceHit);
+	//				//CPUの状態を柵に接触状態にする
+	//				ChangeState(S_FenceHit);
 
-					//カメラ振動
-					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
+	//				//カメラ振動
+	//				Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
 
-					//状態遷移の際は一度回転をストップ
-					rotate_->RotateXStop();
+	//				//状態遷移の際は一度回転をストップ
+	//				rotate_->RotateXStop();
 
-				}
-			}
-		}
-	}
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 void Enemy::EnemyRun()

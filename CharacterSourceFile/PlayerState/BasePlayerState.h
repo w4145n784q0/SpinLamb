@@ -31,10 +31,10 @@ public:
     //”í’eó‘Ô‚©‚Ç‚¤‚©•Ô‚·
     virtual bool isHitState() const { return false; }
 
+    //ò‚ÉÚGó‘Ô‚©‚Ç‚¤‚©•Ô‚·
+    virtual bool IsFenceHitState() const { return false; }
+
     //–³“GŠÔ‚ÌXV‚ğs‚¤‚©‚Ç‚¤‚©•Ô‚·
     virtual bool IsUpdateInvincibility() const { return true; }
-
-	//ò‚ÉÚGó‘Ô‚©‚Ç‚¤‚©•Ô‚·
-    virtual bool IsFenceHitState() const { return false; }
 };
 

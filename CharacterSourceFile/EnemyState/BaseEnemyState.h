@@ -22,16 +22,18 @@ public:
     //状態名を取得(デバッグ用)
     virtual std::string GetStateName() { return ""; }
 
+    //-----以下は専用の状態でオーバーライド-----
+
     //ヒットストップ状態かどうか返す
     virtual bool IsHitStopState() const { return false; }
 
     //被弾状態かどうか返す
     virtual bool isHitState() const { return false; }
 
-    //無敵時間の更新を行うかどうか返す
-    virtual bool IsUpdateInvincibility() const { return true; }
-
     //柵に接触状態かどうか返す
     virtual bool IsFenceHitState() const { return false; }
+
+    //無敵時間の更新を行うかどうか返す
+    virtual bool IsUpdateInvincibility() const { return true; }
 };
 

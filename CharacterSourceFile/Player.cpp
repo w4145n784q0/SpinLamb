@@ -122,21 +122,49 @@ void Player::Release()
 void Player::OnCollision(GameObject* pTarget)
 {
 	//“GƒNƒ‰ƒX,ƒvƒŒƒCƒ„[‚ÆÚG‚µ‚½Žž‚Ìˆ—
-	if (pTarget->GetObjectName() == "Enemy1" || pTarget->GetObjectName() == "Enemy2"
-		|| pTarget->GetObjectName() == "Player1" || pTarget->GetObjectName() == "Player2")
+	//if (pTarget->GetObjectName() == "Enemy1" || pTarget->GetObjectName() == "Enemy2"
+	//	|| pTarget->GetObjectName() == "Player1" || pTarget->GetObjectName() == "Player2")
+	//{
+	//	//ƒqƒbƒgƒXƒgƒbƒvE”í’eEò‚ÉÚGó‘Ô‚È‚ç‰½‚à‚µ‚È‚¢
+	//	if (CurrentState_->IsHitStopState() || CurrentState_->isHitState() 
+	//		|| CurrentState_->IsFenceHitState())
+	//	{
+	//		return;
+	//	}
+
+	//	//ÚG‚µ‚½ƒLƒƒƒ‰ƒNƒ^[‚Ì–¼‘O‚ðŽæ“¾
+	//	std::string targetName = pTarget->GetObjectName();
+
+	//	//“–‚½‚Á‚½‘ÎÛ‚É‰ž‚¶‚½”½ŽËˆ—
+	//	CollisionCharacter(targetName);
+
+	//	//”í’eó‘Ô‚É‚È‚é
+	//	ChangeState(S_HitStop);
+
+	//	//ÚGƒGƒtƒFƒNƒg
+	//	vfx_->SetHitEffect(this->GetPosition());
+
+	//	//ƒJƒƒ‰U“®(’·‚­)
+	//	Camera::CameraShakeStart(Camera::GetShakeTimeLong());
+	//	
+	//	//ÕŒ‚‰¹
+	//	Audio::Play(params_->SoundParam_.hSoundCollision_);
+
+	//	//ó‘Ô‘JˆÚ‚ÌÛ‚Íˆê“xx‰ñ“]‚ðƒXƒgƒbƒv
+	//	rotate_->RotateXStop();
+
+	//}
+
+	//‹¤’Ê‚Ì“–‚½‚è”»’èˆ—
+	collision_->CommonCollision(pTarget);
+
+	//ƒLƒƒƒ‰ƒNƒ^[ŠÖŒW‚ÌŒÅ—Lˆ—
+	if (collision_->IsHitCharacter(pTarget->GetObjectName()) ) 
 	{
-		//ƒqƒbƒgƒXƒgƒbƒvE”í’eEò‚ÉÚGó‘Ô‚È‚ç‰½‚à‚µ‚È‚¢
-		if (CurrentState_->IsHitStopState() || CurrentState_->isHitState() 
-			|| CurrentState_->IsFenceHitState())
+		if (collision_->IsInDamageState())
 		{
 			return;
 		}
-
-		//ÚG‚µ‚½ƒLƒƒƒ‰ƒNƒ^[‚Ì–¼‘O‚ðŽæ“¾
-		std::string targetName = pTarget->GetObjectName();
-
-		//“–‚½‚Á‚½‘ÎÛ‚É‰ž‚¶‚½”½ŽËˆ—
-		CollisionCharacter(targetName);
 
 		//”í’eó‘Ô‚É‚È‚é
 		ChangeState(S_HitStop);
@@ -144,50 +172,56 @@ void Player::OnCollision(GameObject* pTarget)
 		//ÚGƒGƒtƒFƒNƒg
 		vfx_->SetHitEffect(this->GetPosition());
 
-		//ƒJƒƒ‰U“®(’·‚­)
-		Camera::CameraShakeStart(Camera::GetShakeTimeLong());
-		
 		//ÕŒ‚‰¹
 		Audio::Play(params_->SoundParam_.hSoundCollision_);
 
-		//ó‘Ô‘JˆÚ‚ÌÛ‚Íˆê“xx‰ñ“]‚ðƒXƒgƒbƒv
-		rotate_->RotateXStop();
-
+		//ƒJƒƒ‰U“®(’·‚­)
+		Camera::CameraShakeStart(Camera::GetShakeTimeLong());
 	}
-
-	//Šeò‚ÉÚG‚µ‚½Žž‚Ìˆ—
-	if (pTarget->GetObjectName() == "UpperWire" || pTarget->GetObjectName() == "LowerWire" ||
-		pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
+	if (collision_->IsHitFence(pTarget->GetObjectName()))
 	{
-		//Ž©g‚ªò‚ÉÚGó‘Ô‚Å‚Í‚È‚¢ ‚©‚Â–³“Gó‘Ô‚Å‚È‚¢‚È‚ç‘±‚¯‚é
-		if (!params_->FenceHitParam_.IsInvincibility_ && !CurrentState_->IsFenceHitState())
-		{
-			//ò‚Ì–¼‘O‚Ì‚¢‚¸‚ê‚©‚ÉÚG‚µ‚Ä‚¢‚é‚È‚ç
-			for (const std::string& arr : params_->FenceHitParam_.WireArray_)
-			{
-				if (pTarget->GetObjectName() == arr)
-				{
-					//ÚG‚µ‚Ä‚¢‚éò‚Ì–@ü(”½ŽË‚³‚ê‚é•ûŒü)‚ðŽæ“¾
-					XMVECTOR normal = hit_->HitNormal(arr);
+		//ƒvƒŒƒCƒ„[‚Ìó‘Ô‚ðò‚ÉÚGó‘Ô‚É‚·‚é
+	     ChangeState(S_FenceHit);
 
-					//”½ŽËŠJŽn
-					fence_->FenceReflect(normal);
-
-					//Ž©g‚ÌƒmƒbƒNƒoƒbƒNŽž‚ÌYŽ²‰ñ“]Šp‚ðŒÅ’è‚³‚¹‚é
-					hit_->KnockBackAngleY(params_->HitParam_.KnockBack_Direction_, params_->FenceHitParam_.KnockBackPower_);
-
-					//ƒvƒŒƒCƒ„[‚Ìó‘Ô‚ðò‚ÉÚGó‘Ô‚É‚·‚é
-					ChangeState(S_FenceHit);
-
-					//ƒJƒƒ‰U“®(’†‚­‚ç‚¢‚Ì’·‚³)
-					Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
-
-					//ó‘Ô‘JˆÚ‚ÌÛ‚Íˆê“xx‰ñ“]‚ðƒXƒgƒbƒv
-					rotate_->RotateXStop();
-				}
-			}
-		}
+		 //ƒJƒƒ‰U“®(’†‚­‚ç‚¢‚Ì’·‚³)
+	     Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
 	}
+
+
+
+	////Šeò‚ÉÚG‚µ‚½Žž‚Ìˆ—
+	//if (pTarget->GetObjectName() == "UpperWire" || pTarget->GetObjectName() == "LowerWire" ||
+	//	pTarget->GetObjectName() == "RightWire" || pTarget->GetObjectName() == "LeftWire")
+	//{
+	//	//Ž©g‚ªò‚ÉÚGó‘Ô‚Å‚Í‚È‚¢ ‚©‚Â–³“Gó‘Ô‚Å‚È‚¢‚È‚ç‘±‚¯‚é
+	//	if (!params_->FenceHitParam_.IsInvincibility_ && !CurrentState_->IsFenceHitState())
+	//	{
+	//		//ò‚Ì–¼‘O‚Ì‚¢‚¸‚ê‚©‚ÉÚG‚µ‚Ä‚¢‚é‚È‚ç
+	//		for (const std::string& arr : params_->FenceHitParam_.WireArray_)
+	//		{
+	//			if (pTarget->GetObjectName() == arr)
+	//			{
+	//				//ÚG‚µ‚Ä‚¢‚éò‚Ì–@ü(”½ŽË‚³‚ê‚é•ûŒü)‚ðŽæ“¾
+	//				XMVECTOR normal = hit_->HitNormal(arr);
+
+	//				//”½ŽËŠJŽn
+	//				fence_->FenceReflect(normal);
+
+	//				//Ž©g‚ÌƒmƒbƒNƒoƒbƒNŽž‚ÌYŽ²‰ñ“]Šp‚ðŒÅ’è‚³‚¹‚é
+	//				hit_->KnockBackAngleY(params_->HitParam_.KnockBack_Direction_, params_->FenceHitParam_.KnockBackPower_);
+
+	//				//ƒvƒŒƒCƒ„[‚Ìó‘Ô‚ðò‚ÉÚGó‘Ô‚É‚·‚é
+	//				ChangeState(S_FenceHit);
+
+	//				//ƒJƒƒ‰U“®(’†‚­‚ç‚¢‚Ì’·‚³)
+	//				Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
+
+	//				//ó‘Ô‘JˆÚ‚ÌÛ‚Íˆê“xx‰ñ“]‚ðƒXƒgƒbƒv
+	//				rotate_->RotateXStop();
+	//			}
+	//		}
+	//	}
+	//}
 
 }
 
