@@ -9,6 +9,8 @@ namespace
 
 void PlayerStateCharge::Enter(Player* _player)
 {
+	//溜めている速度をリセット
+	//チャージ量は毎回0からスタートさせる
 	_player->OnChargeReset();
 }
 

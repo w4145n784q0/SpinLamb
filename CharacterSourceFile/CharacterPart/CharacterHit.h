@@ -36,17 +36,40 @@ public:
         character_ = _character;
     }
 
-    void CommonCollision(GameObject* target);
+    /// <summary>
+    /// キャラクター関係の当たり判定処理
+    /// </summary>
+    /// <param name="target">接触相手のポインタ(GameObject型)</param>
+    void CommonCollision(GameObject* _target);
 
+    /// <summary>
+    /// キャラクター継承クラスと接触したか判定
+    /// </summary>
+    /// <param name="_name">接触相手の名前</param>
+    /// <returns>接触対象がキャラクター継承クラスかどうか</returns>
     bool IsHitCharacter(std::string _name);
 
+    /// <summary>
+    /// 柵と接触したか判定
+    /// </summary>
+    /// <param name="_name">接触した柵の名前</param>
+    /// <returns>接触対象がいずれかの柵かどうか</returns>
     bool IsHitFence(std::string _name);
 
+    //ダメージ状態(ヒットストップ・被弾・柵に接触)か判定
     bool IsInDamageState();
 
-    void CharacterReflect(GameObject* target);
+    /// <summary>
+    /// キャラクター継承クラス同士の接触処理(反射そのものは別関数で行う)
+    /// </summary>
+    /// <param name="_target">接触相手のポインタ(GameObject型)</param>
+    void CollisionCharacter(GameObject* _target);
 
-    void SomeFenceReflect(std::string wire);
+    /// <summary>
+    /// どれかの柵と接触したときの接触処理(反射そのものは別関数で行う)
+    /// </summary>
+    /// <param name="wire">接触した柵の名前</param>
+    void CollisionSomeFence(std::string wire);
 
     /// <summary>
     /// キャラクター同士の反射処理

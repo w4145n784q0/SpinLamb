@@ -14,13 +14,14 @@ void CharacterHit::CommonCollision(GameObject* target)
 	//キャラクター同士の衝突
 	if (IsHitCharacter(name))
 	{
+		//ヒットストップ・被弾・柵に接触状態なら処理しない
 		if (IsInDamageState())
 		{
 			return;
 		}
 
-		//反射処理
-		CharacterReflect(target);
+		//キャラクターとの当たり判定
+		CollisionCharacter(target);
 
 		//継承先で定義する独自の当たり判定処理(キャラクター同士)
 		character_->OwnCharacterCollision();
@@ -32,10 +33,14 @@ void CharacterHit::CommonCollision(GameObject* target)
 	//柵に衝突判定
 	if (IsHitFence(name))
 	{
+		//無敵時間中か柵に接触状態でなければ続ける
 		if (!character_->GetParams()->FenceHitParam_.IsInvincibility_ &&
 			!character_->IsCharacterStateFenceHit()) {
 
-			SomeFenceReflect(name);
+			//柵との当たり判定
+			CollisionSomeFence(name);
+
+			//継承先で定義する独自の当たり判定処理(キャラクター同士)
 			character_->OwnFenceCollision();
 		}
 	}
@@ -71,6 +76,7 @@ bool CharacterHit::IsHitFence(std::string _name)
 
 bool CharacterHit::IsInDamageState()
 {
+	//親クラスからヒットストップ・被弾・柵に接触のいずれかに該当するか取得し返す
 	if (character_->IsCharacterStateHitStop() ||
 		character_->IsCharacterStateHit() ||
 		character_->IsCharacterStateFenceHit())
@@ -83,14 +89,14 @@ bool CharacterHit::IsInDamageState()
 	}
 }
 
-void CharacterHit::CharacterReflect(GameObject* target)
+void CharacterHit::CollisionCharacter(GameObject* target)
 {
-	//自身の位置・加速を先に保管する
+	//自身の位置(XMVECTOR型)・加速量を用意する
 	XMFLOAT3 mypos = character_->GetPosition();
 	XMVECTOR MyVector = XMLoadFloat3(&mypos);
 	float MySpeed = character_->GetParams()->MoveParam_.CommonAcceleration_;
 
-	//接触相手のXMVECTORを用意
+	//接触相手の位置をXMVECTOR型で用意
 	XMFLOAT3 tarpos = target->GetPosition();
 	XMVECTOR TargetVector = XMLoadFloat3(&tarpos);
 
@@ -101,30 +107,33 @@ void CharacterHit::CharacterReflect(GameObject* target)
 	std::string TargetName = target->GetObjectName();
 
 	//PlayerかEnemyに接触したか(接触相手の名前を使用)
+	//現在の呼び出し元でも行われているが、念のためチェック
 	if (IsHitCharacter(target->GetObjectName()))
 	{
+		//targetがCharacter型か動的に判定
 		auto* charTarget = dynamic_cast<Character*>(target);
+
+		//正しくキャストできたなら速度を取得
 		if (charTarget)
 		{
 			TargetSpeed = charTarget->GetParams()->GetAcceleration();
 		}
 	}
 
+	//反射開始
 	Reflect(MyVector, TargetVector, MySpeed, TargetSpeed, TargetName);
-
 }
 
-void CharacterHit::SomeFenceReflect(std::string wire)
+void CharacterHit::CollisionSomeFence(std::string wire)
 {
 	//接触している柵の法線(反射される方向)を取得
-	XMVECTOR normal = character_->GetModuleHit()->HitNormal(wire);
+	XMVECTOR normal = HitNormal(wire);
 
 	//反射開始
-	character_->GetModuleFence()->FenceReflect(normal);
+	character_->OnFenceReflect(normal);
 
 	//自身のノックバック時のY軸回転角を固定させる
-	character_->GetModuleHit()->KnockBackAngleY(
-		character_->GetParams()->HitParam_.KnockBack_Direction_,
+	KnockBackAngleY(character_->GetParams()->HitParam_.KnockBack_Direction_,
 		character_->GetParams()->FenceHitParam_.KnockBackPower_);
 }
 

@@ -19,8 +19,7 @@ Character::Character(GameObject* parent, const std::string& name)
 {
 	//各モジュールの生成・初期化(Instantiate)
 	//必要に応じてパラメータのセット(SetParams)
-	//必要に応じて親クラス（自身）のセット(SetCharacter)
-	//必要に応じてイベントリスナーのセット(SetEventListener)
+	//必要に応じて親クラス（自身）のセット(SetCharacter
 
 	if (params_ == nullptr)
 	{
@@ -72,12 +71,6 @@ Character::Character(GameObject* parent, const std::string& name)
 		charge_ = std::make_unique<CharacterCharge>(this);
 		charge_->SetParams(params_.get());
 		charge_->SetCharacter(this);
-	}
-	if (collision_ == nullptr)
-	{
-		collision_ = std::make_unique<CharacterCollision>(this);
-		collision_->SetParams(params_.get());
-		collision_->SetCharacter(this);
 	}
 	if (hitstop_ == nullptr)
 	{

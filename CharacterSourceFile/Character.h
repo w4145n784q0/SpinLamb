@@ -12,7 +12,6 @@
 #include "CharacterPart/CharacterMovement.h"
 #include "CharacterPart/CharacterRotate.h"
 #include "CharacterPart/CharacterCharge.h"
-#include"CharacterPart/CharacterCollision.h"
 #include"CharacterPart/CharacterHitStop.h"
 #include "CharacterPart/CharacterHit.h"
 #include "CharacterPart/CharacterFence.h"
@@ -38,7 +37,6 @@ protected:
     std::unique_ptr<CharacterMovement>      movement_;
     std::unique_ptr<CharacterRotate>        rotate_;
     std::unique_ptr<CharacterCharge>        charge_;
-    std::unique_ptr<CharacterCollision>     collision_;
     std::unique_ptr<CharacterHitStop>       hitstop_;
     std::unique_ptr<CharacterHit>           hit_;
     std::unique_ptr<CharacterFence>         fence_;
@@ -69,6 +67,7 @@ public:
     virtual void OwnCharacterCollision() {};
     virtual void OwnFenceCollision() {};
 
+    //自身の特定の状態を返す処理
     virtual bool IsCharacterStateHitStop() { return false; };
     virtual bool IsCharacterStateHit() { return false; };
     virtual bool IsCharacterStateFenceHit() { return false; };
@@ -256,7 +255,7 @@ public:
         hitstop_->HitStopTimerReset();
     }
 
-    //-----被弾関連-----
+    //-----被弾・柵に接触関連-----
     //ノックバックイベント
     void OnKnockBack()
     {
@@ -273,6 +272,12 @@ public:
     void OnKnockBackVelocityReset()
     {
         hit_->KnockBackVelocityReset();
+    }
+
+    //柵との反射処理イベント
+    void OnFenceReflect(XMVECTOR _dir)
+    {
+        fence_->FenceReflect(_dir);
     }
 
     //-----待機関連-----

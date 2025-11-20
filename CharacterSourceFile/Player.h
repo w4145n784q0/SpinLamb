@@ -98,10 +98,14 @@ public:
 	void OnCollision(GameObject* pTarget) override;
 
 	//Characterの仮想関数
-
+	
+	//継承先特有のキャラクター同士の接触処理
 	void OwnCharacterCollision() override;
+
+	//継承先特有の柵の接触処理
 	void OwnFenceCollision() override;
 
+	//自身が該当する状態クラスかどうか返す処理
 	bool IsCharacterStateHitStop() override { return CurrentState_->IsHitStopState(); }
 	bool IsCharacterStateHit() override { return CurrentState_->isHitState(); }
 	bool IsCharacterStateFenceHit() override { return CurrentState_->IsFenceHitState(); }
@@ -157,12 +161,6 @@ public:
 	/// <param name="input">プレイヤーの入力ベクトル</param>
 	/// <returns>カメラのY軸回転を反映した移動ベクトル</returns>
 	XMVECTOR ConvertCameraDirection(XMVECTOR _input);
-
-	/// <summary>
-	/// 受け取った名前に応じて要素を受け取り、反射処理をする
-	/// </summary>
-	/// <param name="_name">接触したオブジェクト名</param>
-	void CollisionCharacter(std::string _name);
 
 	//被弾・柵に衝突・無敵時間かどうかを取得
 	bool IsDamage();

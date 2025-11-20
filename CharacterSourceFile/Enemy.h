@@ -91,9 +91,13 @@ public:
 
 	//Character‚Ì‰¼‘zŠÖ”Œp³
 
+	//Œp³æ“Á—L‚ÌƒLƒƒƒ‰ƒNƒ^[“¯Žm‚ÌÚGˆ—
 	void OwnCharacterCollision() override;
+
+	//Œp³æ“Á—L‚Ìò‚ÌÚGˆ—
 	void OwnFenceCollision() override;
 
+	//Ž©g‚ªŠY“–‚·‚éó‘ÔƒNƒ‰ƒX‚©‚Ç‚¤‚©•Ô‚·ˆ—
 	bool IsCharacterStateHitStop() override { return CurrentState_->IsHitStopState(); }
 	bool IsCharacterStateHit() override { return CurrentState_->isHitState(); }
 	bool IsCharacterStateFenceHit() override { return CurrentState_->IsFenceHitState(); }

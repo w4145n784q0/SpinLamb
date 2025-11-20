@@ -140,7 +140,6 @@
     <ClCompile Include="CharacterSourceFile\Character.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterAir.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterCharge.cpp" />
-    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterCollision.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterCsvLoader.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterDebugPanel.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterFence.cpp" />
@@ -235,7 +234,6 @@
     <ClInclude Include="CharacterSourceFile\Character.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterAir.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterCharge.h" />
-    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterCollision.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterCsvLoader.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterDebugPanel.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterFence.h" />

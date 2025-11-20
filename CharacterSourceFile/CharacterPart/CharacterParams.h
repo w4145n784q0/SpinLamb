@@ -91,7 +91,7 @@ public:
     {
         float Gravity_ = 0.0f;          //重力 キャラクターの下方向にかかる力 実際の重力(9.8/60 m/s)より軽くしている
         bool IsOnGround_ = false;       //今のフレームで地面にいるかのフラグ
-        bool PrevOnGround_ = false;     //前のフレームで地面にいるかのフラグ
+        bool PrevOnGround_ = true;      //前のフレームで地面にいるかのフラグ
         float JumpSpeed_ = 0.0f;        //キャラクターの上方向に向く力 +ならジャンプしている状態 -なら下降～地面にいる状態
         float JumpHeight = 0.0f;        //ジャンプ時の一時的に代入する値(=ジャンプの高さ)
         float HeightLowerLimit_ = 0.0f; //高さの下限

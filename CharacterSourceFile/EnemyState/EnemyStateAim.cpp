@@ -8,6 +8,9 @@ namespace
 
 void EnemyStateAim::Enter(Enemy* _enemy)
 {
+	//溜めている速度をリセット
+	//チャージ量は毎回0からスタートさせる
+	_enemy->OnChargeReset();
 }
 
 void EnemyStateAim::Update(Enemy* _enemy)
@@ -18,6 +21,8 @@ void EnemyStateAim::Update(Enemy* _enemy)
 	if (!_enemy->IsAttackDecision())
 	{
 		_enemy->ChangeState(Enemy::S_Look);
+
+		//溜めている速度をリセット
 	}
 
 	//プレイヤーのいる方向へY回転する
