@@ -156,36 +156,38 @@ void Player::OnCollision(GameObject* pTarget)
 	//}
 
 	//共通の当たり判定処理
-	collision_->CommonCollision(pTarget);
+	//collision_->CommonCollision(pTarget);
+
+	hit_->CommonCollision(pTarget);
 
 	//キャラクター関係の固有処理
-	if (collision_->IsHitCharacter(pTarget->GetObjectName()) ) 
-	{
-		if (collision_->IsInDamageState())
-		{
-			return;
-		}
+	//if (collision_->IsHitCharacter(pTarget->GetObjectName()) ) 
+	//{
+	//	if (collision_->IsInDamageState())
+	//	{
+	//		return;
+	//	}
 
-		//被弾状態になる
-		ChangeState(S_HitStop);
+	//	//被弾状態になる
+	//	ChangeState(S_HitStop);
 
-		//接触エフェクト
-		vfx_->SetHitEffect(this->GetPosition());
+	//	//接触エフェクト
+	//	vfx_->SetHitEffect(this->GetPosition());
 
-		//衝撃音
-		Audio::Play(params_->SoundParam_.hSoundCollision_);
+	//	//衝撃音
+	//	Audio::Play(params_->SoundParam_.hSoundCollision_);
 
-		//カメラ振動(長く)
-		Camera::CameraShakeStart(Camera::GetShakeTimeLong());
-	}
-	if (collision_->IsHitFence(pTarget->GetObjectName()))
-	{
-		//プレイヤーの状態を柵に接触状態にする
-	     ChangeState(S_FenceHit);
+	//	//カメラ振動(長く)
+	//	Camera::CameraShakeStart(Camera::GetShakeTimeLong());
+	//}
+	//if (collision_->IsHitFence(pTarget->GetObjectName()))
+	//{
+	//	//プレイヤーの状態を柵に接触状態にする
+	//     ChangeState(S_FenceHit);
 
-		 //カメラ振動(中くらいの長さ)
-	     Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
-	}
+	//	 //カメラ振動(中くらいの長さ)
+	//     Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
+	//}
 
 
 
@@ -223,6 +225,30 @@ void Player::OnCollision(GameObject* pTarget)
 	//	}
 	//}
 
+}
+
+void Player::OwnCharacterCollision()
+{
+	//被弾状態になる
+	ChangeState(S_HitStop);
+
+	//接触エフェクト
+	vfx_->SetHitEffect(this->GetPosition());
+
+	//衝撃音
+	Audio::Play(params_->SoundParam_.hSoundCollision_);
+
+	//カメラ振動(長く)
+	Camera::CameraShakeStart(Camera::GetShakeTimeLong());
+}
+
+void Player::OwnFenceCollision()
+{
+	//プレイヤーの状態を柵に接触状態にする
+	ChangeState(S_FenceHit);
+
+	//カメラ振動(中くらいの長さ)
+	Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
 }
 
 void Player::PlayerRun()

@@ -22,7 +22,11 @@ void CharacterCollision::CommonCollision(GameObject* target)
 		//反射処理
 		CharacterReflect(target);
 
-		return; // キャラ衝突処理終了
+		//継承先で定義する独自の当たり判定処理
+		character_->OwnCharacterCollision();
+
+		//キャラ衝突処理終了
+		return;
 	}
 
 	//柵に衝突判定

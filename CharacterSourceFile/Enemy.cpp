@@ -162,28 +162,31 @@ void Enemy::OnCollision(GameObject* pTarget)
 	//	rotate_->RotateXStop();
 	//}
 
+	
+//	collision_->CommonCollision(pTarget);
+
 	//共通の当たり判定処理
-	collision_->CommonCollision(pTarget);
+	hit_->CommonCollision(pTarget);
 
 	//キャラクター関係の固有処理
-	if (collision_->IsHitCharacter(pTarget->GetObjectName()))
-	{
+	//if (collision_->IsHitCharacter(pTarget->GetObjectName()))
+	//{
 
-		//被弾状態になる
-		ChangeState(S_HitStop);
+	//	//被弾状態になる
+	//	ChangeState(S_HitStop);
 
-		//接触時点で攻撃までのタイマーをリセット
-		AimTimer_ = 0;
-	}
+	//	//接触時点で攻撃までのタイマーをリセット
+	//	AimTimer_ = 0;
+	//}
 
-	if (collision_->IsHitFence(pTarget->GetObjectName()))
-	{
-		//プレイヤーの状態を柵に接触状態にする
-		ChangeState(S_FenceHit);
+	//if (collision_->IsHitFence(pTarget->GetObjectName()))
+	//{
+	//	//プレイヤーの状態を柵に接触状態にする
+	//	ChangeState(S_FenceHit);
 
-		//接触時点で攻撃までのタイマーをリセット
-		AimTimer_ = 0;
-	}
+	//	//接触時点で攻撃までのタイマーをリセット
+	//	AimTimer_ = 0;
+	//}
 
 	//各柵に接触した時の処理
 	//if (pTarget->GetObjectName() == "UpperWire" || pTarget->GetObjectName() == "LowerWire" ||
@@ -222,6 +225,24 @@ void Enemy::OnCollision(GameObject* pTarget)
 	//		}
 	//	}
 	//}
+}
+
+void Enemy::OwnCharacterCollision()
+{
+	//被弾状態になる
+	ChangeState(S_HitStop);
+
+	//接触時点で攻撃までのタイマーをリセット
+	AimTimer_ = 0;
+}
+
+void Enemy::OwnFenceCollision()
+{
+	//プレイヤーの状態を柵に接触状態にする
+	ChangeState(S_FenceHit);
+
+	//接触時点で攻撃までのタイマーをリセット
+	AimTimer_ = 0;
 }
 
 void Enemy::EnemyRun()

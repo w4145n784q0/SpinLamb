@@ -18,7 +18,7 @@ void EnemyStateFenceHit::Update(Enemy* _enemy)
 		//ノックバック速度を0に戻しておく
 		_enemy->OnKnockBackVelocityReset();
 
-		//ルートへ戻る
+		//待機状態へ遷移
 		_enemy->ChangeState(Enemy::S_Wait);
 
 		//攻撃までの時間を再抽選(ノックバックした際も抽選し、頻繁に変わるようにする)

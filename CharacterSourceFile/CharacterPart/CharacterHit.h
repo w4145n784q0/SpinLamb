@@ -36,6 +36,18 @@ public:
         character_ = _character;
     }
 
+    void CommonCollision(GameObject* target);
+
+    bool IsHitCharacter(std::string _name);
+
+    bool IsHitFence(std::string _name);
+
+    bool IsInDamageState();
+
+    void CharacterReflect(GameObject* target);
+
+    void SomeFenceReflect(std::string wire);
+
     /// <summary>
     /// キャラクター同士の反射処理
     /// </summary>

@@ -64,6 +64,11 @@ public:
     void Draw() override;
 
     //----------継承先で使用する仮想関数----------
+
+    //継承先特有の当たり判定処理
+    virtual void OwnCharacterCollision() {};
+    virtual void OwnFenceCollision() {};
+
     virtual bool IsCharacterStateHitStop() { return false; };
     virtual bool IsCharacterStateHit() { return false; };
     virtual bool IsCharacterStateFenceHit() { return false; };

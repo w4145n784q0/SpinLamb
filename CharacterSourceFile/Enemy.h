@@ -90,6 +90,10 @@ public:
 	void OnCollision(GameObject* pTarget) override;
 
 	//Character‚Ì‰¼‘zŠÖ”Œp³
+
+	void OwnCharacterCollision() override;
+	void OwnFenceCollision() override;
+
 	bool IsCharacterStateHitStop() override { return CurrentState_->IsHitStopState(); }
 	bool IsCharacterStateHit() override { return CurrentState_->isHitState(); }
 	bool IsCharacterStateFenceHit() override { return CurrentState_->IsFenceHitState(); }
