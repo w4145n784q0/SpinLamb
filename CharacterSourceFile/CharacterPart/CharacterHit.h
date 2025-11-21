@@ -37,7 +37,7 @@ public:
     }
 
     /// <summary>
-    /// キャラクター関係の当たり判定処理
+    /// キャラクター継承クラスが持つ、共通の当たり判定処理
     /// </summary>
     /// <param name="target">接触相手のポインタ(GameObject型)</param>
     void CommonCollision(GameObject* _target);

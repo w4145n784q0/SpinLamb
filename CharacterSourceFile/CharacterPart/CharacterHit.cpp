@@ -40,7 +40,7 @@ void CharacterHit::CommonCollision(GameObject* target)
 			//ò‚Æ‚Ì“–‚½‚è”»’è
 			CollisionSomeFence(name);
 
-			//Œp³æ‚Å’è‹`‚·‚é“ÆŽ©‚Ì“–‚½‚è”»’èˆ—(ƒLƒƒƒ‰ƒNƒ^[“¯Žm)
+			//Œp³æ‚Å’è‹`‚·‚é“ÆŽ©‚Ì“–‚½‚è”»’èˆ—(ò‚Ö‚ÌÚG)
 			character_->OwnFenceCollision();
 		}
 	}
