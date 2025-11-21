@@ -11,5 +11,6 @@ public:
     void Exit(Player* _player) override;
     void Draw(Player* _player) override;
 	std::string GetStateName() override { return "Attack"; }
+    bool IsAttackState() const;
 };
 

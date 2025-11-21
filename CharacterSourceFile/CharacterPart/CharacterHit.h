@@ -39,7 +39,7 @@ public:
     /// <summary>
     /// キャラクター継承クラスが持つ、共通の当たり判定処理
     /// </summary>
-    /// <param name="target">接触相手のポインタ(GameObject型)</param>
+    /// <param name="_target">接触相手のポインタ(GameObject型)</param>
     void CommonCollision(GameObject* _target);
 
     /// <summary>
@@ -68,8 +68,8 @@ public:
     /// <summary>
     /// どれかの柵と接触したときの接触処理(反射そのものは別関数で行う)
     /// </summary>
-    /// <param name="wire">接触した柵の名前</param>
-    void CollisionSomeFence(std::string wire);
+    /// <param name="_wire">接触した柵の名前</param>
+    void CollisionSomeFence(std::string _wire);
 
     /// <summary>
     /// キャラクター同士の反射処理

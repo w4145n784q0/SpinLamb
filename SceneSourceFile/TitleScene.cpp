@@ -63,11 +63,7 @@ void TitleScene::Draw()
 
 void TitleScene::Release()
 {
-	//実体は消さず、アドレスのみ無効化する
-	if (pTransitionEffect_ != nullptr)
-	{
-		pTransitionEffect_ = nullptr;
-	}
+
 }
 
 void TitleScene::UpdateActive()

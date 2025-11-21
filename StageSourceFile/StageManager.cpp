@@ -80,19 +80,7 @@ void StageManager::Draw()
 
 void StageManager::Release()
 {
-	//実体は消さず、アドレスのみ無効化する
-	if (pGround_ != nullptr)
-	{
-		pGround_ = nullptr;
-	}
-	if (pFence_ != nullptr)
-	{
-		pFence_ = nullptr;
-	}
-	if (pOutStageThing_ != nullptr)
-	{
-		pOutStageThing_ = nullptr;
-	}
+	
 }
 
 void StageManager::SetStageInitCSV()

@@ -89,7 +89,7 @@ bool CharacterHit::IsInDamageState()
 	}
 }
 
-void CharacterHit::CollisionCharacter(GameObject* target)
+void CharacterHit::CollisionCharacter(GameObject* _target)
 {
 	//自身の位置(XMVECTOR型)・加速量を用意する
 	XMFLOAT3 mypos = character_->GetPosition();
@@ -97,21 +97,21 @@ void CharacterHit::CollisionCharacter(GameObject* target)
 	float MySpeed = character_->GetParams()->MoveParam_.CommonAcceleration_;
 
 	//接触相手の位置をXMVECTOR型で用意
-	XMFLOAT3 tarpos = target->GetPosition();
+	XMFLOAT3 tarpos = _target->GetPosition();
 	XMVECTOR TargetVector = XMLoadFloat3(&tarpos);
 
 	//接触相手の加速量を保管する変数を用意
 	float TargetSpeed = 0.0f;
 
 	//接触した相手の名前を取得する文字列を用意
-	std::string TargetName = target->GetObjectName();
+	std::string TargetName = _target->GetObjectName();
 
 	//PlayerかEnemyに接触したか(接触相手の名前を使用)
 	//現在の呼び出し元でも行われているが、念のためチェック
-	if (IsHitCharacter(target->GetObjectName()))
+	if (IsHitCharacter(_target->GetObjectName()))
 	{
 		//targetがCharacter型か動的に判定
-		auto* charTarget = dynamic_cast<Character*>(target);
+		auto* charTarget = dynamic_cast<Character*>(_target);
 
 		//正しくキャストできたなら速度を取得
 		if (charTarget)
@@ -124,10 +124,10 @@ void CharacterHit::CollisionCharacter(GameObject* target)
 	Reflect(MyVector, TargetVector, MySpeed, TargetSpeed, TargetName);
 }
 
-void CharacterHit::CollisionSomeFence(std::string wire)
+void CharacterHit::CollisionSomeFence(std::string _wire)
 {
 	//接触している柵の法線(反射される方向)を取得
-	XMVECTOR normal = HitNormal(wire);
+	XMVECTOR normal = HitNormal(_wire);
 
 	//反射開始
 	character_->OnFenceReflect(normal);

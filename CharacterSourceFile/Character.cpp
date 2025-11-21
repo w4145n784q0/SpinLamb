@@ -152,16 +152,7 @@ Character::~Character()
 			//通知者(Character)→監視者(BattleScene)の順に解放されるので、
 			//CharacterのデストラクタでRemoveObserverを呼ぶ
 			observer_->RemoveObserver(observer);
-
-			//安全策としてアドレスを無効化
-			observer = nullptr;
 		}
-	}
-
-	//影に使用する地面クラスのポインタを空にする
-	if(params_->ShadowParam_.pGround_ != nullptr)
-	{
-		params_->ShadowParam_.pGround_ = nullptr;
 	}
 }
 

@@ -52,5 +52,11 @@ void PlayerStateAttack::Exit(Player* _player)
 void PlayerStateAttack::Draw(Player* _player)
 {
 	//ダッシュ攻撃スプライト描画
-	_player->OnDrawDashImage();
+	//_player->OnDrawDashImage();
+}
+
+bool PlayerStateAttack::IsAttackState() const
+{
+	//攻撃状態であることを返す
+	return true;
 }

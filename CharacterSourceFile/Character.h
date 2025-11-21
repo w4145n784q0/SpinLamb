@@ -68,6 +68,7 @@ public:
     virtual void OwnFenceCollision() {};
 
     //©g‚Ì“Á’è‚Ìó‘Ô‚ğ•Ô‚·ˆ—
+    virtual bool IsCharacterStateAttack() { return false; }
     virtual bool IsCharacterStateHitStop() { return false; };
     virtual bool IsCharacterStateHit() { return false; };
     virtual bool IsCharacterStateFenceHit() { return false; };
