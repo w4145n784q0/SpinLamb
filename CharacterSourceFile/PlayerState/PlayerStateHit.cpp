@@ -19,7 +19,7 @@ void PlayerStateHit::Update(Player* _player)
 		//通常状態へ戻る
 		_player->ChangeState(Player::S_Idle);
 
-		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
+		//加速度リセット(ノックバック終了時点でリセット)
 		_player->OnAccelerationStop();
 	}
 }

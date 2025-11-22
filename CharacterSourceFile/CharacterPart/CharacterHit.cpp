@@ -1,6 +1,12 @@
 #include "CharacterHit.h"
 #include "../Character.h"
 
+namespace
+{
+	const float RATIO_MAX = 1.0f;	//割合計算をする際の最大
+	const float RATIO_HALF = 0.5f;	//割合計算をするときの半分の値
+}
+
 CharacterHit::CharacterHit(GameObject* parent)
 	:GameObject(parent, "CharacterHit"), params_(nullptr), character_(nullptr)
 {
@@ -167,44 +173,56 @@ void CharacterHit::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _my
 	params_->HitParam_.KnockBack_Direction_ = tmp;
 
 	//自身の速度と相手の速度の差分をとる
-	//速度の差分に応じてノックバック量を変化させる
-	float subVelocity = _myVelocity - _targetVelocity;
+	float subVelocity = fabs(_myVelocity - _targetVelocity);
 
-	//ノックバック量の初期化
-	//毎回値が変化するのでローカル変数
-	float KnockBackValue = 0.0f;
+	//自身の速度と相手の速度の合計をとる
+	//自分の速度が全体のどれくらいの割合かを計算するのに用いる
+	float totalVelocity = _myVelocity + _targetVelocity;
 
-	//速度差の判定は線形補完元の最大値を適用
-	//速度差が自身の方が一定以上なら、自身のノックバック量は0
+	//ノックバック量の最大(ここからお互いの速度に応じて最終的な値が変わる)
+	//線形補間してノックバック量の最大を決める
+	float baseKnockBack = LinearInterpolation(subVelocity,
+		params_->HitParam_.OriginalRangeMin_,
+		params_->HitParam_.OriginalRangeMax_,
+		params_->HitParam_.ConvertedRangeMin_,
+		params_->HitParam_.ConvertedRangeMax_);
+
+	//自身の速度の割合を保管する変数を用意
+	float myRatio = 0.0f;
+
+	//自身の速度が全体のどのくらいの割合かを求める
+	if (totalVelocity > 0.0f)
+	{
+		myRatio = _myVelocity / totalVelocity;
+	}
+	else 
+	{
+		//両方が0なら比率は半分ずつ
+		myRatio = RATIO_HALF; 
+	}
+
+	//1.0から速度割合を引いた数にノックバックの最大値をかける
+	float myKnockBackValue = baseKnockBack * (RATIO_MAX - myRatio);
+
+	//速度差が閾値(変換元のノックバックの最大値)を超えた場合、速い方を0.0fにする
 	if (subVelocity >= params_->HitParam_.OriginalRangeMax_)
 	{
-		KnockBackValue = 0.0f;
-	}
-	else
-	{
-		//値がマイナスならプラスに変更
-		if (signbit(subVelocity))
+		//早い方だけをノックバック量を0にするため、二重に判定
+		if (_myVelocity > _targetVelocity)
 		{
-			subVelocity = -subVelocity;
+			myKnockBackValue = 0.0f;
 		}
-
-		//ノックバック量の線形補完を行う
-		KnockBackValue = LinearInterpolation(subVelocity,
-			params_->HitParam_.OriginalRangeMin_, 
-			params_->HitParam_.OriginalRangeMax_,
-			params_->HitParam_.ConvertedRangeMin_,
-			params_->HitParam_.ConvertedRangeMax_);
 	}
 
 	//変換したノックバック量をノックバック時の速度x,zに代入
-	params_->HitParam_.KnockBack_Velocity_.x = KnockBackValue;
-	params_->HitParam_.KnockBack_Velocity_.z = KnockBackValue;
+	params_->HitParam_.KnockBack_Velocity_.x = myKnockBackValue;
+	params_->HitParam_.KnockBack_Velocity_.z = myKnockBackValue;
 
 	//溜めている速度をリセット
 	character_->OnChargeReset();
 
 	//ノックバック時のY軸回転角の固定
-	KnockBackAngleY(params_->HitParam_.KnockBack_Direction_, KnockBackValue);
+	KnockBackAngleY(params_->HitParam_.KnockBack_Direction_, myKnockBackValue);
 
 	//攻撃相手の名前を取得
 	params_->HitParam_.AttackedName_ = _attackName;

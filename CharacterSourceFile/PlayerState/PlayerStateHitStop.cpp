@@ -3,8 +3,6 @@
 
 void PlayerStateHitStop::Enter(Player* _player)
 {
-	//加速度をリセット
-	_player->OnAccelerationStop();
 }
 
 void PlayerStateHitStop::Update(Player* _player)

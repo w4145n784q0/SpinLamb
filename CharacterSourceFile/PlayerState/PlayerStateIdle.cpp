@@ -29,9 +29,6 @@ void PlayerStateIdle::Update(Player* _player)
 			//地上にいるならチャージ状態へ移行
 			_player->ChangeState(Player::S_Charge);
 
-			//加速度をリセット
-			_player->OnAccelerationStop();
-
 			//シーン遷移のため早期リターン
 			return;
 		}

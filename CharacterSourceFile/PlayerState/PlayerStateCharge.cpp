@@ -12,14 +12,23 @@ void PlayerStateCharge::Enter(Player* _player)
 	//溜めている速度をリセット
 	//チャージ量は毎回0からスタートさせる
 	_player->OnChargeReset();
-
-	//加速度をリセット
-	_player->OnAccelerationStop();
 }
 
 void PlayerStateCharge::Update(Player* _player)
 {
 	//チャージ中(TmpAcceleを溜めている状態) その場で左右回転できるが動けない
+
+	//チャージ中は加速度が低下する
+	//キャラクター同士の反射にはお互いの加速度を考慮している
+	//チャージを長く続けると解放したときに相手をふっとばしやすくなるが
+	//自身の加速度が下がり、接触されると自身がふっとびやすくなる
+	_player->OnFrictionNormalDeceleration();
+
+	//加速度が0以下になったら0で固定する
+	if (_player->OnIsAcceleStop())
+	{
+		_player->OnAccelerationStop();
+	}
 
 	//加速度を溜める
 	_player->OnCharging();
@@ -45,6 +54,9 @@ void PlayerStateCharge::Update(Player* _player)
 			//通常状態へ戻る
 			_player->ChangeState(Player::S_Idle);
 
+			//加速度をリセット(Idle状態の加速度が残っているため)
+			_player->OnAccelerationStop();
+			
 			//シーン遷移のため早期リターン
 			return;
 		}

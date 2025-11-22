@@ -24,7 +24,7 @@ void EnemyStateFenceHit::Update(Enemy* _enemy)
 		//攻撃までの時間を再抽選(ノックバックした際も抽選し、頻繁に変わるようにする)
 		_enemy->RandomAimReLottery();
 
-		//ダッシュ中の速度リセット(ノックバック終了時点でリセット)
+		//加速度リセット(ノックバック終了時点でリセット)
 		_enemy->OnAccelerationStop();
 	}
 }

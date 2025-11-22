@@ -11,14 +11,20 @@ void EnemyStateAim::Enter(Enemy* _enemy)
 	//溜めている速度をリセット
 	//チャージ量は毎回0からスタートさせる
 	_enemy->OnChargeReset();
-
-	//加速度をリセット
-	_enemy->OnAccelerationStop();
 }
 
 void EnemyStateAim::Update(Enemy* _enemy)
 {
 	//チャージ(TmpAcceleを溜めている状態) しながらPlayerを狙う状態
+
+	//チャージ中は加速度が低下する
+	_enemy->OnFrictionNormalDeceleration();
+
+	//加速度が0以下になったら0で固定する
+	if (_enemy->OnIsAcceleStop())
+	{
+		_enemy->OnAccelerationStop();
+	}
 
 	//攻撃前に相手が無敵時間に入った・被弾・壁に接触したら
 	if (!_enemy->IsAttackDecision())

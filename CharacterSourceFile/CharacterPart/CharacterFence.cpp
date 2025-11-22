@@ -48,7 +48,7 @@ void CharacterFence::FenceReflect(XMVECTOR _normal)
 	//溜めている速度をリセット
 	character_->OnChargeReset();
 
-	//ダッシュ中の速度リセット
+	//加速度リセット
 	character_->OnAccelerationStop();
 
 	//念のため正規化する
