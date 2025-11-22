@@ -49,12 +49,6 @@ void PlayerStateAttack::Exit(Player* _player)
 	_player->GetParams()->AnimeParam_.DashFrameCount_ = 0;
 }
 
-void PlayerStateAttack::Draw(Player* _player)
-{
-	//ダッシュ攻撃スプライト描画
-	//_player->OnDrawDashImage();
-}
-
 bool PlayerStateAttack::IsAttackState() const
 {
 	//攻撃状態であることを返す

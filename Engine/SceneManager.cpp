@@ -45,6 +45,7 @@ void SceneManager::Update()
 
 		//GameViewの各ポインタのアドレスを無効化してから次のシーンを作成
 		//実体そのものはKillAllChildren()で消えている
+		//GameView内のポインタは消えないのでここで必ずアドレスの無効化
 		GameView::Release();
 
 		//次のシーンを作成

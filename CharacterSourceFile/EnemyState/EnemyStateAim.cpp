@@ -11,18 +11,26 @@ void EnemyStateAim::Enter(Enemy* _enemy)
 	//溜めている速度をリセット
 	//チャージ量は毎回0からスタートさせる
 	_enemy->OnChargeReset();
+
+	//加速度をリセット
+	_enemy->OnAccelerationStop();
 }
 
 void EnemyStateAim::Update(Enemy* _enemy)
 {
 	//チャージ(TmpAcceleを溜めている状態) しながらPlayerを狙う状態
 
-	//攻撃前に相手が無敵時間に入った・被弾・壁に接触したら様子見状態へ
+	//攻撃前に相手が無敵時間に入った・被弾・壁に接触したら
 	if (!_enemy->IsAttackDecision())
 	{
+		//様子見状態へ移行
 		_enemy->ChangeState(Enemy::S_Look);
 
-		//溜めている速度をリセット
+		//攻撃までのタイマーをリセット
+		_enemy->AimTimerReset();
+
+		//シーン遷移のため早期リターン
+		return;
 	}
 
 	//プレイヤーのいる方向へY回転する
@@ -67,6 +75,9 @@ void EnemyStateAim::Exit(Enemy* _enemy)
 {
 	//状態遷移の際は一度x回転をストップ
 	_enemy->OnRotateXStop();
+
+	//溜めたチャージを0にする
+	_enemy->OnChargeReset();
 }
 
 void EnemyStateAim::Draw(Enemy* _enemy)

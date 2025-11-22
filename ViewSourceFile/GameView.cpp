@@ -166,7 +166,7 @@ namespace GameView
 
 	void ViewImagePlayer1()
 	{
-		//ここからImage関係は呼ぶ(Imageが二重に呼ばれるのを防ぐ)
+		//ここからImage関係は呼ぶ(2人プレイのとき限定)
 		//Imageは単独のクラスなので、通常のImage::Drawを呼ぶと二度呼ばれてしまう
 		//そのため、GameViewから別に呼ぶ
 
@@ -175,6 +175,7 @@ namespace GameView
 			return;
 		}
 
+		//攻撃状態のとき、アニメーションを描画
 		if (pPlayer1_->IsCharacterStateAttack())
 		{
 			pPlayer1_->OnDrawDashImage();
@@ -183,7 +184,7 @@ namespace GameView
 
 	void ViewImagePlayer2()
 	{
-		//ここから画像関係は呼ぶ(Imageが二重に呼ばれるのを防ぐ)
+		//ここから画像関係は呼ぶ(2人プレイのとき限定)
 		//Imageは単独のクラスなので、通常のImage::Drawを呼ぶと二度呼ばれてしまう
 		//そのため、GameViewから別に呼ぶ
 
@@ -192,6 +193,7 @@ namespace GameView
 			return;
 		}
 
+		//攻撃状態のとき、アニメーションを描画
 		if (pPlayer2_->IsCharacterStateAttack())
 		{
 			pPlayer2_->OnDrawDashImage();

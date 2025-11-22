@@ -4,6 +4,7 @@
 
 void PlayerStateIdle::Enter(Player* _player)
 {
+	//加速度をリセット
 	_player->OnAccelerationStop();
 }
 
@@ -30,6 +31,9 @@ void PlayerStateIdle::Update(Player* _player)
 
 			//加速度をリセット
 			_player->OnAccelerationStop();
+
+			//シーン遷移のため早期リターン
+			return;
 		}
 	}
 
@@ -60,5 +64,6 @@ void PlayerStateIdle::Update(Player* _player)
 
 void PlayerStateIdle::Exit(Player* _player)
 {
+	//状態遷移の際は一度x回転をストップ
 	_player->OnRotateXStop();
 }

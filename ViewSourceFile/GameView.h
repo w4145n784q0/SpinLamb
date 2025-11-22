@@ -41,8 +41,10 @@ namespace GameView
 	//二人プレイ用描画(右画面分割)
 	void ViewPlayer2();
 
+	//二人プレイ用のImage関連のみ描画(Player1)
 	void ViewImagePlayer1();
 
+	//二人プレイ用のImage関連のみ描画(Player2)
 	void ViewImagePlayer2();
 
 	//ImGui描画

@@ -3,6 +3,8 @@
 
 void EnemyStateHitStop::Enter(Enemy* _enemy)
 {
+	//加速度をリセット
+	_enemy->OnAccelerationStop();
 }
 
 void EnemyStateHitStop::Update(Enemy* _enemy)

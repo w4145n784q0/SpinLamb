@@ -47,6 +47,7 @@ void PracticeScene::Initialize()
 	StageManager* pStageManager = (StageManager*)FindObject("StageManager");
 	assert(pStageManager != nullptr);
 
+	//各ステージの端を保管
 	float North = pStageManager->GetNorthEnd();
 	float South = pStageManager->GetSouthEnd();
 	float West = pStageManager->GetWestEnd();

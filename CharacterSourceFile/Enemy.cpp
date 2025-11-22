@@ -138,7 +138,7 @@ void Enemy::OwnCharacterCollision()
 	ChangeState(S_HitStop);
 
 	//接触時点で攻撃までのタイマーをリセット
-	AimTimer_ = 0;
+	AimTimerReset();
 }
 
 void Enemy::OwnFenceCollision()
@@ -147,7 +147,7 @@ void Enemy::OwnFenceCollision()
 	ChangeState(S_FenceHit);
 
 	//接触時点で攻撃までのタイマーをリセット
-	AimTimer_ = 0;
+	AimTimerReset();
 }
 
 void Enemy::EnemyRun()

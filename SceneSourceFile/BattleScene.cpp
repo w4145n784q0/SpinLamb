@@ -64,6 +64,7 @@ void BattleScene::Initialize()
 	StageManager* pStageManager = (StageManager*)FindObject("StageManager");
 	assert(pStageManager != nullptr);
 
+	//各ステージの端を保管
 	float North = pStageManager->GetNorthEnd();
 	float South = pStageManager->GetSouthEnd();
 	float West = pStageManager->GetWestEnd();
@@ -148,7 +149,7 @@ void BattleScene::Initialize()
 		InitCharacters[i]->GetParams()->SetID(i + CharacterAddID);
 
 		//監視対象に追加
-		InitCharacters[i]->GetModuleObserver()->AddObserver(this);
+		InitCharacters[i]->OnAddObserver(this);
 	}
 
 	//player初期化時の文字列配列(追加する際はこの配列に文字列を追加)

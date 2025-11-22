@@ -67,7 +67,7 @@ public:
     virtual void OwnCharacterCollision() {};
     virtual void OwnFenceCollision() {};
 
-    //自身の特定の状態を返す処理
+    //自身の特定の状態を返す処理(両方のステートに共通してあるもの)
     virtual bool IsCharacterStateAttack() { return false; }
     virtual bool IsCharacterStateHitStop() { return false; };
     virtual bool IsCharacterStateHit() { return false; };
@@ -298,6 +298,13 @@ public:
     void OnWaitTimeReset()
     {
         wait_->WaitTimeReset();
+    }
+
+    //-----オブザーバー関連-----
+    //監視対象を追加イベント
+    void OnAddObserver(IGameObserver* _observer)
+    {
+        observer_->AddObserver(_observer);
     }
 
     //共通パラメータ群のゲッター関数

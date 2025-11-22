@@ -12,6 +12,9 @@ void PlayerStateCharge::Enter(Player* _player)
 	//溜めている速度をリセット
 	//チャージ量は毎回0からスタートさせる
 	_player->OnChargeReset();
+
+	//加速度をリセット
+	_player->OnAccelerationStop();
 }
 
 void PlayerStateCharge::Update(Player* _player)
@@ -36,15 +39,14 @@ void PlayerStateCharge::Update(Player* _player)
 	{
 		if (_player->GetParams()->JumpParam_.IsOnGround_)
 		{
-			//溜めたチャージを0にする
-			_player->OnChargeReset();
-
 			//ジャンプ開始
 			_player->OnSetJump();
 
 			//通常状態へ戻る
 			_player->ChangeState(Player::S_Idle);
 
+			//シーン遷移のため早期リターン
+			return;
 		}
 	}
 
@@ -72,6 +74,8 @@ void PlayerStateCharge::Update(Player* _player)
 		//攻撃状態へ移行
 		_player->ChangeState(Player::S_Attack);
 
+		//シーン遷移のため早期リターン
+		return;
 	}
 
 	//高速X回転
@@ -85,6 +89,9 @@ void PlayerStateCharge::Exit(Player* _player)
 {
 	//状態遷移の際は一度x回転をストップ
 	_player->OnRotateXStop();
+
+	//溜めたチャージを0にする
+	_player->OnChargeReset();
 }
 
 void PlayerStateCharge::Draw(Player* player)
