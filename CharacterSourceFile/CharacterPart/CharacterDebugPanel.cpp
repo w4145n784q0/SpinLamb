@@ -27,6 +27,7 @@ void CharacterDebugPanel::DrawCharacterImGui()
 			params_->JumpParam_.HeightLowerLimit_, params_->JumpParam_.HeightUpperLimit_);
 		ImGui::SliderFloat("PositionZ", &pos.z,
 			params_->EndParam_.SouthEnd_, params_->EndParam_.NorthEnd_);
+		character_->SetPosition(pos);
 		ImGui::TreePop();
 	}
 
@@ -36,7 +37,7 @@ void CharacterDebugPanel::DrawCharacterImGui()
 		ImGui::InputFloat("RotateX", &rot.x, ZeroPointOne);
 		ImGui::InputFloat("RotateY", &rot.y, ZeroPointOne);
 		ImGui::InputFloat("RotateZ", &rot.z, ZeroPointOne);
-
+		character_->SetPosition(rot);
 		ImGui::TreePop();
 	}
 
@@ -46,7 +47,7 @@ void CharacterDebugPanel::DrawCharacterImGui()
 		ImGui::InputFloat("ScaleX", &sca.x, ZeroPointOne);
 		ImGui::InputFloat("ScaleY", &sca.y, ZeroPointOne);
 		ImGui::InputFloat("ScaleZ", &sca.z, ZeroPointOne);
-
+		character_->SetPosition(sca);
 		ImGui::TreePop();
 	}
 

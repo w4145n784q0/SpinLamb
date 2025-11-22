@@ -193,7 +193,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 					pRootObject->DrawSub();
 
-					//プレイヤー1用のImage専用描画
+					//プレイヤー2用のImage専用描画
 					GameView::ViewImagePlayer2();
 
 					//エフェクトの描画
@@ -217,6 +217,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//全オブジェクトを描画
 					//ルートオブジェクトのDrawを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 					pRootObject->DrawSub();
+
+					//プレイヤー1用のImage専用描画
+					GameView::ViewImagePlayer1();
 
 					//エフェクトの描画
 					VFX::Draw();
