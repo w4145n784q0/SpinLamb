@@ -36,14 +36,14 @@ float CharacterRotate::RotateDirectionVector(XMVECTOR _MoveVector)
 void CharacterRotate::MoveRotateX()
 {
 	float x = character_->GetRotate().x;
-	x += params_->RotateParam_.MoveRotateX;
+	x += params_->RotateParam_.MoveRotateX_;
 	character_->SetRotateX(x);
 }
 
 void CharacterRotate::FastRotateX()
 {
 	float x = character_->GetRotate().x;
-	x += params_->RotateParam_.FastRotateX;
+	x += params_->RotateParam_.FastRotateX_;
 	character_->SetRotateX(x);
 }
 

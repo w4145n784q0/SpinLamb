@@ -36,6 +36,7 @@ public:
         int hSoundCharacterHit_ = -1;   //キャラクター同士の接触音のハンドル
         int hSoundFenceHit_ = -1;       //柵に接触音のハンドル
         int hSoundJump_ = -1;           //ジャンプ音のハンドル
+        int hSoundLanding_ = -1;        //着地音のハンドル
     };
     SoundParam SoundParam_;
 
@@ -82,8 +83,8 @@ public:
      //----------回転----------
     struct RotateParam
     {
-        float MoveRotateX = 0.0f;   //移動時の1fの回転量
-        float FastRotateX = 0.0f;   //(チャージ中など)高速回転中の1fの回転量
+        float MoveRotateX_ = 0.0f;   //移動時の1fの回転量
+        float FastRotateX_ = 0.0f;   //(チャージ中など)高速回転中の1fの回転量
     };
     RotateParam RotateParam_;
 
@@ -242,11 +243,11 @@ public:
     XMVECTOR GetForwardVector() const { return MoveParam_.ForwardVector_; }
 
     //回転
-    void SetMoveRotateX(float _moveRotate) { RotateParam_.MoveRotateX = _moveRotate; }
-    float GetMoveRotateX() const { return RotateParam_.MoveRotateX; }
+    void SetMoveRotateX(float _moveRotate) { RotateParam_.MoveRotateX_ = _moveRotate; }
+    float GetMoveRotateX() const { return RotateParam_.MoveRotateX_; }
 
-    void SetFastRotateX(float _fastRotate) { RotateParam_.FastRotateX = _fastRotate; }
-    float GetFastRotateX() const { return RotateParam_.FastRotateX; }
+    void SetFastRotateX(float _fastRotate) { RotateParam_.FastRotateX_ = _fastRotate; }
+    float GetFastRotateX() const { return RotateParam_.FastRotateX_; }
 
     //空中
     void SetGravity(float _gravity) { JumpParam_.Gravity_ = _gravity; }

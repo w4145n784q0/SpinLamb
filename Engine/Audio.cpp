@@ -21,6 +21,7 @@ namespace Audio
 		i_Hit,
 		i_FenceHit,
 		i_Jump,
+		i_Landing
 	};
 
 	//SEを鳴らす回数(効果音は同じものを一度に複数鳴らすことを想定)
@@ -37,9 +38,10 @@ namespace Audio
 	int WhistleSoundNum_ = 0;	//ホイッスル音を同時に鳴らす回数
 	int	ChargeSoundNum_ = 0;	//チャージ音を同時に鳴らす回数
 	int AttackSoundNum_ = 0;	//攻撃音を同時に鳴らす回数
-	int HitSoundNum_ = 0;	//ヒット音を同時に鳴らす回数
+	int HitSoundNum_ = 0;		//ヒット音を同時に鳴らす回数
 	int FenceHitSoundNum_ = 0;  //柵に接触音を同時に鳴らす回数
 	int JumpSoundNum_ = 0;		//ジャンプ音を同時に鳴らす回数
+	int LandingSoundNum_ = 0;	//着地音を同時に鳴らす回数
 
 	//XAudio本体
 	IXAudio2* pXAudio = nullptr;
@@ -251,16 +253,17 @@ void Audio::InitCSVAudio()
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	StartSoundNum_ = static_cast<int>(SoundData[i_Start]);
-	SelectSoundNum_ = static_cast<int>(SoundData[i_Select]);
-	DecideSoundNum_ = static_cast<int>(SoundData[i_Decide]);
-	CancelSoundNum_ = static_cast<int>(SoundData[i_Cancel]);
-	WhistleSoundNum_ = static_cast<int>(SoundData[i_Whistle]);
-	ChargeSoundNum_ = static_cast<int>(SoundData[i_Charge]);
-	AttackSoundNum_ = static_cast<int>(SoundData[i_Attack]);
-	HitSoundNum_ = static_cast<int>(SoundData[i_Hit]);
-	FenceHitSoundNum_ = static_cast<int>(SoundData[i_FenceHit]);
-	JumpSoundNum_ = static_cast<int>(SoundData[i_Jump]);
+	StartSoundNum_		= static_cast<int>(SoundData[i_Start]);
+	SelectSoundNum_		= static_cast<int>(SoundData[i_Select]);
+	DecideSoundNum_		= static_cast<int>(SoundData[i_Decide]);
+	CancelSoundNum_		= static_cast<int>(SoundData[i_Cancel]);
+	WhistleSoundNum_	= static_cast<int>(SoundData[i_Whistle]);
+	ChargeSoundNum_		= static_cast<int>(SoundData[i_Charge]);
+	AttackSoundNum_		= static_cast<int>(SoundData[i_Attack]);
+	HitSoundNum_		= static_cast<int>(SoundData[i_Hit]);
+	FenceHitSoundNum_	= static_cast<int>(SoundData[i_FenceHit]);
+	JumpSoundNum_		= static_cast<int>(SoundData[i_Jump]);
+	LandingSoundNum_	= static_cast<int>(SoundData[i_Landing]);
 }
 
 int Audio::GetStartNum()
@@ -311,4 +314,9 @@ int Audio::GetFenceHitNum()
 int Audio::GetJumpNum()
 {
 	return JumpSoundNum_;
+}
+
+int Audio::GetLandingNum()
+{
+	return LandingSoundNum_;
 }

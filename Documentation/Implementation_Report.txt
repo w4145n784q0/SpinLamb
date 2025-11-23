@@ -1,11 +1,7 @@
 実際にコーディングしたソースファイルは以下のようになっています。
 
 ●インターフェース関係(InterfaceSourceFileに格納)
-IChargeEventListner.h
 IGameObserver.h
-IMovementEventListener.h
-IRotateEventListner.h
-IVFXEventListener.h
 
 ●描画関係(ViewSourceFileに格納)
 GameView.h
@@ -137,6 +133,8 @@ OutStageThing.cpp
 ●UI関係(UISourceFileに格納)
 HUD.h
 HUD.cpp
+HUDDebugPanel.h
+HUDDebugPanel.cpp
 GameTimer.h
 GameTimer.cpp
 MiniMap.h

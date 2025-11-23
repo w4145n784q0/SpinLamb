@@ -65,5 +65,8 @@ namespace Audio
 
 	//ƒWƒƒƒ“ƒv‰¹‚ğ“¯‚É–Â‚ç‚·‰ñ”
 	int GetJumpNum();
+
+	//’…’n‰¹‚ğ‚ğ“¯‚É–Â‚ç‚·‰ñ”
+	int GetLandingNum();
 };
 

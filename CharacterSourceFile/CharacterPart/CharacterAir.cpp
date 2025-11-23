@@ -36,6 +36,9 @@ void CharacterAir::CharacterGravity()
 			{
 				//着地した瞬間にエフェクトを出す
 				character_->OnLandingVFX(parentPos);
+
+				//着地のSE再生
+				Audio::Play(params_->SoundParam_.hSoundLanding_);
 			}
 		}
 		else

@@ -104,8 +104,8 @@ void CharacterDebugPanel::DrawCharacterImGui()
 	//キャラクター移動時の通常の回転量、チャージ中の回転量
 	if (ImGui::TreeNode("Rotate"))
 	{
-		ImGui::InputFloat("NormalRotate", &params_->RotateParam_.MoveRotateX, ZeroPointOne);
-		ImGui::InputFloat("FastRotate", &params_->RotateParam_.FastRotateX, ZeroPointOne);
+		ImGui::InputFloat("NormalRotate", &params_->RotateParam_.MoveRotateX_, ZeroPointOne);
+		ImGui::InputFloat("FastRotate", &params_->RotateParam_.FastRotateX_, ZeroPointOne);
 		ImGui::TreePop();
 	}
 

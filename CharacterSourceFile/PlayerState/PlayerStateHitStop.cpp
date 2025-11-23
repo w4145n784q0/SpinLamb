@@ -3,6 +3,7 @@
 
 namespace 
 {
+	//HitParam_.NextStateName_‚ğ•ÛŠÇ‚·‚é•Ï”
 	std::string nextState = "";
 }
 

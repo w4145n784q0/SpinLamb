@@ -155,8 +155,8 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	params_->RotateParam_.MoveRotateX = RotData[i_MoveRotate];
-	params_->RotateParam_.FastRotateX = RotData[i_FastRotate];
+	params_->RotateParam_.MoveRotateX_ = RotData[i_MoveRotate];
+	params_->RotateParam_.FastRotateX_ = RotData[i_FastRotate];
 
 
 	//--------------------空中関係のパラメータ--------------------

@@ -135,6 +135,9 @@ Character::Character(GameObject* parent, const std::string& name)
 	params_->SoundParam_.hSoundJump_ = Audio::Load(SoundSE + "Jump.wav", false, Audio::GetJumpNum());
 	assert(params_->SoundParam_.hSoundJump_ >= 0);
 
+	params_->SoundParam_.hSoundLanding_ = Audio::Load(SoundSE + "Landing.wav", false, Audio::GetLandingNum());
+	assert(params_->SoundParam_.hSoundLanding_ >= 0);
+
 	//‚»‚ê‚¼‚ê‚Ìò‚Ì–@ü‚ðŽæ“¾
 	fence_->GetWireNormal();
 
