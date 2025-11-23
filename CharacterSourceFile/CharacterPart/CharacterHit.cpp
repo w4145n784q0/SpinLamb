@@ -20,7 +20,7 @@ void CharacterHit::CommonCollision(GameObject* target)
 	//キャラクター同士の衝突
 	if (IsHitCharacter(name))
 	{
-		//ヒットストップ・被弾・柵に接触状態なら処理しない
+		//自身がヒットストップ・被弾・柵に接触状態なら処理しない
 		if (IsInDamageState())
 		{
 			return;
@@ -39,8 +39,9 @@ void CharacterHit::CommonCollision(GameObject* target)
 	//柵に衝突判定
 	if (IsHitFence(name))
 	{
-		//無敵時間中か柵に接触状態でなければ続ける
+		//無敵時間中・ヒットストップ・柵に接触状態でなければ続ける
 		if (!character_->GetParams()->FenceHitParam_.IsInvincibility_ &&
+			!character_->IsCharacterStateHitStop() &&
 			!character_->IsCharacterStateFenceHit()) {
 
 			//柵との当たり判定
@@ -128,6 +129,9 @@ void CharacterHit::CollisionCharacter(GameObject* _target)
 
 	//反射開始
 	Reflect(MyVector, TargetVector, MySpeed, TargetSpeed, TargetName);
+
+	//ヒットストップ状態用に、次に遷移する状態を文字列で保管する
+	params_->HitParam_.NextStateName_ = "Hit";
 }
 
 void CharacterHit::CollisionSomeFence(std::string _wire)
@@ -141,6 +145,9 @@ void CharacterHit::CollisionSomeFence(std::string _wire)
 	//自身のノックバック時のY軸回転角を固定させる
 	KnockBackAngleY(character_->GetParams()->HitParam_.KnockBack_Direction_,
 		character_->GetParams()->FenceHitParam_.KnockBackPower_);
+
+	//ヒットストップ状態用に、次に遷移する状態を文字列で保管する
+	params_->HitParam_.NextStateName_ = "Fence";
 }
 
 void CharacterHit::Reflect(XMVECTOR _myVector, XMVECTOR _targetVector, float _myVelocity, float _targetVelocity,

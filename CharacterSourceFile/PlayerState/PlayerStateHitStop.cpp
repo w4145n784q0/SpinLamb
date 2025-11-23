@@ -1,8 +1,14 @@
 #include "PlayerStateHitStop.h"
 #include"../Player.h"
 
+namespace 
+{
+	std::string nextState = "";
+}
+
 void PlayerStateHitStop::Enter(Player* _player)
 {
+	nextState = _player->GetParams()->HitParam_.NextStateName_;
 }
 
 void PlayerStateHitStop::Update(Player* _player)
@@ -18,8 +24,22 @@ void PlayerStateHitStop::Update(Player* _player)
 		//タイマーをリセット
 		_player->OnHitStopTimerReset();
 
-		//被弾状態へ移行
-		_player->ChangeState(Player::S_Hit);
+		if (nextState == "Hit")
+		{
+			//被弾状態へ移行
+			_player->ChangeState(Player::S_Hit);
+
+			//遷移指示が出た後は文字列を空にしておく
+			_player->GetParams()->HitParam_.NextStateName_ = "";
+		}
+		else if (nextState == "Fence")
+		{
+			//被弾状態へ移行
+			_player->ChangeState(Player::S_FenceHit);
+
+			//遷移指示が出た後は文字列を空にしておく
+			_player->GetParams()->HitParam_.NextStateName_ = "";
+		}
 	}
 }
 

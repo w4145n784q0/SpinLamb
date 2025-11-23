@@ -4,6 +4,7 @@
 #include"../../StageSourceFile/LowerWire.h"
 #include"../../StageSourceFile/LeftWire.h"
 #include"../../StageSourceFile/RightWire.h"
+#include"../../Engine/Audio.h"
 
 CharacterFence::CharacterFence(GameObject* parent)
 	:GameObject(parent, "CharacterFence"), params_(nullptr), character_(nullptr)
@@ -45,6 +46,9 @@ void CharacterFence::FenceReflect(XMVECTOR _normal)
 	//接触エフェクトを出す
 	character_->OnFenceHitVFX(character_->GetPosition());
 
+	//衝撃音
+	Audio::Play(params_->SoundParam_.hSoundFenceHit_);
+
 	//溜めている速度をリセット
 	character_->OnChargeReset();
 
@@ -72,14 +76,8 @@ void CharacterFence::FenceReflect(XMVECTOR _normal)
 	params_->HitParam_.KnockBack_Velocity_.x = params_->FenceHitParam_.KnockBackPower_;
 	params_->HitParam_.KnockBack_Velocity_.z = params_->FenceHitParam_.KnockBackPower_;
 
-	//無敵状態を設定
-	params_->FenceHitParam_.IsInvincibility_ = true;
-
 	//接触通知
 	NotifyFenceHit();
-
-	//ノックバック時のY軸回転角の固定
-	//KnockBackAngleY(HitParam_.KnockBack_Direction_, FenceHitParam_.KnockBackPower_);
 
 	//攻撃相手の名前をリセット
 	//自分の名前を代入することで、自爆判定に使う

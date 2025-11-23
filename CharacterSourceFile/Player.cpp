@@ -127,14 +127,14 @@ void Player::OnCollision(GameObject* pTarget)
 
 void Player::OwnCharacterCollision()
 {
-	//被弾状態になる
+	//ヒットストップ状態に遷移
 	ChangeState(S_HitStop);
 
 	//接触エフェクト
 	vfx_->SetHitEffect(this->GetPosition());
 
 	//衝撃音
-	Audio::Play(params_->SoundParam_.hSoundCollision_);
+	Audio::Play(params_->SoundParam_.hSoundCharacterHit_);
 
 	//カメラ振動(長く)
 	Camera::CameraShakeStart(Camera::GetShakeTimeLong());
@@ -142,11 +142,11 @@ void Player::OwnCharacterCollision()
 
 void Player::OwnFenceCollision()
 {
-	//プレイヤーの状態を柵に接触状態にする
-	ChangeState(S_FenceHit);
+	//ヒットストップ状態に遷移
+	ChangeState(S_HitStop);
 
 	//カメラ振動(中くらいの長さ)
-	Camera::CameraShakeStart(Camera::GetShakeTimeMiddle());
+	Camera::CameraShakeStart(Camera::GetShakeTimeLong());
 }
 
 void Player::PlayerRun()

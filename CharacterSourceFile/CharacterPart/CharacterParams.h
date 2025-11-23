@@ -31,10 +31,11 @@ public:
     //----------サウンドハンドル----------
     struct SoundParam
     {
-        int hSoundcharge_ = -1;     //チャージ音のハンドル
-        int hSoundattack_ = -1;     //突撃音のハンドル
-        int hSoundCollision_ = -1;  //接触音のハンドル
-        int hSoundJump_ = -1;       //ジャンプ音のハンドル
+        int hSoundcharge_ = -1;         //チャージ音のハンドル
+        int hSoundattack_ = -1;         //突撃音のハンドル
+        int hSoundCharacterHit_ = -1;   //キャラクター同士の接触音のハンドル
+        int hSoundFenceHit_ = -1;       //柵に接触音のハンドル
+        int hSoundJump_ = -1;           //ジャンプ音のハンドル
     };
     SoundParam SoundParam_;
 
@@ -107,6 +108,7 @@ public:
         float ColliderSize_ = 0.0f;                 //当たり判定(球体)のサイズ
         int HitStopTimer_ = 0;                      //ヒットストップ時間を計測するタイマー
         int HitStopValue_ = 0;                      //ヒットストップする時間 この値を超えるとヒットストップ時間終了
+        std::string NextStateName_ = "";            //ヒットストップ後に遷移する状態名を保管する文字列
         float OriginalRangeMin_ = 0.0f;             //変換元のノックバック量の最小値
         float OriginalRangeMax_ = 0.0f;             //変換元のノックバック量の最大値
         float ConvertedRangeMin_ = 0.0f;            //変換後のノックバック量の最小値

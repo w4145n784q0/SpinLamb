@@ -33,6 +33,10 @@ void EnemyStateFenceHit::Exit(Enemy* _enemy)
 {
     //ó‘Ô‘JˆÚ‚ÌÛ‚Íˆê“xx‰ñ“]‚ðƒXƒgƒbƒv
     _enemy->OnRotateXStop();
+
+	//ÚGó‘Ô‚©‚ç”²‚¯‚é‚Æ‚«–³“Gó‘Ô‚ðÝ’è
+	_enemy->GetParams()->FenceHitParam_.IsInvincibility_ = true;
+
 }
 
 bool EnemyStateFenceHit::IsUpdateInvincibility() const

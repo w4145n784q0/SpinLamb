@@ -64,7 +64,7 @@ void CharacterVFX::InitCSVEffect()
 
 	//ò‚ÉÚG
 	VFX::SetEmitter(params_->EffectParam_.FenceHitData_, params_->EffectParam_.FenceHitEffectParam_);
-	params_->EffectParam_.FenceHitData_.textureFileName = str + "flashB_Y.png";
+	params_->EffectParam_.FenceHitData_.textureFileName = str + "flashB_R.png";
 
 }
 

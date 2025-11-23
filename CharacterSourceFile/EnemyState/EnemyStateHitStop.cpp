@@ -1,8 +1,14 @@
 #include "EnemyStateHitStop.h"
 #include"../Enemy.h"
 
+namespace
+{
+	std::string nextState = "";
+}
+
 void EnemyStateHitStop::Enter(Enemy* _enemy)
 {
+	nextState = _enemy->GetParams()->HitParam_.NextStateName_;
 }
 
 void EnemyStateHitStop::Update(Enemy* _enemy)
@@ -15,11 +21,25 @@ void EnemyStateHitStop::Update(Enemy* _enemy)
 	//ヒットストップする時間を超えたら被弾状態へ
 	if (_enemy->OnIsTimeOverHitStopTime())
 	{
-		//タイマーをリセット
-		_enemy->OnHitStopTimerReset();
+		if (nextState == "Hit")
+		{
+			//タイマーをリセット
+			_enemy->OnHitStopTimerReset();
 
-		//被弾状態へ移行
-		_enemy->ChangeState(Enemy::S_Hit);
+			//被弾状態へ移行
+			_enemy->ChangeState(Enemy::S_Hit);
+
+			//遷移指示が出た後は文字列を空にしておく
+			_enemy->GetParams()->HitParam_.NextStateName_ = "";
+		}
+		else if (nextState == "Fence")
+		{
+			//被弾状態へ移行
+			_enemy->ChangeState(Enemy::S_FenceHit);
+
+			//遷移指示が出た後は文字列を空にしておく
+			_enemy->GetParams()->HitParam_.NextStateName_ = "";
+		}
 	}
 }
 

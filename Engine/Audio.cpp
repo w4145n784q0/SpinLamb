@@ -18,7 +18,8 @@ namespace Audio
 		i_Whistle,
 		i_Charge,
 		i_Attack,
-		i_Collision,
+		i_Hit,
+		i_FenceHit,
 		i_Jump,
 	};
 
@@ -36,7 +37,8 @@ namespace Audio
 	int WhistleSoundNum_ = 0;	//ホイッスル音を同時に鳴らす回数
 	int	ChargeSoundNum_ = 0;	//チャージ音を同時に鳴らす回数
 	int AttackSoundNum_ = 0;	//攻撃音を同時に鳴らす回数
-	int CollisionSoundNum_ = 0;	//ヒット音を同時に鳴らす回数
+	int HitSoundNum_ = 0;	//ヒット音を同時に鳴らす回数
+	int FenceHitSoundNum_ = 0;  //柵に接触音を同時に鳴らす回数
 	int JumpSoundNum_ = 0;		//ジャンプ音を同時に鳴らす回数
 
 	//XAudio本体
@@ -256,7 +258,8 @@ void Audio::InitCSVAudio()
 	WhistleSoundNum_ = static_cast<int>(SoundData[i_Whistle]);
 	ChargeSoundNum_ = static_cast<int>(SoundData[i_Charge]);
 	AttackSoundNum_ = static_cast<int>(SoundData[i_Attack]);
-	CollisionSoundNum_ = static_cast<int>(SoundData[i_Collision]);
+	HitSoundNum_ = static_cast<int>(SoundData[i_Hit]);
+	FenceHitSoundNum_ = static_cast<int>(SoundData[i_FenceHit]);
 	JumpSoundNum_ = static_cast<int>(SoundData[i_Jump]);
 }
 
@@ -295,9 +298,14 @@ int Audio::GetAttackNum()
 	return AttackSoundNum_;
 }
 
-int Audio::GetCollisionNum()
+int Audio::GetHitNum()
 {
-	return CollisionSoundNum_;
+	return HitSoundNum_;
+}
+
+int Audio::GetFenceHitNum()
+{
+	return FenceHitSoundNum_;
 }
 
 int Audio::GetJumpNum()

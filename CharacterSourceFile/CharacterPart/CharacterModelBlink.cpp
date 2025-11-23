@@ -23,5 +23,8 @@ void CharacterModelBlink::DrawCharacterModel(int _handle, Transform _transform)
 	{
 		//–³“GŽžŠÔ‚Å‚È‚¢‚È‚ç’Êí‚Ì•`‰æ
 		Model::SetAndDraw(_handle, _transform);
+
+		//“_–ÅƒJƒEƒ“ƒg‚Íí‚É0
+		params_->FenceHitParam_.BlinkTimer_ = 0;
 	}
 }

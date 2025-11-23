@@ -144,7 +144,7 @@ void Enemy::OwnCharacterCollision()
 void Enemy::OwnFenceCollision()
 {
 	//プレイヤーの状態を柵に接触状態にする
-	ChangeState(S_FenceHit);
+	ChangeState(S_HitStop);
 
 	//接触時点で攻撃までのタイマーをリセット
 	AimTimerReset();

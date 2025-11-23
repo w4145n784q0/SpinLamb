@@ -58,7 +58,10 @@ namespace Audio
 	int GetAttackNum();
 
 	//ヒット音を同時に鳴らす回数
-	int GetCollisionNum();
+	int GetHitNum();
+
+	//柵に接触する音を同時に鳴らす回数
+	int GetFenceHitNum();
 
 	//ジャンプ音を同時に鳴らす回数
 	int GetJumpNum();

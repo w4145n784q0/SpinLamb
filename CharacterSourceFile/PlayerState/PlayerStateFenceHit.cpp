@@ -30,6 +30,9 @@ void PlayerStateFenceHit::Exit(Player* _player)
 {
 	//ó‘Ô‘JˆÚ‚ÌÛ‚Íˆê“xx‰ñ“]‚ðƒXƒgƒbƒv
 	_player->OnRotateXStop();
+
+	//ÚGó‘Ô‚©‚ç”²‚¯‚é‚Æ‚«–³“Gó‘Ô‚ðÝ’è
+	_player->GetParams()->FenceHitParam_.IsInvincibility_ = true;
 }
 
 bool PlayerStateFenceHit::IsUpdateInvincibility() const

@@ -126,8 +126,11 @@ Character::Character(GameObject* parent, const std::string& name)
 	params_->SoundParam_.hSoundattack_ = Audio::Load(SoundSE + "Attack.wav", false, Audio::GetAttackNum());
 	assert(params_->SoundParam_.hSoundattack_ >= 0);
 
-	params_->SoundParam_.hSoundCollision_ = Audio::Load(SoundSE + "Collision.wav",false, Audio::GetCollisionNum());
-	assert(params_->SoundParam_.hSoundCollision_ >= 0);
+	params_->SoundParam_.hSoundCharacterHit_ = Audio::Load(SoundSE + "CharacterCollision.wav",false, Audio::GetHitNum());
+	assert(params_->SoundParam_.hSoundCharacterHit_ >= 0);
+
+	params_->SoundParam_.hSoundFenceHit_ = Audio::Load(SoundSE + "FenceCollision.wav", false, Audio::GetFenceHitNum());
+	assert(params_->SoundParam_.hSoundFenceHit_ >= 0);
 
 	params_->SoundParam_.hSoundJump_ = Audio::Load(SoundSE + "Jump.wav", false, Audio::GetJumpNum());
 	assert(params_->SoundParam_.hSoundJump_ >= 0);

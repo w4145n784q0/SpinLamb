@@ -1,2 +1,2 @@
-﻿Data,start,select,decide,cancel ,whistle,charge,attack,collision,jump
-SoundParam,1,4,2,2,1,4,4,8,4
+﻿Data,start,select,decide,cancel ,whistle,charge,attack,hit,fenceHit,jump
+SoundParam,1,4,2,2,1,4,4,8,8,4

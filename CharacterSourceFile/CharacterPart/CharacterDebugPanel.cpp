@@ -144,6 +144,9 @@ void CharacterDebugPanel::DrawCharacterImGui()
 		std::string attackedName = params_->HitParam_.AttackedName_;
 		ImGui::Text("AttackedName_:%s", attackedName.c_str());
 
+		std::string NextStateName = params_->HitParam_.NextStateName_;
+		ImGui::Text("NextStateName_:%s", NextStateName.c_str());
+
 		ImGui::TreePop();
 	}
 
