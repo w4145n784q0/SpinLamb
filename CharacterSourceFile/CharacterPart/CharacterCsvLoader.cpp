@@ -98,6 +98,11 @@ CharacterCsvLoader::CharacterCsvLoader(GameObject* parent)
 
 void CharacterCsvLoader::SetCSVStatus(std::string _path)
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//csvファイルを読み込む
 	CsvReader csv;
 	csv.Load(_path);
@@ -115,9 +120,12 @@ void CharacterCsvLoader::SetCSVStatus(std::string _path)
 	SetTransformPRS(tmp, initData);
 
 	//親クラスのトランスフォームに反映
-	character_->SetPosition(tmp.position_);
-	character_->SetRotate(tmp.rotate_);
-	character_->SetScale(tmp.scale_);
+	if(character_ != nullptr)
+	{
+		character_->SetPosition(tmp.position_);
+		character_->SetRotate(tmp.rotate_);
+		character_->SetScale(tmp.scale_);
+	}
 
 	//初期位置を保管する
 	params_->InitParam_.StartPosition_ = tmp.position_;

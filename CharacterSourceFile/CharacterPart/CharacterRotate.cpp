@@ -8,6 +8,12 @@ CharacterRotate::CharacterRotate(GameObject* parent)
 
 float CharacterRotate::RotateDirectionVector(XMVECTOR _MoveVector)
 {
+	if (params_ == nullptr)
+	{
+		//params_がnullなら0.0を返す
+		return 0.0f;
+	}
+
 	//主にコントローラー・キーボードの入力に使う
 	//受け取った方向ベクトルと前向きベクトルの外積求める
 	XMVECTOR cross = XMVector3Cross(_MoveVector, params_->InitParam_.FrontDirection_);
@@ -35,19 +41,38 @@ float CharacterRotate::RotateDirectionVector(XMVECTOR _MoveVector)
 
 void CharacterRotate::MoveRotateX()
 {
-	float x = character_->GetRotate().x;
-	x += params_->RotateParam_.MoveRotateX_;
-	character_->SetRotateX(x);
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
+	if (character_ != nullptr)
+	{
+		float x = character_->GetRotate().x;
+		x += params_->RotateParam_.MoveRotateX_;
+		character_->SetRotateX(x);
+	}
 }
 
 void CharacterRotate::FastRotateX()
 {
-	float x = character_->GetRotate().x;
-	x += params_->RotateParam_.FastRotateX_;
-	character_->SetRotateX(x);
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
+	if (character_ != nullptr)
+	{
+		float x = character_->GetRotate().x;
+		x += params_->RotateParam_.FastRotateX_;
+		character_->SetRotateX(x);
+	}
 }
 
 void CharacterRotate::RotateXStop()
 {
-	character_->SetRotateX(0.0f);
+	if (character_ != nullptr)
+	{
+		character_->SetRotateX(0.0f);
+	}
 }

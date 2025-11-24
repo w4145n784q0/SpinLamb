@@ -5,28 +5,36 @@ CharacterHitStop::CharacterHitStop(GameObject* parent)
 {
 }
 
-void CharacterHitStop::HitStopTimerAdd(int _add)
+void CharacterHitStop::HitStopTimerAdd()
 {
-	//ヒットストップを行うタイマーを増加(引数あり、かつ0より大きいならそれを加算)
-	if (_add > 0)
+	if (params_ == nullptr)
 	{
-		params_->HitParam_.HitStopTimer_ += _add;
+		return;
 	}
-	else
-	{
-		//引数なし(デフォルトは0)ならインクリメント
-		params_->HitParam_.HitStopTimer_++;
-	}
+
+	//ヒットストップを行うタイマーを増加
+	params_->HitParam_.HitStopTimer_++;
 }
 
 void CharacterHitStop::HitStopTimerReset()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//ヒットストップを行うタイマーをリセット
 	params_->HitParam_.HitStopTimer_ = 0;
 }
 
 bool CharacterHitStop::IsTimeOverHitStopTime()
 {
+	if (params_ == nullptr)
+	{
+		//params_がnullならfalseを返す
+		return false;
+	}
+
 	//HitStopTimer_がヒットストップする時間を経過したか
 	//(ヒットストップを終了するかどうか)返す
 	if (params_->HitParam_.HitStopTimer_ > params_->HitParam_.HitStopValue_)

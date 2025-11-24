@@ -26,11 +26,8 @@ public:
         params_ = _params;
     }
 
-    /// <summary>
-    /// HitStopTimerを増加
-    /// </summary>
-    /// <param name="_add">一度に増加させる値 デフォルトは0</param>
-    void HitStopTimerAdd(int _add = 0);
+    //HitStopTimerを増加
+    void HitStopTimerAdd();
 
     //HitStopTimerをリセット
     void HitStopTimerReset();

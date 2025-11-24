@@ -9,6 +9,11 @@ CharacterAir::CharacterAir(GameObject* parent)
 
 void CharacterAir::CharacterGravity()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//前フレームの着地状態を保存
 	bool prevOnGround = params_->JumpParam_.PrevOnGround_;
 
@@ -64,7 +69,10 @@ void CharacterAir::CharacterGravity()
 
 void CharacterAir::SetJump()
 {
-	//ジャンプを開始する処理
+	if (params_ == nullptr)
+	{
+		return;
+	}
 
 	//地上判定をfalseにする
 	params_->JumpParam_.IsOnGround_ = false;

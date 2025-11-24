@@ -9,6 +9,11 @@ CharacterMovement::CharacterMovement(GameObject* parent)
 
 void CharacterMovement::InitStartPosition()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	// 初期位置を親（Character）のtransformに設定する
 	if (character_ != nullptr)
 	{
@@ -23,6 +28,11 @@ void CharacterMovement::InitStartPosition()
 
 void CharacterMovement::MoveUpdate(XMVECTOR _input)
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//入力があるなら加速
 	if (!XMVector3Equal(_input, XMVectorZero()))
 	{
@@ -42,8 +52,11 @@ void CharacterMovement::MoveUpdate(XMVECTOR _input)
 	}
 	else
 	{
-		//加速度が0以上ならX回転する
-		character_->OnMoveRotateX();
+		if (character_ != nullptr)
+		{
+			//加速度が0以上ならX回転する
+			character_->OnMoveRotateX();
+		}
 	}
 
 	//受け取った方向が0ベクトルでないなら移動方向を確定
@@ -65,6 +78,11 @@ void CharacterMovement::MoveUpdate(XMVECTOR _input)
 
 void CharacterMovement::AddAcceleration()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//一定の加速量を加算し続ける
 	if (params_->MoveParam_.CommonAcceleration_ < params_->MoveParam_.NormalFullAccelerate_)
 	{
@@ -79,6 +97,11 @@ void CharacterMovement::AddAcceleration()
 
 void CharacterMovement::CharacterAttackMove(XMVECTOR _direction)
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//受け取った方向が0ベクトルなら処理しない(0ベクトルを正規化はできない)
 	if (XMVector3Equal(_direction, XMVectorZero()))
 	{
@@ -97,6 +120,11 @@ void CharacterMovement::CharacterAttackMove(XMVECTOR _direction)
 
 void CharacterMovement::CreateMoveVector()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//移動ベクトル = 移動方向 * ( 加速度 * 1fの移動量のスケーリング )
 	//移動ベクトル化する
 	XMVECTOR MoveVector = XMVectorScale(
@@ -105,13 +133,22 @@ void CharacterMovement::CreateMoveVector()
 
 	//現在位置と移動ベクトルを加算し
 	//移動後のベクトルを作成(この時点では移動確定していない)
-	XMFLOAT3 tmp = character_->GetPosition();
-	XMVECTOR PrevPos = XMLoadFloat3(&tmp);
-	params_->MoveParam_.NewPosition_ = PrevPos + MoveVector;
+	if (character_ != nullptr)
+	{
+		XMFLOAT3 tmp = character_->GetPosition();
+		XMVECTOR PrevPos = XMLoadFloat3(&tmp);
+		params_->MoveParam_.NewPosition_ = PrevPos + MoveVector;
+	}
 }
 
 bool CharacterMovement::IsOutsideStage(XMFLOAT3 _position)
 {
+	if (params_ == nullptr)
+	{
+		//params_がnullならfalseを返す
+		return false;
+	}
+
 	//指定位置が一つでもステージ端を超えるかどうか判定し、真偽を返す
 	//ステージ外判定をする際に使用
 
@@ -128,14 +165,27 @@ bool CharacterMovement::IsOutsideStage(XMFLOAT3 _position)
 
 void CharacterMovement::MoveConfirm()
 {
-	//移動後のベクトル(NewPosition_)をtransform_.positionに代入し、移動を確定する
-	XMFLOAT3 tmp = character_->GetPosition();
-	XMStoreFloat3(&tmp, params_->MoveParam_.NewPosition_);
-	character_->SetPosition(tmp);
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
+	if (character_ != nullptr)
+	{
+		//移動後のベクトル(NewPosition_)をtransform_.positionに代入し、移動を確定する
+		XMFLOAT3 tmp = character_->GetPosition();
+		XMStoreFloat3(&tmp, params_->MoveParam_.NewPosition_);
+		character_->SetPosition(tmp);
+	}
 }
 
 void CharacterMovement::NewPositionConfirm()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//移動後のベクトルをXMFLOAT3型に変換
 	XMFLOAT3 tmp;
 	XMStoreFloat3(&tmp, params_->MoveParam_.NewPosition_);
@@ -149,26 +199,52 @@ void CharacterMovement::NewPositionConfirm()
 
 void CharacterMovement::Deceleration()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	params_->MoveParam_.CommonAcceleration_ -= params_->MoveParam_.NormalAcceleValue_;
 }
 
 void CharacterMovement::FrictionNormalDeceleration()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	params_->MoveParam_.CommonAcceleration_ -= params_->MoveParam_.NormalFriction_;
 }
 
 void CharacterMovement::FrictionAttackDeceleration()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	params_->MoveParam_.CommonAcceleration_ -= params_->MoveParam_.AttackFriction_;
 }
 
 void CharacterMovement::AccelerationStop()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	params_->MoveParam_.CommonAcceleration_ = 0.0f;
 }
 
 bool CharacterMovement::IsAcceleStop()
 {
+	if (params_ == nullptr)
+	{
+		//params_がnullならfalseを返す
+		return false;
+	}
+
 	if (params_->MoveParam_.CommonAcceleration_ <= 0.0f)
 	{
 		return true;
@@ -181,6 +257,11 @@ bool CharacterMovement::IsAcceleStop()
 
 void CharacterMovement::InitImage()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//ダッシュ攻撃画像を読み込み
 	params_->AnimeParam_.hDashImage_ = Image::Load("Image\\Play\\AttackEffect.png");
 	assert(params_->AnimeParam_.hDashImage_ >= 0);
@@ -188,6 +269,11 @@ void CharacterMovement::InitImage()
 
 void CharacterMovement::UpdateDashImage()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//スプライトによるアニメーション更新
 	Image::SpriteUpdate(params_->AnimeParam_.DashFrameCount_,
 		params_->AnimeParam_.DashAnimeFrame_,
@@ -198,6 +284,11 @@ void CharacterMovement::UpdateDashImage()
 
 void CharacterMovement::DrawDashImage()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//スプライトによるアニメーション描画
 	//UpdateDashImageで更新したAnimeFrame_を使用する
 	Image::DrawSprite(params_->AnimeParam_.hDashImage_,

@@ -26,6 +26,15 @@ void CharacterForward::FrontVectorConfirm()
 {
 	//ローカル正面ベクトルを現在のy軸回転量で変形すると、正面からどれだけ回転したかが計算される
 	//その値がワールド正面ベクトルとなる
-	params_->MoveParam_.ForwardVector_ = 
-		RotateVecFront(character_->GetRotate().y, params_->InitParam_.FrontDirection_);
+
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
+	if(character_ != nullptr)
+	{
+		params_->MoveParam_.ForwardVector_ =
+			RotateVecFront(character_->GetRotate().y, params_->InitParam_.FrontDirection_);
+	}
 }

@@ -8,6 +8,11 @@ CharacterVFX::CharacterVFX(GameObject* parent)
 
 void CharacterVFX::InitCSVEffect()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//csvファイルを読み込む
 	CsvReader csv;
 	csv.Load("CSVData\\EffectData\\VFXData.csv");
@@ -72,6 +77,11 @@ void CharacterVFX::SetChargingEffect(std::string _path, XMFLOAT3 _pos)
 {
 	//チャージ中エフェクトを実際に行う
 
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//使用する画像のパスをセットする
 	params_->EffectParam_.ChargeData_.textureFileName = _path;
 
@@ -86,6 +96,11 @@ void CharacterVFX::SetFullChargeEffect(XMFLOAT3 _pos)
 {
 	//最大チャージエフェクトを実際に行う
 
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//発射位置をセット
 	params_->EffectParam_.FullChargeData_.position = _pos;
 
@@ -96,6 +111,11 @@ void CharacterVFX::SetFullChargeEffect(XMFLOAT3 _pos)
 void CharacterVFX::SetAttackLocusEffect(XMFLOAT3 _pos)
 {
 	//攻撃中の軌跡エフェクトを実際に行う
+
+	if (params_ == nullptr)
+	{
+		return;
+	}
 
 	//発射位置をセット
 	params_->EffectParam_.LocusData_.position = _pos;
@@ -108,6 +128,11 @@ void CharacterVFX::SetLandingEffect(XMFLOAT3 _pos)
 {
 	//着地エフェクトを実際にセットする
 
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//発射位置をセット
 	params_->EffectParam_.LandingData_.position = _pos;
 
@@ -119,6 +144,11 @@ void CharacterVFX::SetHitEffect(XMFLOAT3 _pos)
 {
 	//被弾エフェクトを実際に行う
 
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//発射位置をセット
 	params_->EffectParam_.HitData_.position = _pos;
 
@@ -129,6 +159,11 @@ void CharacterVFX::SetHitEffect(XMFLOAT3 _pos)
 void CharacterVFX::SetFenceHitEffect(XMFLOAT3 _pos)
 {
 	//柵に接触時エフェクトを実際に行う
+
+	if (params_ == nullptr)
+	{
+		return;
+	}
 
 	//発射位置をセット
 	params_->EffectParam_.FenceHitData_.position = _pos;

@@ -11,6 +11,11 @@ CharacterCharge::CharacterCharge(GameObject* parent)
 
 void CharacterCharge::InitArrow()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//矢印モデルのトランスフォームを初期化
 	params_->MoveParam_.ArrowTransform_.position_ = { 0.0f,0.0f, 0.0f };
 	params_->MoveParam_.ArrowTransform_.rotate_ = params_->MoveParam_.ArrowRotate_;
@@ -24,6 +29,11 @@ void CharacterCharge::InitArrow()
 
 void CharacterCharge::Charging()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//チャージ中のSE再生
 	Audio::Play(params_->SoundParam_.hSoundcharge_);
 
@@ -36,7 +46,10 @@ void CharacterCharge::Charging()
 	else
 	{
 		//最大チャージエフェクトを出す
-		character_->OnFullChargeVFX(character_->GetPosition());
+		if(character_ != nullptr)
+		{
+			character_->OnFullChargeVFX(character_->GetPosition());
+		}
 
 		//加速度が最大を超えないようにする
 		params_->MoveParam_.TmpAccele_ = params_->MoveParam_.AttackFullAccelerate_;
@@ -45,6 +58,11 @@ void CharacterCharge::Charging()
 
 void CharacterCharge::ChargeRelease()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//実際の加速度に溜めた仮の値を代入
 	params_->MoveParam_.CommonAcceleration_ = params_->MoveParam_.TmpAccele_;
 
@@ -54,27 +72,45 @@ void CharacterCharge::ChargeRelease()
 
 void CharacterCharge::ChargeReset()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	params_->MoveParam_.TmpAccele_ = 0.0f;
 }
 
 void CharacterCharge::SetArrow()
 {
-	//正面ベクトルに前方向の調整値を乗算し、矢印の正面位置を計算
-	XMVECTOR FrontArrow = XMVectorScale(params_->MoveParam_.ForwardVector_, params_->MoveParam_.AddArrowDepth_);
+	if (params_ == nullptr)
+	{
+		return;
+	}
 
-	//現在位置を取得
-	XMFLOAT3 tmp = character_->GetPosition();
-	XMVECTOR PosVec = XMLoadFloat3(&tmp);
+	if (character_ != nullptr)
+	{
+		//正面ベクトルに前方向の調整値を乗算し、矢印の正面位置を計算
+		XMVECTOR FrontArrow = XMVectorScale(params_->MoveParam_.ForwardVector_, params_->MoveParam_.AddArrowDepth_);
 
-	//矢印の正面位置と現在位置を加算
-	XMVECTOR arrowPosVec = XMVectorAdd(PosVec, FrontArrow);
+		//現在位置を取得
+		XMFLOAT3 tmp = character_->GetPosition();
+		XMVECTOR PosVec = XMLoadFloat3(&tmp);
 
-	//矢印のトランスフォームに代入
-	XMStoreFloat3(&params_->MoveParam_.ArrowTransform_.position_, arrowPosVec);
+		//矢印の正面位置と現在位置を加算
+		XMVECTOR arrowPosVec = XMVectorAdd(PosVec, FrontArrow);
+
+		//矢印のトランスフォームに代入
+		XMStoreFloat3(&params_->MoveParam_.ArrowTransform_.position_, arrowPosVec);
+	}
 }
 
 void CharacterCharge::DrawArrow()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//矢印モデルを描画
 	Model::SetAndDraw(params_->MoveParam_.hMoveArrow_, params_->MoveParam_.ArrowTransform_);
 }

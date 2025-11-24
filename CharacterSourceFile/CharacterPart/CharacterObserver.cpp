@@ -7,12 +7,22 @@ CharacterObserver::CharacterObserver(GameObject* parent)
 
 void CharacterObserver::AddObserver(IGameObserver* _observer)
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//ŠÄŽ‹ŽÒ‚ð”z—ñ‚É’Ç‰Á‚·‚é
 	params_->InitParam_.observers.push_back(_observer);
 }
 
 void CharacterObserver::RemoveObserver(IGameObserver* _observer)
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	auto it = params_->InitParam_.observers.begin();
 
 	while (it != params_->InitParam_.observers.end())

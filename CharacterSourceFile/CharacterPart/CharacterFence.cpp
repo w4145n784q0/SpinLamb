@@ -13,6 +13,11 @@ CharacterFence::CharacterFence(GameObject* parent)
 
 void CharacterFence::GetWireNormal()
 {
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	//各インスタンスから柵の法線を取得
 	UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");
 	assert(pUpperWire != nullptr);
@@ -43,45 +48,53 @@ void CharacterFence::GetWireNormal()
 
 void CharacterFence::FenceReflect(XMVECTOR _normal)
 {
-	//接触エフェクトを出す
-	character_->OnFenceHitVFX(character_->GetPosition());
-
-	//衝撃音
-	Audio::Play(params_->SoundParam_.hSoundFenceHit_);
-
-	//溜めている速度をリセット
-	character_->OnChargeReset();
-
-	//加速度リセット
-	character_->OnAccelerationStop();
-
-	//念のため正規化する
-	//反射方向が0なら処理しない(0ベクトルを正規化はできない)
-	if (XMVector3Equal(_normal, XMVectorZero()))
+	if (params_ == nullptr)
 	{
 		return;
 	}
 
-	//単位ベクトルに変換
-	_normal = XMVector3Normalize(_normal);
+	if (character_ != nullptr)
+	{
+		//接触エフェクトを出す
+		character_->OnFenceHitVFX(character_->GetPosition());
 
-	//XMFLOAT3型に変換
-	XMFLOAT3 tmp;
-	XMStoreFloat3(&tmp, _normal);
+		//衝撃音
+		Audio::Play(params_->SoundParam_.hSoundFenceHit_);
 
-	//受け取った法線をノックバック方向に代入
-	params_->HitParam_.KnockBack_Direction_ = { tmp };
+		//溜めている速度をリセット
+		character_->OnChargeReset();
 
-	//ノックバック量を速度に代入(一定値)
-	params_->HitParam_.KnockBack_Velocity_.x = params_->FenceHitParam_.KnockBackPower_;
-	params_->HitParam_.KnockBack_Velocity_.z = params_->FenceHitParam_.KnockBackPower_;
+		//加速度リセット
+		character_->OnAccelerationStop();
 
-	//接触通知
-	NotifyFenceHit();
+		//念のため正規化する
+		//反射方向が0なら処理しない(0ベクトルを正規化はできない)
+		if (XMVector3Equal(_normal, XMVectorZero()))
+		{
+			return;
+		}
 
-	//攻撃相手の名前をリセット
-	//自分の名前を代入することで、自爆判定に使う
-	params_->HitParam_.AttackedName_ = character_->GetObjectName();
+		//単位ベクトルに変換
+		_normal = XMVector3Normalize(_normal);
+
+		//XMFLOAT3型に変換
+		XMFLOAT3 tmp;
+		XMStoreFloat3(&tmp, _normal);
+
+		//受け取った法線をノックバック方向に代入
+		params_->HitParam_.KnockBack_Direction_ = { tmp };
+
+		//ノックバック量を速度に代入(一定値)
+		params_->HitParam_.KnockBack_Velocity_.x = params_->FenceHitParam_.KnockBackPower_;
+		params_->HitParam_.KnockBack_Velocity_.z = params_->FenceHitParam_.KnockBackPower_;
+
+		//接触通知
+		NotifyFenceHit();
+
+		//攻撃相手の名前をリセット
+		//自分の名前を代入することで、自爆判定に使う
+		params_->HitParam_.AttackedName_ = character_->GetObjectName();
+	}
 }
 
 void CharacterFence::NotifyFenceHit()
@@ -89,18 +102,31 @@ void CharacterFence::NotifyFenceHit()
 	//通知を受け取る側がoverrideしていなかった場合は何も起こらない
 	//BattleSceneでのみ有効(監視対象がない=AddObserverを呼ばない場合、
 	//InitParam_.observers自体が空なのでfor文がスルーされる)
-	for (IGameObserver* observer : params_->InitParam_.observers)
+
+	if (params_ == nullptr)
 	{
-		//監視者へ柵にヒットしたこと（最後に当たった(攻撃した)キャラクターの名前）と
-		//柵に当たったキャラクターの名前(NotifyFenceHit()を呼び出した自分自身)を通知
-		observer->OnCharacterFenceHit(params_->HitParam_.AttackedName_, character_->GetObjectName());
+		return;
+	}
+
+	if (character_ != nullptr)
+	{
+		for (IGameObserver* observer : params_->InitParam_.observers)
+		{
+			//監視者へ柵にヒットしたこと（最後に当たった(攻撃した)キャラクターの名前）と
+			//柵に当たったキャラクターの名前(NotifyFenceHit()を呼び出した自分自身)を通知
+			observer->OnCharacterFenceHit(params_->HitParam_.AttackedName_, character_->GetObjectName());
+		}
 	}
 }
 
 void CharacterFence::InvincibilityTimeCalculation()
 {
-	//無敵時間の計算
+	if (params_ == nullptr)
+	{
+		return;
+	}
 
+	//無敵時間の計算
 	//無敵時間かどうか判定(この関数は毎フレーム呼ばれるため)
 	if (params_->FenceHitParam_.IsInvincibility_)
 	{

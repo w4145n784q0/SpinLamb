@@ -10,6 +10,11 @@ void CharacterModelBlink::DrawCharacterModel(int _handle, Transform _transform)
 {
 	//無敵時間中かどうかでモデルの点滅表現を行う
 
+	if (params_ == nullptr)
+	{
+		return;
+	}
+
 	if (params_->FenceHitParam_.IsInvincibility_)
 	{
 		//無敵時間中ならタイマーを使い、一定フレームおきにモデルを描画

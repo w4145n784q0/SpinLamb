@@ -13,41 +13,59 @@ void CharacterDebugPanel::DrawCharacterImGui()
 	//Input:値を直接入力 +-による調整も可能
 	//Text:記述のみ
 
-	//親クラスのTransform
-	XMFLOAT3 pos = character_->GetPosition();
-	XMFLOAT3 rot = character_->GetRotate();
-	XMFLOAT3 sca = character_->GetScale();
+	if (params_ == nullptr)
+	{
+		return;
+	}
 
 	//キャラクターの位置(position_.x,y,z)
 	if (ImGui::TreeNode("Transform.Position"))
 	{
-		ImGui::SliderFloat("PositionX", &pos.x, 
-			params_->EndParam_.WestEnd_, params_->EndParam_.EastEnd_);
-		ImGui::SliderFloat("PositionY", &pos.y,
-			params_->JumpParam_.HeightLowerLimit_, params_->JumpParam_.HeightUpperLimit_);
-		ImGui::SliderFloat("PositionZ", &pos.z,
-			params_->EndParam_.SouthEnd_, params_->EndParam_.NorthEnd_);
-		character_->SetPosition(pos);
+		if (character_ != nullptr)
+		{
+			//親クラスの位置
+			XMFLOAT3 pos = character_->GetPosition();
+
+			ImGui::SliderFloat("PositionX", &pos.x,
+				params_->EndParam_.WestEnd_, params_->EndParam_.EastEnd_);
+			ImGui::SliderFloat("PositionY", &pos.y,
+				params_->JumpParam_.HeightLowerLimit_, params_->JumpParam_.HeightUpperLimit_);
+			ImGui::SliderFloat("PositionZ", &pos.z,
+				params_->EndParam_.SouthEnd_, params_->EndParam_.NorthEnd_);
+			character_->SetPosition(pos);
+		}
 		ImGui::TreePop();
 	}
 
 	//キャラクターの回転量(rotate_.x,y,z)
 	if (ImGui::TreeNode("Transform.Rotate"))
 	{
-		ImGui::InputFloat("RotateX", &rot.x, ZeroPointOne);
-		ImGui::InputFloat("RotateY", &rot.y, ZeroPointOne);
-		ImGui::InputFloat("RotateZ", &rot.z, ZeroPointOne);
-		character_->SetPosition(rot);
+		if (character_ != nullptr)
+		{
+			//親クラスの回転量
+			XMFLOAT3 rot = character_->GetRotate();
+
+			ImGui::InputFloat("RotateX", &rot.x, ZeroPointOne);
+			ImGui::InputFloat("RotateY", &rot.y, ZeroPointOne);
+			ImGui::InputFloat("RotateZ", &rot.z, ZeroPointOne);
+			character_->SetPosition(rot);
+		}
 		ImGui::TreePop();
 	}
 
 	//キャラクターの拡大率(scale_.x,y,z)
 	if (ImGui::TreeNode("Transform.Scale"))
 	{
-		ImGui::InputFloat("ScaleX", &sca.x, ZeroPointOne);
-		ImGui::InputFloat("ScaleY", &sca.y, ZeroPointOne);
-		ImGui::InputFloat("ScaleZ", &sca.z, ZeroPointOne);
-		character_->SetPosition(sca);
+		if (character_ != nullptr)
+		{
+			//親クラスの拡大率
+			XMFLOAT3 sca = character_->GetScale();
+
+			ImGui::InputFloat("ScaleX", &sca.x, ZeroPointOne);
+			ImGui::InputFloat("ScaleY", &sca.y, ZeroPointOne);
+			ImGui::InputFloat("ScaleZ", &sca.z, ZeroPointOne);
+			character_->SetPosition(sca);
+		}
 		ImGui::TreePop();
 	}
 
