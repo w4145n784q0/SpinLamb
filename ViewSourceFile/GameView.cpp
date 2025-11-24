@@ -40,15 +40,15 @@ namespace GameView
 
 	void GameView::Initialize()
 	{
-		GameViewMode_ = S_NormalScreen;
-		pPlayer1_ = nullptr;
-		pPlayer2_ = nullptr;
-		pHUD_ = nullptr;
-		pEnemy_ = nullptr;
-		pGround_ = nullptr;
-		pFence_ = nullptr;
-		pOutStageThing_ = nullptr;
-		pTransitionEffect_ = nullptr;
+		GameViewMode_		= S_NormalScreen;
+		pPlayer1_			= nullptr;
+		pPlayer2_			= nullptr;
+		pHUD_				= nullptr;
+		pEnemy_				= nullptr;
+		pGround_			= nullptr;
+		pFence_				= nullptr;
+		pOutStageThing_		= nullptr;
+		pTransitionEffect_	= nullptr;
 	}
 
 	void GameView::Release()

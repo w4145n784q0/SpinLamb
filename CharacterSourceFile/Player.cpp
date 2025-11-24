@@ -96,6 +96,7 @@ void Player::Initialize()
 
 void Player::Update()
 {
+	//ÀÛ‚ÌXVˆ—‚ÍPlayerRun()‚Ås‚¤
 }
 
 void Player::Draw()

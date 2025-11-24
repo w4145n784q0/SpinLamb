@@ -9,6 +9,11 @@ void EnemyStateFenceHit::Update(Enemy* _enemy)
 {
 	//ダメージを受ける柵と接触した状態 
 
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//ノックバックする
 	_enemy->OnKnockBack();
 
@@ -31,6 +36,11 @@ void EnemyStateFenceHit::Update(Enemy* _enemy)
 
 void EnemyStateFenceHit::Exit(Enemy* _enemy)
 {
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
     //状態遷移の際は一度x回転をストップ
     _enemy->OnRotateXStop();
 

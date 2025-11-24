@@ -17,9 +17,9 @@ Character::Character(GameObject* parent, const std::string& name)
 	hit_(nullptr), fence_(nullptr), wait_(nullptr),
 	csvload_(nullptr), observer_(nullptr), debugpanel_(nullptr)
 {
-	//各モジュールの生成・初期化(Instantiate)
-	//必要に応じてパラメータのセット(SetParams)
-	//必要に応じて親クラス（自身）のセット(SetCharacter
+	//各モジュールの生成・初期化
+	//同時にパラメータのセット(SetParams)
+	//必要に応じて親クラス（自身）のセット(SetCharacter)
 
 	if (params_ == nullptr)
 	{
@@ -112,7 +112,7 @@ Character::Character(GameObject* parent, const std::string& name)
 		debugpanel_->SetCharacter(this);
 	}
 
-	//csvからパラメータ読み込み
+	//csvからエフェクト関係のパラメータ読み込み
 	vfx_->InitCSVEffect();
 
 	//サウンドの読み込み

@@ -7,6 +7,13 @@ void PlayerStateHit::Enter(Player* _player)
 
 void PlayerStateHit::Update(Player* _player)
 {
+	//キャラクタークラス継承した相手オブジェクトと接触した状態 移動不可
+
+	if (_player == nullptr)
+	{
+		return;
+	}
+
 	//ノックバックする
 	_player->OnKnockBack();
 
@@ -26,6 +33,11 @@ void PlayerStateHit::Update(Player* _player)
 
 void PlayerStateHit::Exit(Player* _player)
 {
+	if (_player == nullptr)
+	{
+		return;
+	}
+
 	//状態遷移の際は一度x回転をストップ
 	_player->OnRotateXStop();
 }

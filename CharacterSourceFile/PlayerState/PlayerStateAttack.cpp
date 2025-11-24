@@ -10,6 +10,11 @@ void PlayerStateAttack::Update(Player* _player)
 {
 	//攻撃状態 正面の方向に移動し操作不可
 
+	if (_player == nullptr)
+	{
+		return;
+	}
+
 	//ダッシュ画像の更新
 	_player->OnUpdateDashImage();
 
@@ -41,6 +46,11 @@ void PlayerStateAttack::Update(Player* _player)
 
 void PlayerStateAttack::Exit(Player* _player)
 {
+	if (_player == nullptr)
+	{
+		return;
+	}
+
 	//状態遷移の際は一度x回転をストップ
 	_player->OnRotateXStop();
 

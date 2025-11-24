@@ -8,6 +8,11 @@ namespace
 
 void EnemyStateAim::Enter(Enemy* _enemy)
 {
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//溜めている速度をリセット
 	//チャージ量は毎回0からスタートさせる
 	_enemy->OnChargeReset();
@@ -16,6 +21,11 @@ void EnemyStateAim::Enter(Enemy* _enemy)
 void EnemyStateAim::Update(Enemy* _enemy)
 {
 	//チャージ(TmpAcceleを溜めている状態) しながらPlayerを狙う状態
+
+	if (_enemy == nullptr)
+	{
+		return;
+	}
 
 	//チャージ中は加速度が低下する
 	_enemy->OnFrictionNormalDeceleration();
@@ -79,6 +89,11 @@ void EnemyStateAim::Update(Enemy* _enemy)
 
 void EnemyStateAim::Exit(Enemy* _enemy)
 {
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//状態遷移の際は一度x回転をストップ
 	_enemy->OnRotateXStop();
 
@@ -88,6 +103,11 @@ void EnemyStateAim::Exit(Enemy* _enemy)
 
 void EnemyStateAim::Draw(Enemy* _enemy)
 {
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//矢印モデルの描画
 	_enemy->OnDrawArrow();
 }

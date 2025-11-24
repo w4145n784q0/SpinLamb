@@ -61,6 +61,7 @@ namespace Camera
 
 	XMFLOAT3 GetInitTar();
 
+	//ƒJƒƒ‰‚ÌU“®‚Ì’·‚³‚ğ•Ô‚·(‚±‚ê‚ç‚ğg‚Á‚ÄU“®‚·‚é’·‚³‚ğw’è)
 	float GetShakeTimeShort(); 
 
 	float GetShakeTimeMiddle();

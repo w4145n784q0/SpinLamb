@@ -9,6 +9,11 @@ namespace
 
 void PlayerStateCharge::Enter(Player* _player)
 {
+	if (_player == nullptr)
+	{
+		return;
+	}
+
 	//溜めている速度をリセット
 	//チャージ量は毎回0からスタートさせる
 	_player->OnChargeReset();
@@ -17,6 +22,11 @@ void PlayerStateCharge::Enter(Player* _player)
 void PlayerStateCharge::Update(Player* _player)
 {
 	//チャージ中(TmpAcceleを溜めている状態) その場で左右回転できるが動けない
+
+	if (_player == nullptr)
+	{
+		return;
+	}
 
 	//チャージ中は加速度が低下する
 	//キャラクター同士の反射にはお互いの加速度を考慮している
@@ -99,6 +109,11 @@ void PlayerStateCharge::Update(Player* _player)
 
 void PlayerStateCharge::Exit(Player* _player)
 {
+	if (_player == nullptr)
+	{
+		return;
+	}
+
 	//状態遷移の際は一度x回転をストップ
 	_player->OnRotateXStop();
 
@@ -106,8 +121,13 @@ void PlayerStateCharge::Exit(Player* _player)
 	_player->OnChargeReset();
 }
 
-void PlayerStateCharge::Draw(Player* player)
+void PlayerStateCharge::Draw(Player* _player)
 {
+	if (_player == nullptr)
+	{
+		return;
+	}
+
 	//矢印モデルの描画
-	player->OnDrawArrow();
+	_player->OnDrawArrow();
 }

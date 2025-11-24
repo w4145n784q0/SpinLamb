@@ -10,6 +10,11 @@ void EnemyStateAttack::Update(Enemy* _enemy)
 {
 	//攻撃状態 正面の方向に移動
 
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//攻撃中のエフェクトを出す
 	_enemy->OnAttackLocusVFX(_enemy->GetPosition());
 
@@ -44,6 +49,17 @@ void EnemyStateAttack::Update(Enemy* _enemy)
 
 void EnemyStateAttack::Exit(Enemy* _enemy)
 {
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//状態遷移の際は一度x回転をストップ
 	_enemy->OnRotateXStop();
+}
+
+bool EnemyStateAttack::IsAttackState() const
+{
+	//攻撃状態であることを返す
+	return true;
 }

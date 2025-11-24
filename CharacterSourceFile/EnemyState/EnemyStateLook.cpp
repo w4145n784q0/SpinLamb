@@ -3,6 +3,11 @@
 
 void EnemyStateLook::Enter(Enemy* _enemy)
 {
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//加速度をリセット
 	_enemy->OnAccelerationStop();
 }
@@ -10,6 +15,12 @@ void EnemyStateLook::Enter(Enemy* _enemy)
 void EnemyStateLook::Update(Enemy* _enemy)
 {
 	//Playerを様子見している状態
+	//主にPlayerに攻撃を当てたり相手が柵に接触したときに使う
+
+	if (_enemy == nullptr)
+	{
+		return;
+	}
 
 	//プレイヤーのいる方向へY回転する
 	_enemy->LookPlayer();
@@ -25,7 +36,12 @@ void EnemyStateLook::Update(Enemy* _enemy)
 }
 
 void EnemyStateLook::Exit(Enemy* _enemy)
-{	
+{
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//状態遷移の際は一度x回転をストップ
 	_enemy->OnRotateXStop();
 }

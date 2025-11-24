@@ -12,11 +12,6 @@
 #include "../imgui/imgui_impl_dx11.h"
 #include "../imgui/imgui_impl_win32.h"
 
-namespace
-{
-
-}
-
 //----------オペレーター----------
 
 inline XMFLOAT3 operator + (const XMFLOAT3& a, const XMFLOAT3& b) {

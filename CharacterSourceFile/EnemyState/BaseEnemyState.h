@@ -23,6 +23,9 @@ public:
     virtual std::string GetStateName() { return ""; }
 
     //-----以下は専用の状態でオーバーライド-----
+    
+    //攻撃状態かどうか返す
+    virtual bool IsAttackState() const { return false; }
 
     //ヒットストップ状態かどうか返す
     virtual bool IsHitStopState() const { return false; }

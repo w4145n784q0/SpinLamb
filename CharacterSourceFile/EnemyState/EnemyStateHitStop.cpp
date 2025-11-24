@@ -9,12 +9,22 @@ namespace
 
 void EnemyStateHitStop::Enter(Enemy* _enemy)
 {
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	nextState = _enemy->GetParams()->HitParam_.NextStateName_;
 }
 
 void EnemyStateHitStop::Update(Enemy* _enemy)
 {
 	//ヒットストップ状態
+
+	if (_enemy == nullptr)
+	{
+		return;
+	}
 
 	//タイマーを増加
 	_enemy->OnHitStopTimerAdd();
@@ -46,6 +56,11 @@ void EnemyStateHitStop::Update(Enemy* _enemy)
 
 void EnemyStateHitStop::Exit(Enemy* _enemy)
 {
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//状態遷移の際は一度x回転をストップ
 	_enemy->OnRotateXStop();
 }

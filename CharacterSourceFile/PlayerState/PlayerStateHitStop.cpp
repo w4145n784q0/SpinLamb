@@ -9,12 +9,22 @@ namespace
 
 void PlayerStateHitStop::Enter(Player* _player)
 {
+	if (_player == nullptr)
+	{
+		return;
+	}
+
 	nextState = _player->GetParams()->HitParam_.NextStateName_;
 }
 
 void PlayerStateHitStop::Update(Player* _player)
 {
 	//ヒットストップ状態
+
+	if (_player == nullptr)
+	{
+		return;
+	}
 
 	//タイマーを増加
 	_player->OnHitStopTimerAdd();
@@ -46,6 +56,11 @@ void PlayerStateHitStop::Update(Player* _player)
 
 void PlayerStateHitStop::Exit(Player* _player)
 {
+	if (_player == nullptr)
+	{
+		return;
+	}
+
 	//状態遷移の際は一度x回転をストップ
 	_player->OnRotateXStop();
 }

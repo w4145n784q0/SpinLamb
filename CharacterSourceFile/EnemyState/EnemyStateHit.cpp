@@ -7,7 +7,12 @@ void EnemyStateHit::Enter(Enemy* _enemy)
 
 void EnemyStateHit::Update(Enemy* _enemy)
 {
-	//相手と接触した状態
+	//キャラクタークラス継承した相手オブジェクトと接触した状態 移動不可
+
+	if (_enemy == nullptr)
+	{
+		return;
+	}
 
 	//ノックバックする
 	_enemy->OnKnockBack();
@@ -31,6 +36,11 @@ void EnemyStateHit::Update(Enemy* _enemy)
 
 void EnemyStateHit::Exit(Enemy* _enemy)
 {
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//状態遷移の際は一度x回転をストップ
 	_enemy->OnRotateXStop();
 }

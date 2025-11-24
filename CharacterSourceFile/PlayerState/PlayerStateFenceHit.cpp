@@ -7,7 +7,12 @@ void PlayerStateFenceHit::Enter(Player* _player)
 
 void PlayerStateFenceHit::Update(Player* _player)
 {
-	//ダメージを受ける柵と接触した状態 操作不可
+	//ステージ周囲を囲う柵と接触した状態 操作不可
+
+	if (_player == nullptr)
+	{
+		return;
+	}
 
 	//ノックバックする
 	_player->OnKnockBack();
@@ -28,6 +33,11 @@ void PlayerStateFenceHit::Update(Player* _player)
 
 void PlayerStateFenceHit::Exit(Player* _player)
 {
+	if (_player == nullptr)
+	{
+		return;
+	}
+
 	//状態遷移の際は一度x回転をストップ
 	_player->OnRotateXStop();
 

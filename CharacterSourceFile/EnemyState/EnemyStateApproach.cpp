@@ -3,6 +3,11 @@
 
 void EnemyStateApproach::Enter(Enemy* _enemy)
 {
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//加速度をリセット
 	_enemy->OnAccelerationStop();
 }
@@ -10,6 +15,11 @@ void EnemyStateApproach::Enter(Enemy* _enemy)
 void EnemyStateApproach::Update(Enemy* _enemy)
 {
 	//Playerを追跡している状態
+
+	if (_enemy == nullptr)
+	{
+		return;
+	}
 
 	//プレイヤーのいる方向へY回転する
 	_enemy->LookPlayer();
@@ -32,6 +42,11 @@ void EnemyStateApproach::Update(Enemy* _enemy)
 
 void EnemyStateApproach::Exit(Enemy* _enemy)
 {
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//状態遷移の際は一度x回転をストップ
 	_enemy->OnRotateXStop();
 }

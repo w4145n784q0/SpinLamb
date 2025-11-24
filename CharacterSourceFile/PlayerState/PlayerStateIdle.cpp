@@ -4,6 +4,11 @@
 
 void PlayerStateIdle::Enter(Player* _player)
 {
+	if (_player == nullptr)
+	{
+		return;
+	}
+
 	//加速度をリセット
 	_player->OnAccelerationStop();
 }
@@ -11,6 +16,11 @@ void PlayerStateIdle::Enter(Player* _player)
 void PlayerStateIdle::Update(Player* _player)
 {
 	//通常状態 移動・ジャンプなどをしている状態
+
+	if (_player == nullptr)
+	{
+		return;
+	}
 
 	//キーボードの入力した分を実際に移動
 	_player->InputKeyBoard();
@@ -61,6 +71,11 @@ void PlayerStateIdle::Update(Player* _player)
 
 void PlayerStateIdle::Exit(Player* _player)
 {
+	if (_player == nullptr)
+	{
+		return;
+	}
+
 	//状態遷移の際は一度x回転をストップ
 	_player->OnRotateXStop();
 }

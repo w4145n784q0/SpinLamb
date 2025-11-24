@@ -10,6 +10,6 @@ public:
     void Update(Player* _player) override;
     void Exit(Player* _player) override;
     std::string GetStateName() override { return "Charge"; }
-    void Draw(Player* player) override;
+    void Draw(Player* _player) override;
 };
 

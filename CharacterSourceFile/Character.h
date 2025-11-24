@@ -68,6 +68,7 @@ public:
     virtual void OwnFenceCollision() {};
 
     //自身の特定の状態を返す処理(両方のステートに共通してあるもの)
+    //IsCharacterStateAttack()のみ、現状Playerだけで使っている
     virtual bool IsCharacterStateAttack() { return false; }
     virtual bool IsCharacterStateHitStop() { return false; };
     virtual bool IsCharacterStateHit() { return false; };
@@ -307,7 +308,7 @@ public:
         observer_->AddObserver(_observer);
     }
 
-    //共通パラメータ群のゲッター関数
+    //共通パラメータのゲッター関数
     CharacterParams* GetParams() const { return params_.get(); }
 
     //各モジュールのゲッター関数

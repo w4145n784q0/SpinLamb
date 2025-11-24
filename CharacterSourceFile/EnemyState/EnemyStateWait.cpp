@@ -3,12 +3,24 @@
 
 void EnemyStateWait::Enter(Enemy* _enemy)
 {
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//加速度をリセット
 	_enemy->OnAccelerationStop();
 }
 
 void EnemyStateWait::Update(Enemy* _enemy)
 {
+	//攻撃や被弾後の待機(クールタイム)状態
+
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//待機時間を増加
 	_enemy->OnWaitTimerAdd();
 	
@@ -25,6 +37,11 @@ void EnemyStateWait::Update(Enemy* _enemy)
 
 void EnemyStateWait::Exit(Enemy* _enemy)
 {
+	if (_enemy == nullptr)
+	{
+		return;
+	}
+
 	//状態遷移の際は一度x回転をストップ
 	_enemy->OnRotateXStop();
 }

@@ -18,7 +18,7 @@ public:
     virtual void Exit(Player* _player) {}
 
     //ステートごとの描画処理
-    virtual void Draw(Player* player) {}
+    virtual void Draw(Player* _player) {}
 
     //状態名を取得(デバッグ用)
     virtual std::string GetStateName() { return ""; }

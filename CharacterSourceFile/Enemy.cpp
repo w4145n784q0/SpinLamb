@@ -102,7 +102,7 @@ void Enemy::Initialize()
 
 void Enemy::Update()
 {
-
+	//ÀÛ‚ÌXVˆ—‚ÍEnemyRun()‚Ås‚¤
 }
 
 void Enemy::Draw()
