@@ -35,7 +35,7 @@ void PlayerStateHitStop::Update(Player* _player)
 		}
 		else if (nextState == "Fence")
 		{
-			//被弾状態へ移行
+			//柵に接触状態へ移行
 			_player->ChangeState(Player::S_FenceHit);
 
 			//遷移指示が出た後は文字列を空にしておく

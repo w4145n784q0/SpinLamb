@@ -10,7 +10,7 @@ void EnemyStateRoot::Update(Enemy* _enemy)
 	//“G‚Ìó‘Ô‘JˆÚ‚ÌÅãˆÊ UŒ‚‚â”í’eó‘Ô‚ªI‚í‚Á‚½‚ç‚±‚±‚É–ß‚é
 	//‚±‚±‚©‚çŽŸ‚Ìó‘Ô‚Ö‘JˆÚ‚·‚é
 
-	//ƒvƒŒƒCƒ„[‚ªƒqƒbƒgƒXƒgƒbƒvE”í’eEò‚ÉÚGó‘ÔE–³“GŽžŠÔ‚È‚çŒ©‚é‚¾‚¯
+	//ƒvƒŒƒCƒ„[‚ªƒqƒbƒgƒXƒgƒbƒvE”í’eEò‚ÉÚGó‘ÔE–³“GŽžŠÔ‚È‚ç—lŽqŒ©
 	if (!_enemy->IsAttackDecision())
 	{
 		_enemy->ChangeState(Enemy::S_Look);

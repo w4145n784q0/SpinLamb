@@ -134,7 +134,7 @@ void Enemy::OnCollision(GameObject* pTarget)
 
 void Enemy::OwnCharacterCollision()
 {
-	//被弾状態になる
+	//ヒットストップ状態にする
 	ChangeState(S_HitStop);
 
 	//接触時点で攻撃までのタイマーをリセット
@@ -143,7 +143,7 @@ void Enemy::OwnCharacterCollision()
 
 void Enemy::OwnFenceCollision()
 {
-	//プレイヤーの状態を柵に接触状態にする
+	//ヒットストップ状態にする
 	ChangeState(S_HitStop);
 
 	//接触時点で攻撃までのタイマーをリセット
