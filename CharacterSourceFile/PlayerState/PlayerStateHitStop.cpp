@@ -48,6 +48,9 @@ void PlayerStateHitStop::Update(Player* _player)
 			//ò‚ÉÚGó‘Ô‚ÖˆÚs
 			_player->ChangeState(Player::S_FenceHit);
 
+			//ƒRƒ“ƒgƒ[ƒ‰[‚ÌU“®‚ðŽ~‚ß‚é
+			_player->ControllerVibrationEnd(_player->GetControllerID());
+
 			//‘JˆÚŽwŽ¦‚ªo‚½Œã‚Í•¶Žš—ñ‚ð‹ó‚É‚µ‚Ä‚¨‚­
 			_player->GetParams()->HitParam_.NextStateName_ = "";
 		}

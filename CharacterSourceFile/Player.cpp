@@ -32,6 +32,8 @@ namespace {
 		i_CameraDebugWidth,
 		i_CameraDebugHeight,
 		i_CameraDebugDepth,
+		i_ControllerVibLeft,
+		i_ControllerVibRight,
 	};
 
 	//通常カメラの固定位置
@@ -59,8 +61,11 @@ namespace {
 	//デバッグカメラ状態時のカメラの位置
 	XMFLOAT3 CameraDebugPos = { 0,0,0 };
 
-	//着地硬直時間
-	int JumpLandingTimer_ = 0;
+	//コントローラー振動量(左)
+	int ControllerVibLeft = 0;
+
+	//コントローラー振動量(右)
+	int ControllerVibRight = 0;
 }
 
 Player::Player(GameObject* parent)
@@ -148,6 +153,9 @@ void Player::OwnFenceCollision()
 
 	//カメラ振動(中くらいの長さ)
 	Camera::CameraShakeStart(Camera::GetShakeTimeLong());
+
+	//コントローラーの振動開始
+	ControllerVibrationStart(GetControllerID());
 }
 
 void Player::PlayerRun()
@@ -279,6 +287,14 @@ void Player::DrawImGui()
 		{
 			//チャージ中にプレイヤーを回転させた際の1fごとの回転量
 			ImGui::InputFloat("ChargeRotateY", &ChargeRotateY, ZeroPointOne);
+			ImGui::TreePop();
+		}
+
+		if (ImGui::TreeNode("ControllerVib"))
+		{
+			//コントローラーの振動量
+			ImGui::InputInt("VibLeft", &ControllerVibLeft);
+			ImGui::InputInt("VibRight", &ControllerVibRight);
 			ImGui::TreePop();
 		}
 
@@ -580,6 +596,18 @@ bool Player::IsDamage()
 	}
 }
 
+void Player::ControllerVibrationStart(int _PadID)
+{
+	//コントローラー振動させる
+	Input::SetPadVibration(ControllerVibLeft, ControllerVibRight, _PadID);
+}
+
+void Player::ControllerVibrationEnd(int _PadID)
+{
+	//同じ処理を呼んで引数は0にすることで止まる
+	Input::SetPadVibration(0, 0, _PadID);
+}
+
 void Player::SetCSVPlayer(std::string _path)
 {
 	//csvファイルを読み込む
@@ -602,6 +630,8 @@ void Player::SetCSVPlayer(std::string _path)
 	CameraUpperLimit = OnlyData[i_CameraUpperlimit];
 	CameraLowerLimit = OnlyData[i_CameraLowerlimit];
 	CameraDebugPos = { OnlyData[i_CameraDebugWidth],OnlyData[i_CameraDebugHeight],OnlyData[i_CameraDebugDepth] };
+	ControllerVibLeft = static_cast<int>(OnlyData[i_ControllerVibLeft]);
+	ControllerVibRight = static_cast<int>(OnlyData[i_ControllerVibRight]);
 }
 
 void Player::SetChargeRotateY(float _rotate)
