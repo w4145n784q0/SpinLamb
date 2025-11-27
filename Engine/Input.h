@@ -22,6 +22,12 @@ namespace Input
 	/// スティックをわずかに傾けた値(0.0~1.0)がこの値を上回ったか
 	extern float StickMicroTilt;
 
+	//コントローラー振動量(左)
+	extern int ControllerVibLeft;
+
+	//コントローラー振動量(右)
+	extern int ControllerVibRight;
+
 	//初期化
 	//引数：hWnd	ウィンドウハンドル
 	void Initialize(HWND hWnd);
@@ -111,6 +117,15 @@ namespace Input
 
 	//振動させる
 	void SetPadVibration(int l, int r, int padID = 0);
+
+	//コントローラー振動開始(振動量の固定値)
+	void ControllerVibrationStart(int _PadID = 0);
+
+	//コントローラー振動開始(引数あり)
+	void ControllerVibrationStart(int l, int r, int _PadID = 0);
+
+	//コントローラー振動を止める
+	void StopPadVibration(int padID = 0);
 
 	//スティックを左右上下に一定以上倒したか
 	bool IsStickTiltLX_LEFT();

@@ -1,2 +1,2 @@
-﻿Data,sticktilt,stickMicrotilt
-Input,0.5,0.01
+﻿Data,sticktilt,stickMicrotilt,ControllerVibLeft,ControllerVibRight
+Input,0.5,0.01,60000,60000

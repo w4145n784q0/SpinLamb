@@ -11,10 +11,14 @@ namespace Input
 	{
 		i_StickTilt = 0,
 		i_StickMicroTilt,
+		i_ControllerVibLeft,
+		i_ControllerVibRight,
 	};
 
 	float StickTilt = 0.0f;
 	float StickMicroTilt = 0.0f;
+	int ControllerVibLeft = 0;
+	int ControllerVibRight = 0;
 
 	//ウィンドウハンドル
 	HWND	hWnd_;
@@ -312,6 +316,26 @@ namespace Input
 		XInputSetState(padID, &vibration);
 	}
 
+	//コントローラー振動開始(振動量の固定値)
+	void ControllerVibrationStart(int _PadID)
+	{
+		//コントローラー振動させる(値は固定のものを活用)
+		SetPadVibration(ControllerVibLeft, ControllerVibRight, _PadID);
+	}
+
+	void ControllerVibrationStart(int l, int r, int _PadID)
+	{
+		//コントローラー振動させる(引数を活用)
+		SetPadVibration(l, r, _PadID);
+	}
+
+	//コントローラー振動を止める
+	void StopPadVibration(int padID)
+	{
+		//SetPadVibrationを呼んで引数は0にすることで止まる
+		Input::SetPadVibration(0, 0, padID);
+	}
+
 	//左、下に倒した場合: 今回倒した値が-sticktiltより小さい && 前回倒した値が-sticktiltより大きい
 	//右、上に倒した場合: 今回倒した値がsticktiltより大きい && 前回倒した値がsticktiltより小さい 
 
@@ -368,6 +392,8 @@ namespace Input
 		//vの添え字はnamespaceで宣言した列挙型を使用
 		StickTilt = InputData[i_StickTilt];
 		StickMicroTilt = InputData[i_StickMicroTilt];
+		ControllerVibLeft = static_cast<int>(InputData[i_ControllerVibLeft]);
+		ControllerVibRight = static_cast<int>(InputData[i_ControllerVibRight]);
 	}
 
 }

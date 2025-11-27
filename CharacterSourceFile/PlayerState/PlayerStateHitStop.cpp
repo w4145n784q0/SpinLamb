@@ -1,5 +1,6 @@
 #include "PlayerStateHitStop.h"
 #include"../Player.h"
+#include"../../Engine/Input.h"
 
 namespace 
 {
@@ -49,7 +50,7 @@ void PlayerStateHitStop::Update(Player* _player)
 			_player->ChangeState(Player::S_FenceHit);
 
 			//ƒRƒ“ƒgƒ[ƒ‰[‚ÌU“®‚ðŽ~‚ß‚é
-			_player->ControllerVibrationEnd(_player->GetControllerID());
+			Input::StopPadVibration(_player->GetControllerID());
 
 			//‘JˆÚŽwŽ¦‚ªo‚½Œã‚Í•¶Žš—ñ‚ð‹ó‚É‚µ‚Ä‚¨‚­
 			_player->GetParams()->HitParam_.NextStateName_ = "";

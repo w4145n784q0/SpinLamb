@@ -168,12 +168,6 @@ public:
 	//被弾・柵に衝突・無敵時間かどうかを取得
 	bool IsDamage();
 
-	//コントローラー振動開始
-	void ControllerVibrationStart(int _PadID);
-
-	//コントローラー振動終了
-	void ControllerVibrationEnd(int _PadID);
-
 	/// <summary>
 	/// Player限定のデータをCSV読み込み
 	/// </summary>
