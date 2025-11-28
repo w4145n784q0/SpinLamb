@@ -34,7 +34,7 @@ void TitleScene::Initialize()
 	assert(hBackScreen_ >= 0);
 	hSoundTitle_ = Audio::Load(Sound + BGM + "Title.wav",true);
 	assert(hSoundTitle_ >= 0);
-	hSoundStart_ = Audio::Load(Sound + SE + "Start.wav", false, Audio::GetStartNum());
+	hSoundStart_ = Audio::Load(Sound + SE + "Start.wav", false, Audio::StartSoundNum_);
 	assert(hSoundStart_ >= 0);
 
 	//タイトル用サウンド再生

@@ -1,7 +1,7 @@
 #include "camera.h"
 #include "Direct3D.h"
 #include"../Engine/CsvReader.h"
-
+#include"../Engine/Global.h"
 #include"GameObject.h"
 
 XMFLOAT3 _position;
@@ -19,7 +19,6 @@ namespace
 		i_FarZ,				//ファー平面
 		i_ShakeSpeed,		//振動スピード
 		i_ShakeWidth,		//振動幅
-		i_Frame,			//1フレーム
 		i_InitPositionX,	//初期位置X
 		i_InitPositionY,	//初期位置Y
 		i_InitPositionZ,	//初期位置Z
@@ -37,7 +36,6 @@ namespace
 	float ShakeTimer = 0.0f;			//カメラの振動カウント
 	float ShakeSpeed = 0.0f;			//振動スピード
 	float ShakeWidth = 0.0f;			//振動幅
-	float Frame = 0.0f;					//1フレーム
 	XMFLOAT3 InitPosition = { 0,0,0 };	//初期位置
 	XMFLOAT3 InitTarget = { 0,0,0 };	//初期焦点
 	float ShakeTimeShort = 0.0f;		//振動時間(短)
@@ -104,7 +102,7 @@ float Camera::CameraShake()
 
 	if (IsCameraShake)
 	{
-		ShakeTimer -= Frame;
+		ShakeTimer -= DELTATIME;
 		if (ShakeTimer <= 0.0f)
 		{
 			IsCameraShake = false;
@@ -128,7 +126,7 @@ XMFLOAT3 Camera::CameraShakeFloat3()
 
 	if (IsCameraShake)
 	{
-		ShakeTimer -= Frame;
+		ShakeTimer -= DELTATIME;
 		if (ShakeTimer <= 0.0f)
 		{
 			IsCameraShake = false;
@@ -153,6 +151,7 @@ void Camera::CameraShakeStart(float _shaketime)
 
 }
 
+//csv読み込み
 void Camera::SetCSVCamera()
 {
 	//csvファイルを読み込む
@@ -171,7 +170,6 @@ void Camera::SetCSVCamera()
 	FarZ = CameraData[i_FarZ];
 	ShakeSpeed = CameraData[i_ShakeSpeed];
 	ShakeWidth = CameraData[i_ShakeWidth];
-	Frame = CameraData[i_Frame];
 	InitPosition = { CameraData[i_InitPositionX],  CameraData[i_InitPositionY],  CameraData[i_InitPositionZ] };
 	InitTarget = { CameraData[i_InitTargetX],  CameraData[i_InitTargetY],  CameraData[i_InitTargetZ] };
 	ShakeTimeShort = CameraData[i_ShakeTimeShort];
@@ -179,6 +177,7 @@ void Camera::SetCSVCamera()
 	ShakeTimeLong = CameraData[i_ShakeTimeLong];
 }
 
+//画面左右分割設定
 void Camera::HalfScreen()
 {
 	//画面左右分割する際のプロジェクション行列作成
@@ -187,10 +186,29 @@ void Camera::HalfScreen()
 
 }
 
+//全体表示設定
 void Camera::FullScreen()
 {
 	//全体描画のプロジェクション行列に戻す
 	_proj = XMMatrixPerspectiveFovLH(XM_PIDIV4, (FLOAT)Direct3D::screenWidth_ / (FLOAT)Direct3D::screenHeight_, NearZ, FarZ);
+}
+
+//ImGui描画
+void Camera::DrawImGui()
+{
+	if (ImGui::TreeNode("Camera"))
+	{
+		//カメラの振動速度・幅
+		ImGui::InputFloat("ShakeSpeed", &ShakeSpeed, ZERO_POINT_ONE);
+		ImGui::InputFloat("ShakeWidth", &ShakeWidth, ZERO_POINT_ONE);
+
+		//カメラの振動時間
+		ImGui::InputFloat("ShakeTimeShort", &ShakeTimeShort, ZERO_POINT_ONE);
+		ImGui::InputFloat("ShakeTimeMiddle", &ShakeTimeMiddle, ZERO_POINT_ONE);
+		ImGui::InputFloat("ShakeTimeLong", &ShakeTimeLong, ZERO_POINT_ONE);
+
+		ImGui::TreePop();
+	}
 }
 
 //カメラの振動幅をセット(必要に応じてセット)

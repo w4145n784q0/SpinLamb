@@ -396,4 +396,23 @@ namespace Input
 		ControllerVibRight = static_cast<int>(InputData[i_ControllerVibRight]);
 	}
 
+	//ImGui描画
+	void DrawImGui()
+	{
+		if (ImGui::TreeNode("Stick"))
+		{
+			//スティックの傾き
+			ImGui::InputFloat("StickTilt", &StickTilt, ZERO_POINT_ONE);
+			ImGui::InputFloat("StickMicroTilt", &StickMicroTilt, ZERO_POINT_ONE);
+			ImGui::TreePop();
+		}
+		if (ImGui::TreeNode("ControllerVib"))
+		{
+			//コントローラーの振動量
+			ImGui::InputInt("VibLeft", &ControllerVibLeft);
+			ImGui::InputInt("VibRight", &ControllerVibRight);
+			ImGui::TreePop();
+		}
+	}
+
 }

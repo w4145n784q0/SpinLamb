@@ -52,6 +52,9 @@ namespace Camera
 	//全体表示時のプロジェクション行列設定
 	void FullScreen();
 
+	//ImGui描画
+	void DrawImGui();
+
 	//----------セッター・ゲッター関数----------
 	void SetShakeWidth(float _width);
 

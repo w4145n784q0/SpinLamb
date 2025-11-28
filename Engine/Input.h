@@ -136,6 +136,9 @@ namespace Input
 	//CSVからパラメータを読み込みする
 	void SetInputCSV();
 
+	//ImGui描画
+	void DrawImGui();
+
 	//開放
 	void Release();
 };

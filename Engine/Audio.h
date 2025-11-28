@@ -6,6 +6,21 @@
 //-----------------------------------------------------------
 namespace Audio
 {
+	//----------汎用的に使うSE----------
+	extern int StartSoundNum_;		//スタート音を同時に鳴らす回数
+	extern int SelectSoundNum_;	//選択音を同時に鳴らす回数
+	extern int DecideSoundNum_;	//決定音を同時に鳴らす回数
+	extern int CancelSoundNum_;	//キャンセル音を同時に鳴らす回数
+
+	//----------ゲームプレイ中のSE----------
+	extern int WhistleSoundNum_;	//ホイッスル音を同時に鳴らす回数
+	extern int ChargeSoundNum_;	//チャージ音を同時に鳴らす回数
+	extern int AttackSoundNum_;	//攻撃音を同時に鳴らす回数
+	extern int HitSoundNum_;		//ヒット音を同時に鳴らす回数
+	extern int FenceHitSoundNum_;  //柵に接触音を同時に鳴らす回数
+	extern int JumpSoundNum_;		//ジャンプ音を同時に鳴らす回数
+	extern int LandingSoundNum_;	//着地音を同時に鳴らす回数
+
 	//初期化
 	void Initialize();
 
@@ -34,39 +49,5 @@ namespace Audio
 	//鳴らす回数のCSV読み込み
 	void InitCSVAudio();
 
-	//----------SEを鳴らす回数のゲッター関数----------
-
-	//スタート音を同時に鳴らす回数
-	int GetStartNum();
-
-	//選択音を同時に鳴らす回数
-	int GetSelectNum();
-
-	//決定音を同時に鳴らす回数
-	int GetDecideNum();
-
-	//キャンセル音を同時に鳴らす回数
-	int GetCancelNum();
-
-	//ホイッスル音を同時に鳴らす回数
-	int GetWhistleNum();
-
-	//チャージ音を同時に鳴らす回数
-	int GetChargeNum();
-
-	//攻撃音を同時に鳴らす回数
-	int GetAttackNum();
-
-	//ヒット音を同時に鳴らす回数
-	int GetHitNum();
-
-	//柵に接触する音を同時に鳴らす回数
-	int GetFenceHitNum();
-
-	//ジャンプ音を同時に鳴らす回数
-	int GetJumpNum();
-
-	//着地音をを同時に鳴らす回数
-	int GetLandingNum();
 };
 

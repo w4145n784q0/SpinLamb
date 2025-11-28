@@ -1,4 +1,5 @@
 #include "GameTimer.h"
+#include"../Engine/Global.h"
 
 namespace
 {
@@ -56,7 +57,7 @@ void GameTimer::UpdateTimeStop()
 void GameTimer::UpdateTimeCount()
 {
 	//時間の更新処理
-	if (++TimeCounter > oneSecond)
+	if (++TimeCounter > ONE_SECOND)
 	{
 		if (CurrentGameTime_ > 0)
 		{
@@ -86,6 +87,8 @@ void GameTimer::TimeCalculation()
 	//一の位:現在の時間を10で除算した余り
 	//Timeten,TimeoneはHUDクラスから取得され描画される
 
-	Timeten_ = CurrentGameTime_ / TenDivision;
-	Timeone_ = CurrentGameTime_ % TenDivision;
+	//Timeten_ = CurrentGameTime_ / TenDivision;
+	Timeten_ = DIVISION_TEN(CurrentGameTime_);
+	//Timeone_ = CurrentGameTime_ % TenDivision;
+	Timeone_ = MODULUS_TEN(CurrentGameTime_);
 }

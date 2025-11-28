@@ -1,6 +1,7 @@
 #include "GameView.h"
 #include"../Engine/Direct3D.h"
 #include"../Engine/Camera.h"
+#include"../Engine/Input.h"
 #include"../EffectSourceFile/TransitionEffect.h"
 
 namespace GameView
@@ -200,7 +201,7 @@ namespace GameView
 		}
 	}
 
-	void GameView::ViewImGui()
+	void GameView::ViewPlayImGui()
 	{
 		//“n‚³‚ê‚½ƒ|ƒCƒ“ƒ^‚©‚çImGui‚ğ•`‰æ
 		//ImGui‚Ì•`‰æ‚Íˆê“x‚¾‚¯‚Å‚¢‚¢‚Ì‚ÅAŠeDrawŠÖ”‚Å‚Í‚È‚­
@@ -239,6 +240,15 @@ namespace GameView
 		{
 			pHUD_->DrawImGui();
 		}
+	}
+
+	void ViewEngineImGui()
+	{
+		//ƒJƒƒ‰ŠÖŒW‚ÌImGui‚ğ•`‰æ
+		Camera::DrawImGui();
+
+		//“ü—ÍŠÖŒW‚ÌImGui‚ğ•`‰æ
+		Input::DrawImGui();
 	}
 
 	void GameView::ViewHUDNormal()

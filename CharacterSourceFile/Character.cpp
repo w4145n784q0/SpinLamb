@@ -120,22 +120,22 @@ Character::Character(GameObject* parent, const std::string& name)
 	//パスの一部を文字列にし、結合させる
 	std::string SoundSE = "Sound\\SE\\";
 
-	params_->SoundParam_.hSoundcharge_ = Audio::Load(SoundSE + "Charge.wav",false, Audio::GetChargeNum());
+	params_->SoundParam_.hSoundcharge_ = Audio::Load(SoundSE + "Charge.wav",false, Audio::ChargeSoundNum_);
 	assert(params_->SoundParam_.hSoundcharge_ >= 0);
 
-	params_->SoundParam_.hSoundattack_ = Audio::Load(SoundSE + "Attack.wav", false, Audio::GetAttackNum());
+	params_->SoundParam_.hSoundattack_ = Audio::Load(SoundSE + "Attack.wav", false, Audio::AttackSoundNum_);
 	assert(params_->SoundParam_.hSoundattack_ >= 0);
 
-	params_->SoundParam_.hSoundCharacterHit_ = Audio::Load(SoundSE + "CharacterCollision.wav",false, Audio::GetHitNum());
+	params_->SoundParam_.hSoundCharacterHit_ = Audio::Load(SoundSE + "CharacterCollision.wav",false, Audio::HitSoundNum_);
 	assert(params_->SoundParam_.hSoundCharacterHit_ >= 0);
 
-	params_->SoundParam_.hSoundFenceHit_ = Audio::Load(SoundSE + "FenceCollision.wav", false, Audio::GetFenceHitNum());
+	params_->SoundParam_.hSoundFenceHit_ = Audio::Load(SoundSE + "FenceCollision.wav", false, Audio::FenceHitSoundNum_);
 	assert(params_->SoundParam_.hSoundFenceHit_ >= 0);
 
-	params_->SoundParam_.hSoundJump_ = Audio::Load(SoundSE + "Jump.wav", false, Audio::GetJumpNum());
+	params_->SoundParam_.hSoundJump_ = Audio::Load(SoundSE + "Jump.wav", false, Audio::JumpSoundNum_);
 	assert(params_->SoundParam_.hSoundJump_ >= 0);
 
-	params_->SoundParam_.hSoundLanding_ = Audio::Load(SoundSE + "Landing.wav", false, Audio::GetLandingNum());
+	params_->SoundParam_.hSoundLanding_ = Audio::Load(SoundSE + "Landing.wav", false, Audio::LandingSoundNum_);
 	assert(params_->SoundParam_.hSoundLanding_ >= 0);
 
 	//それぞれの柵の法線を取得

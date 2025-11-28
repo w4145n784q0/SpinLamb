@@ -4,6 +4,8 @@
 #include"../Engine/Audio.h"
 #include"../Engine/Camera.h"
 #include"../Engine/SphereCollider.h"
+#include"../Engine/Global.h"
+
 #include"Enemy.h"
 #include"../CharacterSourceFile/PlayerState/PlayerStateIdle.h"
 #include"../CharacterSourceFile/PlayerState/PlayerStateCharge.h"
@@ -240,38 +242,38 @@ void Player::DrawImGui()
 		if (ImGui::TreeNode("Camera"))
 		{
 			//カメラの最終的な位置
-			ImGui::InputFloat("CameraPositionX", &CameraPosition_.x, ZeroPointOne);
-			ImGui::InputFloat("CameraPositionY", &CameraPosition_.y, ZeroPointOne);
-			ImGui::InputFloat("CameraPositionZ", &CameraPosition_.z, ZeroPointOne);
+			ImGui::InputFloat("CameraPositionX", &CameraPosition_.x, ZERO_POINT_ONE);
+			ImGui::InputFloat("CameraPositionY", &CameraPosition_.y, ZERO_POINT_ONE);
+			ImGui::InputFloat("CameraPositionZ", &CameraPosition_.z, ZERO_POINT_ONE);
 
 			//カメラの焦点
-			ImGui::InputFloat("CameraTargetX", &CameraTarget_.x, ZeroPointOne);
-			ImGui::InputFloat("CameraTargetY", &CameraTarget_.y, ZeroPointOne);
-			ImGui::InputFloat("CameraTargetZ", &CameraTarget_.z, ZeroPointOne);
+			ImGui::InputFloat("CameraTargetX", &CameraTarget_.x, ZERO_POINT_ONE);
+			ImGui::InputFloat("CameraTargetY", &CameraTarget_.y, ZERO_POINT_ONE);
+			ImGui::InputFloat("CameraTargetZ", &CameraTarget_.z, ZERO_POINT_ONE);
 
 			//カメラの回転量
-			ImGui::InputFloat("CameraTransform.rotateX", &cameraTransform_.rotate_.x, ZeroPointOne);
-			ImGui::InputFloat("CameraTransform.rotateY", &cameraTransform_.rotate_.y, ZeroPointOne);
-			ImGui::InputFloat("CameraTransform.rotateZ", &cameraTransform_.rotate_.z, ZeroPointOne);
+			ImGui::InputFloat("CameraTransform.rotateX", &cameraTransform_.rotate_.x, ZERO_POINT_ONE);
+			ImGui::InputFloat("CameraTransform.rotateY", &cameraTransform_.rotate_.y, ZERO_POINT_ONE);
+			ImGui::InputFloat("CameraTransform.rotateZ", &cameraTransform_.rotate_.z, ZERO_POINT_ONE);
 
 			//カメラの後方位置
 			XMFLOAT3 tmpBackCamera;
 			XMStoreFloat3(&tmpBackCamera, BackCamera_);
-			ImGui::InputFloat("BackCameraX", &tmpBackCamera.x, ZeroPointOne);
-			ImGui::InputFloat("BackCameraY", &tmpBackCamera.y, ZeroPointOne);
-			ImGui::InputFloat("BackCameraZ", &tmpBackCamera.z, ZeroPointOne);
+			ImGui::InputFloat("BackCameraX", &tmpBackCamera.x, ZERO_POINT_ONE);
+			ImGui::InputFloat("BackCameraY", &tmpBackCamera.y, ZERO_POINT_ONE);
+			ImGui::InputFloat("BackCameraZ", &tmpBackCamera.z, ZERO_POINT_ONE);
 
 			//カメラに毎フレーム代入する固定位置
 			XMFLOAT3 tmpBackCameraDefault;
 			XMStoreFloat3(&tmpBackCameraDefault, BackCameraDefault);
-			ImGui::InputFloat("BackCameraDefaultX", &tmpBackCameraDefault.x, ZeroPointOne);
-			ImGui::InputFloat("BackCameraDefaultY", &tmpBackCameraDefault.y, ZeroPointOne);
-			ImGui::InputFloat("BackCameraDefaultZ", &tmpBackCameraDefault.z, ZeroPointOne);
+			ImGui::InputFloat("BackCameraDefaultX", &tmpBackCameraDefault.x, ZERO_POINT_ONE);
+			ImGui::InputFloat("BackCameraDefaultY", &tmpBackCameraDefault.y, ZERO_POINT_ONE);
+			ImGui::InputFloat("BackCameraDefaultZ", &tmpBackCameraDefault.z, ZERO_POINT_ONE);
 
 			//デバッグカメラ時のカメラ位置
-			ImGui::InputFloat("CameraDebugPosX", &CameraDebugPos.x, ZeroPointOne);
-			ImGui::InputFloat("CameraDebugPosY", &CameraDebugPos.y, ZeroPointOne);
-			ImGui::InputFloat("CameraDebugPosZ", &CameraDebugPos.z, ZeroPointOne);
+			ImGui::InputFloat("CameraDebugPosX", &CameraDebugPos.x, ZERO_POINT_ONE);
+			ImGui::InputFloat("CameraDebugPosY", &CameraDebugPos.y, ZERO_POINT_ONE);
+			ImGui::InputFloat("CameraDebugPosZ", &CameraDebugPos.z, ZERO_POINT_ONE);
 
 			ImGui::TreePop();
 		}
@@ -279,17 +281,9 @@ void Player::DrawImGui()
 		if (ImGui::TreeNode("Charge"))
 		{
 			//チャージ中にプレイヤーを回転させた際の1fごとの回転量
-			ImGui::InputFloat("ChargeRotateY", &ChargeRotateY, ZeroPointOne);
+			ImGui::InputFloat("ChargeRotateY", &ChargeRotateY, ZERO_POINT_ONE);
 			ImGui::TreePop();
 		}
-
-		//if (ImGui::TreeNode("ControllerVib"))
-		//{
-		//	//コントローラーの振動量
-		//	ImGui::InputInt("VibLeft", &ControllerVibLeft);
-		//	ImGui::InputInt("VibRight", &ControllerVibRight);
-		//	ImGui::TreePop();
-		//}
 
 		ImGui::TreePop();
 	}

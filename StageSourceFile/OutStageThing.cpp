@@ -1,5 +1,6 @@
 #include "OutStageThing.h"
 #include"../Engine/Model.h"
+#include"../Engine/Global.h"
 
 OutStageThing::OutStageThing(GameObject* parent)
 	:GameObject(parent, "OutStageThing"), hCabin_(-1), hTree_(-1), hLogs_(-1),hStraw_(-1),
@@ -73,13 +74,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < CabinData_.size(); i++)
 				{
 					std::string labelX = "CabinPositionX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &CabinData_[i].position_.x, ZeroPointOne);
+					ImGui::InputFloat((labelX.c_str()), &CabinData_[i].position_.x, ZERO_POINT_ONE);
 
 					std::string labelY = "CabinPositionY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &CabinData_[i].position_.y, ZeroPointOne);
+					ImGui::InputFloat((labelY.c_str()), &CabinData_[i].position_.y, ZERO_POINT_ONE);
 
 					std::string labelZ = "CabinPositionZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &CabinData_[i].position_.z, ZeroPointOne);
+					ImGui::InputFloat((labelZ.c_str()), &CabinData_[i].position_.z, ZERO_POINT_ONE);
 				}
 				ImGui::TreePop();
 			}
@@ -89,13 +90,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < CabinData_.size(); i++)
 				{
 					std::string labelX = "CabinRotateX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &CabinData_[i].rotate_.x, ZeroPointOne);
+					ImGui::InputFloat((labelX.c_str()), &CabinData_[i].rotate_.x, ZERO_POINT_ONE);
 
 					std::string labelY = "CabinRotateY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &CabinData_[i].rotate_.y, ZeroPointOne);
+					ImGui::InputFloat((labelY.c_str()), &CabinData_[i].rotate_.y, ZERO_POINT_ONE);
 
 					std::string labelZ = "CabinRotateZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &CabinData_[i].rotate_.z, ZeroPointOne);
+					ImGui::InputFloat((labelZ.c_str()), &CabinData_[i].rotate_.z, ZERO_POINT_ONE);
 				}
 				ImGui::TreePop();
 			}
@@ -105,13 +106,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < CabinData_.size(); i++)
 				{
 					std::string labelX = "CabinScaleX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &CabinData_[i].scale_.x, ZeroPointOne);
+					ImGui::InputFloat((labelX.c_str()), &CabinData_[i].scale_.x, ZERO_POINT_ONE);
 
 					std::string labelY = "CabinScaleY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &CabinData_[i].scale_.y, ZeroPointOne);
+					ImGui::InputFloat((labelY.c_str()), &CabinData_[i].scale_.y, ZERO_POINT_ONE);
 
 					std::string labelZ = "CabinScaleZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &CabinData_[i].scale_.z, ZeroPointOne);
+					ImGui::InputFloat((labelZ.c_str()), &CabinData_[i].scale_.z, ZERO_POINT_ONE);
 				}
 				ImGui::TreePop();
 			}
@@ -127,13 +128,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < TreeData_.size(); i++)
 				{
 					std::string labelX = "TreePositionX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &TreeData_[i].position_.x, ZeroPointOne);
+					ImGui::InputFloat((labelX.c_str()), &TreeData_[i].position_.x, ZERO_POINT_ONE);
 
 					std::string labelY = "TreePositionY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &TreeData_[i].position_.y, ZeroPointOne);
+					ImGui::InputFloat((labelY.c_str()), &TreeData_[i].position_.y, ZERO_POINT_ONE);
 
 					std::string labelZ = "TreePositionZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &TreeData_[i].position_.z, ZeroPointOne);
+					ImGui::InputFloat((labelZ.c_str()), &TreeData_[i].position_.z, ZERO_POINT_ONE);
 				}
 
 				ImGui::TreePop();
@@ -144,13 +145,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < TreeData_.size(); i++)
 				{
 					std::string labelX = "TreeRotateX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &TreeData_[i].rotate_.x, ZeroPointOne);
+					ImGui::InputFloat((labelX.c_str()), &TreeData_[i].rotate_.x, ZERO_POINT_ONE);
 
 					std::string labelY = "TreeRotateY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &TreeData_[i].rotate_.y, ZeroPointOne);
+					ImGui::InputFloat((labelY.c_str()), &TreeData_[i].rotate_.y, ZERO_POINT_ONE);
 
 					std::string labelZ = "TreeRotateZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &TreeData_[i].rotate_.z, ZeroPointOne);
+					ImGui::InputFloat((labelZ.c_str()), &TreeData_[i].rotate_.z, ZERO_POINT_ONE);
 				}
 
 				ImGui::TreePop();
@@ -161,13 +162,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < TreeData_.size(); i++)
 				{
 					std::string labelX = "TreeScaleX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &TreeData_[i].scale_.x, ZeroPointOne);
+					ImGui::InputFloat((labelX.c_str()), &TreeData_[i].scale_.x, ZERO_POINT_ONE);
 
 					std::string labelY = "TreeScaleY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &TreeData_[i].scale_.y, ZeroPointOne);
+					ImGui::InputFloat((labelY.c_str()), &TreeData_[i].scale_.y, ZERO_POINT_ONE);
 
 					std::string labelZ = "TreeScaleZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &TreeData_[i].scale_.z, ZeroPointOne);
+					ImGui::InputFloat((labelZ.c_str()), &TreeData_[i].scale_.z, ZERO_POINT_ONE);
 				}
 
 				ImGui::TreePop();
@@ -185,13 +186,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < LogsData_.size(); i++)
 				{
 					std::string labelX = "LogsPositionX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &LogsData_[i].position_.x, ZeroPointOne);
+					ImGui::InputFloat((labelX.c_str()), &LogsData_[i].position_.x, ZERO_POINT_ONE);
 
 					std::string labelY = "LogsPositionY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &LogsData_[i].position_.y, ZeroPointOne);
+					ImGui::InputFloat((labelY.c_str()), &LogsData_[i].position_.y, ZERO_POINT_ONE);
 
 					std::string labelZ = "LogsPositionZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &LogsData_[i].position_.z, ZeroPointOne);
+					ImGui::InputFloat((labelZ.c_str()), &LogsData_[i].position_.z, ZERO_POINT_ONE);
 				}
 
 				ImGui::TreePop();
@@ -202,13 +203,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < LogsData_.size(); i++)
 				{
 					std::string labelX = "LogsRotateX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &LogsData_[i].rotate_.x, ZeroPointOne);
+					ImGui::InputFloat((labelX.c_str()), &LogsData_[i].rotate_.x, ZERO_POINT_ONE);
 
 					std::string labelY = "LogsRotateY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &LogsData_[i].rotate_.y, ZeroPointOne);
+					ImGui::InputFloat((labelY.c_str()), &LogsData_[i].rotate_.y, ZERO_POINT_ONE);
 
 					std::string labelZ = "LogsRotateZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &LogsData_[i].rotate_.z, ZeroPointOne);
+					ImGui::InputFloat((labelZ.c_str()), &LogsData_[i].rotate_.z, ZERO_POINT_ONE);
 				}
 
 				ImGui::TreePop();
@@ -219,13 +220,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < LogsData_.size(); i++)
 				{
 					std::string labelX = "LogsScaleX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &LogsData_[i].scale_.x, ZeroPointOne);
+					ImGui::InputFloat((labelX.c_str()), &LogsData_[i].scale_.x, ZERO_POINT_ONE);
 
 					std::string labelY = "LogsScaleY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &LogsData_[i].scale_.y, ZeroPointOne);
+					ImGui::InputFloat((labelY.c_str()), &LogsData_[i].scale_.y, ZERO_POINT_ONE);
 
 					std::string labelZ = "LogsScaleZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &LogsData_[i].scale_.z, ZeroPointOne);
+					ImGui::InputFloat((labelZ.c_str()), &LogsData_[i].scale_.z, ZERO_POINT_ONE);
 				}
 
 				ImGui::TreePop();
@@ -241,13 +242,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < StrawData_.size(); i++)
 				{
 					std::string labelX = "StrawPositionX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &StrawData_[i].position_.x, ZeroPointOne);
+					ImGui::InputFloat((labelX.c_str()), &StrawData_[i].position_.x, ZERO_POINT_ONE);
 
 					std::string labelY = "StrawPositionY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &StrawData_[i].position_.y, ZeroPointOne);
+					ImGui::InputFloat((labelY.c_str()), &StrawData_[i].position_.y, ZERO_POINT_ONE);
 
 					std::string labelZ = "StrawPositionZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &StrawData_[i].position_.z, ZeroPointOne);
+					ImGui::InputFloat((labelZ.c_str()), &StrawData_[i].position_.z, ZERO_POINT_ONE);
 				}
 
 				ImGui::TreePop();
@@ -258,13 +259,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < StrawData_.size(); i++)
 				{
 					std::string labelX = "StrawRotateX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &StrawData_[i].rotate_.x, ZeroPointOne);
+					ImGui::InputFloat((labelX.c_str()), &StrawData_[i].rotate_.x, ZERO_POINT_ONE);
 
 					std::string labelY = "StrawRotateY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &StrawData_[i].rotate_.y, ZeroPointOne);
+					ImGui::InputFloat((labelY.c_str()), &StrawData_[i].rotate_.y, ZERO_POINT_ONE);
 
 					std::string labelZ = "StrawRotateZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &StrawData_[i].rotate_.z, ZeroPointOne);
+					ImGui::InputFloat((labelZ.c_str()), &StrawData_[i].rotate_.z, ZERO_POINT_ONE);
 				}
 
 				ImGui::TreePop();
@@ -275,13 +276,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < StrawData_.size(); i++)
 				{
 					std::string labelX = "StrawScaleX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &StrawData_[i].scale_.x, ZeroPointOne);
+					ImGui::InputFloat((labelX.c_str()), &StrawData_[i].scale_.x, ZERO_POINT_ONE);
 
 					std::string labelY = "StrawScaleY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &StrawData_[i].scale_.y, ZeroPointOne);
+					ImGui::InputFloat((labelY.c_str()), &StrawData_[i].scale_.y, ZERO_POINT_ONE);
 
 					std::string labelZ = "StrawScaleZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &StrawData_[i].scale_.z, ZeroPointOne);
+					ImGui::InputFloat((labelZ.c_str()), &StrawData_[i].scale_.z, ZERO_POINT_ONE);
 				}
 
 				ImGui::TreePop();

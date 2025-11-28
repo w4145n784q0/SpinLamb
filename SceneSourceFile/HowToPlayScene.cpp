@@ -43,10 +43,10 @@ void HowToPlayScene::Initialize()
 	hSoundHowtoPlay_ = Audio::Load(Sound + BGM + "HowToPlay.wav", true);
 	assert(hSoundHowtoPlay_ >= 0);
 
-	hSoundSelect_ = Audio::Load(Sound + SE + "Select.wav", false, Audio::GetSelectNum());
+	hSoundSelect_ = Audio::Load(Sound + SE + "Select.wav", false, Audio::SelectSoundNum_);
 	assert(hSoundSelect_ >= 0);
 
-	hSoundBackGameMode_ = Audio::Load(Sound + SE + "Cancel.wav", false, Audio::GetCancelNum());
+	hSoundBackGameMode_ = Audio::Load(Sound + SE + "Cancel.wav", false, Audio::CancelSoundNum_);
 	assert(hSoundBackGameMode_ >= 0);
 
 	//ƒŠƒXƒg‚ÉŠeó‘Ô‚ð’Ç‰Á

@@ -1,7 +1,7 @@
 #include "HUD.h"
 #include"../Engine/Image.h"
 #include"../EffectSourceFile/Easing.h"
-
+#include"../Engine/Global.h"
 
 //描画操作のみ扱うクラス
 namespace
@@ -376,7 +376,7 @@ void HUD::DrawTimerEasing()
 		if (EasingCount_ < TimeDuration)
 		{
 			//イージング経過時間を計算
-			EasingCount_ += DeltaTime;
+			EasingCount_ += DELTATIME;
 
 			//正規化する
 			double ratio = static_cast<double>(Normalize(EasingCount_));
@@ -579,7 +579,7 @@ void HUD::DrawGo()
 	//徐々にロゴが拡大する動き
 
 	//イージング経過時間を計算
-	EasingCount_ += DeltaTime;
+	EasingCount_ += DELTATIME;
 
 	//正規化する
 	double ratio = static_cast<double>(Normalize(EasingCount_));

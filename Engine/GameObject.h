@@ -71,17 +71,6 @@ protected:
 	//以下はGameObject継承先で汎用的に使う定数
 
 	/// <summary>
-	/// 60fpsにおける1フレームの時間
-	/// 使用端末によるフレームレート依存防止
-	/// </summary>
-	static float DeltaTime;
-
-	/// <summary>
-	/// 1秒を表す定数
-	/// </summary>
-	static int oneSecond;
-
-	/// <summary>
 	/// 時間表記等に除算する値
 	/// </summary>
 	static int  TenDivision;
@@ -100,12 +89,6 @@ protected:
 	/// 次のシーン遷移までの時間(2秒程)
 	/// </summary>
 	static int SceneLongTransition;
-
-	/// <summary>
-	/// 0.1 を表す定数
-	/// ImGuiの操作などに使う
-	/// </summary>
-	static float ZeroPointOne;
 
 public:
 	//コンストラクタ

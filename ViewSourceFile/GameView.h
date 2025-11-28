@@ -47,8 +47,11 @@ namespace GameView
 	//二人プレイ用のImage関連のみ描画(Player2)
 	void ViewImagePlayer2();
 
-	//ImGui描画
-	void ViewImGui();
+	//ゲーム中のImGui描画
+	void ViewPlayImGui();
+
+	//エンジン用(Camera,InputなどのEngine関係)のImGui描画
+	void ViewEngineImGui();
 
 	//HUD用描画(画面全体)
 	void ViewHUDNormal();

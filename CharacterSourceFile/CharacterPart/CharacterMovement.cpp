@@ -1,6 +1,7 @@
 #include "CharacterMovement.h"
 #include"../Character.h"
 #include"../../Engine/Image.h"
+#include"../../Engine/Global.h"
 
 CharacterMovement::CharacterMovement(GameObject* parent)
 	:GameObject(parent, "CharacterMovement"), params_(nullptr),character_(nullptr)
@@ -129,7 +130,7 @@ void CharacterMovement::CreateMoveVector()
 	//移動ベクトル化する
 	XMVECTOR MoveVector = XMVectorScale(
 		params_->MoveParam_.MoveDirection_, 
-			 params_->MoveParam_.CommonAcceleration_ * DeltaTime);
+			 params_->MoveParam_.CommonAcceleration_ * DELTATIME);
 
 	//現在位置と移動ベクトルを加算し
 	//移動後のベクトルを作成(この時点では移動確定していない)

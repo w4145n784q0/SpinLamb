@@ -46,13 +46,13 @@ void PlayBaseScene::Initialize()
 	hBackScreen_ = Image::Load(Play + "BackSky.jpg");
 	assert(hBackScreen_ >= 0);
 
-	hSoundPause_ = Audio::Load(Sound + SE + "Pause.wav", false, Audio::GetSelectNum());
+	hSoundPause_ = Audio::Load(Sound + SE + "Pause.wav", false, Audio::SelectSoundNum_);
 	assert(hSoundPause_ >= 0);
 
-	hSoundSelect_ = Audio::Load(Sound + SE + "Select.wav", false, Audio::GetSelectNum());
+	hSoundSelect_ = Audio::Load(Sound + SE + "Select.wav", false, Audio::SelectSoundNum_);
 	assert(hSoundSelect_ >= 0);
 
-	hSoundExit_ = Audio::Load(Sound + SE + "Cancel.wav", false, Audio::GetCancelNum());
+	hSoundExit_ = Audio::Load(Sound + SE + "Cancel.wav", false, Audio::SelectSoundNum_);
 	assert(hSoundExit_ >= 0);
 
 	//各モードをリストに入れる

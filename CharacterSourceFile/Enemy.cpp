@@ -3,6 +3,7 @@
 #include"../Engine/Model.h"
 #include"../Engine/Camera.h"
 #include"../Engine/SphereCollider.h"
+#include"../Engine/Global.h"
 
 #include"../CharacterSourceFile/EnemyState/EnemyStateRoot.h"
 #include"../CharacterSourceFile/EnemyState/EnemyStateApproach.h"
@@ -235,7 +236,7 @@ void Enemy::DrawImGui()
 			ImGui::Text("PlayerDistance:%.3f", dist);
 
 			//攻撃準備状態(UpdateAim)に入るのに必要な距離
-			ImGui::InputFloat("ChaseLength", &ChaseLength, ZeroPointOne);
+			ImGui::InputFloat("ChaseLength", &ChaseLength, ZERO_POINT_ONE);
 
 			//プレイヤーを向く方向
 			XMFLOAT3 AutoDir;

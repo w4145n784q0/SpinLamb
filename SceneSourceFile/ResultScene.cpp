@@ -4,6 +4,7 @@
 #include"../Engine/Audio.h"
 #include"../Engine/SceneManager.h"
 #include"../Engine/CsvReader.h"
+#include"../Engine/Global.h"
 #include"../ViewSourceFile/GameView.h"
 
 
@@ -71,7 +72,7 @@ void ResultScene::Initialize()
 	hSoundResult_ = Audio::Load(Sound + BGM + "Result.wav", true);
 	assert(hSoundResult_ >= 0);
 
-	hSoundBackTitle_ = Audio::Load(Sound + SE + "Cancel.wav", false, Audio::GetCancelNum());
+	hSoundBackTitle_ = Audio::Load(Sound + SE + "Cancel.wav", false, Audio::CancelSoundNum_);
 	assert(hSoundBackTitle_ >= 0);
 
 	//SceneManagerインスタンスからBattleSceneから各スコアを取得
@@ -158,15 +159,15 @@ void ResultScene::Draw()
 			}
 			if (ImGui::TreeNode("ResultRotate"))
 			{
-				ImGui::InputFloat("ResultRotateX", &Result_.rotate_.x, ZeroPointOne);
-				ImGui::InputFloat("ResultRotateY", &Result_.rotate_.y, ZeroPointOne);
-				ImGui::InputFloat("ResultRotateZ", &Result_.rotate_.z, ZeroPointOne);
+				ImGui::InputFloat("ResultRotateX", &Result_.rotate_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("ResultRotateY", &Result_.rotate_.y, ZERO_POINT_ONE);
+				ImGui::InputFloat("ResultRotateZ", &Result_.rotate_.z, ZERO_POINT_ONE);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("ResultScale"))
 			{
-				ImGui::InputFloat("ResultScaleX", &Result_.scale_.x, ZeroPointOne);
-				ImGui::InputFloat("ResultScaleY", &Result_.scale_.y, ZeroPointOne);
+				ImGui::InputFloat("ResultScaleX", &Result_.scale_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("ResultScaleY", &Result_.scale_.y, ZERO_POINT_ONE);
 				ImGui::TreePop();
 			}
 			ImGui::TreePop();
@@ -183,15 +184,15 @@ void ResultScene::Draw()
 			}
 			if (ImGui::TreeNode("PushTitleRotate"))
 			{
-				ImGui::InputFloat("PushTitleRotateX", &PushTitle_.rotate_.x, ZeroPointOne);
-				ImGui::InputFloat("PushTitleRotateY", &PushTitle_.rotate_.y, ZeroPointOne);
-				ImGui::InputFloat("PushTitleRotateZ", &PushTitle_.rotate_.z, ZeroPointOne);
+				ImGui::InputFloat("PushTitleRotateX", &PushTitle_.rotate_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("PushTitleRotateY", &PushTitle_.rotate_.y, ZERO_POINT_ONE);
+				ImGui::InputFloat("PushTitleRotateZ", &PushTitle_.rotate_.z, ZERO_POINT_ONE);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("PushTitleScale"))
 			{
-				ImGui::InputFloat("PushTitleScaleX", &PushTitle_.scale_.x, ZeroPointOne);
-				ImGui::InputFloat("PushTitleScaleY", &PushTitle_.scale_.y, ZeroPointOne);
+				ImGui::InputFloat("PushTitleScaleX", &PushTitle_.scale_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("PushTitleScaleY", &PushTitle_.scale_.y, ZERO_POINT_ONE);
 				ImGui::TreePop();
 			}
 

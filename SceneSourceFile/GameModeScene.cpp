@@ -4,6 +4,7 @@
 #include"../Engine/Audio.h"
 #include"../Engine/SceneManager.h"
 #include"../Engine/CsvReader.h"
+#include"../Engine/Global.h"
 #include"../ViewSourceFile/GameView.h"
 
 namespace
@@ -102,13 +103,13 @@ void GameModeScene::Initialize()
 	hSoundGameMode_ = Audio::Load(Sound + BGM + "GameMode.wav",true);
 	assert(hSoundGameMode_ >= 0);
 
-	hSoundDecide_ = Audio::Load(Sound + SE + "Decide.wav", false, Audio::GetDecideNum());
+	hSoundDecide_ = Audio::Load(Sound + SE + "Decide.wav", false, Audio::DecideSoundNum_);
 	assert(hSoundDecide_ >= 0);
 
-	hSoundSelect_ = Audio::Load(Sound + SE + "Select.wav", false, Audio::GetSelectNum());
+	hSoundSelect_ = Audio::Load(Sound + SE + "Select.wav", false, Audio::SelectSoundNum_);
 	assert(hSoundSelect_ >= 0);
 
-	hSoundCancel_ = Audio::Load(Sound + SE + "Cancel.wav", false, Audio::GetCancelNum());
+	hSoundCancel_ = Audio::Load(Sound + SE + "Cancel.wav", false, Audio::CancelSoundNum_);
 	assert(hSoundCancel_ >= 0);
 
 	//各モードの画像ハンドルを配列に入れる
@@ -217,15 +218,15 @@ void GameModeScene::Draw()
 			}
 			if (ImGui::TreeNode("BackCharaRotate"))
 			{
-				ImGui::InputFloat("BackCharaRotateX", &BackChara_.rotate_.x, ZeroPointOne);
-				ImGui::InputFloat("BackCharaRotateY", &BackChara_.rotate_.y, ZeroPointOne);
-				ImGui::InputFloat("BackCharaRotateZ", &BackChara_.rotate_.z, ZeroPointOne);
+				ImGui::InputFloat("BackCharaRotateX", &BackChara_.rotate_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("BackCharaRotateY", &BackChara_.rotate_.y, ZERO_POINT_ONE);
+				ImGui::InputFloat("BackCharaRotateZ", &BackChara_.rotate_.z, ZERO_POINT_ONE);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("BackCharaScale"))
 			{
-				ImGui::InputFloat("BackCharaScaleX", &BackChara_.scale_.x, ZeroPointOne);
-				ImGui::InputFloat("BackCharaScaleY", &BackChara_.scale_.y, ZeroPointOne);
+				ImGui::InputFloat("BackCharaScaleX", &BackChara_.scale_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("BackCharaScaleY", &BackChara_.scale_.y, ZERO_POINT_ONE);
 				ImGui::TreePop();
 			}
 			ImGui::TreePop();
@@ -242,15 +243,15 @@ void GameModeScene::Draw()
 			}
 			if (ImGui::TreeNode("TransSelectRotate"))
 			{
-				ImGui::InputFloat("TransSelectRotateX", &TransSelect_.rotate_.x, ZeroPointOne);
-				ImGui::InputFloat("TransSelectRotateY", &TransSelect_.rotate_.y, ZeroPointOne);
-				ImGui::InputFloat("TransSelectRotateZ", &TransSelect_.rotate_.z, ZeroPointOne);
+				ImGui::InputFloat("TransSelectRotateX", &TransSelect_.rotate_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransSelectRotateY", &TransSelect_.rotate_.y, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransSelectRotateZ", &TransSelect_.rotate_.z, ZERO_POINT_ONE);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("TransSelectScale"))
 			{
-				ImGui::InputFloat("TransSelectScaleX", &TransSelect_.scale_.x, ZeroPointOne);
-				ImGui::InputFloat("TransSelectScaleY", &TransSelect_.scale_.y, ZeroPointOne);
+				ImGui::InputFloat("TransSelectScaleX", &TransSelect_.scale_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransSelectScaleY", &TransSelect_.scale_.y, ZERO_POINT_ONE);
 				ImGui::TreePop();
 			}
 			ImGui::TreePop();
@@ -267,15 +268,15 @@ void GameModeScene::Draw()
 			}
 			if (ImGui::TreeNode("TransTextRotate"))
 			{
-				ImGui::InputFloat("TransTextRotateX", &TransText_.rotate_.x, ZeroPointOne);
-				ImGui::InputFloat("TransTextRotateY", &TransText_.rotate_.y, ZeroPointOne);
-				ImGui::InputFloat("TransTextRotateZ", &TransText_.rotate_.z, ZeroPointOne);
+				ImGui::InputFloat("TransTextRotateX", &TransText_.rotate_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransTextRotateY", &TransText_.rotate_.y, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransTextRotateZ", &TransText_.rotate_.z, ZERO_POINT_ONE);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("TransTextScale"))
 			{
-				ImGui::InputFloat("TransTextScaleX", &TransText_.scale_.x, ZeroPointOne);
-				ImGui::InputFloat("TransTextScaleY", &TransText_.scale_.y, ZeroPointOne);
+				ImGui::InputFloat("TransTextScaleX", &TransText_.scale_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransTextScaleY", &TransText_.scale_.y, ZERO_POINT_ONE);
 				ImGui::TreePop();
 			}
 			ImGui::TreePop();
@@ -297,9 +298,9 @@ void GameModeScene::Draw()
 			{
 				for (int i = 0; i < ModeTransArray_.size(); i++)
 				{
-					ImGui::InputFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].rotate_.x, ZeroPointOne);
-					ImGui::InputFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].rotate_.y, ZeroPointOne);
-					ImGui::InputFloat((ModeStringArray[i] + "Z").c_str(), &ModeTransArray_[i].rotate_.z, ZeroPointOne);
+					ImGui::InputFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].rotate_.x, ZERO_POINT_ONE);
+					ImGui::InputFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].rotate_.y, ZERO_POINT_ONE);
+					ImGui::InputFloat((ModeStringArray[i] + "Z").c_str(), &ModeTransArray_[i].rotate_.z, ZERO_POINT_ONE);
 				}
 				ImGui::TreePop();
 			}
@@ -307,8 +308,8 @@ void GameModeScene::Draw()
 			{
 				for (int i = 0; i < ModeTransArray_.size(); i++)
 				{
-					ImGui::InputFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].scale_.x, ZeroPointOne);
-					ImGui::InputFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].scale_.y, ZeroPointOne);
+					ImGui::InputFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].scale_.x, ZERO_POINT_ONE);
+					ImGui::InputFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].scale_.y, ZERO_POINT_ONE);
 				}
 				ImGui::TreePop();
 			}
@@ -331,15 +332,15 @@ void GameModeScene::Draw()
 			}
 			if (ImGui::TreeNode("TransPlayerRotate"))
 			{
-				ImGui::InputFloat("TransPlayerRotateX", &TransPlayer_.rotate_.x, ZeroPointOne);
-				ImGui::InputFloat("TransPlayerRotateY", &TransPlayer_.rotate_.y, ZeroPointOne);
-				ImGui::InputFloat("TransPlayerRotateZ", &TransPlayer_.rotate_.z, ZeroPointOne);
+				ImGui::InputFloat("TransPlayerRotateX", &TransPlayer_.rotate_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransPlayerRotateY", &TransPlayer_.rotate_.y, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransPlayerRotateZ", &TransPlayer_.rotate_.z, ZERO_POINT_ONE);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("TransPlayerScale"))
 			{
-				ImGui::InputFloat("TransPlayerScaleX", &TransPlayer_.scale_.x, ZeroPointOne);
-				ImGui::InputFloat("TransPlayerScaleY", &TransPlayer_.scale_.y, ZeroPointOne);
+				ImGui::InputFloat("TransPlayerScaleX", &TransPlayer_.scale_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransPlayerScaleY", &TransPlayer_.scale_.y, ZERO_POINT_ONE);
 				ImGui::TreePop();
 			}
 			ImGui::TreePop();
@@ -356,15 +357,15 @@ void GameModeScene::Draw()
 			}
 			if (ImGui::TreeNode("TransSelectPlayerRotate"))
 			{
-				ImGui::InputFloat("TransSelectPlayerRotateX", &TransSelectPlayerIcon_.rotate_.x, ZeroPointOne);
-				ImGui::InputFloat("TransSelectPlayerRotateY", &TransSelectPlayerIcon_.rotate_.y, ZeroPointOne);
-				ImGui::InputFloat("TransSelectPlayerRotateZ", &TransSelectPlayerIcon_.rotate_.z, ZeroPointOne);
+				ImGui::InputFloat("TransSelectPlayerRotateX", &TransSelectPlayerIcon_.rotate_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransSelectPlayerRotateY", &TransSelectPlayerIcon_.rotate_.y, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransSelectPlayerRotateZ", &TransSelectPlayerIcon_.rotate_.z, ZERO_POINT_ONE);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("TransSelectPlayerScale"))
 			{
-				ImGui::InputFloat("TransSelectPlayerScaleX", &TransSelectPlayerIcon_.scale_.x, ZeroPointOne);
-				ImGui::InputFloat("TransSelectPlayerScaleY", &TransSelectPlayerIcon_.scale_.y, ZeroPointOne);
+				ImGui::InputFloat("TransSelectPlayerScaleX", &TransSelectPlayerIcon_.scale_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransSelectPlayerScaleY", &TransSelectPlayerIcon_.scale_.y, ZERO_POINT_ONE);
 				ImGui::TreePop();
 			}
 			ImGui::TreePop();
