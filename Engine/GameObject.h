@@ -71,11 +71,6 @@ protected:
 	//以下はGameObject継承先で汎用的に使う定数
 
 	/// <summary>
-	/// 時間表記等に除算する値
-	/// </summary>
-	static int  TenDivision;
-
-	/// <summary>
 	/// 次のシーン遷移までの時間(1.0秒程)
 	/// </summary>
 	static int SceneShortTransition;

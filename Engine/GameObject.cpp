@@ -3,7 +3,6 @@
 #include "global.h"
 
 //複数定義防止のためグローバルスコープで初期化
-int GameObject::TenDivision = 0;
 int GameObject::SceneShortTransition = 0;
 int GameObject::SceneTransition = 0;
 int GameObject::SceneLongTransition = 0;
@@ -29,8 +28,7 @@ namespace
 	//GameObject軽傷先で汎用的に使用する変数
 	enum CommonIndex
 	{
-		i_TenDivision = 0,
-		i_SceneShortTransition,
+		i_SceneShortTransition = 0,
 		i_SceneTransition,
 		i_SceneLongTransition,
 	};
@@ -459,7 +457,6 @@ void GameObject::CSVCommonDataInitialize()
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	TenDivision = static_cast<int>(CommonData[i_TenDivision]);
 	SceneShortTransition = static_cast<int>(CommonData[i_SceneShortTransition]);
 	SceneTransition = static_cast<int>(CommonData[i_SceneTransition]);
 	SceneLongTransition = static_cast<int>(CommonData[i_SceneLongTransition]);

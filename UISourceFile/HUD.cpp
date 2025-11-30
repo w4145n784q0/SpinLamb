@@ -471,10 +471,11 @@ void HUD::DrawScore()
 	//現在のスコアをそれぞれ計算
 	//十の位:現在のスコアを10で除算
 	//一の位:現在のスコアを10で除算した余り
-	FirstScoreIndexTen = FirstScore_ / TenDivision;
-	FirstScoreIndexOne = FirstScore_ % TenDivision;
-	SecondScoreIndexTen = SecondScore_ / TenDivision;
-	SecondScoreIndexOne = SecondScore_ % TenDivision;
+	FirstScoreIndexTen = DIVISION_TEN(FirstScore_);
+	FirstScoreIndexOne = MODULO_TEN(FirstScore_);
+
+	SecondScoreIndexTen = DIVISION_TEN(SecondScore_);
+	SecondScoreIndexOne = MODULO_TEN(SecondScore_);
 
 	//Player1のスコアの十の位,一の位を描画
 	Image::SetAndDraw(ArrayHandle[FirstScoreIndexTen], FirstScoreTen);
