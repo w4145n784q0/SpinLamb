@@ -102,7 +102,7 @@ float Camera::CameraShake()
 
 	if (IsCameraShake)
 	{
-		ShakeTimer -= DELTATIME;
+		ShakeTimer -= Dt;
 		if (ShakeTimer <= 0.0f)
 		{
 			IsCameraShake = false;
@@ -126,7 +126,7 @@ XMFLOAT3 Camera::CameraShakeFloat3()
 
 	if (IsCameraShake)
 	{
-		ShakeTimer -= DELTATIME;
+		ShakeTimer -= Dt;
 		if (ShakeTimer <= 0.0f)
 		{
 			IsCameraShake = false;

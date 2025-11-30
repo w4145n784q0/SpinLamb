@@ -87,8 +87,6 @@ void GameTimer::TimeCalculation()
 	//ˆê‚ÌˆÊ:Œ»İ‚ÌŠÔ‚ğ10‚ÅœZ‚µ‚½—]‚è
 	//Timeten,Timeone‚ÍHUDƒNƒ‰ƒX‚©‚çæ“¾‚³‚ê•`‰æ‚³‚ê‚é
 
-	//Timeten_ = CurrentGameTime_ / TenDivision;
 	Timeten_ = DIVISION_TEN(CurrentGameTime_);
-	//Timeone_ = CurrentGameTime_ % TenDivision;
-	Timeone_ = MODULUS_TEN(CurrentGameTime_);
+	Timeone_ = MODULO_TEN(CurrentGameTime_);
 }

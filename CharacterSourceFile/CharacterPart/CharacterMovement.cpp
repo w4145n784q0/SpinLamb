@@ -130,7 +130,7 @@ void CharacterMovement::CreateMoveVector()
 	//移動ベクトル化する
 	XMVECTOR MoveVector = XMVectorScale(
 		params_->MoveParam_.MoveDirection_, 
-			 params_->MoveParam_.CommonAcceleration_ * DELTATIME);
+			 params_->MoveParam_.CommonAcceleration_ * Dt);
 
 	//現在位置と移動ベクトルを加算し
 	//移動後のベクトルを作成(この時点では移動確定していない)

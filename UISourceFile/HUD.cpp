@@ -376,7 +376,7 @@ void HUD::DrawTimerEasing()
 		if (EasingCount_ < TimeDuration)
 		{
 			//イージング経過時間を計算
-			EasingCount_ += DELTATIME;
+			EasingCount_ += Dt;
 
 			//正規化する
 			double ratio = static_cast<double>(Normalize(EasingCount_));
@@ -579,7 +579,7 @@ void HUD::DrawGo()
 	//徐々にロゴが拡大する動き
 
 	//イージング経過時間を計算
-	EasingCount_ += DELTATIME;
+	EasingCount_ += Dt;
 
 	//正規化する
 	double ratio = static_cast<double>(Normalize(EasingCount_));

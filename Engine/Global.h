@@ -12,12 +12,14 @@
 #define DIVISION_TEN(x) ((x) / 10)
 
 //引数を10で割った余りを返す(時間計算などに使う)
-#define MODULUS_TEN(x) ((x) % 10)
+#define MODULO_TEN(x) ((x) % 10)
 
 //-----汎用的に使う定数-----
 
-//60fpsにおける1フレームの時間 使用端末によるフレームレート依存防止
-const float DELTATIME = 0.016f;
+//60fpsにおける1フレームの時間(前フレームからの経過時間) 
+//使用端末によるフレームレート依存防止
+//ここでは宣言のみ
+extern float Dt;
 
 //60fpsにおける1秒
 const int ONE_SECOND = 60;
