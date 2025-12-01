@@ -23,6 +23,9 @@ SceneManager::SceneManager(GameObject * parent)
 //‰Šú‰»
 void SceneManager::Initialize()
 {
+	//ˆê“x‚¾‚¯BaseScene‚Ìcsv“Ç‚İ‚İˆ—‚ğŒÄ‚Ô
+	BaseScene::CSVSceneDataInitialize();
+
 	//Å‰‚ÌƒV[ƒ“‚ğ€”õ
 	currentSceneID_ = SCENE_ID_TITLE;
 	nextSceneID_ = currentSceneID_;

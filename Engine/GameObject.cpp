@@ -2,16 +2,11 @@
 #include <assert.h>
 #include "global.h"
 
-//複数定義防止のためグローバルスコープで初期化
-int GameObject::SceneShortTransition = 0;
-int GameObject::SceneTransition = 0;
-int GameObject::SceneLongTransition = 0;
-
 namespace
 {
 	//csv読み込み時のインデックス
 
-//トランスフォームの初期化値
+	//トランスフォームの初期化値
 	enum InitTransform
 	{
 		pos_x = 0,
@@ -24,21 +19,12 @@ namespace
 		sca_y,
 		sca_z,
 	};
-
-	//GameObject軽傷先で汎用的に使用する変数
-	enum CommonIndex
-	{
-		i_SceneShortTransition = 0,
-		i_SceneTransition,
-		i_SceneLongTransition,
-	};
 }
 
 //コンストラクタ（親も名前もなし）
 GameObject::GameObject(void) :
 	GameObject(nullptr, "")
 {
-
 }
 
 //コンストラクタ（名前なし）
@@ -431,6 +417,9 @@ void GameObject::InitCSVTransformArray(CsvReader& _csv, const std::vector<std::s
 	//名前配列とトランスフォーム配列数が一致している必要あり
 	if (_names.size() != _Transforms.size())
 	{
+		//存在しなかった場合はエラーメッセージを出す
+		std::string message = "指定された文字列の配列数とトランスフォーム配列数が一致していません。\n初期化できませんでした。";
+		MessageBox(NULL, message.c_str(), "BaseProjDx9エラー", MB_OK);
 		return;
 	}
 
@@ -440,30 +429,6 @@ void GameObject::InitCSVTransformArray(CsvReader& _csv, const std::vector<std::s
 		InitCSVTransform(_csv, _names[i], _Transforms[i]);
 	}
 }
-
-void GameObject::CSVCommonDataInitialize()
-{
-	//GameObjectで共通する汎用データの初期化
-
-	//csvファイルを読み込む
-	CsvReader csv;
-	csv.Load("CSVdata\\EngineData\\CommonData.csv");
-
-	//csvファイルの各0列目の文字列を取得
-	std::string Common = "CommonData";
-
-	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> CommonData = GetCSVReadData(csv, Common);
-
-	//初期化の順番はcsvの各行の順番に合わせる
-	//vの添え字はnamespaceで宣言した列挙型を使用
-	SceneShortTransition = static_cast<int>(CommonData[i_SceneShortTransition]);
-	SceneTransition = static_cast<int>(CommonData[i_SceneTransition]);
-	SceneLongTransition = static_cast<int>(CommonData[i_SceneLongTransition]);
-}
-
-
-
 
 void GameObject::UpdateSub()
 {

@@ -68,23 +68,6 @@ protected:
 	//衝突判定リスト
 	std::list<Collider*>	colliderList_;	
 
-	//以下はGameObject継承先で汎用的に使う定数
-
-	/// <summary>
-	/// 次のシーン遷移までの時間(1.0秒程)
-	/// </summary>
-	static int SceneShortTransition;
-
-	/// <summary>
-	/// 次のシーン遷移までの時間(1.5秒程)
-	/// </summary>
-	static int SceneTransition;
-
-	/// <summary>
-	/// 次のシーン遷移までの時間(2秒程)
-	/// </summary>
-	static int SceneLongTransition;
-
 public:
 	//コンストラクタ
 	GameObject();
@@ -229,6 +212,7 @@ public:
 
 	/// <summary>
 	/// csv読み込み時の各トランスフォーム初期化
+	/// PRS(position, rotate, scale)の順番で初期化
 	/// </summary>
 	/// <param name="tr">代入するトランスフォーム変数</param>
 	/// <param name="v">受け取った一行分のTransformデータ配列</param>
@@ -258,12 +242,6 @@ public:
 	/// <param name="_Transforms">代入するトランスフォーム配列</param>
 	void InitCSVTransformArray(CsvReader& _csv, const std::vector<std::string>& _names,
 		std::vector<std::reference_wrapper<Transform>>& _Transforms);
-
-	/// <summary>
-	/// GameObjectの共通データ初期化
-	/// ゲームループ開始前に一度だけ呼ぶ
-	/// </summary>
-	static void CSVCommonDataInitialize();
 
 
 private:

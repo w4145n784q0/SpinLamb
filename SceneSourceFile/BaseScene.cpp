@@ -1,5 +1,18 @@
 #include "BaseScene.h"
 
+//遷移時間の実体定義
+int BaseScene::SceneShortTransition = 0;
+int BaseScene::SceneTransition = 0;
+int BaseScene::SceneLongTransition = 0;
+
+//GameObject継承先で汎用的に使用する変数
+enum CommonIndex
+{
+	i_SceneShortTransition = 0,
+	i_SceneTransition,
+	i_SceneLongTransition,
+};
+
 BaseScene::BaseScene(GameObject* parent)
 	:GameObject(parent,"BaseScene"),SceneState_(S_Active),SceneTransitionTimer_(0)
 {
@@ -34,5 +47,25 @@ void BaseScene::Update()
 	default:
 		break;
 	}
+}
 
+void BaseScene::CSVSceneDataInitialize()
+{
+	//GameObjectで共通する汎用データの初期化
+
+	//csvファイルを読み込む
+	CsvReader csv;
+	csv.Load("CSVdata\\SceneData\\BaseSceneData.csv");
+
+	//csvファイルの各0列目の文字列を取得
+	std::string base = "SceneData";
+
+	//0列目の文字列を渡し、その行のパラメータを取得
+	std::vector<float> baseSceneData = GetCSVReadData(csv, base);
+
+	//初期化の順番はcsvの各行の順番に合わせる
+	//vの添え字はnamespaceで宣言した列挙型を使用
+	SceneShortTransition = static_cast<int>(baseSceneData[i_SceneShortTransition]);
+	SceneTransition = static_cast<int>(baseSceneData[i_SceneTransition]);
+	SceneLongTransition = static_cast<int>(baseSceneData[i_SceneLongTransition]);
 }

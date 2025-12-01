@@ -88,8 +88,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	RootObject* pRootObject = new RootObject;
 	pRootObject->Initialize();
 
-	//共通データを初期化
-	GameObject::CSVCommonDataInitialize();
+	//Imageで使用するcsvデータ読み込み
 	Image::SetCSVImage();
 
 	//デルタタイムの計算
@@ -151,8 +150,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				//ルートオブジェクトのUpdateを呼んだあと、自動的に子、孫のUpdateが呼ばれる
 				pRootObject->UpdateSub();
 
-				//カメラを更新
-				//Camera::Update();
 
 				//エフェクトの更新
 				VFX::Update();
