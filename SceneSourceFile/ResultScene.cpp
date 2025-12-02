@@ -111,6 +111,7 @@ void ResultScene::Initialize()
 
 	//GameViewにポインタを渡す
 	GameView::SetTransitionEffect(pTransitionEffect_);
+	SetPointerGameView();
 }
 
 void ResultScene::Update()
@@ -143,64 +144,7 @@ void ResultScene::Draw()
 	default:
 		break;
 	}
-	
 
-#ifdef _DEBUG
-	if (ImGui::TreeNode("ResultScene"))
-	{
-		//結果のテキスト
-		if (ImGui::TreeNode("Result"))
-		{
-			if (ImGui::TreeNode("ResultPosition"))
-			{
-				ImGui::SliderFloat("ResultPositionX", &Result_.position_.x, Image::LeftEdge, Image::RightEdge);
-				ImGui::SliderFloat("ResultPositionY", &Result_.position_.y, Image::UpEdge, Image::DownEdge);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("ResultRotate"))
-			{
-				ImGui::InputFloat("ResultRotateX", &Result_.rotate_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("ResultRotateY", &Result_.rotate_.y, ZERO_POINT_ONE);
-				ImGui::InputFloat("ResultRotateZ", &Result_.rotate_.z, ZERO_POINT_ONE);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("ResultScale"))
-			{
-				ImGui::InputFloat("ResultScaleX", &Result_.scale_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("ResultScaleY", &Result_.scale_.y, ZERO_POINT_ONE);
-				ImGui::TreePop();
-			}
-			ImGui::TreePop();
-		}
-
-		//"Push Title"のテキスト
-		if (ImGui::TreeNode("PushTitle"))
-		{
-			if (ImGui::TreeNode("PushTitlePosition"))
-			{
-				ImGui::SliderFloat("PushTitlePositionX", &PushTitle_.position_.x, Image::LeftEdge, Image::RightEdge);
-				ImGui::SliderFloat("PushTitlePositionY", &PushTitle_.position_.y, Image::UpEdge, Image::DownEdge);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("PushTitleRotate"))
-			{
-				ImGui::InputFloat("PushTitleRotateX", &PushTitle_.rotate_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("PushTitleRotateY", &PushTitle_.rotate_.y, ZERO_POINT_ONE);
-				ImGui::InputFloat("PushTitleRotateZ", &PushTitle_.rotate_.z, ZERO_POINT_ONE);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("PushTitleScale"))
-			{
-				ImGui::InputFloat("PushTitleScaleX", &PushTitle_.scale_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("PushTitleScaleY", &PushTitle_.scale_.y, ZERO_POINT_ONE);
-				ImGui::TreePop();
-			}
-
-			ImGui::TreePop();
-		}
-		ImGui::TreePop();
-	}
-#endif
 }
 
 void ResultScene::Release()
@@ -265,4 +209,64 @@ void ResultScene::UpdateTransition()
 		//ゲームシーン状態を通常に戻しておく
 		SceneState_ = S_Active;
 	}
+}
+
+void ResultScene::DrawImGuiMyScene()
+{
+#ifdef _DEBUG
+	if (ImGui::TreeNode("ResultScene"))
+	{
+		//結果のテキスト
+		if (ImGui::TreeNode("Result"))
+		{
+			if (ImGui::TreeNode("ResultPosition"))
+			{
+				ImGui::SliderFloat("ResultPositionX", &Result_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("ResultPositionY", &Result_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("ResultRotate"))
+			{
+				ImGui::InputFloat("ResultRotateX", &Result_.rotate_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("ResultRotateY", &Result_.rotate_.y, ZERO_POINT_ONE);
+				ImGui::InputFloat("ResultRotateZ", &Result_.rotate_.z, ZERO_POINT_ONE);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("ResultScale"))
+			{
+				ImGui::InputFloat("ResultScaleX", &Result_.scale_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("ResultScaleY", &Result_.scale_.y, ZERO_POINT_ONE);
+				ImGui::TreePop();
+			}
+			ImGui::TreePop();
+		}
+
+		//"Push Title"のテキスト
+		if (ImGui::TreeNode("PushTitle"))
+		{
+			if (ImGui::TreeNode("PushTitlePosition"))
+			{
+				ImGui::SliderFloat("PushTitlePositionX", &PushTitle_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("PushTitlePositionY", &PushTitle_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("PushTitleRotate"))
+			{
+				ImGui::InputFloat("PushTitleRotateX", &PushTitle_.rotate_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("PushTitleRotateY", &PushTitle_.rotate_.y, ZERO_POINT_ONE);
+				ImGui::InputFloat("PushTitleRotateZ", &PushTitle_.rotate_.z, ZERO_POINT_ONE);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("PushTitleScale"))
+			{
+				ImGui::InputFloat("PushTitleScaleX", &PushTitle_.scale_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("PushTitleScaleY", &PushTitle_.scale_.y, ZERO_POINT_ONE);
+				ImGui::TreePop();
+			}
+
+			ImGui::TreePop();
+		}
+		ImGui::TreePop();
+	}
+#endif
 }

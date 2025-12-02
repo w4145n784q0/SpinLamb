@@ -236,9 +236,10 @@ void BattleScene::Initialize()
 	pHUD_->SetTimerPointer(pGameTimer_);
 	pHUD_->SetMiniMapPointer(pMiniMap_);
 
-	//GameView‚ÉHUD,TransitionEffect‚Ìƒ|ƒCƒ“ƒ^‚ð“n‚·(•`‰æ‡”Ô‚ð‚¸‚ç‚·‚½‚ß‚ÉŽg—p)
+	//GameView‚ÉHUD,TransitionEffect,Scene‚Ìƒ|ƒCƒ“ƒ^‚ð“n‚·(•`‰æ‡”Ô‚ð‚¸‚ç‚·‚½‚ß‚ÉŽg—p)
 	GameView::SetHUD(pHUD_);
 	GameView::SetTransitionEffect(pTransitionEffect_);
+	SetPointerGameView();
 
 	//ƒQ[ƒ€§ŒÀŽžŠÔ‚ð“n‚·
 	pGameTimer_->SetCurrentGameTime(GameTimeLimit);

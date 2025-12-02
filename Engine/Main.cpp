@@ -207,6 +207,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//HUDの描画(これらも一度だけ描画するので、player1,2の描画が終わった後に行う)
 					GameView::ViewHUDNormal();
 
+					//シーン関係のImGuiの表示(これも一度だけ描画する)
+					GameView::ViewSceneImGui();
+
 					//遷移演出の描画(これらも一度だけ描画するので、player1,2の描画が終わった後に行う)
 					//遷移演出は必ず最後に一度だけ行う
 					GameView::ViewTransitionEffect();
@@ -235,6 +238,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 					//HUDの描画(一度だけ描画するので、player1の描画が終わった後に行う)
 					GameView::ViewHUDNormal();
 
+					//シーン関係のImGuiの表示(これも一度だけ描画する)
+					GameView::ViewSceneImGui();
+
 					//遷移演出の描画(一度だけ描画するので、player1の描画が終わった後に行う)
 					//遷移演出は必ず最後に一度だけ行う
 					GameView::ViewTransitionEffect();
@@ -253,6 +259,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 					//エンジン関係のImGuiの表示(これも一度だけ表示)
 					GameView::ViewEngineImGui();
+
+					//シーン関係のImGuiの表示(これも一度だけ描画する)
+					GameView::ViewSceneImGui();
 
 					//遷移演出の描画(一度だけ描画するので、すべての描画が終わった後に行う)
 					//遷移演出は必ず最後に一度だけ行う

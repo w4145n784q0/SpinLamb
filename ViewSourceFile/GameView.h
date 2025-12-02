@@ -1,5 +1,6 @@
 #pragma once
 #include "../Engine/GameObject.h"
+#include"../SceneSourceFile/BaseScene.h"
 #include"../CharacterSourceFile/Player.h"
 #include"../CharacterSourceFile/Enemy.h"
 #include"../UISourceFile/HUD.h"
@@ -53,6 +54,9 @@ namespace GameView
 	//エンジン用(Camera,InputなどのEngine関係)のImGui描画
 	void ViewEngineImGui();
 
+	//シーン用ImGui描画
+	void ViewSceneImGui();
+
 	//HUD用描画(画面全体)
 	void ViewHUDNormal();
 
@@ -69,6 +73,9 @@ namespace GameView
 	void SetGameViewMode(GameViewMode mode);
 
 	//----------ポインタセッター関数----------
+
+	//シーンのインスタンス設定
+	void SetScene(BaseScene* _scene);
 
 	//プレイヤーのインスタンスを配列で受け取り設定(Battle,Practiceで呼ぶ)
 	void SetPlayers(std::vector<Player*> _players);

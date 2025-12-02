@@ -49,6 +49,15 @@ public:
 	//csvデータ初期化
 	static void CSVSceneDataInitialize();
 
+	//GameViewに自身のポインタをセット
+	void SetPointerGameView();
+
+	//ImGui描画(BaseScene関係のみ)
+	void DrawImGuiBaseScene();
+
+	//ImGui描画(継承したシーン用 継承先によって中身をオーバーライド)
+	virtual void DrawImGuiMyScene() {};
+
 	//以下の処理は純粋仮想関数のため、継承先で必ずオーバーライド
 
 	//通常の処理

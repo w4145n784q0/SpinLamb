@@ -8,16 +8,16 @@ namespace Audio
 {
 	//----------汎用的に使うSE----------
 	extern int StartSoundNum_;		//スタート音を同時に鳴らす回数
-	extern int SelectSoundNum_;	//選択音を同時に鳴らす回数
-	extern int DecideSoundNum_;	//決定音を同時に鳴らす回数
-	extern int CancelSoundNum_;	//キャンセル音を同時に鳴らす回数
+	extern int SelectSoundNum_;		//選択音を同時に鳴らす回数
+	extern int DecideSoundNum_;		//決定音を同時に鳴らす回数
+	extern int CancelSoundNum_;		//キャンセル音を同時に鳴らす回数
 
 	//----------ゲームプレイ中のSE----------
 	extern int WhistleSoundNum_;	//ホイッスル音を同時に鳴らす回数
-	extern int ChargeSoundNum_;	//チャージ音を同時に鳴らす回数
-	extern int AttackSoundNum_;	//攻撃音を同時に鳴らす回数
+	extern int ChargeSoundNum_;		//チャージ音を同時に鳴らす回数
+	extern int AttackSoundNum_;		//攻撃音を同時に鳴らす回数
 	extern int HitSoundNum_;		//ヒット音を同時に鳴らす回数
-	extern int FenceHitSoundNum_;  //柵に接触音を同時に鳴らす回数
+	extern int FenceHitSoundNum_;	//柵に接触音を同時に鳴らす回数
 	extern int JumpSoundNum_;		//ジャンプ音を同時に鳴らす回数
 	extern int LandingSoundNum_;	//着地音を同時に鳴らす回数
 

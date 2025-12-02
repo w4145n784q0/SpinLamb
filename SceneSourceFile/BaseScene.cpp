@@ -1,4 +1,6 @@
 #include "BaseScene.h"
+#include"../Engine/Global.h"
+#include"../ViewSourceFile/GameView.h"
 
 //遷移時間の実体定義
 int BaseScene::SceneShortTransition = 0;
@@ -68,4 +70,23 @@ void BaseScene::CSVSceneDataInitialize()
 	SceneShortTransition = static_cast<int>(baseSceneData[i_SceneShortTransition]);
 	SceneTransition = static_cast<int>(baseSceneData[i_SceneTransition]);
 	SceneLongTransition = static_cast<int>(baseSceneData[i_SceneLongTransition]);
+}
+
+void BaseScene::SetPointerGameView()
+{
+	//GameViewに自身(継承先も含むので基底クラスであるBaseScene)のポインタを渡す
+	GameView::SetScene(this);
+}
+
+void BaseScene::DrawImGuiBaseScene()
+{
+	if (ImGui::TreeNode("BaseSceneData"))
+	{
+		//シーン遷移時間
+		ImGui::InputInt("SceneShortTransition", &SceneShortTransition);
+		ImGui::InputInt("SceneTransition", &SceneTransition);
+		ImGui::InputInt("SceneLongTransition", &SceneLongTransition);
+
+		ImGui::TreePop();
+	}
 }

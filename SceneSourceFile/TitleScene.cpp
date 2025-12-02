@@ -46,6 +46,7 @@ void TitleScene::Initialize()
 
 	//GameView‚Éƒ|ƒCƒ“ƒ^‚ð“n‚·
 	GameView::SetTransitionEffect(pTransitionEffect_);
+	SetPointerGameView();
 }
 
 void TitleScene::Update()

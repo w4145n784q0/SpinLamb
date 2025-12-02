@@ -136,6 +136,7 @@ void GameModeScene::Initialize()
 
 	//GameViewにポインタを渡す
 	GameView::SetTransitionEffect(pTransitionEffect_);
+	SetPointerGameView();
 
 	//モード選択用サウンド再生
 	Audio::Play(hSoundGameMode_);
@@ -202,178 +203,6 @@ void GameModeScene::Draw()
 			break;
 		}
 	}
-
-#ifdef _DEBUG
-	//各画像のトランスフォームの位置変更
-	if (ImGui::TreeNode("GameModeScene"))
-	{
-		//背景のキャラクター
-		if (ImGui::TreeNode("BackChara"))
-		{
-			if (ImGui::TreeNode("BackCharaPosition"))
-			{
-				ImGui::SliderFloat("BackCharaPositionX", &BackChara_.position_.x, Image::LeftEdge, Image::RightEdge);
-				ImGui::SliderFloat("BackCharaPositionY", &BackChara_.position_.y, Image::UpEdge, Image::DownEdge);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("BackCharaRotate"))
-			{
-				ImGui::InputFloat("BackCharaRotateX", &BackChara_.rotate_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("BackCharaRotateY", &BackChara_.rotate_.y, ZERO_POINT_ONE);
-				ImGui::InputFloat("BackCharaRotateZ", &BackChara_.rotate_.z, ZERO_POINT_ONE);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("BackCharaScale"))
-			{
-				ImGui::InputFloat("BackCharaScaleX", &BackChara_.scale_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("BackCharaScaleY", &BackChara_.scale_.y, ZERO_POINT_ONE);
-				ImGui::TreePop();
-			}
-			ImGui::TreePop();
-		}
-
-		//"モードセレクト"
-		if (ImGui::TreeNode("TransSelect"))
-		{
-			if (ImGui::TreeNode("TransSelectPosition"))
-			{
-				ImGui::SliderFloat("TransSelectPositionX", &TransSelect_.position_.x, Image::LeftEdge, Image::RightEdge);
-				ImGui::SliderFloat("TransSelectPositionY", &TransSelect_.position_.y, Image::UpEdge, Image::DownEdge);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("TransSelectRotate"))
-			{
-				ImGui::InputFloat("TransSelectRotateX", &TransSelect_.rotate_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("TransSelectRotateY", &TransSelect_.rotate_.y, ZERO_POINT_ONE);
-				ImGui::InputFloat("TransSelectRotateZ", &TransSelect_.rotate_.z, ZERO_POINT_ONE);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("TransSelectScale"))
-			{
-				ImGui::InputFloat("TransSelectScaleX", &TransSelect_.scale_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("TransSelectScaleY", &TransSelect_.scale_.y, ZERO_POINT_ONE);
-				ImGui::TreePop();
-			}
-			ImGui::TreePop();
-		}
-
-		//画面下部の説明テキスト
-		if (ImGui::TreeNode("TransText"))
-		{
-			if (ImGui::TreeNode("TransTextPosition"))
-			{
-				ImGui::SliderFloat("TransTextPositionX", &TransText_.position_.x, Image::LeftEdge, Image::RightEdge);
-				ImGui::SliderFloat("TransTextPositionY", &TransText_.position_.y, Image::UpEdge, Image::DownEdge);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("TransTextRotate"))
-			{
-				ImGui::InputFloat("TransTextRotateX", &TransText_.rotate_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("TransTextRotateY", &TransText_.rotate_.y, ZERO_POINT_ONE);
-				ImGui::InputFloat("TransTextRotateZ", &TransText_.rotate_.z, ZERO_POINT_ONE);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("TransTextScale"))
-			{
-				ImGui::InputFloat("TransTextScaleX", &TransText_.scale_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("TransTextScaleY", &TransText_.scale_.y, ZERO_POINT_ONE);
-				ImGui::TreePop();
-			}
-			ImGui::TreePop();
-		}
-
-		//各モードのボタン
-		if (ImGui::TreeNode("ModeTransArray"))
-		{
-			if (ImGui::TreeNode("ModeTransArrayPosition"))
-			{
-				for (int i = 0; i < ModeTransArray_.size(); i++)
-				{
-					ImGui::SliderFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].position_.x, Image::LeftEdge, Image::RightEdge);
-					ImGui::SliderFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].position_.y, Image::UpEdge, Image::DownEdge);
-				}
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("ModeTransArrayRotate"))
-			{
-				for (int i = 0; i < ModeTransArray_.size(); i++)
-				{
-					ImGui::InputFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].rotate_.x, ZERO_POINT_ONE);
-					ImGui::InputFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].rotate_.y, ZERO_POINT_ONE);
-					ImGui::InputFloat((ModeStringArray[i] + "Z").c_str(), &ModeTransArray_[i].rotate_.z, ZERO_POINT_ONE);
-				}
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("ModeTransArrayScale"))
-			{
-				for (int i = 0; i < ModeTransArray_.size(); i++)
-				{
-					ImGui::InputFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].scale_.x, ZERO_POINT_ONE);
-					ImGui::InputFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].scale_.y, ZERO_POINT_ONE);
-				}
-				ImGui::TreePop();
-			}
-			ImGui::TreePop();
-		}
-
-		ImGui::TreePop();
-	}
-	
-	//遊ぶ人数確認画面
-	if (ImGui::TreeNode("Confirmation"))
-	{
-		if (ImGui::TreeNode("TransPlayer"))
-		{
-			if (ImGui::TreeNode("TransPlayerPosition"))
-			{
-				ImGui::SliderFloat("TransPlayerPositionX", &TransPlayer_.position_.x, Image::LeftEdge, Image::RightEdge);
-				ImGui::SliderFloat("TransPlayerPositionY", &TransPlayer_.position_.y, Image::UpEdge, Image::DownEdge);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("TransPlayerRotate"))
-			{
-				ImGui::InputFloat("TransPlayerRotateX", &TransPlayer_.rotate_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("TransPlayerRotateY", &TransPlayer_.rotate_.y, ZERO_POINT_ONE);
-				ImGui::InputFloat("TransPlayerRotateZ", &TransPlayer_.rotate_.z, ZERO_POINT_ONE);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("TransPlayerScale"))
-			{
-				ImGui::InputFloat("TransPlayerScaleX", &TransPlayer_.scale_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("TransPlayerScaleY", &TransPlayer_.scale_.y, ZERO_POINT_ONE);
-				ImGui::TreePop();
-			}
-			ImGui::TreePop();
-		}
-
-		//プレイ人数選択選択中のアイコン
-		if (ImGui::TreeNode("TransSelectPlayerIcon"))
-		{
-			if (ImGui::TreeNode("TransSelectPlayerPosition"))
-			{
-				ImGui::SliderFloat("TransSelectPlayerPositionX", &TransSelectPlayerIcon_.position_.x, Image::LeftEdge, Image::RightEdge);
-				ImGui::SliderFloat("TransSelectPlayerPositionY", &TransSelectPlayerIcon_.position_.y, Image::UpEdge, Image::DownEdge);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("TransSelectPlayerRotate"))
-			{
-				ImGui::InputFloat("TransSelectPlayerRotateX", &TransSelectPlayerIcon_.rotate_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("TransSelectPlayerRotateY", &TransSelectPlayerIcon_.rotate_.y, ZERO_POINT_ONE);
-				ImGui::InputFloat("TransSelectPlayerRotateZ", &TransSelectPlayerIcon_.rotate_.z, ZERO_POINT_ONE);
-				ImGui::TreePop();
-			}
-			if (ImGui::TreeNode("TransSelectPlayerScale"))
-			{
-				ImGui::InputFloat("TransSelectPlayerScaleX", &TransSelectPlayerIcon_.scale_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("TransSelectPlayerScaleY", &TransSelectPlayerIcon_.scale_.y, ZERO_POINT_ONE);
-				ImGui::TreePop();
-			}
-			ImGui::TreePop();
-		}
-
-		ImGui::TreePop();
-	}
-#endif
 }
 
 void GameModeScene::Release()
@@ -646,4 +475,180 @@ void GameModeScene::UpdateTransition()
 		//ゲームシーン状態を通常に戻しておく
 		SceneState_ = S_Active;
 	}
+}
+
+void GameModeScene::DrawImGuiMyScene()
+{
+#ifdef _DEBUG
+	//各画像のトランスフォームの位置変更
+	if (ImGui::TreeNode("GameModeScene"))
+	{
+		//背景のキャラクター
+		if (ImGui::TreeNode("BackChara"))
+		{
+			if (ImGui::TreeNode("BackCharaPosition"))
+			{
+				ImGui::SliderFloat("BackCharaPositionX", &BackChara_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("BackCharaPositionY", &BackChara_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("BackCharaRotate"))
+			{
+				ImGui::SliderFloat("BackCharaRotateX", &BackChara_.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("BackCharaRotateY", &BackChara_.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("BackCharaRotateZ", &BackChara_.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("BackCharaScale"))
+			{
+				ImGui::InputFloat("BackCharaScaleX", &BackChara_.scale_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("BackCharaScaleY", &BackChara_.scale_.y, ZERO_POINT_ONE);
+				ImGui::TreePop();
+			}
+			ImGui::TreePop();
+		}
+
+		//"モードセレクト"
+		if (ImGui::TreeNode("TransSelect"))
+		{
+			if (ImGui::TreeNode("TransSelectPosition"))
+			{
+				ImGui::SliderFloat("TransSelectPositionX", &TransSelect_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("TransSelectPositionY", &TransSelect_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransSelectRotate"))
+			{
+				ImGui::SliderFloat("TransSelectRotateX", &TransSelect_.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("TransSelectRotateY", &TransSelect_.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("TransSelectRotateZ", &TransSelect_.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransSelectScale"))
+			{
+				ImGui::InputFloat("TransSelectScaleX", &TransSelect_.scale_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransSelectScaleY", &TransSelect_.scale_.y, ZERO_POINT_ONE);
+				ImGui::TreePop();
+			}
+			ImGui::TreePop();
+		}
+
+		//画面下部の説明テキスト
+		if (ImGui::TreeNode("TransText"))
+		{
+			if (ImGui::TreeNode("TransTextPosition"))
+			{
+				ImGui::SliderFloat("TransTextPositionX", &TransText_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("TransTextPositionY", &TransText_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransTextRotate"))
+			{
+				ImGui::SliderFloat("TransTextRotateX", &TransText_.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("TransTextRotateY", &TransText_.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("TransTextRotateZ", &TransText_.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransTextScale"))
+			{
+				ImGui::InputFloat("TransTextScaleX", &TransText_.scale_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransTextScaleY", &TransText_.scale_.y, ZERO_POINT_ONE);
+				ImGui::TreePop();
+			}
+			ImGui::TreePop();
+		}
+
+		//各モードのボタン
+		if (ImGui::TreeNode("ModeTransArray"))
+		{
+			if (ImGui::TreeNode("ModeTransArrayPosition"))
+			{
+				for (int i = 0; i < ModeTransArray_.size(); i++)
+				{
+					ImGui::SliderFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].position_.x, Image::LeftEdge, Image::RightEdge);
+					ImGui::SliderFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].position_.y, Image::UpEdge, Image::DownEdge);
+				}
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("ModeTransArrayRotate"))
+			{
+				for (int i = 0; i < ModeTransArray_.size(); i++)
+				{
+					ImGui::SliderFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+					ImGui::SliderFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+					ImGui::SliderFloat((ModeStringArray[i] + "Z").c_str(), &ModeTransArray_[i].rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
+				}
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("ModeTransArrayScale"))
+			{
+				for (int i = 0; i < ModeTransArray_.size(); i++)
+				{
+					ImGui::InputFloat((ModeStringArray[i] + "X").c_str(), &ModeTransArray_[i].scale_.x, ZERO_POINT_ONE);
+					ImGui::InputFloat((ModeStringArray[i] + "Y").c_str(), &ModeTransArray_[i].scale_.y, ZERO_POINT_ONE);
+				}
+				ImGui::TreePop();
+			}
+			ImGui::TreePop();
+		}
+
+		ImGui::TreePop();
+	}
+
+	//遊ぶ人数確認画面
+	if (ImGui::TreeNode("Confirmation"))
+	{
+		if (ImGui::TreeNode("TransPlayer"))
+		{
+			if (ImGui::TreeNode("TransPlayerPosition"))
+			{
+				ImGui::SliderFloat("TransPlayerPositionX", &TransPlayer_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("TransPlayerPositionY", &TransPlayer_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransPlayerRotate"))
+			{
+				ImGui::SliderFloat("TransPlayerRotateX", &TransPlayer_.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("TransPlayerRotateY", &TransPlayer_.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("TransPlayerRotateZ", &TransPlayer_.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransPlayerScale"))
+			{
+				ImGui::InputFloat("TransPlayerScaleX", &TransPlayer_.scale_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransPlayerScaleY", &TransPlayer_.scale_.y, ZERO_POINT_ONE);
+				ImGui::TreePop();
+			}
+			ImGui::TreePop();
+		}
+
+		//プレイ人数選択選択中のアイコン
+		if (ImGui::TreeNode("TransSelectPlayerIcon"))
+		{
+			if (ImGui::TreeNode("TransSelectPlayerPosition"))
+			{
+				ImGui::SliderFloat("TransSelectPlayerPositionX", &TransSelectPlayerIcon_.position_.x, Image::LeftEdge, Image::RightEdge);
+				ImGui::SliderFloat("TransSelectPlayerPositionY", &TransSelectPlayerIcon_.position_.y, Image::UpEdge, Image::DownEdge);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransSelectPlayerRotate"))
+			{
+				ImGui::SliderFloat("TransSelectPlayerRotateX", &TransSelectPlayerIcon_.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("TransSelectPlayerRotateY", &TransSelectPlayerIcon_.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("TransSelectPlayerRotateZ", &TransSelectPlayerIcon_.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::TreePop();
+			}
+			if (ImGui::TreeNode("TransSelectPlayerScale"))
+			{
+				ImGui::InputFloat("TransSelectPlayerScaleX", &TransSelectPlayerIcon_.scale_.x, ZERO_POINT_ONE);
+				ImGui::InputFloat("TransSelectPlayerScaleY", &TransSelectPlayerIcon_.scale_.y, ZERO_POINT_ONE);
+				ImGui::TreePop();
+			}
+			ImGui::TreePop();
+		}
+
+		ImGui::TreePop();
+	}
+#endif
+
 }

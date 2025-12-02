@@ -92,5 +92,8 @@ public:
 
 	//ƒV[ƒ“‘JˆÚ’†‚Ìˆ—
 	void UpdateTransition() override;
+
+	//ImGui•`‰æ
+	void DrawImGuiMyScene() override;
 };
 

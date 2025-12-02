@@ -16,7 +16,7 @@
 
 //-----汎用的に使う定数-----
 
-//60fpsにおける1フレームの時間(前フレームからの経過時間) 
+//60fpsにおける1フレームの時間(DeltaTime)(前フレームからの経過時間) 
 //使用端末によるフレームレート依存防止
 //ここでは宣言のみ
 extern float Dt;
@@ -26,3 +26,9 @@ const int ONE_SECOND = 60;
 
 //0.1の定数 主にImGui用
 const float ZERO_POINT_ONE = 0.1f;
+
+//0度の定数 主にImGui用
+const float ANGLE_0_DEG = 0.0f;
+
+//360度の定数 主にImGui用
+const float ANGLE_360_DEG = 360.0f;

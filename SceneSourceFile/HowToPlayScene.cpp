@@ -61,6 +61,7 @@ void HowToPlayScene::Initialize()
 
 	//GameViewにポインタを渡す
 	GameView::SetTransitionEffect(pTransitionEffect_);
+	SetPointerGameView();
 
 	//あそびかた用サウンド再生
 	Audio::Play(hSoundHowtoPlay_);

@@ -17,6 +17,9 @@ namespace GameView
 	//描画モードの状態を保持
 	GameView::GameViewMode GameViewMode_;
 
+	//今のシーン(基底クラスを受け取る)
+	BaseScene* pBaseScene_;
+
 	//プレイヤー1,2のインスタンス
 	Player* pPlayer1_;
 	Player* pPlayer2_;
@@ -251,6 +254,17 @@ namespace GameView
 		Input::DrawImGui();
 	}
 
+	void ViewSceneImGui()
+	{
+		//渡されたポインタからシーン用ImGuiを描画
+		//各シーン共通のものと特有のImGuiを描画する
+		if (pBaseScene_ != nullptr)
+		{
+			pBaseScene_->DrawImGuiBaseScene();
+			pBaseScene_->DrawImGuiMyScene();
+		}
+	}
+
 	void GameView::ViewHUDNormal()
 	{
 		//渡されたポインタからHUDを描画
@@ -326,6 +340,12 @@ namespace GameView
 	void GameView::SetGameViewMode(GameViewMode mode)
 	{
 		GameViewMode_ = mode;
+	}
+
+	//シーンのインスタンス設定
+	void SetScene(BaseScene* _scene)
+	{
+		pBaseScene_ = _scene;
 	}
 
 	void GameView::SetPlayers(std::vector<Player*> _players)
