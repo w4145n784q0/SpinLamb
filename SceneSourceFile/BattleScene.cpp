@@ -627,15 +627,23 @@ void BattleScene::OnCharacterFenceHit(std::string _AttackedName, std::string _Hi
 			//なにも触れずに被弾した場合自爆判定となる )
 			if (ActiveCharacters[i]->GetObjectName() == _HitName)
 			{
-				//自爆なので自分のスコアを減算
-				//スコアの計算関数には自分のスコアを参照
-				ScoreChange(*ScoreArray_[i],true);
+				//念のため配列範囲チェック
+				if (i >= 0 && i < ScoreArray_.size())
+				{
+					//自爆なので自分のスコアを減算
+					//スコアの計算関数には自分のスコアを参照
+					ScoreChange(*ScoreArray_[i],true);
+				}
 			}
 			else
 			{
-				//スコアを加算
-				//関数には攻撃した相手のスコアを参照
-				ScoreChange(*ScoreArray_[i]);
+				//念のため配列範囲チェック
+				if (i >= 0 && i < ScoreArray_.size())
+				{
+					//スコアを加算
+					//関数には攻撃した相手のスコアを参照
+					ScoreChange(*ScoreArray_[i]);
+				}
 			}
 			
 		}
