@@ -399,6 +399,7 @@ namespace Input
 	//ImGui描画
 	void DrawImGui()
 	{
+#ifdef _DEBUG
 		if (ImGui::TreeNode("Stick"))
 		{
 			//スティックの傾き
@@ -413,6 +414,7 @@ namespace Input
 			ImGui::InputInt("VibRight", &ControllerVibRight);
 			ImGui::TreePop();
 		}
+#endif
 	}
 
 }

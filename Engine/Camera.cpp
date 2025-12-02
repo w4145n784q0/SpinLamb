@@ -196,6 +196,7 @@ void Camera::FullScreen()
 //ImGui描画
 void Camera::DrawImGui()
 {
+#ifdef _DEBUG
 	if (ImGui::TreeNode("Camera"))
 	{
 		//カメラの振動速度・幅
@@ -209,6 +210,7 @@ void Camera::DrawImGui()
 
 		ImGui::TreePop();
 	}
+#endif
 }
 
 //カメラの振動幅をセット(必要に応じてセット)

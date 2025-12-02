@@ -80,6 +80,7 @@ void BaseScene::SetPointerGameView()
 
 void BaseScene::DrawImGuiBaseScene()
 {
+#ifdef _DEBUG
 	if (ImGui::TreeNode("BaseSceneData"))
 	{
 		//ƒV[ƒ“‘JˆÚŠÔ
@@ -89,4 +90,5 @@ void BaseScene::DrawImGuiBaseScene()
 
 		ImGui::TreePop();
 	}
+#endif
 }
