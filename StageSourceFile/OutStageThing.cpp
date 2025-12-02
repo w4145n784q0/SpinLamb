@@ -90,13 +90,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < CabinData_.size(); i++)
 				{
 					std::string labelX = "CabinRotateX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &CabinData_[i].rotate_.x, ZERO_POINT_ONE);
+					ImGui::SliderFloat((labelX.c_str()), &CabinData_[i].rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
 
 					std::string labelY = "CabinRotateY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &CabinData_[i].rotate_.y, ZERO_POINT_ONE);
+					ImGui::SliderFloat((labelY.c_str()), &CabinData_[i].rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
 
 					std::string labelZ = "CabinRotateZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &CabinData_[i].rotate_.z, ZERO_POINT_ONE);
+					ImGui::SliderFloat((labelZ.c_str()), &CabinData_[i].rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 				}
 				ImGui::TreePop();
 			}
@@ -145,13 +145,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < TreeData_.size(); i++)
 				{
 					std::string labelX = "TreeRotateX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &TreeData_[i].rotate_.x, ZERO_POINT_ONE);
+					ImGui::SliderFloat((labelX.c_str()), &TreeData_[i].rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
 
 					std::string labelY = "TreeRotateY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &TreeData_[i].rotate_.y, ZERO_POINT_ONE);
+					ImGui::SliderFloat((labelY.c_str()), &TreeData_[i].rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
 
 					std::string labelZ = "TreeRotateZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &TreeData_[i].rotate_.z, ZERO_POINT_ONE);
+					ImGui::SliderFloat((labelZ.c_str()), &TreeData_[i].rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 				}
 
 				ImGui::TreePop();
@@ -203,13 +203,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < LogsData_.size(); i++)
 				{
 					std::string labelX = "LogsRotateX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &LogsData_[i].rotate_.x, ZERO_POINT_ONE);
+					ImGui::SliderFloat((labelX.c_str()), &LogsData_[i].rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
 
 					std::string labelY = "LogsRotateY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &LogsData_[i].rotate_.y, ZERO_POINT_ONE);
+					ImGui::SliderFloat((labelY.c_str()), &LogsData_[i].rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
 
 					std::string labelZ = "LogsRotateZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &LogsData_[i].rotate_.z, ZERO_POINT_ONE);
+					ImGui::SliderFloat((labelZ.c_str()), &LogsData_[i].rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 				}
 
 				ImGui::TreePop();
@@ -259,13 +259,13 @@ void OutStageThing::DrawImGui()
 				for (int i = 0; i < StrawData_.size(); i++)
 				{
 					std::string labelX = "StrawRotateX_" + std::to_string(i);
-					ImGui::InputFloat((labelX.c_str()), &StrawData_[i].rotate_.x, ZERO_POINT_ONE);
+					ImGui::SliderFloat((labelX.c_str()), &StrawData_[i].rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
 
 					std::string labelY = "StrawRotateY_" + std::to_string(i);
-					ImGui::InputFloat((labelY.c_str()), &StrawData_[i].rotate_.y, ZERO_POINT_ONE);
+					ImGui::SliderFloat((labelY.c_str()), &StrawData_[i].rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
 
 					std::string labelZ = "StrawRotateZ_" + std::to_string(i);
-					ImGui::InputFloat((labelZ.c_str()), &StrawData_[i].rotate_.z, ZERO_POINT_ONE);
+					ImGui::SliderFloat((labelZ.c_str()), &StrawData_[i].rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 				}
 
 				ImGui::TreePop();

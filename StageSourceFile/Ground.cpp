@@ -51,9 +51,9 @@ void Ground::DrawImGui()
 
 		if (ImGui::TreeNode("GroundRotate"))
 		{
-			ImGui::InputFloat("RotateX", &this->transform_.rotate_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("RotateY", &this->transform_.rotate_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("RotateZ", &this->transform_.rotate_.z, ZERO_POINT_ONE);
+			ImGui::SliderFloat("RotateX", &this->transform_.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("RotateY", &this->transform_.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("RotateZ", &this->transform_.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 			ImGui::TreePop();
 		}
 

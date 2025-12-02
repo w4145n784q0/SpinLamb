@@ -26,7 +26,7 @@ namespace
 	std::vector<XMFLOAT3> PillarPosArray = {};
 
 	//Imgui•\Ž¦—p‚Ì•¶Žš—ñ”z—ñ
-	std::string PillarNameArray[] = { "UpperPillar", "LowerPillar", "RightPillar", "LeftPillar" };
+	std::string PillarNameArray[] = { "UpperRightPillar", "UpperLeftPillar", "LowerRightPillar", "LowerLeftPillar" };
 }
 
 Fence::Fence(GameObject* parent)
@@ -100,9 +100,9 @@ void Fence::DrawImGui()
 
 			if (ImGui::TreeNode("WireRotate"))
 			{
-				ImGui::InputFloat("FenceRotateX", &WireTransform.rotate_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("FenceRotateY", &WireTransform.rotate_.y, ZERO_POINT_ONE);
-				ImGui::InputFloat("FenceRotateZ", &WireTransform.rotate_.z, ZERO_POINT_ONE);
+				ImGui::SliderFloat("FenceRotateX", &WireTransform.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("FenceRotateY", &WireTransform.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("FenceRotateZ", &WireTransform.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 				ImGui::TreePop();
 			}
 
@@ -134,9 +134,9 @@ void Fence::DrawImGui()
 			{
 				for (int i = 0; i < PillarsTransformArray.size(); i++)
 				{
-					ImGui::InputFloat((PillarNameArray[i] + " RotateX").c_str(), &PillarsTransformArray[i].rotate_.x, ZERO_POINT_ONE);
-					ImGui::InputFloat((PillarNameArray[i] + " RotateY").c_str(), &PillarsTransformArray[i].rotate_.y, ZERO_POINT_ONE);
-					ImGui::InputFloat((PillarNameArray[i] + " RotateZ").c_str(), &PillarsTransformArray[i].rotate_.z, ZERO_POINT_ONE);
+					ImGui::SliderFloat((PillarNameArray[i] + " RotateX").c_str(), &PillarsTransformArray[i].rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+					ImGui::SliderFloat((PillarNameArray[i] + " RotateY").c_str(), &PillarsTransformArray[i].rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+					ImGui::SliderFloat((PillarNameArray[i] + " RotateZ").c_str(), &PillarsTransformArray[i].rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 				}
 				ImGui::TreePop();
 			}

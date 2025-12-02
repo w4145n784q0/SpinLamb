@@ -46,10 +46,10 @@ void CharacterDebugPanel::DrawCharacterImGui()
 			//eƒNƒ‰ƒX‚Ì‰ñ“]—Ê
 			XMFLOAT3 rot = character_->GetRotate();
 
-			ImGui::InputFloat("RotateX", &rot.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("RotateY", &rot.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("RotateZ", &rot.z, ZERO_POINT_ONE);
-			character_->SetPosition(rot);
+			ImGui::SliderFloat("RotateX", &rot.x, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("RotateY", &rot.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("RotateZ", &rot.z, ANGLE_0_DEG, ANGLE_360_DEG);
+			character_->SetRotate(rot);
 		}
 		ImGui::TreePop();
 	}
@@ -65,7 +65,7 @@ void CharacterDebugPanel::DrawCharacterImGui()
 			ImGui::InputFloat("ScaleX", &sca.x, ZERO_POINT_ONE);
 			ImGui::InputFloat("ScaleY", &sca.y, ZERO_POINT_ONE);
 			ImGui::InputFloat("ScaleZ", &sca.z, ZERO_POINT_ONE);
-			character_->SetPosition(sca);
+			character_->SetScale(sca);
 		}
 		ImGui::TreePop();
 	}
@@ -205,9 +205,9 @@ void CharacterDebugPanel::DrawCharacterImGui()
 		ImGui::InputFloat("ArrowTransform.PositionY", &params_->MoveParam_.ArrowTransform_.position_.y, ZERO_POINT_ONE);
 		ImGui::InputFloat("ArrowTransform.PositionZ", &params_->MoveParam_.ArrowTransform_.position_.z, ZERO_POINT_ONE);
 
-		ImGui::InputFloat("ArrowTransform.RotateX", &params_->MoveParam_.ArrowTransform_.rotate_.x, ZERO_POINT_ONE);
-		ImGui::InputFloat("ArrowTransform.RotateY", &params_->MoveParam_.ArrowTransform_.rotate_.y, ZERO_POINT_ONE);
-		ImGui::InputFloat("ArrowTransform.RotateZ", &params_->MoveParam_.ArrowTransform_.rotate_.z, ZERO_POINT_ONE);
+		ImGui::SliderFloat("ArrowTransform.RotateX", &params_->MoveParam_.ArrowTransform_.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+		ImGui::SliderFloat("ArrowTransform.RotateY", &params_->MoveParam_.ArrowTransform_.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+		ImGui::SliderFloat("ArrowTransform.RotateZ", &params_->MoveParam_.ArrowTransform_.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 
 		ImGui::InputFloat("ArrowTransform.ScaleX", &params_->MoveParam_.ArrowTransform_.scale_.x, ZERO_POINT_ONE);
 		ImGui::InputFloat("ArrowTransform.ScaleY", &params_->MoveParam_.ArrowTransform_.scale_.y, ZERO_POINT_ONE);

@@ -227,9 +227,9 @@ void ResultScene::DrawImGuiMyScene()
 			}
 			if (ImGui::TreeNode("ResultRotate"))
 			{
-				ImGui::InputFloat("ResultRotateX", &Result_.rotate_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("ResultRotateY", &Result_.rotate_.y, ZERO_POINT_ONE);
-				ImGui::InputFloat("ResultRotateZ", &Result_.rotate_.z, ZERO_POINT_ONE);
+				ImGui::SliderFloat("ResultRotateX", &Result_.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("ResultRotateY", &Result_.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("ResultRotateZ", &Result_.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("ResultScale"))
@@ -252,9 +252,9 @@ void ResultScene::DrawImGuiMyScene()
 			}
 			if (ImGui::TreeNode("PushTitleRotate"))
 			{
-				ImGui::InputFloat("PushTitleRotateX", &PushTitle_.rotate_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("PushTitleRotateY", &PushTitle_.rotate_.y, ZERO_POINT_ONE);
-				ImGui::InputFloat("PushTitleRotateZ", &PushTitle_.rotate_.z, ZERO_POINT_ONE);
+				ImGui::SliderFloat("PushTitleRotateX", &PushTitle_.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("PushTitleRotateY", &PushTitle_.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("PushTitleRotateZ", &PushTitle_.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("PushTitleScale"))

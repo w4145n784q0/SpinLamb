@@ -239,7 +239,7 @@ void Player::DrawImGui()
 			ImGui::TreePop();
 		}
 
-		if (ImGui::TreeNode("Camera"))
+		if (ImGui::TreeNode("PlayerCamera"))
 		{
 			//カメラの最終的な位置
 			ImGui::InputFloat("CameraPositionX", &CameraPosition_.x, ZERO_POINT_ONE);
@@ -252,9 +252,9 @@ void Player::DrawImGui()
 			ImGui::InputFloat("CameraTargetZ", &CameraTarget_.z, ZERO_POINT_ONE);
 
 			//カメラの回転量
-			ImGui::InputFloat("CameraTransform.rotateX", &cameraTransform_.rotate_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("CameraTransform.rotateY", &cameraTransform_.rotate_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("CameraTransform.rotateZ", &cameraTransform_.rotate_.z, ZERO_POINT_ONE);
+			ImGui::SliderFloat("CameraTransform.rotateX", &cameraTransform_.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("CameraTransform.rotateY", &cameraTransform_.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("CameraTransform.rotateZ", &cameraTransform_.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 
 			//カメラの後方位置
 			XMFLOAT3 tmpBackCamera;

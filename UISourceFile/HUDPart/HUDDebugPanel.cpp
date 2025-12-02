@@ -81,9 +81,9 @@ void HUDDebugPanel::ImGuiExplanationDraw(HUD* _hud)
 		}
 		if (ImGui::TreeNode("ExplanationRotate"))
 		{
-			ImGui::InputFloat("ExplanationRotateX", &t.rotate_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("ExplanationRotateY", &t.rotate_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("ExplanationRotateZ", &t.rotate_.y, ZERO_POINT_ONE);
+			ImGui::SliderFloat("ExplanationRotateX", &t.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("ExplanationRotateY", &t.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("ExplanationRotateZ", &t.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("ExplanationScale"))
@@ -115,9 +115,9 @@ void HUDDebugPanel::ImGuiStartLogoDraw(HUD* _hud)
 		}
 		if (ImGui::TreeNode("StartRotate"))
 		{
-			ImGui::InputFloat("StartRotateX", &t.rotate_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("StartRotateY", &t.rotate_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("StartRotateZ", &t.rotate_.y, ZERO_POINT_ONE);
+			ImGui::SliderFloat("StartRotateX", &t.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("StartRotateY", &t.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("StartRotateZ", &t.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("StartScale"))
@@ -150,9 +150,9 @@ void HUDDebugPanel::ImGuiFinishLogoDraw(HUD* _hud)
 		}
 		if (ImGui::TreeNode("FinishRotate"))
 		{
-			ImGui::InputFloat("FinishRotateX", &t.rotate_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("FinishRotateY", &t.rotate_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("FinishRotateZ", &t.rotate_.y, ZERO_POINT_ONE);
+			ImGui::SliderFloat("FinishRotateX", &t.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("FinishRotateY", &t.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("FinishRotateZ", &t.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("FinishScale"))
@@ -185,9 +185,9 @@ void HUDDebugPanel::ImGuiPracticeLogoDraw(HUD* _hud)
 		}
 		if (ImGui::TreeNode("PracticeLogoRotate"))
 		{
-			ImGui::InputFloat("Practice_RotateX", &t.rotate_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("Practice_RotateY", &t.rotate_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("Practice_RotateZ", &t.rotate_.z, ZERO_POINT_ONE);
+			ImGui::SliderFloat("Practice_RotateX", &t.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("Practice_RotateY", &t.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("Practice_RotateZ", &t.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("PracticeLogoScale"))
@@ -234,21 +234,21 @@ void HUDDebugPanel::ImGuiScoreDraw(HUD* _hud)
 		}
 		if (ImGui::TreeNode("ScoreRotate"))
 		{
-			ImGui::InputFloat("FirstScoreTen_RotateX", &firstTen.rotate_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("FirstScoreTen_RotateY", &firstTen.rotate_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("FirstScoreTen_RotateZ", &firstTen.rotate_.z, ZERO_POINT_ONE);
+			ImGui::SliderFloat("FirstScoreTen_RotateX", &firstTen.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("FirstScoreTen_RotateY", &firstTen.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("FirstScoreTen_RotateZ", &firstTen.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 
-			ImGui::InputFloat("FirstScoreOne_RotateX", &firstOne.rotate_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("FirstScoreOne_RotateY", &firstOne.rotate_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("FirstScoreOne_RotateZ", &firstOne.rotate_.z, ZERO_POINT_ONE);
+			ImGui::SliderFloat("FirstScoreOne_RotateX", &firstOne.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("FirstScoreOne_RotateY", &firstOne.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("FirstScoreOne_RotateZ", &firstOne.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 
-			ImGui::InputFloat("SecondScoreTen_RotateX", &secondTen.rotate_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("SecondScoreTen_RotateY", &secondTen.rotate_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("SecondScoreTen_RotateZ", &secondTen.rotate_.z, ZERO_POINT_ONE);
+			ImGui::SliderFloat("SecondScoreTen_RotateX", &secondTen.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("SecondScoreTen_RotateY", &secondTen.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("SecondScoreTen_RotateZ", &secondTen.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 
-			ImGui::InputFloat("SecondScoreOne_RotateX", &secondOne.rotate_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("SecondScoreOne_RotateY", &secondOne.rotate_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("SecondScoreOne_RotateZ", &secondOne.rotate_.z, ZERO_POINT_ONE);
+			ImGui::SliderFloat("SecondScoreOne_RotateX", &secondOne.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("SecondScoreOne_RotateY", &secondOne.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("SecondScoreOne_RotateZ", &secondOne.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 
 			ImGui::TreePop();
 		}
@@ -297,13 +297,13 @@ void HUDDebugPanel::ImGuiTimerDraw(HUD* _hud)
 		}
 		if (ImGui::TreeNode("TimerRotate"))
 		{
-			ImGui::InputFloat("TenTimeRotateX", &tenTime.rotate_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("TenTimeRotateY", &tenTime.rotate_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("TenTimeRotateZ", &tenTime.rotate_.z, ZERO_POINT_ONE);
+			ImGui::SliderFloat("TenTimeRotateX", &tenTime.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("TenTimeRotateY", &tenTime.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("TenTimeRotateZ", &tenTime.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 
-			ImGui::InputFloat("OneTimeRotateX", &oneTime.rotate_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("OneTimeRotateY", &oneTime.rotate_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("OneTimeRotateZ", &oneTime.rotate_.z, ZERO_POINT_ONE);
+			ImGui::SliderFloat("OneTimeRotateX", &oneTime.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("OneTimeRotateY", &oneTime.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("OneTimeRotateZ", &oneTime.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("TimerScale"))
@@ -342,9 +342,9 @@ void HUDDebugPanel::ImGuiMiniMapDraw(HUD* _hud)
 
 		if (ImGui::TreeNode("MiniMapRotate"))
 		{
-			ImGui::InputFloat("MiniMapRotateX", &mapIcon.rotate_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("MiniMapRotateY", &mapIcon.rotate_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("MiniMapRotateZ", &mapIcon.rotate_.z, ZERO_POINT_ONE);
+			ImGui::SliderFloat("MiniMapRotateX", &mapIcon.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("MiniMapRotateY", &mapIcon.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("MiniMapRotateZ", &mapIcon.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 			ImGui::TreePop();
 		}
 
@@ -386,9 +386,9 @@ void HUDDebugPanel::ImGuiPauseDraw(HUD* _hud)
 			}
 			if (ImGui::TreeNode("PauseMenuRotate"))
 			{
-				ImGui::InputFloat("PauseMenuRotateX", &pauseMenu.rotate_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("PauseMenuRotateY", &pauseMenu.rotate_.y, ZERO_POINT_ONE);
-				ImGui::InputFloat("PauseMenuRotateZ", &pauseMenu.rotate_.z, ZERO_POINT_ONE);
+				ImGui::SliderFloat("PauseMenuRotateX", &pauseMenu.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("PauseMenuRotateY", &pauseMenu.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("PauseMenuRotateZ", &pauseMenu.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("PauseMenuScale"))
@@ -411,9 +411,9 @@ void HUDDebugPanel::ImGuiPauseDraw(HUD* _hud)
 			}
 			if (ImGui::TreeNode("PauseIconRotate"))
 			{
-				ImGui::InputFloat("PauseIconRotateX", &pauseIcon.rotate_.x, ZERO_POINT_ONE);
-				ImGui::InputFloat("PauseIconRotateY", &pauseIcon.rotate_.y, ZERO_POINT_ONE);
-				ImGui::InputFloat("PauseIconRotateZ", &pauseIcon.rotate_.z, ZERO_POINT_ONE);
+				ImGui::SliderFloat("PauseIconRotateX", &pauseIcon.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("PauseIconRotateY", &pauseIcon.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+				ImGui::SliderFloat("PauseIconRotateZ", &pauseIcon.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 				ImGui::TreePop();
 			}
 			if (ImGui::TreeNode("PauseIconScale"))
