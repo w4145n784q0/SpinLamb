@@ -1,5 +1,6 @@
 #include "CharacterRotate.h"
 #include"../Character.h"
+#include"../../Engine/Global.h"
 
 CharacterRotate::CharacterRotate(GameObject* parent)
 	:GameObject(parent, "CharacterRotate"), params_(nullptr), character_(nullptr)
@@ -48,8 +49,16 @@ void CharacterRotate::MoveRotateX()
 
 	if (character_ != nullptr)
 	{
+		//xŽ²‰ñ“]‚ð‰ÁŽZ‚·‚é
+		//ƒ[ƒJƒ‹•Ï”‚Ée‚ÌxŽ²‰ñ“]—Ê‚ð‘ã“ü‚µAŒvŽZ‚µ‚Ä‚©‚çŒ³‚É–ß‚·
 		float x = character_->GetRotate().x;
 		x += params_->RotateParam_.MoveRotateX_;
+
+		//360“x‚ð’´‚¦‚½‚ç0“x‚É–ß‚·
+		if (x >= ANGLE_360_DEG)
+		{
+			x = ANGLE_0_DEG;
+		}
 		character_->SetRotateX(x);
 	}
 }
@@ -63,16 +72,25 @@ void CharacterRotate::FastRotateX()
 
 	if (character_ != nullptr)
 	{
+		//xŽ²‰ñ“]‚ð‰ÁŽZ‚·‚é
+		//ƒ[ƒJƒ‹•Ï”‚Ée‚ÌxŽ²‰ñ“]—Ê‚ð‘ã“ü‚µAŒvŽZ‚µ‚Ä‚©‚çŒ³‚É–ß‚·
 		float x = character_->GetRotate().x;
 		x += params_->RotateParam_.FastRotateX_;
+
+		//360“x‚ð’´‚¦‚½‚ç0“x‚É–ß‚·
+		if (x >= ANGLE_360_DEG)
+		{
+			x = ANGLE_0_DEG;
+		}
 		character_->SetRotateX(x);
 	}
 }
 
 void CharacterRotate::RotateXStop()
 {
+	//xŽ²‰ñ“]‚ð0‚É‚·‚é
 	if (character_ != nullptr)
 	{
-		character_->SetRotateX(0.0f);
+		character_->SetRotateX(ANGLE_0_DEG);
 	}
 }

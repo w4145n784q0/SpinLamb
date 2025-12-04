@@ -7,9 +7,6 @@ class HUD;
 class HUDDebugPanel :
     public GameObject
 {
-private:
-    //親クラス(HUD)のポインタ
-
 public:
     HUDDebugPanel() = default;
     HUDDebugPanel(GameObject* parent);

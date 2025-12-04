@@ -332,8 +332,15 @@
     <ClCompile Include="UISourceFile\HUDPart\HUDDebugPanel.cpp">
       <Filter>06UI\HUDPart</Filter>
     </ClCompile>
-    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterCollision.cpp">
-      <Filter>04Chara\CharacterParts</Filter>
+    <ClCompile Include="Engine\Global.cpp" />
+    <ClCompile Include="UISourceFile\HUDPart\HUDCsvLoader.cpp">
+      <Filter>06UI\HUDPart</Filter>
+    </ClCompile>
+    <ClCompile Include="UISourceFile\HUDPart\HUDParam.cpp">
+      <Filter>06UI\HUDPart</Filter>
+    </ClCompile>
+    <ClCompile Include="UISourceFile\HUDPart\HUDImageLoader.cpp">
+      <Filter>06UI\HUDPart</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -620,8 +627,14 @@
     <ClInclude Include="UISourceFile\HUDPart\HUDDebugPanel.h">
       <Filter>06UI\HUDPart</Filter>
     </ClInclude>
-    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterCollision.h">
-      <Filter>04Chara\CharacterParts</Filter>
+    <ClInclude Include="UISourceFile\HUDPart\HUDCsvLoader.h">
+      <Filter>06UI\HUDPart</Filter>
+    </ClInclude>
+    <ClInclude Include="UISourceFile\HUDPart\HUDParam.h">
+      <Filter>06UI\HUDPart</Filter>
+    </ClInclude>
+    <ClInclude Include="UISourceFile\HUDPart\HUDImageLoader.h">
+      <Filter>06UI\HUDPart</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

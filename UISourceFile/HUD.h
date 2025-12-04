@@ -97,7 +97,7 @@ private:
 	//hud側から操作する場合のミニマップクラスポインタ
 	MiniMap* pMiniMap_;
 
-	//モジュール群
+	//モジュール関係
 	//ImGui関連
 	std::unique_ptr<HUDDebugPanel> HUDDebug_;
 
