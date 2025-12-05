@@ -108,14 +108,14 @@ namespace
 }
 
 HUD::HUD(GameObject* parent)
-	:GameObject(parent, "HUD"), hPracticeNow_(-1), hGameExplanation_(-1),
+	:GameObject(parent, "HUD")/*, hPracticeNow_(-1), hGameExplanation_(-1),
 	hStart_(-1),hReady_(-1),hGo_(-1),hFinish_(-1), hSplitLine_(-1),
 	hNumber0_(-1), hNumber1_(-1), hNumber2_(-1), hNumber3_(-1), hNumber4_(-1),
 	hNumber5_(-1), hNumber6_(-1), hNumber7_(-1), hNumber8_(-1), hNumber9_(-1),
 	hMap_(-1), hFirstIcon_(-1), hSecondIcon_(-1), hPauseMenu_(-1),hPauseIcon_(-1),
 	FirstScore_(0), SecondScore_(0),
 	pGameTimer_(nullptr), pMiniMap_(nullptr), DrawMode_(Mode_None),DrawStart_(S_MaxStartMode),
-	ReadyTimer_(0), EasingCount_(0) 
+	ReadyTimer_(0), EasingCount_(0) */
 
 {
 }
@@ -127,94 +127,118 @@ HUD::~HUD()
 void HUD::Initialize()
 {
 	//モジュールの初期化
-	HUDDebug_ = std::make_unique<HUDDebugPanel>();
+	if (HUDDebug_ == nullptr)
+	{
+		HUDDebug_ = std::make_unique<HUDDebugPanel>(this);
+	}
+	if (HUDParam_ == nullptr)
+	{
+		HUDParam_ = std::make_unique<HUDParam>(this);
+	}
+	if(HUDCsvLoader_ == nullptr)
+	{
+		HUDCsvLoader_ = std::make_unique<HUDCsvLoader>(this);
+	}
+	if (HUDImageLoader_ == nullptr)
+	{
+		HUDImageLoader_ = std::make_unique<HUDImageLoader>(this);
+	}
 
-	DrawStart_ = S_StartReady;
+
+	HUDParam_->DrawStart_ = S_StartReady;
 
 	//csvからパラメータ読み込み
-	SetHUDCSV();
+	
+	//	SetHUDCSV();
+	HUDCsvLoader_->SetHUDCSV();
+
+	//画像の初期化
+	HUDImageLoader_->ImageInitialize();
 
 	//同じディレクトリ内からのパスは省略
 	//パスの一部を文字列にし、結合させる
 
-	std::string Image = "Image\\";
-	std::string Practice = "Practice\\";
-	std::string Battle = "Battle\\";
-	std::string Play = "Play\\";
-	std::string Number = "number\\";
-	std::string MiniMap = "MiniMap\\";
+	//std::string Image = "Image\\";
+	//std::string Practice = "Practice\\";
+	//std::string Battle = "Battle\\";
+	//std::string Play = "Play\\";
+	//std::string Number = "number\\";
+	//std::string MiniMap = "MiniMap\\";
 
 
-	//各画像の読み込み
-	hPracticeNow_ = Image::Load(Image + Practice + "PracticeLogo.png");
-	assert(hPracticeNow_ >= 0);
+	////各画像の読み込み
+	//hPracticeNow_ = Image::Load(Image + Practice + "PracticeLogo.png");
+	//assert(hPracticeNow_ >= 0);
 
-	hGameExplanation_ = Image::Load(Image + Battle + "Rule.png");
-	assert(hGameExplanation_ >= 0);
+	//hGameExplanation_ = Image::Load(Image + Battle + "Rule.png");
+	//assert(hGameExplanation_ >= 0);
 
-	hStart_ = Image::Load(Image + Battle + "StartLogo.png");
-	assert(hStart_ >= 0);
+	//hStart_ = Image::Load(Image + Battle + "StartLogo.png");
+	//assert(hStart_ >= 0);
 
-	hReady_ = Image::Load(Image + Battle + "ReadyLogo.png");
-	assert(hReady_ >= 0);
+	//hReady_ = Image::Load(Image + Battle + "ReadyLogo.png");
+	//assert(hReady_ >= 0);
 
-	hGo_ = Image::Load(Image + Battle + "GoLogo.png");
-	assert(hGo_ >= 0);
+	//hGo_ = Image::Load(Image + Battle + "GoLogo.png");
+	//assert(hGo_ >= 0);
 
-	hFinish_ = Image::Load(Image + Battle + "FinishLogo.png");
-	assert(hFinish_ >= 0);
+	//hFinish_ = Image::Load(Image + Battle + "FinishLogo.png");
+	//assert(hFinish_ >= 0);
 
-	hSplitLine_ = Image::Load(Image + Play + "ViewLine.png");
-	assert(hSplitLine_ >= 0);
+	//hSplitLine_ = Image::Load(Image + Play + "ViewLine.png");
+	//assert(hSplitLine_ >= 0);
 
-	hNumber0_ = Image::Load(Image + Number + "Number0.png");
-	assert(hNumber0_ >= 0);
+	//hNumber0_ = Image::Load(Image + Number + "Number0.png");
+	//assert(hNumber0_ >= 0);
 
-	hNumber1_ = Image::Load(Image + Number + "Number1.png");
-	assert(hNumber1_ >= 0);
+	//hNumber1_ = Image::Load(Image + Number + "Number1.png");
+	//assert(hNumber1_ >= 0);
 
-	hNumber2_ = Image::Load(Image + Number + "Number2.png");
-	assert(hNumber2_ >= 0);
-	
-	hNumber3_ = Image::Load(Image + Number + "Number3.png");
-	assert(hNumber3_ >= 0);
-	
-	hNumber4_ = Image::Load(Image + Number + "Number4.png");
-	assert(hNumber4_ >= 0);
+	//hNumber2_ = Image::Load(Image + Number + "Number2.png");
+	//assert(hNumber2_ >= 0);
+	//
+	//hNumber3_ = Image::Load(Image + Number + "Number3.png");
+	//assert(hNumber3_ >= 0);
+	//
+	//hNumber4_ = Image::Load(Image + Number + "Number4.png");
+	//assert(hNumber4_ >= 0);
 
-	hNumber5_ = Image::Load(Image + Number + "Number5.png");
-	assert(hNumber5_ >= 0);
+	//hNumber5_ = Image::Load(Image + Number + "Number5.png");
+	//assert(hNumber5_ >= 0);
 
-	hNumber6_ = Image::Load(Image + Number + "Number6.png");
-	assert(hNumber6_ >= 0);
+	//hNumber6_ = Image::Load(Image + Number + "Number6.png");
+	//assert(hNumber6_ >= 0);
 
-	hNumber7_ = Image::Load(Image + Number + "Number7.png");
-	assert(hNumber7_ >= 0);
+	//hNumber7_ = Image::Load(Image + Number + "Number7.png");
+	//assert(hNumber7_ >= 0);
 
-	hNumber8_ = Image::Load(Image + Number + "Number8.png");
-	assert(hNumber8_ >= 0);
+	//hNumber8_ = Image::Load(Image + Number + "Number8.png");
+	//assert(hNumber8_ >= 0);
 
-	hNumber9_ = Image::Load(Image + Number + "Number9.png");
-	assert(hNumber9_ >= 0);
+	//hNumber9_ = Image::Load(Image + Number + "Number9.png");
+	//assert(hNumber9_ >= 0);
 
-	hMap_ = Image::Load(Image + MiniMap + "MiniMap.png");
-	assert(hMap_ >= 0);
+	//hMap_ = Image::Load(Image + MiniMap + "MiniMap.png");
+	//assert(hMap_ >= 0);
 
-	hFirstIcon_ = Image::Load(Image + MiniMap + "FirstCharaArrow.png");
-	assert(hFirstIcon_ >= 0);
+	//hFirstIcon_ = Image::Load(Image + MiniMap + "FirstCharaArrow.png");
+	//assert(hFirstIcon_ >= 0);
 
-	hSecondIcon_ = Image::Load(Image + MiniMap + "SecondCharaArrow.png");
-	assert(hSecondIcon_ >= 0);
+	//hSecondIcon_ = Image::Load(Image + MiniMap + "SecondCharaArrow.png");
+	//assert(hSecondIcon_ >= 0);
 
-	hPauseMenu_ = Image::Load(Image + "Play\\Pause.png");
-	assert(hPauseMenu_ >= 0);
+	//hPauseMenu_ = Image::Load(Image + "Play\\Pause.png");
+	//assert(hPauseMenu_ >= 0);
 
-	hPauseIcon_ = Image::Load(Image + "GameMode\\SelectIcon.png");
-	assert(hPauseIcon_ >= 0);
+	//hPauseIcon_ = Image::Load(Image + "GameMode\\SelectIcon.png");
+	//assert(hPauseIcon_ >= 0);
 
 	//数字画像ハンドル配列を初期化
-	ArrayHandle = { hNumber0_,hNumber1_,hNumber2_,hNumber3_,hNumber4_,
-	hNumber5_,hNumber6_,hNumber7_,hNumber8_,hNumber9_ };
+	//HUDParam_->ArrayHandle = { hNumber0_,hNumber1_,hNumber2_,hNumber3_,hNumber4_,
+	//hNumber5_,hNumber6_,hNumber7_,hNumber8_,hNumber9_ };
+
+	//数字画像ハンドル配列を初期化
+	HUDParam_->InitImageArray();
 }
 
 void HUD::Update()
@@ -297,47 +321,47 @@ void HUD::DrawFullScreen()
 	DrawMiniMap();
 }
 
-void HUD::SetHUDCSV()
-{
-	//csvファイルを読み込む
-	CsvReader csvTransform;
-	csvTransform.Load("CSVdata\\HUDData\\HUDTransformData.csv");
+//void HUD::SetHUDCSV()
+//{
+//	//csvファイルを読み込む
+//	CsvReader csvTransform;
+//	csvTransform.Load("CSVdata\\HUDData\\HUDTransformData.csv");
+//
+//	//csvファイル(HUDTransformData.csv)の各0列目の文字列の配列を取得
+//	std::vector<std::string> ParamNames = {
+//		"Practice","Explanation","Start","Finish","Split",
+//		"TenTime","OneTime","MiniMap","FirstIcon", "SecondIcon",
+//		"FirstScoreTen","FirstScoreOne","SecondScoreTen","SecondScoreOne",
+//		"PauseMenu","PauseIcon"
+//	};
+//
+//	//まとめて初期化
+//	InitCSVTransformArray(csvTransform, ParamNames, ImageArray);
+//
+//	//csvファイルを読み込む
+//	CsvReader csvEasing;
+//	csvEasing.Load("CSVdata\\HUDData\\HUDSomeData.csv");
+//
+//	//csvファイル(HUDSomeData.csv)の0列目の文字列を取得
+//	std::string EasingLogoName = "Easing";
+//
+//	//0列目の文字列を渡し、その行のパラメータを取得
+//	std::vector<float> EasingData = GetCSVReadData(csvEasing, EasingLogoName);
+//
+//	//初期化の順番はcsvの各行の順番に合わせる
+//	//vの添え字はnamespaceで宣言した列挙型を使用
+//	GoMinScale = EasingData[i_GoMinScale];
+//	GoMaxScale = EasingData[i_GoMaxScale];
+//	TimeMinScale = EasingData[i_TimeMinScale];
+//	TimeMaxScale = EasingData[i_TimeMaxScale];
+//	TimeDuration = EasingData[i_TimeDuration];
+//}
 
-	//csvファイル(HUDTransformData.csv)の各0列目の文字列の配列を取得
-	std::vector<std::string> ParamNames = {
-		"Practice","Explanation","Start","Finish","Split",
-		"TenTime","OneTime","MiniMap","FirstIcon", "SecondIcon",
-		"FirstScoreTen","FirstScoreOne","SecondScoreTen","SecondScoreOne",
-		"PauseMenu","PauseIcon"
-	};
-
-	//まとめて初期化
-	InitCSVTransformArray(csvTransform, ParamNames, ImageArray);
-
-	//csvファイルを読み込む
-	CsvReader csvEasing;
-	csvEasing.Load("CSVdata\\HUDData\\HUDSomeData.csv");
-
-	//csvファイル(HUDSomeData.csv)の0列目の文字列を取得
-	std::string EasingLogoName = "Easing";
-
-	//0列目の文字列を渡し、その行のパラメータを取得
-	std::vector<float> EasingData = GetCSVReadData(csvEasing, EasingLogoName);
-
-	//初期化の順番はcsvの各行の順番に合わせる
-	//vの添え字はnamespaceで宣言した列挙型を使用
-	GoMinScale = EasingData[i_GoMinScale];
-	GoMaxScale = EasingData[i_GoMaxScale];
-	TimeMinScale = EasingData[i_TimeMinScale];
-	TimeMaxScale = EasingData[i_TimeMaxScale];
-	TimeDuration = EasingData[i_TimeDuration];
-}
-
-void HUD::SetPauseIcon(float _posY)
-{
-	//Y座標だけをトランスフォームに渡す(変わるのはY座標の位置のみ)
-	TransPauseIcon.position_.y = _posY;
-}
+//void HUD::SetPauseIcon(float _posY)
+//{
+//	//Y座標だけをトランスフォームに渡す(変わるのはY座標の位置のみ)
+//	TransPauseIcon.position_.y = _posY;
+//}
 
 void HUD::DrawPracticeLogo()
 {
@@ -486,80 +510,80 @@ void HUD::DrawScore()
 	Image::SetAndDraw(ArrayHandle[SecondScoreIndexOne], SecondScoreOne);
 }
 
-Transform& HUD::GetLogoExplanation() const
-{
-	return LogoExplanation;
-}
-
-Transform& HUD::GetLogoStart() const
-{
-	return LogoStart;
-}
-
-Transform& HUD::GetLogoFinish() const
-{
-	return LogoFinish;
-}
-
-Transform& HUD::GetLogoPractice() const
-{
-	return LogoPractice;
-}
-
-Transform& HUD::GetFirstScoreTen() const
-{
-	return FirstScoreTen;//プレイヤー1の10の位
-}
-
-Transform& HUD::GetFirstScoreOne() const
-{
-	return FirstScoreOne;//プレイヤー1の1の位
-}
-
-Transform& HUD::GetSecondScoreTen() const
-{
-	return SecondScoreTen;//プレイヤー2・Enemyの1の位
-}
-
-Transform& HUD::GetSecondScoreOne() const
-{
-	return SecondScoreOne;//プレイヤー2・Enemyの1の位
-}
-
-Transform& HUD::GetTenTime() const
-{
-	return TenTime; 
-}
-
-Transform& HUD::GetOneTime() const
-{
-	return OneTime;
-}
-
-Transform& HUD::GetMapIcon() const
-{
-	return MapIcon;
-}
-
-Transform& HUD::GetFirstIcon() const
-{
-	return FirstIcon;
-}
-
-Transform& HUD::GetSecondIcon() const
-{
-	return SecondIcon;
-}
-
-Transform& HUD::GetPauseMenu() const
-{
-	return TransPauseMenu;
-}
-
-Transform& HUD::GetPauseIcon() const
-{
-	return TransPauseIcon;
-}
+//Transform& HUD::GetLogoExplanation() const
+//{
+//	return LogoExplanation;
+//}
+//
+//Transform& HUD::GetLogoStart() const
+//{
+//	return LogoStart;
+//}
+//
+//Transform& HUD::GetLogoFinish() const
+//{
+//	return LogoFinish;
+//}
+//
+//Transform& HUD::GetLogoPractice() const
+//{
+//	return LogoPractice;
+//}
+//
+//Transform& HUD::GetFirstScoreTen() const
+//{
+//	return FirstScoreTen;//プレイヤー1の10の位
+//}
+//
+//Transform& HUD::GetFirstScoreOne() const
+//{
+//	return FirstScoreOne;//プレイヤー1の1の位
+//}
+//
+//Transform& HUD::GetSecondScoreTen() const
+//{
+//	return SecondScoreTen;//プレイヤー2・Enemyの1の位
+//}
+//
+//Transform& HUD::GetSecondScoreOne() const
+//{
+//	return SecondScoreOne;//プレイヤー2・Enemyの1の位
+//}
+//
+//Transform& HUD::GetTenTime() const
+//{
+//	return TenTime; 
+//}
+//
+//Transform& HUD::GetOneTime() const
+//{
+//	return OneTime;
+//}
+//
+//Transform& HUD::GetMapIcon() const
+//{
+//	return MapIcon;
+//}
+//
+//Transform& HUD::GetFirstIcon() const
+//{
+//	return FirstIcon;
+//}
+//
+//Transform& HUD::GetSecondIcon() const
+//{
+//	return SecondIcon;
+//}
+//
+//Transform& HUD::GetPauseMenu() const
+//{
+//	return TransPauseMenu;
+//}
+//
+//Transform& HUD::GetPauseIcon() const
+//{
+//	return TransPauseIcon;
+//}
 
 void HUD::DrawReady()
 {

@@ -2,25 +2,20 @@
 
 namespace
 {
-
-	//描画モード（状況に応じて表示/非表示を切り替えたいもの）を指定
-	//他クラスからSetDrawModeを通じて指示するため、namespaceに宣言(このクラスからは変更しない)
-	enum DrawMode
+	//csv読み込み時のインデックス(イージング処理用の変数)
+	enum EasingIndex
 	{
-		Mode_BeforeStart = 0,	//スタート前
-		Mode_JustBefore,		//"Ready?","Go!"を出す、ゲーム開始直前
-		Mode_Playing,			//バトルシーンのゲーム中
-		Mode_PlayPause,			//バトルシーンのポーズ中
-		Mode_Finish,			//"Finish"を出す ゲーム終了
-		Mode_Practice,			//フリープレイのゲーム中
-		Mode_PracticePause,		//フリープレイのポーズ中
-		Mode_None,
+		i_GoMinScale = 0,
+		i_GoMaxScale,
+		i_TimeMinScale,
+		i_TimeMaxScale,
+		i_TimeDuration,
+		i_Max
 	};
-
 }
 
 HUDCsvLoader::HUDCsvLoader(GameObject* parent)
-	:GameObject(parent, "HUDCsvLoader")
+	:GameObject(parent, "HUDCsvLoader"), hudParam_(nullptr)
 {
 }
 
@@ -40,7 +35,7 @@ void HUDCsvLoader::SetHUDCSV()
 	};
 
 	//まとめて初期化
-	InitCSVTransformArray(csvTransform, ParamNames, ImageArray);
+	InitCSVTransformArray(csvTransform, ParamNames, hudParam_->ImageArray);
 
 	//csvファイルを読み込む
 	CsvReader csvEasing;
@@ -54,9 +49,9 @@ void HUDCsvLoader::SetHUDCSV()
 
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
-	GoMinScale = EasingData[i_GoMinScale];
-	GoMaxScale = EasingData[i_GoMaxScale];
-	TimeMinScale = EasingData[i_TimeMinScale];
-	TimeMaxScale = EasingData[i_TimeMaxScale];
-	TimeDuration = EasingData[i_TimeDuration];
+	hudParam_->GoMinScale = EasingData[i_GoMinScale];
+	hudParam_->GoMaxScale = EasingData[i_GoMaxScale];
+	hudParam_->TimeMinScale = EasingData[i_TimeMinScale];
+	hudParam_->TimeMaxScale = EasingData[i_TimeMaxScale];
+	hudParam_->TimeDuration = EasingData[i_TimeDuration];
 }

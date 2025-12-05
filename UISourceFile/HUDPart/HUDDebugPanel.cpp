@@ -68,7 +68,7 @@ void HUDDebugPanel::ImGuiExplanationDraw(HUD* _hud)
 #ifdef _DEBUG
 	if (!_hud) return;
 
-	auto& t = _hud->GetLogoExplanation();
+	auto& t = _hud->HUDParam_->GetLogoExplanation();
 
 	//バトル開始前の説明
 	if (ImGui::TreeNode("Explanation"))
@@ -102,7 +102,7 @@ void HUDDebugPanel::ImGuiStartLogoDraw(HUD* _hud)
 #ifdef _DEBUG
 	if (!_hud) return;
 
-	auto& t = _hud->GetLogoStart();
+	auto& t = _hud->HUDParam_->GetLogoStart();
 
 	//"Ready"と"Go"の文字
 	if (ImGui::TreeNode("Start"))
@@ -137,7 +137,7 @@ void HUDDebugPanel::ImGuiFinishLogoDraw(HUD* _hud)
 #ifdef _DEBUG
 	if (!_hud) return;
 
-	auto& t = _hud->GetLogoFinish();
+	auto& t = _hud->HUDParam_->GetLogoFinish();
 
 	//"Finish!"の文字
 	if (ImGui::TreeNode("Finish"))
@@ -172,7 +172,7 @@ void HUDDebugPanel::ImGuiPracticeLogoDraw(HUD* _hud)
 #ifdef _DEBUG
 	if (!_hud) return;
 
-	auto& t = _hud->GetLogoPractice();
+	auto& t = _hud->HUDParam_->GetLogoPractice();
 
 	//"練習モード"の文字
 	if (ImGui::TreeNode("PracticeLogo"))
@@ -208,10 +208,10 @@ void HUDDebugPanel::ImGuiScoreDraw(HUD* _hud)
 #ifdef _DEBUG
 	if (!_hud) return;
 
-	auto& firstTen = _hud->GetFirstScoreTen();
-	auto& firstOne = _hud->GetFirstScoreOne();
-	auto& secondTen = _hud->GetSecondScoreTen();
-	auto& secondOne = _hud->GetSecondScoreOne();
+	auto& firstTen = _hud->HUDParam_->GetFirstScoreTen();
+	auto& firstOne = _hud->HUDParam_->GetFirstScoreOne();
+	auto& secondTen = _hud->HUDParam_->GetSecondScoreTen();
+	auto& secondOne = _hud->HUDParam_->GetSecondScoreOne();
 
 	//画面上部のスコア(十の位・一の位)
 	if (ImGui::TreeNode("Score"))
@@ -280,8 +280,8 @@ void HUDDebugPanel::ImGuiTimerDraw(HUD* _hud)
 #ifdef _DEBUG
 	if (!_hud) return;
 
-	auto& tenTime = _hud->GetTenTime();
-	auto& oneTime = _hud->GetOneTime();
+	auto& tenTime = _hud->HUDParam_->GetTenTime();
+	auto& oneTime = _hud->HUDParam_->GetOneTime();
 
 	//タイマー(十の位・一の位)
 	if (ImGui::TreeNode("Timer"))
@@ -326,9 +326,9 @@ void HUDDebugPanel::ImGuiMiniMapDraw(HUD* _hud)
 {
 #ifdef _DEBUG
 
-	auto& mapIcon = _hud->GetMapIcon();
-	auto& firstIcon = _hud->GetFirstIcon();
-	auto& secondIcon = _hud->GetSecondIcon();
+	auto& mapIcon = _hud->HUDParam_->GetMapIcon();
+	auto& firstIcon = _hud->HUDParam_->GetFirstIcon();
+	auto& secondIcon = _hud->HUDParam_->GetSecondIcon();
 
 	if (ImGui::TreeNode("MiniMap"))
 	{
@@ -372,8 +372,8 @@ void HUDDebugPanel::ImGuiPauseDraw(HUD* _hud)
 #ifdef _DEBUG
 	if (ImGui::TreeNode("Pause"))
 	{
-		auto& pauseMenu = _hud->GetPauseMenu();
-		auto& pauseIcon = _hud->GetPauseIcon();
+		auto& pauseMenu = _hud->HUDParam_->GetPauseMenu();
+		auto& pauseIcon = _hud->HUDParam_->GetPauseIcon();
 
 		//ポーズメニュー
 		if (ImGui::TreeNode("PauseMenu"))
