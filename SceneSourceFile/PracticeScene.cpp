@@ -194,7 +194,7 @@ void PracticeScene::Initialize()
 
 	//MiniMapのポインタを渡す
 	//HUDクラスと同じポインタを渡すことで値の相違を防ぐ
-	pHUD_->SetMiniMapPointer(pMiniMap_);
+	pHUD_->HUDParam_->SetMiniMapPointer(pMiniMap_);
 
 	//GameViewにHUD,TransitionEffect,Sceneのポインタを渡す(描画順番をずらすために使用)
 	GameView::SetHUD(pHUD_);
@@ -231,10 +231,10 @@ void PracticeScene::Draw()
 	switch (PracticeState_)
 	{
 	case PracticeScene::S_Now:
-		pHUD_->SetDrawMode(Mode_Practice);
+		pHUD_->HUDParam_->SetDrawMode(Mode_Practice);
 		break;
 	case PracticeScene::S_Pause:
-		pHUD_->SetDrawMode(Mode_PracticePause);
+		pHUD_->HUDParam_->SetDrawMode(Mode_PracticePause);
 		break;
 	default:
 		break;
@@ -356,7 +356,7 @@ void PracticeScene::SetPauseIconY()
 {
 	if (pHUD_ != nullptr)
 	{
-		pHUD_->SetPauseIcon(TmpIconPosY_);
+		pHUD_->HUDParam_->SetPauseIcon(TmpIconPosY_);
 	}
 }
 

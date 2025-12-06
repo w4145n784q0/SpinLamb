@@ -2,6 +2,8 @@
 #include "../../Engine/GameObject.h"
 #include"HUDParam.h"
 
+//HUDクラスのCSV読み込み関係の処理を行うモジュール
+
 class HUDCsvLoader :
     public GameObject
 {
@@ -18,6 +20,11 @@ public:
     void Update() override {};
     void Draw() override {};
     void Release() override {};
+
+    //HUDParamをセットする
+    void SetHUDParam(HUDParam* _param) {
+        hudParam_ = _param;
+    }
 
     //CSVファイルから必要パラメータを読み込みする
     void SetHUDCSV();

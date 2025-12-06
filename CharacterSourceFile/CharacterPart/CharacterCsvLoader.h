@@ -2,7 +2,7 @@
 #include"CharacterParams.h"
 #include"../../Engine/GameObject.h"
 
-//Characterクラスの-CSV読み込み関係の処理を行うモジュール
+//CharacterクラスのCSV読み込み関係の処理を行うモジュール
 
 class Character;
 

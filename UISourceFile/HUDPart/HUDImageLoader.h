@@ -2,6 +2,8 @@
 #include "../../Engine/GameObject.h"
 #include"HUDParam.h"
 
+//HUDクラスの画像読み込み関係の処理を行うモジュール
+
 class HUDImageLoader :
     public GameObject
 {
@@ -18,6 +20,11 @@ public:
     void Update() override {};
     void Draw() override {};
     void Release() override {};
+
+    //HUDParamをセットする
+    void SetHUDParam(HUDParam* _param) {
+        hudParam_ = _param;
+    }
 
     //画像の初期化
     void ImageInitialize();

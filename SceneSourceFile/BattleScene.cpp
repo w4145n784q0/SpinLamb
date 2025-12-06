@@ -233,8 +233,8 @@ void BattleScene::Initialize()
 
 	//GameTimer,MiniMapのポインタを渡す
 	//HUDクラスと同じポインタを渡すことで値の相違を防ぐ
-	pHUD_->SetTimerPointer(pGameTimer_);
-	pHUD_->SetMiniMapPointer(pMiniMap_);
+	pHUD_->HUDParam_->SetTimerPointer(pGameTimer_);
+	pHUD_->HUDParam_->SetMiniMapPointer(pMiniMap_);
 
 	//GameViewにHUD,TransitionEffect,Sceneのポインタを渡す(描画順番をずらすために使用)
 	GameView::SetHUD(pHUD_);
@@ -264,8 +264,8 @@ void BattleScene::Initialize()
 	assert(hSoundWhistle_ >= 0);
 
 	//Player,Enemyのスコアを初期化
-	pHUD_->SetFirstScore(FirstScore_);
-	pHUD_->SetSecondScore(SecondScore_);
+	pHUD_->HUDParam_->SetFirstScore(FirstScore_);
+	pHUD_->HUDParam_->SetSecondScore(SecondScore_);
 
 
 }
@@ -286,19 +286,19 @@ void BattleScene::Draw()
 	switch (BattleState_)
 	{
 	case BattleScene::S_Before:
-		pHUD_->SetDrawMode(DrawMode::Mode_BeforeStart);
+		pHUD_->HUDParam_->SetDrawMode(DrawMode::Mode_BeforeStart);
 		break;
 	case BattleScene::S_Ready:
-		pHUD_->SetDrawMode(DrawMode::Mode_JustBefore);
+		pHUD_->HUDParam_->SetDrawMode(DrawMode::Mode_JustBefore);
 		break;
 	case BattleScene::S_Now:
-		pHUD_->SetDrawMode(DrawMode::Mode_Playing);
+		pHUD_->HUDParam_->SetDrawMode(DrawMode::Mode_Playing);
 		break;
 	case BattleScene::S_Pause:
-		pHUD_->SetDrawMode(DrawMode::Mode_PlayPause);
+		pHUD_->HUDParam_->SetDrawMode(DrawMode::Mode_PlayPause);
 		break;
 	case BattleScene::S_After:
-		pHUD_->SetDrawMode(DrawMode::Mode_Finish);
+		pHUD_->HUDParam_->SetDrawMode(DrawMode::Mode_Finish);
 		break;
 	default:
 		break;
@@ -462,7 +462,7 @@ void BattleScene::SetPauseIconY()
 {
 	if (pHUD_ != nullptr)
 	{
-		pHUD_->SetPauseIcon(TmpIconPosY_);
+		pHUD_->HUDParam_->SetPauseIcon(TmpIconPosY_);
 	}
 }
 
@@ -480,7 +480,7 @@ void BattleScene::UpdateBattleBefore()
 		BattleState_ = S_Ready;
 
 		//Ready?を表示する時間を渡す
-		pHUD_->SetReadyTimer(SceneTransition);
+		pHUD_->HUDParam_->SetReadyTimer(SceneTransition);
 	}
 }
 
@@ -553,8 +553,8 @@ void BattleScene::UpdateBattle()
 	Audio::Play(hSoundBattle_);
 
 	//スコアは毎フレーム渡し続ける
-	pHUD_->SetFirstScore(FirstScore_);
-	pHUD_->SetSecondScore(SecondScore_);
+	pHUD_->HUDParam_->SetFirstScore(FirstScore_);
+	pHUD_->HUDParam_->SetSecondScore(SecondScore_);
 
 	//escキーかstartボタンでポーズ画面へ
 	PlayBaseScene::WaitGotoPause();

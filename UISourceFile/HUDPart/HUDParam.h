@@ -4,6 +4,8 @@
 #include "../../UISourceFile/MiniMap.h"
 
 
+//HUDクラスの画像ハンドル・トランスフォーム・パラメータ等保持するモジュール
+
 namespace
 {
 	//描画モード（状況に応じて表示/非表示を切り替えたいもの）を指定
@@ -69,7 +71,8 @@ public:
 	int hNumber9_ = -1;
 
 	//ナンバーハンドルの配列
-	std::vector<int> ArrayHandle = {};
+	std::vector<int> ArrayHandle_ = { hNumber0_,hNumber1_,hNumber2_,hNumber3_,hNumber4_,
+	hNumber5_,hNumber6_,hNumber7_,hNumber8_,hNumber9_ };
 
 	//マップ全体
 	int hMap_ = -1;
@@ -96,10 +99,10 @@ public:
 
 	//スコア表記のナンバーハンドルの添え字
 	//Player1またはPlayer2,Enemyそれぞれの十の位、一の位
-	int FirstScoreIndexTen = 0;
-	int FirstScoreIndexOne = 0;
-	int SecondScoreIndexTen = 0;
-	int SecondScoreIndexOne = 0;
+	int FirstScoreIndexTen_ = 0;
+	int FirstScoreIndexOne_ = 0;
+	int SecondScoreIndexTen_ = 0;
+	int SecondScoreIndexOne_ = 0;
 
 	//----------タイマー----------
 	
@@ -107,10 +110,10 @@ public:
 	GameTimer* pGameTimer_ = nullptr;
 
 	//時間表記のナンバーハンドルの添え字(10の位)
-	int TimeIndexTen = 0;
+	int TimeIndexTen_ = 0;
 
 	//時間表記のナンバーハンドルの添え字(1の位)
-	int TimeIndexOne = 0;
+	int TimeIndexOne_ = 0;
 
 	//----------ミニマップ----------
 	
@@ -122,15 +125,15 @@ public:
 
 	//描画モードを格納する変数
 	//直接代入はせず、SetDrawModeから変更される
-	DrawMode DrawMode_;
+	DrawMode DrawMode_ = Mode_None;
 
 	//DrawStartで呼ぶ状態遷移を格納する変数
-	DrawStartMode DrawStart_;
+	DrawStartMode DrawStart_ = S_MaxStartMode;
 
 	//----------開始前ロゴ----------
 
 	//開始前ロゴ変更までのカウンター
-	float LogoChangeCount = 0;
+	float LogoChangeCount_ = 0;
 
 	//----------イージング----------
 
@@ -144,72 +147,72 @@ public:
 	//----------イージング用定数----------
 
 	//Go!のロゴの最小拡大率(定数)
-	float GoMinScale = 0.0f;
+	float GoMinScale_ = 0.0f;
 
 	//Go! のロゴの最大拡大率(定数)
-	float GoMaxScale = 0.0f;
+	float GoMaxScale_ = 0.0f;
 
 	//制限時間の最小拡大率(定数)
-	float TimeMinScale = 0.0f;
+	float TimeMinScale_ = 0.0f;
 
 	//制限時間の最大拡大率(定数)
-	float TimeMaxScale = 0.0f;
+	float TimeMaxScale_ = 0.0f;
 
 	//制限時間に行うイージング処理の実行時間(定数)
-	float TimeDuration = 0.0f;
+	float TimeDuration_ = 0.0f;
 
 
 	//----------画像描画用トランスフォーム----------
 
 	//"練習モード"
-	Transform LogoPractice;
+	Transform LogoPractice_;
 
 	//ゲーム簡易説明
-	Transform LogoExplanation;
+	Transform LogoExplanation_;
 
 	//Ready,Go!ロゴ
-	Transform LogoStart;
+	Transform LogoStart_;
 
 	//Finish!ロゴ
-	Transform LogoFinish;
+	Transform LogoFinish_;
 
 	//画面分割の枠
-	Transform SplitLine;
+	Transform SplitLine_;
 
 	//時間表記十の位
-	Transform TenTime;
+	Transform TenTime_;
 
 	//時間表記一の位
-	Transform OneTime;
+	Transform OneTime_;
 
 	//マップのトランスフォーム
-	Transform MapIcon;
+	Transform MapIcon_;
 
 	//プレイヤーアイコンのトランスフォーム
-	Transform FirstIcon;
+	Transform FirstIcon_;
 
 	//敵アイコンのトランスフォーム
-	Transform SecondIcon;
+	Transform SecondIcon_;
 
 	//スコア表示位置のトランスフォーム
-	Transform FirstScoreTen;//プレイヤー1の10の位
-	Transform FirstScoreOne;//プレイヤー1の1の位
-	Transform SecondScoreTen;//プレイヤー2・Enemyの1の位
-	Transform SecondScoreOne;//プレイヤー2・Enemyの1の位
+	Transform FirstScoreTen_;//プレイヤー1の10の位
+	Transform FirstScoreOne_;//プレイヤー1の1の位
+	Transform SecondScoreTen_;//プレイヤー2・Enemyの1の位
+	Transform SecondScoreOne_;//プレイヤー2・Enemyの1の位
 
 	//ポーズ画面のトランスフォーム
-	Transform TransPauseMenu;
+	Transform TransPauseMenu_;
 
 	//ポーズ画面の選択アイコンのトランスフォーム
-	Transform TransPauseIcon;
+	Transform TransPauseIcon_;
 
 	//画像用トランスフォームをすべて入れる配列
 	//初期化の際に使用する
 	std::vector<std::reference_wrapper<Transform>> ImageArray = {
-	LogoPractice,LogoExplanation,LogoStart,
-	LogoFinish, SplitLine, TenTime ,OneTime, MapIcon,FirstIcon,SecondIcon,
-	FirstScoreTen, FirstScoreOne, SecondScoreTen, SecondScoreOne,
-	TransPauseMenu, TransPauseIcon
+	LogoPractice_,LogoExplanation_,LogoStart_,
+	LogoFinish_, SplitLine_, TenTime_, OneTime_, MapIcon_,FirstIcon_,SecondIcon_,
+	FirstScoreTen_, FirstScoreOne_, SecondScoreTen_, SecondScoreOne_,
+	TransPauseMenu_, TransPauseIcon_
 	};
 
 public:
@@ -221,9 +224,6 @@ public:
     void Update() override {};
     void Draw() override {};
     void Release() override {};
-
-	//画像ハンドル初期化
-	void InitImageArray();
 
 
 	//描画するスコア設定
@@ -240,6 +240,12 @@ public:
 	//描画モードを渡す 主にImGuiで使用
 	DrawMode GetDrawMode() { return DrawMode_; }
 
+	//開始前ロゴの状態遷移設定
+	void SetDrawStartMode(DrawStartMode _drawstartmode) { DrawStart_ = _drawstartmode; }
+
+	//開始前ロゴの状態遷移を渡す
+	DrawStartMode GetDrawStartMode() { return DrawStart_; }
+
 	//DrawReady()からDrawGo()に遷る時間設定
 	//バラバラに持つことを防ぐため,BattleSceneから指示して設定
 	void SetReadyTimer(int _timer) { ReadyTimer_ = _timer; }
@@ -247,23 +253,23 @@ public:
 	//ポーズ画面選択アイコンの位置設定
 	//HUDからは変更せずに、BattleScene,Practiceシーンからセット
 	//Y座標だけをトランスフォームに渡す(変わるのはY座標の位置のみ)
-	void SetPauseIcon(float	_posY) { TransPauseIcon.position_.y = _posY; }
+	void SetPauseIcon(float	_posY) { TransPauseIcon_.position_.y = _posY; }
 
 	//トランスフォームのゲッター関数(ImGui用)
-	Transform& GetLogoExplanation();
-	Transform& GetLogoStart();
-	Transform& GetLogoFinish();
-	Transform& GetLogoPractice();
-	Transform& GetFirstScoreTen();
-	Transform& GetFirstScoreOne();
-	Transform& GetSecondScoreTen(); 
-	Transform& GetSecondScoreOne();
-	Transform& GetTenTime();
-	Transform& GetOneTime();
-	Transform& GetMapIcon();
-	Transform& GetFirstIcon();
-	Transform& GetSecondIcon();
-	Transform& GetPauseMenu();
-	Transform& GetPauseIcon();
+	Transform& GetLogoExplanation() { return LogoExplanation_; }
+	Transform& GetLogoStart() { return LogoStart_; }
+	Transform& GetLogoFinish() { return LogoFinish_; }
+	Transform& GetLogoPractice() { return LogoPractice_; }
+	Transform& GetFirstScoreTen() { return FirstScoreTen_; }//プレイヤー1の10の位
+	Transform& GetFirstScoreOne() { return FirstScoreOne_; }//プレイヤー1の1の位
+	Transform& GetSecondScoreTen() { return SecondScoreTen_; }//プレイヤー2・Enemyの1の位
+	Transform& GetSecondScoreOne() { return SecondScoreOne_; }//プレイヤー2・Enemyの1の位
+	Transform& GetTenTime() { return TenTime_; }
+	Transform& GetOneTime() { return OneTime_; }
+	Transform& GetMapIcon() { return MapIcon_; }
+	Transform& GetFirstIcon() { return FirstIcon_; }
+	Transform& GetSecondIcon() { return SecondIcon_; }
+	Transform& GetPauseMenu() { return TransPauseMenu_; }
+	Transform& GetPauseIcon() { return TransPauseIcon_; }
 };
 

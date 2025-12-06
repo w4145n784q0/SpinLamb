@@ -11,7 +11,7 @@ HUDDebugPanel::HUDDebugPanel(GameObject* parent)
 void HUDDebugPanel::ImGuiDrawer(HUD* _hud)
 {
 	//シーンクラスからの指示によって呼ぶ描画関数を変える
-	switch (_hud->GetDrawMode())
+	switch (_hud->HUDParam_->GetDrawMode())
 	{
 	case Mode_BeforeStart:
 	{
@@ -60,7 +60,59 @@ void HUDDebugPanel::ImGuiDrawer(HUD* _hud)
 	}
 
 	//常に表示するものはswitch文の外で記述
+	ImGuiRenderTaskDraw(_hud);
 	ImGuiMiniMapDraw(_hud);
+}
+
+void HUDDebugPanel::ImGuiRenderTaskDraw(HUD* _hud)
+{
+#ifdef _DEBUG
+	if (!_hud) return;
+	
+	if (ImGui::TreeNode("RenderTask"))
+	{
+		//常時描画タスク
+
+		//常時描画するタスク(文字列)表示
+		for (auto& task : _hud->HUDDrawTable_->always)
+		{
+			//有効でない場合はdisabledを表示
+			if (!task.predicate || task.predicate())
+			{
+				ImGui::Text("Always Tasks: %s", task.name.c_str());
+			}
+			else
+			{
+				ImGui::Text("Always Tasks: %s (disabled)", task.name.c_str());
+			}
+		}
+
+		//モード別描画タスク
+
+		//現在のモード(数値)表示
+		int mode = _hud->HUDParam_->DrawMode_;
+		ImGui::Text("Current Mode: %d", mode);
+
+		//現在のモードに対応するタスク(文字列)表示
+		auto it = _hud->HUDDrawTable_->byMode.find(_hud->HUDParam_->DrawMode_);
+		if (it != _hud->HUDDrawTable_->byMode.end())
+		{
+			for (auto& task : it->second)
+			{
+				//有効でない場合はdisabledを表示
+				if (!task.predicate || task.predicate())
+				{
+					ImGui::Text("Current Tasks: %s", task.name.c_str());
+				}
+				else
+				{
+					ImGui::Text("Current Tasks: %s (disabled)", task.name.c_str());
+				}
+			}
+		}
+		ImGui::TreePop();
+	}
+#endif
 }
 
 void HUDDebugPanel::ImGuiExplanationDraw(HUD* _hud)

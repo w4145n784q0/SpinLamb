@@ -4,6 +4,7 @@
 class HUD;
 
 //HUDクラスのImGui描画を行うモジュール
+
 class HUDDebugPanel :
     public GameObject
 {
@@ -19,6 +20,9 @@ public:
 
     //ImGui描画全体を管理
     void ImGuiDrawer(HUD* _hud);
+
+    //描画タスクImGui描画
+    void ImGuiRenderTaskDraw(HUD* _hud);
 
     //操作説明のImGui描画
     void ImGuiExplanationDraw(HUD* _hud);

@@ -229,6 +229,7 @@
     <ClCompile Include="UISourceFile\HUD.cpp" />
     <ClCompile Include="UISourceFile\HUDPart\HUDCsvLoader.cpp" />
     <ClCompile Include="UISourceFile\HUDPart\HUDDebugPanel.cpp" />
+    <ClCompile Include="UISourceFile\HUDPart\HUDDrawTable.cpp" />
     <ClCompile Include="UISourceFile\HUDPart\HUDImageLoader.cpp" />
     <ClCompile Include="UISourceFile\HUDPart\HUDParam.cpp" />
     <ClCompile Include="UISourceFile\MiniMap.cpp" />
@@ -329,8 +330,10 @@
     <ClInclude Include="UISourceFile\HUD.h" />
     <ClInclude Include="UISourceFile\HUDPart\HUDCsvLoader.h" />
     <ClInclude Include="UISourceFile\HUDPart\HUDDebugPanel.h" />
+    <ClInclude Include="UISourceFile\HUDPart\HUDDrawTable.h" />
     <ClInclude Include="UISourceFile\HUDPart\HUDImageLoader.h" />
     <ClInclude Include="UISourceFile\HUDPart\HUDParam.h" />
+    <ClInclude Include="UISourceFile\HUDPart\RenderTask.h" />
     <ClInclude Include="UISourceFile\MiniMap.h" />
     <ClInclude Include="ViewSourceFile\GameView.h" />
   </ItemGroup>

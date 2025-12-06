@@ -49,9 +49,9 @@ void HUDCsvLoader::SetHUDCSV()
 
 	//‰Šú‰»‚Ì‡”Ô‚Ícsv‚ÌŠes‚Ì‡”Ô‚É‡‚í‚¹‚é
 	//v‚Ì“Y‚¦Žš‚Ínamespace‚ÅéŒ¾‚µ‚½—ñ‹“Œ^‚ðŽg—p
-	hudParam_->GoMinScale = EasingData[i_GoMinScale];
-	hudParam_->GoMaxScale = EasingData[i_GoMaxScale];
-	hudParam_->TimeMinScale = EasingData[i_TimeMinScale];
-	hudParam_->TimeMaxScale = EasingData[i_TimeMaxScale];
-	hudParam_->TimeDuration = EasingData[i_TimeDuration];
+	hudParam_->GoMinScale_ = EasingData[i_GoMinScale];
+	hudParam_->GoMaxScale_ = EasingData[i_GoMaxScale];
+	hudParam_->TimeMinScale_ = EasingData[i_TimeMinScale];
+	hudParam_->TimeMaxScale_ = EasingData[i_TimeMaxScale];
+	hudParam_->TimeDuration_ = EasingData[i_TimeDuration];
 }
