@@ -1,6 +1,5 @@
 #include "EnemyStateAttack.h"
 #include"../Enemy.h"
-#include"../../Engine/Audio.h"
 
 void EnemyStateAttack::Enter(Enemy* _enemy)
 {
@@ -44,7 +43,7 @@ void EnemyStateAttack::Update(Enemy* _enemy)
 	}
 
 	//UŒ‚SEÄ¶
-	Audio::Play(_enemy->GetParams()->SoundParam_.hSoundattack_);
+	_enemy->OnPlayAttackSound();
 }
 
 void EnemyStateAttack::Exit(Enemy* _enemy)

@@ -1,6 +1,5 @@
 #include "CharacterAir.h"
 #include"../Character.h"
-#include"../../Engine/Audio.h"
 
 CharacterAir::CharacterAir(GameObject* parent)
 	:GameObject(parent, "CharacterAir"), params_(nullptr),character_(nullptr)
@@ -43,7 +42,7 @@ void CharacterAir::CharacterGravity()
 				character_->OnLandingVFX(parentPos);
 
 				//着地のSE再生
-				Audio::Play(params_->SoundParam_.hSoundLanding_);
+				character_->OnPlayLandingSound();
 			}
 		}
 		else
@@ -80,6 +79,6 @@ void CharacterAir::SetJump()
 	//一時的にy方向にマイナスされている値を大きくすることで、キャラクターが飛び上がる
 	params_->JumpParam_.JumpSpeed_ = params_->JumpParam_.JumpHeight;
 
-	//チャージ中のSE再生
-	Audio::Play(params_->SoundParam_.hSoundJump_);
+	//ジャンプSE再生
+	character_->OnPlayJumpSound();
 }

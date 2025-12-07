@@ -152,6 +152,7 @@
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterParams.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterRotate.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterShadow.cpp" />
+    <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterSound.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterVFX.cpp" />
     <ClCompile Include="CharacterSourceFile\CharacterPart\CharacterWait.cpp" />
     <ClCompile Include="CharacterSourceFile\Enemy.cpp" />
@@ -251,6 +252,7 @@
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterParams.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterRotate.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterShadow.h" />
+    <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterSound.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterVFX.h" />
     <ClInclude Include="CharacterSourceFile\CharacterPart\CharacterWait.h" />
     <ClInclude Include="CharacterSourceFile\Enemy.h" />

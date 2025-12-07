@@ -1,12 +1,9 @@
 #include "Player.h"
 #include"../Engine/Model.h"
 #include"../Engine/Input.h"
-#include"../Engine/Audio.h"
 #include"../Engine/Camera.h"
 #include"../Engine/SphereCollider.h"
 #include"../Engine/Global.h"
-
-#include"Enemy.h"
 #include"../CharacterSourceFile/PlayerState/PlayerStateIdle.h"
 #include"../CharacterSourceFile/PlayerState/PlayerStateCharge.h"
 #include"../CharacterSourceFile/PlayerState/PlayerStateAttack.h"
@@ -134,8 +131,8 @@ void Player::OwnCharacterCollision()
 	//接触エフェクト
 	vfx_->SetHitEffect(this->GetPosition());
 
-	//衝撃音
-	Audio::Play(params_->SoundParam_.hSoundCharacterHit_);
+	//衝撃音再生
+	sound_->PlayCharacterHitSound();
 
 	//カメラ振動(長く)
 	Camera::CameraShakeStart(Camera::GetShakeTimeLong());

@@ -41,7 +41,7 @@ void PlayerStateAttack::Update(Player* _player)
 	}
 
 	//UŒ‚SEÄ¶
-	Audio::Play(_player->GetParams()->SoundParam_.hSoundattack_);
+	_player->OnPlayAttackSound();
 }
 
 void PlayerStateAttack::Exit(Player* _player)

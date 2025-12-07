@@ -19,6 +19,7 @@
 #include "CharacterPart/CharacterCsvLoader.h"
 #include "CharacterPart/CharacterObserver.h"
 #include"CharacterPart/CharacterDebugPanel.h"
+#include"CharacterPart/CharacterSound.h"
 
 
 //プレイヤー,敵クラスの共通事項クラス
@@ -29,21 +30,22 @@ protected:
     //----------モジュール群----------
 
     //各モジュールのポインタ 処理ごとに分割
-    std::unique_ptr<CharacterModelBlink>    modeldraw_;
-    std::unique_ptr<CharacterVFX>           vfx_;
-    std::unique_ptr<CharacterShadow>        shadow_;
-    std::unique_ptr<CharacterAir>           air_;
-    std::unique_ptr<CharacterForward>       forward_;
-    std::unique_ptr<CharacterMovement>      movement_;
-    std::unique_ptr<CharacterRotate>        rotate_;
-    std::unique_ptr<CharacterCharge>        charge_;
-    std::unique_ptr<CharacterHitStop>       hitstop_;
-    std::unique_ptr<CharacterHit>           hit_;
-    std::unique_ptr<CharacterFence>         fence_;
-	std::unique_ptr<CharacterWait>          wait_;
-    std::unique_ptr<CharacterCsvLoader>     csvload_;
-    std::unique_ptr<CharacterObserver>      observer_;
-    std::unique_ptr<CharacterDebugPanel>    debugpanel_;
+    std::unique_ptr<CharacterModelBlink>    modeldraw_; //モデル描画
+    std::unique_ptr<CharacterVFX>           vfx_;       //エフェクト(VFX)
+    std::unique_ptr<CharacterShadow>        shadow_;    //影付け
+    std::unique_ptr<CharacterAir>           air_;       //空中
+    std::unique_ptr<CharacterForward>       forward_;   //前方ベクトル
+    std::unique_ptr<CharacterMovement>      movement_;  //移動
+    std::unique_ptr<CharacterRotate>        rotate_;    //回転
+    std::unique_ptr<CharacterCharge>        charge_;    //チャージ
+    std::unique_ptr<CharacterHitStop>       hitstop_;   //ヒットストップ
+    std::unique_ptr<CharacterHit>           hit_;       //被弾
+    std::unique_ptr<CharacterFence>         fence_;     //柵との接触
+	std::unique_ptr<CharacterWait>          wait_;      //待機
+    std::unique_ptr<CharacterCsvLoader>     csvload_;   //csv読み込み
+    std::unique_ptr<CharacterObserver>      observer_;  //監視
+    std::unique_ptr<CharacterDebugPanel>    debugpanel_;//デバッグ(ImGui)
+    std::unique_ptr<CharacterSound>         sound_;     //サウンド
 
     //使用するパラメータ(CharacterParams)のポインタ
     //protectedにして自身か継承先のみアクセス可能にする(モジュールのparams_と混ざらないように)
@@ -306,6 +308,43 @@ public:
     void OnAddObserver(IGameObserver* _observer)
     {
         observer_->AddObserver(_observer);
+    }
+
+    //-----サウンド関連-----
+    //チャージ音再生イベント
+    void OnPlayChargeSound()
+    {
+        sound_->PlayChargeSound();
+    }
+
+    //攻撃音再生イベント
+    void OnPlayAttackSound()
+    {
+        sound_->PlayAttackSound();
+    }
+
+    //キャラクター同士の衝撃音再生イベント
+    void OnPlayCharacterHitSound()
+    {
+        sound_->PlayCharacterHitSound();
+    }
+
+    //柵との衝撃音再生イベント
+    void OnPlayFenceHitSound()
+    {
+        sound_->PlayFenceHitSound();
+    }
+
+    //ジャンプ音再生イベント
+    void OnPlayJumpSound()
+    {
+        sound_->PlayJumpSound();
+    }
+
+    //着地音再生イベント
+    void OnPlayLandingSound()
+    {
+        sound_->PlayLandingSound();
     }
 
     //共通パラメータのゲッター関数

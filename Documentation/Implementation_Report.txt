@@ -62,6 +62,8 @@ CharacterRotate.cpp
 CharacterRotate.h
 CharacterShadow.cpp
 CharacterShadow.h
+CharacterSound.h
+CharacterSound.cpp
 CharacterVFX.cpp
 CharacterVFX.h
 CharacterWait.cpp
@@ -133,12 +135,23 @@ OutStageThing.cpp
 ●UI関係(UISourceFileに格納)
 HUD.h
 HUD.cpp
-HUDDebugPanel.h
-HUDDebugPanel.cpp
 GameTimer.h
 GameTimer.cpp
 MiniMap.h
 MiniMap.cpp
+
+●HUD関係のモジュール(UISourceFile内のHUDPartに格納)
+HUDCsvLoader.cpp
+HUDCsvLoader.h
+HUDDebugPanel.cpp
+HUDDebugPanel.h
+HUDDrawTable.cpp
+HUDDrawTable.h
+HUDImageLoader.cpp
+HUDImageLoader.h
+HUDParam.cpp
+HUDParam.h
+RenderTask.h
 
 ●エフェクト関係(EffectSourceFileに格納)
 TransitionEffect.h

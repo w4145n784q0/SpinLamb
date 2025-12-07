@@ -1,12 +1,11 @@
 #include "Character.h"
-#include"../Engine/Audio.h"
 
 Character::Character(GameObject* parent)
 	:GameObject(parent,"Character"),
 	params_(nullptr), modeldraw_(nullptr), vfx_(nullptr), shadow_(nullptr), air_(nullptr),
 	forward_(nullptr), movement_(nullptr),rotate_(nullptr),charge_(nullptr),hitstop_(nullptr),
     hit_(nullptr),fence_(nullptr),wait_(nullptr),
-	csvload_(nullptr),observer_(nullptr),debugpanel_(nullptr)
+	csvload_(nullptr),observer_(nullptr),debugpanel_(nullptr), sound_(nullptr)
 {
 }
 
@@ -15,7 +14,7 @@ Character::Character(GameObject* parent, const std::string& name)
 	params_(nullptr), modeldraw_(nullptr), vfx_(nullptr), shadow_(nullptr), air_(nullptr),
 	forward_(nullptr), movement_(nullptr), rotate_(nullptr), charge_(nullptr), hitstop_(nullptr),
 	hit_(nullptr), fence_(nullptr), wait_(nullptr),
-	csvload_(nullptr), observer_(nullptr), debugpanel_(nullptr)
+	csvload_(nullptr), observer_(nullptr), debugpanel_(nullptr), sound_(nullptr)
 {
 	//各モジュールの生成・初期化
 	//同時にパラメータのセット(SetParams)
@@ -111,32 +110,17 @@ Character::Character(GameObject* parent, const std::string& name)
 		debugpanel_->SetParams(params_.get());
 		debugpanel_->SetCharacter(this);
 	}
+	if (sound_ == nullptr)
+	{
+		sound_ = std::make_unique<CharacterSound>(this);
+		sound_->SetParams(params_.get());
+	}
 
 	//csvからエフェクト関係のパラメータ読み込み
 	vfx_->InitCSVEffect();
 
 	//サウンドの読み込み
-	//同じディレクトリ内からのパスは省略
-	//パスの一部を文字列にし、結合させる
-	std::string SoundSE = "Sound\\SE\\";
-
-	params_->SoundParam_.hSoundcharge_ = Audio::Load(SoundSE + "Charge.wav",false, Audio::ChargeSoundNum_);
-	assert(params_->SoundParam_.hSoundcharge_ >= 0);
-
-	params_->SoundParam_.hSoundattack_ = Audio::Load(SoundSE + "Attack.wav", false, Audio::AttackSoundNum_);
-	assert(params_->SoundParam_.hSoundattack_ >= 0);
-
-	params_->SoundParam_.hSoundCharacterHit_ = Audio::Load(SoundSE + "CharacterCollision.wav",false, Audio::HitSoundNum_);
-	assert(params_->SoundParam_.hSoundCharacterHit_ >= 0);
-
-	params_->SoundParam_.hSoundFenceHit_ = Audio::Load(SoundSE + "FenceCollision.wav", false, Audio::FenceHitSoundNum_);
-	assert(params_->SoundParam_.hSoundFenceHit_ >= 0);
-
-	params_->SoundParam_.hSoundJump_ = Audio::Load(SoundSE + "Jump.wav", false, Audio::JumpSoundNum_);
-	assert(params_->SoundParam_.hSoundJump_ >= 0);
-
-	params_->SoundParam_.hSoundLanding_ = Audio::Load(SoundSE + "Landing.wav", false, Audio::LandingSoundNum_);
-	assert(params_->SoundParam_.hSoundLanding_ >= 0);
+	sound_->LoadSound();
 
 	//それぞれの柵の法線を取得
 	fence_->GetWireNormal();

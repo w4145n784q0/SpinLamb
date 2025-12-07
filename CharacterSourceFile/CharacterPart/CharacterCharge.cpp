@@ -1,6 +1,5 @@
 #include "CharacterCharge.h"
 #include "../Character.h" 
-#include"../../Engine/Audio.h"
 #include"../../Engine/Model.h"
 
 
@@ -35,7 +34,7 @@ void CharacterCharge::Charging()
 	}
 
 	//チャージ中のSE再生
-	Audio::Play(params_->SoundParam_.hSoundcharge_);
+	character_->OnPlayChargeSound();
 
 	//チャージ中,仮の値に一定の加速量を加算し続ける
 	//チャージ解放時に実際にCommonAcceleration_に代入する

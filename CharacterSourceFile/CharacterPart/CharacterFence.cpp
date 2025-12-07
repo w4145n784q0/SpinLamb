@@ -4,7 +4,6 @@
 #include"../../StageSourceFile/LowerWire.h"
 #include"../../StageSourceFile/LeftWire.h"
 #include"../../StageSourceFile/RightWire.h"
-#include"../../Engine/Audio.h"
 
 CharacterFence::CharacterFence(GameObject* parent)
 	:GameObject(parent, "CharacterFence"), params_(nullptr), character_(nullptr)
@@ -59,7 +58,7 @@ void CharacterFence::FenceReflect(XMVECTOR _normal)
 		character_->OnFenceHitVFX(character_->GetPosition());
 
 		//衝撃音
-		Audio::Play(params_->SoundParam_.hSoundFenceHit_);
+		character_->OnPlayFenceHitSound();
 
 		//溜めている速度をリセット
 		character_->OnChargeReset();
