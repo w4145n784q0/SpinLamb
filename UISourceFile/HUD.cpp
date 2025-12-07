@@ -41,7 +41,7 @@ void HUD::Initialize()
 	}
 
 	//開始ロゴ描画モードの初期化
-	HUDParam_->SetDrawStartMode(S_StartReady);
+	HUDParam_->SetDrawStartMode(HUDMode::DrawStartMode::S_StartReady);
 
 	//csvからパラメータ読み込み
 	HUDCsvLoader_->SetHUDCSV();
@@ -109,6 +109,8 @@ void HUD::DrawFullScreen()
 	//endではない=モードに対応するタスクが見つかったら実行
 	if (it != HUDDrawTable_->byMode.end())
 	{
+		//登録されているタスクを順に実行
+		//it->secondはvector<RenderTask>のこと(keyとvalueのうちvalue)
 		for (auto& task : it->second)
 		{
 			//predicateが設定されていない=nullptrなら無条件で描く
@@ -230,11 +232,11 @@ void HUD::UpdateScoreCalculate()
 
 void HUD::UpdateStartLogo()
 {
-	if (HUDParam_->DrawStart_ == S_StartReady)
+	if (HUDParam_->DrawStart_ == HUDMode::DrawStartMode::S_StartReady)
 	{
 		ReadyEasingStep();     //Ready?の表示(ここでイージングはなし)
 	}
-	else if (HUDParam_->DrawStart_ == S_StartGo)
+	else if (HUDParam_->DrawStart_ == HUDMode::DrawStartMode::S_StartGo)
 	{
 		GoEasingStep();        //Go!のイージング進行
 	}
@@ -257,7 +259,7 @@ void HUD::ReadyEasingStep()
 	{
 		//カウンターを0に戻し、状態遷移
 		HUDParam_->LogoChangeCount_ = 0;
-		HUDParam_->DrawStart_ = S_StartGo;
+		HUDParam_->DrawStart_ = HUDMode::DrawStartMode::S_StartGo;
 	}
 }
 
@@ -297,11 +299,11 @@ void HUD::DrawExplanation()
 void HUD::DrawStartLogo()
 {
 	//DrawStartの状態によって描画するロゴを切り替える
-	if (HUDParam_->DrawStart_ == S_StartReady)
+	if (HUDParam_->DrawStart_ == HUDMode::DrawStartMode::S_StartReady)
 	{
 		Image::SetAndDraw(HUDParam_->hReady_, HUDParam_->LogoStart_);
 	}
-	else if (HUDParam_->DrawStart_ == S_StartGo)
+	else if (HUDParam_->DrawStart_ == HUDMode::DrawStartMode::S_StartGo)
 	{
 		Image::SetAndDraw(HUDParam_->hGo_, HUDParam_->LogoStart_);
 	}
@@ -353,7 +355,7 @@ void HUD::BuildDrawTable()
 	//それに応じた描画タスクを登録する
 	//描画するものの文字列(name),条件(predicate),前処理(pre),描画処理(draw)の順に登録
 
-	// -------- 常時描画（ミニマップ） --------
+	//-------- 常時描画（ミニマップ） --------
 	HUDDrawTable_->always.push_back(RenderTask{
 		"MiniMap", //描画するもの
 		nullptr,   //常時
@@ -361,86 +363,88 @@ void HUD::BuildDrawTable()
 		[this]() { DrawMiniMap(); } //描画処理
 		});
 
-	// -------- Mode_BeforeStart --------
-	HUDDrawTable_->byMode[Mode_BeforeStart].push_back(RenderTask{
+	//-------- Mode_BeforeStart --------
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_BeforeStart].push_back(RenderTask{
 		"Explanation",//描画するもの
 		nullptr,      //常時
 		nullptr,	  //前処理があれば記述
 		[this]() { DrawExplanation(); } //描画処理
 		});
 
-	// -------- Mode_JustBefore --------
-	HUDDrawTable_->byMode[Mode_JustBefore].push_back(RenderTask{
+	//-------- Mode_JustBefore --------
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_JustBefore].push_back(RenderTask{
 		"Score",	//描画するもの
 		nullptr,	//常時
 		[this](RenderContext&) { UpdateScoreCalculate(); }, //前処理としてスコア更新
 		[this]() { DrawScore(); } //描画処理
 		});
 
-	HUDDrawTable_->byMode[Mode_JustBefore].push_back(RenderTask{
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_JustBefore].push_back(RenderTask{
 		"StartLogo",//描画するもの
-		[this] { return HUDParam_->DrawStart_ != S_MaxStartMode; },	//常時
+		[this] { return HUDParam_->DrawStart_ != HUDMode::DrawStartMode::S_MaxStartMode; },	//MaxStartModeでなければ描画
 		[this](RenderContext&) { UpdateStartLogo(); },//前処理としてイージング更新
 		[this]() { DrawStartLogo(); } //描画処理
 		});
 
-	// -------- Mode_Playing --------
-	HUDDrawTable_->byMode[Mode_Playing].push_back(RenderTask{
+	//-------- Mode_Playing --------
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_Playing].push_back(RenderTask{
 		"Score",	//描画するもの
 		nullptr,	//常時
 		[this](RenderContext&) { UpdateScoreCalculate(); }, //前処理としてスコア更新
 		[this]() { DrawScore(); } //描画処理
 		});
 
-	HUDDrawTable_->byMode[Mode_Playing].push_back(RenderTask{
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_Playing].push_back(RenderTask{
 		"Timer",	//描画するもの
 		[this]() { return HUDParam_->pGameTimer_ != nullptr; },//ポインタがnullでなければ描画
 		[this](RenderContext&) { UpdateTimer(); }, //前処理としてタイマー更新
 		[this]() { DrawTimer(); } //描画処理
 		});
 
-	// -------- Mode_PlayPause（Playing + Pause）--------
-	HUDDrawTable_->byMode[Mode_PlayPause] = HUDDrawTable_->byMode[Mode_Playing];
-	HUDDrawTable_->byMode[Mode_PlayPause].push_back(RenderTask{
+	//-------- Mode_PlayPause（Playing + Pause）--------
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_PlayPause]
+		= HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_Playing];
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_PlayPause].push_back(RenderTask{
 		"Pause",    //描画するもの
 		nullptr,	//常時
 		nullptr,	//前処理があれば記述
 		[this]() { DrawPause(); }
 		});
 
-	// -------- Mode_Finish --------
-	HUDDrawTable_->byMode[Mode_Finish].push_back(RenderTask{
+	//-------- Mode_Finish --------
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_Finish].push_back(RenderTask{
 		"Timer",
 		[this]() { return HUDParam_->pGameTimer_ != nullptr; },	//ポインタがnullでなければ描画
 		[this](RenderContext&) { UpdateTimer(); },				//前処理としてタイマー更新
 		[this]() { DrawTimer(); } //描画処理
 		});
 
-	HUDDrawTable_->byMode[Mode_Finish].push_back(RenderTask{
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_Finish].push_back(RenderTask{
 		"FinishLogo",	//描画するもの
 		nullptr,		//常時
 		nullptr,		//前処理があれば記述
 		[this]() { DrawFinishLogo(); }
 		});
 
-	HUDDrawTable_->byMode[Mode_Finish].push_back(RenderTask{
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_Finish].push_back(RenderTask{
 		"Score",	//描画するもの
 		nullptr,	//常時
 		[this](RenderContext&) { UpdateScoreCalculate(); }, //前処理としてスコア更新
 		[this]() { DrawScore(); }
 		});
 
-	// -------- Mode_Practice --------
-	HUDDrawTable_->byMode[Mode_Practice].push_back(RenderTask{
+	//-------- Mode_Practice --------
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_Practice].push_back(RenderTask{
 		"PracticeLogo",	//描画するもの
 		nullptr,		//常時
 		nullptr,		//前処理があれば記述
 		[this]() { DrawPracticeLogo(); }
 		});
 
-	// -------- Mode_PracticePause（Practice + Pause）--------
-	HUDDrawTable_->byMode[Mode_PracticePause] = HUDDrawTable_->byMode[Mode_Practice];
-	HUDDrawTable_->byMode[Mode_PracticePause].push_back(RenderTask{
+	//-------- Mode_PracticePause（Practice + Pause）--------
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_PracticePause]
+		= HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_Practice];
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_PracticePause].push_back(RenderTask{
 		"Pause",	//描画するもの
 		nullptr,	//常時
 		nullptr,	//前処理があれば記述

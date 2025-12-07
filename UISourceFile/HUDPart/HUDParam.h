@@ -6,11 +6,12 @@
 
 //HUDクラスの画像ハンドル・トランスフォーム・パラメータ等保持するモジュール
 
-namespace
+//描画モードを定義するnamespace
+namespace HUDMode
 {
 	//描画モード（状況に応じて表示/非表示を切り替えたいもの）を指定
 	//他クラスからSetDrawModeを通じて指示するため、namespaceに宣言(このクラスからは変更しない)
-	enum DrawMode
+	enum class DrawMode
 	{
 		Mode_BeforeStart = 0,	//スタート前
 		Mode_JustBefore,		//"Ready?","Go!"を出す、ゲーム開始直前
@@ -23,7 +24,7 @@ namespace
 	};
 
 	//DrawStartで呼ぶ状態遷移
-	enum DrawStartMode
+	enum class DrawStartMode
 	{
 		S_StartReady = 0,	//"Ready?"を表示している状態
 		S_StartGo,			//"Go!"を表示している状態
@@ -124,10 +125,10 @@ public:
 
 	//描画モードを格納する変数
 	//直接代入はせず、SetDrawModeから変更される
-	DrawMode DrawMode_ = Mode_None;
+	HUDMode::DrawMode DrawMode_ = HUDMode::DrawMode::Mode_None;
 
 	//DrawStartで呼ぶ状態遷移を格納する変数
-	DrawStartMode DrawStart_ = S_MaxStartMode;
+	HUDMode::DrawStartMode DrawStart_ = HUDMode::DrawStartMode::S_MaxStartMode;
 
 	//----------開始前ロゴ----------
 
@@ -242,16 +243,16 @@ public:
 	void SetMiniMapPointer(MiniMap* _minimap) { pMiniMap_ = _minimap; }
 
 	//描画モードを変更 ここで指定した_drawmodeがDraw()にて呼ばれる
-	void SetDrawMode(DrawMode _drawmode) { DrawMode_ = _drawmode; }
+	void SetDrawMode(HUDMode::DrawMode _drawmode) { DrawMode_ = _drawmode; }
 
 	//描画モードを渡す 主にImGuiで使用
-	DrawMode GetDrawMode() { return DrawMode_; }
+	HUDMode::DrawMode GetDrawMode() { return DrawMode_; }
 
 	//開始前ロゴの状態遷移設定
-	void SetDrawStartMode(DrawStartMode _drawstartmode) { DrawStart_ = _drawstartmode; }
+	void SetDrawStartMode(HUDMode::DrawStartMode _drawstartmode) { DrawStart_ = _drawstartmode; }
 
 	//開始前ロゴの状態遷移を渡す
-	DrawStartMode GetDrawStartMode() { return DrawStart_; }
+	HUDMode::DrawStartMode GetDrawStartMode() { return DrawStart_; }
 
 	//DrawReady()からDrawGo()に遷る時間設定
 	//バラバラに持つことを防ぐため,BattleSceneから指示して設定

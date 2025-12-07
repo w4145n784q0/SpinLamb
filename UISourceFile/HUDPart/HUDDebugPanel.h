@@ -21,6 +21,13 @@ public:
     //ImGui描画全体を管理
     void ImGuiDrawer(HUD* _hud);
 
+    /// <summary>
+    /// HUDクラスの描画タスクに応じたImGui描画指示
+    /// </summary>
+    /// <param name="_name">タスク名(RenderTaskのname)</param>
+    /// <param name="_hud">HUDクラスのポインタ</param>
+    void DrawTaskImGui(const std::string& _name, HUD* _hud);
+
     //描画タスクImGui描画
     void ImGuiRenderTaskDraw(HUD* _hud);
 

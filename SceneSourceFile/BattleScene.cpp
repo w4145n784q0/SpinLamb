@@ -286,19 +286,19 @@ void BattleScene::Draw()
 	switch (BattleState_)
 	{
 	case BattleScene::S_Before:
-		pHUD_->HUDParam_->SetDrawMode(DrawMode::Mode_BeforeStart);
+		pHUD_->HUDParam_->SetDrawMode(HUDMode::DrawMode::Mode_BeforeStart);
 		break;
 	case BattleScene::S_Ready:
-		pHUD_->HUDParam_->SetDrawMode(DrawMode::Mode_JustBefore);
+		pHUD_->HUDParam_->SetDrawMode(HUDMode::DrawMode::Mode_JustBefore);
 		break;
 	case BattleScene::S_Now:
-		pHUD_->HUDParam_->SetDrawMode(DrawMode::Mode_Playing);
+		pHUD_->HUDParam_->SetDrawMode(HUDMode::DrawMode::Mode_Playing);
 		break;
 	case BattleScene::S_Pause:
-		pHUD_->HUDParam_->SetDrawMode(DrawMode::Mode_PlayPause);
+		pHUD_->HUDParam_->SetDrawMode(HUDMode::DrawMode::Mode_PlayPause);
 		break;
 	case BattleScene::S_After:
-		pHUD_->HUDParam_->SetDrawMode(DrawMode::Mode_Finish);
+		pHUD_->HUDParam_->SetDrawMode(HUDMode::DrawMode::Mode_Finish);
 		break;
 	default:
 		break;

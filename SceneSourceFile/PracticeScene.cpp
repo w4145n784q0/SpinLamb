@@ -231,10 +231,10 @@ void PracticeScene::Draw()
 	switch (PracticeState_)
 	{
 	case PracticeScene::S_Now:
-		pHUD_->HUDParam_->SetDrawMode(Mode_Practice);
+		pHUD_->HUDParam_->SetDrawMode(HUDMode::DrawMode::Mode_Practice);
 		break;
 	case PracticeScene::S_Pause:
-		pHUD_->HUDParam_->SetDrawMode(Mode_PracticePause);
+		pHUD_->HUDParam_->SetDrawMode(HUDMode::DrawMode::Mode_PracticePause);
 		break;
 	default:
 		break;

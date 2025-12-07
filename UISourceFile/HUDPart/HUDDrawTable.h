@@ -21,7 +21,7 @@ public:
     void Release() override {};
 
 	//モードごとの描画タスク
-	std::unordered_map<DrawMode, std::vector<RenderTask>> byMode;
+	std::unordered_map<HUDMode::DrawMode, std::vector<RenderTask>> byMode;
 
 	//常時描画するタスク（ミニマップなど）
 	std::vector<RenderTask> always;

@@ -10,58 +10,63 @@ HUDDebugPanel::HUDDebugPanel(GameObject* parent)
 
 void HUDDebugPanel::ImGuiDrawer(HUD* _hud)
 {
-	//シーンクラスからの指示によって呼ぶ描画関数を変える
-	switch (_hud->HUDParam_->GetDrawMode())
+	//------ 常時タスク ------
+	//常時描画タスク(alwaysに登録されているタスク)のImGui描画
+	for (auto& task : _hud->HUDDrawTable_->always)
 	{
-	case Mode_BeforeStart:
-	{
-		ImGuiExplanationDraw(_hud);
-	}
-	break;
-	case Mode_JustBefore:
-	{
-		ImGuiScoreDraw(_hud);
-		ImGuiStartLogoDraw(_hud);
-	}
-	break;
-	case Mode_Playing:
-	{
-		ImGuiScoreDraw(_hud);
-		ImGuiTimerDraw(_hud);
-	}
-	break;
-	case Mode_PlayPause:
-	{
-		ImGuiScoreDraw(_hud);
-		ImGuiTimerDraw(_hud);
-		ImGuiPauseDraw(_hud);
-	}
-	break;
-	case Mode_Finish:
-	{
-		ImGuiTimerDraw(_hud);
-		ImGuiFinishLogoDraw(_hud);
-		ImGuiScoreDraw(_hud);
-	}
-	break;
-	case Mode_Practice:
-	{
-		ImGuiPracticeLogoDraw(_hud);
-	}
-	break;
-	case Mode_PracticePause:
-	{
-		ImGuiPracticeLogoDraw(_hud);
-		ImGuiPauseDraw(_hud);
-	}
-	break;
-	default:
-		break;
+		DrawTaskImGui(task.name, _hud);
 	}
 
-	//常に表示するものはswitch文の外で記述
-	ImGuiRenderTaskDraw(_hud);
-	ImGuiMiniMapDraw(_hud);
+	//------ モード別タスク ------
+
+	//現在の描画モードを取得
+	auto mode = _hud->HUDParam_->GetDrawMode();
+
+	//現在の描画モードに対応するタスク一覧を検索
+	auto it = _hud->HUDDrawTable_->byMode.find(mode);
+
+	//モードに対応するタスクが見つかったら(見つからない場合はそのモードにはタスクが登録されていない)
+	if (it != _hud->HUDDrawTable_->byMode.end())
+	{
+		//そのモードに登録されたタスクを順番にImGuiに表示
+		//Mode_Playingならスコアやタイマーなど
+		//it->secondはvector<RenderTask>のこと(keyとvalueのうちvalue)
+		for (auto& task : it->second)
+		{
+			//タスク名に応じたImGui描画を行う
+			DrawTaskImGui(task.name, _hud);
+		}
+	}
+}
+
+void HUDDebugPanel::DrawTaskImGui(const std::string& _name, HUD* _hud)
+{
+	//渡されたタスク名に応じたImGui描画を行う
+	//タスク名が一致しなければ何もしない
+
+	if (_name == "Explanation")
+		ImGuiExplanationDraw(_hud);
+
+	else if (_name == "Score")
+		ImGuiScoreDraw(_hud);
+
+	else if (_name == "StartLogo")
+		ImGuiStartLogoDraw(_hud);
+
+	else if (_name == "Timer")
+		ImGuiTimerDraw(_hud);
+
+	else if (_name == "FinishLogo")
+		ImGuiFinishLogoDraw(_hud);
+
+	else if (_name == "PracticeLogo")
+		ImGuiPracticeLogoDraw(_hud);
+
+	else if (_name == "Pause")
+		ImGuiPauseDraw(_hud);
+
+	else if (_name == "MiniMap")
+		ImGuiMiniMapDraw(_hud);
 }
 
 void HUDDebugPanel::ImGuiRenderTaskDraw(HUD* _hud)
@@ -88,10 +93,6 @@ void HUDDebugPanel::ImGuiRenderTaskDraw(HUD* _hud)
 		}
 
 		//モード別描画タスク
-
-		//現在のモード(数値)表示
-		int mode = _hud->HUDParam_->DrawMode_;
-		ImGui::Text("Current Mode: %d", mode);
 
 		//現在のモードに対応するタスク(文字列)表示
 		auto it = _hud->HUDDrawTable_->byMode.find(_hud->HUDParam_->DrawMode_);
@@ -135,7 +136,7 @@ void HUDDebugPanel::ImGuiExplanationDraw(HUD* _hud)
 		{
 			ImGui::SliderFloat("ExplanationRotateX", &t.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
 			ImGui::SliderFloat("ExplanationRotateY", &t.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
-			ImGui::SliderFloat("ExplanationRotateZ", &t.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("ExplanationRotateZ", &t.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("ExplanationScale"))
@@ -169,7 +170,7 @@ void HUDDebugPanel::ImGuiStartLogoDraw(HUD* _hud)
 		{
 			ImGui::SliderFloat("StartRotateX", &t.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
 			ImGui::SliderFloat("StartRotateY", &t.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
-			ImGui::SliderFloat("StartRotateZ", &t.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("StartRotateZ", &t.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("StartScale"))
@@ -204,7 +205,7 @@ void HUDDebugPanel::ImGuiFinishLogoDraw(HUD* _hud)
 		{
 			ImGui::SliderFloat("FinishRotateX", &t.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
 			ImGui::SliderFloat("FinishRotateY", &t.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
-			ImGui::SliderFloat("FinishRotateZ", &t.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
+			ImGui::SliderFloat("FinishRotateZ", &t.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 			ImGui::TreePop();
 		}
 		if (ImGui::TreeNode("FinishScale"))

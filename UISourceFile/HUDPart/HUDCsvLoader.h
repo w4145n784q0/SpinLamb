@@ -8,7 +8,7 @@ class HUDCsvLoader :
     public GameObject
 {
 private:
-    //使用するパラメータ(HUDParams)のポインタ
+    //使用するパラメータ(HUDParam)のポインタ
     HUDParam* hudParam_;
 
 public:
