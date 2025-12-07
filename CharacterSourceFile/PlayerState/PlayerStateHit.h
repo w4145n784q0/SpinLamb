@@ -10,6 +10,6 @@ public:
     void Update(Player* _player) override;
     void Exit(Player* _player) override;
     std::string GetStateName() override { return "Hit"; }
-    bool isHitState() const override;
+    bool IsHitState() const override;
 };
 

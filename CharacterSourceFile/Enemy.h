@@ -100,7 +100,7 @@ public:
 	//Ž©g‚ªŠY“–‚·‚éó‘ÔƒNƒ‰ƒX‚©‚Ç‚¤‚©•Ô‚·ˆ—
 	bool IsCharacterStateAttack() override { return CurrentState_->IsAttackState(); }
 	bool IsCharacterStateHitStop() override { return CurrentState_->IsHitStopState(); }
-	bool IsCharacterStateHit() override { return CurrentState_->isHitState(); }
+	bool IsCharacterStateHit() override { return CurrentState_->IsHitState(); }
 	bool IsCharacterStateFenceHit() override { return CurrentState_->IsFenceHitState(); }
 
 	//----------

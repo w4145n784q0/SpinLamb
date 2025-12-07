@@ -35,7 +35,7 @@ namespace
 	float ChaseLength = 0.0f;
 
 	//敵がプレイヤーの方向を向く際のトリガー この値を超えたら回転
-	float LookRotateAngle = 0;
+	float LookRotateAngle = 0.0f;
 	
 	//プレイヤー方向を向く際の1fごとの回転量
 	float LookRotateValue = 0.0f;

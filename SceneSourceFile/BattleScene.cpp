@@ -39,7 +39,7 @@ BattleScene::BattleScene(GameObject* parent)
 	pPlayer1_(nullptr), pPlayer2_(nullptr), pEnemy_(nullptr),
 	pHUD_(nullptr), pTransitionEffect_(nullptr),
 	pGameTimer_(nullptr),pMiniMap_(nullptr),
-	ActivePlayers_({}), ActiveEnemys_({}),
+	ActivePlayers_({}), ActiveEnemies_({}),
 	BattleState_(S_Before),
 	FirstScore_(0),SecondScore_(0),ScoreArray_({})
 {
@@ -72,7 +72,7 @@ void BattleScene::Initialize()
 
 	//各キャラクターの初期化用の配列
 	std::vector<Player*> InitPlayers = {};
-	std::vector<Enemy*> InitEnemys = {};
+	std::vector<Enemy*> InitEnemies = {};
 	std::vector<Character*> InitCharacters = {};
 
 	//登場させるキャラクターは事前に生成だけ行う
@@ -102,7 +102,7 @@ void BattleScene::Initialize()
 
 		//初期化配列に追加
 		InitCharacters.push_back(pEnemy_);
-		InitEnemys.push_back(pEnemy_);
+		InitEnemies.push_back(pEnemy_);
 
 		//アクティブな配列に追加
 		ActiveCharacters.push_back(pEnemy_);
@@ -186,23 +186,23 @@ void BattleScene::Initialize()
 	}
 
 	//Enemyの初期化処理
-	for (int i = 0; i < InitEnemys.size(); i++)
+	for (int i = 0; i < InitEnemies.size(); i++)
 	{
 		if (!InitPlayers.empty()) 
 		{
 			//CPUの名前を登録
-			InitEnemys[i]->SetObjectName(EnemyNames[i]);
+			InitEnemies[i]->SetObjectName(EnemyNames[i]);
 
 			//CPUの名前を最後に接触したキャラクターとして初期化(名前が割り振られたタイミングで初期化)
-			InitEnemys[i]->GetParams()->SetAttackedName(InitEnemys[i]->GetObjectName());
+			InitEnemies[i]->GetParams()->SetAttackedName(InitEnemies[i]->GetObjectName());
 
 			//プレイヤーの初期化配列からランダムなインスタンスをセット
 			//(現状は敵と一対一なのでplayer1が選ばれる)
 			//BattleSceneから設定することで値の相違・結合度の上昇を防ぐ
-			InitEnemys[i]->SetPlayerPointer(InitPlayers[rand() % InitPlayers.size()]);
+			InitEnemies[i]->SetPlayerPointer(InitPlayers[rand() % InitPlayers.size()]);
 
 			//生成した敵を登録
-			ActiveEnemys_.push_back(InitEnemys[i]);
+			ActiveEnemies_.push_back(InitEnemies[i]);
 		}
 	}
 
@@ -344,7 +344,7 @@ void BattleScene::UpdateActive()
 	{
 		player->PlayerRun();
 	}
-	for (auto enemy : ActiveEnemys_)
+	for (auto enemy : ActiveEnemies_)
 	{
 		enemy->EnemyRun();
 	}

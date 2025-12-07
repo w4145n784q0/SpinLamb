@@ -5,7 +5,7 @@
 //部品分けしたヘッダファイル
 #include "CharacterPart/CharacterParams.h"
 #include "CharacterPart/CharacterModelBlink.h"
-#include "CharacterPart/CharacterVfx.h"
+#include "CharacterPart/CharacterVFX.h"
 #include "CharacterPart/CharacterShadow.h"
 #include "CharacterPart/CharacterAir.h"
 #include "CharacterPart/CharacterForward.h"

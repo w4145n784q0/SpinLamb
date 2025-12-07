@@ -4,7 +4,7 @@
 
 namespace
 {
-	std::string PlayerChargeEffectPath = "ParticleAssets\\circle_B.png";
+	const std::string PlayerChargeEffectPath = "ParticleAssets\\circle_B.png";
 }
 
 void PlayerStateCharge::Enter(Player* _player)

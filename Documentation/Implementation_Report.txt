@@ -16,8 +16,8 @@ GameModeScene.h
 GameModeScene.cpp
 HowToPlayScene.h
 HowToPlayScene.cpp
-PlayScene.h
-PlayScene.cpp
+PlayBaseScene.h
+PlayBaseScene.cpp
 PracticeScene.h
 PracticeScene.cpp
 ResultScene.h
@@ -119,8 +119,8 @@ Ground.h
 Ground.cpp
 Fence.h
 Fence.cpp
-Wire.h
-Wire.cpp
+BaseWire.h
+BaseWire.cpp
 LeftWire.h
 LeftWire.cpp
 RightWire.h

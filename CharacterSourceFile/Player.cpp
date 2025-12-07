@@ -232,7 +232,7 @@ void Player::DrawImGui()
 		if (ImGui::TreeNode("PlayerInit"))
 		{
 			//コントローラーID
-			ImGui::Text("ControllerID:%1d", ControllerID_);
+			ImGui::Text("ControllerID:%d", ControllerID_);
 			ImGui::TreePop();
 		}
 
@@ -498,7 +498,7 @@ void Player::InputKeyBoard()
 	Direction_ = { 0,0,0 };
 }
 
-void Player::InputCotroller(int _PadID)
+void Player::InputController(int _PadID)
 {
 	//コントローラーIDが0以下(シーン生成時に初期化されていない)なら処理しない
 	if (_PadID < 0)
@@ -569,7 +569,7 @@ XMVECTOR Player::ConvertCameraDirection(XMVECTOR _input)
 bool Player::IsDamage()
 {
 	//ヒットストップ・被弾・柵に接触状態・無敵時間なら何もしない
-	if (CurrentState_->IsHitStopState() || CurrentState_->isHitState()
+	if (CurrentState_->IsHitStopState() || CurrentState_->IsHitState()
 		|| CurrentState_->IsFenceHitState() || params_->GetIsInvincibility())
 	{
 		return true;

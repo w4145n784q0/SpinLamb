@@ -2,7 +2,7 @@
 #include"../../Engine/Model.h"
 
 CharacterModelBlink::CharacterModelBlink(GameObject* parent)
-	:GameObject(parent, "CharacterBlink"), params_(nullptr)
+	:GameObject(parent, "CharacterModelBlink"), params_(nullptr)
 {
 }
 

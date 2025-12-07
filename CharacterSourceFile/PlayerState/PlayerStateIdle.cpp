@@ -26,7 +26,7 @@ void PlayerStateIdle::Update(Player* _player)
 	_player->InputKeyBoard();
 
 	//コントローラー操作による移動
-	_player->InputCotroller(_player->GetControllerID());
+	_player->InputController(_player->GetControllerID());
 
 	//------------------チャージ状態へ移行------------------//
 

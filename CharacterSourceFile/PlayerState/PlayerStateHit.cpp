@@ -42,7 +42,7 @@ void PlayerStateHit::Exit(Player* _player)
 	_player->OnRotateXStop();
 }
 
-bool PlayerStateHit::isHitState() const
+bool PlayerStateHit::IsHitState() const
 {
 	//”í’eó‘Ô‚Å‚ ‚é‚±‚Æ‚ğ•Ô‚·
 	return true;

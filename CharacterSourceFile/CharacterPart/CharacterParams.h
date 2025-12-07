@@ -224,7 +224,7 @@ public:
 	void SetFullNormalAccelerate(float _fullNormalAccelerate) { MoveParam_.NormalFullAccelerate_ = _fullNormalAccelerate; }
 	float GetFullNormalAccelerate() { return MoveParam_.NormalFullAccelerate_; }
 
-    void SetNormalFriction(float _friction) { MoveParam_.NormalFriction_; }
+    void SetNormalFriction(float _friction) { MoveParam_.NormalFriction_ = _friction; }
     float GetNormalFriction() { return  MoveParam_.NormalFriction_; }
 
     void SetTmpAccele(float _tmpAccele) { MoveParam_.TmpAccele_ = _tmpAccele; }
@@ -236,7 +236,7 @@ public:
 	void SetFullAttackAccelerate(float _fullAttackAccelerate) { MoveParam_.AttackFullAccelerate_ = _fullAttackAccelerate; }
 	float GetFullAttackAccelerate() { return MoveParam_.AttackFullAccelerate_; }
 
-    void SetAttackFriction(float _friction) { MoveParam_.AttackFriction_; }
+    void SetAttackFriction(float _friction) { MoveParam_.AttackFriction_ = _friction; }
     float GetAttackFriction() { return  MoveParam_.AttackFriction_; }
 
     void SetForwardVector(XMVECTOR _forward) { MoveParam_.ForwardVector_ = _forward; }

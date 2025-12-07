@@ -10,6 +10,9 @@ namespace
 		i_MaxZoomValue = 0,
 		i_Max
 	};
+
+	//0除算対策用定数(1を割っても値に影響しないため)
+	const int DevideByZero = 1; 
 }
 
 TransitionEffect::TransitionEffect(GameObject* parent)
@@ -126,6 +129,13 @@ void TransitionEffect::DrawDelay()
 void TransitionEffect::UpdateFadeOut()
 {
 	//だんだん暗くなるエフェクト
+	
+	//TransitionTime_が0の場合は1で割る(0除算対策)
+	//そうでなければ遷移時間を分母にする
+	//（CSVや呼び出し元のミスで0が入ることがある）
+	int denom = (TransitionTime_ > 0) ? TransitionTime_ : DevideByZero;
+
+	//フェードアウト処理（上限超えたらストップ）
 	if (FadeEffect_.AlphaValue_ >= Image::AlphaMin)
 	{
 		FadeEffect_.AlphaValue_ = Image::AlphaMin;
@@ -133,7 +143,7 @@ void TransitionEffect::UpdateFadeOut()
 	else
 	{
 		//透明度に (透過度の最小値 / 遷移時間) を加算して透過度を上げていき、画面を隠していく
-		FadeEffect_.AlphaValue_ += Image::AlphaMin / TransitionTime_;
+		FadeEffect_.AlphaValue_ += Image::AlphaMin / denom;
 	}
 
 }
@@ -141,6 +151,13 @@ void TransitionEffect::UpdateFadeOut()
 void TransitionEffect::UpdateFadeIn()
 {
 	//だんだん明るくなるエフェクト
+	
+	//TransitionTime_が0の場合は1で割る(0除算対策)
+	//そうでなければ遷移時間を分母にする
+	//（CSVや呼び出し元のミスで0が入ることがある）
+	int denom = (TransitionTime_ > 0) ? TransitionTime_ : DevideByZero;
+
+	//フェードイン処理（下限超えたらストップ）
 	if (FadeEffect_.AlphaValue_ <= 0)
 	{
 		FadeEffect_.AlphaValue_ = 0;
@@ -148,13 +165,20 @@ void TransitionEffect::UpdateFadeIn()
 	else
 	{
 		//透明度に (透過度の最小値 / 遷移時間) を減算して透過度を下げていき、画面を見せていく
-		FadeEffect_.AlphaValue_ -= Image::AlphaMin / TransitionTime_;
+		FadeEffect_.AlphaValue_ -= Image::AlphaMin / denom;
 	}
 }
 
 void TransitionEffect::UpdateSlideInLTR()
 {
 	//画像を左→右にスライド
+
+	//TransitionTime_が0の場合は1で割る(0除算対策)
+	//そうでなければ遷移時間を分母にする
+	//（CSVや呼び出し元のミスで0が入ることがある）
+	int denom = (TransitionTime_ > 0) ? TransitionTime_ : DevideByZero;
+
+	//スライドイン処理（上限超えたらストップ）
 	if (SlideEffect_.SlideTransform_.position_.x >= Image::Center)
 	{
 		SlideEffect_.SlideTransform_.position_.x = Image::Center;
@@ -162,13 +186,20 @@ void TransitionEffect::UpdateSlideInLTR()
 	else
 	{
 		//スライド画像位置に (右端から左端を引いた値 / 遷移時間) を加算していく
-		SlideEffect_.SlideTransform_.position_.x += (Image::RightEdge - Image::LeftEdge) / TransitionTime_;
+		SlideEffect_.SlideTransform_.position_.x += (Image::RightEdge - Image::LeftEdge) / denom;
 	}
 }
 
 void TransitionEffect::UpdateZoomIn()
 {
 	//だんだん大きくなるエフェクト
+	
+	//TransitionTime_が0の場合は1で割る(0除算対策)
+	//そうでなければ遷移時間を分母にする
+	//（CSVや呼び出し元のミスで0が入ることがある）
+	int denom = (TransitionTime_ > 0) ? TransitionTime_ : DevideByZero;
+
+	//ズームイン処理（上限超えたらストップ）
 	if (ZoomEffect_.ZoomTransform_.scale_.x >= ZoomEffect_.MaxZoomValue_ ||
 		ZoomEffect_.ZoomTransform_.scale_.y >= ZoomEffect_.MaxZoomValue_)
 	{
@@ -178,15 +209,20 @@ void TransitionEffect::UpdateZoomIn()
 	else
 	{
 		//ズーム量に (最大値 / 遷移時間) を加算してだんだん大きくする
-		ZoomEffect_.ZoomTransform_.scale_.x += ZoomEffect_.MaxZoomValue_ / TransitionTime_;
-		ZoomEffect_.ZoomTransform_.scale_.y += ZoomEffect_.MaxZoomValue_ / TransitionTime_;
+		ZoomEffect_.ZoomTransform_.scale_.x += ZoomEffect_.MaxZoomValue_ / denom;
+		ZoomEffect_.ZoomTransform_.scale_.y += ZoomEffect_.MaxZoomValue_ / denom;
 	}
 }
 
 void TransitionEffect::UpdateZoomOut()
 {
-	//だんだん小さくなるエフェクト
-	if (ZoomEffect_.ZoomTransform_.scale_.x <= 0.0f || 
+	//TransitionTime_が0の場合は1で割る(0除算対策)
+	//そうでなければ遷移時間を分母にする
+	//（CSVや呼び出し元のミスで0が入ることがある）
+	int denom = (TransitionTime_ > 0) ? TransitionTime_ : DevideByZero;
+
+	//ズームアウト処理（下限超えたらストップ）
+	if (ZoomEffect_.ZoomTransform_.scale_.x <= 0.0f ||
 		ZoomEffect_.ZoomTransform_.scale_.y <= 0.0f)
 	{
 		ZoomEffect_.ZoomTransform_.scale_.x = 0.0f;
@@ -195,11 +231,10 @@ void TransitionEffect::UpdateZoomOut()
 	else
 	{
 		//ズーム量に (最大値 / 遷移時間) 減算してだんだん小さくする
-		ZoomEffect_.ZoomTransform_.scale_.x -= ZoomEffect_.MaxZoomValue_ / TransitionTime_;
-		ZoomEffect_.ZoomTransform_.scale_.y -= ZoomEffect_.MaxZoomValue_ / TransitionTime_;
+		ZoomEffect_.ZoomTransform_.scale_.x -= ZoomEffect_.MaxZoomValue_ / denom;
+		ZoomEffect_.ZoomTransform_.scale_.y -= ZoomEffect_.MaxZoomValue_ / denom;
 	}
 }
-
 void TransitionEffect::SetCSVTransitionEffect()
 {
 	//csvファイルを読み込む

@@ -84,7 +84,7 @@ void CharacterDebugPanel::DrawCharacterImGui()
 	//キャラクターID,初期位置
 	if (ImGui::TreeNode("Initialize"))
 	{
-		ImGui::Text("CharacterID:%.1d", params_->InitParam_.CharacterID);
+		ImGui::Text("CharacterID:%d", params_->InitParam_.CharacterID);
 		ImGui::Text("ForwardX:%.3f", params_->InitParam_.StartPosition_.x);
 		ImGui::Text("ForwardY:%.3f", params_->InitParam_.StartPosition_.y);
 		ImGui::Text("ForwardZ:%.3f", params_->InitParam_.StartPosition_.z);

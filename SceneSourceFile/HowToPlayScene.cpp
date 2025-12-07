@@ -105,7 +105,7 @@ void HowToPlayScene::UpdateActive()
 	//表示画像の移動
 	//インデックスが先頭/末尾の場合、末尾/先頭へ戻る
 	//前置デクリメントで配列オーバー防ぐ
-	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT)
+	if (Input::IsKeyDown(DIK_LEFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT)
 		|| Input::IsStickTiltLX_RIGHT())
 	{
 		if (itr == ImageList_.begin())
@@ -121,7 +121,7 @@ void HowToPlayScene::UpdateActive()
 		//選択SE再生
 		Audio::Play(hSoundSelect_);
 	}
-	if (Input::IsKeyDown(DIK_LEFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT)
+	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT)
 		|| Input::IsStickTiltLX_LEFT())
 	{
 		if (itr == --ImageList_.end())

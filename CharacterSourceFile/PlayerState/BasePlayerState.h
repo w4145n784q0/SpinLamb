@@ -32,7 +32,7 @@ public:
     virtual bool IsHitStopState() const { return false; }
 
     //”í’eó‘Ô‚©‚Ç‚¤‚©•Ô‚·
-    virtual bool isHitState() const { return false; }
+    virtual bool IsHitState() const { return false; }
 
     //ò‚ÉÚGó‘Ô‚©‚Ç‚¤‚©•Ô‚·
     virtual bool IsFenceHitState() const { return false; }

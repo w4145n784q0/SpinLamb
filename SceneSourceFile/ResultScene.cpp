@@ -58,10 +58,10 @@ void ResultScene::Initialize()
 	assert(hCpuWin_ >= 0);
 
 	hPlayer1Win_ = Image::Load(Result + "Player1Win.png");
-	assert(hPlayer1Win_);
+	assert(hPlayer1Win_ >= 0);
 
 	hPlayer2Win_ = Image::Load(Result + "Player2Win.png");
-	assert(hPlayer2Win_);
+	assert(hPlayer2Win_ >= 0);
 
 	hDraw_ = Image::Load(Result + "Draw.png");
 	assert(hDraw_ >= 0);

@@ -10,9 +10,6 @@
 
 namespace
 {
-	//柱の数 setpillarの初期化に用いる
-	int PillarNum = 0;
-
 	//鉄線のトランスフォーム
 	Transform WireTransform;
 
@@ -31,7 +28,9 @@ namespace
 
 Fence::Fence(GameObject* parent)
 	:GameObject(parent,"Fence"),hPillar_(-1), hFence_(-1),
-	PillarUpperLeft_({0,0,0}),PillarUpperRight_({0,0,0}),PillarLowerLeft_({0,0,0}),PillarLowerRight_({0,0,0})
+	PillarUpperLeft_({0,0,0}),PillarUpperRight_({0,0,0}),
+	PillarLowerLeft_({0,0,0}),PillarLowerRight_({0,0,0}),
+	PillarNum_(0)
 {
 }
 
@@ -120,17 +119,17 @@ void Fence::DrawImGui()
 		//柱モデル
 		if (ImGui::TreeNode("Pillar"))
 		{
-			if (ImGui::TreeNode("PillerPosition"))
+			if (ImGui::TreeNode("PillarPosition"))
 			{
 				for (int i = 0; i < PillarsTransformArray.size(); i++)
 				{
-					ImGui::InputFloat((PillarNameArray[i] + " PosisionX").c_str(), &PillarsTransformArray[i].position_.x, ZERO_POINT_ONE);
+					ImGui::InputFloat((PillarNameArray[i] + " PositionX").c_str(), &PillarsTransformArray[i].position_.x, ZERO_POINT_ONE);
 					ImGui::InputFloat((PillarNameArray[i] + " PositionY").c_str(), &PillarsTransformArray[i].position_.y, ZERO_POINT_ONE);
 					ImGui::InputFloat((PillarNameArray[i] + " PositionZ").c_str(), &PillarsTransformArray[i].position_.z, ZERO_POINT_ONE);
 				}
 				ImGui::TreePop();
 			}
-			if (ImGui::TreeNode("PillerRotate"))
+			if (ImGui::TreeNode("PillarRotate"))
 			{
 				for (int i = 0; i < PillarsTransformArray.size(); i++)
 				{
@@ -140,7 +139,7 @@ void Fence::DrawImGui()
 				}
 				ImGui::TreePop();
 			}
-			if (ImGui::TreeNode("PillerScale"))
+			if (ImGui::TreeNode("PillarScale"))
 			{
 				for (int i = 0; i < PillarsTransformArray.size(); i++)
 				{
@@ -170,12 +169,12 @@ void Fence::SetPillar(float _upper, float _lower, float _left, float _right, flo
 	PillarPosArray = { PillarUpperLeft_, PillarUpperRight_,  PillarLowerLeft_, PillarLowerRight_ };
 
 	//PillarsTransformのサイズを柱の数分に変更
-	PillarsTransformArray.resize(PillarNum);
+	PillarsTransformArray.resize(PillarNum_);
 
 	//柱の位置,回転,拡大率を配列にセット
 	//位置はPillarPosArrayの値を用いる
 	//回転,拡大率はpillarTransformで統一
-	for (int i = 0; i < PillarNum; i++)
+	for (int i = 0; i < PillarNum_; i++)
 	{
 		PillarsTransformArray[i].position_ = PillarPosArray[i];
 		PillarsTransformArray[i].rotate_ = PillarTransform.rotate_;
@@ -185,7 +184,7 @@ void Fence::SetPillar(float _upper, float _lower, float _left, float _right, flo
 
 void Fence::SetPillarNum(int _num)
 {
-	PillarNum = _num;
+	PillarNum_ = _num;
 }
 
 void Fence::InitWireTransform(Transform _t)

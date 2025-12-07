@@ -108,7 +108,7 @@ public:
 	//自身が該当する状態クラスかどうか返す処理
 	bool IsCharacterStateAttack() override { return CurrentState_->IsAttackState(); }
 	bool IsCharacterStateHitStop() override { return CurrentState_->IsHitStopState(); }
-	bool IsCharacterStateHit() override { return CurrentState_->isHitState(); }
+	bool IsCharacterStateHit() override { return CurrentState_->IsHitState(); }
 	bool IsCharacterStateFenceHit() override { return CurrentState_->IsFenceHitState(); }
 
 	//----------
@@ -150,7 +150,7 @@ public:
 	/// コントローラーの処理を受け取る
 	/// </summary>
 	/// <param name="_PadID">使用しているゲームパッドのID(接続順)</param>
-	void InputCotroller(int _PadID);
+	void InputController(int _PadID);
 	
 	/// <summary>
 	/// プレイヤー専用回転処理

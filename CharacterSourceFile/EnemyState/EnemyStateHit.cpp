@@ -45,7 +45,7 @@ void EnemyStateHit::Exit(Enemy* _enemy)
 	_enemy->OnRotateXStop();
 }
 
-bool EnemyStateHit::isHitState() const
+bool EnemyStateHit::IsHitState() const
 {
 	//”í’eó‘Ô‚Å‚ ‚é‚±‚Æ‚ğ•Ô‚·
 	return true;

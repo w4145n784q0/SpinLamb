@@ -1,7 +1,7 @@
 #include "CharacterWait.h"
 
 CharacterWait::CharacterWait(GameObject* parent)
-	:GameObject(parent, "CharacterCharge"), params_(nullptr)
+	:GameObject(parent, "CharacterWait"), params_(nullptr)
 {
 }
 

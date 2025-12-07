@@ -1,6 +1,5 @@
 #pragma once
 #include "BaseScene.h"
-#include"../UISourceFile/HUD.h"
 #include<array>
 
 //Battle,Practiceシーンの基底クラス
@@ -52,6 +51,7 @@ protected:
 
 	//ポーズ画面の選択アイコンの位置配列
 	//PauseSelectの要素数を使い、それぞれの数値が選択中のアイコンのY位置となる
+	//enumの末尾を使い配列の大きさを決定
 	std::array<float, MaxPauseSelect> IconPosYArray;
 
 public:

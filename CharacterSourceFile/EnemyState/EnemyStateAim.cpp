@@ -3,7 +3,7 @@
 
 namespace
 {
-	std::string EnemyChargeEffectPath = "ParticleAssets\\circle_R.png";
+	const std::string EnemyChargeEffectPath = "ParticleAssets\\circle_R.png";
 }
 
 void EnemyStateAim::Enter(Enemy* _enemy)

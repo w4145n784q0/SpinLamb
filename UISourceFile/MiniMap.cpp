@@ -15,7 +15,7 @@ namespace
 	float ReductionX = 0.0f;
 
 	//キャラクターのZ座標を縮小する値
-	float ReductionY = 0.0f;
+	float ReductionZ = 0.0f;
 
 	//マップのX座標を補正する値
 	float CorrectionValueX = 0.0f;
@@ -48,12 +48,10 @@ void MiniMap::Update()
 	//キャラクターのワールド座標を縮小,補正値を足してマップ内に表示
 
 	FirstPos_.x = (OriginalFirstPos_.x * ReductionX) + CorrectionValueX;
-	FirstPos_.y = (OriginalFirstPos_.z * ReductionY) - CorrectionValueY;
+	FirstPos_.y = (OriginalFirstPos_.z * ReductionZ) - CorrectionValueY;
 
 	SecondPos_.x = (OriginalSecondPos_.x * ReductionX) + CorrectionValueX;
-	SecondPos_.y = (OriginalSecondPos_.z * ReductionY) - CorrectionValueY;
-
-	//FirstRot_.z = 180.0f;
+	SecondPos_.y = (OriginalSecondPos_.z * ReductionZ) - CorrectionValueY;
 }
 
 void MiniMap::Draw()
@@ -80,7 +78,7 @@ void MiniMap::SetMiniMapCSV()
 	//初期化の順番はcsvの各行の順番に合わせる
 	//vの添え字はnamespaceで宣言した列挙型を使用
 	ReductionX = MapData[i_ReductionXParam];
-	ReductionY = MapData[i_ReductionZParam];
+	ReductionZ = MapData[i_ReductionZParam];
 	CorrectionValueX = MapData[i_CorrectionValueXParam];
 	CorrectionValueY = MapData[i_CorrectionValueYParam];
 	

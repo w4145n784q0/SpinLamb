@@ -28,6 +28,9 @@ private:
 	//‰E‰º
 	XMFLOAT3 PillarLowerRight_;
 	
+	///----------’Œ‚Ì”----------
+	//SetPillar‚Ì‰Šú‰»‚É—p‚¢‚é
+	int PillarNum_;
 
 public:
 	Fence(GameObject* parent);

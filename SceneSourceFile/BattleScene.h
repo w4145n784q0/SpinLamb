@@ -42,7 +42,7 @@ private:
 	std::vector<Player*> ActivePlayers_;
 
 	//¶¬‚³‚ê‚½“G(CPU)‚ğ“o˜^‚·‚é”z—ñ
-	std::vector<Enemy*> ActiveEnemys_;
+	std::vector<Enemy*> ActiveEnemies_;
 
 	//----------ó‘Ô‘JˆÚ----------
 	 
