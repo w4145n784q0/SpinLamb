@@ -49,6 +49,10 @@ void HUD::Initialize()
 	//画像の初期化
 	HUDImageLoader_->ImageInitialize();
 
+	//ナンバー画像ハンドル配列の初期化
+	//画像を読み込んでから配列に入れる
+	HUDParam_->InitImageArray();
+
 	//描画テーブルの初期化
 	BuildDrawTable();
 }
@@ -133,22 +137,25 @@ void HUD::DrawPracticeLogo()
 
 void HUD::DrawTimer()
 {
-	if(HUDParam_->pGameTimer_ != nullptr)
+	//制限時間の十の位,一の位を描画
+	Image::SetAndDraw(HUDParam_->ArrayHandle_[HUDParam_->TimeIndexTen_], HUDParam_->TenTime_);
+	Image::SetAndDraw(HUDParam_->ArrayHandle_[HUDParam_->TimeIndexOne_], HUDParam_->OneTime_);
+}
+
+void HUD::UpdateTimer()
+{
+	if (HUDParam_->pGameTimer_ != nullptr)
 	{
 		//現在の時間(十の位,一の位)を取得
 		HUDParam_->TimeIndexTen_ = HUDParam_->pGameTimer_->GetTimeTen();
 		HUDParam_->TimeIndexOne_ = HUDParam_->pGameTimer_->GetTimeOne();
 
 		//制限時間にイージング処理を行う処理
-		DrawTimerEasing();
-
-		//制限時間の十の位,一の位を描画
-		Image::SetAndDraw(HUDParam_->ArrayHandle_[HUDParam_->TimeIndexTen_], HUDParam_->TenTime_);
-		Image::SetAndDraw(HUDParam_->ArrayHandle_[HUDParam_->TimeIndexOne_], HUDParam_->OneTime_);
+		TimerEasing();
 	}
 }
 
-void HUD::DrawTimerEasing()
+void HUD::TimerEasing()
 {
 	//残り時間n秒でイージング拡大処理(今は10秒)
 	if (HUDParam_->pGameTimer_->IsEasingTime() && HUDParam_->pGameTimer_->IsCounting())
@@ -193,6 +200,31 @@ void HUD::DrawTimerEasing()
 			= HUDParam_->OneTime_.scale_.x = HUDParam_->OneTime_.scale_.y = 1.0f;
 		HUDParam_->EasingCount_ = 1.0f;
 	}
+}
+
+void HUD::UpdateMiniMapPosition()
+{
+	//ミニマップの位置,回転を取得
+	if (HUDParam_->pMiniMap_ != nullptr)
+	{
+		HUDParam_->FirstIcon_.position_ = HUDParam_->pMiniMap_->GetFirstPos();
+		HUDParam_->FirstIcon_.rotate_ = HUDParam_->pMiniMap_->GetFirstRot();
+
+		HUDParam_->SecondIcon_.position_ = HUDParam_->pMiniMap_->GetSecondPos();
+		HUDParam_->SecondIcon_.rotate_ = HUDParam_->pMiniMap_->GetSecondRot();
+	}
+}
+
+void HUD::UpdateScoreCalculate()
+{
+	//現在のスコアをそれぞれ計算
+	//十の位:現在のスコアを10で除算
+	//一の位:現在のスコアを10で除算した余り
+	HUDParam_->FirstScoreIndexTen_ = DIVISION_TEN(HUDParam_->FirstScore_);
+	HUDParam_->FirstScoreIndexOne_ = MODULO_TEN(HUDParam_->FirstScore_);
+
+	HUDParam_->SecondScoreIndexTen_ = DIVISION_TEN(HUDParam_->SecondScore_);
+	HUDParam_->SecondScoreIndexOne_ = MODULO_TEN(HUDParam_->SecondScore_);
 }
 
 void HUD::DrawExplanation()
@@ -241,16 +273,6 @@ void HUD::DrawPause()
 
 void HUD::DrawMiniMap()
 {
-	//ミニマップを描画
-	if (HUDParam_->pMiniMap_ != nullptr)
-	{
-		HUDParam_->FirstIcon_.position_  = HUDParam_->pMiniMap_->GetFirstPos();
-		HUDParam_->FirstIcon_.rotate_	 = HUDParam_->pMiniMap_->GetFirstRot();
-
-		HUDParam_->SecondIcon_.position_ = HUDParam_->pMiniMap_->GetSecondPos();
-		HUDParam_->SecondIcon_.rotate_	 = HUDParam_->pMiniMap_->GetSecondRot();
-	}
-
 	//マップ画像,Player1,Player2・敵(CPU)のアイコン描画
 	Image::SetAndDraw(HUDParam_->hMap_, HUDParam_->MapIcon_);
 	Image::SetAndDraw(HUDParam_->hFirstIcon_, HUDParam_->FirstIcon_);
@@ -259,15 +281,6 @@ void HUD::DrawMiniMap()
 
 void HUD::DrawScore()
 {
-	//現在のスコアをそれぞれ計算
-	//十の位:現在のスコアを10で除算
-	//一の位:現在のスコアを10で除算した余り
-	HUDParam_->FirstScoreIndexTen_ = DIVISION_TEN(HUDParam_->FirstScore_);
-	HUDParam_->FirstScoreIndexOne_ = MODULO_TEN(HUDParam_->FirstScore_);
-
-	HUDParam_->SecondScoreIndexTen_ = DIVISION_TEN(HUDParam_->SecondScore_);
-	HUDParam_->SecondScoreIndexOne_ = MODULO_TEN(HUDParam_->SecondScore_);
-
 	//Player1のスコアの十の位,一の位を描画
 	Image::SetAndDraw(HUDParam_->ArrayHandle_[HUDParam_->FirstScoreIndexTen_], HUDParam_->FirstScoreTen_);
 	Image::SetAndDraw(HUDParam_->ArrayHandle_[HUDParam_->FirstScoreIndexOne_], HUDParam_->FirstScoreOne_);
@@ -281,88 +294,101 @@ void HUD::DrawScore()
 
 void HUD::BuildDrawTable()
 {
+	//DrawMode_によってどんな描画をするか
+	//それに応じた描画タスクを登録する
+	//描画するものの文字列(name),条件(predicate),前処理(pre),描画処理(draw)の順に登録
+
 	// -------- 常時描画（ミニマップ） --------
 	HUDDrawTable_->always.push_back(RenderTask{
-		"MiniMap",
-		nullptr, //常時
-		nullptr, 
-		[this]() { DrawMiniMap(); }
+		"MiniMap", //描画するもの
+		nullptr,   //常時
+		[this](RenderContext&) { UpdateMiniMapPosition(); }, //前処理としてミニマップ位置更新
+		[this]() { DrawMiniMap(); } //描画処理
 		});
 
 	// -------- Mode_BeforeStart --------
 	HUDDrawTable_->byMode[Mode_BeforeStart].push_back(RenderTask{
-		"Explanation",
-		nullptr, 
-		nullptr,
-		[this]() { DrawExplanation(); }
+		"Explanation",//描画するもの
+		nullptr,      //常時
+		nullptr,	  //前処理があれば記述
+		[this]() { DrawExplanation(); } //描画処理
 		});
 
 	// -------- Mode_JustBefore --------
 	HUDDrawTable_->byMode[Mode_JustBefore].push_back(RenderTask{
-		"Score", nullptr, nullptr,
-		[this]() { DrawScore(); }
+		"Score",	//描画するもの
+		nullptr,	//常時
+		[this](RenderContext&) { UpdateScoreCalculate(); }, //前処理としてスコア更新
+		[this]() { DrawScore(); } //描画処理
 		});
 
 	HUDDrawTable_->byMode[Mode_JustBefore].push_back(RenderTask{
-		"StartLogo",
-		nullptr,
-		nullptr, 
-		[this]() { DrawStartLogo(); }
+		"StartLogo",//描画するもの
+		nullptr,	//常時
+		nullptr,	//前処理があれば記述
+		[this]() { DrawStartLogo(); } //描画処理
 		});
 
 	// -------- Mode_Playing --------
 	HUDDrawTable_->byMode[Mode_Playing].push_back(RenderTask{
-		"Score", nullptr, nullptr,
-		[this]() { DrawScore(); }
+		"Score",	//描画するもの
+		nullptr,	//常時
+		[this](RenderContext&) { UpdateScoreCalculate(); }, //前処理としてスコア更新
+		[this]() { DrawScore(); } //描画処理
 		});
 
 	HUDDrawTable_->byMode[Mode_Playing].push_back(RenderTask{
-		"Timer",
-		[this]() { return HUDParam_->pGameTimer_ != nullptr; },
-		nullptr,
-		[this]() { DrawTimer(); }
+		"Timer",	//描画するもの
+		[this]() { return HUDParam_->pGameTimer_ != nullptr; },//ポインタがnullでなければ描画
+		[this](RenderContext&) { UpdateTimer(); }, //前処理としてタイマー更新
+		[this]() { DrawTimer(); } //描画処理
 		});
 
 	// -------- Mode_PlayPause（Playing + Pause）--------
 	HUDDrawTable_->byMode[Mode_PlayPause] = HUDDrawTable_->byMode[Mode_Playing];
 	HUDDrawTable_->byMode[Mode_PlayPause].push_back(RenderTask{
-		"Pause",
-		nullptr, nullptr,
+		"Pause",    //描画するもの
+		nullptr,	//常時
+		nullptr,	//前処理があれば記述
 		[this]() { DrawPause(); }
 		});
 
 	// -------- Mode_Finish --------
 	HUDDrawTable_->byMode[Mode_Finish].push_back(RenderTask{
 		"Timer",
-		[this]() { return HUDParam_->pGameTimer_ != nullptr; },
-		nullptr,
-		[this]() { DrawTimer(); }
+		[this]() { return HUDParam_->pGameTimer_ != nullptr; },	//ポインタがnullでなければ描画
+		[this](RenderContext&) { UpdateTimer(); },				//前処理としてタイマー更新
+		[this]() { DrawTimer(); } //描画処理
 		});
 
 	HUDDrawTable_->byMode[Mode_Finish].push_back(RenderTask{
-		"FinishLogo",
-		nullptr, nullptr,
+		"FinishLogo",	//描画するもの
+		nullptr,		//常時
+		nullptr,		//前処理があれば記述
 		[this]() { DrawFinishLogo(); }
 		});
 
 	HUDDrawTable_->byMode[Mode_Finish].push_back(RenderTask{
-		"Score",
-		nullptr, nullptr,
+		"Score",	//描画するもの
+		nullptr,	//常時
+		[this](RenderContext&) { UpdateScoreCalculate(); }, //前処理としてスコア更新
 		[this]() { DrawScore(); }
 		});
 
 	// -------- Mode_Practice --------
 	HUDDrawTable_->byMode[Mode_Practice].push_back(RenderTask{
-		"PracticeLogo",
-		nullptr, nullptr,
+		"PracticeLogo",	//描画するもの
+		nullptr,		//常時
+		nullptr,		//前処理があれば記述
 		[this]() { DrawPracticeLogo(); }
 		});
 
 	// -------- Mode_PracticePause（Practice + Pause）--------
 	HUDDrawTable_->byMode[Mode_PracticePause] = HUDDrawTable_->byMode[Mode_Practice];
 	HUDDrawTable_->byMode[Mode_PracticePause].push_back(RenderTask{
-		"Pause",
-		nullptr, nullptr,
+		"Pause",	//描画するもの
+		nullptr,	//常時
+		nullptr,	//前処理があれば記述
 		[this]() { DrawPause(); }
 		});
 }

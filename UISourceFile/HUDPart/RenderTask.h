@@ -5,7 +5,7 @@
 
 struct RenderContext
 {
-    // 将来 deltaTime などが必要になったら入れる
+    //将来必要になったら入れる
 };
 
 //描画タスク構造体

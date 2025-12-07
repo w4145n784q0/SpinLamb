@@ -91,10 +91,19 @@ public:
 	//画面分割の枠線
 	void DrawSplitLine();
 
-	//-----以下はHUDクラス内で描画する-----
+	//-----以下はHUDクラス内で行う前処理-----
+
+	//タイマーの更新
+	void UpdateTimer();
 
 	//タイマーのイージング処理
-	void DrawTimerEasing();
+	void TimerEasing();
+
+	//ミニマップの位置取得
+	void UpdateMiniMapPosition();
+
+	//スコアの更新
+	void UpdateScoreCalculate();
 
 private:
 	//以下の描画関数は他クラスから呼ばず、上記の描画関数から呼ぶ

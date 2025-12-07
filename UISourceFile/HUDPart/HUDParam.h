@@ -71,8 +71,7 @@ public:
 	int hNumber9_ = -1;
 
 	//ナンバーハンドルの配列
-	std::vector<int> ArrayHandle_ = { hNumber0_,hNumber1_,hNumber2_,hNumber3_,hNumber4_,
-	hNumber5_,hNumber6_,hNumber7_,hNumber8_,hNumber9_ };
+	std::vector<int> ArrayHandle_ = {};
 
 	//マップ全体
 	int hMap_ = -1;
@@ -133,7 +132,7 @@ public:
 	//----------開始前ロゴ----------
 
 	//開始前ロゴ変更までのカウンター
-	float LogoChangeCount_ = 0;
+	int LogoChangeCount_ = 0;
 
 	//----------イージング----------
 
@@ -225,6 +224,8 @@ public:
     void Draw() override {};
     void Release() override {};
 
+	//画像ハンドル初期化
+	void InitImageArray();
 
 	//描画するスコア設定
 	void SetFirstScore(int score) { FirstScore_ = score; }
