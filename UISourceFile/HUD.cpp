@@ -80,6 +80,7 @@ void HUD::DrawFullScreen()
 	//各オブジェクトに被さることを防ぐため、この関数から呼ぶ
 	//これらの処理はGameViewから呼ばれる(通常のDrawとは別に呼ばれる)
 
+	//描画フレームの共有データの入れ物(将来的に必要になったらここに入れる)
 	RenderContext ctx{};
 
 	//常時タスク（ミニマップなど）
@@ -198,7 +199,7 @@ void HUD::TimerEasing()
 		//計測中でない、または残り時間10秒以上なら拡大率は1.0f
 		HUDParam_->TenTime_.scale_.x = HUDParam_->TenTime_.scale_.y
 			= HUDParam_->OneTime_.scale_.x = HUDParam_->OneTime_.scale_.y = 1.0f;
-		HUDParam_->EasingCount_ = 1.0f;
+		HUDParam_->EasingCount_ = 0.0f;
 	}
 }
 
@@ -227,6 +228,66 @@ void HUD::UpdateScoreCalculate()
 	HUDParam_->SecondScoreIndexOne_ = MODULO_TEN(HUDParam_->SecondScore_);
 }
 
+void HUD::UpdateStartLogo()
+{
+	if (HUDParam_->DrawStart_ == S_StartReady)
+	{
+		ReadyEasingStep();     //Ready?の表示(ここでイージングはなし)
+	}
+	else if (HUDParam_->DrawStart_ == S_StartGo)
+	{
+		GoEasingStep();        //Go!のイージング進行
+	}
+}
+
+void HUD::ReadyEasingStep()
+{
+	//一定時間"Ready?"のロゴを描画した後に"Go!"に遷る
+
+	//直接インクリメントできないので仮のカウント用意
+	int cnt = HUDParam_->LogoChangeCount_;
+
+	//タイマーが超えるまで"Ready?"のロゴ描画と更新
+	if (++cnt < HUDParam_->ReadyTimer_)
+	{
+		//仮のカウントを元に戻す
+		HUDParam_->LogoChangeCount_ = cnt;
+	}
+	else
+	{
+		//カウンターを0に戻し、状態遷移
+		HUDParam_->LogoChangeCount_ = 0;
+		HUDParam_->DrawStart_ = S_StartGo;
+	}
+}
+
+void HUD::GoEasingStep()
+{
+	//徐々にロゴが拡大する動き
+
+	//イージング経過時間を計算
+	HUDParam_->EasingCount_ += Dt;
+
+	//正規化する
+	double ratio = static_cast<double>(Normalize(HUDParam_->EasingCount_));
+
+	//拡大率をイージング計算
+	double eased = Easing::EaseOutElastic(ratio);
+
+	//拡大率を最小値~最大値の間で補完する
+	double sca = Easing::Complement(HUDParam_->GoMinScale_, HUDParam_->GoMaxScale_, eased);
+
+	//トランスフォームの拡大量に代入
+	HUDParam_->LogoStart_.scale_.x = HUDParam_->LogoStart_.scale_.y = static_cast<float>(sca);
+
+	//イージング終了判定(一定時間表示したか)
+	if (HUDParam_->EasingCount_ >= HUDParam_->GoEndTime_)
+	{
+		//イージング終了フラグをオン
+		HUDParam_->IsGoEasingEnd_ = true;
+	}
+}
+
 void HUD::DrawExplanation()
 {
 	//ゲーム説明ロゴ描画
@@ -236,20 +297,14 @@ void HUD::DrawExplanation()
 void HUD::DrawStartLogo()
 {
 	//DrawStartの状態によって描画するロゴを切り替える
-	//DrawStart_の状態はStartReady->StartGoの順に変化するが
-	//start_readyに戻る処理はBattleSceneから指示
-	switch (HUDParam_->DrawStart_)
+	if (HUDParam_->DrawStart_ == S_StartReady)
 	{
-	case S_StartReady:
-		DrawReady();
-		break;
-	case S_StartGo:
-		DrawGo();
-		break;
-	default:
-		break;
+		Image::SetAndDraw(HUDParam_->hReady_, HUDParam_->LogoStart_);
 	}
-
+	else if (HUDParam_->DrawStart_ == S_StartGo)
+	{
+		Image::SetAndDraw(HUDParam_->hGo_, HUDParam_->LogoStart_);
+	}
 }
 
 void HUD::DrawFinishLogo()
@@ -324,8 +379,8 @@ void HUD::BuildDrawTable()
 
 	HUDDrawTable_->byMode[Mode_JustBefore].push_back(RenderTask{
 		"StartLogo",//描画するもの
-		nullptr,	//常時
-		nullptr,	//前処理があれば記述
+		[this] { return HUDParam_->DrawStart_ != S_MaxStartMode; },	//常時
+		[this](RenderContext&) { UpdateStartLogo(); },//前処理としてイージング更新
 		[this]() { DrawStartLogo(); } //描画処理
 		});
 
@@ -391,50 +446,4 @@ void HUD::BuildDrawTable()
 		nullptr,	//前処理があれば記述
 		[this]() { DrawPause(); }
 		});
-}
-
-void HUD::DrawReady()
-{
-	//一定時間"Ready?"のロゴを描画した後に"Go!"に遷る
-
-	//直接インクリメントできないので仮のカウント用意
-	int cnt = HUDParam_->LogoChangeCount_;
-
-	if (++cnt < HUDParam_->ReadyTimer_)
-	{
-		//タイマーが超えるまで"Ready?"のロゴ描画
-		Image::SetAndDraw(HUDParam_->hReady_, HUDParam_->LogoStart_);
-
-		//仮のカウントを元に戻す
-		HUDParam_->LogoChangeCount_ = cnt;
-	}
-	else
-	{
-		//カウンターを0に戻し、状態遷移
-		HUDParam_->LogoChangeCount_ = 0;
-		HUDParam_->DrawStart_ = S_StartGo;
-	}
-}
-
-void HUD::DrawGo()
-{
-	//徐々にロゴが拡大する動き
-
-	//イージング経過時間を計算
-	HUDParam_->EasingCount_ += Dt;
-
-	//正規化する
-	double ratio = static_cast<double>(Normalize(HUDParam_->EasingCount_));
-
-	//拡大率をイージング計算
-	double eased = Easing::EaseOutElastic(ratio);
-
-	//拡大率を最小値~最大値の間で補完する
-	double sca = Easing::Complement(HUDParam_->GoMinScale_, HUDParam_->GoMaxScale_, eased);
-
-	//トランスフォームの拡大量に代入
-	HUDParam_->LogoStart_.scale_.x = HUDParam_->LogoStart_.scale_.y = static_cast<float>(sca);
-
-	//"Go!"のロゴ描画
-	Image::SetAndDraw(HUDParam_->hGo_, HUDParam_->LogoStart_);
 }

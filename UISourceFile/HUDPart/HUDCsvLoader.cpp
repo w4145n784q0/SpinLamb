@@ -7,6 +7,7 @@ namespace
 	{
 		i_GoMinScale = 0,
 		i_GoMaxScale,
+		i_GoEndTime_,
 		i_TimeMinScale,
 		i_TimeMaxScale,
 		i_TimeDuration,
@@ -49,8 +50,9 @@ void HUDCsvLoader::SetHUDCSV()
 
 	//‰Šú‰»‚Ì‡”Ô‚Ícsv‚ÌŠes‚Ì‡”Ô‚É‡‚í‚¹‚é
 	//v‚Ì“Y‚¦Žš‚Ínamespace‚ÅéŒ¾‚µ‚½—ñ‹“Œ^‚ðŽg—p
-	hudParam_->GoMinScale_ = EasingData[i_GoMinScale];
-	hudParam_->GoMaxScale_ = EasingData[i_GoMaxScale];
+	hudParam_->GoMinScale_   = EasingData[i_GoMinScale];
+	hudParam_->GoMaxScale_   = EasingData[i_GoMaxScale];
+	hudParam_->GoEndTime_    = EasingData[i_GoEndTime_];
 	hudParam_->TimeMinScale_ = EasingData[i_TimeMinScale];
 	hudParam_->TimeMaxScale_ = EasingData[i_TimeMaxScale];
 	hudParam_->TimeDuration_ = EasingData[i_TimeDuration];

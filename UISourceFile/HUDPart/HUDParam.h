@@ -134,6 +134,9 @@ public:
 	//開始前ロゴ変更までのカウンター
 	int LogoChangeCount_ = 0;
 
+	//Go!のイージングが終了したかどうかのフラグ
+	bool IsGoEasingEnd_ = false;
+
 	//----------イージング----------
 
 	//DrawReady()からDrawGo()に遷る際のタイマー
@@ -150,6 +153,9 @@ public:
 
 	//Go! のロゴの最大拡大率(定数)
 	float GoMaxScale_ = 0.0f;
+
+	//Go!のロゴのイージング終了時間(定数)
+	float GoEndTime_ = 0.0f;
 
 	//制限時間の最小拡大率(定数)
 	float TimeMinScale_ = 0.0f;

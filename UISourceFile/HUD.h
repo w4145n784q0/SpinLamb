@@ -16,7 +16,9 @@ class HUD :
 	public GameObject
 {
 public:
-	//----------モジュール----------
+	//----------モジュール群----------
+	//各モジュールのポインタ 処理ごとに分割
+	
 	//ImGui関連
 	std::unique_ptr<HUDDebugPanel> HUDDebug_;
 
@@ -48,19 +50,26 @@ public:
 	//開放
 	void Release() override;
 
-	//ImGuiの描画
-	void DrawImGui();
+	//-----以下はGameViewから描画する-----
 
 	//全画面描画
 	void DrawFullScreen();
 
+	//画面分割の枠線
+	void DrawSplitLine();
+
+	//ImGuiの描画
+	void DrawImGui();
+
+private:
+
 	//描画タスクテーブルの構築
 	void BuildDrawTable();
 
-	//----------以下は個別に指定する描画関数----------
+	//----------以下はBuildDrawTable()で登録する描画・更新関数----------
+	//一度登録したものはDrawFullScreen()から自動的に呼ばれる
 
-	//-----以下は直接呼ばず、SetDrawModeを介して
-	//描画する(シーンによって切り替わるものなど)-----
+	//-----純粋な描画関数-----
 
 	//練習モード中
 	void DrawPracticeLogo();
@@ -86,12 +95,7 @@ public:
 	//ポーズ画面
 	void DrawPause();
 
-	//-----以下はHUDのポインタから描画する-----
-	
-	//画面分割の枠線
-	void DrawSplitLine();
-
-	//-----以下はHUDクラス内で行う前処理-----
+	//-----前処理-----
 
 	//タイマーの更新
 	void UpdateTimer();
@@ -105,10 +109,12 @@ public:
 	//スコアの更新
 	void UpdateScoreCalculate();
 
-private:
-	//以下の描画関数は他クラスから呼ばず、上記の描画関数から呼ぶ
-	//Draw → DrawStart → DrawReady DrawGo
+	//開始前ロゴの更新
+	void UpdateStartLogo();
 
-	void DrawReady();
-	void DrawGo();
+	//Ready?の更新処理
+	void ReadyEasingStep();
+
+	//Go!の更新処理
+	void GoEasingStep();
 };

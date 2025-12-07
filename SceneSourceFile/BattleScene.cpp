@@ -488,13 +488,17 @@ void BattleScene::UpdateBattleReady()
 {
 	//Ready,GO!を表示している状態
 	
-	if (++StateCounter > SceneLongTransition)
+	if (pHUD_->HUDParam_->IsGoEasingEnd_)
 	{
 		//シーン遷移タイマーをリセット
 		StateCounter = 0;
 
 		//時間経過したらバトル中状態へ移行
 		BattleState_ = S_Now;
+
+		//イージング時間・フラグを戻しておく
+		pHUD_->HUDParam_->IsGoEasingEnd_ = false;
+		pHUD_->HUDParam_->EasingCount_ = 0.0f;
 
 		//時間経過でPlayer,Enemyに移動許可を出す
 		//Enemy,Player2のnullチェックを行い、存在するなら実行
