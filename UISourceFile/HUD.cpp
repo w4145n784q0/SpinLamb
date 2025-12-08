@@ -353,6 +353,8 @@ void HUD::BuildDrawTable()
 {
 	//DrawMode_によってどんな描画をするか
 	//それに応じた描画タスクを登録する
+	//常時描画でないならHUDDrawTable_->byMode[HUDMode::DrawMode::モード名].push_back(RenderTask{
+	//常時描画ならHUDDrawTable_->always.push_back(RenderTask{ });
 	//描画するものの文字列(name),条件(predicate),前処理(pre),描画処理(draw)の順に登録
 
 	//-------- 常時描画（ミニマップ） --------
@@ -402,13 +404,13 @@ void HUD::BuildDrawTable()
 		});
 
 	//-------- Mode_PlayPause（Playing + Pause）--------
-	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_PlayPause]
-		= HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_Playing];
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_PlayPause]//Playingのタスクをコピーし差分だけ追加
+		= HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_Playing];//こうすることで既存の描画モードのタスクを丸ごと引き継げる
 	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_PlayPause].push_back(RenderTask{
 		"Pause",    //描画するもの
 		nullptr,	//常時
 		nullptr,	//前処理があれば記述
-		[this]() { DrawPause(); }
+		[this]() { DrawPause(); }	//描画処理
 		});
 
 	//-------- Mode_Finish --------
@@ -416,21 +418,21 @@ void HUD::BuildDrawTable()
 		"Timer",
 		[this]() { return HUDParam_->pGameTimer_ != nullptr; },	//ポインタがnullでなければ描画
 		[this](RenderContext&) { UpdateTimer(); },				//前処理としてタイマー更新
-		[this]() { DrawTimer(); } //描画処理
+		[this]() { DrawTimer(); }	//描画処理
 		});
 
 	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_Finish].push_back(RenderTask{
 		"FinishLogo",	//描画するもの
 		nullptr,		//常時
 		nullptr,		//前処理があれば記述
-		[this]() { DrawFinishLogo(); }
+		[this]() { DrawFinishLogo(); }	//描画処理
 		});
 
 	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_Finish].push_back(RenderTask{
 		"Score",	//描画するもの
 		nullptr,	//常時
 		[this](RenderContext&) { UpdateScoreCalculate(); }, //前処理としてスコア更新
-		[this]() { DrawScore(); }
+		[this]() { DrawScore(); }	//描画処理
 		});
 
 	//-------- Mode_Practice --------
@@ -438,16 +440,18 @@ void HUD::BuildDrawTable()
 		"PracticeLogo",	//描画するもの
 		nullptr,		//常時
 		nullptr,		//前処理があれば記述
-		[this]() { DrawPracticeLogo(); }
+		[this]() { DrawPracticeLogo(); }	//描画処理
 		});
 
 	//-------- Mode_PracticePause（Practice + Pause）--------
-	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_PracticePause]
+	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_PracticePause]//Practiceのタスクをコピーし差分だけ追加
 		= HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_Practice];
 	HUDDrawTable_->byMode[HUDMode::DrawMode::Mode_PracticePause].push_back(RenderTask{
 		"Pause",	//描画するもの
 		nullptr,	//常時
 		nullptr,	//前処理があれば記述
-		[this]() { DrawPause(); }
+		[this]() { DrawPause(); }	//描画処理
 		});
+
+	//今後追加する場合はHUDMode::DrawModeに項目を追加して、ここにタスクを登録する
 }
