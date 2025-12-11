@@ -17,7 +17,7 @@ void CharacterFence::GetWireNormal()
 		return;
 	}
 
-	//各インスタンスから柵の法線を取得
+	//ポインタから柵の法線を取得
 	UpperWire* pUpperWire = (UpperWire*)FindObject("UpperWire");
 	assert(pUpperWire != nullptr);
 	params_->FenceHitParam_.UpperNormal_ = pUpperWire->GetNormal();

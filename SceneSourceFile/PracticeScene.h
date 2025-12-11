@@ -17,7 +17,7 @@ private:
 	//----------サウンドハンドル----------
 	int hSoundPractice_; 
 
-	//----------インスタンス----------
+	//----------ポインタ----------
 	Player* pPlayer1_;
 	Player* pPlayer2_;
 	Enemy* pEnemy_;

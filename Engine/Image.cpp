@@ -213,6 +213,7 @@ namespace Image
 		return _datas[handle]->transform.GetWorldMatrix();
 	}
 
+	//csv読み込み
 	void SetCSVImage()
 	{
 		//csvファイルを読み込む
@@ -250,6 +251,7 @@ namespace Image
 		Draw(handle);
 	}
 
+	//スプライトシートから特定のコマを描画する
 	void DrawSprite(int handle, int frameIndex, int frameWidth, int frameHeight, int sheetWidth)
 	{
 		//横方向の総コマ数

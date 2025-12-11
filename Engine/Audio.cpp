@@ -204,7 +204,7 @@ void Audio::Play(int ID)
 	}
 }
 
-
+//’â~
 void Audio::Stop(int ID)
 {
 	for (int i = 0; i < audioDatas[ID].svNum; i++)
@@ -239,6 +239,7 @@ void Audio::AllRelease()
 	pXAudio->Release();
 }
 
+//–Â‚ç‚·‰ñ”‚ÌCSV“Ç‚İ‚İ
 void Audio::InitCSVAudio()
 {
 	//csvƒtƒ@ƒCƒ‹‚ğ“Ç‚İ‚Ş

@@ -55,7 +55,7 @@ void HowToPlayScene::Initialize()
 	////インデックスの初期位置を指定
 	itr = ImageList_.begin();
 
-	//インスタンス生成
+	//ポインタを取得
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
 	assert(pTransitionEffect_ != nullptr);
 
@@ -159,7 +159,7 @@ void HowToPlayScene::UpdateTransition()
 
 	if (++SceneTransitionTimer_ > SceneShortTransition)
 	{
-		//SceneManagerのインスタンスからタイトルシーンへ
+		//SceneManagerのポインタからタイトルシーンへ
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		assert(pSceneManager != nullptr);
 

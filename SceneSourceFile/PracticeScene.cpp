@@ -161,7 +161,7 @@ void PracticeScene::Initialize()
 			//CPUの名前を最後に接触したキャラクターとして初期化(名前が割り振られたタイミングで初期化)
 			InitEnemys[i]->GetParams()->SetAttackedName(InitEnemys[i]->GetObjectName());
 
-			//プレイヤーの初期化配列からランダムなインスタンスをセット
+			//プレイヤーの初期化配列からランダムなポインタをセット
 			//(現状は敵と一対一なのでplayer1が選ばれる)
 			//PracticeSceneから設定することで値の相違・結合度の上昇を防ぐ
 			InitEnemys[i]->SetPlayerPointer(InitPlayers[rand() % InitPlayers.size()]);
@@ -182,7 +182,7 @@ void PracticeScene::Initialize()
 	Instantiate<HUD>(this);
 	Instantiate<TransitionEffect>(this);
 
-	//インスタンスを初期化
+	//ポインタを取得
 	pMiniMap_ = (MiniMap*)FindObject("MiniMap");
 	assert(pMiniMap_ != nullptr);
 
@@ -298,7 +298,7 @@ void PracticeScene::UpdateTransition()
 
 	if (++SceneTransitionTimer_ > SceneShortTransition)
 	{
-		//SceneManagerのインスタンスからタイトルシーンへ
+		//SceneManagerのポインタからタイトルシーンへ
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		assert(pSceneManager != nullptr);
 

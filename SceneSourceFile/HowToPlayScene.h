@@ -49,7 +49,7 @@ private:
 	//ModeList_のインデックスを指す値
 	std::list<HowtoImage>::iterator itr;
 
-	//----------インスタンス----------
+	//----------ポインタ----------
 	TransitionEffect* pTransitionEffect_;
 
 public:

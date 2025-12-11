@@ -31,7 +31,7 @@ GameModeScene::GameModeScene(GameObject* parent)
 	hPlayerNumSelect_(-1), hPlayerSelectIcon_(-1), 
 	TextArray_({}), PlayerTransArray_({}), 
 
-	//----------サウンド・インスタンス----------
+	//----------サウンド・ポインタ----------
 	hSoundGameMode_(-1), hSoundSelect_(-1), hSoundDecide_(-1), hSoundCancel_(-1),
 	pTransitionEffect_(nullptr)
 {
@@ -130,7 +130,7 @@ void GameModeScene::Initialize()
 	//PlayerNumList_のインデックスの初期位置を指定
 	PlayerNumitr = PlayerNumList_.begin();
 
-	//インスタンス生成
+	//ポインタを取得
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
 	assert(pTransitionEffect_ != nullptr);
 
@@ -443,7 +443,7 @@ void GameModeScene::UpdateTransition()
 
 	if (++SceneTransitionTimer_ > SceneShortTransition)
 	{
-		//SceneManagerインスタンスから選択しているシーンへ遷移する
+		//SceneManagerポインタから選択しているシーンへ遷移する
 
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		assert(pSceneManager != nullptr);

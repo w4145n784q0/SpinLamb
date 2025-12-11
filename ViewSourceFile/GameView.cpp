@@ -20,28 +20,29 @@ namespace GameView
 	//今のシーン(基底クラスを受け取る)
 	BaseScene* pBaseScene_;
 
-	//プレイヤー1,2のインスタンス
+	//プレイヤー1,2のポインタ
 	Player* pPlayer1_;
 	Player* pPlayer2_;
 
-	//Enemyのインスタンス
+	//Enemyのポインタ
 	Enemy* pEnemy_;
 
-	//HUDのインスタンス
+	//HUDのポインタ
 	HUD* pHUD_;
 
-	//地面クラスのインスタンス
+	//地面クラスのポインタ
 	Ground* pGround_;
 
-	//柵クラスのインスタンス
+	//柵クラスのポインタ
 	Fence* pFence_;
 
-	//ステージ外オブジェクトクラスのインスタンス
+	//ステージ外オブジェクトクラスのポインタ
 	OutStageThing* pOutStageThing_;
 
-	//シーン遷移演出クラスのインスタンス
+	//シーン遷移演出クラスのポインタ
 	TransitionEffect* pTransitionEffect_;
 
+	//ゲーム画面の映し方の初期化
 	void GameView::Initialize()
 	{
 		GameViewMode_		= S_NormalScreen;
@@ -55,6 +56,7 @@ namespace GameView
 		pTransitionEffect_	= nullptr;
 	}
 
+	//解放
 	void GameView::Release()
 	{
 		//実体の解放はSceneManager(シーン切り替え時)
@@ -95,6 +97,7 @@ namespace GameView
 		}
 	}
 
+	//画面全体描画(メニューなどに使用)
 	void GameView::ViewNormal()
 	{
 		//全体画面描画
@@ -108,6 +111,7 @@ namespace GameView
 		Camera::Update();
 	}
 
+	//一人プレイ用描画(プレイヤーの背中にカメラを置く)
 	void GameView::ViewPvE()
 	{
 		if (pPlayer1_ == nullptr)
@@ -128,6 +132,7 @@ namespace GameView
 		Camera::Update();
 	}
 
+	//二人プレイ用描画(左画面分割)
 	void GameView::ViewPlayer1()
 	{
 		if (pPlayer1_ == nullptr)
@@ -148,6 +153,7 @@ namespace GameView
 		Camera::Update();
 	}
 
+	//二人プレイ用描画(右画面分割)
 	void GameView::ViewPlayer2()
 	{
 		if (pPlayer2_ == nullptr)
@@ -168,6 +174,7 @@ namespace GameView
 		Camera::Update();
 	}
 
+	//二人プレイ用のImage関連のみ描画(Player1)
 	void ViewImagePlayer1()
 	{
 		//ここからImage関係は呼ぶ(2人プレイのとき限定)
@@ -186,6 +193,7 @@ namespace GameView
 		}
 	}
 
+	//二人プレイ用のImage関連のみ描画(Player2)
 	void ViewImagePlayer2()
 	{
 		//ここから画像関係は呼ぶ(2人プレイのとき限定)
@@ -204,6 +212,7 @@ namespace GameView
 		}
 	}
 
+	//ゲーム中のImGui描画
 	void GameView::ViewPlayImGui()
 	{
 		//渡されたポインタからImGuiを描画
@@ -245,6 +254,7 @@ namespace GameView
 		}
 	}
 
+	//エンジン用(Camera,InputなどのEngine関係)のImGui描画
 	void ViewEngineImGui()
 	{
 		//カメラ関係のImGuiを描画
@@ -254,6 +264,7 @@ namespace GameView
 		Input::DrawImGui();
 	}
 
+	//シーン用ImGui描画
 	void ViewSceneImGui()
 	{
 		//渡されたポインタからシーン用ImGuiを描画
@@ -265,6 +276,7 @@ namespace GameView
 		}
 	}
 
+	//HUD用描画(画面全体)
 	void GameView::ViewHUDNormal()
 	{
 		//渡されたポインタからHUDを描画
@@ -295,6 +307,7 @@ namespace GameView
 		pHUD_->DrawFullScreen();
 	}
 
+	//シーン遷移演出描画
 	void GameView::ViewTransitionEffect()
 	{
 		//渡されたポインタから遷移演出を描画
@@ -342,12 +355,13 @@ namespace GameView
 		GameViewMode_ = mode;
 	}
 
-	//シーンのインスタンス設定
+	//シーンのポインタ設定
 	void SetScene(BaseScene* _scene)
 	{
 		pBaseScene_ = _scene;
 	}
 
+	//プレイヤーのポインタを配列で受け取り設定(Battle,Practiceで呼ぶ)
 	void GameView::SetPlayers(std::vector<Player*> _players)
 	{
 		//プレイヤー配列が空か最大プレイヤー数を超えたら処理しない
@@ -377,37 +391,37 @@ namespace GameView
 		}
 	}
 
-	//HUDのインスタンスを設定
+	//HUDのポインタを設定
 	void GameView::SetHUD(HUD* _HUD)
 	{
 		pHUD_ = _HUD;
 	}
 
-	//Enemyのインスタンスを設定
+	//Enemyのポインタを設定
 	void GameView::SetEnemy(Enemy* _enemy)
 	{
 		pEnemy_ = _enemy;
 	}
 
-	//Groundのインスタンスを設定
+	//Groundのポインタを設定
 	void GameView::SetGround(Ground* _ground)
 	{
 		pGround_ = _ground;
 	}
 
-	//Fenceのインスタンスを設定
+	//Fenceのポインタを設定
 	void GameView::SetFence(Fence* _fence)
 	{
 		pFence_ = _fence;
 	}
 
-	//OutStageThingのインスタンスを設定
+	//OutStageThingのポインタを設定
 	void GameView::SetOutStageThing(OutStageThing* _stagething)
 	{
 		pOutStageThing_ = _stagething;
 	}
 
-	//TransitionEffectのインスタンスを設定
+	//TransitionEffectのポインタを設定
 	void GameView::SetTransitionEffect(TransitionEffect* _transition)
 	{
 		pTransitionEffect_ = _transition;

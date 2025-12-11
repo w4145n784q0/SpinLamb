@@ -16,10 +16,10 @@ using namespace DirectX;
 //-----------------------------------------------------------
 namespace Input
 {
-	/// スティックを傾けた値(0.0~1.0)がこの値を上回ったか
+	//スティックを傾けた値(0.0~1.0)がこの値を上回ったか
 	extern float StickTilt;
 
-	/// スティックをわずかに傾けた値(0.0~1.0)がこの値を上回ったか
+	//スティックをわずかに傾けた値(0.0~1.0)がこの値を上回ったか
 	extern float StickMicroTilt;
 
 	//コントローラー振動量(左)
@@ -75,7 +75,7 @@ namespace Input
 	XMFLOAT3 GetMousePosition();
 
 	//マウスカーソルの位置をセット
-	//引数：マウスカーソルの位置
+	//引数：マウスカーソルの位置(x,y)
 	void SetMousePosition(int x, int y);
 
 	//そのフレームでのマウスの移動量を取得
@@ -86,45 +86,58 @@ namespace Input
 	///////////////////////////　コントローラー　//////////////////////////////////
 	//コントローラーのボタンが押されているか調べる
 	//引数：buttonCode	調べたいボタンの番号
+	//引数：padID 調べたいコントローラーのID デフォルトは0番目のコントローラー
 	//戻値：押されていればtrue
 	bool IsPadButton(int buttonCode, int padID = 0);
 
 	//コントローラーのボタンを今押したか調べる（押しっぱなしは無効）
 	//引数：buttonCode	調べたいボタンの番号
+	//引数：padID 調べたいコントローラーのID デフォルトは0番目のコントローラー
 	//戻値：押した瞬間だったらtrue
 	bool IsPadButtonDown(int buttonCode, int padID = 0);
 
 	//コントローラーのボタンを今放したか調べる
 	//引数：buttonCode	調べたいボタンの番号
+	//引数：padID 調べたいコントローラーのID デフォルトは0番目のコントローラー
 	//戻値：放した瞬間だったらtrue
 	bool IsPadButtonUp(int buttonCode, int padID = 0);
 
 	//左スティックの傾きを取得
+	//引数：padID 調べたいコントローラーのID デフォルトは0番目のコントローラー
 	//戻値:傾き具合（-1～1）
 	XMFLOAT3 GetPadStickL(int padID = 0);
 
 	//右スティックの傾きを取得
+	//引数：padID 調べたいコントローラーのID デフォルトは0番目のコントローラー
 	//戻値:傾き具合（-1～1）
 	XMFLOAT3 GetPadStickR(int padID = 0);
 
 	//左トリガーの押し込み具合を取得
+	//引数：padID 調べたいコントローラーのID デフォルトは0番目のコントローラー
 	//戻値:押し込み具合（0～1）
-	float		GetPadTriggerL(int padID = 0);
+	float GetPadTriggerL(int padID = 0);
 
 	//右トリガーの押し込み具合を取得
+	//引数：padID 調べたいコントローラーのID デフォルトは0番目のコントローラー
 	//戻値:押し込み具合（0～1）
-	float		GetPadTriggerR(int padID = 0);
+	float GetPadTriggerR(int padID = 0);
 
 	//振動させる
+	//引数：l,r 左,右のモーターの強さ(振動量)
+	//引数：padID 調べたいコントローラーのID デフォルトは0番目のコントローラー
 	void SetPadVibration(int l, int r, int padID = 0);
 
 	//コントローラー振動開始(振動量の固定値)
+	//引数：padID 調べたいコントローラーのID デフォルトは0番目のコントローラー
 	void ControllerVibrationStart(int _PadID = 0);
 
 	//コントローラー振動開始(引数あり)
+	//引数：l,r 左,右のモーターの強さ(振動量)
+	//引数：padID 調べたいコントローラーのID デフォルトは0番目のコントローラー
 	void ControllerVibrationStart(int l, int r, int _PadID = 0);
 
 	//コントローラー振動を止める
+	//引数：padID 調べたいコントローラーのID デフォルトは0番目のコントローラー
 	void StopPadVibration(int padID = 0);
 
 	//スティックを左右上下に一定以上倒したか

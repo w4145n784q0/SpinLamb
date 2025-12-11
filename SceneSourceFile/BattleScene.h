@@ -23,7 +23,7 @@ private:
 	//開始・終了ホイッスルサウンド
 	int hSoundWhistle_;
 
-	//----------インスタンス----------
+	//----------各クラスのポインタ----------
 	Player* pPlayer1_;
 	Player* pPlayer2_;
 	Enemy* pEnemy_;

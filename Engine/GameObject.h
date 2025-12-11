@@ -229,7 +229,7 @@ public:
 	/// <summary>
 	/// Transformを初期化する際の共通処理
 	/// </summary>
-	/// <param name="_csv">読み込んだCSVインスタンス</param>
+	/// <param name="_csv">読み込んだCSVインスタンス(実体の値渡し)</param>
 	/// <param name="_name">読み込みたいパラメータの名前</param>
 	/// <param name="_tr">代入するトランスフォーム変数</param>
 	void InitCSVTransform(CsvReader& _csv, const std::string& _name, Transform& _tr);
@@ -237,7 +237,7 @@ public:
 	/// <summary>
 	/// Transformをまとめて初期化する際の共通処理
 	/// </summary>
-	/// <param name="_csv">読み込んだCSVインスタンス</param>
+	/// <param name="_csv">読み込んだCSVインスタンス(実体の値渡し)</param>
 	/// <param name="_names">読み込みたいパラメータの名前配列</param>
 	/// <param name="_Transforms">代入するトランスフォーム配列</param>
 	void InitCSVTransformArray(CsvReader& _csv, const std::vector<std::string>& _names,

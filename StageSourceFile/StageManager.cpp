@@ -25,7 +25,7 @@ namespace
 		i_CollisionZ,
 	};
 
-	//インスタンス
+	//ポインタ
 	//このcppファイル内で一度しか使わないので名前空間で宣言
 	Ground* pGround_ = nullptr;
 	Fence* pFence_ = nullptr;
@@ -204,7 +204,7 @@ void StageManager::InitGroundData()
 {
 	//Groundクラスの初期化行う
 
-	//地面クラスのインスタンスを取得
+	//地面クラスのポインタを取得
 	pGround_ = (Ground*)FindObject("Ground");
 	assert(pGround_ != nullptr);
 
@@ -222,7 +222,7 @@ void StageManager::InitFenceData()
 {
 	//Fenceクラスのトランスフォーム関係の初期化行う
 
-	//柵クラスのインスタンスを取得
+	//柵クラスのポインタを取得
 	pFence_ = (Fence*)FindObject("Fence");
 	assert(pFence_ != nullptr);
 
@@ -239,7 +239,7 @@ void StageManager::InitEndData()
 {
 	//Fenceクラスの柱の位置、法線の方向を初期化
 
-	//柵クラスのインスタンスを取得
+	//柵クラスのポインタを取得
 	pFence_ = (Fence*)FindObject("Fence");
 	assert(pFence_ != nullptr);
 
@@ -259,7 +259,7 @@ void StageManager::InitOutStageThingData()
 {
 	//ステージ外オブジェクトを初期化
 
-	//OutStageThingのインスタンスを取得
+	//OutStageThingのポインタを取得
 	pOutStageThing_ = (OutStageThing*)FindObject("OutStageThing");
 	assert(pOutStageThing_ != nullptr);
 

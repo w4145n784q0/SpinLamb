@@ -152,7 +152,7 @@ private:
 	//StateList_のインデックスを指す値
 	std::list<PlayerNum>::iterator PlayerNumitr;
 
-	//----------インスタンス----------
+	//----------ポインタ----------
 	TransitionEffect* pTransitionEffect_;
 	
 public:

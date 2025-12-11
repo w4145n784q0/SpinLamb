@@ -40,7 +40,7 @@ void TitleScene::Initialize()
 	//タイトル用サウンド再生
 	Audio::Play(hSoundTitle_);
 
-	//インスタンス生成
+	//ポインタを取得
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
 	assert(pTransitionEffect_ != nullptr);
 
@@ -90,7 +90,7 @@ void TitleScene::UpdateTransition()
 
 	if (++SceneTransitionTimer_ > SceneTransition)
 	{
-		//SceneManagerのインスタンスからゲーム選択シーンへ
+		//SceneManagerのポインタからゲーム選択シーンへ
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		assert(pSceneManager != nullptr);
 

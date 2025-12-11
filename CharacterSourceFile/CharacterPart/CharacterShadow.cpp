@@ -14,7 +14,7 @@ void CharacterShadow::InitShadow()
 		return;
 	}
 
-	//初期化の時点でステージクラスのインスタンスを取得
+	//初期化の時点でStageクラスのポインタを取得
 	params_->ShadowParam_.pGround_ = (Ground*)FindObject("Ground");
 	assert(params_->ShadowParam_.pGround_ != nullptr);
 

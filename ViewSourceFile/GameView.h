@@ -74,28 +74,28 @@ namespace GameView
 
 	//----------ポインタセッター関数----------
 
-	//シーンのインスタンス設定
+	//シーンのポインタ設定
 	void SetScene(BaseScene* _scene);
 
-	//プレイヤーのインスタンスを配列で受け取り設定(Battle,Practiceで呼ぶ)
+	//プレイヤーのポインタを配列で受け取り設定(Battle,Practiceで呼ぶ)
 	void SetPlayers(std::vector<Player*> _players);
 
-	//HUDのインスタンスを設定
+	//HUDのポインタを設定
 	void SetHUD(HUD* _HUD);
 
-	//Enemyのインスタンスを設定
+	//Enemyのポインタを設定
 	void SetEnemy(Enemy* _enemy);
 
-	//Groundのインスタンスを設定
+	//Groundのポインタを設定
 	void SetGround(Ground* _ground);
 
-	//Fenceのインスタンスを設定
+	//Fenceのポインタを設定
 	void SetFence(Fence* _fence);
 
-	//OutStageThingのインスタンスを設定
+	//OutStageThingのポインタを設定
 	void SetOutStageThing(OutStageThing* _stagething);
 
-	//TransitionEffectのインスタンスを設定
+	//TransitionEffectのポインタを設定
 	void SetTransitionEffect(TransitionEffect* _transition);
 };
 

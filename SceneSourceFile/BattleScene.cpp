@@ -196,7 +196,7 @@ void BattleScene::Initialize()
 			//CPUの名前を最後に接触したキャラクターとして初期化(名前が割り振られたタイミングで初期化)
 			InitEnemies[i]->GetParams()->SetAttackedName(InitEnemies[i]->GetObjectName());
 
-			//プレイヤーの初期化配列からランダムなインスタンスをセット
+			//プレイヤーの初期化配列からランダムなポインタをセット
 			//(現状は敵と一対一なのでplayer1が選ばれる)
 			//BattleSceneから設定することで値の相違・結合度の上昇を防ぐ
 			InitEnemies[i]->SetPlayerPointer(InitPlayers[rand() % InitPlayers.size()]);
@@ -218,7 +218,7 @@ void BattleScene::Initialize()
 	Instantiate<HUD>(this);
 	Instantiate<TransitionEffect>(this);
 
-	//インスタンスを初期化
+	//ポインタを取得
 	pGameTimer_ = (GameTimer*)FindObject("GameTimer");
 	assert(pGameTimer_ != nullptr);
 
@@ -385,7 +385,7 @@ void BattleScene::UpdateTransition()
 	if (++SceneTransitionTimer_ > SceneShortTransition)
 	{
 
-		//SceneManagerのインスタンスを取得
+		//SceneManagerのポインタを取得
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		assert(pSceneManager != nullptr);
 

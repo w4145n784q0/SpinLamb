@@ -21,7 +21,7 @@ private:
 	//タイトル時の決定音
 	int hSoundStart_;
 
-	//----------インスタンス----------
+	//----------ポインタ----------
 	TransitionEffect* pTransitionEffect_;
 
 public:

@@ -225,26 +225,31 @@ void Camera::SetShakeSpeed(float _speed)
 	ShakeSpeed = _speed;
 }
 
+//カメラの初期位置を取得
 XMFLOAT3 Camera::GetInitPos()
 {
 	return InitPosition;
 }
 
+//カメラの初期焦点を取得
 XMFLOAT3 Camera::GetInitTar()
 {
 	return InitTarget;
 }
 
+//カメラの振動時間(短)を取得
 float Camera::GetShakeTimeShort()
 {
 	return ShakeTimeShort;
 }
 
+//カメラの振動時間(中)を取得
 float Camera::GetShakeTimeMiddle()
 {
 	return ShakeTimeMiddle;
 }
 
+//カメラの振動時間(長)を取得
 float Camera::GetShakeTimeLong()
 {
 	return ShakeTimeLong;

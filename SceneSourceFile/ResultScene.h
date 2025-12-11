@@ -62,7 +62,7 @@ private:
 	//各結果ロゴの画像ハンドル配列
 	std::array<int, MaxResult> ResultArray_;
 
-	//----------インスタンス----------
+	//----------ポインタ----------
 	TransitionEffect* pTransitionEffect_;
 public:
 	ResultScene(GameObject* parent);

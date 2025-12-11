@@ -344,6 +344,8 @@ void VFX::End(int handle)
     }
 }
 
+//エミッターデータに各値を入れる
+//CSVで読み取れる値の初期化
 void VFX::SetEmitter(EmitterData &data, std::vector<float> v)
 {
     //CSVで読み取った値を入れた配列を受け取り、EmitterDataに入れていく

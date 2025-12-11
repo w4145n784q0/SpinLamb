@@ -157,7 +157,7 @@ public:
         float ShadowHeight_ = 0.0f;         //影をつける高さ
         float ShadowCorrection_ = 0.0f;     //影の位置の調整値
         Transform ShadowTrans_;             //影の描画トランスフォーム
-        Ground* pGround_ = nullptr;         //地面のインスタンス
+        Ground* pGround_ = nullptr;         //地面(Stageクラス)のポインタ
     };
     ShadowParam ShadowParam_;
 

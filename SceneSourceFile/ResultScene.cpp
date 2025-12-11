@@ -75,7 +75,7 @@ void ResultScene::Initialize()
 	hSoundBackTitle_ = Audio::Load(Sound + SE + "Cancel.wav", false, Audio::CancelSoundNum_);
 	assert(hSoundBackTitle_ >= 0);
 
-	//SceneManagerインスタンスからBattleSceneから各スコアを取得
+	//SceneManagerポインタからBattleSceneから各スコアを取得
 	SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 	assert(pSceneManager != nullptr);
 	FirstCharaScore =  pSceneManager->GetFirstCharaScore();
@@ -105,7 +105,7 @@ void ResultScene::Initialize()
 		ResultArray_ = { hPlayer1Win_, hPlayer2Win_, hDraw_ };
 	}
 
-	//インスタンス生成
+	//ポインタを取得
 	pTransitionEffect_ = (TransitionEffect*)FindObject("TransitionEffect");
 	assert(pTransitionEffect_ != nullptr);
 
@@ -194,7 +194,7 @@ void ResultScene::UpdateTransition()
 	//カウント中はシーン遷移エフェクト行う
 	if (++SceneTransitionTimer_ > SceneShortTransition)
 	{
-		//SceneManagerのインスタンスからタイトルシーンへ
+		//SceneManagerのポインタからタイトルシーンへ
 		SceneManager* pSceneManager = (SceneManager*)FindObject("SceneManager");
 		assert(pSceneManager != nullptr);
 
