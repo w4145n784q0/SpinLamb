@@ -56,5 +56,10 @@ public:
     /// X‰ñ“]‚ğ~‚ß‚é
     /// </summary>
     void RotateXStop();
+
+    /// <summary>
+    /// Šp“x‚ğ360“xˆÈ“à‚É§ŒÀ‚·‚é
+    /// </summary>
+    void LimitAngleX(float& _x);
 };
 

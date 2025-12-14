@@ -54,11 +54,8 @@ void CharacterRotate::MoveRotateX()
 		float x = character_->GetRotate().x;
 		x += params_->RotateParam_.MoveRotateX_;
 
-		//360度を超えたら0度に戻す
-		if (x >= ANGLE_360_DEG)
-		{
-			x = ANGLE_0_DEG;
-		}
+		//360度を超えたら0度に戻してからセットする
+		LimitAngleX(x);
 		character_->SetRotateX(x);
 	}
 }
@@ -77,11 +74,8 @@ void CharacterRotate::FastRotateX()
 		float x = character_->GetRotate().x;
 		x += params_->RotateParam_.FastRotateX_;
 
-		//360度を超えたら0度に戻す
-		if (x >= ANGLE_360_DEG)
-		{
-			x = ANGLE_0_DEG;
-		}
+		//360度を超えたら0度に戻してからセットする
+		LimitAngleX(x);
 		character_->SetRotateX(x);
 	}
 }
@@ -92,5 +86,15 @@ void CharacterRotate::RotateXStop()
 	if (character_ != nullptr)
 	{
 		character_->SetRotateX(ANGLE_0_DEG);
+	}
+}
+
+void CharacterRotate::LimitAngleX(float& _x)
+{
+	//360度を超えたら0度に戻す
+	//元の値から360を引く
+	if (_x >= ANGLE_360_DEG)
+	{
+		_x -= ANGLE_360_DEG;
 	}
 }

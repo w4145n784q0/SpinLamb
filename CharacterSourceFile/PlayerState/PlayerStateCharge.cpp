@@ -1,7 +1,7 @@
 #include "PlayerStateCharge.h"
 #include "../Player.h"
 #include "../../Engine/Input.h"
-
+#include"../../Engine/Global.h"
 namespace
 {
 	const std::string PlayerChargeEffectPath = "ParticleAssets\\circle_B.png";
@@ -77,12 +77,14 @@ void PlayerStateCharge::Update(Player* _player)
 	{
 		float tmp = _player->GetRotate().y;
 		tmp -= _player->GetChargeRotateY();
+		tmp = NormalizeAngle(tmp);
 		_player->SetRotateY(tmp);
 	}
 	if (Input::IsKey(DIK_RIGHT) || Input::GetPadStickL(_player->GetControllerID()).x > Input::StickTilt)
 	{
 		float tmp = _player->GetRotate().y;
 		tmp += _player->GetChargeRotateY();
+		tmp = NormalizeAngle(tmp);
 		_player->SetRotateY(tmp);
 	}
 

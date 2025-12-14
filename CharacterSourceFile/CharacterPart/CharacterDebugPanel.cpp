@@ -85,9 +85,9 @@ void CharacterDebugPanel::DrawCharacterImGui()
 	if (ImGui::TreeNode("Initialize"))
 	{
 		ImGui::Text("CharacterID:%d", params_->InitParam_.CharacterID);
-		ImGui::Text("ForwardX:%.3f", params_->InitParam_.StartPosition_.x);
-		ImGui::Text("ForwardY:%.3f", params_->InitParam_.StartPosition_.y);
-		ImGui::Text("ForwardZ:%.3f", params_->InitParam_.StartPosition_.z);
+		ImGui::Text("InitializePos:%.3f", params_->InitParam_.StartPosition_.x);
+		ImGui::Text("InitializePos:%.3f", params_->InitParam_.StartPosition_.y);
+		ImGui::Text("InitializePos:%.3f", params_->InitParam_.StartPosition_.z);
 		ImGui::TreePop();
 	}
 
@@ -170,7 +170,7 @@ void CharacterDebugPanel::DrawCharacterImGui()
 	}
 
 	//òƒqƒbƒgŽž‚ÌƒmƒbƒNƒoƒbƒN—Ê,–³“GŽžŠÔ,–³“GŽžŠÔ‚ÌI—¹‚·‚é’l
-	// –³“GŽžŠÔ’†‚Ì•`‰æŠÔŠu,•`‰æ’†‚É“_–Å•\Œ»‚ð‚³‚¹‚é’l
+	//–³“GŽžŠÔ’†‚Ì•`‰æŠÔŠu,•`‰æ’†‚É“_–Å•\Œ»‚ð‚³‚¹‚é’l
 	if (ImGui::TreeNode("FenceHit"))
 	{
 		ImGui::InputFloat("KnockBackPower", &params_->FenceHitParam_.KnockBackPower_, ZERO_POINT_ONE);

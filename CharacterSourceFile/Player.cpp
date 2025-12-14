@@ -46,8 +46,8 @@ namespace {
 	//カメラの初期化位置
 	XMFLOAT3 CameraInit = { 0,0,0 };
 
-	//左右入力時のカメラの回転量
-	float CameraRotate = 0.0f;
+	//左右入力時のカメラの回転量(回転速度)
+	float CameraRotateValue = 0.0f;
 
 	//上下入力時のカメラの高さの最高値
 	float CameraUpperLimit = 0.0f;
@@ -239,26 +239,25 @@ void Player::DrawImGui()
 		if (ImGui::TreeNode("PlayerCamera"))
 		{
 			//カメラの最終的な位置
-			ImGui::InputFloat("CameraPositionX", &CameraPosition_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("CameraPositionY", &CameraPosition_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("CameraPositionZ", &CameraPosition_.z, ZERO_POINT_ONE);
+			ImGui::Text("CameraPositionX:%.3f", CameraPosition_.x);
+			ImGui::Text("CameraPositionY:%.3f", CameraPosition_.y);
+			ImGui::Text("CameraPositionZ:%.3f", CameraPosition_.z);
 
 			//カメラの焦点
-			ImGui::InputFloat("CameraTargetX", &CameraTarget_.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("CameraTargetY", &CameraTarget_.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("CameraTargetZ", &CameraTarget_.z, ZERO_POINT_ONE);
+			ImGui::Text("CameraTargetX:%.3f", CameraTarget_.x);
+			ImGui::Text("CameraTargetY:%.3f", CameraTarget_.y);
+			ImGui::Text("CameraTargetZ:%.3f", CameraTarget_.z);
 
 			//カメラの回転量
 			ImGui::SliderFloat("CameraTransform.rotateX", &cameraTransform_.rotate_.x, ANGLE_0_DEG, ANGLE_360_DEG);
 			ImGui::SliderFloat("CameraTransform.rotateY", &cameraTransform_.rotate_.y, ANGLE_0_DEG, ANGLE_360_DEG);
-			ImGui::SliderFloat("CameraTransform.rotateZ", &cameraTransform_.rotate_.z, ANGLE_0_DEG, ANGLE_360_DEG);
 
 			//カメラの後方位置
 			XMFLOAT3 tmpBackCamera;
 			XMStoreFloat3(&tmpBackCamera, BackCamera_);
-			ImGui::InputFloat("BackCameraX", &tmpBackCamera.x, ZERO_POINT_ONE);
-			ImGui::InputFloat("BackCameraY", &tmpBackCamera.y, ZERO_POINT_ONE);
-			ImGui::InputFloat("BackCameraZ", &tmpBackCamera.z, ZERO_POINT_ONE);
+			ImGui::Text("BackCameraX:%.3f", tmpBackCamera.x);
+			ImGui::Text("BackCameraY:%.3f", tmpBackCamera.y);
+			ImGui::Text("BackCameraZ:%.3f", tmpBackCamera.z);
 
 			//カメラに毎フレーム代入する固定位置
 			XMFLOAT3 tmpBackCameraDefault;
@@ -266,6 +265,16 @@ void Player::DrawImGui()
 			ImGui::InputFloat("BackCameraDefaultX", &tmpBackCameraDefault.x, ZERO_POINT_ONE);
 			ImGui::InputFloat("BackCameraDefaultY", &tmpBackCameraDefault.y, ZERO_POINT_ONE);
 			ImGui::InputFloat("BackCameraDefaultZ", &tmpBackCameraDefault.z, ZERO_POINT_ONE);
+			BackCameraDefault = XMLoadFloat3(&tmpBackCameraDefault);
+
+			//左右入力時のカメラの回転量(回転速度)
+			ImGui::InputFloat("CameraRotateValue", &CameraRotateValue, ZERO_POINT_ONE);
+
+			//カメラの高さの最高値
+			ImGui::InputFloat("CameraUpperLimit", &CameraUpperLimit, ZERO_POINT_ONE);
+
+			//カメラの高さの最低値
+			ImGui::InputFloat("CameraLowerLimit", &CameraLowerLimit, ZERO_POINT_ONE);
 
 			//デバッグカメラ時のカメラ位置
 			ImGui::InputFloat("CameraDebugPosX", &CameraDebugPos.x, ZERO_POINT_ONE);
@@ -356,11 +365,11 @@ void Player::CameraControl()
 		//A・Dキー/右スティックでカメラ回転
 		if (Input::IsKey(DIK_A) || Input::GetPadStickR(ControllerID_).x <= -Input::StickTilt)
 		{
-			cameraTransform_.rotate_.y -= CameraRotate;
+			cameraTransform_.rotate_.y -= CameraRotateValue;
 		}
 		if (Input::IsKey(DIK_D) || Input::GetPadStickR(ControllerID_).x >= Input::StickTilt)
 		{
-			cameraTransform_.rotate_.y += CameraRotate;
+			cameraTransform_.rotate_.y += CameraRotateValue;
 		}
 
 		//W・Sキーでカメラ上下移動
@@ -373,7 +382,7 @@ void Player::CameraControl()
 			}
 			else
 			{
-				cameraTransform_.rotate_.x += CameraRotate;
+				cameraTransform_.rotate_.x += CameraRotateValue;
 			}
 		}
 		if (Input::IsKey(DIK_S) || Input::GetPadStickR(ControllerID_).y >= Input::StickTilt)
@@ -385,7 +394,7 @@ void Player::CameraControl()
 			}
 			else
 			{
-				cameraTransform_.rotate_.x -= CameraRotate;
+				cameraTransform_.rotate_.x -= CameraRotateValue;
 			}
 		}
 
@@ -543,7 +552,7 @@ void Player::PlayerRotate(XMVECTOR _move)
 
 	if (!XMVector3Equal(_move, XMVectorZero()))
 	{
-		//コントローラー入力ベクトルからy軸回転量を計算
+		//移動方向ベクトルからy軸回転量を計算
 		this->transform_.rotate_.y = rotate_->RotateDirectionVector(_move);
 	}
 
@@ -598,7 +607,7 @@ void Player::SetCSVPlayer(std::string _path)
 	ChargeRotateY = OnlyData[i_ChargeRotateY];
 	MoveValue = OnlyData[i_MoveValue];
 	CameraInit = { OnlyData[i_CameraInitX] ,OnlyData[i_CameraInitY] , OnlyData[i_CameraInitZ] };
-	CameraRotate = OnlyData[i_CameraRotate];
+	CameraRotateValue = OnlyData[i_CameraRotate];
 	CameraUpperLimit = OnlyData[i_CameraUpperlimit];
 	CameraLowerLimit = OnlyData[i_CameraLowerlimit];
 	CameraDebugPos = { OnlyData[i_CameraDebugWidth],OnlyData[i_CameraDebugHeight],OnlyData[i_CameraDebugDepth] };

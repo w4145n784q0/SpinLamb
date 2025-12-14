@@ -6,14 +6,6 @@
 #define SAFE_DELETE_ARRAY(p) {if ((p)!=nullptr) { delete[] (p); (p)=nullptr;}}
 #define SAFE_RELEASE(p) {if ((p)!=nullptr) { p->Release(); (p)=nullptr;}}
 
-//-----汎用的に使えるマクロ-----
-
-//引数を10で割る(時間計算などに使う)
-#define DIVISION_TEN(x) ((x) / 10)
-
-//引数を10で割った余りを返す(時間計算などに使う)
-#define MODULO_TEN(x) ((x) % 10)
-
 //-----汎用的に使う定数-----
 
 //60fpsにおける1フレームの時間(DeltaTime)(前フレームからの経過時間) 
@@ -32,3 +24,19 @@ const float ANGLE_0_DEG = 0.0f;
 
 //360度の定数 主にImGui用
 const float ANGLE_360_DEG = 360.0f;
+
+//-----汎用的に使えるマクロ・インライン関数-----
+
+//引数を10で割る(時間計算などに使う)
+#define DIVISION_TEN(x) ((x) / 10)
+
+//引数を10で割った余りを返す(時間計算などに使う)
+#define MODULO_TEN(x) ((x) % 10)
+
+//角度を0~360度の範囲に正規化する
+inline float NormalizeAngle(float angle)
+{
+    angle = fmodf(angle, ANGLE_360_DEG);
+    if (angle < ANGLE_0_DEG) angle += ANGLE_360_DEG;
+    return angle;
+}
