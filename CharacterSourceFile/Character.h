@@ -102,12 +102,6 @@ public:
         vfx_->SetAttackLocusEffect(_pos);
     }
 
-    //接触エフェクトを出すイベント
-    void OnHitVFX(XMFLOAT3 _pos) 
-    {
-        vfx_->SetHitEffect(_pos);
-    }
-
     //柵接触エフェクトを出すイベント
     void OnFenceHitVFX(XMFLOAT3 _pos) 
     {
@@ -351,16 +345,20 @@ public:
     CharacterParams* GetParams() const { return params_.get(); }
 
     //各モジュールのゲッター関数
-    CharacterMovement* GetModuleMovement() const { return movement_.get(); }
+    CharacterModelBlink* GetModuleModelBlink() const { return modeldraw_.get(); }
     CharacterVFX* GetModuleVFX() const { return vfx_.get(); }
+	CharacterShadow* GetModuleShadow() const { return shadow_.get(); }
     CharacterAir* GetModuleAir() const { return air_.get(); }
-    CharacterCharge* GetModuleCharge() const { return charge_.get(); }
+    CharacterForward* GetModuleForward() { return forward_.get(); }
+    CharacterMovement* GetModuleMovement() const { return movement_.get(); }
     CharacterRotate* GetModuleRotate() const { return rotate_.get(); }
+    CharacterCharge* GetModuleCharge() const { return charge_.get(); }
     CharacterHitStop* GetModuleHitStop() const { return hitstop_.get(); }
     CharacterHit* GetModuleHit() const { return hit_.get(); }
     CharacterFence* GetModuleFence() const { return fence_.get(); }
     CharacterWait* GetModuleWait() const { return wait_.get(); }
-    CharacterModelBlink* GetModuleModelBlink() const { return modeldraw_.get(); }
+    CharacterCsvLoader* GetModuleCsvLoader() const { return csvload_.get(); }
     CharacterObserver* GetModuleObserver() const { return observer_.get(); }
-
+    CharacterDebugPanel* GetModuleDebugPanel() const { return debugpanel_.get(); }
+    CharacterSound* GetModuleSound() const { return sound_.get(); }
 };
