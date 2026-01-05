@@ -30,8 +30,14 @@ struct VS_OUTPUT
 VS_OUTPUT VS(float4 pos : POSITION, float4 uv : TEXCOORD)
 {
 	VS_OUTPUT output;
+	
+	//ローカル座標に、ワールド・ビュー・プロジェクション行列をかけてスクリーン座標に変換
 	output.pos = mul(pos, g_matWorld);
+	
+	//テクスチャ座標に変換行列をかける(テクスチャの表示位置・拡大・回転等を制御)
 	output.uv = mul(uv, g_matTexture);
+	
+	//まとめて出力
 	return output;
 }
 
@@ -40,5 +46,7 @@ VS_OUTPUT VS(float4 pos : POSITION, float4 uv : TEXCOORD)
 //───────────────────────────────────────
 float4 PS(VS_OUTPUT input) : SV_Target
 {
-  return g_vecColor * g_texture.Sample(g_sampler, input.uv);
+	//UV座標の位置からテクスチャの色を1ピクセル分取り出し(g_texture.Sample)
+	//その色に合成色(g_vecColor)をかけて最終的なピクセルの色を計算して返す
+	return g_vecColor * g_texture.Sample(g_sampler, input.uv);
 }

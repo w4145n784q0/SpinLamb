@@ -237,8 +237,8 @@ namespace Direct3D
 		//パイプラインの構築
 		//データを画面に描画するための一通りの設定
 		pContext_->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);  // データの入力種類を指定
-		pContext_->OMSetRenderTargets(1, &pRenderTargetView_, pDepthStencilView);            // 描画先を設定（今後はレンダーターゲットビューを介して描画してね）
-		pContext_->RSSetViewports(1, &vp);                                      // ビューポートのセット
+		pContext_->OMSetRenderTargets(1, &pRenderTargetView_, pDepthStencilView);  // 描画先を設定(何枚のレンダーターゲットに描くか,書き込み先,深度情報の保存先)
+		pContext_->RSSetViewports(1, &vp);                                         // ビューポートのセット
 		
 
 
@@ -276,8 +276,12 @@ namespace Direct3D
 
 
 			// 頂点レイアウトの作成（1頂点の情報が何のデータをどんな順番で持っているか）
+			//"POSITION"(位置),"NORMAL"(法線),"TEXCOORD"(UV座標)の順でデータを持っているのでそれぞれのオフセットを指定 
+			//セマンティクス(「この変数が、頂点バッファのどの要素か」を示すラベル)が違うとシェーダー側で受け取れない
+			//サイズと並びが一致している必要あり
 			D3D11_INPUT_ELEMENT_DESC layout[] = {
-				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, vectorSize * 0,  D3D11_INPUT_PER_VERTEX_DATA, 0 },	//頂点位置
+				//vectorSize * nの形にしていると、n番目のデータのオフセットになる
+				{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, vectorSize * 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },	//頂点位置
 				{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, vectorSize * 1, D3D11_INPUT_PER_VERTEX_DATA, 0 },	//法線
 				{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,    0, vectorSize * 2, D3D11_INPUT_PER_VERTEX_DATA, 0 },	//テクスチャ（UV）座標
 			};
@@ -288,7 +292,7 @@ namespace Direct3D
 			pCompileVS->Release();
 			pCompilePS->Release();
 
-			//ラスタライザ作成
+			//ラスタライザ(三角形をピクセルの集合に変換する)作成
 			D3D11_RASTERIZER_DESC rdc = {};
 			rdc.CullMode = D3D11_CULL_BACK;
 			rdc.FillMode = D3D11_FILL_SOLID;

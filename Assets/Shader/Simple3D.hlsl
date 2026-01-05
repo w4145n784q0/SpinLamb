@@ -39,6 +39,10 @@ struct VS_OUT
 //───────────────────────────────────────
 VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 {
+	//モデルの頂点の位置(ローカル)を画面上の位置(スクリーン)に変換する
+	//画面上ではどの位置に頂点が来るかを計算し、
+	//その情報をピクセルシェーダーに渡す
+	
 	//ピクセルシェーダーへ渡す情報
 	VS_OUT outData;
 
@@ -51,13 +55,12 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 	Normal = mul(Normal, g_matNormalTrans);		//オブジェクトが変形すれば法線も変形
 	outData.normal = Normal;		//これをピクセルシェーダーへ
 
-	//視線ベクトル（ハイライトの計算に必要
+	//視線ベクトル（ハイライトの計算に必要）
 	float4 worldPos = mul(pos, g_matWorld);					//ローカル座標にワールド行列をかけてワールド座標へ
 	outData.eye = normalize(g_vecCameraPosition - worldPos);	//視点から頂点位置を引き算し視線を求めてピクセルシェーダーへ
 
-	//UV「座標
+	//UV座標
 	outData.uv = Uv;	//そのままピクセルシェーダーへ
-
 
 	//まとめて出力
 	return outData;
@@ -68,6 +71,10 @@ VS_OUT VS(float4 pos : POSITION, float4 Normal : NORMAL, float2 Uv : TEXCOORD)
 //───────────────────────────────────────
 float4 PS(VS_OUT inData) : SV_Target
 {
+	//頂点シェーダーから受け取ったデータ
+	//(ラスタライズによって生成された、各ピクセル用に計算されたVS出力値)
+	//をもとに色の計算を行う
+	
 	//ライトの向き
 	float4 lightDir = g_vecLightDir;	//グルーバル変数は変更できないので、いったんローカル変数へ
 	lightDir = normalize(lightDir);	//向きだけが必要なので正規化
