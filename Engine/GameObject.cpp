@@ -383,7 +383,7 @@ std::vector<float> GameObject::GetCSVReadData(CsvReader& _csv, const std::string
 		else
 		{
 			//配列が空だった場合はエラーメッセージを出す
-			std::string message = "指定された文字列" + _name + "のデータはありませんでした。";
+			std::string message = "csv読み込みエラー:指定された文字列" + _name + "のデータはありませんでした。\n呼び出し元またはcsvファイル内を確認してください。";
 			MessageBox(NULL, message.c_str(), "BaseProjDx9エラー", MB_OK);
 
 			//空の配列を返す
@@ -394,7 +394,7 @@ std::vector<float> GameObject::GetCSVReadData(CsvReader& _csv, const std::string
 	else
 	{
 		//存在しなかった場合はエラーメッセージを出す
-		std::string message = "指定された文字列" + _name + "が見つかりませんでした。";
+		std::string message = "csv読み込みエラー:指定された文字列" + _name + "が見つかりませんでした。\n呼び出し元またはcsvファイル内、もしくは保存形式を確認してください。";
 		MessageBox(NULL, message.c_str(), "BaseProjDx9エラー", MB_OK);
 
 		//空の配列を返す
