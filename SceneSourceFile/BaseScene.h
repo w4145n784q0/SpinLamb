@@ -58,6 +58,26 @@ public:
 	//ImGui描画(継承したシーン用 継承先によって中身をオーバーライド)
 	virtual void DrawImGuiMyScene() {};
 
+	//以下の処理は入力関係
+
+	//決定ボタン(Pキー/エンターキー・B/Startボタン)を押したか
+	bool IsPushConfirmButton();
+
+	//キャンセルボタン(Aキー・ESCキー/Aボタン)を押したか
+	bool IsPushCancelButton();
+
+	//左矢印キー・十字左ボタン・左スティックを左に倒したか
+	bool IsPushLeft();
+
+	//右矢印キー・十字右ボタンを押したか・左スティックを右に倒したか
+	bool IsPushRight();
+
+	//上矢印キー・十字上ボタンを押したか・左スティックを上に倒したか
+	bool IsPushUp();
+
+	//下矢印キー・十字下ボタンを押したか・左スティックを下に倒したか
+	bool IsPushDown();
+
 	//以下の処理は純粋仮想関数のため、継承先で必ずオーバーライド
 
 	//通常の処理

@@ -105,8 +105,7 @@ void HowToPlayScene::UpdateActive()
 	//表示画像の移動
 	//インデックスが先頭/末尾の場合、末尾/先頭へ戻る
 	//前置デクリメントで配列オーバー防ぐ
-	if (Input::IsKeyDown(DIK_LEFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT)
-		|| Input::IsStickTiltLX_RIGHT())
+	if (IsPushLeft())
 	{
 		if (itr == ImageList_.begin())
 		{
@@ -121,8 +120,7 @@ void HowToPlayScene::UpdateActive()
 		//選択SE再生
 		Audio::Play(hSoundSelect_);
 	}
-	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT)
-		|| Input::IsStickTiltLX_LEFT())
+	if (IsPushRight())
 	{
 		if (itr == --ImageList_.end())
 		{
@@ -138,8 +136,8 @@ void HowToPlayScene::UpdateActive()
 		Audio::Play(hSoundSelect_);
 	}
 
-	//決定ボタン(Aキー・A/Startボタン)を押したらシーン遷移状態へ
-	if (Input::IsKeyUp(DIK_A) || Input::IsPadButtonUp(XINPUT_GAMEPAD_A) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	//A・ESCキー/Aボタンを押したらシーン遷移状態へ
+	if (IsPushCancelButton())
 	{
 		SceneState_ = S_Transition;
 

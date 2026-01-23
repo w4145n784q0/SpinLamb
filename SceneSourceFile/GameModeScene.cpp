@@ -250,8 +250,7 @@ void GameModeScene::UpdateSelecting()
 	//インデックスが先頭/末尾の場合、末尾/先頭へ戻る
 	//前置デクリメントで配列オーバー防ぐ
 
-	if (Input::IsKeyDown(DIK_UP) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP)
-		|| Input::IsStickTiltLY_UP())
+	if (IsPushUp())
 	{
 
 		if (Modeitr == ModeList_.begin())
@@ -267,8 +266,7 @@ void GameModeScene::UpdateSelecting()
 		//選択SE再生
 		Audio::Play(hSoundSelect_);
 	}
-	if (Input::IsKeyDown(DIK_DOWN) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN)
-		|| Input::IsStickTiltLY_DOWN())
+	if (IsPushDown())
 	{
 		if (Modeitr == --ModeList_.end())
 		{
@@ -297,10 +295,9 @@ void GameModeScene::UpdateSelecting()
 		break;
 	}
 
-	//決定ボタン(Pキー・B/Startボタン)を押したら確認画面へ
+	//決定ボタン(Pキー/エンターキー・B/Startボタン)を押したら確認画面へ
 	//あそびかたシーン選択ならシーン遷移状態へ
-	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B)
-		|| Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	if (IsPushConfirmButton())
 	{
 		//決定音を再生
 		Audio::Play(hSoundDecide_);
@@ -329,8 +326,7 @@ void GameModeScene::UpdateConfirmation()
 	//インデックスが先頭/末尾の場合、末尾/先頭へ戻る
 	//前置デクリメントで配列オーバー防ぐ
 
-	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT)
-		|| Input::IsStickTiltLX_RIGHT())
+	if (IsPushRight())
 	{
 		if (PlayerNumitr == PlayerNumList_.begin())
 		{
@@ -345,8 +341,7 @@ void GameModeScene::UpdateConfirmation()
 		//選択SE再生
 		Audio::Play(hSoundSelect_);
 	}
-	if (Input::IsKeyDown(DIK_LEFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT)
-		|| Input::IsStickTiltLX_LEFT())
+	if (IsPushLeft())
 	{
 		if (PlayerNumitr == --PlayerNumList_.end())
 		{
@@ -375,8 +370,8 @@ void GameModeScene::UpdateConfirmation()
 		break;
 	}
 
-
-	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	//決定ボタン(Pキー/エンターキー・B/Startボタン)を押して決定
+	if (IsPushConfirmButton())
 	{
 		//決定音を再生
 		Audio::Play(hSoundDecide_);
@@ -411,7 +406,8 @@ void GameModeScene::UpdateConfirmation()
 
 	}
 
-	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsPadButtonUp(XINPUT_GAMEPAD_A))
+	//A・ESCキー/Aボタンで確認状態から抜け、選択画面に戻る
+	if (IsPushCancelButton())
 	{
 		//キャンセル音再生
 		Audio::Play(hSoundCancel_);

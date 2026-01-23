@@ -89,8 +89,7 @@ void PlayBaseScene::DrawBackScreen()
 void PlayBaseScene::UpdatePauseMenu()
 {
 	//ポーズ画面中の操作を行う
-	if (Input::IsKeyDown(DIK_UP) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP)
-		|| Input::IsStickTiltLY_UP())
+	if (IsPushUp())
 	{
 		if (Pauseitr == PauseSelectList_.begin())
 		{
@@ -106,8 +105,7 @@ void PlayBaseScene::UpdatePauseMenu()
 		Audio::Play(hSoundSelect_);
 
 	}
-	if (Input::IsKeyDown(DIK_DOWN) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN)
-		|| Input::IsStickTiltLY_DOWN())
+	if (IsPushDown())
 	{
 		if (Pauseitr == --PauseSelectList_.end())
 		{
@@ -139,8 +137,8 @@ void PlayBaseScene::UpdatePauseMenu()
 	//TmpIconPosY_の位置をHUDに渡す(処理は派生先で記述、ここではポインタは持たない)
 	SetPauseIconY();
 
-	//決定ボタン(Pキー・Bボタン)を押したら
-	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
+	//P/エンターキー・Bボタンを押したら(SCキー・STARTボタンはポーズ画面を閉じるのに使う)
+	if (Input::IsKeyUp(DIK_P) || Input::IsKeyUp(DIK_RETURN) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
 	{
 		
 		if (PauseSelect_ == S_Continue)
@@ -173,8 +171,8 @@ void PlayBaseScene::UpdatePauseMenu()
 
 void PlayBaseScene::WaitGotoPause()
 {
-	//escキーかstartボタンでポーズ画面へ
-	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	//ESCキー・Startボタンでポーズ画面へ
+	if (IsPushPauseButton())
 	{
 		//シーンをポーズ状態にする(ここは共通)
 		SceneState_ = S_InActive;
@@ -189,8 +187,8 @@ void PlayBaseScene::WaitGotoPause()
 
 void PlayBaseScene::WaitGotoPlay()
 {
-	//ESCキー・Startボタンを押したらActiveに戻る
-	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	//ポーズボタン(ESCキー・Startボタン)を押したらActiveに戻る
+	if (IsPushPauseButton())
 	{
 		//シーンを通常状態にする(ここは共通)
 		SceneState_ = S_Active;
@@ -201,6 +199,16 @@ void PlayBaseScene::WaitGotoPlay()
 		//プレイ画面に行く際の処理(仮想関数なので派生先で処理を追加する)
 		GotoPlay();
 	}
+}
+
+bool PlayBaseScene::IsPushPauseButton()
+{
+	//ポーズボタン(ESCキー・Startボタン)を押したか返す
+	if (Input::IsKeyUp(DIK_ESCAPE) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	{
+		return true;
+	}
+	return false;
 }
 
 

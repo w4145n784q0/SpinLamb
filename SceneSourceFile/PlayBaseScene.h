@@ -82,6 +82,9 @@ public:
 	//プレイ画面に遷移を待つ処理(S_InActiveに記述)
 	void WaitGotoPlay();
 
+	//ポーズボタン(ESCキー・Startボタン)を押したか
+	bool IsPushPauseButton();
+
 	//以下は仮想関数で、継承先で別途処理をするものを記述
 
 	//ポーズ画面に移動する

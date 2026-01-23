@@ -1,6 +1,6 @@
 #include "BaseScene.h"
-#include"../Engine/Global.h"
 #include"../ViewSourceFile/GameView.h"
+#include"../Engine/Input.h"
 
 //遷移時間の実体定義
 int BaseScene::SceneShortTransition = 0;
@@ -91,4 +91,71 @@ void BaseScene::DrawImGuiBaseScene()
 		ImGui::TreePop();
 	}
 #endif
+}
+
+bool BaseScene::IsPushConfirmButton()
+{
+	//決定ボタン(Pキー/エンターキー・B/Startボタン)を押したか返す
+	if (Input::IsKeyUp(DIK_P) || Input::IsKeyUp(DIK_RETURN)
+		|| Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	{
+		return true;
+	}
+
+	return false;
+}
+
+bool BaseScene::IsPushCancelButton()
+{
+	//キャンセルボタン(A・ESCキー/Aボタン)を押したか返す
+	if (Input::IsKeyUp(DIK_A) || Input::IsKeyUp(DIK_ESCAPE)
+		|| Input::IsPadButtonUp(XINPUT_GAMEPAD_A))
+	{
+		return true;
+	}
+	return false;
+}
+
+bool BaseScene::IsPushLeft()
+{
+	//左矢印キー・十字左ボタンを押したか・左スティックを左に倒したか返す
+	if (Input::IsKeyDown(DIK_LEFT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_LEFT)
+		|| Input::IsStickTiltLX_RIGHT())
+	{
+		return true;
+	}
+	return false;
+}
+
+bool BaseScene::IsPushRight()
+{
+	//右矢印キー・十字右ボタンを押したか・左スティックを右に倒したか返す
+	if (Input::IsKeyDown(DIK_RIGHT) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_RIGHT)
+		|| Input::IsStickTiltLX_LEFT())
+	{
+		return true;
+	}
+	return false;
+}
+
+bool BaseScene::IsPushUp()
+{
+	//上矢印キー・十字上ボタンを押したか・左スティックを上に倒したか返す
+	if (Input::IsKeyDown(DIK_UP) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_UP)
+		|| Input::IsStickTiltLY_UP())
+	{
+		return true;
+	}
+	return false;
+}
+
+bool BaseScene::IsPushDown()
+{
+	//下矢印キー・十字下ボタンを押したか・左スティックを下に倒したか返す
+	if (Input::IsKeyDown(DIK_DOWN) || Input::IsPadButtonDown(XINPUT_GAMEPAD_DPAD_DOWN)
+		|| Input::IsStickTiltLY_DOWN())
+	{
+		return true;
+	}
+	return false;
 }

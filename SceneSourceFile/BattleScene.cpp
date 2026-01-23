@@ -469,9 +469,8 @@ void BattleScene::SetPauseIconY()
 void BattleScene::UpdateBattleBefore()
 {
 	//説明文を出している状態
-	//BボタンかPキーでスキップ
-	if (++StateCounter > SceneTransition ||
-		Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B))
+	//決定ボタン(Pキー/エンターキー・B/Startボタン)でスキップ
+	if (++StateCounter > SceneTransition ||	IsPushConfirmButton())
 	{
 		//シーン遷移タイマーをリセット
 		StateCounter = 0;

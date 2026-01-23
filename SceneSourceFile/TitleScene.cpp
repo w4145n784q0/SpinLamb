@@ -69,8 +69,8 @@ void TitleScene::Release()
 
 void TitleScene::UpdateActive()
 {
-	//決定ボタン(Pキー・B/Startボタン)を押したらシーン遷移状態へ
-	if (Input::IsKeyUp(DIK_P) || Input::IsPadButtonUp(XINPUT_GAMEPAD_B) || Input::IsPadButtonUp(XINPUT_GAMEPAD_START))
+	//決定ボタン(Pキー/エンターキー・B/Startボタン)を押したらシーン遷移状態へ
+	if (IsPushConfirmButton())
 	{
 		SceneState_ = S_Transition;
 
