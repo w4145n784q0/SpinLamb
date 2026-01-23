@@ -14,16 +14,16 @@
 extern float Dt;
 
 //60fpsにおける1秒
-const int ONE_SECOND = 60;
+constexpr int ONE_SECOND = 60;
 
 //0.1の定数 主にImGui用
-const float ZERO_POINT_ONE = 0.1f;
+constexpr float ZERO_POINT_ONE = 0.1f;
 
 //0度の定数 主にImGui用
-const float ANGLE_0_DEG = 0.0f;
+constexpr float ANGLE_0_DEG = 0.0f;
 
 //360度の定数 主にImGui用
-const float ANGLE_360_DEG = 360.0f;
+constexpr float ANGLE_360_DEG = 360.0f;
 
 //-----汎用的に使えるマクロ・インライン関数-----
 
